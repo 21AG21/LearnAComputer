@@ -1,0 +1,16 @@
+{
+  "slug": "trackpad-two-finger-scroll",
+  "unit": "Unit 1: Getting Started",
+  "module": "Using the Trackpad",
+  "order": 15,
+  "title": "Two-finger scrolling",
+  "videoUrl": "",
+  "drDigitalIntro": "Let's say you're on a website and want to see more of the page. Place two fingers side by side on the trackpad, like for a right click, but instead of clicking, move them up or down to scroll. Scroll down in the browser below to find a secret code, then scroll back up and type it in the box.",
+  "playgroundTask": {
+    "type": "browser-scroll-code",
+    "instructions": "Scroll down using two fingers to find the code, then scroll back up and type it into the box.",
+    "code": "7X2Q"
+  },
+  "drDigitalSuccess": "You found it and scrolled right back! Two-finger scrolling is officially yours.",
+  "drDigitalHint": "Slide two fingers down on the trackpad to scroll down inside the page below. Once you find the code, slide two fingers up to scroll back to the top, then type the code in the box."
+}

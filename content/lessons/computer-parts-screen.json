@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-screen",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 1,
+  "title": "Screen",
+  "videoUrl": "",
+  "drDigitalIntro": "Let's meet the parts of your laptop, one at a time. First up is the part you're looking at right now — your screen! It's made up of millions of tiny colored lights called pixels, and together they paint everything you see: words, pictures, videos, all of it.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's your screen! Every single thing on your laptop shows up there. Let's look at the next part.",
+  "drDigitalHint": "No rush — just take a look at your own screen, then click Continue whenever you're ready."
+}

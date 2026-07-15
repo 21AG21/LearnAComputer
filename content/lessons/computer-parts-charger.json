@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-charger",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 7,
+  "title": "Charger",
+  "videoUrl": "",
+  "drDigitalIntro": "Your charger is the power cord that plugs into the outlet on your wall and connects to the side of your laptop to fill up its battery.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's your charger! Keep it nearby so your laptop never runs out of battery.",
+  "drDigitalHint": "Take a look at your charger, then click Continue whenever you're ready."
+}

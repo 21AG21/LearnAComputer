@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-review",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 9,
+  "title": "Match the parts",
+  "videoUrl": "",
+  "drDigitalIntro": "Let's see how much you remember! In this activity you'll match each part of the laptop to its definition.",
+  "playgroundTask": { "type": "placeholder" },
+  "drDigitalSuccess": "Wonderful — you know your laptop inside and out!",
+  "drDigitalHint": "This activity is coming soon — click Continue for now."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-camera",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 5,
+  "title": "Camera",
+  "videoUrl": "",
+  "drDigitalIntro": "Your camera sits at the top of your screen. When it's in use, it can snap photos, record videos, or let you video call other people.",
+  "playgroundTask": { "type": "placeholder" },
+  "drDigitalSuccess": "That's your camera! We'll practice taking a real photo together soon.",
+  "drDigitalHint": "This activity is coming soon — click Continue for now."
+}

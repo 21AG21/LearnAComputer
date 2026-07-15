@@ -1,0 +1,16 @@
+{
+  "slug": "trackpad-double-click",
+  "unit": "Unit 1: Getting Started",
+  "module": "Using the Trackpad",
+  "order": 13,
+  "title": "Double click",
+  "videoUrl": "",
+  "drDigitalIntro": "A double click is one finger pressing down twice quickly, like two single clicks back to back. It's how you open files and folders. Try it out in the file manager below — double-click to open Grocery List.txt and Budget.xlsx.",
+  "playgroundTask": {
+    "type": "file-explorer-open",
+    "instructions": "Double-click to open \"Grocery List.txt\" and \"Budget.xlsx\".",
+    "filesToOpen": ["Grocery List.txt", "Budget.xlsx"]
+  },
+  "drDigitalSuccess": "Perfect double-clicking! You opened exactly the right files.",
+  "drDigitalHint": "Click twice quickly, right on top of the file name — that's a double click. Try it on Grocery List.txt and Budget.xlsx."
+}

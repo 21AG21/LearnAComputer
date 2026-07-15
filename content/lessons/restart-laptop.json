@@ -1,0 +1,12 @@
+{
+  "slug": "restart-laptop",
+  "unit": "Unit 1: Getting Started",
+  "module": "Starting and Stopping",
+  "order": 11,
+  "title": "Restarting",
+  "videoUrl": "",
+  "drDigitalIntro": "Sometimes you'll need to restart your laptop. If it ever gets really slow or stuck, and closing an individual app doesn't fix it (we'll cover that later!), a restart usually will.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Great — now you know when a restart can help.",
+  "drDigitalHint": "Take your time reading through this, then click Continue whenever you're ready."
+}

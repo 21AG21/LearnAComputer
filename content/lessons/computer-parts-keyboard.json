@@ -1,0 +1,16 @@
+{
+  "slug": "computer-parts-keyboard",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 2,
+  "title": "Keyboard",
+  "videoUrl": "",
+  "drDigitalIntro": "Next is your keyboard — what you type on. It has somewhere between 80 and 100 buttons, called keys, that let you type numbers, letters, and symbols. Let's try it out: type my name into the box below.",
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Type in the name of your teacher into the box.",
+    "targetText": "Doctor Digital"
+  },
+  "drDigitalSuccess": "That's me! Nicely typed. You've got the hang of the keyboard already.",
+  "drDigitalHint": "Try typing my full name exactly as I introduced myself: Doctor Digital. Capitalization doesn't matter, just the letters."
+}

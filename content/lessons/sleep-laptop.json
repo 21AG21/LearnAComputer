@@ -1,0 +1,12 @@
+{
+  "slug": "sleep-laptop",
+  "unit": "Unit 1: Getting Started",
+  "module": "Starting and Stopping",
+  "order": 10,
+  "title": "Putting the laptop to sleep",
+  "videoUrl": "",
+  "drDigitalIntro": "Normally, you'll put your laptop to sleep rather than turning it off completely. To do this, simply close the lid when you're done using it. That way, it's ready instantly the next time you need it. Watch the video to see it in action.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Nicely done! Closing the lid is the easiest way to put your laptop to sleep.",
+  "drDigitalHint": "Watch the video, then click Continue whenever you're ready."
+}

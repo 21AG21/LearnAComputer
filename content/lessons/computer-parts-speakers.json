@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-speakers",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 4,
+  "title": "Speakers",
+  "videoUrl": "",
+  "drDigitalIntro": "Your speakers are what let you hear music, voice messages, videos, and notifications. They play sound out loud so you don't need headphones for everything.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's your speakers! Now you know where the sound is coming from.",
+  "drDigitalHint": "Take a look at your laptop, then click Continue whenever you're ready."
+}

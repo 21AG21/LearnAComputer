@@ -1,0 +1,12 @@
+{
+  "slug": "trackpad-pinch-zoom",
+  "unit": "Unit 1: Getting Started",
+  "module": "Using the Trackpad",
+  "order": 16,
+  "title": "Pinch to zoom",
+  "videoUrl": "",
+  "drDigitalIntro": "What if you'd like to zoom in on pictures or text? Spread two fingers apart on the trackpad to make something bigger, or move two fingers closer together to make it smaller.",
+  "playgroundTask": { "type": "placeholder" },
+  "drDigitalSuccess": "You've got pinch to zoom! We'll practice it hands-on soon.",
+  "drDigitalHint": "This activity is coming soon — click Continue for now."
+}

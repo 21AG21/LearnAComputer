@@ -1,0 +1,12 @@
+{
+  "slug": "computer-parts-power-button",
+  "unit": "Unit 1: Getting Started",
+  "module": "What is a computer?",
+  "order": 6,
+  "title": "Power button",
+  "videoUrl": "",
+  "drDigitalIntro": "Your power button is what turns your laptop on. On many laptops it can also log you in with a fingerprint sensor, so you don't have to type your password every time. It's usually the blank square key in the top right corner of your keyboard.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's the power button! One of the most important buttons on the whole laptop.",
+  "drDigitalHint": "Find the power button on your own laptop, then click Continue when you're ready."
+}

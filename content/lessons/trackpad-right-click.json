@@ -1,0 +1,15 @@
+{
+  "slug": "trackpad-right-click",
+  "unit": "Unit 1: Getting Started",
+  "module": "Using the Trackpad",
+  "order": 14,
+  "title": "Right click",
+  "videoUrl": "",
+  "drDigitalIntro": "Normally you click with one finger. But if you click with two fingers at the same time — like your middle and ring finger — you open a hidden menu of extra options. That's called a right click. Try right-clicking the link below to open it in a new tab.",
+  "playgroundTask": {
+    "type": "browser-right-click",
+    "instructions": "Right-click the link below, then choose \"Open link in new tab\"."
+  },
+  "drDigitalSuccess": "Great right-clicking! See how it opened a whole menu of options?",
+  "drDigitalHint": "Press down with two fingers at the same time on the link to open the menu, then choose \"Open link in new tab\"."
+}
