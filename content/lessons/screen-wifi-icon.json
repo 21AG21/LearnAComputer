@@ -1,0 +1,12 @@
+{
+  "slug": "screen-wifi-icon",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Understanding the Screen",
+  "order": 21,
+  "title": "Wi-Fi icon",
+  "videoUrl": "",
+  "drDigitalIntro": "The Wi-Fi icon is a small symbol of curved lines that shows if your computer is connected to the internet. Clicking it lets you choose which wireless network to join.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's the Wi-Fi icon — your window to the internet connection.",
+  "drDigitalHint": "Spot the curved lines near the clock on the playground desktop, then click Continue whenever you're ready."
+}

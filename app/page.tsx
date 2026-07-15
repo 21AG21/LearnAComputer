@@ -6,7 +6,7 @@ export default function Home() {
   const firstLesson = getAllLessons()[0];
 
   return (
-    <div className="space-y-6 max-w-xl">
+    <div className="h-full overflow-y-auto p-6 space-y-6 max-w-xl">
       <h1 className="text-2xl font-bold">Welcome to LearnAComputer</h1>
       <DrDigital message="Hi, I'm Dr. Digital! I'll be with you every step of the way as you learn to use a computer with confidence. Ready to start?" />
       <div className="flex gap-3">

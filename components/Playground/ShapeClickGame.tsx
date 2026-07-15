@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import MockupPlayground, { Hotspot } from "./MockupPlayground";
 import { checkShapeScore } from "./TaskChecker";
 
 interface ShapeClickGameProps {
@@ -10,18 +9,77 @@ interface ShapeClickGameProps {
   onResult: (success: boolean) => void;
 }
 
-// Invisible click targets over the five shapes drawn in the mockup (% of the 1280x800 image).
-const SHAPE_HOTSPOTS = [
-  { id: "triangle", left: 8.5, top: 30, width: 19, height: 27.5 },
-  { id: "square", left: 36.3, top: 30.5, width: 16.5, height: 26 },
-  { id: "pentagon", left: 58, top: 27.5, width: 19, height: 30 },
-  { id: "hexagon", left: 7.4, top: 60.5, width: 21, height: 30 },
-  { id: "circle", left: 37.4, top: 61, width: 18.5, height: 30 },
-];
+type ShapeKind = "triangle" | "square" | "pentagon" | "hexagon" | "circle";
+
+interface FallingShape {
+  id: number;
+  kind: ShapeKind;
+  left: number;
+  top: number;
+}
+
+const SHAPE_KINDS: ShapeKind[] = ["triangle", "square", "pentagon", "hexagon", "circle"];
+// Medium fall speed: a shape crosses the play area in roughly 12 seconds.
+const FALL_PERCENT_PER_TICK = 0.42;
+const TICK_MS = 50;
+const SPAWN_MS = 1300;
+
+function polygonPoints(sides: number): string {
+  const points: string[] = [];
+  for (let i = 0; i < sides; i++) {
+    const angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+    const x = 50 + 50 * Math.cos(angle);
+    const y = 50 + 50 * Math.sin(angle);
+    points.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`);
+  }
+  return `polygon(${points.join(", ")})`;
+}
+
+function shapeStyle(kind: ShapeKind): React.CSSProperties {
+  switch (kind) {
+    case "square":
+      return {};
+    case "circle":
+      return { borderRadius: "9999px" };
+    case "triangle":
+      return { clipPath: polygonPoints(3) };
+    case "pentagon":
+      return { clipPath: polygonPoints(5) };
+    case "hexagon":
+      return { clipPath: polygonPoints(6) };
+  }
+}
 
 export default function ShapeClickGame({ instructions, targetScore, onResult }: ShapeClickGameProps) {
+  const [shapes, setShapes] = useState<FallingShape[]>([]);
   const [score, setScore] = useState(0);
+  const nextId = useRef(0);
   const finished = useRef(false);
+
+  useEffect(() => {
+    const spawnInterval = setInterval(() => {
+      setShapes((prev) => [
+        ...prev,
+        {
+          id: nextId.current++,
+          kind: SHAPE_KINDS[Math.floor(Math.random() * SHAPE_KINDS.length)],
+          left: 4 + Math.random() * 84,
+          top: -14,
+        },
+      ]);
+    }, SPAWN_MS);
+
+    const fallInterval = setInterval(() => {
+      setShapes((prev) =>
+        prev.map((s) => ({ ...s, top: s.top + FALL_PERCENT_PER_TICK })).filter((s) => s.top < 102)
+      );
+    }, TICK_MS);
+
+    return () => {
+      clearInterval(spawnInterval);
+      clearInterval(fallInterval);
+    };
+  }, []);
 
   useEffect(() => {
     if (!finished.current && checkShapeScore(score, targetScore)) {
@@ -30,22 +88,28 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
     }
   }, [score, targetScore, onResult]);
 
+  function handleShapeClick(id: number) {
+    setShapes((prev) => prev.filter((s) => s.id !== id));
+    setScore((prev) => prev + 1);
+  }
+
   return (
-    <MockupPlayground imageSrc="/playgrounds/single-click.png" imageAlt={instructions}>
-      {SHAPE_HOTSPOTS.map((shape) => (
-        <Hotspot
-          key={shape.id}
-          left={shape.left}
-          top={shape.top}
-          width={shape.width}
-          height={shape.height}
-          label={`Click the ${shape.id}`}
-          onClick={() => setScore((prev) => prev + 1)}
-        />
-      ))}
-      <p className="absolute top-[1%] right-[2%] text-lg font-bold" aria-live="polite">
+    <div className="h-full flex flex-col items-center px-6 py-6 bg-white" aria-label={instructions}>
+      <h2 className="text-4xl font-bold mb-2 text-center">Click on {targetScore} falling shapes to advance!</h2>
+      <p className="text-xl font-semibold mb-3" aria-live="polite">
         Score: {score} / {targetScore}
       </p>
-    </MockupPlayground>
+      <div className="relative w-full max-w-5xl flex-1 border-4 border-black bg-[#c2e6fb] overflow-hidden">
+        {shapes.map((shape) => (
+          <button
+            key={shape.id}
+            onClick={() => handleShapeClick(shape.id)}
+            aria-label={`Click the ${shape.kind}`}
+            className="absolute w-20 h-20 bg-black"
+            style={{ left: `${shape.left}%`, top: `${shape.top}%`, ...shapeStyle(shape.kind) }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

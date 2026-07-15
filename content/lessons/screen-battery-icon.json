@@ -1,0 +1,12 @@
+{
+  "slug": "screen-battery-icon",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Understanding the Screen",
+  "order": 22,
+  "title": "Battery icon",
+  "videoUrl": "",
+  "drDigitalIntro": "The battery icon shows how much power your portable computer has left before it shuts down. It works like a gas gauge, letting you know when it's time to plug in your charger.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's the battery icon — keep an eye on it so you know when to charge!",
+  "drDigitalHint": "Find the battery near the clock on the playground desktop, then click Continue whenever you're ready."
+}

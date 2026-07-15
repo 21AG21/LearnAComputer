@@ -5,7 +5,7 @@ export default function LessonsPage() {
   const unitGroups = getLessonsGrouped();
 
   return (
-    <div className="space-y-10 max-w-xl">
+    <div className="h-full overflow-y-auto p-6 space-y-10 max-w-xl">
       <h1 className="text-2xl font-bold">Lessons</h1>
       {unitGroups.map((unitGroup) => (
         <div key={unitGroup.unit} className="space-y-6">

@@ -1,0 +1,12 @@
+{
+  "slug": "apps-opening",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Opening Apps",
+  "order": 23,
+  "title": "Opening apps",
+  "videoUrl": "",
+  "drDigitalIntro": "To open an app, go to your dock and click the app you want to open. If it's not there, search your computer's files for that app. Try it in the playground: click any icon in the dock to open an app.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's how you open apps — click and go!",
+  "drDigitalHint": "Try clicking one of the icons at the bottom of the playground desktop, then click Continue."
+}

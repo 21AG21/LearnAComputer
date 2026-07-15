@@ -9,6 +9,7 @@ import ShapeClickGame from "@/components/Playground/ShapeClickGame";
 import FakeFileExplorerTask from "@/components/Playground/FakeFileExplorer";
 import { FakeBrowserRightClickTask, FakeBrowserScrollCodeTask } from "@/components/Playground/FakeBrowser";
 import { PinchZoomTask } from "@/components/Playground/PinchZoomTask";
+import MessagingApp from "@/components/Playground/Desktop/MessagingApp";
 import FullscreenPlayground from "@/components/Playground/FullscreenPlayground";
 import type { Lesson } from "@/lib/lessons";
 
@@ -20,10 +21,11 @@ const FULLSCREEN_TASK_TYPES = [
   "browser-right-click",
   "browser-scroll-code",
   "pinch-zoom",
+  "message-reply",
 ];
 
-// These activities draw their own red X (in the mockup image or the BrowserSimulator chrome).
-const OWN_EXIT_TASK_TYPES = ["browser-right-click", "browser-scroll-code", "pinch-zoom"];
+// These activities draw their own red X (in the mockup image, BrowserSimulator, or AppWindow chrome).
+const OWN_EXIT_TASK_TYPES = ["browser-right-click", "browser-scroll-code", "pinch-zoom", "message-reply"];
 
 export default function LessonRunner({ lesson }: { lesson: Lesson }) {
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
@@ -118,6 +120,15 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
               instructions={task.instructions}
               onResult={handleResult}
               onExit={() => setPlaygroundOpen(false)}
+            />
+          )}
+          {task.type === "message-reply" && (
+            <MessagingApp
+              contactName={task.contactName}
+              initialMessages={[{ from: "contact", text: task.incomingMessage }]}
+              onSendMessage={() => handleResult(true)}
+              onClose={() => setPlaygroundOpen(false)}
+              onMinimize={() => setPlaygroundOpen(false)}
             />
           )}
         </FullscreenPlayground>

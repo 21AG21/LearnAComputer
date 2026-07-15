@@ -1,0 +1,12 @@
+{
+  "slug": "apps-closing",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Opening Apps",
+  "order": 24,
+  "title": "Closing apps",
+  "videoUrl": "",
+  "drDigitalIntro": "To close an app completely, press Command+Q (or Control+Q), or click the red X to shut it down. To just move a window out of your way instead, minimize it by clicking the yellow minus button next to the red X.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Red X to close, yellow minus to tuck it away — you've got it!",
+  "drDigitalHint": "Open an app in the playground and try the red X and the minus button, then click Continue."
+}

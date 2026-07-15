@@ -15,7 +15,8 @@ export type PlaygroundTask =
   | { type: "file-explorer-open"; instructions: string; filesToOpen: string[] }
   | { type: "browser-right-click"; instructions: string }
   | { type: "browser-scroll-code"; instructions: string; code: string }
-  | { type: "pinch-zoom"; instructions: string };
+  | { type: "pinch-zoom"; instructions: string }
+  | { type: "message-reply"; instructions: string; contactName: string; incomingMessage: string };
 
 export interface Lesson {
   slug: string;
