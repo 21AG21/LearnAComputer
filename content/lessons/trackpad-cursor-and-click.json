@@ -5,11 +5,11 @@
   "order": 12,
   "title": "Moving the cursor and single click",
   "videoUrl": "",
-  "drDigitalIntro": "Let's practice two skills together: moving the cursor and single clicking. With just the tip of one finger touching the trackpad, gently slide your finger to guide your cursor — imagine being the tip of a pen gliding across paper. Then press down with one finger until you feel a soft click to select something. In this game, numbers will fall from the sky, each one enclosed in the shape with that many sides. Move your cursor over a shape and click it before it reaches the bottom!",
+  "drDigitalIntro": "Let's practice two skills together: moving the cursor and single clicking. With just the tip of one finger touching the trackpad, gently slide your finger to guide your cursor — imagine being the tip of a pen gliding across paper. Then press down with one finger until you feel a soft click to select something. In this game, shapes will fall from the sky. Move your cursor over a shape and click it before it reaches the bottom!",
   "playgroundTask": {
     "type": "shape-click-game",
-    "instructions": "Click each falling shape before it reaches the bottom. Reach a score of 5 to pass — take your time, they fall slowly.",
-    "targetScore": 5
+    "instructions": "Click each falling shape before it reaches the bottom — take your time, they fall slowly.",
+    "targetScore": 10
   },
   "drDigitalSuccess": "Fantastic clicking! You've got moving the cursor and single-clicking down.",
   "drDigitalHint": "Move your cursor right over a falling shape and click once. There's no rush — the shapes fall slowly on purpose."

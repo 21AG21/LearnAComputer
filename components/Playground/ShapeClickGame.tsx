@@ -9,19 +9,21 @@ interface ShapeClickGameProps {
   onResult: (success: boolean) => void;
 }
 
+type ShapeKind = "triangle" | "square" | "pentagon" | "hexagon" | "circle";
+
 interface FallingShape {
   id: number;
-  sides: number;
+  kind: ShapeKind;
   left: number;
   top: number;
 }
 
-const SHAPE_SIDE_OPTIONS = [3, 4, 5, 6];
-const FALL_PERCENT_PER_TICK = 0.15;
+const SHAPE_KINDS: ShapeKind[] = ["triangle", "square", "pentagon", "hexagon", "circle"];
+const FALL_PERCENT_PER_TICK = 0.12;
 const TICK_MS = 50;
-const SPAWN_MS = 1400;
+const SPAWN_MS = 1200;
 
-function polygonClipPath(sides: number): string {
+function polygonPoints(sides: number): string {
   const points: string[] = [];
   for (let i = 0; i < sides; i++) {
     const angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
@@ -30,6 +32,21 @@ function polygonClipPath(sides: number): string {
     points.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`);
   }
   return `polygon(${points.join(", ")})`;
+}
+
+function shapeStyle(kind: ShapeKind): React.CSSProperties {
+  switch (kind) {
+    case "square":
+      return {};
+    case "circle":
+      return { borderRadius: "9999px" };
+    case "triangle":
+      return { clipPath: polygonPoints(3) };
+    case "pentagon":
+      return { clipPath: polygonPoints(5) };
+    case "hexagon":
+      return { clipPath: polygonPoints(6) };
+  }
 }
 
 export default function ShapeClickGame({ instructions, targetScore, onResult }: ShapeClickGameProps) {
@@ -44,15 +61,15 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
         ...prev,
         {
           id: nextId.current++,
-          sides: SHAPE_SIDE_OPTIONS[Math.floor(Math.random() * SHAPE_SIDE_OPTIONS.length)],
-          left: 10 + Math.random() * 70,
+          kind: SHAPE_KINDS[Math.floor(Math.random() * SHAPE_KINDS.length)],
+          left: 5 + Math.random() * 85,
           top: -10,
         },
       ]);
     }, SPAWN_MS);
 
     const fallInterval = setInterval(() => {
-      setShapes((prev) => prev.map((s) => ({ ...s, top: s.top + FALL_PERCENT_PER_TICK })).filter((s) => s.top < 100));
+      setShapes((prev) => prev.map((s) => ({ ...s, top: s.top + FALL_PERCENT_PER_TICK })).filter((s) => s.top < 105));
     }, TICK_MS);
 
     return () => {
@@ -74,26 +91,23 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
   }
 
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-gray-500">{instructions}</p>
-      <p className="text-sm font-semibold">
+    <div className="h-full flex flex-col items-center px-6 py-8 bg-white">
+      <p className="text-sm text-gray-500 mb-2 text-center">{instructions}</p>
+      <h2 className="text-3xl font-bold mb-1 text-center">
+        Click on {targetScore} falling shapes to advance!
+      </h2>
+      <p className="text-lg font-semibold mb-4">
         Score: {score} / {targetScore}
       </p>
-      <div className="relative border rounded h-96 overflow-hidden bg-sky-50">
+      <div className="relative w-full max-w-4xl flex-1 border-4 border-black rounded bg-sky-200 overflow-hidden">
         {shapes.map((shape) => (
           <button
             key={shape.id}
             onClick={() => handleShapeClick(shape.id)}
-            aria-label={`Click the ${shape.sides}-sided shape`}
-            className="absolute w-12 h-12 bg-indigo-500 text-white flex items-center justify-center font-bold"
-            style={{
-              left: `${shape.left}%`,
-              top: `${shape.top}%`,
-              clipPath: polygonClipPath(shape.sides),
-            }}
-          >
-            {shape.sides}
-          </button>
+            aria-label={`Click the ${shape.kind}`}
+            className="absolute w-16 h-16 bg-black"
+            style={{ left: `${shape.left}%`, top: `${shape.top}%`, ...shapeStyle(shape.kind) }}
+          />
         ))}
       </div>
     </div>
