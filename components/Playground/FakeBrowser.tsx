@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import BrowserSimulator from "./BrowserSimulator";
 import MockupPlayground, { Hotspot } from "./MockupPlayground";
 import { checkScrollCode } from "./TaskChecker";
 
@@ -68,9 +69,10 @@ interface FakeBrowserScrollCodeTaskProps {
   instructions: string;
   code: string;
   onResult: (success: boolean) => void;
+  onExit: () => void;
 }
 
-export function FakeBrowserScrollCodeTask({ instructions, code, onResult }: FakeBrowserScrollCodeTaskProps) {
+export function FakeBrowserScrollCodeTask({ instructions, code, onResult, onExit }: FakeBrowserScrollCodeTaskProps) {
   const [reachedBottom, setReachedBottom] = useState(false);
   const [reachedTopAgain, setReachedTopAgain] = useState(false);
   const [typedCode, setTypedCode] = useState("");
@@ -90,28 +92,29 @@ export function FakeBrowserScrollCodeTask({ instructions, code, onResult }: Fake
   }
 
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-gray-500">{instructions}</p>
-      <div className="flex gap-2 items-center">
-        <input
-          value={typedCode}
-          onChange={(e) => setTypedCode(e.target.value)}
-          placeholder="Type the code here"
-          className="border rounded p-2 flex-1"
-        />
-        <button onClick={handleSubmit} className="border rounded px-4 py-2">
-          Go
-        </button>
+    <BrowserSimulator tabTitle="Fun Facts" url="examplefunfacts.com" onExit={onExit}>
+      <div ref={scrollRef} onScroll={handleScroll} aria-label={instructions} className="h-full overflow-y-scroll px-8 py-6">
+        <div className="max-w-2xl mx-auto space-y-10 text-2xl">
+          <div className="flex gap-3 items-center sticky top-0 bg-white py-2">
+            <input
+              value={typedCode}
+              onChange={(e) => setTypedCode(e.target.value)}
+              placeholder="Type the code here"
+              className="border-4 border-black p-2 flex-1 text-2xl"
+            />
+            <button onClick={handleSubmit} className="border-4 border-black px-6 py-2 font-bold">
+              Go
+            </button>
+          </div>
+          <h1 className="text-4xl font-bold">Welcome to Fun Facts About Computers!</h1>
+          <p>Computers have come a long way since the 1940s.</p>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <p key={i}>This is paragraph {i + 1}. Keep scrolling with two fingers to find your code.</p>
+          ))}
+          <p className="font-bold text-4xl">Your code is: {code}</p>
+          <p>Great job finding it! Now scroll back up and type it in the box at the top.</p>
+        </div>
       </div>
-      <div ref={scrollRef} onScroll={handleScroll} className="border rounded h-64 overflow-y-scroll p-4 space-y-4">
-        <p>Welcome to Fun Facts About Computers!</p>
-        <p>Computers have come a long way since the 1940s.</p>
-        {Array.from({ length: 10 }).map((_, i) => (
-          <p key={i}>This is paragraph {i + 1}. Keep scrolling to find your code.</p>
-        ))}
-        <p className="font-bold text-lg">Your code is: {code}</p>
-        <p>Great job finding it! Now scroll back up and type it in the box above.</p>
-      </div>
-    </div>
+    </BrowserSimulator>
   );
 }

@@ -1,12 +1,14 @@
 "use client";
 
 import { ComponentType, useEffect, useRef, useState } from "react";
+import BrowserSimulator from "./BrowserSimulator";
 import { checkZoomCode } from "./TaskChecker";
 import { DogIllustration, SnakeIllustration, BirdIllustration, CowIllustration } from "./AnimalIllustrations";
 
 interface PinchZoomTaskProps {
   instructions: string;
   onResult: (success: boolean) => void;
+  onExit: () => void;
 }
 
 const ANIMALS = [
@@ -69,7 +71,7 @@ function ZoomableAnimal({
   );
 }
 
-export function PinchZoomTask({ instructions, onResult }: PinchZoomTaskProps) {
+export function PinchZoomTask({ instructions, onResult, onExit }: PinchZoomTaskProps) {
   const [answerDigits] = useState<number[]>(() => ANIMALS.map(() => Math.floor(Math.random() * 10)));
   const [typedDigits, setTypedDigits] = useState<string[]>(["", "", "", ""]);
 
@@ -87,26 +89,8 @@ export function PinchZoomTask({ instructions, onResult }: PinchZoomTaskProps) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      <p className="text-sm text-gray-500 px-4 pt-3">{instructions}</p>
-
-      <div className="flex items-center gap-2 px-3 pt-3 pl-14">
-        <div className="border rounded px-3 py-1 flex items-center gap-2 text-sm">
-          My Animals
-          <span className="text-gray-400">✕</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 border-y px-3 py-2 text-lg mt-3">
-        <span aria-hidden="true">←</span>
-        <span aria-hidden="true">→</span>
-        <span aria-hidden="true">⟳</span>
-        <span aria-hidden="true">🔒</span>
-        <div className="flex-1 border rounded px-3 py-1 text-center text-base">exampleanimalpage.com</div>
-        <span aria-hidden="true">🔍</span>
-      </div>
-
-      <div className="flex-1 flex flex-col items-center justify-center gap-8 px-6 py-6">
+    <BrowserSimulator tabTitle="My Animals" url="exampleanimalpage.com" onExit={onExit}>
+      <div aria-label={instructions} className="h-full flex flex-col items-center justify-center gap-8 px-6 py-6 overflow-auto">
         <div className="flex gap-4 flex-wrap justify-center">
           {ANIMALS.map((animal, i) => (
             <ZoomableAnimal key={animal.id} digit={answerDigits[i]} Illustration={animal.Illustration} label={animal.id} />
@@ -141,6 +125,6 @@ export function PinchZoomTask({ instructions, onResult }: PinchZoomTaskProps) {
           Check my work
         </button>
       </div>
-    </div>
+    </BrowserSimulator>
   );
 }

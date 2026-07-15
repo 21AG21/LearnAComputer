@@ -14,7 +14,16 @@ import type { Lesson } from "@/lib/lessons";
 
 type AttemptState = "unattempted" | "failed" | "success";
 
-const FULLSCREEN_TASK_TYPES = ["shape-click-game", "file-explorer-open", "browser-right-click", "pinch-zoom"];
+const FULLSCREEN_TASK_TYPES = [
+  "shape-click-game",
+  "file-explorer-open",
+  "browser-right-click",
+  "browser-scroll-code",
+  "pinch-zoom",
+];
+
+// These activities draw their own red X (in the mockup image or the BrowserSimulator chrome).
+const OWN_EXIT_TASK_TYPES = ["browser-right-click", "browser-scroll-code", "pinch-zoom"];
 
 export default function LessonRunner({ lesson }: { lesson: Lesson }) {
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
@@ -66,9 +75,6 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
           {task.type === "type-text" && (
             <TypeTextTask instructions={task.instructions} targetText={task.targetText} onResult={handleResult} />
           )}
-          {task.type === "browser-scroll-code" && (
-            <FakeBrowserScrollCodeTask instructions={task.instructions} code={task.code} onResult={handleResult} />
-          )}
           {isFullscreenTask && (
             <button onClick={() => setPlaygroundOpen(true)} className="border rounded px-4 py-2">
               Start activity
@@ -80,7 +86,7 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
       {playgroundOpen && (
         <FullscreenPlayground
           onExit={() => setPlaygroundOpen(false)}
-          showExitButton={task.type !== "browser-right-click"}
+          showExitButton={!OWN_EXIT_TASK_TYPES.includes(task.type)}
         >
           {task.type === "shape-click-game" && (
             <ShapeClickGame instructions={task.instructions} targetScore={task.targetScore} onResult={handleResult} />
@@ -99,8 +105,20 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
               onExit={() => setPlaygroundOpen(false)}
             />
           )}
+          {task.type === "browser-scroll-code" && (
+            <FakeBrowserScrollCodeTask
+              instructions={task.instructions}
+              code={task.code}
+              onResult={handleResult}
+              onExit={() => setPlaygroundOpen(false)}
+            />
+          )}
           {task.type === "pinch-zoom" && (
-            <PinchZoomTask instructions={task.instructions} onResult={handleResult} />
+            <PinchZoomTask
+              instructions={task.instructions}
+              onResult={handleResult}
+              onExit={() => setPlaygroundOpen(false)}
+            />
           )}
         </FullscreenPlayground>
       )}
