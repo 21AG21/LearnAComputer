@@ -37,3 +37,7 @@ export function checkScrollCode(
 ): boolean {
   return reachedBottom && reachedTopAgain && typedCode.trim().toUpperCase() === code.toUpperCase();
 }
+
+export function checkZoomCode(typedDigits: string[], answerDigits: number[]): boolean {
+  return answerDigits.every((digit, i) => typedDigits[i] === String(digit));
+}

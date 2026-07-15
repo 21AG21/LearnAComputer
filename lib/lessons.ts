@@ -14,7 +14,8 @@ export type PlaygroundTask =
   | { type: "shape-click-game"; instructions: string; targetScore: number }
   | { type: "file-explorer-open"; instructions: string; filesToOpen: string[] }
   | { type: "browser-right-click"; instructions: string }
-  | { type: "browser-scroll-code"; instructions: string; code: string };
+  | { type: "browser-scroll-code"; instructions: string; code: string }
+  | { type: "pinch-zoom"; instructions: string };
 
 export interface Lesson {
   slug: string;

@@ -8,12 +8,13 @@ import TypeTextTask from "@/components/Playground/TypeTextTask";
 import ShapeClickGame from "@/components/Playground/ShapeClickGame";
 import FakeFileExplorerTask from "@/components/Playground/FakeFileExplorer";
 import { FakeBrowserRightClickTask, FakeBrowserScrollCodeTask } from "@/components/Playground/FakeBrowser";
+import { PinchZoomTask } from "@/components/Playground/PinchZoomTask";
 import FullscreenPlayground from "@/components/Playground/FullscreenPlayground";
 import type { Lesson } from "@/lib/lessons";
 
 type AttemptState = "unattempted" | "failed" | "success";
 
-const FULLSCREEN_TASK_TYPES = ["shape-click-game", "file-explorer-open", "browser-right-click"];
+const FULLSCREEN_TASK_TYPES = ["shape-click-game", "file-explorer-open", "browser-right-click", "pinch-zoom"];
 
 export default function LessonRunner({ lesson }: { lesson: Lesson }) {
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
@@ -90,6 +91,9 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
           )}
           {task.type === "browser-right-click" && (
             <FakeBrowserRightClickTask instructions={task.instructions} onResult={handleResult} />
+          )}
+          {task.type === "pinch-zoom" && (
+            <PinchZoomTask instructions={task.instructions} onResult={handleResult} />
           )}
         </FullscreenPlayground>
       )}
