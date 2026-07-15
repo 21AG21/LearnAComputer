@@ -78,7 +78,10 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
       )}
 
       {playgroundOpen && (
-        <FullscreenPlayground onExit={() => setPlaygroundOpen(false)}>
+        <FullscreenPlayground
+          onExit={() => setPlaygroundOpen(false)}
+          showExitButton={task.type !== "browser-right-click"}
+        >
           {task.type === "shape-click-game" && (
             <ShapeClickGame instructions={task.instructions} targetScore={task.targetScore} onResult={handleResult} />
           )}
@@ -90,7 +93,11 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
             />
           )}
           {task.type === "browser-right-click" && (
-            <FakeBrowserRightClickTask instructions={task.instructions} onResult={handleResult} />
+            <FakeBrowserRightClickTask
+              instructions={task.instructions}
+              onResult={handleResult}
+              onExit={() => setPlaygroundOpen(false)}
+            />
           )}
           {task.type === "pinch-zoom" && (
             <PinchZoomTask instructions={task.instructions} onResult={handleResult} />

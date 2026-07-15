@@ -1,82 +1,65 @@
 "use client";
 
 import { useRef, useState } from "react";
+import MockupPlayground, { Hotspot } from "./MockupPlayground";
 import { checkScrollCode } from "./TaskChecker";
-import CatIllustration from "./CatIllustration";
 
 interface FakeBrowserRightClickTaskProps {
   instructions: string;
   onResult: (success: boolean) => void;
+  onExit: () => void;
 }
 
-export function FakeBrowserRightClickTask({ instructions, onResult }: FakeBrowserRightClickTaskProps) {
+export function FakeBrowserRightClickTask({ instructions, onResult, onExit }: FakeBrowserRightClickTaskProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
-  const [tabs, setTabs] = useState<string[]>(["Cats Blog"]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
-    setMenuPos({ x: e.clientX, y: e.clientY });
+    const rect = wrapperRef.current?.getBoundingClientRect();
+    if (rect) {
+      setMenuPos({
+        x: ((e.clientX - rect.left) / rect.width) * 100,
+        y: ((e.clientY - rect.top) / rect.height) * 100,
+      });
+    }
     setMenuOpen(true);
   }
 
   function handleOpenInNewTab() {
     setMenuOpen(false);
-    setTabs((prev) => [...prev, "Funny Cat Video"]);
+    window.open("/funny-cat-video", "_blank");
     onResult(true);
   }
 
   return (
-    <div className="h-full flex flex-col bg-white" onClick={() => setMenuOpen(false)}>
-      <p className="text-sm text-gray-500 px-4 pt-3">{instructions}</p>
-
-      <div className="flex items-center gap-2 px-3 pt-3 pl-14">
-        {tabs.map((tab, i) => (
-          <div key={i} className="border rounded px-3 py-1 flex items-center gap-2 text-sm">
-            {tab}
-            <span className="text-gray-400">✕</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-3 border-y px-3 py-2 text-lg mt-3">
-        <span aria-hidden="true">←</span>
-        <span aria-hidden="true">→</span>
-        <span aria-hidden="true">⟳</span>
-        <span aria-hidden="true">🔒</span>
-        <div className="flex-1 border rounded px-3 py-1 text-center text-base">examplecatsblog.com</div>
-        <span aria-hidden="true">🔍</span>
-      </div>
-
-      <div className="flex-1 flex items-center gap-8 px-10 py-8 relative">
-        <div className="flex-1">
-          <h1 className="text-5xl font-bold mb-4">My Cat</h1>
-          <p className="text-lg mb-4 max-w-xl">
-            This is my cat, his name is DJ! Instead of clicking the link directly, which will open the link
-            on this page, right click on the link and click open in a new tab so you can still see this page!
-          </p>
-          <a
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            onContextMenu={handleContextMenu}
-            className="underline text-blue-600 text-2xl"
+    <div ref={wrapperRef} className="h-full w-full" onClick={() => setMenuOpen(false)}>
+      <MockupPlayground imageSrc="/playgrounds/right-click.png" imageAlt={instructions}>
+        <Hotspot left={0.4} top={0.5} width={7.5} height={11.5} label="Exit activity" onClick={onExit} />
+        <Hotspot
+          left={3}
+          top={69.5}
+          width={31}
+          height={9}
+          label="Funny Cat Video link — right-click to open the menu"
+          onContextMenu={handleContextMenu}
+        />
+        {menuOpen && (
+          <div
+            className="absolute bg-white border-2 border-black rounded shadow-lg z-10"
+            style={{ left: `${menuPos.x}%`, top: `${menuPos.y}%` }}
+            onClick={(e) => e.stopPropagation()}
           >
-            Funny Cat Video
-          </a>
-          {menuOpen && (
-            <div
-              className="absolute bg-white border rounded shadow z-10"
-              style={{ left: menuPos.x, top: menuPos.y }}
-              onClick={(e) => e.stopPropagation()}
+            <button
+              onClick={handleOpenInNewTab}
+              className="block w-full text-left px-4 py-2 text-lg hover:bg-gray-100 whitespace-nowrap"
             >
-              <button onClick={handleOpenInNewTab} className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                Open link in new tab
-              </button>
-            </div>
-          )}
-        </div>
-        <CatIllustration className="w-56 h-56 shrink-0" />
-      </div>
+              Open link in new tab
+            </button>
+          </div>
+        )}
+      </MockupPlayground>
     </div>
   );
 }
