@@ -1,9 +1,9 @@
 "use client";
 
-import { ComponentType, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import BrowserSimulator from "./BrowserSimulator";
 import { checkZoomCode } from "./TaskChecker";
-import { DogIllustration, SnakeIllustration, BirdIllustration, CowIllustration } from "./AnimalIllustrations";
 
 interface PinchZoomTaskProps {
   instructions: string;
@@ -12,25 +12,17 @@ interface PinchZoomTaskProps {
 }
 
 const ANIMALS = [
-  { id: "dog", Illustration: DogIllustration },
-  { id: "snake", Illustration: SnakeIllustration },
-  { id: "bird", Illustration: BirdIllustration },
-  { id: "cow", Illustration: CowIllustration },
+  { id: "dog", src: "/playgrounds/Dog.png" },
+  { id: "snake", src: "/playgrounds/Snake.png" },
+  { id: "bird", src: "/playgrounds/Bird.png" },
+  { id: "cow", src: "/playgrounds/Cow.png" },
 ] as const;
 
 const MIN_SCALE = 1;
-const MAX_SCALE = 5;
+const MAX_SCALE = 6;
 const ZOOM_SENSITIVITY = 0.02;
 
-function ZoomableAnimal({
-  digit,
-  Illustration,
-  label,
-}: {
-  digit: number;
-  Illustration: ComponentType<{ className?: string }>;
-  label: string;
-}) {
+function ZoomableAnimal({ digit, src, label }: { digit: number; src: string; label: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(MIN_SCALE);
 
@@ -51,18 +43,15 @@ function ZoomableAnimal({
   return (
     <div
       ref={containerRef}
-      className="relative w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border rounded bg-white touch-none"
+      className="relative w-40 h-40 sm:w-48 sm:h-48 overflow-hidden border-2 border-black rounded bg-white touch-none"
       aria-label={`${label}, pinch or ctrl+scroll to zoom`}
     >
-      <div
-        className="w-full h-full flex items-center justify-center origin-center"
-        style={{ transform: `scale(${scale})` }}
-      >
-        <Illustration className="w-full h-full" />
+      <div className="relative w-full h-full origin-center" style={{ transform: `scale(${scale})` }}>
+        <Image src={src} alt={label} fill sizes="200px" className="object-contain" />
         <span
           aria-hidden="true"
-          className="absolute text-black select-none font-mono"
-          style={{ fontSize: "5px", top: "48%", left: "48%" }}
+          className="absolute font-mono font-bold text-black select-none"
+          style={{ fontSize: "5px", top: "47%", left: "48%" }}
         >
           {digit}
         </span>
@@ -90,10 +79,13 @@ export function PinchZoomTask({ instructions, onResult, onExit }: PinchZoomTaskP
 
   return (
     <BrowserSimulator tabTitle="My Animals" url="exampleanimalpage.com" onExit={onExit}>
-      <div aria-label={instructions} className="h-full flex flex-col items-center justify-center gap-8 px-6 py-6 overflow-auto">
+      <div
+        aria-label={instructions}
+        className="h-full flex flex-col items-center justify-center gap-8 px-6 py-6 overflow-auto"
+      >
         <div className="flex gap-4 flex-wrap justify-center">
           {ANIMALS.map((animal, i) => (
-            <ZoomableAnimal key={animal.id} digit={answerDigits[i]} Illustration={animal.Illustration} label={animal.id} />
+            <ZoomableAnimal key={animal.id} digit={answerDigits[i]} src={animal.src} label={animal.id} />
           ))}
         </div>
 

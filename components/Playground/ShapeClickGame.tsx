@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { checkShapeScore } from "./TaskChecker";
 
@@ -19,36 +20,17 @@ interface FallingShape {
 }
 
 const SHAPE_KINDS: ShapeKind[] = ["triangle", "square", "pentagon", "hexagon", "circle"];
+const SHAPE_SRC: Record<ShapeKind, string> = {
+  triangle: "/playgrounds/shape-triangle.png",
+  square: "/playgrounds/shape-square.png",
+  pentagon: "/playgrounds/shape-pentagon.png",
+  hexagon: "/playgrounds/shape-hexagon.png",
+  circle: "/playgrounds/shape-circle.png",
+};
 // Medium fall speed: a shape crosses the play area in roughly 12 seconds.
 const FALL_PERCENT_PER_TICK = 0.42;
 const TICK_MS = 50;
 const SPAWN_MS = 1300;
-
-function polygonPoints(sides: number): string {
-  const points: string[] = [];
-  for (let i = 0; i < sides; i++) {
-    const angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
-    const x = 50 + 50 * Math.cos(angle);
-    const y = 50 + 50 * Math.sin(angle);
-    points.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`);
-  }
-  return `polygon(${points.join(", ")})`;
-}
-
-function shapeStyle(kind: ShapeKind): React.CSSProperties {
-  switch (kind) {
-    case "square":
-      return {};
-    case "circle":
-      return { borderRadius: "9999px" };
-    case "triangle":
-      return { clipPath: polygonPoints(3) };
-    case "pentagon":
-      return { clipPath: polygonPoints(5) };
-    case "hexagon":
-      return { clipPath: polygonPoints(6) };
-  }
-}
 
 export default function ShapeClickGame({ instructions, targetScore, onResult }: ShapeClickGameProps) {
   const [shapes, setShapes] = useState<FallingShape[]>([]);
@@ -105,9 +87,17 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
             key={shape.id}
             onClick={() => handleShapeClick(shape.id)}
             aria-label={`Click the ${shape.kind}`}
-            className="absolute w-20 h-20 bg-black"
-            style={{ left: `${shape.left}%`, top: `${shape.top}%`, ...shapeStyle(shape.kind) }}
-          />
+            className="absolute w-20 h-20"
+            style={{ left: `${shape.left}%`, top: `${shape.top}%` }}
+          >
+            <Image
+              src={SHAPE_SRC[shape.kind]}
+              alt={shape.kind}
+              fill
+              sizes="80px"
+              className="object-contain pointer-events-none"
+            />
+          </button>
         ))}
       </div>
     </div>

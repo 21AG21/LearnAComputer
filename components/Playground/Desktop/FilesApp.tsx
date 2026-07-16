@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
 
@@ -9,12 +10,18 @@ interface FilesAppProps {
   onFileOpened?: (name: string) => void;
 }
 
-const FILES = [
-  { name: "VacationPhoto.png", contents: "🏖️ A sunny photo from the beach!" },
+interface FileEntry {
+  name: string;
+  image?: string;
+  contents?: string;
+}
+
+const FILES: FileEntry[] = [
+  { name: "VacationPhoto.png", image: "/playgrounds/VacationPhoto.png" },
   { name: "GroceryList.txt", contents: "Milk\nEggs\nBread\nApples" },
-  { name: "Budget.xlsx", contents: "Rent: $1200\nGroceries: $300\nSavings: $200" },
+  { name: "Budget.xlsx", image: "/playgrounds/Budget.png" },
   { name: "SecretRecipie.docx", contents: "Grandma's secret cookies:\nbutter, sugar, flour, love." },
-  { name: "FavoriteSong.mp3", contents: "🎵 Now playing your favorite song!" },
+  { name: "FavoriteSong.mp3", image: "/playgrounds/FavoriteSong.png" },
 ];
 
 export default function FilesApp({ onClose, onMinimize, onFileOpened }: FilesAppProps) {
@@ -46,8 +53,13 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened }: FilesApp
         {/* Preview pane */}
         <div className="flex-1 flex flex-col">
           <p className="text-xl mb-2">Double click a file to see it&rsquo;s contents!</p>
-          <div className="flex-1 bg-[#8fb4cb] border-2 border-black p-4 whitespace-pre-wrap text-2xl font-semibold text-white">
-            {selected ? selected.contents : ""}
+          <div className="relative flex-1 bg-[#8fb4cb] border-2 border-black p-4">
+            {selected?.image && (
+              <Image src={selected.image} alt={selected.name} fill className="object-contain p-2" />
+            )}
+            {selected?.contents && (
+              <p className="whitespace-pre-wrap text-2xl font-semibold text-white">{selected.contents}</p>
+            )}
           </div>
         </div>
       </div>

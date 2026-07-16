@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
@@ -13,11 +14,11 @@ interface FakeDesktopProps {
   onAppOpened?: (app: DesktopAppId) => void;
 }
 
-const APPS: { id: DesktopAppId; label: string; Icon: (props: { className?: string }) => React.ReactNode }[] = [
-  { id: "messages", label: "Open the Messaging App", Icon: ChatIcon },
-  { id: "browser", label: "Open the Browser", Icon: GlobeIcon },
-  { id: "files", label: "Open Files", Icon: FolderIcon },
-  { id: "mail", label: "Open the Mail App", Icon: MailIcon },
+const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
+  { id: "messages", label: "Open the Messaging App", icon: "/playgrounds/icon-chat.png" },
+  { id: "browser", label: "Open the Browser", icon: "/playgrounds/icon-globe.png" },
+  { id: "files", label: "Open Files", icon: "/playgrounds/icon-folder.png" },
+  { id: "mail", label: "Open the Mail App", icon: "/playgrounds/icon-mail.png" },
 ];
 
 export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
@@ -76,14 +77,14 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
           }}
         />
         <div className="absolute bottom-8 left-8 flex gap-6">
-          {APPS.map(({ id, label, Icon }) => (
+          {APPS.map(({ id, label, icon }) => (
             <button
               key={id}
               onClick={() => openApp(id)}
               aria-label={label}
-              className="w-20 h-20 bg-white border-[3px] border-black flex items-center justify-center"
+              className="relative w-20 h-20"
             >
-              <Icon className="w-12 h-12" />
+              <Image src={icon} alt="" fill sizes="80px" className="object-contain" />
             </button>
           ))}
         </div>
@@ -127,55 +128,3 @@ function BatteryIcon({ className }: { className?: string }) {
   );
 }
 
-function ChatIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path
-        d="M24 6 C13 6 6 13 6 21.5 C6 27 9 31.5 13.5 34 L11 42 L20 37 C21.3 37.2 22.6 37.3 24 37.3 C35 37.3 42 30 42 21.5 C42 13 35 6 24 6 Z"
-        fill="#fff"
-        stroke="#111"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-      <circle cx="16" cy="22" r="2.5" fill="#111" />
-      <circle cx="24" cy="22" r="2.5" fill="#111" />
-      <circle cx="32" cy="22" r="2.5" fill="#111" />
-    </svg>
-  );
-}
-
-function GlobeIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <circle cx="24" cy="24" r="19" fill="#fff" stroke="#111" strokeWidth="3" />
-      <ellipse cx="24" cy="24" rx="9" ry="19" fill="none" stroke="#111" strokeWidth="3" />
-      <path d="M5 24 L43 24 M8 14 L40 14 M8 34 L40 34" stroke="#111" strokeWidth="3" />
-    </svg>
-  );
-}
-
-function FolderIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path
-        d="M6 14 L6 38 L38 38 L38 18 L22 18 L18 14 Z"
-        fill="#fff"
-        stroke="#111"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-      <path d="M12 18 L40 12 L42 16 L38 18" fill="#fff" stroke="#111" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M6 38 L12 22 L44 22 L38 38 Z" fill="#fff" stroke="#111" strokeWidth="3" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function MailIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <rect x="5" y="11" width="38" height="26" fill="#fff" stroke="#111" strokeWidth="3" />
-      <path d="M5 11 L24 27 L43 11" fill="none" stroke="#111" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M5 37 L18 24 M43 37 L30 24" fill="none" stroke="#111" strokeWidth="2.5" />
-    </svg>
-  );
-}
