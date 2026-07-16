@@ -5,8 +5,11 @@
   "order": 23,
   "title": "Opening apps",
   "videoUrl": "",
-  "drDigitalIntro": "To open an app, go to your dock and click the app you want to open. If it's not there, search your computer's files for that app. Try it in the playground: click any icon in the dock to open an app.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "That's how you open apps — click and go!",
-  "drDigitalHint": "Try clicking one of the icons at the bottom of the playground desktop, then click Continue."
+  "drDigitalIntro": "To open an app, go to your dock and click the app you want to open. If it's not there, search your computer's files for that app. Let's practice: open all four apps in the dock.",
+  "playgroundTask": {
+    "type": "open-all-apps",
+    "instructions": "Click each icon in the dock to open all four apps"
+  },
+  "drDigitalSuccess": "That's how you open apps — click and go! You opened every one.",
+  "drDigitalHint": "Click an icon at the bottom of the desktop to open that app, then close it with the red X and open the next one, until you've opened all four."
 }

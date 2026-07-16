@@ -10,6 +10,8 @@ import FakeFileExplorerTask from "@/components/Playground/FakeFileExplorer";
 import { FakeBrowserRightClickTask, FakeBrowserScrollCodeTask } from "@/components/Playground/FakeBrowser";
 import { PinchZoomTask } from "@/components/Playground/PinchZoomTask";
 import MessagingApp from "@/components/Playground/Desktop/MessagingApp";
+import MatchPartsTask from "@/components/Playground/MatchPartsTask";
+import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
 import FullscreenPlayground from "@/components/Playground/FullscreenPlayground";
 import type { Lesson } from "@/lib/lessons";
 
@@ -22,6 +24,8 @@ const FULLSCREEN_TASK_TYPES = [
   "browser-scroll-code",
   "pinch-zoom",
   "message-reply",
+  "match-parts",
+  "open-all-apps",
 ];
 
 // These activities draw their own red X (in the mockup image, BrowserSimulator, or AppWindow chrome).
@@ -130,6 +134,12 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
               onClose={() => setPlaygroundOpen(false)}
               onMinimize={() => setPlaygroundOpen(false)}
             />
+          )}
+          {task.type === "match-parts" && (
+            <MatchPartsTask instructions={task.instructions} onResult={handleResult} />
+          )}
+          {task.type === "open-all-apps" && (
+            <OpenAllAppsTask instructions={task.instructions} onResult={handleResult} />
           )}
         </FullscreenPlayground>
       )}

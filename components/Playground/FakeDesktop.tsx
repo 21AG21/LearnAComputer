@@ -21,8 +21,17 @@ const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
   { id: "mail", label: "Open the Mail App", icon: "/playgrounds/icon-mail.png" },
 ];
 
+const APP_TITLES: Record<DesktopAppId, string> = {
+  messages: "Messaging App",
+  browser: "Browser",
+  files: "Files",
+  mail: "Mail App",
+};
+
 export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
+  // Apps that are open-but-minimized (still running, not quit) — these show a green dot on the desktop.
+  const [minimized, setMinimized] = useState<Set<DesktopAppId>>(new Set());
   // Bumping a key remounts (resets) an app after it's closed; minimizing keeps its state.
   const [appKeys, setAppKeys] = useState<Record<DesktopAppId, number>>({
     messages: 0,
@@ -45,26 +54,44 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
 
   function openApp(app: DesktopAppId) {
     setActiveApp(app);
+    setMinimized((prev) => {
+      if (!prev.has(app)) return prev;
+      const next = new Set(prev);
+      next.delete(app);
+      return next;
+    });
     onAppOpened?.(app);
   }
 
   function closeApp(app: DesktopAppId) {
     setAppKeys((prev) => ({ ...prev, [app]: prev[app] + 1 }));
+    setMinimized((prev) => {
+      if (!prev.has(app)) return prev;
+      const next = new Set(prev);
+      next.delete(app);
+      return next;
+    });
     setActiveApp(null);
   }
 
-  const minimize = () => setActiveApp(null);
+  function minimizeApp() {
+    if (activeApp) setMinimized((prev) => new Set(prev).add(activeApp));
+    setActiveApp(null);
+  }
 
   return (
     <div className="h-full w-full flex flex-col bg-white overflow-hidden">
-      {/* Status bar */}
-      <div className="h-9 shrink-0 bg-white flex items-center justify-end gap-3 px-4 text-lg font-semibold">
-        <WifiIcon className="w-6 h-5" />
-        <span className="flex items-center gap-1">
-          <BatteryIcon className="w-8 h-4" />
-          85%
-        </span>
-        <span suppressHydrationWarning>{time}</span>
+      {/* Menu bar */}
+      <div className="h-9 shrink-0 bg-white flex items-center justify-between px-4 text-lg font-semibold">
+        <span>{activeApp ? APP_TITLES[activeApp] : "Desktop"}</span>
+        <div className="flex items-center gap-3">
+          <WifiIcon className="w-6 h-5" />
+          <span className="flex items-center gap-1">
+            <BatteryIcon className="w-8 h-4" />
+            85%
+          </span>
+          <span suppressHydrationWarning>{time}</span>
+        </div>
       </div>
 
       {/* Desktop */}
@@ -85,22 +112,28 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
               className="relative w-20 h-20"
             >
               <Image src={icon} alt="" fill sizes="80px" className="object-contain" />
+              {minimized.has(id) && (
+                <span
+                  aria-label={`${APP_TITLES[id]} is still open`}
+                  className="absolute top-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white"
+                />
+              )}
             </button>
           ))}
         </div>
 
         {/* Apps — kept mounted while minimized so their state survives */}
         <div className={`absolute inset-0 ${activeApp === "messages" ? "" : "hidden"}`}>
-          <MessagingApp key={appKeys.messages} onClose={() => closeApp("messages")} onMinimize={minimize} />
+          <MessagingApp key={appKeys.messages} onClose={() => closeApp("messages")} onMinimize={minimizeApp} />
         </div>
         <div className={`absolute inset-0 ${activeApp === "browser" ? "" : "hidden"}`}>
-          <BrowserApp key={appKeys.browser} onClose={() => closeApp("browser")} onMinimize={minimize} />
+          <BrowserApp key={appKeys.browser} onClose={() => closeApp("browser")} onMinimize={minimizeApp} />
         </div>
         <div className={`absolute inset-0 ${activeApp === "files" ? "" : "hidden"}`}>
-          <FilesApp key={appKeys.files} onClose={() => closeApp("files")} onMinimize={minimize} />
+          <FilesApp key={appKeys.files} onClose={() => closeApp("files")} onMinimize={minimizeApp} />
         </div>
         <div className={`absolute inset-0 ${activeApp === "mail" ? "" : "hidden"}`}>
-          <MailApp key={appKeys.mail} onClose={() => closeApp("mail")} onMinimize={minimize} />
+          <MailApp key={appKeys.mail} onClose={() => closeApp("mail")} onMinimize={minimizeApp} />
         </div>
       </div>
     </div>

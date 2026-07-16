@@ -5,8 +5,11 @@
   "order": 9,
   "title": "Match the parts",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see how much you remember! In this activity you'll match each part of the laptop to its definition.",
-  "playgroundTask": { "type": "placeholder" },
+  "drDigitalIntro": "Let's see how much you remember! Match each part of the laptop to its name.",
+  "playgroundTask": {
+    "type": "match-parts",
+    "instructions": "Click a dot on the laptop, then click the name it belongs to."
+  },
   "drDigitalSuccess": "Wonderful — you know your laptop inside and out!",
-  "drDigitalHint": "This activity is coming soon — click Continue for now."
+  "drDigitalHint": "Click a dot on the laptop first, then click the name you think it is. Green means you got it!"
 }
