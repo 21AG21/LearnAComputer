@@ -1,24 +1,16 @@
 import { notFound } from "next/navigation";
-import { getLessonBySlug } from "@/lib/lessons";
-import LessonRunner from "@/components/LessonRunner";
-import FakeDesktop from "@/components/Playground/FakeDesktop";
+import { getModuleRouteBySlug, getNextModuleSlug } from "@/lib/lessons";
+import LessonModuleRunner from "@/components/LessonModuleRunner";
 
-export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function LessonModulePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const lesson = getLessonBySlug(slug);
+  const route = getModuleRouteBySlug(slug);
 
-  if (!lesson) {
+  if (!route) {
     notFound();
   }
 
-  return (
-    <div className="h-full flex">
-      <div className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6">
-        <LessonRunner lesson={lesson} />
-      </div>
-      <div className="hidden lg:block flex-1 min-w-0 border-l">
-        <FakeDesktop />
-      </div>
-    </div>
-  );
+  const nextModuleSlug = getNextModuleSlug(slug);
+
+  return <LessonModuleRunner route={route} nextModuleSlug={nextModuleSlug} />;
 }

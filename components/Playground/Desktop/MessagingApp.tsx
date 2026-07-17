@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
 
@@ -13,11 +14,19 @@ interface MessagingAppProps {
   onMinimize: () => void;
   onSendMessage?: (text: string) => void;
   contactName?: string;
+  avatarSrc?: string;
   initialMessages?: ChatMessage[];
+  showHeader?: boolean;
 }
 
 const DEFAULT_MESSAGES: ChatMessage[] = [
   { from: "contact", text: "Woof woof! Hi friend! It's me, Doggo. What's your name?" },
+];
+
+const SIDEBAR_CONTACTS = [
+  { name: "Doggo", avatar: "/playgrounds/Dog.png" },
+  { name: "Cat", avatar: "/playgrounds/Cat1.png" },
+  { name: "Snake", avatar: "/playgrounds/Snake.png" },
 ];
 
 export default function MessagingApp({
@@ -25,7 +34,9 @@ export default function MessagingApp({
   onMinimize,
   onSendMessage,
   contactName = "Doggo",
+  avatarSrc = "/playgrounds/Dog.png",
   initialMessages = DEFAULT_MESSAGES,
+  showHeader = true,
 }: MessagingAppProps) {
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
@@ -39,36 +50,43 @@ export default function MessagingApp({
   }
 
   return (
-    <AppWindow title="Messaging App" onClose={onClose} onMinimize={onMinimize}>
+    <AppWindow title="Messaging App" onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
       <div className="h-full flex gap-4 px-2 pb-2">
         {/* Contacts sidebar */}
         <div className="w-40 shrink-0 bg-[#c9e4f7] border-2 border-black flex flex-col items-center gap-6 py-6">
-          {[0, 1, 2].map((i) => (
+          {SIDEBAR_CONTACTS.map((contact, i) => (
             <button
-              key={i}
-              aria-label={i === 0 ? `Contact: ${contactName}` : `Contact ${i + 1}`}
-              className="w-24 h-24 bg-white border-2 border-black flex items-center justify-center text-sm font-semibold"
+              key={contact.name}
+              aria-label={`Contact: ${contact.name}`}
+              className={`relative w-24 h-24 border-2 border-black overflow-hidden ${
+                i === 0 ? "bg-blue-200" : "bg-white"
+              }`}
             >
-              {i === 0 ? contactName : ""}
+              <Image src={contact.avatar} alt={contact.name} fill sizes="96px" className="object-contain p-1" />
             </button>
           ))}
         </div>
 
         {/* Conversation pane */}
         <div className="flex-1 bg-[#c9e4f7] border-2 border-black flex flex-col p-4">
-          <div className="flex-1 overflow-y-auto flex flex-col gap-2">
+          <div className="flex-1 overflow-y-auto flex flex-col gap-3">
             {messages.map((message, i) => (
-              <p
+              <div
                 key={i}
-                className={`bg-white border-2 border-black px-4 py-2 text-xl max-w-[70%] break-words ${
-                  message.from === "me" ? "self-end" : "self-start"
+                className={`flex items-end gap-2 max-w-[75%] ${
+                  message.from === "me" ? "self-end flex-row-reverse" : "self-start"
                 }`}
               >
                 {message.from === "contact" && (
-                  <span className="block text-sm font-bold">{contactName}</span>
+                  <span className="relative w-10 h-10 shrink-0 border-2 border-black bg-white overflow-hidden">
+                    <Image src={avatarSrc} alt={contactName} fill sizes="40px" className="object-contain p-0.5" />
+                  </span>
                 )}
-                {message.text}
-              </p>
+                <p className="bg-white border-2 border-black px-4 py-2 text-xl break-words">
+                  {message.from === "contact" && <span className="block text-sm font-bold">{contactName}</span>}
+                  {message.text}
+                </p>
+              </div>
             ))}
           </div>
           <div className="flex items-stretch gap-3 pt-3">

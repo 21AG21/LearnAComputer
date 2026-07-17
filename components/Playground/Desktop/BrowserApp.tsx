@@ -9,7 +9,7 @@ interface BrowserAppProps {
 
 export default function BrowserApp({ onClose, onMinimize }: BrowserAppProps) {
   return (
-    <BrowserSimulator onExit={onClose} onMinimize={onMinimize} bezel={false}>
+    <BrowserSimulator onExit={onClose} onMinimize={onMinimize} bezel={false} showControls={false}>
       <div className="h-full bg-white" />
     </BrowserSimulator>
   );

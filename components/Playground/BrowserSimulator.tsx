@@ -15,6 +15,8 @@ interface BrowserSimulatorProps {
   onTabClose?: () => void;
   /** Set false when the browser runs inside the fake desktop (no gray laptop bezel). */
   bezel?: boolean;
+  /** False when opened from the fake desktop's dock — its shared menu bar hosts close/minimize instead. */
+  showControls?: boolean;
   /** The simulated web page. */
   children?: ReactNode;
 }
@@ -32,6 +34,7 @@ export default function BrowserSimulator({
   onMinimize,
   onTabClose,
   bezel = true,
+  showControls = true,
   children,
 }: BrowserSimulatorProps) {
   return (
@@ -41,26 +44,28 @@ export default function BrowserSimulator({
       >
         {/* Tab row */}
         <div className="flex items-stretch gap-4 px-2 pt-2">
-          <div className="flex shrink-0">
-            <button
-              onClick={onExit}
-              aria-label="Exit activity"
-              className="w-16 h-14 border-4 border-black bg-white flex items-center justify-center"
-            >
-              <RedX className="w-9 h-9" />
-            </button>
-            {onMinimize && (
+          {showControls && (
+            <div className="flex shrink-0">
               <button
-                onClick={onMinimize}
-                aria-label="Minimize"
-                className="w-16 h-14 border-4 border-l-0 border-black bg-white flex items-center justify-center"
+                onClick={onExit}
+                aria-label="Exit activity"
+                className="w-16 h-14 border-4 border-black bg-white flex items-center justify-center"
               >
-                <OrangeDash className="w-9 h-5" />
+                <RedX className="w-9 h-9" />
               </button>
-            )}
-          </div>
+              {onMinimize && (
+                <button
+                  onClick={onMinimize}
+                  aria-label="Minimize"
+                  className="w-16 h-14 border-4 border-l-0 border-black bg-white flex items-center justify-center"
+                >
+                  <OrangeDash className="w-9 h-5" />
+                </button>
+              )}
+            </div>
+          )}
           <div className="h-14 border-4 border-black bg-white flex items-center gap-4 px-4 min-w-64">
-            <span className="text-2xl font-semibold flex-1">{tabTitle}</span>
+            <span className="text-2xl font-semibold flex-1 font-[var(--font-app-title)]">{tabTitle}</span>
             <button
               onClick={onTabClose ?? onExit}
               aria-label="Close tab"

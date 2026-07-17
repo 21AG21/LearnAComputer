@@ -19,7 +19,15 @@ export default function MockupPlayground({ imageSrc, imageAlt, children }: Mocku
   return (
     <div className="h-full w-full flex items-center justify-center bg-white">
       <div className="relative aspect-[1280/800]" style={{ width: "min(100vw, 160vh)" }}>
-        <Image src={imageSrc} alt={imageAlt} fill priority className="object-contain select-none" draggable={false} />
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          priority
+          sizes="160vh"
+          className="object-contain select-none"
+          draggable={false}
+        />
         {children}
       </div>
     </div>

@@ -8,12 +8,11 @@ interface MatchPartsTaskProps {
   onResult: (success: boolean) => void;
 }
 
-// Each laptop part sits at the right-hand end of the leader line drawn on laptop.png
-// (positions are % of the laptop image box).
+// Center of each part on laptop.png (% of the image box).
 const PARTS = [
-  { id: "screen", label: "Screen", top: 33 },
-  { id: "keyboard", label: "Keyboard", top: 69 },
-  { id: "trackpad", label: "Trackpad", top: 88 },
+  { id: "screen", label: "Screen", left: 50, top: 16.4 },
+  { id: "keyboard", label: "Keyboard", left: 50, top: 53.6 },
+  { id: "trackpad", label: "Trackpad", left: 50, top: 83.1 },
 ] as const;
 
 type PartId = (typeof PARTS)[number]["id"];
@@ -59,9 +58,9 @@ export default function MatchPartsTask({ instructions, onResult }: MatchPartsTas
       </p>
 
       <div className="flex-1 w-full max-w-4xl flex items-center justify-center gap-10">
-        {/* Laptop with part dots at the leader-line ends */}
-        <div className="relative shrink-0" style={{ width: "min(46vw, 460px)", aspectRatio: "608 / 594" }}>
-          <Image src="/playgrounds/laptop.png" alt="Laptop" fill className="object-contain" />
+        {/* Laptop with a dot centered on each part */}
+        <div className="relative shrink-0" style={{ width: "min(50vw, 520px)", aspectRatio: "2342 / 1786" }}>
+          <Image src="/playgrounds/laptop.png" alt="Laptop" fill sizes="520px" className="object-contain" />
           {PARTS.map((part) => {
             const isMatched = matched[part.id];
             const isSelected = selectedPart === part.id;
@@ -71,21 +70,27 @@ export default function MatchPartsTask({ instructions, onResult }: MatchPartsTas
                 key={part.id}
                 onClick={() => !isMatched && setSelectedPart(part.id)}
                 aria-label={`Part at ${part.label} position`}
-                className={`absolute -translate-y-1/2 flex items-center gap-2 ${isMatched ? "cursor-default" : ""}`}
-                style={{ left: "98%", top: `${part.top}%` }}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 ${
+                  isMatched ? "cursor-default" : ""
+                }`}
+                style={{ left: `${part.left}%`, top: `${part.top}%` }}
               >
                 <span
-                  className={`w-7 h-7 rounded-full border-2 border-black transition-colors ${
+                  className={`w-8 h-8 rounded-full border-2 border-black transition-colors ${
                     isMatched
                       ? "bg-green-500"
                       : isWrong
                       ? "bg-red-500"
                       : isSelected
                       ? "bg-yellow-400"
-                      : "bg-[#2b3a5b]"
+                      : "bg-[#2b3a5b]/70"
                   }`}
                 />
-                {isMatched && <span className="text-lg font-semibold whitespace-nowrap">{part.label}</span>}
+                {isMatched && (
+                  <span className="text-lg font-semibold whitespace-nowrap bg-white/90 px-1 rounded">
+                    {part.label}
+                  </span>
+                )}
               </button>
             );
           })}

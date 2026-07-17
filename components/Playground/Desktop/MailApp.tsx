@@ -9,6 +9,7 @@ interface MailAppProps {
   onEmailOpened?: (subject: string) => void;
   /** Called when the learner sends a composed email (used by the Unit 2 "email Dr. Digital" task). */
   onSend?: (email: { to: string; subject: string; body: string }) => void;
+  showHeader?: boolean;
 }
 
 interface Email {
@@ -45,7 +46,7 @@ const EMAILS: Email[] = [
   },
 ];
 
-export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend }: MailAppProps) {
+export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend, showHeader = true }: MailAppProps) {
   const [selected, setSelected] = useState<Email | null>(null);
   const [composing, setComposing] = useState(false);
   const [draft, setDraft] = useState({ to: "", subject: "", body: "" });
@@ -63,7 +64,7 @@ export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend }: 
   }
 
   return (
-    <AppWindow title="Mail App" onClose={onClose} onMinimize={onMinimize}>
+    <AppWindow title="Mail App" onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
       <div className="h-full flex px-2 pb-2">
         {/* Inbox list */}
         <div className="w-72 shrink-0 border-2 border-black flex flex-col overflow-y-auto">

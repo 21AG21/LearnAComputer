@@ -16,7 +16,13 @@ export type PlaygroundTask =
   | { type: "browser-right-click"; instructions: string }
   | { type: "browser-scroll-code"; instructions: string; code: string }
   | { type: "pinch-zoom"; instructions: string }
-  | { type: "message-reply"; instructions: string; contactName: string; incomingMessage: string }
+  | {
+      type: "message-reply";
+      instructions: string;
+      contactName: string;
+      incomingMessage: string;
+      avatarSrc?: string;
+    }
   | { type: "match-parts"; instructions: string }
   | { type: "open-all-apps"; instructions: string };
 
@@ -41,6 +47,21 @@ export interface ModuleGroup {
 export interface UnitGroup {
   unit: string;
   modules: ModuleGroup[];
+}
+
+/** One routable page: a module and every sub-lesson inside it, in order. */
+export interface ModuleRoute {
+  unit: string;
+  module: string;
+  moduleSlug: string;
+  subLessons: Lesson[];
+}
+
+export function slugifyModule(module: string): string {
+  return module
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 const lessonsDirectory = path.join(process.cwd(), "content", "lessons");
@@ -79,4 +100,32 @@ export function getLessonsGrouped(): UnitGroup[] {
   }
 
   return unitGroups;
+}
+
+/** Flat, ordered list of every module — each one is a single route. */
+export function getModuleRoutes(): ModuleRoute[] {
+  const routes: ModuleRoute[] = [];
+  for (const unitGroup of getLessonsGrouped()) {
+    for (const moduleGroup of unitGroup.modules) {
+      routes.push({
+        unit: unitGroup.unit,
+        module: moduleGroup.module,
+        moduleSlug: slugifyModule(moduleGroup.module),
+        subLessons: moduleGroup.lessons,
+      });
+    }
+  }
+  return routes;
+}
+
+export function getModuleRouteBySlug(moduleSlug: string): ModuleRoute | undefined {
+  return getModuleRoutes().find((route) => route.moduleSlug === moduleSlug);
+}
+
+/** The next module's slug in course order, or null if this is the last one. */
+export function getNextModuleSlug(moduleSlug: string): string | null {
+  const routes = getModuleRoutes();
+  const index = routes.findIndex((route) => route.moduleSlug === moduleSlug);
+  if (index === -1 || index === routes.length - 1) return null;
+  return routes[index + 1].moduleSlug;
 }

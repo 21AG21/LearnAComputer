@@ -6,12 +6,15 @@ import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
 import FilesApp from "./Desktop/FilesApp";
 import MailApp from "./Desktop/MailApp";
+import { RedX, OrangeDash } from "./BrowserSimulator";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail";
 
 interface FakeDesktopProps {
   /** Notified whenever the learner opens an app — lets lessons set goals like "open the mail app". */
   onAppOpened?: (app: DesktopAppId) => void;
+  /** Yellow-highlighted Dr. Digital-style tip shown inside the Files app — only set this from the lesson that needs it. */
+  filesHint?: string;
 }
 
 const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
@@ -28,7 +31,21 @@ const APP_TITLES: Record<DesktopAppId, string> = {
   mail: "Mail App",
 };
 
-export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
+const WIFI_NETWORKS = [
+  { name: "CoolKids Network", connected: true },
+  { name: "Neighbor's WiFi", connected: false },
+  { name: "Coffee shop", connected: false },
+  { name: "Backup", connected: false },
+];
+
+// Battery Status API — non-standard, Chromium-only. Guarded and typed loosely on purpose.
+interface BatteryManagerLike {
+  level: number;
+  addEventListener: (type: "levelchange", listener: () => void) => void;
+  removeEventListener: (type: "levelchange", listener: () => void) => void;
+}
+
+export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps) {
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
   // Apps that are open-but-minimized (still running, not quit) — these show a green dot on the desktop.
   const [minimized, setMinimized] = useState<Set<DesktopAppId>>(new Set());
@@ -40,20 +57,36 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
     mail: 0,
   });
   const [time, setTime] = useState("1:35 pm");
+  const [batteryPercent, setBatteryPercent] = useState<number | null>(null);
+  const [openPanel, setOpenPanel] = useState<"wifi" | "battery" | null>(null);
 
   useEffect(() => {
     function update() {
-      setTime(
-        new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase()
-      );
+      setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase());
     }
     update();
     const id = setInterval(update, 30_000);
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    const nav = navigator as Navigator & { getBattery?: () => Promise<BatteryManagerLike> };
+    if (!nav.getBattery) return;
+    let battery: BatteryManagerLike | null = null;
+    const handleChange = () => {
+      if (battery) setBatteryPercent(Math.round(battery.level * 100));
+    };
+    nav.getBattery().then((b) => {
+      battery = b;
+      handleChange();
+      b.addEventListener("levelchange", handleChange);
+    });
+    return () => battery?.removeEventListener("levelchange", handleChange);
+  }, []);
+
   function openApp(app: DesktopAppId) {
     setActiveApp(app);
+    setOpenPanel(null);
     setMinimized((prev) => {
       if (!prev.has(app)) return prev;
       const next = new Set(prev);
@@ -82,20 +115,70 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
   return (
     <div className="h-full w-full flex flex-col bg-white overflow-hidden">
       {/* Menu bar */}
-      <div className="h-9 shrink-0 bg-white flex items-center justify-between px-4 text-lg font-semibold">
-        <span>{activeApp ? APP_TITLES[activeApp] : "Desktop"}</span>
+      <div className="relative h-9 shrink-0 bg-white flex items-center justify-between px-2 text-lg font-semibold border-b">
+        <div className="flex items-center gap-2">
+          {activeApp && (
+            <div className="flex shrink-0 border-2 border-black">
+              <button
+                onClick={() => closeApp(activeApp)}
+                aria-label={`Close ${APP_TITLES[activeApp]}`}
+                className="w-6 h-6 bg-white flex items-center justify-center border-r-2 border-black"
+              >
+                <RedX className="w-4 h-4" />
+              </button>
+              <button
+                onClick={minimizeApp}
+                aria-label={`Minimize ${APP_TITLES[activeApp]}`}
+                className="w-6 h-6 bg-white flex items-center justify-center"
+              >
+                <OrangeDash className="w-4 h-2.5" />
+              </button>
+            </div>
+          )}
+          <span className="font-[var(--font-app-title)]">{activeApp ? APP_TITLES[activeApp] : "Desktop"}</span>
+        </div>
         <div className="flex items-center gap-3">
-          <WifiIcon className="w-6 h-5" />
-          <span className="flex items-center gap-1">
+          <button onClick={() => setOpenPanel((p) => (p === "wifi" ? null : "wifi"))} aria-label="Wi-Fi status">
+            <WifiIcon className="w-6 h-5" />
+          </button>
+          <button
+            onClick={() => setOpenPanel((p) => (p === "battery" ? null : "battery"))}
+            aria-label="Battery status"
+            className="flex items-center gap-1"
+          >
             <BatteryIcon className="w-8 h-4" />
-            85%
-          </span>
+            {batteryPercent !== null && <span>{batteryPercent}%</span>}
+          </button>
           <span suppressHydrationWarning>{time}</span>
         </div>
+
+        {openPanel === "wifi" && (
+          <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={() => setOpenPanel(null)} title="WiFi Networks">
+            {WIFI_NETWORKS.map((network) => (
+              <p
+                key={network.name}
+                className={`px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 ${
+                  network.connected ? "bg-green-400" : "bg-white"
+                }`}
+              >
+                {network.name}
+              </p>
+            ))}
+          </StatusPanel>
+        )}
+        {openPanel === "battery" && (
+          <StatusPanel color="#0f9b6c" tint="#c3f3dd" onClose={() => setOpenPanel(null)} title="Your Battery">
+            <p className="border-2 border-green-400 p-3 text-center">
+              {batteryPercent !== null
+                ? `You have ${batteryPercent}% battery left.`
+                : "Your browser won't share the real battery level, but you can check it in your computer's own status bar."}
+            </p>
+          </StatusPanel>
+        )}
       </div>
 
       {/* Desktop */}
-      <div className="relative flex-1">
+      <div className="relative flex-1" onClick={() => setOpenPanel(null)}>
         <div
           className="absolute inset-0"
           style={{
@@ -105,12 +188,7 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
         />
         <div className="absolute bottom-8 left-8 flex gap-6">
           {APPS.map(({ id, label, icon }) => (
-            <button
-              key={id}
-              onClick={() => openApp(id)}
-              aria-label={label}
-              className="relative w-20 h-20"
-            >
+            <button key={id} onClick={() => openApp(id)} aria-label={label} className="relative w-20 h-20">
               <Image src={icon} alt="" fill sizes="80px" className="object-contain" />
               {minimized.has(id) && (
                 <span
@@ -124,18 +202,61 @@ export default function FakeDesktop({ onAppOpened }: FakeDesktopProps) {
 
         {/* Apps — kept mounted while minimized so their state survives */}
         <div className={`absolute inset-0 ${activeApp === "messages" ? "" : "hidden"}`}>
-          <MessagingApp key={appKeys.messages} onClose={() => closeApp("messages")} onMinimize={minimizeApp} />
+          <MessagingApp
+            key={appKeys.messages}
+            onClose={() => closeApp("messages")}
+            onMinimize={minimizeApp}
+            showHeader={false}
+          />
         </div>
         <div className={`absolute inset-0 ${activeApp === "browser" ? "" : "hidden"}`}>
           <BrowserApp key={appKeys.browser} onClose={() => closeApp("browser")} onMinimize={minimizeApp} />
         </div>
         <div className={`absolute inset-0 ${activeApp === "files" ? "" : "hidden"}`}>
-          <FilesApp key={appKeys.files} onClose={() => closeApp("files")} onMinimize={minimizeApp} />
+          <FilesApp
+            key={appKeys.files}
+            onClose={() => closeApp("files")}
+            onMinimize={minimizeApp}
+            hint={filesHint}
+            showHeader={false}
+          />
         </div>
         <div className={`absolute inset-0 ${activeApp === "mail" ? "" : "hidden"}`}>
-          <MailApp key={appKeys.mail} onClose={() => closeApp("mail")} onMinimize={minimizeApp} />
+          <MailApp key={appKeys.mail} onClose={() => closeApp("mail")} onMinimize={minimizeApp} showHeader={false} />
         </div>
       </div>
+    </div>
+  );
+}
+
+function StatusPanel({
+  color,
+  tint,
+  title,
+  onClose,
+  children,
+}: {
+  color: string;
+  tint: string;
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden"
+    >
+      <button onClick={onClose} aria-label={`Close ${title}`} className="absolute top-1 right-1 text-xs font-bold">
+        ✕
+      </button>
+      <div className="h-3" style={{ backgroundColor: color }} />
+      <p className="px-4 py-2 text-xl text-center" style={{ backgroundColor: tint }}>
+        {title}
+      </p>
+      <div className="h-3" style={{ backgroundColor: color }} />
+      <div className="p-2">{children}</div>
+      <div className="h-3" style={{ backgroundColor: color }} />
     </div>
   );
 }
@@ -154,10 +275,8 @@ function WifiIcon({ className }: { className?: string }) {
 function BatteryIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 20" className={className} aria-hidden="true">
-      <rect x="1" y="2" width="33" height="16" rx="4" fill="#111" />
-      <rect x="35" y="7" width="4" height="6" rx="1.5" fill="#111" />
-      <rect x="27" y="4" width="5" height="12" fill="#fff" />
+      <rect x="1" y="1.5" width="33" height="17" rx="6" fill="none" stroke="#111" strokeWidth="2.5" />
+      <rect x="35" y="6.5" width="4" height="7" rx="2" fill="#111" />
     </svg>
   );
 }
-
