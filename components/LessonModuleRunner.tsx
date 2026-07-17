@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import DrDigital from "@/components/DrDigital";
 import VideoPlayer from "@/components/VideoPlayer";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
-import { markComplete } from "@/lib/progress";
+import { markComplete, getCompletedSlugs } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
 
 type AttemptState = "unattempted" | "failed" | "success";
@@ -21,6 +21,8 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
   const [started, setStarted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [indexResolved, setIndexResolved] = useState(false);
+  const [allModuleComplete, setAllModuleComplete] = useState(false);
 
   const subLesson = route.subLessons[index];
   const isLastSubLesson = index === route.subLessons.length - 1;
@@ -32,6 +34,29 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
     setAttemptState("unattempted");
     setStarted(false);
   }, [subLesson.slug]);
+
+  // On every module change, resume at the first incomplete sub-lesson (or show the
+  // module-complete state if all are done). Keyed on route.moduleSlug rather than mount
+  // because App Router reuses this component instance across /lessons/a → /lessons/b —
+  // useState(0) does not re-initialize on navigation, so without this effect `index`
+  // would carry into the next module and index out of range.
+  useEffect(() => {
+    setIndexResolved(false);
+    setAllModuleComplete(false);
+    const completed = getCompletedSlugs();
+    const firstIncomplete = route.subLessons.findIndex((l) => !completed.includes(l.slug));
+    if (firstIncomplete === -1) {
+      setAllModuleComplete(true);
+      setIndex(0);
+    } else {
+      setIndex(firstIncomplete);
+    }
+    setIndexResolved(true);
+  // route.subLessons is intentionally excluded: it's a new array reference every render
+  // but only has new *content* when route.moduleSlug changes (same navigation event).
+  // Including it would re-run the effect every render due to array-reference instability.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.moduleSlug]);
 
   useEffect(() => {
     function handleFullscreenChange() {
@@ -83,6 +108,47 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
       : subLesson.drDigitalIntro;
 
   const drDigitalMood = attemptState === "success" ? "success" : attemptState === "failed" ? "hint" : "neutral";
+
+  if (!indexResolved) {
+    return (
+      <div className="h-full flex">
+        <div className="w-full lg:max-w-xl shrink-0 p-6">
+          <p className="text-sm text-gray-400 animate-pulse">Loading…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (allModuleComplete) {
+    return (
+      <div className="h-full flex">
+        <div className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
+          <div>
+            <p className="text-sm text-gray-500">{route.module}</p>
+            <h1 className="text-2xl font-bold">{route.module}</h1>
+          </div>
+          <div className="rounded-lg border-2 border-green-500 bg-green-50 p-6 text-center space-y-3">
+            <p className="text-5xl">✓</p>
+            <p className="text-xl font-bold text-green-700">Module complete!</p>
+            <p className="text-gray-600">You&apos;ve finished every lesson in this module.</p>
+          </div>
+          <button
+            onClick={() => {
+              if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+              if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
+              else router.push("/lessons");
+            }}
+            className="border rounded px-4 py-2 font-semibold"
+          >
+            {nextModuleSlug ? "Next module →" : "Finish"}
+          </button>
+        </div>
+        <div className="hidden lg:block flex-1 min-w-0 p-4">
+          <LessonPlaygroundPane task={{ type: "none" }} started={false} onResult={() => {}} onExit={() => {}} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex">

@@ -50,8 +50,9 @@ export default function DashboardView({ routes }: DashboardViewProps) {
       </div>
 
       <p className="text-sm text-gray-500 border-t pt-4">
-        Progress is saved for this browser session only — there&rsquo;s no account yet, so it resets when you
-        close the tab. A future version will let a parent or teacher check in on progress here too.
+        Progress is saved on this device — closing the tab or coming back another day won&rsquo;t lose it.
+        Clearing your browser data or switching to a different device will reset it.
+        A future version will let a parent or teacher check in on progress here too.
       </p>
     </div>
   );
