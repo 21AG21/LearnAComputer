@@ -15,6 +15,8 @@ interface FakeDesktopProps {
   onAppOpened?: (app: DesktopAppId) => void;
   /** Yellow-highlighted Dr. Digital-style tip shown inside the Files app — only set this from the lesson that needs it. */
   filesHint?: string;
+  /** Called when the learner double-clicks a file in the Files app. */
+  onFileOpened?: (name: string) => void;
 }
 
 const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
@@ -45,7 +47,7 @@ interface BatteryManagerLike {
   removeEventListener: (type: "levelchange", listener: () => void) => void;
 }
 
-export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps) {
+export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: FakeDesktopProps) {
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
   // Apps that are open-but-minimized (still running, not quit) — these show a green dot on the desktop.
   const [minimized, setMinimized] = useState<Set<DesktopAppId>>(new Set());
@@ -58,7 +60,9 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
   });
   const [time, setTime] = useState("1:35 pm");
   const [batteryPercent, setBatteryPercent] = useState<number | null>(null);
-  const [openPanel, setOpenPanel] = useState<"wifi" | "battery" | null>(null);
+  const [openPanel, setOpenPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
+  const [wifiConnected, setWifiConnected] = useState(true);
+  const [wifiSearching, setWifiSearching] = useState(false);
 
   useEffect(() => {
     function update() {
@@ -112,6 +116,15 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
     setActiveApp(null);
   }
 
+  function handleNetworkClick(network: (typeof WIFI_NETWORKS)[number]) {
+    if (network.connected || wifiSearching) return;
+    setWifiSearching(true);
+    setTimeout(() => {
+      setWifiConnected(false);
+      setWifiSearching(false);
+    }, 2500);
+  }
+
   return (
     <div className="h-full w-full flex flex-col bg-white overflow-hidden">
       {/* Menu bar */}
@@ -149,21 +162,35 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
             <BatteryIcon className="w-8 h-4" />
             {batteryPercent !== null && <span>{batteryPercent}%</span>}
           </button>
-          <span suppressHydrationWarning>{time}</span>
+          <button
+            onClick={() => setOpenPanel((p) => (p === "calendar" ? null : "calendar"))}
+            aria-label="Open calendar"
+            suppressHydrationWarning
+            className="hover:underline"
+          >
+            {time}
+          </button>
         </div>
 
         {openPanel === "wifi" && (
           <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={() => setOpenPanel(null)} title="WiFi Networks">
-            {WIFI_NETWORKS.map((network) => (
-              <p
-                key={network.name}
-                className={`px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 ${
-                  network.connected ? "bg-green-400" : "bg-white"
-                }`}
-              >
-                {network.name}
-              </p>
-            ))}
+            {wifiSearching ? (
+              <p className="px-3 py-3 text-center text-blue-700 font-semibold animate-pulse">Searching…</p>
+            ) : !wifiConnected ? (
+              <p className="px-3 py-3 text-center text-red-600 font-semibold">No WiFi connection.</p>
+            ) : (
+              WIFI_NETWORKS.map((network) => (
+                <button
+                  key={network.name}
+                  onClick={() => handleNetworkClick(network)}
+                  className={`w-full text-left px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 ${
+                    network.connected ? "bg-green-400 cursor-default" : "bg-white hover:bg-blue-50"
+                  }`}
+                >
+                  {network.name}
+                </button>
+              ))
+            )}
           </StatusPanel>
         )}
         {openPanel === "battery" && (
@@ -175,6 +202,7 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
             </p>
           </StatusPanel>
         )}
+        {openPanel === "calendar" && <CalendarPanel onClose={() => setOpenPanel(null)} />}
       </div>
 
       {/* Desktop */}
@@ -188,7 +216,7 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
         />
         <div className="absolute bottom-8 left-8 flex gap-6">
           {APPS.map(({ id, label, icon }) => (
-            <button key={id} onClick={() => openApp(id)} aria-label={label} className="relative w-20 h-20">
+            <button key={id} onClick={() => openApp(id)} aria-label={label} className="relative w-20 h-20 transition-transform hover:scale-110 active:scale-95">
               <Image src={icon} alt="" fill sizes="80px" className="object-contain" />
               {minimized.has(id) && (
                 <span
@@ -201,28 +229,41 @@ export default function FakeDesktop({ onAppOpened, filesHint }: FakeDesktopProps
         </div>
 
         {/* Apps — kept mounted while minimized so their state survives */}
-        <div className={`absolute inset-0 ${activeApp === "messages" ? "" : "hidden"}`}>
+        <div key={activeApp === "messages" ? appKeys.messages : undefined} className={`absolute inset-0 ${activeApp === "messages" ? "animate-fade-in" : "hidden"}`}>
           <MessagingApp
             key={appKeys.messages}
             onClose={() => closeApp("messages")}
             onMinimize={minimizeApp}
             showHeader={false}
+            noWifi={!wifiConnected}
           />
         </div>
-        <div className={`absolute inset-0 ${activeApp === "browser" ? "" : "hidden"}`}>
-          <BrowserApp key={appKeys.browser} onClose={() => closeApp("browser")} onMinimize={minimizeApp} />
+        <div key={activeApp === "browser" ? appKeys.browser : undefined} className={`absolute inset-0 ${activeApp === "browser" ? "animate-fade-in" : "hidden"}`}>
+          <BrowserApp
+            key={appKeys.browser}
+            onClose={() => closeApp("browser")}
+            onMinimize={minimizeApp}
+            noWifi={!wifiConnected}
+          />
         </div>
-        <div className={`absolute inset-0 ${activeApp === "files" ? "" : "hidden"}`}>
+        <div key={activeApp === "files" ? appKeys.files : undefined} className={`absolute inset-0 ${activeApp === "files" ? "animate-fade-in" : "hidden"}`}>
           <FilesApp
             key={appKeys.files}
             onClose={() => closeApp("files")}
             onMinimize={minimizeApp}
             hint={filesHint}
             showHeader={false}
+            onFileOpened={onFileOpened}
           />
         </div>
-        <div className={`absolute inset-0 ${activeApp === "mail" ? "" : "hidden"}`}>
-          <MailApp key={appKeys.mail} onClose={() => closeApp("mail")} onMinimize={minimizeApp} showHeader={false} />
+        <div key={activeApp === "mail" ? appKeys.mail : undefined} className={`absolute inset-0 ${activeApp === "mail" ? "animate-fade-in" : "hidden"}`}>
+          <MailApp
+            key={appKeys.mail}
+            onClose={() => closeApp("mail")}
+            onMinimize={minimizeApp}
+            showHeader={false}
+            noWifi={!wifiConnected}
+          />
         </div>
       </div>
     </div>
@@ -245,19 +286,64 @@ function StatusPanel({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden"
+      className="absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden animate-slide-down"
     >
-      <button onClick={onClose} aria-label={`Close ${title}`} className="absolute top-1 right-1 text-xs font-bold">
-        ✕
-      </button>
-      <div className="h-3" style={{ backgroundColor: color }} />
-      <p className="px-4 py-2 text-xl text-center" style={{ backgroundColor: tint }}>
-        {title}
-      </p>
-      <div className="h-3" style={{ backgroundColor: color }} />
+      <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: tint }}>
+        <p className="text-lg font-bold">{title}</p>
+        <button
+          onClick={onClose}
+          aria-label={`Close ${title}`}
+          className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-sm hover:opacity-80 transition-opacity"
+          style={{ backgroundColor: color }}
+        >
+          ✕
+        </button>
+      </div>
+      <div className="h-1" style={{ backgroundColor: color }} />
       <div className="p-2">{children}</div>
       <div className="h-3" style={{ backgroundColor: color }} />
     </div>
+  );
+}
+
+const CALENDAR_EVENTS = [
+  { time: "9:00 am", label: "School" },
+  { time: "12:00 pm", label: "Lunch" },
+  { time: "4:00 pm", label: "Soccer practice" },
+  { time: "7:00 pm", label: "Homework time" },
+];
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTH_NAMES = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
+function ordinal(n: number) {
+  if (n === 1 || n === 21 || n === 31) return `${n}st`;
+  if (n === 2 || n === 22) return `${n}nd`;
+  if (n === 3 || n === 23) return `${n}rd`;
+  return `${n}th`;
+}
+
+function CalendarPanel({ onClose }: { onClose: () => void }) {
+  const now = new Date();
+  const dayName = DAY_NAMES[now.getDay()];
+  const monthName = MONTH_NAMES[now.getMonth()];
+  const dateOrdinal = ordinal(now.getDate());
+  return (
+    <StatusPanel color="#c0392b" tint="#fde8e6" onClose={onClose} title="Calendar">
+      <p className="px-2 py-1 font-semibold text-sm text-gray-700">
+        Today is {dayName}, {monthName} {dateOrdinal}
+      </p>
+      <div className="mt-1 space-y-1">
+        {CALENDAR_EVENTS.map((ev) => (
+          <div key={ev.label} className="flex gap-2 items-baseline px-2 py-1 border-t border-red-100">
+            <span className="text-xs text-gray-500 w-16 shrink-0">{ev.time}</span>
+            <span className="text-sm font-medium">{ev.label}</span>
+          </div>
+        ))}
+      </div>
+    </StatusPanel>
   );
 }
 

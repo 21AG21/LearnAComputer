@@ -16,6 +16,7 @@ interface MailAppProps {
   composeBanner?: string;
   /** Yellow-highlighted Dr. Digital-style tip shown before the learner has started composing. */
   promptBanner?: string;
+  noWifi?: boolean;
 }
 
 interface Email {
@@ -61,6 +62,7 @@ export default function MailApp({
   composeDefaults,
   composeBanner,
   promptBanner,
+  noWifi = false,
 }: MailAppProps) {
   const [selected, setSelected] = useState<Email | null>(null);
   const [composing, setComposing] = useState(false);
@@ -80,7 +82,14 @@ export default function MailApp({
 
   return (
     <AppWindow title="Mail App" onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
-      <div className="h-full flex px-2 pb-2">
+      <div className="relative h-full flex px-2 pb-2">
+      {noWifi && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/95 gap-2">
+          <p className="text-4xl">📵</p>
+          <p className="text-xl font-bold text-red-600">No WiFi</p>
+          <p className="text-gray-500 text-sm">Connect to a network to use Mail.</p>
+        </div>
+      )}
         {/* Inbox list */}
         <div className="w-72 shrink-0 border-2 border-black flex flex-col overflow-y-auto">
           {EMAILS.map((email) => (

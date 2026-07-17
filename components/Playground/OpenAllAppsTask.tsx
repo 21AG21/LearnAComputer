@@ -15,16 +15,14 @@ export default function OpenAllAppsTask({ instructions, onResult }: OpenAllAppsT
   const finished = useRef(false);
 
   function handleAppOpened(app: DesktopAppId) {
-    setOpened((prev) => {
-      if (prev.has(app)) return prev;
-      const next = new Set(prev);
-      next.add(app);
-      if (!finished.current && ALL_APPS.every((a) => next.has(a))) {
-        finished.current = true;
-        onResult(true);
-      }
-      return next;
-    });
+    if (opened.has(app)) return;
+    const next = new Set(opened);
+    next.add(app);
+    setOpened(next);
+    if (!finished.current && ALL_APPS.every((a) => next.has(a))) {
+      finished.current = true;
+      onResult(true);
+    }
   }
 
   return (

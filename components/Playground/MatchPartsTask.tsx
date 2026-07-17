@@ -57,10 +57,10 @@ export default function MatchPartsTask({ instructions, onResult }: MatchPartsTas
         Click a dot on the laptop, then click the name it belongs to.
       </p>
 
-      <div className="flex-1 w-full max-w-4xl flex items-center justify-center gap-10">
+      <div className="flex-1 w-full flex items-center justify-center gap-8">
         {/* Laptop with a dot centered on each part */}
-        <div className="relative shrink-0" style={{ width: "min(50vw, 520px)", aspectRatio: "2342 / 1786" }}>
-          <Image src="/playgrounds/laptop.png" alt="Laptop" fill sizes="520px" className="object-contain" />
+        <div className="relative shrink-0" style={{ width: "min(55%, 400px)", aspectRatio: "2342 / 1786" }}>
+          <Image src="/playgrounds/laptop.png" alt="Laptop" fill sizes="400px" className="object-contain" />
           {PARTS.map((part) => {
             const isMatched = matched[part.id];
             const isSelected = selectedPart === part.id;

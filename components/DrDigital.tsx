@@ -15,7 +15,11 @@ const MOOD_STYLES: Record<DrDigitalMood, string> = {
 
 export default function DrDigital({ message, mood = "neutral" }: DrDigitalProps) {
   return (
-    <div data-mood={mood} className={`flex gap-3 items-start border-2 rounded p-4 ${MOOD_STYLES[mood]}`}>
+    <div
+      key={mood}
+      data-mood={mood}
+      className={`flex gap-3 items-start border-2 rounded p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
+    >
       <DrDigitalAvatar className="w-14 h-14 shrink-0" />
       <div>
         <p className="text-base font-semibold">Dr. Digital</p>

@@ -26,7 +26,7 @@ export default function DashboardView({ routes }: DashboardViewProps) {
   return (
     <div className="space-y-6">
       <p className="text-lg font-semibold">
-        {totalCompleted} of {totalSubLessons} lessons completed this session
+        {totalCompleted} of {totalSubLessons} lessons completed
       </p>
 
       <div className="space-y-4">

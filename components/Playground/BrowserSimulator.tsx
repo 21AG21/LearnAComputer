@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+
+interface ExtraTab {
+  title: string;
+  active?: boolean;
+  onClick: () => void;
+}
 
 interface BrowserSimulatorProps {
   /** Text shown inside the tab. */
@@ -13,10 +19,18 @@ interface BrowserSimulatorProps {
   onMinimize?: () => void;
   /** Optional separate handler for the tab's dark ✕; falls back to onExit. */
   onTabClose?: () => void;
+  /** Whether the main tab is the active one. When extraTabs are present and one is active, set false. */
+  tabActive?: boolean;
   /** Set false when the browser runs inside the fake desktop (no gray laptop bezel). */
   bezel?: boolean;
   /** False when opened from the fake desktop's dock — its shared menu bar hosts close/minimize instead. */
   showControls?: boolean;
+  /** Additional tabs shown in the tab row (used by the right-click task). */
+  extraTabs?: ExtraTab[];
+  /** When set, adds a 3-dot menu in the toolbar with Zoom In / Zoom Out. */
+  onZoomIn?: () => void;
+  /** When set, adds a 3-dot menu in the toolbar with Zoom In / Zoom Out. */
+  onZoomOut?: () => void;
   /** The simulated web page. */
   children?: ReactNode;
 }
@@ -35,15 +49,21 @@ export default function BrowserSimulator({
   onTabClose,
   bezel = true,
   showControls = true,
+  tabActive = true,
+  extraTabs,
+  onZoomIn,
+  onZoomOut,
   children,
 }: BrowserSimulatorProps) {
+  const [dotMenuOpen, setDotMenuOpen] = useState(false);
+  const hasZoom = !!(onZoomIn || onZoomOut);
   return (
     <div className={`h-full w-full ${bezel ? "bg-gray-200 p-3 sm:p-5" : ""}`}>
       <div
         className={`h-full w-full bg-white overflow-hidden flex flex-col ${bezel ? "rounded-lg shadow" : ""}`}
       >
         {/* Tab row */}
-        <div className="flex items-stretch gap-4 px-2 pt-2">
+        <div className="flex items-stretch gap-3 px-2 pt-2">
           {showControls && (
             <div className="flex shrink-0">
               <button
@@ -64,15 +84,29 @@ export default function BrowserSimulator({
               )}
             </div>
           )}
-          <div className="h-14 border-4 border-black bg-white flex items-center gap-4 px-4 min-w-64">
-            <span className="text-2xl font-semibold flex-1 font-[var(--font-app-title)]">{tabTitle}</span>
-            <button
-              onClick={onTabClose ?? onExit}
-              aria-label="Close tab"
-              className="shrink-0 flex items-center justify-center"
-            >
-              <DarkX className="w-7 h-7" />
-            </button>
+          {/* Tab group — no gap so borders share */}
+          <div className="flex items-stretch">
+            <div className={`h-14 border-4 border-black flex items-center gap-3 px-4 min-w-40 ${tabActive ? "bg-white" : "bg-gray-100"}`}>
+              <span className="text-xl font-semibold flex-1 font-[var(--font-app-title)]">{tabTitle}</span>
+              <button
+                onClick={onTabClose ?? onExit}
+                aria-label="Close tab"
+                className="shrink-0 flex items-center justify-center"
+              >
+                <DarkX className="w-6 h-6" />
+              </button>
+            </div>
+            {extraTabs?.map((tab, i) => (
+              <button
+                key={i}
+                onClick={tab.onClick}
+                className={`h-14 border-4 border-l-0 border-black flex items-center px-4 min-w-36 ${
+                  tab.active ? "bg-white" : "bg-gray-100"
+                }`}
+              >
+                <span className="text-lg font-semibold font-[var(--font-app-title)]">{tab.title}</span>
+              </button>
+            ))}
           </div>
         </div>
 
@@ -83,6 +117,36 @@ export default function BrowserSimulator({
           <ReloadIcon className="w-7 h-7 shrink-0" />
           <LockIcon className="w-6 h-8 shrink-0" />
           <span className="flex-1 text-center text-2xl">{url}</span>
+          {hasZoom && (
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setDotMenuOpen((o) => !o)}
+                aria-label="Browser menu"
+                className="flex flex-col items-center justify-center gap-1 w-8 h-8"
+              >
+                {[0,1,2].map((i) => <span key={i} className="w-1.5 h-1.5 rounded-full bg-gray-700 block" />)}
+              </button>
+              {dotMenuOpen && (
+                <div
+                  className="absolute right-0 top-full mt-1 z-30 bg-white border-2 border-black shadow-lg min-w-36 animate-slide-down"
+                  onClick={() => setDotMenuOpen(false)}
+                >
+                  <button
+                    onClick={onZoomIn}
+                    className="w-full text-left px-4 py-2 text-lg font-semibold hover:bg-gray-100 border-b border-gray-200"
+                  >
+                    + Zoom In
+                  </button>
+                  <button
+                    onClick={onZoomOut}
+                    className="w-full text-left px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                  >
+                    − Zoom Out
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           <MagnifierIcon className="w-8 h-8 shrink-0" />
         </div>
 

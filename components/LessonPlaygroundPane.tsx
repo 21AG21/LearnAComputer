@@ -4,9 +4,10 @@ import FakeDesktop from "@/components/Playground/FakeDesktop";
 import CopyPasteTask from "@/components/Playground/CopyPasteTask";
 import TypeTextTask from "@/components/Playground/TypeTextTask";
 import ShapeClickGame from "@/components/Playground/ShapeClickGame";
-import FakeFileExplorerTask from "@/components/Playground/FakeFileExplorer";
-import { FakeBrowserRightClickTask, FakeBrowserScrollCodeTask } from "@/components/Playground/FakeBrowser";
-import { PinchZoomTask } from "@/components/Playground/PinchZoomTask";
+import DesktopFileExplorerTask from "@/components/Playground/DesktopFileExplorerTask";
+import DesktopBrowserRightClickTask from "@/components/Playground/DesktopBrowserRightClickTask";
+import DesktopBrowserScrollTask from "@/components/Playground/DesktopBrowserScrollTask";
+import DesktopBrowserZoomTask from "@/components/Playground/DesktopBrowserZoomTask";
 import MessagingApp from "@/components/Playground/Desktop/MessagingApp";
 import MatchPartsTask from "@/components/Playground/MatchPartsTask";
 import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
@@ -25,9 +26,16 @@ interface LessonPlaygroundPaneProps {
   onExit: () => void;
 }
 
-// These activities draw their own red X (in the mockup image, BrowserSimulator, or AppWindow chrome),
-// so the pane shouldn't draw a second one on top of it.
-const OWN_EXIT_TASK_TYPES = ["browser-right-click", "browser-scroll-code", "pinch-zoom", "message-reply", "compose-email"];
+// These activities manage their own close/exit chrome (FakeDesktop, BrowserSimulator, or AppWindow),
+// so the pane shouldn't draw a generic red X on top of them.
+const OWN_EXIT_TASK_TYPES = [
+  "file-explorer-open",
+  "browser-right-click",
+  "browser-scroll-code",
+  "pinch-zoom",
+  "message-reply",
+  "compose-email",
+];
 
 /**
  * The right-hand playground pane on a lesson page. Idle, it's just the fake
@@ -77,15 +85,15 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <ShapeClickGame instructions={task.instructions} targetScore={task.targetScore} onResult={onResult} />
           )}
           {task.type === "file-explorer-open" && (
-            <FakeFileExplorerTask instructions={task.instructions} filesToOpen={task.filesToOpen} onResult={onResult} />
+            <DesktopFileExplorerTask filesToOpen={task.filesToOpen} onResult={onResult} />
           )}
           {task.type === "browser-right-click" && (
-            <FakeBrowserRightClickTask instructions={task.instructions} onResult={onResult} onExit={onExit} />
+            <DesktopBrowserRightClickTask onResult={onResult} />
           )}
           {task.type === "browser-scroll-code" && (
-            <FakeBrowserScrollCodeTask instructions={task.instructions} code={task.code} onResult={onResult} onExit={onExit} />
+            <DesktopBrowserScrollTask code={task.code} onResult={onResult} />
           )}
-          {task.type === "pinch-zoom" && <PinchZoomTask instructions={task.instructions} onResult={onResult} onExit={onExit} />}
+          {task.type === "pinch-zoom" && <DesktopBrowserZoomTask onResult={onResult} />}
           {task.type === "message-reply" && (
             <MessagingApp
               contactName={task.contactName}

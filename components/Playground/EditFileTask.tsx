@@ -59,7 +59,7 @@ export default function EditFileTask({
             className="sticky top-0 z-10 flex items-center gap-2 border-2 border-black bg-yellow-100 px-3 py-1.5 rounded font-bold mb-3"
           >
             <ExpandIcon className="w-5 h-5" />
-            Click here to edit in full screen
+            Click here to edit
           </button>
           <p className="whitespace-pre-wrap text-lg font-semibold text-white">{startingText}</p>
         </div>

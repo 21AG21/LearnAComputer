@@ -5,11 +5,11 @@
   "order": 16,
   "title": "Pinch to zoom",
   "videoUrl": "",
-  "drDigitalIntro": "What if you'd like to zoom in on pictures or text? Spread two fingers apart on the trackpad to make something bigger, or move two fingers closer together to make it smaller. Each animal below is hiding a tiny number — zoom in close to find it!",
+  "drDigitalIntro": "What if you'd like to zoom in on pictures or text? Spread two fingers apart on the trackpad to make something bigger, or move two fingers closer together to make it smaller. In the activity, open the browser and use the three-dot menu (⋮) next to the search icon to zoom in — then find the hidden number in the text!",
   "playgroundTask": {
     "type": "pinch-zoom",
-    "instructions": "Pinch to zoom in on each animal (or hold Ctrl and scroll) to find its hidden number, then type all four numbers in order."
+    "instructions": "Open the browser, then click the ⋮ menu next to the search icon and choose Zoom In to make the text bigger. Find the hidden number that appears, then type the full code."
   },
-  "drDigitalSuccess": "You zoomed right in and cracked the code! Pinch to zoom is yours now.",
-  "drDigitalHint": "Put two fingers on the trackpad and spread them apart over an animal to zoom in — or hold Ctrl and scroll if you're using a mouse. Look closely for a tiny number, then type all four in order."
+  "drDigitalSuccess": "You zoomed in and found the hidden code — great detective work!",
+  "drDigitalHint": "Click the three dots ⋮ next to the search icon in the browser toolbar, then choose Zoom In. Keep zooming until you can read the tiny hidden number, then type the full code."
 }

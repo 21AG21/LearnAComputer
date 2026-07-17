@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import DrDigital from "@/components/DrDigital";
 import VideoPlayer from "@/components/VideoPlayer";
@@ -20,9 +20,9 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   const [index, setIndex] = useState(0);
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
   const [started, setStarted] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [indexResolved, setIndexResolved] = useState(false);
   const [allModuleComplete, setAllModuleComplete] = useState(false);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
 
   const subLesson = route.subLessons[index];
   const isLastSubLesson = index === route.subLessons.length - 1;
@@ -33,6 +33,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   useEffect(() => {
     setAttemptState("unattempted");
     setStarted(false);
+    if (leftPanelRef.current) leftPanelRef.current.scrollTop = 0;
   }, [subLesson.slug]);
 
   // On every module change, resume at the first incomplete sub-lesson (or show the
@@ -58,32 +59,13 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.moduleSlug]);
 
-  useEffect(() => {
-    function handleFullscreenChange() {
-      setIsFullscreen(!!document.fullscreenElement);
-    }
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
-
   function handleStart() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen?.().catch(() => {
-        // Fullscreen can be denied (no user-gesture context, iframe restrictions, etc.) —
-        // the activity still opens, just without taking over the whole screen.
-      });
-    }
     setStarted(true);
   }
 
   function handleResult(success: boolean) {
     setAttemptState(success ? "success" : "failed");
-    if (success) {
-      markComplete(subLesson.slug);
-      // Return to the idle desktop as a reward beat, but stay in fullscreen —
-      // the whole point is not to flicker in and out of fullscreen between activities.
-      setStarted(false);
-    }
+    if (success) markComplete(subLesson.slug);
   }
 
   function handleNext() {
@@ -91,7 +73,6 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
     if (!isLastSubLesson) {
       setIndex((i) => i + 1);
     } else {
-      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
       if (nextModuleSlug) {
         router.push(`/lessons/${nextModuleSlug}`);
       } else {
@@ -134,7 +115,6 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
           </div>
           <button
             onClick={() => {
-              if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
               if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
               else router.push("/lessons");
             }}
@@ -152,7 +132,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
   return (
     <div className="h-full flex">
-      <div className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
+      <div ref={leftPanelRef} className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
         <div>
           <p className="text-sm text-gray-500">
             {route.module} &middot; {index + 1} of {route.subLessons.length}
@@ -170,30 +150,28 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         {hasGate && attemptState !== "success" && (
           <div className="flex items-center gap-4">
             {!started && (
-              <button onClick={handleStart} className="border-2 border-black rounded px-4 py-2 font-semibold bg-white">
+              <button onClick={handleStart} className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95">
                 Start activity
               </button>
             )}
-            <button onClick={handleNext} className="text-sm text-gray-500 underline">
+            <button onClick={handleNext} className="text-sm text-gray-500 underline transition-colors hover:text-gray-800">
               Skip this activity
             </button>
           </div>
         )}
 
-        {canAdvance && (
-          <button onClick={handleNext} className="border rounded px-4 py-2 font-semibold">
-            {isLastSubLesson && !nextModuleSlug ? "Finish" : "Next"}
-          </button>
-        )}
-
-        {isFullscreen && (
-          <button
-            onClick={() => document.exitFullscreen?.().catch(() => {})}
-            className="block text-xs text-gray-400 underline"
-          >
-            Exit fullscreen
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {index > 0 && (
+            <button onClick={() => setIndex((i) => i - 1)} className="border rounded px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100">
+              ← Back
+            </button>
+          )}
+          {canAdvance && (
+            <button onClick={handleNext} className="border rounded px-4 py-2 font-semibold animate-slide-up transition-colors hover:bg-gray-50 active:bg-gray-100">
+              {isLastSubLesson && !nextModuleSlug ? "Finish" : "Next"}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="hidden lg:block flex-1 min-w-0 p-4">

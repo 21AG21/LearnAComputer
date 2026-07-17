@@ -19,6 +19,7 @@ interface MessagingAppProps {
   showHeader?: boolean;
   /** Yellow-highlighted Dr. Digital-style tip — only pass this from the specific lesson that needs it. */
   instructionBanner?: string;
+  noWifi?: boolean;
 }
 
 const DEFAULT_MESSAGES: ChatMessage[] = [
@@ -40,6 +41,7 @@ export default function MessagingApp({
   initialMessages = DEFAULT_MESSAGES,
   showHeader = true,
   instructionBanner,
+  noWifi = false,
 }: MessagingAppProps) {
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
@@ -54,6 +56,14 @@ export default function MessagingApp({
 
   return (
     <AppWindow title="Messaging App" onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
+      <div className="relative h-full">
+      {noWifi && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/95 gap-2">
+          <p className="text-4xl">📵</p>
+          <p className="text-xl font-bold text-red-600">No WiFi</p>
+          <p className="text-gray-500 text-sm">Connect to a network to use Messaging.</p>
+        </div>
+      )}
       <div className="h-full flex gap-4 px-2 pb-2">
         {/* Contacts sidebar */}
         <div className="w-40 shrink-0 bg-[#c9e4f7] border-2 border-black flex flex-col items-center gap-6 py-6">
@@ -108,6 +118,7 @@ export default function MessagingApp({
             />
           </div>
         </div>
+      </div>
       </div>
     </AppWindow>
   );
