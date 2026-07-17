@@ -33,12 +33,7 @@ const APP_TITLES: Record<DesktopAppId, string> = {
   mail: "Mail App",
 };
 
-const WIFI_NETWORKS = [
-  { name: "CoolKids Network", connected: true },
-  { name: "Neighbor's WiFi", connected: false },
-  { name: "Coffee shop", connected: false },
-  { name: "Backup", connected: false },
-];
+const WIFI_NETWORKS = [{ name: "CoolKids Network" }, { name: "Neighbor's WiFi" }, { name: "Coffee shop" }, { name: "Backup" }];
 
 // Battery Status API — non-standard, Chromium-only. Guarded and typed loosely on purpose.
 interface BatteryManagerLike {
@@ -61,8 +56,12 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
   const [time, setTime] = useState("1:35 pm");
   const [batteryPercent, setBatteryPercent] = useState<number | null>(null);
   const [openPanel, setOpenPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
-  const [wifiConnected, setWifiConnected] = useState(true);
-  const [wifiSearching, setWifiSearching] = useState(false);
+  const [connectedNetwork, setConnectedNetwork] = useState<string | null>("CoolKids Network");
+  const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
+  // Transient visual states: an app plays its close/minimize animation here before
+  // actually unmounting/hiding, since CSS can't animate a jump straight to display:none.
+  const [closingApp, setClosingApp] = useState<DesktopAppId | null>(null);
+  const [minimizingApp, setMinimizingApp] = useState<DesktopAppId | null>(null);
 
   useEffect(() => {
     function update() {
@@ -101,28 +100,41 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
   }
 
   function closeApp(app: DesktopAppId) {
-    setAppKeys((prev) => ({ ...prev, [app]: prev[app] + 1 }));
-    setMinimized((prev) => {
-      if (!prev.has(app)) return prev;
-      const next = new Set(prev);
-      next.delete(app);
-      return next;
-    });
-    setActiveApp(null);
+    setClosingApp(app);
+    setTimeout(() => {
+      setAppKeys((prev) => ({ ...prev, [app]: prev[app] + 1 }));
+      setMinimized((prev) => {
+        if (!prev.has(app)) return prev;
+        const next = new Set(prev);
+        next.delete(app);
+        return next;
+      });
+      setActiveApp(null);
+      setClosingApp(null);
+    }, 150);
   }
 
   function minimizeApp() {
-    if (activeApp) setMinimized((prev) => new Set(prev).add(activeApp));
-    setActiveApp(null);
+    if (!activeApp) return;
+    const app = activeApp;
+    setMinimizingApp(app);
+    setTimeout(() => {
+      setMinimized((prev) => new Set(prev).add(app));
+      setActiveApp(null);
+      setMinimizingApp(null);
+    }, 220);
   }
 
   function handleNetworkClick(network: (typeof WIFI_NETWORKS)[number]) {
-    if (network.connected || wifiSearching) return;
-    setWifiSearching(true);
+    if (network.name === connectedNetwork || searchingNetwork) return;
+    setSearchingNetwork(network.name);
     setTimeout(() => {
-      setWifiConnected(false);
-      setWifiSearching(false);
-    }, 2500);
+      // Only the learner's own network is known-good; the others are neighbors'/public
+      // networks that need a password we don't have, so connecting to them fails —
+      // but the list stays visible so they can always click back to CoolKids Network.
+      setConnectedNetwork(network.name === "CoolKids Network" ? network.name : null);
+      setSearchingNetwork(null);
+    }, 2000);
   }
 
   return (
@@ -174,23 +186,25 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
 
         {openPanel === "wifi" && (
           <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={() => setOpenPanel(null)} title="WiFi Networks">
-            {wifiSearching ? (
-              <p className="px-3 py-3 text-center text-blue-700 font-semibold animate-pulse">Searching…</p>
-            ) : !wifiConnected ? (
-              <p className="px-3 py-3 text-center text-red-600 font-semibold">No WiFi connection.</p>
-            ) : (
-              WIFI_NETWORKS.map((network) => (
+            {!connectedNetwork && !searchingNetwork && (
+              <p className="px-3 py-2 text-center text-red-600 font-semibold text-sm">No WiFi connection. Pick a network below.</p>
+            )}
+            {WIFI_NETWORKS.map((network) => {
+              const isConnected = network.name === connectedNetwork;
+              const isSearching = network.name === searchingNetwork;
+              return (
                 <button
                   key={network.name}
                   onClick={() => handleNetworkClick(network)}
+                  disabled={!!searchingNetwork}
                   className={`w-full text-left px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 ${
-                    network.connected ? "bg-green-400 cursor-default" : "bg-white hover:bg-blue-50"
+                    isConnected ? "bg-green-400 cursor-default" : isSearching ? "bg-yellow-100 animate-pulse" : "bg-white hover:bg-blue-50"
                   }`}
                 >
-                  {network.name}
+                  {isSearching ? `Connecting to ${network.name}…` : isConnected ? `${network.name} ✓` : network.name}
                 </button>
-              ))
-            )}
+              );
+            })}
           </StatusPanel>
         )}
         {openPanel === "battery" && (
@@ -228,25 +242,38 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
           ))}
         </div>
 
-        {/* Apps — kept mounted while minimized so their state survives */}
-        <div key={activeApp === "messages" ? appKeys.messages : undefined} className={`absolute inset-0 ${activeApp === "messages" ? "animate-fade-in" : "hidden"}`}>
+        {/* Apps — kept mounted while minimized so their state survives. Each wrapper's own
+            key never changes; only the inner app's key (bumped on real close) resets it. */}
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "messages" ? "animate-window-close" : minimizingApp === "messages" ? "animate-window-minimize" : activeApp === "messages" ? "animate-window-open" : "hidden"
+          }`}
+        >
           <MessagingApp
             key={appKeys.messages}
             onClose={() => closeApp("messages")}
             onMinimize={minimizeApp}
             showHeader={false}
-            noWifi={!wifiConnected}
+            noWifi={!connectedNetwork}
           />
         </div>
-        <div key={activeApp === "browser" ? appKeys.browser : undefined} className={`absolute inset-0 ${activeApp === "browser" ? "animate-fade-in" : "hidden"}`}>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "browser" ? "animate-window-close" : minimizingApp === "browser" ? "animate-window-minimize" : activeApp === "browser" ? "animate-window-open" : "hidden"
+          }`}
+        >
           <BrowserApp
             key={appKeys.browser}
             onClose={() => closeApp("browser")}
             onMinimize={minimizeApp}
-            noWifi={!wifiConnected}
+            noWifi={!connectedNetwork}
           />
         </div>
-        <div key={activeApp === "files" ? appKeys.files : undefined} className={`absolute inset-0 ${activeApp === "files" ? "animate-fade-in" : "hidden"}`}>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "files" ? "animate-window-close" : minimizingApp === "files" ? "animate-window-minimize" : activeApp === "files" ? "animate-window-open" : "hidden"
+          }`}
+        >
           <FilesApp
             key={appKeys.files}
             onClose={() => closeApp("files")}
@@ -256,13 +283,17 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
             onFileOpened={onFileOpened}
           />
         </div>
-        <div key={activeApp === "mail" ? appKeys.mail : undefined} className={`absolute inset-0 ${activeApp === "mail" ? "animate-fade-in" : "hidden"}`}>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "mail" ? "animate-window-close" : minimizingApp === "mail" ? "animate-window-minimize" : activeApp === "mail" ? "animate-window-open" : "hidden"
+          }`}
+        >
           <MailApp
             key={appKeys.mail}
             onClose={() => closeApp("mail")}
             onMinimize={minimizeApp}
             showHeader={false}
-            noWifi={!wifiConnected}
+            noWifi={!connectedNetwork}
           />
         </div>
       </div>

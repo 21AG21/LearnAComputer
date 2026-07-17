@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import DrDigital from "@/components/DrDigital";
-import VideoPlayer from "@/components/VideoPlayer";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
 import { markComplete, getCompletedSlugs } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
@@ -22,17 +22,22 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   const [started, setStarted] = useState(false);
   const [indexResolved, setIndexResolved] = useState(false);
   const [allModuleComplete, setAllModuleComplete] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const [alreadyDone, setAlreadyDone] = useState(false);
+  const [activityAttempt, setActivityAttempt] = useState(0);
   const leftPanelRef = useRef<HTMLDivElement>(null);
 
   const subLesson = route.subLessons[index];
   const isLastSubLesson = index === route.subLessons.length - 1;
   // "none"/"placeholder" sub-lessons have nothing to pass — advancing is never gated on them.
   const hasGate = subLesson.playgroundTask.type !== "none" && subLesson.playgroundTask.type !== "placeholder";
-  const canAdvance = !hasGate || attemptState === "success";
+  const canAdvance = !hasGate || attemptState === "success" || alreadyDone;
 
   useEffect(() => {
     setAttemptState("unattempted");
     setStarted(false);
+    setActivityAttempt(0);
+    setAlreadyDone(getCompletedSlugs().includes(subLesson.slug));
     if (leftPanelRef.current) leftPanelRef.current.scrollTop = 0;
   }, [subLesson.slug]);
 
@@ -44,6 +49,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   useEffect(() => {
     setIndexResolved(false);
     setAllModuleComplete(false);
+    setReviewing(false);
     const completed = getCompletedSlugs();
     const firstIncomplete = route.subLessons.findIndex((l) => !completed.includes(l.slug));
     if (firstIncomplete === -1) {
@@ -72,12 +78,13 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
     if (!hasGate) markComplete(subLesson.slug);
     if (!isLastSubLesson) {
       setIndex((i) => i + 1);
+    } else if (reviewing) {
+      setReviewing(false);
+      setAllModuleComplete(true);
+    } else if (nextModuleSlug) {
+      router.push(`/lessons/${nextModuleSlug}`);
     } else {
-      if (nextModuleSlug) {
-        router.push(`/lessons/${nextModuleSlug}`);
-      } else {
-        router.push("/lessons");
-      }
+      router.push("/lessons");
     }
   }
 
@@ -100,10 +107,13 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
     );
   }
 
-  if (allModuleComplete) {
+  if (allModuleComplete && !reviewing) {
     return (
       <div className="h-full flex">
         <div className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
+          <Link href="/lessons" className="text-sm text-gray-500 underline">
+            ← All lessons
+          </Link>
           <div>
             <p className="text-sm text-gray-500">{route.module}</p>
             <h1 className="text-2xl font-bold">{route.module}</h1>
@@ -113,15 +123,26 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
             <p className="text-xl font-bold text-green-700">Module complete!</p>
             <p className="text-gray-600">You&apos;ve finished every lesson in this module.</p>
           </div>
-          <button
-            onClick={() => {
-              if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
-              else router.push("/lessons");
-            }}
-            className="border rounded px-4 py-2 font-semibold"
-          >
-            {nextModuleSlug ? "Next module →" : "Finish"}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
+                else router.push("/lessons");
+              }}
+              className="border rounded px-4 py-2 font-semibold"
+            >
+              {nextModuleSlug ? "Next module →" : "Finish"}
+            </button>
+            <button
+              onClick={() => {
+                setReviewing(true);
+                setIndex(0);
+              }}
+              className="border rounded px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100"
+            >
+              Review this module
+            </button>
+          </div>
         </div>
         <div className="hidden lg:block flex-1 min-w-0 p-4">
           <LessonPlaygroundPane task={{ type: "none" }} started={false} onResult={() => {}} onExit={() => {}} />
@@ -133,6 +154,9 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   return (
     <div className="h-full flex">
       <div ref={leftPanelRef} className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
+        <Link href="/lessons" className="text-sm text-gray-500 underline">
+          ← All lessons
+        </Link>
         <div>
           <p className="text-sm text-gray-500">
             {route.module} &middot; {index + 1} of {route.subLessons.length}
@@ -141,7 +165,6 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         </div>
 
         <DrDigital message={drDigitalMessage} mood={drDigitalMood} />
-        <VideoPlayer videoUrl={subLesson.videoUrl} title={subLesson.title} />
 
         {subLesson.playgroundTask.type === "placeholder" && (
           <p className="text-sm text-gray-500 border rounded p-3 bg-gray-50">This activity is coming soon.</p>
@@ -149,14 +172,37 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
         {hasGate && attemptState !== "success" && (
           <div className="flex items-center gap-4">
-            {!started && (
-              <button onClick={handleStart} className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95">
-                Start activity
-              </button>
+            {!started ? (
+              <>
+                <button
+                  onClick={handleStart}
+                  className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95"
+                >
+                  Start activity
+                </button>
+                <button onClick={handleNext} className="text-sm text-gray-500 underline transition-colors hover:text-gray-800">
+                  Skip this activity
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setStarted(false)}
+                  className="border-2 border-red-600 text-red-600 rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-red-600 hover:text-white active:scale-95"
+                >
+                  Exit activity
+                </button>
+                <button
+                  onClick={() => {
+                    setActivityAttempt((n) => n + 1);
+                    setAttemptState("unattempted");
+                  }}
+                  className="text-sm text-gray-500 underline transition-colors hover:text-gray-800"
+                >
+                  Restart activity
+                </button>
+              </>
             )}
-            <button onClick={handleNext} className="text-sm text-gray-500 underline transition-colors hover:text-gray-800">
-              Skip this activity
-            </button>
           </div>
         )}
 
@@ -176,6 +222,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
       <div className="hidden lg:block flex-1 min-w-0 p-4">
         <LessonPlaygroundPane
+          key={activityAttempt}
           task={subLesson.playgroundTask}
           started={started}
           onResult={handleResult}

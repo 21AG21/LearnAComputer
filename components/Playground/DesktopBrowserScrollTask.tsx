@@ -32,7 +32,7 @@ export default function DesktopBrowserScrollTask({ code, onResult }: DesktopBrow
     return (
       <BrowserSimulator
         tabTitle="Fun Computer Facts"
-        url="facts.learna.computer"
+        url="facts.learna.example"
         onExit={() => {
           setPhase("desktop");
           setScrolled(false);

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getCompletedSlugs } from "@/lib/progress";
+import { getCompletedSlugs, resetProgress } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
 
 interface DashboardViewProps {
@@ -54,6 +54,18 @@ export default function DashboardView({ routes }: DashboardViewProps) {
         Clearing your browser data or switching to a different device will reset it.
         A future version will let a parent or teacher check in on progress here too.
       </p>
+
+      <button
+        onClick={() => {
+          if (window.confirm("Reset all progress? This can't be undone.")) {
+            resetProgress();
+            setCompletedSlugs([]);
+          }
+        }}
+        className="text-sm text-red-600 underline"
+      >
+        Reset all progress
+      </button>
     </div>
   );
 }

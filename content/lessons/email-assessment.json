@@ -10,6 +10,7 @@
     "type": "edit-text",
     "instructions": "Fix the mistakes in this email: delete the duplicate words, capitalize names and the start of each sentence, and add the missing punctuation. Then click Check my work.",
     "startingText": "hey sarah\n\ni wanted to remind you the team meeting meeting is is on thursday at 3pm in the big conference room\n\ncan you bring the the budget report\n\nsee you thursday\n\nthanks\nmike",
+    "correctText": "Hey Sarah,\n\nI wanted to remind you the team meeting is on Thursday at 3pm in the big conference room.\n\nCan you bring the budget report?\n\nSee you Thursday.\n\nThanks,\nMike",
     "mustInclude": [
       "Hey Sarah",
       "I wanted",

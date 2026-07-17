@@ -49,8 +49,8 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
         tabActive={browserPhase !== "catPhoto"}
         url={
           browserPhase === "catPhoto"
-            ? "funny-cats.learna.computer"
-            : "petnews.learna.computer"
+            ? "funny-cats.learna.example"
+            : "petnews.learna.example"
         }
         onExit={() => setPhase("desktop")}
         bezel={false}

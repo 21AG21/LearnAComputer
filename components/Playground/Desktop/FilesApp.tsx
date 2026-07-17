@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
 import MusicNoteIcon from "../MusicNoteIcon";
+import { FILLER_FILES as FILES, FileEntry } from "./filesData";
 
 interface FilesAppProps {
   onClose: () => void;
@@ -14,25 +15,10 @@ interface FilesAppProps {
   showHeader?: boolean;
 }
 
-interface FileEntry {
-  name: string;
-  image?: string;
-  icon?: "music";
-  contents?: string;
-}
-
-const FILES: FileEntry[] = [
-  { name: "VacationPhoto.png", image: "/playgrounds/VacationPhoto.png" },
-  { name: "GroceryList.txt", contents: "Milk\nEggs\nBread\nApples" },
-  { name: "Budget.xlsx", image: "/playgrounds/Budget.png" },
-  { name: "SecretRecipie.docx", contents: "Grandma's secret cookies:\nbutter, sugar, flour, love." },
-  { name: "FavoriteSong.mp3", icon: "music" },
-];
-
 export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, showHeader = true }: FilesAppProps) {
-  const [selected, setSelected] = useState<(typeof FILES)[number] | null>(null);
+  const [selected, setSelected] = useState<FileEntry | null>(null);
 
-  function handleDoubleClick(file: (typeof FILES)[number]) {
+  function handleDoubleClick(file: FileEntry) {
     setSelected(file);
     onFileOpened?.(file.name);
   }
@@ -51,7 +37,9 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, show
                 <li
                   key={file.name}
                   onDoubleClick={() => handleDoubleClick(file)}
-                  className="px-3 py-3 text-3xl font-bold cursor-pointer select-none"
+                  className={`px-3 py-3 text-3xl font-bold cursor-pointer select-none ${
+                    selected?.name === file.name ? "bg-blue-900 text-white" : ""
+                  }`}
                 >
                   {file.name}
                 </li>

@@ -41,7 +41,7 @@ export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomT
     return (
       <BrowserSimulator
         tabTitle="Animal Facts"
-        url="animals.learna.computer"
+        url="animals.learna.example"
         onExit={() => setPhase("desktop")}
         bezel={false}
         showControls={false}

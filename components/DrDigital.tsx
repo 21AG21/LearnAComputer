@@ -23,7 +23,7 @@ export default function DrDigital({ message, mood = "neutral" }: DrDigitalProps)
       <DrDigitalAvatar className="w-14 h-14 shrink-0" />
       <div>
         <p className="text-base font-semibold">Dr. Digital</p>
-        <p className="text-xl leading-snug">{message}</p>
+        <p className="text-2xl leading-relaxed">{message}</p>
       </div>
     </div>
   );

@@ -55,3 +55,7 @@ export function isComplete(slug: string): boolean {
 export function getCompletedSlugs(): string[] {
   return readState().completedSlugs;
 }
+
+export function resetProgress(): void {
+  writeState({ version: SCHEMA_VERSION, completedSlugs: [] });
+}

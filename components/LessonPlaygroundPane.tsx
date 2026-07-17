@@ -26,17 +26,6 @@ interface LessonPlaygroundPaneProps {
   onExit: () => void;
 }
 
-// These activities manage their own close/exit chrome (FakeDesktop, BrowserSimulator, or AppWindow),
-// so the pane shouldn't draw a generic red X on top of them.
-const OWN_EXIT_TASK_TYPES = [
-  "file-explorer-open",
-  "browser-right-click",
-  "browser-scroll-code",
-  "pinch-zoom",
-  "message-reply",
-  "compose-email",
-];
-
 /**
  * The right-hand playground pane on a lesson page. Idle, it's just the fake
  * desktop. Once `started`, it shows the current sub-lesson's activity. Both
@@ -44,24 +33,12 @@ const OWN_EXIT_TASK_TYPES = [
  * LessonModuleRunner, so switching between sub-lessons doesn't toggle fullscreen.
  */
 export default function LessonPlaygroundPane({ task, started, onResult, onExit }: LessonPlaygroundPaneProps) {
-  const showGenericExit = started && !OWN_EXIT_TASK_TYPES.includes(task.type);
-
   return (
-    <div className="relative h-full w-full border-4 border-black bg-white overflow-hidden">
+    <div className="relative h-full w-full border-4 border-gray-300 bg-white overflow-hidden">
       {!started && <FakeDesktop />}
 
       {started && (
         <div className="relative h-full w-full">
-          {showGenericExit && (
-            <button
-              onClick={onExit}
-              aria-label="Exit activity"
-              className="absolute top-2 left-2 z-20 w-9 h-9 border-2 border-red-600 rounded flex items-center justify-center text-red-600 font-bold bg-white"
-            >
-              ✕
-            </button>
-          )}
-
           {task.type === "keyboard-shortcut" && (
             <div className="h-full flex items-center justify-center p-8">
               <div className="w-full max-w-lg">
@@ -111,6 +88,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <TextEditorTask
               instructions={task.instructions}
               startingText={task.startingText}
+              correctText={task.correctText}
               mustInclude={task.mustInclude}
               mustNotInclude={task.mustNotInclude}
               onResult={onResult}
@@ -121,6 +99,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               instructions={task.instructions}
               fileName={task.fileName}
               startingText={task.startingText}
+              correctText={task.correctText}
               mustInclude={task.mustInclude}
               mustNotInclude={task.mustNotInclude}
               onResult={onResult}

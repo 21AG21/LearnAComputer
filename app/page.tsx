@@ -1,14 +1,15 @@
 import Link from "next/link";
-import DrDigital from "@/components/DrDigital";
-import { getModuleRoutes } from "@/lib/lessons";
+import HomeGreeting from "@/components/HomeGreeting";
+import { getModuleRoutes, getAllLessons } from "@/lib/lessons";
 
 export default function Home() {
   const firstModule = getModuleRoutes()[0];
+  const totalLessons = getAllLessons().length;
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-6 max-w-xl">
       <h1 className="text-2xl font-bold">Welcome to LearnAComputer</h1>
-      <DrDigital message="Hi, I'm Dr. Digital! I'll be with you every step of the way as you learn to use a computer with confidence. Ready to start?" />
+      <HomeGreeting totalLessons={totalLessons} />
       <div className="flex gap-3">
         <Link
           href={`/lessons/${firstModule.moduleSlug}`}

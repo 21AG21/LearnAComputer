@@ -56,9 +56,10 @@ export default function BrowserSimulator({
   children,
 }: BrowserSimulatorProps) {
   const [dotMenuOpen, setDotMenuOpen] = useState(false);
+  const [showLockInfo, setShowLockInfo] = useState(false);
   const hasZoom = !!(onZoomIn || onZoomOut);
   return (
-    <div className={`h-full w-full ${bezel ? "bg-gray-200 p-3 sm:p-5" : ""}`}>
+    <div className={`h-full w-full ${bezel ? "bg-gray-200 p-3 sm:p-5" : ""}`} onClick={() => setShowLockInfo(false)}>
       <div
         className={`h-full w-full bg-white overflow-hidden flex flex-col ${bezel ? "rounded-lg shadow" : ""}`}
       >
@@ -86,7 +87,11 @@ export default function BrowserSimulator({
           )}
           {/* Tab group — no gap so borders share */}
           <div className="flex items-stretch">
-            <div className={`h-14 border-4 border-black flex items-center gap-3 px-4 min-w-40 ${tabActive ? "bg-white" : "bg-gray-100"}`}>
+            <div
+              className={`h-14 border-4 border-black flex items-center gap-3 px-4 min-w-40 transition-colors duration-150 ${
+                tabActive ? "bg-white" : "bg-gray-100"
+              }`}
+            >
               <span className="text-xl font-semibold flex-1 font-[var(--font-app-title)]">{tabTitle}</span>
               <button
                 onClick={onTabClose ?? onExit}
@@ -100,7 +105,7 @@ export default function BrowserSimulator({
               <button
                 key={i}
                 onClick={tab.onClick}
-                className={`h-14 border-4 border-l-0 border-black flex items-center px-4 min-w-36 ${
+                className={`h-14 border-4 border-l-0 border-black flex items-center px-4 min-w-36 animate-slide-down transition-colors duration-150 ${
                   tab.active ? "bg-white" : "bg-gray-100"
                 }`}
               >
@@ -115,7 +120,22 @@ export default function BrowserSimulator({
           <BackArrow className="w-9 h-7 shrink-0" />
           <ForwardArrow className="w-9 h-7 shrink-0" />
           <ReloadIcon className="w-7 h-7 shrink-0" />
-          <LockIcon className="w-6 h-8 shrink-0" />
+          <div className="relative shrink-0">
+            <button onClick={(e) => { e.stopPropagation(); setShowLockInfo((s) => !s); }} aria-label="Connection security info">
+              <LockIcon className="w-6 h-8" />
+            </button>
+            {showLockInfo && (
+              <div
+                className="absolute left-0 top-full mt-2 z-30 w-64 border-2 border-black bg-white shadow-lg p-3 animate-slide-down"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-sm font-semibold">🔒 This site is secure</p>
+                <p className="text-xs text-gray-600 mt-1">
+                  The lock means your connection to this page is private. Look for it before typing anything personal into a website.
+                </p>
+              </div>
+            )}
+          </div>
           <span className="flex-1 text-center text-2xl">{url}</span>
           {hasZoom && (
             <div className="relative shrink-0">

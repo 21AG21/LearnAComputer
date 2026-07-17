@@ -3,11 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
+import { getThread, saveThread, StoredChatMessage } from "@/lib/chat";
 
-export interface ChatMessage {
-  from: "contact" | "me";
-  text: string;
-}
+export type ChatMessage = StoredChatMessage;
 
 interface MessagingAppProps {
   onClose: () => void;
@@ -22,36 +20,62 @@ interface MessagingAppProps {
   noWifi?: boolean;
 }
 
-const DEFAULT_MESSAGES: ChatMessage[] = [
-  { from: "contact", text: "Woof woof! Hi friend! It's me, Doggo. What's your name?" },
-];
+// The lesson message-reply task always targets Doggo today.
+const TARGET_CONTACT_ID = "doggo";
 
-const SIDEBAR_CONTACTS = [
-  { name: "Doggo", avatar: "/playgrounds/Dog.png" },
-  { name: "Cat", avatar: "/playgrounds/Cat1.png" },
-  { name: "Snake", avatar: "/playgrounds/Snake.png" },
-];
+const CONTACT_ORDER = ["doggo", "cat", "snake"];
+
+const DEFAULT_CONTACTS: Record<string, { name: string; avatar: string; greeting: string }> = {
+  doggo: { name: "Doggo", avatar: "/playgrounds/Dog.png", greeting: "Woof woof! Hi friend! It's me, Doggo. What's your name?" },
+  cat: { name: "Cat", avatar: "/playgrounds/Cat1.png", greeting: "Meow! I'm Cat. Want to chat with me too?" },
+  snake: { name: "Snake", avatar: "/playgrounds/Snake.png", greeting: "Hisss... hi there, I'm Snake! Nice to meet you." },
+};
+
+function initialThreads(doggoOverride?: ChatMessage[]): Record<string, ChatMessage[]> {
+  const threads: Record<string, ChatMessage[]> = {};
+  for (const id of CONTACT_ORDER) {
+    const saved = getThread(id);
+    if (saved) {
+      threads[id] = saved;
+    } else if (id === TARGET_CONTACT_ID && doggoOverride) {
+      threads[id] = doggoOverride;
+    } else {
+      threads[id] = [{ from: "contact", text: DEFAULT_CONTACTS[id].greeting }];
+    }
+  }
+  return threads;
+}
 
 export default function MessagingApp({
   onClose,
   onMinimize,
   onSendMessage,
-  contactName = "Doggo",
-  avatarSrc = "/playgrounds/Dog.png",
-  initialMessages = DEFAULT_MESSAGES,
+  contactName,
+  avatarSrc,
+  initialMessages,
   showHeader = true,
   instructionBanner,
   noWifi = false,
 }: MessagingAppProps) {
   const [draft, setDraft] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const [activeContactId, setActiveContactId] = useState(TARGET_CONTACT_ID);
+  const [threads, setThreads] = useState<Record<string, ChatMessage[]>>(() => initialThreads(initialMessages));
+
+  const contacts = { ...DEFAULT_CONTACTS };
+  if (contactName) contacts[TARGET_CONTACT_ID] = { ...contacts[TARGET_CONTACT_ID], name: contactName };
+  if (avatarSrc) contacts[TARGET_CONTACT_ID] = { ...contacts[TARGET_CONTACT_ID], avatar: avatarSrc };
+
+  const activeContact = contacts[activeContactId];
+  const activeMessages = threads[activeContactId] ?? [];
 
   function handleSend() {
     const text = draft.trim();
     if (!text) return;
-    setMessages((prev) => [...prev, { from: "me", text }]);
+    const next = [...activeMessages, { from: "me" as const, text }];
+    setThreads((prev) => ({ ...prev, [activeContactId]: next }));
+    saveThread(activeContactId, next);
     setDraft("");
-    onSendMessage?.(text);
+    if (activeContactId === TARGET_CONTACT_ID) onSendMessage?.(text);
   }
 
   return (
@@ -67,28 +91,29 @@ export default function MessagingApp({
       <div className="h-full flex gap-4 px-2 pb-2">
         {/* Contacts sidebar */}
         <div className="w-40 shrink-0 bg-[#c9e4f7] border-2 border-black flex flex-col items-center gap-6 py-6">
-          {SIDEBAR_CONTACTS.map((contact, i) => (
+          {CONTACT_ORDER.map((id) => (
             <button
-              key={contact.name}
-              aria-label={`Contact: ${contact.name}`}
+              key={id}
+              onClick={() => setActiveContactId(id)}
+              aria-label={`Contact: ${contacts[id].name}`}
               className={`relative w-24 h-24 border-2 border-black overflow-hidden ${
-                i === 0 ? "bg-blue-200" : "bg-white"
+                id === activeContactId ? "bg-blue-200" : "bg-white"
               }`}
             >
-              <Image src={contact.avatar} alt={contact.name} fill sizes="96px" className="object-contain p-1" />
+              <Image src={contacts[id].avatar} alt={contacts[id].name} fill sizes="96px" className="object-contain p-1" />
             </button>
           ))}
         </div>
 
         {/* Conversation pane */}
         <div className="flex-1 bg-[#c9e4f7] border-2 border-black flex flex-col p-4">
-          {instructionBanner && (
+          {instructionBanner && activeContactId === TARGET_CONTACT_ID && (
             <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2 mb-3">
               {instructionBanner}
             </p>
           )}
           <div className="flex-1 overflow-y-auto flex flex-col gap-3">
-            {messages.map((message, i) => (
+            {activeMessages.map((message, i) => (
               <div
                 key={i}
                 className={`flex items-end gap-2 max-w-[75%] ${
@@ -97,11 +122,11 @@ export default function MessagingApp({
               >
                 {message.from === "contact" && (
                   <span className="relative w-10 h-10 shrink-0 border-2 border-black bg-white overflow-hidden">
-                    <Image src={avatarSrc} alt={contactName} fill sizes="40px" className="object-contain p-0.5" />
+                    <Image src={activeContact.avatar} alt={activeContact.name} fill sizes="40px" className="object-contain p-0.5" />
                   </span>
                 )}
                 <p className="bg-white border-2 border-black px-4 py-2 text-xl break-words">
-                  {message.from === "contact" && <span className="block text-sm font-bold">{contactName}</span>}
+                  {message.from === "contact" && <span className="block text-sm font-bold">{activeContact.name}</span>}
                   {message.text}
                 </p>
               </div>

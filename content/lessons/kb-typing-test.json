@@ -7,10 +7,11 @@
   "videoUrl": "",
   "drDigitalIntro": "Let's put it all together — letters, numbers, spaces, Shift, and Caps Lock. Type this sentence exactly, capital letters, commas, and all: Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
   "playgroundTask": {
-    "type": "type-text",
-    "instructions": "Type exactly: Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
-    "targetText": "Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
-    "exact": true
+    "type": "compose-email",
+    "instructions": "Open the Mail app, click the pencil to compose a new email, and type this message exactly: \"Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!\" Then click Send.",
+    "to": "doctordigital@example.com",
+    "subject": "Hi Dr. Digital!",
+    "requiredBody": "Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!"
   },
   "drDigitalSuccess": "Perfect typing! Capitals, numbers, punctuation — you nailed every part.",
   "drDigitalHint": "Match it exactly: capital H, D, and D, the commas inside 9,003,751, and the ! and ? marks. Use Shift for the capitals and symbols."

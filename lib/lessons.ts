@@ -30,6 +30,7 @@ export type PlaygroundTask =
       type: "edit-text";
       instructions: string;
       startingText: string;
+      correctText?: string;
       mustInclude: string[];
       mustNotInclude: string[];
     }
@@ -38,6 +39,7 @@ export type PlaygroundTask =
       instructions: string;
       fileName: string;
       startingText: string;
+      correctText?: string;
       mustInclude: string[];
       mustNotInclude: string[];
     }
