@@ -5,21 +5,34 @@
   "order": 280,
   "title": "Fix the birthday invitation",
   "videoUrl": "",
-  "drDigitalIntro": "Time for a real challenge! Below is a birthday invitation with a few mistakes in it. Edit it to fix the spelling, capitalization, and punctuation — using only the keyboard, no mouse needed. We'll practice everything you've learned in this unit.",
+  "drDigitalIntro": "Time for a real challenge! A new file just showed up in your Files app — someone typed up a birthday invitation for me, but it's a mess: misspelled words, mixed-up details, and a couple of rambling sentences that need to go. Open it up, click into full screen, and fix it using only the keyboard.",
   "playgroundTask": {
-    "type": "edit-text",
-    "instructions": "Fix the mistakes in this invitation: correct the spelling, capitalize names and the start of each sentence, and delete the duplicate word. Then click Check my work.",
-    "startingText": "your invited to emma's birthday party\n\ncome on saturday july 25th at 2pm\n\nthe party party will be at the park on maple street\n\nbring a swimsuit and a smile\n\nhope to see you there",
+    "type": "edit-file",
+    "instructions": "Fix the invitation: correct the spelling, delete the extra sentence that repeats the title, straighten out the Date/Time/Location so each label matches its real value, and trim the rambling ending down to one closing sentence. Then click Check my work.",
+    "fileName": "BirthdayInvitation.txt",
+    "startingText": "Your Invitatoin too Dr. Digeetul Birthday!!\n\nPlease joim us four a birthdy celebretion honering Dr. Digital.\n\nDate: Moonstone Medical Plaza, 742 Rainbow Avenue\nTime: Saturday, October 8, 2026\nLocation: 3:30 PM – 6:30 PM, Cloud Ctiy\n\nThere will be pizza cake, games and music plenty of fun. Pleese RSVP by October 17 so we know how many guest's to expect. Freinds and family are welcom. We hop you can special celebrate this join us occasion! Don't forgte bring your birthday smile, becuase cake the will be huge. everyone after arrive before, presents open we will. See you their soon hopefully! We cant wait too celabrate with all of are favorite pepole.",
     "mustInclude": [
-      "You're invited",
-      "Emma's birthday party",
-      "Saturday",
-      "July 25th",
-      "the party will be at the park on Maple Street",
-      "Hope to see you there"
+      "You're Invited to Dr. Digital's Birthday!",
+      "Date: Saturday, October 17, 2026",
+      "Time: 3:30 PM",
+      "Location: Moonstone Medical Plaza, 742 Rainbow Avenue, Cloud City",
+      "Please RSVP by October 8",
+      "Friends and family are welcome",
+      "We hope you can join us to celebrate this special occasion"
     ],
-    "mustNotInclude": ["your invited", "party party"]
+    "mustNotInclude": [
+      "Invitatoin",
+      "Digeetul",
+      "joim",
+      "birthdy",
+      "celebretion",
+      "honering",
+      "Pleese",
+      "guest's",
+      "Freinds",
+      "welcom."
+    ]
   },
   "drDigitalSuccess": "Wonderful editing! You fixed it all without touching the mouse.",
-  "drDigitalHint": "\"your\" should be \"You're\" (you are). Capitalize names, days, months, and street names — Emma, Saturday, July, Maple Street. And look for one word that repeats twice in a row."
+  "drDigitalHint": "The title should read \"You're Invited to Dr. Digital's Birthday!\" and the whole next sentence can be deleted — it just repeats the title. The Date, Time, and Location labels are all matched to the wrong values — Date should be October 17, Time is 3:30–6:30 PM, and Location is the address plus Cloud City. RSVP is due October 8. And everything after \"Friends and family are welcome\" can be replaced with one short closing sentence."
 }

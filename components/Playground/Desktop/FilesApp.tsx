@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
+import MusicNoteIcon from "../MusicNoteIcon";
 
 interface FilesAppProps {
   onClose: () => void;
@@ -16,8 +17,7 @@ interface FilesAppProps {
 interface FileEntry {
   name: string;
   image?: string;
-  /** Straighten art that wasn't drawn upright (e.g. the sideways music note). */
-  imageRotateDeg?: number;
+  icon?: "music";
   contents?: string;
 }
 
@@ -26,7 +26,7 @@ const FILES: FileEntry[] = [
   { name: "GroceryList.txt", contents: "Milk\nEggs\nBread\nApples" },
   { name: "Budget.xlsx", image: "/playgrounds/Budget.png" },
   { name: "SecretRecipie.docx", contents: "Grandma's secret cookies:\nbutter, sugar, flour, love." },
-  { name: "FavoriteSong.mp3", image: "/playgrounds/FavoriteSong.png", imageRotateDeg: 25 },
+  { name: "FavoriteSong.mp3", icon: "music" },
 ];
 
 export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, showHeader = true }: FilesAppProps) {
@@ -62,14 +62,12 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, show
           {/* Preview pane */}
           <div className="relative flex-1 bg-[#8fb4cb] border-2 border-black p-4">
             {selected?.image && (
-              <Image
-                src={selected.image}
-                alt={selected.name}
-                fill
-                sizes="50vw"
-                className="object-contain p-2"
-                style={selected.imageRotateDeg ? { transform: `rotate(${selected.imageRotateDeg}deg)` } : undefined}
-              />
+              <Image src={selected.image} alt={selected.name} fill sizes="50vw" className="object-contain p-2" />
+            )}
+            {selected?.icon === "music" && (
+              <div className="absolute inset-0 flex items-center justify-center p-8">
+                <MusicNoteIcon className="h-full" />
+              </div>
             )}
             {selected?.contents && (
               <p className="whitespace-pre-wrap text-2xl font-semibold text-white">{selected.contents}</p>

@@ -21,6 +21,7 @@ export type PlaygroundTask =
       instructions: string;
       contactName: string;
       incomingMessage: string;
+      requiredResponse: string;
       avatarSrc?: string;
     }
   | { type: "match-parts"; instructions: string }
@@ -31,6 +32,21 @@ export type PlaygroundTask =
       startingText: string;
       mustInclude: string[];
       mustNotInclude: string[];
+    }
+  | {
+      type: "edit-file";
+      instructions: string;
+      fileName: string;
+      startingText: string;
+      mustInclude: string[];
+      mustNotInclude: string[];
+    }
+  | {
+      type: "compose-email";
+      instructions: string;
+      to: string;
+      subject: string;
+      requiredBody: string;
     };
 
 export interface Lesson {

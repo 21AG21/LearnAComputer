@@ -1,0 +1,18 @@
+{
+  "slug": "email-thank-you",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Real-Life Exercise",
+  "order": 270,
+  "title": "Say thanks over email",
+  "videoUrl": "",
+  "drDigitalIntro": "I just sent you a note in your Mail app — go take a look! Then click the pencil icon to write me back. Type the message exactly as I've written it below, punctuation and all, so I know your typing is spot on.",
+  "playgroundTask": {
+    "type": "compose-email",
+    "instructions": "Open the Mail app, click the pencil to compose a new email, and type this message exactly: \"Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!\" Then click Send.",
+    "to": "doctordigital@example.com",
+    "subject": "THANKS DOCTOR DIGITAL",
+    "requiredBody": "Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!"
+  },
+  "drDigitalSuccess": "Message received — you made my day! Your typing is getting really precise.",
+  "drDigitalHint": "Click the pencil icon in the top corner of the Mail app to start a new email. In the message box, type it exactly as shown, including the exclamation points and the question mark, then click Send."
+}

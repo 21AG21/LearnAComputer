@@ -17,6 +17,8 @@ interface MessagingAppProps {
   avatarSrc?: string;
   initialMessages?: ChatMessage[];
   showHeader?: boolean;
+  /** Yellow-highlighted Dr. Digital-style tip — only pass this from the specific lesson that needs it. */
+  instructionBanner?: string;
 }
 
 const DEFAULT_MESSAGES: ChatMessage[] = [
@@ -37,6 +39,7 @@ export default function MessagingApp({
   avatarSrc = "/playgrounds/Dog.png",
   initialMessages = DEFAULT_MESSAGES,
   showHeader = true,
+  instructionBanner,
 }: MessagingAppProps) {
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
@@ -69,6 +72,11 @@ export default function MessagingApp({
 
         {/* Conversation pane */}
         <div className="flex-1 bg-[#c9e4f7] border-2 border-black flex flex-col p-4">
+          {instructionBanner && (
+            <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2 mb-3">
+              {instructionBanner}
+            </p>
+          )}
           <div className="flex-1 overflow-y-auto flex flex-col gap-3">
             {messages.map((message, i) => (
               <div

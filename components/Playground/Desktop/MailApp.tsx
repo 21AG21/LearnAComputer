@@ -10,6 +10,12 @@ interface MailAppProps {
   /** Called when the learner sends a composed email (used by the Unit 2 "email Dr. Digital" task). */
   onSend?: (email: { to: string; subject: string; body: string }) => void;
   showHeader?: boolean;
+  /** Pre-fills To/Subject when the learner opens a new compose — used by guided compose tasks. */
+  composeDefaults?: { to: string; subject: string };
+  /** Yellow-highlighted Dr. Digital-style tip shown inside the compose form. */
+  composeBanner?: string;
+  /** Yellow-highlighted Dr. Digital-style tip shown before the learner has started composing. */
+  promptBanner?: string;
 }
 
 interface Email {
@@ -46,7 +52,16 @@ const EMAILS: Email[] = [
   },
 ];
 
-export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend, showHeader = true }: MailAppProps) {
+export default function MailApp({
+  onClose,
+  onMinimize,
+  onEmailOpened,
+  onSend,
+  showHeader = true,
+  composeDefaults,
+  composeBanner,
+  promptBanner,
+}: MailAppProps) {
   const [selected, setSelected] = useState<Email | null>(null);
   const [composing, setComposing] = useState(false);
   const [draft, setDraft] = useState({ to: "", subject: "", body: "" });
@@ -99,6 +114,7 @@ export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend, sh
             onClick={() => {
               setComposing(true);
               setSelected(null);
+              setDraft({ to: composeDefaults?.to ?? "", subject: composeDefaults?.subject ?? "", body: "" });
             }}
             aria-label="Compose new email"
             className="absolute top-3 right-3 w-12 h-12 flex items-center justify-center"
@@ -106,8 +122,17 @@ export default function MailApp({ onClose, onMinimize, onEmailOpened, onSend, sh
             <PencilIcon className="w-10 h-10" />
           </button>
 
+          {!composing && !selected && promptBanner && (
+            <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2 mr-16">
+              {promptBanner}
+            </p>
+          )}
+
           {composing ? (
             <div className="space-y-3 pr-14">
+              {composeBanner && (
+                <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2">{composeBanner}</p>
+              )}
               <p className="text-2xl font-bold">New Email</p>
               <label className="block">
                 <span className="font-bold">To:</span>

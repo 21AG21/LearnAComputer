@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import MockupPlayground, { Hotspot } from "./MockupPlayground";
+import MusicNoteIcon from "./MusicNoteIcon";
 import { checkFilesOpened } from "./TaskChecker";
 
 interface FakeFileExplorerTaskProps {
@@ -12,12 +13,12 @@ interface FakeFileExplorerTaskProps {
 }
 
 // Invisible double-click targets over the file rows drawn in the mockup (% of the 1280x800 image).
-const FILE_HOTSPOTS: { name: string; top: number; image?: string; imageRotateDeg?: number; contents?: string }[] = [
+const FILE_HOTSPOTS: { name: string; top: number; image?: string; icon?: "music"; contents?: string }[] = [
   { name: "VacationPhoto.png", top: 32, image: "/playgrounds/VacationPhoto.png" },
   { name: "GroceryList.txt", top: 43.2, contents: "Milk\nEggs\nBread\nApples" },
   { name: "Budget.xlsx", top: 54.4, image: "/playgrounds/Budget.png" },
   { name: "SecretRecipie.docx", top: 65.6, contents: "Grandma's secret cookies:\nbutter, sugar, flour, love." },
-  { name: "FavoriteSong.mp3", top: 76.8, image: "/playgrounds/FavoriteSong.png", imageRotateDeg: 25 },
+  { name: "FavoriteSong.mp3", top: 76.8, icon: "music" },
 ];
 const ROW_LEFT = 1.7;
 const ROW_WIDTH = 53;
@@ -59,14 +60,12 @@ export default function FakeFileExplorerTask({ instructions, filesToOpen, onResu
           style={{ left: "57%", top: "19%", width: "40%", height: "73%" }}
         >
           {selected.image && (
-            <Image
-              src={selected.image}
-              alt={selected.name}
-              fill
-              sizes="40vw"
-              className="object-contain p-2"
-              style={selected.imageRotateDeg ? { transform: `rotate(${selected.imageRotateDeg}deg)` } : undefined}
-            />
+            <Image src={selected.image} alt={selected.name} fill sizes="40vw" className="object-contain p-2" />
+          )}
+          {selected.icon === "music" && (
+            <div className="absolute inset-0 flex items-center justify-center p-8">
+              <MusicNoteIcon className="h-full" />
+            </div>
           )}
           {selected.contents && (
             <p className="whitespace-pre-wrap text-xl font-semibold text-white p-4">{selected.contents}</p>
