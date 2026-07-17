@@ -6,14 +6,15 @@ import { checkTypeText } from "./TaskChecker";
 interface TypeTextTaskProps {
   instructions: string;
   targetText: string;
+  exact?: boolean;
   onResult: (success: boolean) => void;
 }
 
-export default function TypeTextTask({ instructions, targetText, onResult }: TypeTextTaskProps) {
+export default function TypeTextTask({ instructions, targetText, exact = false, onResult }: TypeTextTaskProps) {
   const [value, setValue] = useState("");
 
   function handleSubmit() {
-    onResult(checkTypeText(targetText, value));
+    onResult(checkTypeText(targetText, value, exact));
   }
 
   return (

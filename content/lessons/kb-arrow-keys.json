@@ -1,0 +1,12 @@
+{
+  "slug": "kb-arrow-keys",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 212,
+  "title": "Arrow keys",
+  "videoUrl": "",
+  "drDigitalIntro": "The four arrow keys let you move your cursor or scroll up, down, left, and right through text, documents, or games — all without touching the mouse.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Those are your arrow keys — precise movement in every direction!",
+  "drDigitalHint": "Find the four arrow keys in the bottom-right area, then click Continue."
+}

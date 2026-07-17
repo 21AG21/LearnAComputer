@@ -1,0 +1,12 @@
+{
+  "slug": "kb-control",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 209,
+  "title": "Control",
+  "videoUrl": "",
+  "drDigitalIntro": "Control is used together with other keys to perform shortcut commands. It's the main shortcut key on Windows, and on a Mac it's often held while clicking to open a menu of extra options.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's Control — a shortcut helper on every kind of computer!",
+  "drDigitalHint": "Find Control (Ctrl) in the bottom corner of the keyboard, then click Continue."
+}

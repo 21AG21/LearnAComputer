@@ -1,0 +1,12 @@
+{
+  "slug": "keyboard-shortcuts-pattern",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Shortcuts",
+  "order": 250,
+  "title": "The shortcut pattern",
+  "videoUrl": "",
+  "drDigitalIntro": "Here's the secret: you don't have to memorize dozens of shortcuts. Almost all of them follow one pattern — hold Command and press a letter to do something. C copies, V pastes, X cuts, A selects all, Z undoes, S saves, P prints, F finds, N makes a new one, W closes, and T opens a new tab. Once you see the pattern, they're easy to remember!",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You've got the pattern — Command plus a letter. That unlocks almost every shortcut!",
+  "drDigitalHint": "Take your time with the pattern, then click Continue whenever you're ready."
+}

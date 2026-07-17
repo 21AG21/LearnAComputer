@@ -1,0 +1,17 @@
+{
+  "slug": "editing-copy-paste",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Editing",
+  "order": 240,
+  "title": "Copy, paste, cut, undo, redo",
+  "videoUrl": "",
+  "drDigitalIntro": "Now the moves you'll use every day. Select some text, then: Command+C copies it, Command+V pastes it somewhere else, and Command+X cuts it (copy plus remove). Made a change you don't like? Command+Z undoes it, and Command+Shift+Z redoes it. And Command+A selects everything.",
+  "playgroundTask": {
+    "type": "keyboard-shortcut",
+    "instructions": "Copy the text below, then paste it into the box.",
+    "sourceText": "Hello, computer!",
+    "successCondition": "pasted-matches-source"
+  },
+  "drDigitalSuccess": "Nice work! Copy and paste will save you so much time from here on out.",
+  "drDigitalHint": "Select the text first — click and drag across it — then use Command+C to copy and Command+V to paste."
+}

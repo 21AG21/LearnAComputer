@@ -1,0 +1,12 @@
+{
+  "slug": "email-assessment",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Website Assessment",
+  "order": 290,
+  "title": "Clean up a messy email",
+  "videoUrl": "",
+  "drDigitalIntro": "Here's your big Unit 2 test! You'll get a poorly written email and, using the keyboard only, you'll select text, copy a sentence, paste it elsewhere, delete extra words, capitalize names, add punctuation, move around with Tab, and submit. It brings together every skill from this unit.",
+  "playgroundTask": { "type": "placeholder" },
+  "drDigitalSuccess": "Outstanding — you used the whole keyboard toolkit to clean that up!",
+  "drDigitalHint": "This activity is coming soon — click Continue for now."
+}

@@ -10,7 +10,7 @@ export type PlaygroundTask =
       sourceText: string;
       successCondition: "pasted-matches-source";
     }
-  | { type: "type-text"; instructions: string; targetText: string }
+  | { type: "type-text"; instructions: string; targetText: string; exact?: boolean }
   | { type: "shape-click-game"; instructions: string; targetScore: number }
   | { type: "file-explorer-open"; instructions: string; filesToOpen: string[] }
   | { type: "browser-right-click"; instructions: string }

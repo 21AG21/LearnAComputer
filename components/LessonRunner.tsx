@@ -79,7 +79,12 @@ export default function LessonRunner({ lesson }: { lesson: Lesson }) {
             <CopyPasteTask instructions={task.instructions} sourceText={task.sourceText} onResult={handleResult} />
           )}
           {task.type === "type-text" && (
-            <TypeTextTask instructions={task.instructions} targetText={task.targetText} onResult={handleResult} />
+            <TypeTextTask
+              instructions={task.instructions}
+              targetText={task.targetText}
+              exact={task.exact}
+              onResult={handleResult}
+            />
           )}
           {isFullscreenTask && (
             <button onClick={() => setPlaygroundOpen(true)} className="border rounded px-4 py-2">

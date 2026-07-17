@@ -1,0 +1,12 @@
+{
+  "slug": "kb-shift",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 203,
+  "title": "Shift",
+  "videoUrl": "",
+  "drDigitalIntro": "Holding Shift while typing a letter makes it uppercase. Holding it while pressing a number types the symbol shown on the top half of that key — like turning 1 into an exclamation point.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's Shift — your key for capital letters and symbols!",
+  "drDigitalHint": "There's a Shift key on each side of the keyboard. Find one, then click Continue."
+}

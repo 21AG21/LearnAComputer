@@ -1,0 +1,17 @@
+{
+  "slug": "kb-typing-test",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 205,
+  "title": "Typing practice",
+  "videoUrl": "",
+  "drDigitalIntro": "Let's put it all together — letters, numbers, spaces, Shift, and Caps Lock. Type this sentence exactly, capital letters, commas, and all: Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Type exactly: Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
+    "targetText": "Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
+    "exact": true
+  },
+  "drDigitalSuccess": "Perfect typing! Capitals, numbers, punctuation — you nailed every part.",
+  "drDigitalHint": "Match it exactly: capital H, D, and D, the commas inside 9,003,751, and the ! and ? marks. Use Shift for the capitals and symbols."
+}

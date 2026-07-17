@@ -17,7 +17,8 @@ export function checkCopyPasteTask(
   }
 }
 
-export function checkTypeText(targetText: string, submitted: string): boolean {
+export function checkTypeText(targetText: string, submitted: string, exact = false): boolean {
+  if (exact) return submitted.trim() === targetText.trim();
   return submitted.trim().toLowerCase() === targetText.trim().toLowerCase();
 }
 

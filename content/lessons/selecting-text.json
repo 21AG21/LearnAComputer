@@ -1,0 +1,12 @@
+{
+  "slug": "selecting-text",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Selecting Text",
+  "order": 230,
+  "title": "Selecting text",
+  "videoUrl": "",
+  "drDigitalIntro": "Selecting text tells the computer which words you want to work with. There are lots of ways: click and drag across words, double-click to select one word, triple-click to select a whole line or paragraph, hold Shift and press the arrow keys to stretch your selection, or press Command+A to select everything at once.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's a whole toolkit for selecting text — pick whichever way feels easiest!",
+  "drDigitalHint": "Read through the different ways to select, then click Continue whenever you're ready."
+}

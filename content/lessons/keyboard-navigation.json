@@ -1,0 +1,12 @@
+{
+  "slug": "keyboard-navigation",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Navigation",
+  "order": 260,
+  "title": "Moving around without the mouse",
+  "videoUrl": "",
+  "drDigitalIntro": "You can move around the screen using just the keyboard. Press Tab to jump to the next button or box, press Shift+Tab to jump back to the previous one, and use the arrow keys to move through text or lists. It's faster than reaching for the trackpad every time!",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Now you can get around hands-on-keyboard — Tab forward, Shift+Tab back!",
+  "drDigitalHint": "Read through the navigation keys, then click Continue whenever you're ready."
+}

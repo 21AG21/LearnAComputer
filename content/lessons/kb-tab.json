@@ -1,0 +1,12 @@
+{
+  "slug": "kb-tab",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 211,
+  "title": "Tab",
+  "videoUrl": "",
+  "drDigitalIntro": "The Tab key jumps your cursor forward by several spaces to indent a paragraph, or moves you to the next box when filling out a form online.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's Tab — great for indenting and for hopping between form boxes!",
+  "drDigitalHint": "Find Tab on the far left, above Caps Lock, then click Continue."
+}

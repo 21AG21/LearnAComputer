@@ -1,0 +1,12 @@
+{
+  "slug": "kb-caps-lock",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 204,
+  "title": "Caps Lock",
+  "videoUrl": "",
+  "drDigitalIntro": "Pressing Caps Lock locks your keyboard into typing ONLY CAPITAL LETTERS. Press it once to turn it on, and press it again to turn it off.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's Caps Lock — press once for all capitals, press again to go back!",
+  "drDigitalHint": "Find Caps Lock on the left side, just above Shift, then click Continue."
+}

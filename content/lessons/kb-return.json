@@ -1,0 +1,12 @@
+{
+  "slug": "kb-return",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 206,
+  "title": "Return",
+  "videoUrl": "",
+  "drDigitalIntro": "Pressing Return moves your typing cursor down to a new line, like starting a fresh paragraph. It also acts as an Enter or OK button to confirm actions on your screen.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "That's Return — new lines, and your all-purpose OK button!",
+  "drDigitalHint": "Find the large Return (or Enter) key on the right side, then click Continue."
+}
