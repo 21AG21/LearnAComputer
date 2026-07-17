@@ -5,8 +5,21 @@
   "order": 280,
   "title": "Fix the birthday invitation",
   "videoUrl": "",
-  "drDigitalIntro": "Time for a real challenge! You'll edit a birthday invitation to fix its spelling, capitalization, and punctuation — using only the keyboard, no mouse. We'll practice everything you've learned in this unit.",
-  "playgroundTask": { "type": "placeholder" },
+  "drDigitalIntro": "Time for a real challenge! Below is a birthday invitation with a few mistakes in it. Edit it to fix the spelling, capitalization, and punctuation — using only the keyboard, no mouse needed. We'll practice everything you've learned in this unit.",
+  "playgroundTask": {
+    "type": "edit-text",
+    "instructions": "Fix the mistakes in this invitation: correct the spelling, capitalize names and the start of each sentence, and delete the duplicate word. Then click Check my work.",
+    "startingText": "your invited to emma's birthday party\n\ncome on saturday july 25th at 2pm\n\nthe party party will be at the park on maple street\n\nbring a swimsuit and a smile\n\nhope to see you there",
+    "mustInclude": [
+      "You're invited",
+      "Emma's birthday party",
+      "Saturday",
+      "July 25th",
+      "the party will be at the park on Maple Street",
+      "Hope to see you there"
+    ],
+    "mustNotInclude": ["your invited", "party party"]
+  },
   "drDigitalSuccess": "Wonderful editing! You fixed it all without touching the mouse.",
-  "drDigitalHint": "This activity is coming soon — click Continue for now."
+  "drDigitalHint": "\"your\" should be \"You're\" (you are). Capitalize names, days, months, and street names — Emma, Saturday, July, Maple Street. And look for one word that repeats twice in a row."
 }

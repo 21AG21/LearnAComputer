@@ -42,3 +42,7 @@ export function checkScrollCode(
 export function checkZoomCode(typedDigits: string[], answerDigits: number[]): boolean {
   return answerDigits.every((digit, i) => typedDigits[i] === String(digit));
 }
+
+export function checkTextEdit(current: string, mustInclude: string[], mustNotInclude: string[]): boolean {
+  return mustInclude.every((s) => current.includes(s)) && mustNotInclude.every((s) => !current.includes(s));
+}

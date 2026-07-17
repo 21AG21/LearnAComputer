@@ -24,7 +24,14 @@ export type PlaygroundTask =
       avatarSrc?: string;
     }
   | { type: "match-parts"; instructions: string }
-  | { type: "open-all-apps"; instructions: string };
+  | { type: "open-all-apps"; instructions: string }
+  | {
+      type: "edit-text";
+      instructions: string;
+      startingText: string;
+      mustInclude: string[];
+      mustNotInclude: string[];
+    };
 
 export interface Lesson {
   slug: string;

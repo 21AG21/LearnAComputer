@@ -1,12 +1,27 @@
 {
   "slug": "email-assessment",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Website Assessment",
+  "module": "Real-Life Exercise",
   "order": 290,
   "title": "Clean up a messy email",
   "videoUrl": "",
-  "drDigitalIntro": "Here's your big Unit 2 test! You'll get a poorly written email and, using the keyboard only, you'll select text, copy a sentence, paste it elsewhere, delete extra words, capitalize names, add punctuation, move around with Tab, and submit. It brings together every skill from this unit.",
-  "playgroundTask": { "type": "placeholder" },
+  "drDigitalIntro": "Here's your big Unit 2 test! Below is a real email with some mistakes in it — duplicate words, missing capital letters, and missing punctuation. Fix it up using only the keyboard: click into the text, use the arrow keys and Delete to clean things up, and type in what's missing. It brings together every skill from this unit.",
+  "playgroundTask": {
+    "type": "edit-text",
+    "instructions": "Fix the mistakes in this email: delete the duplicate words, capitalize names and the start of each sentence, and add the missing punctuation. Then click Check my work.",
+    "startingText": "hey sarah\n\ni wanted to remind you the team meeting meeting is is on thursday at 3pm in the big conference room\n\ncan you bring the the budget report\n\nsee you thursday\n\nthanks\nmike",
+    "mustInclude": [
+      "Hey Sarah",
+      "I wanted",
+      "meeting is on Thursday",
+      "conference room.",
+      "Can you bring the budget report?",
+      "See you Thursday",
+      "Thanks",
+      "Mike"
+    ],
+    "mustNotInclude": ["meeting meeting", "is is", "the the"]
+  },
   "drDigitalSuccess": "Outstanding — you used the whole keyboard toolkit to clean that up!",
-  "drDigitalHint": "This activity is coming soon — click Continue for now."
+  "drDigitalHint": "Look for words that repeat twice in a row and delete the extra one. Every sentence should start with a capital letter, and names like Sarah, Thursday, and Mike always get one too. Sentences need a period, question mark, or other punctuation at the end."
 }

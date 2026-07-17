@@ -11,6 +11,7 @@ import { PinchZoomTask } from "@/components/Playground/PinchZoomTask";
 import MessagingApp from "@/components/Playground/Desktop/MessagingApp";
 import MatchPartsTask from "@/components/Playground/MatchPartsTask";
 import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
+import TextEditorTask from "@/components/Playground/TextEditorTask";
 import type { PlaygroundTask } from "@/lib/lessons";
 
 interface LessonPlaygroundPaneProps {
@@ -148,6 +149,15 @@ export default function LessonPlaygroundPane({ task, onResult }: LessonPlaygroun
           {task.type === "match-parts" && <MatchPartsTask instructions={task.instructions} onResult={handleResult} />}
           {task.type === "open-all-apps" && (
             <OpenAllAppsTask instructions={task.instructions} onResult={handleResult} />
+          )}
+          {task.type === "edit-text" && (
+            <TextEditorTask
+              instructions={task.instructions}
+              startingText={task.startingText}
+              mustInclude={task.mustInclude}
+              mustNotInclude={task.mustNotInclude}
+              onResult={handleResult}
+            />
           )}
         </div>
       )}
