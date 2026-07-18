@@ -48,10 +48,6 @@ export function markComplete(slug: string): void {
   }
 }
 
-export function isComplete(slug: string): boolean {
-  return readState().completedSlugs.includes(slug);
-}
-
 export function getCompletedSlugs(): string[] {
   return readState().completedSlugs;
 }

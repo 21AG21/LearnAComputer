@@ -6,7 +6,21 @@
   "title": "Selecting text",
   "videoUrl": "",
   "drDigitalIntro": "Selecting text tells the computer which words you want to work with. There are lots of ways: click and drag across words, double-click to select one word, triple-click to select a whole line or paragraph, hold Shift and press the arrow keys to stretch your selection, or press Command+A to select everything at once.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "That's a whole toolkit for selecting text — pick whichever way feels easiest!",
-  "drDigitalHint": "Read through the different ways to select, then click Continue whenever you're ready."
+  "playgroundTask": {
+    "type": "edit-text",
+    "instructions": "Two sentences sneaked in that don't belong. Select each one and press Delete to remove it — try double-clicking a word, then holding Shift and pressing the right arrow key to stretch your selection across the whole sentence.",
+    "startingText": "The weather is nice today. PLEASE DELETE THIS ENTIRE SENTENCE. I think I will go for a walk. THIS PART DOES NOT BELONG HERE EITHER. Maybe I will bring my dog along.",
+    "correctText": "The weather is nice today. I think I will go for a walk. Maybe I will bring my dog along.",
+    "mustInclude": [
+      "The weather is nice today.",
+      "I think I will go for a walk.",
+      "Maybe I will bring my dog along."
+    ],
+    "mustNotInclude": [
+      "PLEASE DELETE THIS ENTIRE SENTENCE",
+      "THIS PART DOES NOT BELONG HERE"
+    ]
+  },
+  "drDigitalSuccess": "You selected and deleted whole sentences — that's the power of selecting text!",
+  "drDigitalHint": "The two ALL-CAPS sentences don't belong. Click at the start of one, hold Shift, and click at the end to select it all, then press Delete. Don't forget to remove the extra space left behind too."
 }

@@ -6,7 +6,12 @@
   "title": "Cursor, insertion point, and fixing mistakes",
   "videoUrl": "",
   "drDigitalIntro": "When you type, watch for the blinking line called the insertion point — that's where your next letter will appear. The cursor is the arrow you move with the trackpad; click somewhere to place the insertion point there. Made a mistake? No problem — just use Delete to erase it and type again. Everyone makes typos!",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Now you know how to see where you're typing and fix any slip-ups!",
-  "drDigitalHint": "Take your time reading through this, then click Continue whenever you're ready."
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Put it all together! Type the sentence below exactly as shown — watch your insertion point, fix any mistakes with Delete, and take your time.",
+    "targetText": "I am learning to use a computer and it is fun!",
+    "exact": true
+  },
+  "drDigitalSuccess": "Look at that — a whole sentence, typed out perfectly! You know how to place your cursor, type, and fix mistakes.",
+  "drDigitalHint": "Type exactly: I am learning to use a computer and it is fun! — remember to capitalize the I at the start and include the exclamation point at the end. If you make a mistake, use Delete to erase it."
 }

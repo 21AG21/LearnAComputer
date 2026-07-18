@@ -6,7 +6,11 @@
   "title": "Letters",
   "videoUrl": "",
   "drDigitalIntro": "Welcome to the keyboard! Let's meet the keys. The letter keys let you type words, sentences, and messages — just like on a classic typewriter.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Those are your letters — the heart of everything you'll write!",
-  "drDigitalHint": "Find the letter keys in the middle of your keyboard, then click Continue whenever you're ready."
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Give the letter keys a spin! Type the words below — don't worry about capital letters, just the letters and spaces.",
+    "targetText": "hello dr digital"
+  },
+  "drDigitalSuccess": "You typed it! Those letter keys are the heart of everything you'll write.",
+  "drDigitalHint": "Type exactly: hello dr digital — just lowercase letters and spaces, nothing else."
 }
