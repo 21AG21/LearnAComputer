@@ -64,7 +64,7 @@ components/
       MessagingApp.tsx      # Chat app (persistent threads via localStorage)
       filesData.ts          # Shared file/folder tree used by FilesApp and EditFileTask
 
-content/lessons/           # 48 lesson JSON files (see Lesson schema below)
+content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
 
 lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
@@ -85,7 +85,7 @@ Each file defines one sub-lesson:
   slug: string;           // unique, matches filename
   unit: string;           // "Unit 1: ..." or "Unit 2: ..."
   module: string;         // groups sub-lessons into one routable page
-  order: number;          // global sort order (1–26 = Unit 1, 200–290 = Unit 2)
+  order: number;          // global sort order (see ranges below)
   title: string;
   videoUrl: string;       // unused for now, reserved
   drDigitalIntro: string;
@@ -157,8 +157,19 @@ Decide the unit name, modules, and sub-lessons. A **unit** is a top-level groupi
 `order` controls the global sort order of all lessons. Existing ranges:
 - Unit 1: `1`–`26`
 - Unit 2: `200`–`290`
+- Unit 3 (Files & Finder): `300`–`390`
+- Unit 4 (Internet & Safari): `400`–`496`
+- Unit 5 (Messages & FaceTime): `500`–`570`
+- Unit 6 (Email): `600`–`680`
+- Unit 7 (Photos): `700`–`780`
+- Unit 8 (Apps): `800`–`870`
+- Unit 9 (Settings): `900`–`960`
+- Unit 10 (Online Safety): `1000`–`1100`
+- Unit 11 (Troubleshooting): `1110`–`1190`
+- Unit 12 (Everyday Life): `1200`–`1290`
+- Final Capstone: `1300`
 
-For Unit 3, start at `300`. Within a module, use consecutive integers (`300`, `301`, `302`). Between modules, leave a gap of 10 (`300`-series, `310`-series, `320`-series) so lessons can be inserted later.
+Within a module, use consecutive integers (`300`, `301`, `302`). Between modules, leave a gap of 10 (`300`-series, `310`-series, `320`-series) so lessons can be inserted later.
 
 ### Step 3: Create one JSON file per sub-lesson
 

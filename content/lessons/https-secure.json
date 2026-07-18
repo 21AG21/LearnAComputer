@@ -2,7 +2,7 @@
   "slug": "https-secure",
   "unit": "Unit 4: Internet and Safari",
   "module": "Online Safety",
-  "order": 495,
+  "order": 491,
   "title": "HTTPS and Secure Websites",
   "videoUrl": "",
   "drDigitalIntro": "When a website is secure, its URL starts with https:// (the 's' stands for secure). A lock icon appears in the address bar. This means your connection is encrypted — information you send (passwords, credit card numbers, personal data) is scrambled and safe. If a site is just http:// without the 's', it's not secure. Never enter passwords or credit card numbers on an unsecured site. Check for the lock icon before entering sensitive information.",

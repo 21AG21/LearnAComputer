@@ -2,7 +2,7 @@
   "slug": "refresh-reload",
   "unit": "Unit 4: Internet and Safari",
   "module": "Using Safari",
-  "order": 500,
+  "order": 494,
   "title": "Refresh and Reload",
   "videoUrl": "",
   "drDigitalIntro": "Sometimes a website loads partially or gets stuck — clicking the Refresh button (the circular arrow icon) reloads the page. Press Command+R for refresh. If that doesn't work, try a 'hard refresh' with Command+Shift+R — this clears cached data and gets the newest version. Most of the time, a simple refresh fixes loading problems.",
