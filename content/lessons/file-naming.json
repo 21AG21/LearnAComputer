@@ -5,20 +5,15 @@
   "order": 340,
   "title": "Naming Files Well",
   "videoUrl": "",
-  "drDigitalIntro": "File names matter — a good name tells you what's inside. Compare: IMG_48293 tells you nothing, but Vacation_Hawaii_2026 tells you exactly what it is. Use descriptive names with spaces or underscores. Avoid special characters like * or / — they confuse your Mac. Include a date if it helps you find things later: Invoice_2026_July. Good names save you time when you're searching for files later.",
+  "drDigitalIntro": "A good file name tells you what's inside without opening it. 'Beach-Vacation-2025.jpg' is clear. 'img_20250104_FINAL(2).jpg' is confusing — you'd have to open it to know what it is. Let's rename a messy file to something useful.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Sort these file names into Good Names and Bad Names.",
-    "categories": ["Good Name", "Bad Name"],
-    "items": [
-      { "label": "photo.jpg", "category": "Bad Name" },
-      { "label": "Birthday_Party_2026.jpg", "category": "Good Name" },
-      { "label": "Untitled_1", "category": "Bad Name" },
-      { "label": "Doctor_Invoice_July.pdf", "category": "Good Name" },
-      { "label": "document", "category": "Bad Name" },
-      { "label": "Grandma_Visit_Dec2025.png", "category": "Good Name" }
+    "type": "guided-files",
+    "goal": "Rename a messy file to something clear",
+    "steps": [
+      { "say": "A badly-named file is hiding in Downloads. Click Downloads to find it.", "action": "go-to", "target": "Downloads" },
+      { "say": "See 'img_20250104_FINAL(2).jpg'? Nobody can tell what that is. Click it, click Rename, then type Beach-Vacation-2025.jpg and press Enter.", "action": "rename", "target": "img_20250104_FINAL(2).jpg", "value": "Beach-Vacation-2025.jpg" }
     ]
   },
-  "drDigitalSuccess": "You've got it! Descriptive, specific names make files easy to find later. Vague names are headaches waiting to happen.",
-  "drDigitalHint": "A good file name tells you what's inside without even opening it. If the name could apply to 100 different files, it's a bad name."
+  "drDigitalSuccess": "Much better! 'Beach-Vacation-2025.jpg' tells you exactly what the file is. Good names save you time.",
+  "drDigitalHint": "First click the file once to select it, then click the glowing Rename button, then type the new name and press Enter."
 }

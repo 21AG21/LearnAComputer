@@ -114,6 +114,38 @@ Each file defines one sub-lesson:
 | `match-parts` | MatchPartsTask | Drag laptop part labels to correct spots |
 | `open-all-apps` | OpenAllAppsTask | Open every dock app |
 | `compose-email` | ComposeEmailTask | Write an email with required to/subject/body |
+| `multiple-choice` | MultipleChoiceTask | 4-option quiz (A/B/C/D) — **avoid for new lessons; prefer hands-on** |
+| `drag-sort-files` | DragSortTask | Click-to-place items into category buckets |
+| `spot-the-fake` | SpotTheFakeTask | Click the scam/fake among 2–3 item cards |
+| `find-in-settings` | FindInSettingsTask | Navigate a fake System Settings UI, toggle a setting |
+| `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
+| `guided-files` | GuidedFilesTask | Step-by-step guided Finder: open/create/rename/move/search/delete/restore/save real files |
+
+**Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). Multiple-choice quizzes test recognition, not skill; do not add them to new lessons. `guided-files` is the reference pattern for a guided simulator.
+
+#### `guided-files` schema
+
+A self-contained simulated Finder. The JSON provides a `goal` and an array of `steps`; each step highlights exactly what to click next and only advances when done. The virtual filesystem (Home + Documents/Pictures/Downloads/Trash, plus a standard set of files) is hardcoded in `GuidedFilesTask.tsx`.
+
+```json
+"playgroundTask": {
+  "type": "guided-files",
+  "goal": "Short summary shown when finished",
+  "steps": [
+    { "say": "Double-click GroceryList.txt to open it.", "action": "open-file", "target": "GroceryList.txt" },
+    { "say": "Click Documents in the sidebar.", "action": "go-to", "target": "Documents" },
+    { "say": "Click New Folder and name it Taxes.", "action": "new-folder", "value": "Taxes" },
+    { "say": "Rename the messy file.", "action": "rename", "target": "old.jpg", "value": "Beach-2025.jpg" },
+    { "say": "Drag Budget.xlsx into Documents.", "action": "move", "target": "Budget.xlsx", "into": "Documents" },
+    { "say": "Search for budget.", "action": "search", "value": "budget", "reveal": "Budget.xlsx" },
+    { "say": "Delete it.", "action": "delete", "target": "TaxReturn.pdf" },
+    { "say": "Put it back.", "action": "restore", "target": "TaxReturn.pdf" },
+    { "say": "Save your note in Documents.", "action": "save", "value": "shopping-list", "into": "Documents" }
+  ]
+}
+```
+
+Actions: `open-file`, `open-folder`, `go-to` (sidebar), `new-folder` (`value`), `rename` (`target`+`value`), `move` (`target`+`into`, drag or click-file-then-folder), `search` (`value`+`reveal`), `delete` (`target`), `restore` (`target`), `save` (`value`+`into`). Available folders for `move`/`save`/`go-to`: Documents, Pictures, Downloads (and Home/Trash for `go-to`).
 
 ### Progress
 

@@ -5,20 +5,15 @@
   "order": 360,
   "title": "Moving Files",
   "videoUrl": "",
-  "drDigitalIntro": "Once you have folders, you can move files into them. There are three ways: drag a file into a folder (click and drag), cut and paste (Command+X to cut, Command+V to paste), or use the sidebar to move files by dragging them to a folder. When a file is inside a folder, it's still on your computer — it's just organized.",
+  "drDigitalIntro": "Moving a file puts it in a different folder. You can drag a file on top of a folder to drop it inside — or click the file once and then click the folder. Moving files is how you tidy up: put photos in Pictures, documents in Documents. Let's move a file.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Move each file into the correct folder.",
-    "categories": ["Photos", "Documents", "Downloads"],
-    "items": [
-      { "label": "vacation.jpg", "category": "Photos" },
-      { "label": "tax_return.pdf", "category": "Documents" },
-      { "label": "family_dinner.jpg", "category": "Photos" },
-      { "label": "resume.docx", "category": "Documents" },
-      { "label": "app_installer.dmg", "category": "Downloads" },
-      { "label": "birthday_party.png", "category": "Photos" }
+    "type": "guided-files",
+    "goal": "Move a file into the Documents folder",
+    "steps": [
+      { "say": "Let's tidy up. Drag Budget.xlsx onto the Documents folder — or click Budget.xlsx once, then click Documents.", "action": "move", "target": "Budget.xlsx", "into": "Documents" },
+      { "say": "Let's check it worked. Double-click the Documents folder to see Budget.xlsx now inside.", "action": "open-folder", "target": "Documents" }
     ]
   },
-  "drDigitalSuccess": "Perfectly organized! Photos, documents, and downloads all in their right place.",
-  "drDigitalHint": ".jpg and .png are image files (Photos), .pdf and .docx are documents, and installers go in Downloads."
+  "drDigitalSuccess": "You moved Budget.xlsx into Documents and checked it landed there. That's how you organize files into folders.",
+  "drDigitalHint": "Drag the glowing file onto the glowing folder. Or click the file once, then click the folder once."
 }

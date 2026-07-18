@@ -5,17 +5,15 @@
   "order": 370,
   "title": "Searching for Files",
   "videoUrl": "",
-  "drDigitalIntro": "Can't remember where you saved something? Use Finder's search. Click the search icon in the top right of Finder and type what you're looking for — a file name, part of a name, or even when it was created. Finder searches through all your folders and shows you matches. This is faster than digging through folders manually.",
+  "drDigitalIntro": "When you have lots of files, you don't have to hunt through folders — you can search. The search box is in the top-right corner of Finder. Type part of a file's name and Finder shows only the files that match. Let's find a file by searching.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You saved a file called 'Party_Invite_2026.docx' but you can't find it. What do you type in the Finder search box?",
-    "options": [
-      { "text": "files", "correct": false },
-      { "text": "party", "correct": true },
-      { "text": "document", "correct": false },
-      { "text": "Desktop", "correct": false }
+    "type": "guided-files",
+    "goal": "Find a file using search",
+    "steps": [
+      { "say": "Instead of hunting, you can search. Click the Search box and type budget to find your budget file.", "action": "search", "value": "budget", "reveal": "Budget.xlsx" },
+      { "say": "There it is! Double-click Budget.xlsx to open it.", "action": "open-file", "target": "Budget.xlsx" }
     ]
   },
-  "drDigitalSuccess": "Exactly! Typing 'party' will find any file with that word in the name, including Party_Invite_2026.docx.",
-  "drDigitalHint": "Search for a unique word from the file name — something that won't match hundreds of other files."
+  "drDigitalSuccess": "You searched for 'budget' and Finder found it instantly. Searching is the fastest way to find any file.",
+  "drDigitalHint": "Click the glowing Search box in the top-right corner and type the word budget."
 }

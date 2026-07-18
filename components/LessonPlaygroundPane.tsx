@@ -19,6 +19,7 @@ import DragSortTask from "@/components/Playground/DragSortTask";
 import SpotTheFakeTask from "@/components/Playground/SpotTheFakeTask";
 import FindInSettingsTask from "@/components/Playground/FindInSettingsTask";
 import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
+import GuidedFilesTask from "@/components/Playground/GuidedFilesTask";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -127,6 +128,9 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "url-navigator" && (
             <UrlNavigatorTask instructions={task.instructions} prompt={task.prompt} targetUrl={task.targetUrl} successTitle={task.successTitle} onResult={onResult} />
+          )}
+          {task.type === "guided-files" && (
+            <GuidedFilesTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
         </div>
       )}

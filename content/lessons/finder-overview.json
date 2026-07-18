@@ -5,17 +5,16 @@
   "order": 320,
   "title": "Finder: Your File Manager",
   "videoUrl": "",
-  "drDigitalIntro": "Finder is the app that shows you all your files and folders. It's like opening a filing cabinet to see what you've stored. When you open Finder, you'll see the sidebar on the left with shortcuts: Recent files you've used, your Desktop, Documents folder, Downloads folder, Applications (all your programs), and Trash (where deleted files go). The main area shows what's inside each folder.",
+  "drDigitalIntro": "Finder is the app that shows all your files and folders. The list on the left side is called the sidebar — it has shortcuts to the important places on your Mac: Home, Documents, Pictures, Downloads, and Trash. Click any of them to jump straight there. Let's practice getting around.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What does Finder help you do?",
-    "options": [
-      { "text": "Connect to Wi-Fi", "correct": false },
-      { "text": "Find, open, and organize files and folders", "correct": true },
-      { "text": "Browse the internet", "correct": false },
-      { "text": "Send emails", "correct": false }
+    "type": "guided-files",
+    "goal": "Use the sidebar to move between places",
+    "steps": [
+      { "say": "The sidebar on the left jumps between places. Click Pictures.", "action": "go-to", "target": "Pictures" },
+      { "say": "Now click Downloads to see what's saved there.", "action": "go-to", "target": "Downloads" },
+      { "say": "Click Home to return to your main files. That's how you get around in Finder!", "action": "go-to", "target": "Home" }
     ]
   },
-  "drDigitalSuccess": "That's right! Finder is your file manager — it's how you navigate everything stored on your Mac.",
-  "drDigitalHint": "The word 'Finder' is a big clue. It helps you find things on your computer."
+  "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. That's how you navigate everywhere in Finder.",
+  "drDigitalHint": "Single-click the glowing place in the sidebar on the left."
 }

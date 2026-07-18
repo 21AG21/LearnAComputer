@@ -80,6 +80,28 @@ export type PlaygroundTask =
       prompt: string;
       targetUrl: string;
       successTitle: string;
+    }
+  | {
+      type: "guided-files";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "open-file"
+          | "open-folder"
+          | "go-to"
+          | "new-folder"
+          | "rename"
+          | "move"
+          | "search"
+          | "delete"
+          | "restore"
+          | "save";
+        target?: string;
+        value?: string;
+        into?: string;
+        reveal?: string;
+      }>;
     };
 
 export interface Lesson {

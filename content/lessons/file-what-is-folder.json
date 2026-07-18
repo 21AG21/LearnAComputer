@@ -5,17 +5,16 @@
   "order": 310,
   "title": "What is a Folder?",
   "videoUrl": "",
-  "drDigitalIntro": "A folder is like a filing cabinet drawer. Just like you organize papers into different drawers so you can find them later, you organize files into folders. A folder is an empty container until you put files inside it. You can have folders inside folders — like having dividers inside a drawer.",
+  "drDigitalIntro": "A folder is a container that holds files — just like a paper folder holds documents in a filing cabinet. Folders keep related files together so your computer doesn't become one giant messy pile. Let's look inside a folder.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What is a folder?",
-    "options": [
-      { "text": "A program that runs on your Mac", "correct": false },
-      { "text": "A container for organizing files", "correct": true },
-      { "text": "A file with a .doc extension", "correct": false },
-      { "text": "The Trash can", "correct": false }
+    "type": "guided-files",
+    "goal": "Look inside a folder and come back out",
+    "steps": [
+      { "say": "A folder holds files, like a paper folder holds papers. Double-click the Documents folder to open it.", "action": "open-folder", "target": "Documents" },
+      { "say": "These are the files kept inside Documents. Double-click Resume.pdf to open one.", "action": "open-file", "target": "Resume.pdf" },
+      { "say": "Now click Home in the sidebar to step back out of the folder.", "action": "go-to", "target": "Home" }
     ]
   },
-  "drDigitalSuccess": "Perfect! A folder is a container — it holds files but is not itself a file you'd open and read.",
-  "drDigitalHint": "Think of a real filing cabinet drawer. Files go inside it — the drawer itself is the folder."
+  "drDigitalSuccess": "You opened a folder, looked at a file inside, and came back out. Folders keep your files organized!",
+  "drDigitalHint": "Follow the yellow glow — double-click folders and files, but single-click the Home button in the sidebar."
 }

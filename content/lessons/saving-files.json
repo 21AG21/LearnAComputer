@@ -5,17 +5,14 @@
   "order": 330,
   "title": "Saving Files",
   "videoUrl": "",
-  "drDigitalIntro": "When you create something — like writing a letter, downloading a photo, or saving a webpage — you're saving a file to your computer. Most apps have a File menu with a Save option. When you save, your computer asks where you want to save it: maybe your Desktop, Documents, or a folder you created. Downloads also happens automatically — files you download from the internet go to your Downloads folder unless you tell them to go somewhere else.",
+  "drDigitalIntro": "When you make something on a computer — a note, a letter, a drawing — it disappears when you close the app unless you SAVE it. Saving keeps a copy as a file. When you save, you give the file a name and choose which folder to keep it in. Let's save a note.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Which keyboard shortcut saves a file in most Mac apps?",
-    "options": [
-      { "text": "Command + D", "correct": false },
-      { "text": "Command + S", "correct": true },
-      { "text": "Command + W", "correct": false },
-      { "text": "Command + Q", "correct": false }
+    "type": "guided-files",
+    "goal": "Save your note into a folder",
+    "steps": [
+      { "say": "You typed a note. Follow the yellow highlights: press Save, type the name shopping-list, choose the Documents folder, then press Save.", "action": "save", "value": "shopping-list", "into": "Documents" }
     ]
   },
-  "drDigitalSuccess": "Command + S — S for Save! It's one of the most important shortcuts to remember.",
-  "drDigitalHint": "The shortcut follows the pattern: Command + the first letter of what you want to do."
+  "drDigitalSuccess": "You saved your note as shopping-list in the Documents folder. Now you can find it again any time!",
+  "drDigitalHint": "Do it in order: click the glowing Save button, type shopping-list, click Documents, then click Save."
 }

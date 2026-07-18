@@ -5,17 +5,15 @@
   "order": 380,
   "title": "Trash: Delete and Recover",
   "videoUrl": "",
-  "drDigitalIntro": "When you delete a file, it goes to Trash — like a recycle bin for your Mac. The file isn't gone from your computer yet. If you delete something by accident, you can open Trash (look in the Finder sidebar) and drag it back out. If you're sure you want something deleted forever, right-click Trash and choose Empty Trash. Once you empty it, the file is permanently gone.",
+  "drDigitalIntro": "When you don't need a file anymore, you move it to the Trash. But here's the good news: deleting a file sends it to the Trash, where it waits — so if you delete something by accident, you can put it back. Let's delete a file, then rescue it.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You delete a photo by accident. Where does it go?",
-    "options": [
-      { "text": "It's permanently deleted immediately", "correct": false },
-      { "text": "The Downloads folder", "correct": false },
-      { "text": "The Trash — you can recover it until you empty Trash", "correct": true },
-      { "text": "iCloud backup only", "correct": false }
+    "type": "guided-files",
+    "goal": "Delete a file, then recover it from the Trash",
+    "steps": [
+      { "say": "Let's delete a file. Click TaxReturn.pdf to select it, then click Move to Trash.", "action": "delete", "target": "TaxReturn.pdf" },
+      { "say": "Oops — we still need it! Click Trash in the sidebar, click TaxReturn.pdf, then click Put Back.", "action": "restore", "target": "TaxReturn.pdf" }
     ]
   },
-  "drDigitalSuccess": "The Trash is your safety net! Files stay there until you decide to empty it permanently.",
-  "drDigitalHint": "The Trash works like a real trash can — you can dig things back out before you take the bag to the curb."
+  "drDigitalSuccess": "You deleted a file AND rescued it from the Trash. Now you'll never panic about deleting something by accident!",
+  "drDigitalHint": "First select the file and click Move to Trash. Then open Trash in the sidebar, select the file, and click Put Back."
 }
