@@ -5,8 +5,17 @@
   "order": 450,
   "title": "Windows: Organize Your Browsing",
   "videoUrl": "",
-  "drDigitalIntro": "Windows are separate Safari experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Command+N. Windows are useful when you want to keep things completely organized. Unlike tabs in the same window, different windows don't share history or cookies.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can organize your browsing with multiple windows!",
-  "drDigitalHint": "Use windows to separate different browsing sessions."
+  "drDigitalIntro": "Windows are separate Safari experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Command+N. Windows are useful when you want to keep things completely organized.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What is the difference between tabs and windows in Safari?",
+    "options": [
+      { "text": "Nothing, they're the same thing", "correct": false },
+      { "text": "Tabs are within one window; windows are entirely separate", "correct": true },
+      { "text": "Windows are faster than tabs", "correct": false },
+      { "text": "You can only have one tab per window", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Exactly! Tabs share a window. Windows are independent — each can have their own tabs.",
+  "drDigitalHint": "Think of a window as an entire browser session, and tabs as pages within that session."
 }

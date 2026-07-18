@@ -5,8 +5,13 @@
   "order": 1240,
   "title": "Notes and Documents",
   "videoUrl": "",
-  "drDigitalIntro": "Notes app is perfect for quick ideas, shopping lists, recipes, or anything you want to remember. Write, add checklists, and sync across devices. For longer documents, use Pages (like Microsoft Word) or Google Docs. For spreadsheets, use Numbers or Excel. These tools let you create, organize, and share documents.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can create and organize your ideas!",
-  "drDigitalHint": "Notes syncs to iCloud — your ideas are safe and accessible everywhere."
+  "drDigitalIntro": "The Notes app is perfect for quick ideas, shopping lists, recipes, and anything you want to remember. Notes sync across all your Apple devices via iCloud. For longer documents — letters, reports, essays — use Pages (Apple's word processor, free) or Microsoft Word. You can create a new note by pressing Command+N in the Notes app. Notes can include text, photos, checklists, and sketches.",
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Practice typing a quick note. Type the words below exactly.",
+    "targetText": "Milk, eggs, bread",
+    "exact": false
+  },
+  "drDigitalSuccess": "A quick typed note like this — ready in seconds, saved automatically, accessible on all your devices. That's the power of Notes!",
+  "drDigitalHint": "Type those three words exactly as shown and the note will be accepted."
 }

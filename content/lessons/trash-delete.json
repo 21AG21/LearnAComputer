@@ -6,7 +6,16 @@
   "title": "Trash: Delete and Recover",
   "videoUrl": "",
   "drDigitalIntro": "When you delete a file, it goes to Trash — like a recycle bin for your Mac. The file isn't gone from your computer yet. If you delete something by accident, you can open Trash (look in the Finder sidebar) and drag it back out. If you're sure you want something deleted forever, right-click Trash and choose Empty Trash. Once you empty it, the file is permanently gone.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Now you know how to safely delete files and recover them if needed!",
-  "drDigitalHint": "Trash is your safety net — you can always recover something unless you empty the trash."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You delete a photo by accident. Where does it go?",
+    "options": [
+      { "text": "It's permanently deleted immediately", "correct": false },
+      { "text": "The Downloads folder", "correct": false },
+      { "text": "The Trash — you can recover it until you empty Trash", "correct": true },
+      { "text": "iCloud backup only", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The Trash is your safety net! Files stay there until you decide to empty it permanently.",
+  "drDigitalHint": "The Trash works like a real trash can — you can dig things back out before you take the bag to the curb."
 }

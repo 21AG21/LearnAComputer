@@ -3,10 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Performance",
   "order": 1160,
-  "title": "Storage Full and Slowness",
+  "title": "Mac Running Slowly",
   "videoUrl": "",
-  "drDigitalIntro": "Mac running slow: check storage (System Settings > General > Storage). If full, delete old files, apps you don't use, or old downloads. Too many open apps slow things down — close unnecessary ones. Restart your Mac — it's remarkable how often that fixes slowness. If still slow, check Activity Monitor for apps using too much CPU or memory.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can speed up your Mac!",
-  "drDigitalHint": "Delete old downloads — they pile up and slow you down."
+  "drDigitalIntro": "A slow Mac often has a simple cause. Too many apps open at once = less memory, slower performance. A full hard drive (less than 10% free) also slows things down. Check storage in Apple menu > About This Mac > Storage. Close apps you aren't using. Delete large files you don't need. Restart your Mac — this clears the memory. Old Macs also run newer software harder; check Activity Monitor to see what's using CPU.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Your Mac has been on for two weeks without a restart and is running slowly. What is the most likely fix?",
+    "options": [
+      { "text": "Buy more RAM — the Mac is permanently broken", "correct": false },
+      { "text": "Restart the Mac — it clears memory and fixes many slowdowns", "correct": true },
+      { "text": "Delete your entire Documents folder", "correct": false },
+      { "text": "Uninstall Safari", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Restarting clears temporary files and frees memory — it's the single best fix for a gradual slowdown.",
+  "drDigitalHint": "What happens to memory and temporary files when you restart a computer that's been running for weeks?"
 }

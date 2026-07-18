@@ -6,7 +6,19 @@
   "title": "Managing Your Inbox",
   "videoUrl": "",
   "drDigitalIntro": "Email adds up fast. Create folders for topics (Recipes, Bills, Work). Search Mail for specific senders or subjects. Mark emails as unread if you need to handle them later. Unsubscribe from newsletters you don't read — look for an Unsubscribe link at the bottom. Delete emails you don't need. Archive important emails for later. A clean Inbox makes it easier to find what you need.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can keep your inbox organized and manageable!",
-  "drDigitalHint": "Regular cleanup keeps email from becoming overwhelming."
+  "playgroundTask": {
+    "type": "drag-sort-files",
+    "instructions": "Decide what to do with each email.",
+    "categories": ["Keep (Inbox)", "Archive", "Delete"],
+    "items": [
+      { "label": "Meeting invite for tomorrow", "category": "Keep (Inbox)" },
+      { "label": "Doctor appointment receipt", "category": "Archive" },
+      { "label": "50% off sale from random store", "category": "Delete" },
+      { "label": "Old newsletter you never read", "category": "Delete" },
+      { "label": "Bank statement from last month", "category": "Archive" },
+      { "label": "Friend asking about dinner plans", "category": "Keep (Inbox)" }
+    ]
+  },
+  "drDigitalSuccess": "Great inbox management! Action items stay in Inbox, records get archived, junk gets deleted.",
+  "drDigitalHint": "Ask yourself: do I need to act on this? Keep it. Might need to reference it? Archive it. Neither? Delete it."
 }

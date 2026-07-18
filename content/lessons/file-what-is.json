@@ -6,7 +6,16 @@
   "title": "What is a File?",
   "videoUrl": "",
   "drDigitalIntro": "A file is anything you save on your laptop — a photo, a document, a video, a song. Every file has a name and lives somewhere on your computer. When you take a photo with your phone or write a document, you're creating a file. Let me show you what files look like.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Now you know files are just saved information on your computer.",
-  "drDigitalHint": "Think about the last thing you saved on your computer — that's a file!"
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Which of these is a file?",
+    "options": [
+      { "text": "A folder on your Desktop", "correct": false },
+      { "text": "A photo you saved on your Mac", "correct": true },
+      { "text": "The Safari app", "correct": false },
+      { "text": "Your screen wallpaper", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Exactly right! A saved photo is a file. Folders hold files, apps run programs, and the wallpaper is a display setting.",
+  "drDigitalHint": "Think about what you've actually saved to your computer — that thing sitting there with a name and a location is a file."
 }

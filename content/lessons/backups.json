@@ -3,10 +3,19 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "System Health",
   "order": 1090,
-  "title": "Backing Up Your Mac",
+  "title": "Backing Up Your Data",
   "videoUrl": "",
-  "drDigitalIntro": "A backup is a copy of all your files stored somewhere safe. Time Machine (built into macOS) automatically backs up your Mac to an external drive. iCloud also backs up your files. If your Mac breaks, gets stolen, or is hit by ransomware, you can restore from backup. Never rely on just your Mac's drive. A good backup strategy saves you from disaster. Set up Time Machine today.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You're protected by a backup!",
-  "drDigitalHint": "Time Machine needs an external drive."
+  "drDigitalIntro": "A backup is a copy of your important files stored somewhere safe. If your laptop breaks, gets stolen, or is hit by ransomware, a backup lets you recover everything. Time Machine backs up your Mac automatically to an external hard drive. iCloud backs up photos and documents online. The rule is 3-2-1: 3 copies of your data, on 2 different types of storage, with 1 offsite. Even one backup is much better than none.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Your Mac is stolen. You have no backup. What happens to all your photos and documents?",
+    "options": [
+      { "text": "Apple can recover them for you from their servers", "correct": false },
+      { "text": "They are gone permanently — there's no way to get them back", "correct": true },
+      { "text": "They are automatically saved in your email", "correct": false },
+      { "text": "The police can extract them from the stolen laptop", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Without a backup, lost data is usually gone forever. Time Machine or iCloud can save you from this — back up regularly!",
+  "drDigitalHint": "If the only copy of your data was on the stolen device, and no one else has a copy..."
 }

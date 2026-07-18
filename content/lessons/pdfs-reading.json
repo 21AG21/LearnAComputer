@@ -3,10 +3,19 @@
   "unit": "Unit 12: Everyday Life with Your Mac",
   "module": "Real-World Tasks",
   "order": 1280,
-  "title": "PDFs and Reading",
+  "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDFs are files that look the same on every computer. Open them with Preview. You can annotate (add notes and highlights), fill out forms, and sign PDFs. Read ebooks with Apple Books or Kindle. Read articles offline with Safari's Reader mode. These are everyday ways people consume information.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can read and work with PDFs!",
-  "drDigitalHint": "Preview has powerful annotation tools."
+  "drDigitalIntro": "PDF is the most common document format — used for forms, statements, manuals, and tickets. Your Mac opens PDFs automatically in Preview app. In Preview, you can highlight text, add notes, fill in forms, and sign documents with your finger or trackpad. To save a webpage as a PDF: File > Print > PDF > Save as PDF. This is great for keeping records of receipts or tickets when you can't print them.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You receive an important bank statement as a PDF. Which app on your Mac opens PDFs automatically?",
+    "options": [
+      { "text": "Pages", "correct": false },
+      { "text": "Preview", "correct": true },
+      { "text": "Calendar", "correct": false },
+      { "text": "Numbers", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Preview is your Mac's built-in PDF viewer — it opens automatically when you double-click a PDF file.",
+  "drDigitalHint": "Which Mac app is specifically for viewing images and PDF files?"
 }

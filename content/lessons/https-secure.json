@@ -5,8 +5,29 @@
   "order": 491,
   "title": "HTTPS and Secure Websites",
   "videoUrl": "",
-  "drDigitalIntro": "When a website is secure, its URL starts with https:// (the 's' stands for secure). A lock icon appears in the address bar. This means your connection is encrypted — information you send (passwords, credit card numbers, personal data) is scrambled and safe. If a site is just http:// without the 's', it's not secure. Never enter passwords or credit card numbers on an unsecured site. Check for the lock icon before entering sensitive information.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to spot secure websites!",
-  "drDigitalHint": "https:// + lock icon = safe to share passwords and payment info."
+  "drDigitalIntro": "When a website is secure, its URL starts with https:// (the 's' stands for secure). A lock icon appears in the address bar. This means your connection is encrypted — information you send (passwords, credit card numbers, personal data) is scrambled and safe. If a site is just http:// without the 's', it's not secure. Never enter passwords or credit card numbers on an unsecured site.",
+  "playgroundTask": {
+    "type": "spot-the-fake",
+    "instructions": "Which website is NOT safe to enter your password on?",
+    "items": [
+      {
+        "label": "https://amazon.com",
+        "preview": "🔒 amazon.com — Secure checkout. Trusted retailer since 1995.",
+        "isFake": false
+      },
+      {
+        "label": "http://amaz0n-deals.net",
+        "preview": "⚠️ No lock icon. amaz0n-deals.net — HUGE SALE click to buy now!!!",
+        "isFake": true
+      },
+      {
+        "label": "https://apple.com",
+        "preview": "🔒 apple.com — Official Apple Store. Shop with confidence.",
+        "isFake": false
+      }
+    ],
+    "fakeExplanation": "http:// (no 's') means no encryption, and the misspelled URL ('amaz0n' with a zero) is a classic phishing trick."
+  },
+  "drDigitalSuccess": "You spotted it! Always look for https:// and the 🔒 lock icon before entering sensitive information.",
+  "drDigitalHint": "Look for two things: does it say https (with an s)? Is the domain name spelled correctly?"
 }

@@ -6,7 +6,16 @@
   "title": "Editing Photos",
   "videoUrl": "",
   "drDigitalIntro": "Photos lets you edit photos without a separate app. Double-click a photo to open the editor. You can crop (change the size or angle), rotate, adjust brightness and contrast, and apply filters. All edits are non-destructive — the original is always saved. Undo changes anytime. Photos editing is perfect for quick adjustments before sharing.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can edit photos to make them look better!",
-  "drDigitalHint": "Edit button is in the top right when viewing a photo."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What does 'non-destructive editing' mean in Photos?",
+    "options": [
+      { "text": "You can't make permanent changes to photos", "correct": false },
+      { "text": "Edits are permanent and cannot be undone", "correct": false },
+      { "text": "The original photo is always preserved — you can revert anytime", "correct": true },
+      { "text": "Only one edit can be applied at a time", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Non-destructive means safe to experiment! You can always click 'Revert to Original' to undo everything.",
+  "drDigitalHint": "'Non-destructive' = not destroying anything. The original is always safe underneath."
 }

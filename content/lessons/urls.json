@@ -6,7 +6,13 @@
   "title": "URLs: Website Addresses",
   "videoUrl": "",
   "drDigitalIntro": "Every website has an address called a URL (Uniform Resource Locator). It starts with http:// or https:// and looks like: www.google.com or www.wikipedia.org. The address tells your browser where to go on the internet. Type a URL in Safari's address bar and press Return — Safari takes you there. You might see URLs written on signs, in emails, or in books: click them or type them to visit.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand how URLs work — they're website addresses!",
-  "drDigitalHint": "https:// at the start means the website is secure."
+  "playgroundTask": {
+    "type": "url-navigator",
+    "instructions": "Practice typing a web address. Navigate to Google's homepage.",
+    "prompt": "Type a web address, e.g. google.com",
+    "targetUrl": "google.com",
+    "successTitle": "Google — Search the web"
+  },
+  "drDigitalSuccess": "You typed a URL and navigated to Google! That's exactly how you get to any website.",
+  "drDigitalHint": "Type the core address — google.com — and press Enter or click Go. You don't need the http:// part."
 }

@@ -6,7 +6,16 @@
   "title": "Contacts",
   "videoUrl": "",
   "drDigitalIntro": "Before you send messages or make FaceTime calls, you need contacts — a list of people and their phone numbers or email addresses. The Contacts app lets you create and organize contact information. Each contact has a name and can have multiple phone numbers, email addresses, and addresses. You can organize contacts into groups (Family, Friends, Work). Once someone is a contact, messaging apps can find them easily.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand how contacts work!",
-  "drDigitalHint": "Contacts are like a digital address book."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What is a Contact on your Mac?",
+    "options": [
+      { "text": "An email saved in your Drafts folder", "correct": false },
+      { "text": "A saved person with their phone number or email address", "correct": true },
+      { "text": "A file you downloaded", "correct": false },
+      { "text": "A browser bookmark", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Exactly! Contacts are like a digital address book — each person has their info stored so you can reach them easily.",
+  "drDigitalHint": "Think of Contacts as a digital version of the address book people used to keep by the phone."
 }

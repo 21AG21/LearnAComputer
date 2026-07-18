@@ -3,10 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Connectivity",
   "order": 1150,
-  "title": "Printer and Bluetooth Issues",
+  "title": "Peripheral Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Printer won't print: make sure it's turned on and connected, restart both printer and Mac, check if it's set as default printer. Bluetooth device won't connect: restart both devices, re-pair them in System Settings > Bluetooth, make sure the device is charged. Devices disconnect randomly: they might be too far away, or low battery.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can troubleshoot peripherals!",
-  "drDigitalHint": "Always restart both the Mac and the device first."
+  "drDigitalIntro": "Peripherals are devices you connect to your Mac — printers, external monitors, mice, USB drives, and headphones. When a peripheral isn't working: unplug and replug it. Try a different USB port. Restart the Mac with the peripheral connected. Check System Settings > Printers & Scanners (for printers). Update drivers if needed. Make sure the peripheral is charged if it's wireless. Most peripheral problems resolve with these simple steps.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You plug in a USB flash drive but your Mac doesn't recognize it. What should you try first?",
+    "options": [
+      { "text": "Buy a new Mac — your USB ports are broken", "correct": false },
+      { "text": "Unplug it and try a different USB port on your Mac", "correct": true },
+      { "text": "Format your internal hard drive", "correct": false },
+      { "text": "Turn off Bluetooth", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "A different USB port often solves recognition issues — one port may be faulty while others work fine.",
+  "drDigitalHint": "What's the simplest, least drastic step when a USB port doesn't recognize something?"
 }

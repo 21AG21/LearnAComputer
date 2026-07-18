@@ -6,7 +6,13 @@
   "title": "System Settings Overview",
   "videoUrl": "",
   "drDigitalIntro": "System Settings is where you customize how your Mac works. Open Apple menu > System Settings. You'll find options for everything: how your trackpad works, when your screen turns off, privacy settings, sound, display, keyboard behavior. Think of System Settings like your home — you adjust it so it's comfortable and works the way you like.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know where to find Mac settings!",
-  "drDigitalHint": "System Settings is where you personalize your Mac."
+  "playgroundTask": {
+    "type": "find-in-settings",
+    "instructions": "Explore System Settings. Navigate to Appearance and turn on Dark Mode.",
+    "targetPanel": "Appearance",
+    "toggleLabel": "Dark Mode",
+    "targetValue": true
+  },
+  "drDigitalSuccess": "Dark Mode on! You just navigated System Settings and changed a setting — that's all you ever do in there.",
+  "drDigitalHint": "Click Appearance in the left sidebar, then find the Dark Mode toggle on the right and click it."
 }

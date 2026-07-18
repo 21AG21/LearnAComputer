@@ -6,7 +6,13 @@
   "title": "Notifications and Sound",
   "videoUrl": "",
   "drDigitalIntro": "Control which apps can send notifications and how. Some notifications are important (calendar alerts), others are distracting (game notifications). Mute or adjust volume in Sound settings. Enable Do Not Disturb when you want quiet time — notifications will wait until you're ready. These settings help you focus and avoid interruptions.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can manage distractions!",
-  "drDigitalHint": "Notification settings are in System Settings > Notifications."
+  "playgroundTask": {
+    "type": "find-in-settings",
+    "instructions": "You need to focus for an hour. Turn on Do Not Disturb in Notifications settings.",
+    "targetPanel": "Notifications",
+    "toggleLabel": "Do Not Disturb",
+    "targetValue": true
+  },
+  "drDigitalSuccess": "Do Not Disturb silences all popups and sounds until you turn it off — perfect for focused work.",
+  "drDigitalHint": "Open Notifications in Settings and look for the Do Not Disturb toggle at the top."
 }

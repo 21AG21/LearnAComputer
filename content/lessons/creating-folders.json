@@ -6,7 +6,16 @@
   "title": "Creating Folders",
   "videoUrl": "",
   "drDigitalIntro": "Folders help you stay organized. You can create new folders for different parts of your life: Family, Bills, Recipes, Photos, Work. Right-click in Finder and choose New Folder, or use File > New Folder. Then give your folder a clear name. Once you have folders, you can move files into them so everything is organized by topic.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can now organize your computer like a filing cabinet!",
-  "drDigitalHint": "Create folders for the things that matter to you — photos, documents, recipes, whatever you save most."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Which is the best folder name for keeping medical documents?",
+    "options": [
+      { "text": "stuff", "correct": false },
+      { "text": "Documents and Files and More", "correct": false },
+      { "text": "Medical_Records", "correct": true },
+      { "text": "folder123abc", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Medical_Records is clear, specific, and easy to search for. Short, descriptive names win every time.",
+  "drDigitalHint": "The best folder name is one that tells you exactly what's inside — even a year from now."
 }

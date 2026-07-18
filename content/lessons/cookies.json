@@ -5,8 +5,17 @@
   "order": 492,
   "title": "Cookies: Website Memory",
   "videoUrl": "",
-  "drDigitalIntro": "Cookies are small files websites store on your computer. They remember information about you: what's in your shopping cart, your login info, your preferences. Most cookies are helpful — they make websites work better. When you return to Amazon, it remembers what you looked at. But some websites track your behavior across the internet. You can see your cookies in Safari Preferences and delete them anytime. Many people delete cookies regularly for privacy.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand cookies and how they work!",
-  "drDigitalHint": "Cookies remember you, but they can also track you."
+  "drDigitalIntro": "Cookies are small files websites store on your computer. They remember information about you: what's in your shopping cart, your login info, your preferences. Most cookies are helpful — they make websites work better. When you return to Amazon, it remembers what you looked at. But some websites track your behavior across the internet. You can see your cookies in Safari Preferences and delete them anytime.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What is a browser cookie?",
+    "options": [
+      { "text": "A snack reward for visiting websites", "correct": false },
+      { "text": "A virus that slows down your Mac", "correct": false },
+      { "text": "A small file a website saves to remember you", "correct": true },
+      { "text": "A type of photo file", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Cookies are tiny memory files — they're why websites remember your login and shopping cart.",
+  "drDigitalHint": "Think of cookies as little notes that websites write to themselves about you."
 }

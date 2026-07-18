@@ -5,8 +5,24 @@
   "order": 1060,
   "title": "Safe Online Shopping",
   "videoUrl": "",
-  "drDigitalIntro": "Shop safely online by using trusted websites (Amazon, Apple, known retailers). Look for the lock icon and https:// in the address bar. Use credit cards or PayPal for protection against fraud — they offer refunds for fake charges. Avoid unusual payment methods (wire transfer, gift cards). Never share your full credit card number via email. Check your statements regularly for unauthorized purchases. Shopping online is safe when you're careful.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can shop online with confidence!",
-  "drDigitalHint": "Credit cards offer buyer protection that debit cards don't."
+  "drDigitalIntro": "Online shopping is convenient but has risks. Before entering your credit card, check: Is the URL correct (amazon.com, not amaz0n-deals.net)? Does the address bar show https:// with a padlock icon? Does the site look professional or rushed/suspicious? Stick to well-known retailers or sites you've used before. Use a credit card (not debit) — credit cards have better fraud protection.",
+  "playgroundTask": {
+    "type": "spot-the-fake",
+    "instructions": "You want to buy shoes online. One of these sites is a scam. Which one?",
+    "items": [
+      {
+        "label": "amazon.com",
+        "preview": "🔒 https://www.amazon.com — Millions of products, trusted reviews, free Prime shipping. Credit card info protected by SSL encryption.",
+        "isFake": false
+      },
+      {
+        "label": "amaz0n-deals.net",
+        "preview": "AMAZING DEALS!! 90% off ALL shoes TODAY ONLY!! Enter your credit card at checkout. No returns needed — guaranteed lowest prices!! Limited time: next 10 minutes!",
+        "isFake": true
+      }
+    ],
+    "fakeExplanation": "Red flags: 'amaz0n' uses a zero instead of 'o', it's a .net domain instead of .com, excessive exclamation marks, unbelievable discounts, and extreme time pressure — all classic scam tactics."
+  },
+  "drDigitalSuccess": "You spotted the fake store! Check the URL carefully, look for https://, and be very suspicious of deals that seem too good to be true.",
+  "drDigitalHint": "Look very closely at the web address spelling. Is anything slightly off?"
 }

@@ -6,7 +6,19 @@
   "title": "Inbox, Sent, Drafts, and Archive",
   "videoUrl": "",
   "drDigitalIntro": "Your Mail app has several folders: Inbox (emails you receive), Sent (emails you've sent), Drafts (emails you started but haven't sent yet), Archive (emails you don't need in Inbox but want to keep). Spam automatically goes to a Spam folder. You can create custom folders to organize emails by topic or person. Archive emails to keep them but clean up your Inbox.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can organize your email like a filing system!",
-  "drDigitalHint": "Archive emails instead of deleting them — you can always find them later."
+  "playgroundTask": {
+    "type": "drag-sort-files",
+    "instructions": "Sort each email into the correct Mail folder.",
+    "categories": ["Inbox", "Sent", "Drafts", "Spam"],
+    "items": [
+      { "label": "Unfinished note to Mom", "category": "Drafts" },
+      { "label": "Birthday message from Tom", "category": "Inbox" },
+      { "label": "Reply you sent to your doctor", "category": "Sent" },
+      { "label": "You've won $1,000,000!!", "category": "Spam" },
+      { "label": "Your bank statement", "category": "Inbox" },
+      { "label": "Directions you emailed yourself", "category": "Sent" }
+    ]
+  },
+  "drDigitalSuccess": "You sorted them all correctly! Inbox = received, Sent = sent by you, Drafts = unfinished, Spam = junk.",
+  "drDigitalHint": "Think about the status of each email: Did you receive it? Send it? Start but not finish it? Or is it suspicious?"
 }

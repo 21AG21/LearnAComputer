@@ -3,10 +3,19 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Online Transactions",
   "order": 1070,
-  "title": "Public Wi-Fi Safety",
+  "title": "Public WiFi Safety",
   "videoUrl": "",
-  "drDigitalIntro": "Public Wi-Fi at cafés and airports is convenient but risky — hackers can intercept your data. Never do sensitive things on public Wi-Fi: don't log into banking, don't enter credit cards, don't check email passwords. If you must, use a VPN (Virtual Private Network) that encrypts your connection. When you're home or on trusted networks, it's safe. Know the difference between safe and risky places to browse.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand public Wi-Fi risks!",
-  "drDigitalHint": "VPN encrypts your data so hackers can't see it."
+  "drDigitalIntro": "Free public WiFi at coffee shops, airports, or hotels is convenient but risky. Other people on the same network can potentially see what you're doing. Avoid logging into your bank or entering passwords on public WiFi. If you must use public WiFi, stick to browsing sites (news, weather) and avoid anything sensitive. Consider using your phone's mobile hotspot instead — that's private and safe.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You're at a coffee shop and need to check your bank balance. What's the safest option?",
+    "options": [
+      { "text": "Use the free coffee shop WiFi — it's probably fine", "correct": false },
+      { "text": "Use your phone's mobile hotspot instead of the public WiFi", "correct": true },
+      { "text": "Use the coffee shop WiFi but type very quietly", "correct": false },
+      { "text": "Ask the barista for the WiFi password — the private one is safer", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Your phone's cellular connection (hotspot) is private and encrypted — other people at the coffee shop can't see your banking traffic.",
+  "drDigitalHint": "Public WiFi is shared with strangers. What connection is only yours?"
 }

@@ -6,7 +6,16 @@
   "title": "FaceTime: Video Calls",
   "videoUrl": "",
   "drDigitalIntro": "FaceTime is video calling on your Mac. Open FaceTime, select a contact, and click the video icon to start a call. Your camera turns on and the other person sees you. You see them on your screen. Press the red phone icon to end the call. FaceTime is how families stay connected across distances — you can see each other while talking, which is much more personal than a voice call.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can now video call anyone!",
-  "drDigitalHint": "Make sure your camera and microphone are working before calling."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What app do you use for video calls on a Mac?",
+    "options": [
+      { "text": "Messages", "correct": false },
+      { "text": "Safari", "correct": false },
+      { "text": "FaceTime", "correct": true },
+      { "text": "Mail", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "FaceTime! It's Apple's built-in video calling app — free for calls between Apple devices.",
+  "drDigitalHint": "It's in your Applications folder. The name 'FaceTime' is a clue — seeing someone's face in real time."
 }

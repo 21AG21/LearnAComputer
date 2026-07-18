@@ -6,7 +6,16 @@
   "title": "Updating Apps",
   "videoUrl": "",
   "drDigitalIntro": "App developers regularly release updates — new features, bug fixes, or security improvements. Check the App Store for updates by clicking your profile icon. Enable automatic updates so your apps stay current without you thinking about it. Keeping apps updated is important for security and fixes.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand app updates!",
-  "drDigitalHint": "Updates are almost always safe — they fix problems."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Why should you update your apps regularly?",
+    "options": [
+      { "text": "So they look better with nicer colors", "correct": false },
+      { "text": "To get new features and fix security problems", "correct": true },
+      { "text": "Because Apple requires it every week", "correct": false },
+      { "text": "To free up storage space", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Security fixes are the most important reason — outdated apps can have vulnerabilities that hackers exploit.",
+  "drDigitalHint": "Updates aren't just about new features — they often fix bugs and security holes discovered after launch."
 }

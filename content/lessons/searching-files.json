@@ -6,7 +6,16 @@
   "title": "Searching for Files",
   "videoUrl": "",
   "drDigitalIntro": "Can't remember where you saved something? Use Finder's search. Click the search icon in the top right of Finder and type what you're looking for — a file name, part of a name, or even when it was created. Finder searches through all your folders and shows you matches. This is faster than digging through folders manually.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Now you can find any file on your Mac, even if you forgot where you put it!",
-  "drDigitalHint": "The search box is in the top right of every Finder window."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You saved a file called 'Party_Invite_2026.docx' but you can't find it. What do you type in the Finder search box?",
+    "options": [
+      { "text": "files", "correct": false },
+      { "text": "party", "correct": true },
+      { "text": "document", "correct": false },
+      { "text": "Desktop", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Exactly! Typing 'party' will find any file with that word in the name, including Party_Invite_2026.docx.",
+  "drDigitalHint": "Search for a unique word from the file name — something that won't match hundreds of other files."
 }

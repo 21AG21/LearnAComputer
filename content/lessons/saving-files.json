@@ -6,7 +6,16 @@
   "title": "Saving Files",
   "videoUrl": "",
   "drDigitalIntro": "When you create something — like writing a letter, downloading a photo, or saving a webpage — you're saving a file to your computer. Most apps have a File menu with a Save option. When you save, your computer asks where you want to save it: maybe your Desktop, Documents, or a folder you created. Downloads also happens automatically — files you download from the internet go to your Downloads folder unless you tell them to go somewhere else.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand how files get saved and where they go!",
-  "drDigitalHint": "Most apps have File > Save. Your Downloads folder is where things from the internet end up."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Which keyboard shortcut saves a file in most Mac apps?",
+    "options": [
+      { "text": "Command + D", "correct": false },
+      { "text": "Command + S", "correct": true },
+      { "text": "Command + W", "correct": false },
+      { "text": "Command + Q", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Command + S — S for Save! It's one of the most important shortcuts to remember.",
+  "drDigitalHint": "The shortcut follows the pattern: Command + the first letter of what you want to do."
 }

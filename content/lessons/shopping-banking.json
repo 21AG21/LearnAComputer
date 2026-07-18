@@ -5,8 +5,24 @@
   "order": 1250,
   "title": "Online Shopping and Banking",
   "videoUrl": "",
-  "drDigitalIntro": "Shopping: Amazon, Target, and other retailers let you browse and buy online. Use a credit card for fraud protection. Banking: check your account, transfer money, pay bills through your bank's website or app. Always verify you're on the secure website (look for the lock icon). Never share passwords or full credit card numbers. These are essential services people use daily.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can confidently shop and bank online!",
-  "drDigitalHint": "Bookmark your bank's website so you're never tricked by fakes."
+  "drDigitalIntro": "Online banking lets you check balances, pay bills, and transfer money without visiting a branch. Use your bank's official app or website (type the URL yourself — never click email links). Online shopping (Amazon, local store websites) lets you order from home with home delivery. Always check for https:// and the padlock icon before entering card details. Keep your receipts and check your statements for unexpected charges.",
+  "playgroundTask": {
+    "type": "spot-the-fake",
+    "instructions": "You want to check your bank balance online. Which site is your real bank?",
+    "items": [
+      {
+        "label": "chaseonline.com",
+        "preview": "CLICK HERE — Your Chase account needs IMMEDIATE VERIFICATION. Enter your username, password, and 16-digit card number NOW to avoid suspension. Offer expires in 10 minutes!",
+        "isFake": true
+      },
+      {
+        "label": "chase.com",
+        "preview": "🔒 https://www.chase.com — Sign in to access your accounts, pay bills, view statements, and transfer money. Protected by 256-bit encryption.",
+        "isFake": false
+      }
+    ],
+    "fakeExplanation": "Real bank sites never ask for your card number on the login page. 'chaseonline.com' is not Chase's real domain — banks own their exact name, like chase.com or bankofamerica.com. Urgency and countdown timers are major scam red flags."
+  },
+  "drDigitalSuccess": "You spotted the fake bank site! Always type your bank's address yourself and never click links from emails claiming to be from your bank.",
+  "drDigitalHint": "What is the actual web address? And does a real bank ever demand your card number with a 10-minute countdown?"
 }

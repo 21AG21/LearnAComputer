@@ -6,7 +6,16 @@
   "title": "FaceTime Features",
   "videoUrl": "",
   "drDigitalIntro": "During a FaceTime call, you can mute your microphone (so they can't hear you), turn off your camera (they see a black screen instead of video), or switch to audio-only. If you want to share what's on your screen, FaceTime has screen-sharing. Portrait mode makes your background blurry and puts you in focus. Noise cancellation reduces background noise. You can also group FaceTime with up to 32 people.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know all the tools to make FaceTime calls work for you!",
-  "drDigitalHint": "Mute and camera buttons are in the call controls."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "During a FaceTime call, how do you mute your microphone?",
+    "options": [
+      { "text": "Say 'mute me please' out loud", "correct": false },
+      { "text": "Click the microphone icon in the call controls", "correct": true },
+      { "text": "Close the FaceTime app", "correct": false },
+      { "text": "Turn off your Wi-Fi", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The microphone icon in the call controls toggles mute on and off. The icon changes to show when you're muted.",
+  "drDigitalHint": "Look at the row of icons at the bottom of the FaceTime screen during a call."
 }

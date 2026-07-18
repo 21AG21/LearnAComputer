@@ -5,8 +5,17 @@
   "order": 495,
   "title": "Zooming Web Pages",
   "videoUrl": "",
-  "drDigitalIntro": "Some websites are hard to read if the text is tiny. You can zoom in with Command+Plus or zoom out with Command+Minus. You can also pinch on the trackpad to zoom. Press Command+0 to return to normal size. Each website remembers your zoom level — when you return, it's zoomed how you like it. This makes browsing more comfortable, especially if you have trouble reading small text.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can make any website easier to read!",
-  "drDigitalHint": "Zoom is your friend — adjust it to what's comfortable for your eyes."
+  "drDigitalIntro": "Some websites are hard to read if the text is tiny. You can zoom in with Command+Plus or zoom out with Command+Minus. You can also pinch on the trackpad to zoom. Press Command+0 to return to normal size. Each website remembers your zoom level — when you return, it's zoomed how you like it.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Which keyboard shortcut makes text bigger on a webpage?",
+    "options": [
+      { "text": "Command + = (plus)", "correct": true },
+      { "text": "Command + - (minus)", "correct": false },
+      { "text": "Command + 0", "correct": false },
+      { "text": "Command + T", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Command + Plus zooms in. Command + Minus zooms out. Command + 0 resets to normal.",
+  "drDigitalHint": "+ means bigger, - means smaller. That's all there is to it."
 }

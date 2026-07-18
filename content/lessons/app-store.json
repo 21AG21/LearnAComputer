@@ -6,7 +6,16 @@
   "title": "The App Store",
   "videoUrl": "",
   "drDigitalIntro": "The App Store is Apple's marketplace for Mac apps. Open the App Store app and you'll see thousands of apps: games, productivity tools, photo editors, and more. You can search for specific apps or browse by category. Many apps are free; some cost money. Buy an app once and it's yours forever — or pay a subscription for ongoing access. All apps in the App Store are reviewed by Apple for safety.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know where to find and buy apps!",
-  "drDigitalHint": "App Store is the safest place to get Mac apps."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Why is the App Store the safest place to get Mac apps?",
+    "options": [
+      { "text": "Apps are always the cheapest there", "correct": false },
+      { "text": "Apple reviews every app for security before listing it", "correct": true },
+      { "text": "It's the only place apps can be downloaded", "correct": false },
+      { "text": "Apps from the App Store never need updating", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Apple's review process is the key — they check each app for malware and policy violations before it goes live.",
+  "drDigitalHint": "The App Store is like a trusted store with a strict return policy — only vetted apps get in."
 }

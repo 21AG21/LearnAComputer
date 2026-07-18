@@ -5,8 +5,17 @@
   "order": 1220,
   "title": "Calendar and Reminders",
   "videoUrl": "",
-  "drDigitalIntro": "The Calendar app keeps track of appointments and events. Create a new event, set a date and time, and it appears on your calendar. Reminders app is for tasks and to-do lists — check them off when complete. Both sync across your devices. Use them together: an appointment goes on Calendar, to-do items go in Reminders.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can stay organized!",
-  "drDigitalHint": "Set reminders so you don't forget important events."
+  "drDigitalIntro": "The Calendar app lets you schedule appointments, birthdays, and events. Set reminders so you never forget a doctor's appointment. Events sync across your iPhone, iPad, and Mac through iCloud. The Reminders app is for task lists — grocery shopping, things to do. Use both together to stay organized. Creating a simple digital calendar habit takes only a few minutes a day and saves a lot of stress.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You want to make sure you don't forget your dentist appointment on Thursday. What's the best tool for this?",
+    "options": [
+      { "text": "Write the time in a text file and hope you find it", "correct": false },
+      { "text": "Add it to the Calendar app with a reminder alert the day before", "correct": true },
+      { "text": "Take a screenshot of this message", "correct": false },
+      { "text": "Email yourself with no subject", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The Calendar app with a reminder alert will notify you automatically — no need to remember to check anything.",
+  "drDigitalHint": "Which tool is specifically designed to remind you of future events at the right time?"
 }

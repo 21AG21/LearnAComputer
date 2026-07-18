@@ -3,10 +3,19 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Passwords and Access",
   "order": 1030,
-  "title": "Passkeys (the Future)",
+  "title": "Passkeys",
   "videoUrl": "",
-  "drDigitalIntro": "Passkeys are the next generation of password security — they replace passwords entirely. Instead of typing a password, you verify with your face (Face ID) or fingerprint. Passkeys are cryptographically secure and phishing-proof. Apple is rolling out passkeys for iCloud, banking, and shopping websites. You don't need to remember anything — your Mac or iPhone handles it. Passkeys are coming to everything, and they're much safer than passwords.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand the future of passwords!",
-  "drDigitalHint": "Passkeys use biometric verification — your face or fingerprint."
+  "drDigitalIntro": "Passkeys are a new, more secure way to sign in without typing a password at all. Instead of a password, your Mac or iPhone uses Face ID, Touch ID, or your PIN to prove who you are. Passkeys are stored on your device — they can't be stolen in a data breach. More and more websites (Google, Apple, Amazon) are switching to passkeys as a simpler, safer alternative to passwords.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What makes passkeys safer than regular passwords?",
+    "options": [
+      { "text": "Passkeys are longer than passwords so they're harder to guess", "correct": false },
+      { "text": "They are stored on your device and use biometrics — they can't be stolen in a data breach", "correct": true },
+      { "text": "They change automatically every day", "correct": false },
+      { "text": "You have to type them twice for extra security", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Passkeys live on your device, not on a server. Even if a website is hacked, there's no password to steal.",
+  "drDigitalHint": "Think about what makes regular passwords vulnerable — where do they get stolen from?"
 }

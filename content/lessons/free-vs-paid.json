@@ -5,8 +5,17 @@
   "order": 860,
   "title": "Free vs Paid Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Some apps are free forever. Others cost a one-time price. Some have a free version with limited features and a paid version for more. Subscriptions charge regularly (monthly or yearly) for ongoing access. In-app purchases let you unlock features within an app by paying. Read app descriptions to understand what you're paying for. Free doesn't always mean good — paid apps often have better quality and fewer ads.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand app pricing!",
-  "drDigitalHint": "Always check what you're getting before spending money."
+  "drDigitalIntro": "Some apps are free forever. Others cost a one-time price. Some have a free version with limited features and a paid version for more. Subscriptions charge regularly (monthly or yearly) for ongoing access. In-app purchases let you unlock features within an app by paying. Read app descriptions to understand what you're paying for.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "A 'freemium' app is one that:",
+    "options": [
+      { "text": "Costs exactly $0.99", "correct": false },
+      { "text": "Has a free tier and a paid upgrade", "correct": true },
+      { "text": "Is only available to students", "correct": false },
+      { "text": "Is made by Apple and always free", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Freemium = free to start, pay to unlock more. Many popular apps use this model.",
+  "drDigitalHint": "Freemium = free + premium. You get the basics for free and can pay to unlock more features."
 }

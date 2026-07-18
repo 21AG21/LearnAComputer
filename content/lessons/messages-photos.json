@@ -6,7 +6,16 @@
   "title": "Sending Photos",
   "videoUrl": "",
   "drDigitalIntro": "You can send photos through Messages. Click the + button and choose from your Photos app or take a new photo. Add a caption if you like, then send. The other person receives the photo instantly. Photos through Messages can be edited with effects before sending. This is how people share memories with family and friends instantly.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can share photos instantly with anyone!",
-  "drDigitalHint": "Photos in messages can be edited with effects before sending."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "How do you send a photo in Messages on your Mac?",
+    "options": [
+      { "text": "Attach it to an email first", "correct": false },
+      { "text": "Click the + button and choose from your Photos", "correct": true },
+      { "text": "Take a screenshot and hope they see it", "correct": false },
+      { "text": "Upload it to Safari first, then share the link", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The + button is your attachment button in Messages — use it to add photos, files, or anything else.",
+  "drDigitalHint": "Look for the + (plus) icon next to the message box. It opens an attachment picker."
 }

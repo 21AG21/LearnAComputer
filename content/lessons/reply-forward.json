@@ -6,7 +6,16 @@
   "title": "Reply and Forward",
   "videoUrl": "",
   "drDigitalIntro": "Reply sends a message back to the person who emailed you. Your reply includes the original email in quotes so they remember what they asked. Forward sends someone else's email to another person — useful when you want to share information. Reply includes only the sender; Reply All sends to everyone who was on the original email chain.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can participate in email conversations!",
-  "drDigitalHint": "Use Reply All carefully — only use it when everyone needs to see your message."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You receive an email from your sister. To send a response only to her, you click:",
+    "options": [
+      { "text": "Forward", "correct": false },
+      { "text": "Reply All", "correct": false },
+      { "text": "Reply", "correct": true },
+      { "text": "New Message", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Reply goes back to just the sender. Reply All goes to everyone. Forward sends to someone new entirely.",
+  "drDigitalHint": "Reply = respond to the person who wrote to you. Just them, no one else."
 }

@@ -6,7 +6,16 @@
   "title": "Sharing Photos",
   "videoUrl": "",
   "drDigitalIntro": "Share photos with family through Messages, Mail, or AirDrop (wirelessly to nearby Macs or iPhones). Use the Share Sheet to send photos or create a shared album that people can add to. Export photos to save copies in different formats or locations. Print photos directly from Photos. Sharing is how you preserve memories with others.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can share photos with anyone!",
-  "drDigitalHint": "Right-click a photo and choose Share to see options."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "To wirelessly share a photo with a family member in the same room, you use:",
+    "options": [
+      { "text": "USB cable transfer", "correct": false },
+      { "text": "Email as an attachment", "correct": false },
+      { "text": "AirDrop", "correct": true },
+      { "text": "Bluetooth", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "AirDrop is Apple's wireless sharing feature — fast, direct, no internet needed, and it works between Apple devices nearby.",
+  "drDigitalHint": "AirDrop works like a wireless 'drop' — you drop files right onto someone else's device."
 }

@@ -3,10 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Fixing Problems",
   "order": 1120,
-  "title": "Hardware Issues",
+  "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems: your Mac won't turn on (check power), trackpad won't click (check trackpad settings or try clicking harder), keyboard has dead keys (try restarting), mouse is slow (check batteries, clean sensor). Many hardware issues are simple to fix. If restarting doesn't work, check settings first. If it's truly broken, you might need a repair.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can diagnose hardware problems!",
-  "drDigitalHint": "Always check the batteries first if a wireless device stops working."
+  "drDigitalIntro": "Hardware problems involve the physical parts of your Mac: the screen, keyboard, trackpad, battery, or speakers. Symptoms include: screen flickering, keys not responding, trackpad not clicking, battery draining very fast, or speakers making no sound. First try a restart — sometimes hardware glitches clear. Check System Settings to confirm the hardware is recognized. Serious hardware problems usually need an Apple Store repair.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Your Mac's keyboard randomly types the wrong letters. What is the most likely cause?",
+    "options": [
+      { "text": "Your WiFi password is wrong", "correct": false },
+      { "text": "A hardware or driver issue with the keyboard itself", "correct": true },
+      { "text": "You have too many browser tabs open", "correct": false },
+      { "text": "Your iCloud storage is full", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Keyboard issues are hardware or driver problems — not related to WiFi or storage. A restart is the first thing to try.",
+  "drDigitalHint": "The keyboard is physical hardware. Which option is related to physical hardware behavior?"
 }

@@ -6,7 +6,13 @@
   "title": "Permissions and Privacy",
   "videoUrl": "",
   "drDigitalIntro": "When you install an app, it might ask for permissions to access your camera, microphone, location, or files. Allow only what makes sense — a photo editor needs access to Photos, but a game probably shouldn't need your location. You can change permissions later in System Settings. Check permissions for apps you don't trust. This protects your privacy and security.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can control what information apps can see!",
-  "drDigitalHint": "Only grant permissions that make sense for the app."
+  "playgroundTask": {
+    "type": "find-in-settings",
+    "instructions": "A game is using your location without permission. Open Privacy & Security settings and turn off Location Services.",
+    "targetPanel": "Privacy & Security",
+    "toggleLabel": "Location Services",
+    "targetValue": false
+  },
+  "drDigitalSuccess": "Location Services off! You can always come back to Privacy & Security to review what each app can access.",
+  "drDigitalHint": "Open Privacy & Security from the sidebar, then find the Location Services toggle."
 }

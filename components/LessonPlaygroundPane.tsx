@@ -14,6 +14,11 @@ import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
 import TextEditorTask from "@/components/Playground/TextEditorTask";
 import EditFileTask from "@/components/Playground/EditFileTask";
 import ComposeEmailTask from "@/components/Playground/ComposeEmailTask";
+import MultipleChoiceTask from "@/components/Playground/MultipleChoiceTask";
+import DragSortTask from "@/components/Playground/DragSortTask";
+import SpotTheFakeTask from "@/components/Playground/SpotTheFakeTask";
+import FindInSettingsTask from "@/components/Playground/FindInSettingsTask";
+import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -107,6 +112,21 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "compose-email" && (
             <ComposeEmailTask to={task.to} subject={task.subject} requiredBody={task.requiredBody} onResult={onResult} onExit={onExit} />
+          )}
+          {task.type === "multiple-choice" && (
+            <MultipleChoiceTask question={task.question} options={task.options} onResult={onResult} />
+          )}
+          {task.type === "drag-sort-files" && (
+            <DragSortTask instructions={task.instructions} categories={task.categories} items={task.items} onResult={onResult} />
+          )}
+          {task.type === "spot-the-fake" && (
+            <SpotTheFakeTask instructions={task.instructions} items={task.items} fakeExplanation={task.fakeExplanation} onResult={onResult} />
+          )}
+          {task.type === "find-in-settings" && (
+            <FindInSettingsTask instructions={task.instructions} targetPanel={task.targetPanel} toggleLabel={task.toggleLabel} targetValue={task.targetValue} onResult={onResult} />
+          )}
+          {task.type === "url-navigator" && (
+            <UrlNavigatorTask instructions={task.instructions} prompt={task.prompt} targetUrl={task.targetUrl} successTitle={task.successTitle} onResult={onResult} />
           )}
         </div>
       )}

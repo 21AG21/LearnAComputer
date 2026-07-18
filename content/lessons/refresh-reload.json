@@ -6,7 +6,16 @@
   "title": "Refresh and Reload",
   "videoUrl": "",
   "drDigitalIntro": "Sometimes a website loads partially or gets stuck — clicking the Refresh button (the circular arrow icon) reloads the page. Press Command+R for refresh. If that doesn't work, try a 'hard refresh' with Command+Shift+R — this clears cached data and gets the newest version. Most of the time, a simple refresh fixes loading problems.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to fix a page that won't load properly!",
-  "drDigitalHint": "Refresh is often the first troubleshooting step for websites."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "A webpage is stuck loading. What keyboard shortcut refreshes it?",
+    "options": [
+      { "text": "Command + R", "correct": true },
+      { "text": "Command + F", "correct": false },
+      { "text": "Command + W", "correct": false },
+      { "text": "Command + L", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Command + R — R for Reload! It's the first thing to try when a page acts up.",
+  "drDigitalHint": "R for Reload, or Refresh — same letter, same Command pattern."
 }

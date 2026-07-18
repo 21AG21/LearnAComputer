@@ -6,7 +6,16 @@
   "title": "Deleting and Uninstalling",
   "videoUrl": "",
   "drDigitalIntro": "Drag an app to Trash to uninstall it, or right-click and choose Move to Trash. Some apps have an uninstaller — run it to remove the app completely. Deleting an app frees up space on your Mac. If you buy an app from the App Store, you can reinstall it free anytime. Deleting an app doesn't delete your documents — those stay safely in your folders.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can remove apps you don't use!",
-  "drDigitalHint": "Dragging to Trash is the easiest way to uninstall."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You delete the Pages app. What happens to your Pages documents?",
+    "options": [
+      { "text": "They are also deleted automatically", "correct": false },
+      { "text": "They stay safely in your Documents folder", "correct": true },
+      { "text": "They move to iCloud automatically", "correct": false },
+      { "text": "They are emailed to you as a backup", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Documents are separate from apps — deleting an app never touches your files.",
+  "drDigitalHint": "Apps live in the Applications folder. Your documents live in your personal folders like Documents or Desktop. They're separate."
 }

@@ -5,8 +5,17 @@
   "order": 480,
   "title": "Reading List: Articles to Explore",
   "videoUrl": "",
-  "drDigitalIntro": "Reading List is different from bookmarks — it's for articles you want to read later. See an article that looks interesting but don't have time now? Add it to Reading List with Shift+Command+D. Later, click the Reading List sidebar icon and browse what you've saved. Articles in Reading List can be read offline — Safari caches them. It's perfect for saving recipes, news articles, or blog posts to read when you have time.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You have a place to save articles for later!",
-  "drDigitalHint": "Reading List is for temporary articles; bookmarks are for sites you return to."
+  "drDigitalIntro": "Reading List is different from bookmarks — it's for articles you want to read later. See an article that looks interesting but don't have time now? Add it to Reading List with Shift+Command+D. Later, click the Reading List sidebar icon and browse what you've saved. Articles in Reading List can be read offline — Safari caches them. It's perfect for saving recipes, news articles, or blog posts.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What is Safari's Reading List best for?",
+    "options": [
+      { "text": "Websites you visit every single day", "correct": false },
+      { "text": "Articles you want to read later", "correct": true },
+      { "text": "Downloading movies to watch offline", "correct": false },
+      { "text": "Your browsing history", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Reading List is your 'save for later' pile — great for articles you spotted but haven't had time to read.",
+  "drDigitalHint": "The name says it all: Reading List is a list of things to read — later."
 }

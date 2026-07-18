@@ -6,7 +6,16 @@
   "title": "Favorites and Search",
   "videoUrl": "",
   "drDigitalIntro": "Mark your best photos as Favorites by clicking the heart icon. Favorites are easy to find in the sidebar. You can also search photos by date, location, or who's in the photo. Search for 'beach' and Photos finds all photos tagged with beach-related keywords. This makes finding specific photos fast, especially when you have thousands.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can find any photo quickly!",
-  "drDigitalHint": "Use Favorites for your best photos."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "How do you mark a photo as a Favorite in the Photos app?",
+    "options": [
+      { "text": "Right-click and choose 'Mark as Favorite'", "correct": false },
+      { "text": "Click the heart icon on the photo", "correct": true },
+      { "text": "Rename the file with 'FAV' at the start", "correct": false },
+      { "text": "Drag it to a special Favorites folder", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The heart icon is your Favorite button — click it once to mark, click again to unmark.",
+  "drDigitalHint": "Hearts mean favorites everywhere on the internet — Photos uses the same symbol."
 }

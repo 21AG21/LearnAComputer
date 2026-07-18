@@ -5,8 +5,17 @@
   "order": 1260,
   "title": "QR Codes and Siri",
   "videoUrl": "",
-  "drDigitalIntro": "QR codes are squares with patterns — open Camera or Notes and point at one to scan it. QR codes often link to websites or apps. Siri is Apple's voice assistant. Click the Siri icon or press Command+Space and say 'Hey Siri' to ask questions, set reminders, or control your Mac. Siri is faster than typing sometimes.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know about modern convenience features!",
-  "drDigitalHint": "Siri improves with use — it learns your voice."
+  "drDigitalIntro": "QR codes are square black-and-white patterns you scan with your phone camera to open a website or menu. Just open the Camera app and point it at the QR code — a link appears. Siri is Apple's voice assistant. Ask Siri questions, set timers, send messages, or open apps just by talking. On Mac, activate Siri with Cmd+Space or click the Siri icon in the menu bar. 'Hey Siri' works hands-free if enabled.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "At a restaurant, your paper menu is replaced with a QR code. How do you view the menu?",
+    "options": [
+      { "text": "Type 'restaurant menu' into Google", "correct": false },
+      { "text": "Open your iPhone Camera app and point it at the QR code", "correct": true },
+      { "text": "Scan it with your MacBook's webcam in Finder", "correct": false },
+      { "text": "Ask the waiter to email it to you", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Your iPhone Camera app scans QR codes automatically — just point and tap the link that appears!",
+  "drDigitalHint": "Which device always has a camera with you and can scan QR codes instantly?"
 }

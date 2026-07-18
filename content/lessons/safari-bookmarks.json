@@ -5,8 +5,17 @@
   "order": 470,
   "title": "Bookmarks: Favorite Sites",
   "videoUrl": "",
-  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click Bookmarks > Bookmark This Page or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather, etc.). The Bookmarks menu and sidebar show all your saved sites. Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can save your favorite websites for quick access!",
-  "drDigitalHint": "Bookmark sites you visit regularly — saves time!"
+  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click Bookmarks > Bookmark This Page or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather, etc.). Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What does bookmarking a website do?",
+    "options": [
+      { "text": "Downloads the website to your Mac", "correct": false },
+      { "text": "Saves it so you can find it quickly later", "correct": true },
+      { "text": "Sends a link to your friends automatically", "correct": false },
+      { "text": "Adds it to your Reading List", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Bookmarks save sites for quick return visits. Think of them as sticky notes on your favorite web addresses.",
+  "drDigitalHint": "The word 'bookmark' is a hint — just like marking a page in a physical book to find it again."
 }

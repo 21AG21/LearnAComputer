@@ -6,7 +6,16 @@
   "title": "Creating Albums",
   "videoUrl": "",
   "drDigitalIntro": "Albums organize your photos by topic. Create an album for a vacation, a holiday, or people. Drag photos into an album to organize them. Albums don't move the actual photos — they're just folders that group photos. You can have photos in multiple albums. Albums are great for creating collections to share with family or print.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can organize photos into albums!",
-  "drDigitalHint": "Albums are like folders for your photos."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What happens to the original photo when you add it to an album?",
+    "options": [
+      { "text": "It moves into the album and is only there", "correct": false },
+      { "text": "A copy is created in the album", "correct": false },
+      { "text": "Nothing — the album is just a shortcut to the original", "correct": true },
+      { "text": "It gets compressed to save space", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Albums are just organizational labels — the original photo stays in your library, and the album is a view of it.",
+  "drDigitalHint": "Albums are like playlists for photos. Adding a song to a playlist doesn't move the audio file."
 }

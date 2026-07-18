@@ -6,7 +6,16 @@
   "title": "Recently Deleted",
   "videoUrl": "",
   "drDigitalIntro": "Deleted a photo by accident? It goes to Recently Deleted for 30 days. You can restore it anytime within that window. After 30 days, it's permanently gone. This safety net means you can delete freely without worrying about losing a photo forever.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to recover deleted photos!",
-  "drDigitalHint": "Recently Deleted is in the Albums sidebar."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You delete a photo by accident. How long do you have to recover it from Recently Deleted?",
+    "options": [
+      { "text": "24 hours", "correct": false },
+      { "text": "7 days", "correct": false },
+      { "text": "30 days", "correct": true },
+      { "text": "It's gone immediately", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "30 days! That's your safety window. After that, Recently Deleted clears automatically.",
+  "drDigitalHint": "Photos gives you a generous 30-day buffer — enough time to notice a mistake."
 }

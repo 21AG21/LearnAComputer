@@ -6,7 +6,19 @@
   "title": "Moving Files",
   "videoUrl": "",
   "drDigitalIntro": "Once you have folders, you can move files into them. There are three ways: drag a file into a folder (click and drag), cut and paste (Command+X to cut, Command+V to paste), or use the sidebar to move files by dragging them to a folder. When a file is inside a folder, it's still on your computer — it's just organized.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can organize your files wherever you want!",
-  "drDigitalHint": "Try dragging a file into a folder — it's the easiest way to organize."
+  "playgroundTask": {
+    "type": "drag-sort-files",
+    "instructions": "Move each file into the correct folder.",
+    "categories": ["Photos", "Documents", "Downloads"],
+    "items": [
+      { "label": "vacation.jpg", "category": "Photos" },
+      { "label": "tax_return.pdf", "category": "Documents" },
+      { "label": "family_dinner.jpg", "category": "Photos" },
+      { "label": "resume.docx", "category": "Documents" },
+      { "label": "app_installer.dmg", "category": "Downloads" },
+      { "label": "birthday_party.png", "category": "Photos" }
+    ]
+  },
+  "drDigitalSuccess": "Perfectly organized! Photos, documents, and downloads all in their right place.",
+  "drDigitalHint": ".jpg and .png are image files (Photos), .pdf and .docx are documents, and installers go in Downloads."
 }

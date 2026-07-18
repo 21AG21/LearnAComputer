@@ -5,8 +5,17 @@
   "order": 540,
   "title": "Emoji and Reactions",
   "videoUrl": "",
-  "drDigitalIntro": "Emoji are small pictures you can use to express feelings. Instead of typing 'haha', you can send a laughing emoji 😂. Messages has thousands of emoji to choose from. You can also react to someone else's message — double-tap a message and choose a reaction (thumbs up, love, laughing, etc.). Reactions are a quick way to respond without typing a full message.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can express yourself with emoji and reactions!",
-  "drDigitalHint": "Emoji make messaging more fun and expressive."
+  "drDigitalIntro": "Emoji are small pictures you can use to express feelings. Instead of typing 'haha', you can send a laughing emoji 😂. Messages has thousands of emoji to choose from. You can also react to someone else's message — hover over a message and click the smiley face icon to add a reaction (thumbs up, love, laughing, etc.). Reactions are a quick way to respond without typing a full message.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "How do you react to someone's message with a thumbs up in Messages?",
+    "options": [
+      { "text": "Type the word 'thumbs up' and send it", "correct": false },
+      { "text": "Hover over the message and click the smiley face icon", "correct": true },
+      { "text": "Hold down Command while clicking the message", "correct": false },
+      { "text": "Right-click and choose Translate", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Hover over the message to reveal the tapback reactions — a quick way to respond without typing anything.",
+  "drDigitalHint": "Move your cursor over a message in the conversation and watch what appears near it."
 }

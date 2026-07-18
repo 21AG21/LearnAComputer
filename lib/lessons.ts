@@ -49,6 +49,37 @@ export type PlaygroundTask =
       to: string;
       subject: string;
       requiredBody: string;
+    }
+  | {
+      type: "multiple-choice";
+      question: string;
+      options: Array<{ text: string; correct: boolean }>;
+    }
+  | {
+      type: "drag-sort-files";
+      instructions: string;
+      categories: string[];
+      items: Array<{ label: string; category: string }>;
+    }
+  | {
+      type: "spot-the-fake";
+      instructions: string;
+      items: Array<{ label: string; preview: string; isFake: boolean }>;
+      fakeExplanation: string;
+    }
+  | {
+      type: "find-in-settings";
+      instructions: string;
+      targetPanel: string;
+      toggleLabel: string;
+      targetValue: boolean;
+    }
+  | {
+      type: "url-navigator";
+      instructions: string;
+      prompt: string;
+      targetUrl: string;
+      successTitle: string;
     };
 
 export interface Lesson {

@@ -3,10 +3,19 @@
   "unit": "Unit 12: Everyday Life with Your Mac",
   "module": "Social and Entertainment",
   "order": 1210,
-  "title": "Social Media and Streaming",
+  "title": "Social Media and Videos",
   "videoUrl": "",
-  "drDigitalIntro": "Facebook, YouTube, Netflix, Apple TV+, and other services are accessed through Safari. You log in with your email and password. YouTube is free but has ads; Netflix and Apple TV+ charge subscriptions. Social media connects you to friends; streaming services provide movies and shows. Be aware of your privacy on social media — choose what information you share.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can enjoy social media and streaming safely!",
-  "drDigitalHint": "Use strong passwords for all accounts."
+  "drDigitalIntro": "Social media platforms let you share photos, stay in touch with family, and follow news. Popular ones include Facebook, Instagram, and YouTube. YouTube is great for tutorials, entertainment, and watching TV clips. To use them, create a free account on their website. Privacy tip: be thoughtful about what personal information you share publicly — use privacy settings to control who sees your posts.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You want to watch a tutorial video on how to bake a cake. Which website should you visit?",
+    "options": [
+      { "text": "google.com", "correct": false },
+      { "text": "youtube.com", "correct": true },
+      { "text": "apple.com", "correct": false },
+      { "text": "mail.com", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "YouTube is the world's largest video library — you can find tutorials for almost anything, including baking!",
+  "drDigitalHint": "Which website is specifically for watching and sharing videos?"
 }

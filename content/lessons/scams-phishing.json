@@ -5,8 +5,24 @@
   "order": 1040,
   "title": "Scams and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Phishing is when criminals pretend to be Apple, your bank, or a trusted company to steal your password. They send emails or texts with fake links saying 'Verify your account now!' Never click unexpected links. Go directly to the official website instead. Real companies never ask for passwords by email. If something feels wrong, ask a friend or call the company directly. Trust your instincts.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can spot phishing attempts!",
-  "drDigitalHint": "Real companies never ask for passwords by email."
+  "drDigitalIntro": "Phishing is when criminals send fake emails or messages pretending to be a trusted company — your bank, Apple, or the government. They want you to click a link and enter your password or personal information. Warning signs: urgent language ('Your account will be closed!'), unexpected requests for passwords, sender addresses that are slightly off (appl-e.com instead of apple.com), and links that don't match the company's real website.",
+  "playgroundTask": {
+    "type": "spot-the-fake",
+    "instructions": "One of these emails is a phishing scam. Click the fake one.",
+    "items": [
+      {
+        "label": "From: apple.com",
+        "preview": "Your iCloud storage is almost full. You can upgrade your plan at icloud.com/upgrade. Monthly plans start at $0.99/month.",
+        "isFake": false
+      },
+      {
+        "label": "From: apple-security-alert.net",
+        "preview": "URGENT: Your Apple ID has been suspended! Click here immediately to verify your account: verify-apple-id-now.net — or your account will be permanently deleted within 24 hours.",
+        "isFake": true
+      }
+    ],
+    "fakeExplanation": "Real Apple emails come from @apple.com — not 'apple-security-alert.net'. Scams use urgency ('permanently deleted in 24 hours') and suspicious links to panic you into clicking."
+  },
+  "drDigitalSuccess": "You spotted the phishing email! Look at the sender's domain and be suspicious of urgent threats. Real companies don't threaten you like that.",
+  "drDigitalHint": "Check the sender's email address carefully. Does it end in the real company's domain?"
 }

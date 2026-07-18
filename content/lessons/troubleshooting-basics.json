@@ -3,10 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Fixing Problems",
   "order": 1110,
-  "title": "General Troubleshooting Steps",
+  "title": "Troubleshooting Basics",
   "videoUrl": "",
-  "drDigitalIntro": "When something breaks, don't panic. Follow these steps: 1) Turn it off and on again (restart). 2) Check if the problem happens with other apps or just one. 3) Look for error messages and write them down. 4) Google the error message — someone else probably had the same problem. 5) Contact support if nothing works. Most problems are easy to fix if you stay calm and think systematically.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to troubleshoot!",
-  "drDigitalHint": "Restarting fixes most problems — it's the first thing to try."
+  "drDigitalIntro": "Troubleshooting means figuring out why something isn't working and fixing it. The golden rule: try the simplest fix first. Restart the app. If that doesn't work, restart the Mac. If still broken, check if you're connected to the internet. Search the error message online — you're never the first person to have this problem. Stay calm; almost every problem has a solution.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "An app on your Mac has frozen and won't respond. What should you try FIRST?",
+    "options": [
+      { "text": "Take the Mac to a repair shop immediately", "correct": false },
+      { "text": "Force quit the frozen app and reopen it", "correct": true },
+      { "text": "Delete the app and buy a new Mac", "correct": false },
+      { "text": "Unplug the power cable", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Force quit (Cmd+Option+Esc) closes a frozen app without restarting. Start with the simplest fix before escalating!",
+  "drDigitalHint": "What's the least drastic thing you can try that might fix a frozen app?"
 }

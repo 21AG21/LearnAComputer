@@ -5,8 +5,17 @@
   "order": 1270,
   "title": "Printing and Scanning",
   "videoUrl": "",
-  "drDigitalIntro": "Printing: open a document and choose File > Print, select your printer, and click Print. Scanning: use a scanner app or your printer's scanner (if it has one). Your iPhone can act as a scanner — use Notes to scan documents instantly. PDFs are perfect for saving and sharing printed documents.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You can print and scan!",
-  "drDigitalHint": "Scan documents to create digital backups."
+  "drDigitalIntro": "To print from your Mac, press Cmd+P in any app — a print dialog appears. Choose your printer, number of copies, and which pages. Set up a printer in System Settings > Printers & Scanners. To scan a document, place it on the scanner and use Image Capture or the printer's own app. You can also scan documents with your iPhone camera — many apps like Notes create a PDF scan automatically.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You want to print an email. You're in the Mail app. What keyboard shortcut opens the print dialog?",
+    "options": [
+      { "text": "Cmd+S", "correct": false },
+      { "text": "Cmd+P", "correct": true },
+      { "text": "Cmd+D", "correct": false },
+      { "text": "Cmd+X", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Cmd+P opens the print dialog in almost every app on your Mac — it's a universal shortcut.",
+  "drDigitalHint": "P for Print — which command shortcut uses P?"
 }

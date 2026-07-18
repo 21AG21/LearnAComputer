@@ -6,7 +6,16 @@
   "title": "iCloud Photos",
   "videoUrl": "",
   "drDigitalIntro": "iCloud Photos syncs your photos across all your Apple devices — Mac, iPhone, iPad. When you take a photo on your iPhone, it appears in Photos on your Mac automatically. You get 5GB free; if you need more, subscribe to iCloud+. iCloud also backs up your photos so if you lose your Mac, your photos are safe in the cloud.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "Your photos are backed up and accessible everywhere!",
-  "drDigitalHint": "iCloud Photos requires enabling in System Settings."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "With iCloud Photos turned on, what happens when you take a photo on your iPhone?",
+    "options": [
+      { "text": "It saves only on your iPhone", "correct": false },
+      { "text": "It automatically appears on all your Apple devices", "correct": true },
+      { "text": "You have to manually transfer it to your Mac", "correct": false },
+      { "text": "It gets emailed to you", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "iCloud Photos is seamless sync — snap a photo on your phone, it's on your Mac in seconds.",
+  "drDigitalHint": "iCloud connects all your Apple devices. With Photos enabled, your photo library is one shared library across all of them."
 }

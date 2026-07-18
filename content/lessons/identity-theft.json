@@ -5,8 +5,17 @@
   "order": 1050,
   "title": "Identity Theft",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft is when someone uses your personal information to pretend to be you — they might open credit cards, take out loans, or commit crimes in your name. Protect yourself by not sharing your Social Security Number, birth date, or financial info with anyone you don't trust. Monitor your credit reports. Use strong, unique passwords. Enable 2FA. If you think you're a victim, contact your bank and the FTC immediately.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to protect your identity!",
-  "drDigitalHint": "Monitoring your credit is a good habit."
+  "drDigitalIntro": "Identity theft is when someone steals your personal information — name, Social Security number, credit card, or bank details — to commit fraud. They might open new credit cards in your name, drain your bank account, or file fake taxes. Protect yourself: never share sensitive info in emails, check your bank statements regularly, use strong passwords, and be wary of oversharing on social media.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You receive a text from 'your bank' asking you to reply with your account number and Social Security number to verify your identity. What should you do?",
+    "options": [
+      { "text": "Reply with the information — banks need to verify customers regularly", "correct": false },
+      { "text": "Do not reply. Call your bank's official number to check if it's real", "correct": true },
+      { "text": "Forward the text to your friends so they know about it", "correct": false },
+      { "text": "Reply and ask them to prove they work at the bank first", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Never send sensitive personal information by text or email. Call your bank at their official number — not a number in the message — to check if it's legitimate.",
+  "drDigitalHint": "Banks and the government will never ask for your SSN or account number by text. What's the safe move here?"
 }

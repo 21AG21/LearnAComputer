@@ -5,8 +5,17 @@
   "order": 1200,
   "title": "Common Daily Tasks",
   "videoUrl": "",
-  "drDigitalIntro": "Most people use their Mac for a few main things: checking email, browsing the web, watching videos, organizing files, and communicating with family. This unit covers these everyday tasks so you feel confident using your Mac for whatever you need.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You're ready for everyday Mac use!",
-  "drDigitalHint": "The skills you've learned so far cover most of what you'll do daily."
+  "drDigitalIntro": "Once you're comfortable with your Mac, you'll find yourself doing the same things every day: checking email, browsing the web, reading the news, watching videos, video calling family, writing notes, and managing files. The more you practice these everyday tasks, the faster and easier they become. Your Mac is a versatile tool — in this unit we'll bring all your skills together for real-life use.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You want to video call your grandchild who has an iPhone. Which Apple app lets you do this for free?",
+    "options": [
+      { "text": "Safari", "correct": false },
+      { "text": "FaceTime", "correct": true },
+      { "text": "Finder", "correct": false },
+      { "text": "Notes", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "FaceTime is Apple's free video and audio calling app — works between Macs, iPhones, and iPads.",
+  "drDigitalHint": "Which app is specifically designed for video calls on Apple devices?"
 }

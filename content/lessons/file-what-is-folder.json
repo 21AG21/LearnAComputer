@@ -6,7 +6,16 @@
   "title": "What is a Folder?",
   "videoUrl": "",
   "drDigitalIntro": "A folder is like a filing cabinet drawer. Just like you organize papers into different drawers so you can find them later, you organize files into folders. A folder is an empty container until you put files inside it. You can have folders inside folders — like having dividers inside a drawer.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand folders! They're how we keep files organized.",
-  "drDigitalHint": "Think of your desktop like a real desk — folders are like the drawers you keep things in."
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "What is a folder?",
+    "options": [
+      { "text": "A program that runs on your Mac", "correct": false },
+      { "text": "A container for organizing files", "correct": true },
+      { "text": "A file with a .doc extension", "correct": false },
+      { "text": "The Trash can", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "Perfect! A folder is a container — it holds files but is not itself a file you'd open and read.",
+  "drDigitalHint": "Think of a real filing cabinet drawer. Files go inside it — the drawer itself is the folder."
 }

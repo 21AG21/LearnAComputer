@@ -5,8 +5,17 @@
   "order": 640,
   "title": "CC and BCC",
   "videoUrl": "",
-  "drDigitalIntro": "CC (Carbon Copy) sends a copy of an email to someone in addition to the main recipient. Everyone can see who was CC'd. BCC (Blind Carbon Copy) sends a copy to someone without anyone else knowing they got it — the recipient isn't shown to others. Use CC to keep people informed and BCC when you want someone to see an email privately. To and Reply All is not the same — learn the difference to avoid embarrassing mistakes.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You understand when to use CC and BCC!",
-  "drDigitalHint": "CC = everyone sees them. BCC = secret copy."
+  "drDigitalIntro": "CC (Carbon Copy) sends a copy of an email to someone in addition to the main recipient. Everyone can see who was CC'd. BCC (Blind Carbon Copy) sends a copy to someone without anyone else knowing they got it — the recipient isn't shown to others. Use CC to keep people informed and BCC when you want someone to see an email privately.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "You send an email and add Bob to the CC field. What does this mean?",
+    "options": [
+      { "text": "Bob is the main recipient", "correct": false },
+      { "text": "Bob gets a copy and everyone can see he received it", "correct": true },
+      { "text": "Bob gets a secret copy that no one knows about", "correct": false },
+      { "text": "Bob won't receive the email", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "CC = visible copy. Everyone in the email thread can see that Bob was included. BCC = invisible copy — only Bob knows.",
+  "drDigitalHint": "CC = Carbon Copy (visible). BCC = Blind Carbon Copy (secret). Blind means nobody can see it."
 }

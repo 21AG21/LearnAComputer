@@ -5,8 +5,17 @@
   "order": 460,
   "title": "Downloads: Saving from the Internet",
   "videoUrl": "",
-  "drDigitalIntro": "When you download something — a PDF, an image, a document — it comes from the internet to your Mac. Click a download link and Safari saves it to your Downloads folder. You can see recent downloads in Safari's sidebar or press Command+Y to open the Downloads panel. From there, you can open the file, show it in Finder, or move it to a folder. Files you download this way are saved to your Mac.",
-  "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You know how to download and find files from the internet!",
-  "drDigitalHint": "Your Downloads folder is where everything from the internet lands."
+  "drDigitalIntro": "When you download something — a PDF, an image, a document — it comes from the internet to your Mac. Click a download link and Safari saves it to your Downloads folder. You can see recent downloads in Safari's sidebar or press Command+Y to open the Downloads panel. From there, you can open the file, show it in Finder, or move it to a folder.",
+  "playgroundTask": {
+    "type": "multiple-choice",
+    "question": "Where do files go when you download them in Safari?",
+    "options": [
+      { "text": "Your Desktop", "correct": false },
+      { "text": "The Applications folder", "correct": false },
+      { "text": "Your Downloads folder", "correct": true },
+      { "text": "Your email inbox", "correct": false }
+    ]
+  },
+  "drDigitalSuccess": "The Downloads folder! It's in Finder's sidebar. Always check there when you can't find something you downloaded.",
+  "drDigitalHint": "Safari always puts downloaded files in the same place so you know where to look."
 }
