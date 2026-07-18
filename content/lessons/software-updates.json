@@ -1,0 +1,12 @@
+{
+  "slug": "software-updates",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "System Health",
+  "order": 1080,
+  "title": "Software Updates",
+  "videoUrl": "",
+  "drDigitalIntro": "Software updates fix security vulnerabilities (weaknesses hackers can exploit). Apple regularly releases updates to macOS and apps. Don't skip them — these fixes are critical. Enable automatic updates so you don't have to remember. Check System Settings > General > Software Update. Security researchers discover vulnerabilities constantly, and updates patch them. A well-updated Mac is a secure Mac.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand why updates matter!",
+  "drDigitalHint": "Updates are usually quick and painless."
+}

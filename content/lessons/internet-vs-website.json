@@ -1,0 +1,12 @@
+{
+  "slug": "internet-vs-website",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Internet Basics",
+  "order": 400,
+  "title": "Internet vs Website",
+  "videoUrl": "",
+  "drDigitalIntro": "The internet is a giant network connecting computers all over the world. Think of it like a highway system — the internet is the highways. A website is one location on the internet, like a store on that highway. Google, Facebook, YouTube — those are all websites. They live on the internet. You use the internet to reach websites.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Now you understand the difference between the internet and individual websites!",
+  "drDigitalHint": "Internet = the network. Website = a place on that network."
+}

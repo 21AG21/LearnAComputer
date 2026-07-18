@@ -1,0 +1,12 @@
+{
+  "slug": "messages-app",
+  "unit": "Unit 5: Messages and FaceTime",
+  "module": "Messages Basics",
+  "order": 510,
+  "title": "Messaging Basics",
+  "videoUrl": "",
+  "drDigitalIntro": "Messages is how you text on your Mac — you can send and receive text messages just like on a phone. Open the Messages app and start a new message with someone in your Contacts. Type your message and press Enter to send. Each conversation stays in the list so you can return to old chats. Messages syncs across your devices — if you reply on your Mac, your iPhone knows about it.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can now text anyone from your Mac!",
+  "drDigitalHint": "Messages are instant — they appear right away on the other person's device."
+}

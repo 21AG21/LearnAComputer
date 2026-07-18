@@ -1,0 +1,12 @@
+{
+  "slug": "finder-overview",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Understanding Files",
+  "order": 320,
+  "title": "Finder: Your File Manager",
+  "videoUrl": "",
+  "drDigitalIntro": "Finder is the app that shows you all your files and folders. It's like opening a filing cabinet to see what you've stored. When you open Finder, you'll see the sidebar on the left with shortcuts: Recent files you've used, your Desktop, Documents folder, Downloads folder, Applications (all your programs), and Trash (where deleted files go). The main area shows what's inside each folder.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Now you know how to navigate your files with Finder!",
+  "drDigitalHint": "Look at the sidebar in Finder — it shows you the main places where files live on your Mac."
+}

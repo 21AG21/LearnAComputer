@@ -1,0 +1,12 @@
+{
+  "slug": "hardware-problems",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Fixing Problems",
+  "order": 1120,
+  "title": "Hardware Issues",
+  "videoUrl": "",
+  "drDigitalIntro": "Hardware problems: your Mac won't turn on (check power), trackpad won't click (check trackpad settings or try clicking harder), keyboard has dead keys (try restarting), mouse is slow (check batteries, clean sensor). Many hardware issues are simple to fix. If restarting doesn't work, check settings first. If it's truly broken, you might need a repair.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can diagnose hardware problems!",
+  "drDigitalHint": "Always check the batteries first if a wireless device stops working."
+}

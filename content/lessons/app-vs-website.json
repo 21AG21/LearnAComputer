@@ -1,0 +1,12 @@
+{
+  "slug": "app-vs-website",
+  "unit": "Unit 8: Apps and the App Store",
+  "module": "Understanding Apps",
+  "order": 800,
+  "title": "Website vs App vs Developer",
+  "videoUrl": "",
+  "drDigitalIntro": "A website runs in your browser — you visit it with Safari. An app is software you install on your Mac — it's its own program, like Mail or Photos. A developer is the company or person who created the app. Most apps are made by real companies (Apple, Netflix, Microsoft). You can get apps from the App Store or directly from developers' websites. Apps often work better offline than websites, and they're designed specifically for Mac.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand the difference between websites and apps!",
+  "drDigitalHint": "Apps = programs. Websites = pages in Safari."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "unit-12-assessment",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Unit 12 Assessment",
+  "order": 1290,
+  "title": "A Day in Your Digital Life",
+  "videoUrl": "",
+  "drDigitalIntro": "You'll simulate a day using your Mac: check email, look up directions, read weather, watch a video, add a calendar event, set a reminder, search for something, take a note, and use banking or shopping. This assessment brings together years of learning into realistic, everyday tasks.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You're ready for real Mac use!",
+  "drDigitalHint": "This is how people actually use computers — for real things."
+}

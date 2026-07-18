@@ -1,0 +1,12 @@
+{
+  "slug": "messages-contacts",
+  "unit": "Unit 5: Messages and FaceTime",
+  "module": "Messages Basics",
+  "order": 500,
+  "title": "Contacts",
+  "videoUrl": "",
+  "drDigitalIntro": "Before you send messages or make FaceTime calls, you need contacts — a list of people and their phone numbers or email addresses. The Contacts app lets you create and organize contact information. Each contact has a name and can have multiple phone numbers, email addresses, and addresses. You can organize contacts into groups (Family, Friends, Work). Once someone is a contact, messaging apps can find them easily.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand how contacts work!",
+  "drDigitalHint": "Contacts are like a digital address book."
+}

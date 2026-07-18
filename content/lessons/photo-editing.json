@@ -1,0 +1,12 @@
+{
+  "slug": "photo-editing",
+  "unit": "Unit 7: Photos",
+  "module": "Editing Photos",
+  "order": 740,
+  "title": "Editing Photos",
+  "videoUrl": "",
+  "drDigitalIntro": "Photos lets you edit photos without a separate app. Double-click a photo to open the editor. You can crop (change the size or angle), rotate, adjust brightness and contrast, and apply filters. All edits are non-destructive — the original is always saved. Undo changes anytime. Photos editing is perfect for quick adjustments before sharing.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can edit photos to make them look better!",
+  "drDigitalHint": "Edit button is in the top right when viewing a photo."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "trackpad-keyboard",
+  "unit": "Unit 9: System Settings",
+  "module": "Hardware",
+  "order": 930,
+  "title": "Trackpad and Keyboard Settings",
+  "videoUrl": "",
+  "drDigitalIntro": "Adjust how your trackpad and keyboard work. Slow down or speed up your trackpad sensitivity. Change how fast your keyboard repeats letters when you hold down a key. Enable three-finger drag if you like. Set up keyboard shortcuts for tasks you do often. Finding the right settings makes using your Mac more comfortable and productive.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can adjust hardware settings to your preference!",
+  "drDigitalHint": "These settings are under Keyboard and Trackpad."
+}

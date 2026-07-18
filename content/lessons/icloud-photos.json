@@ -1,0 +1,12 @@
+{
+  "slug": "icloud-photos",
+  "unit": "Unit 7: Photos",
+  "module": "Cloud Storage",
+  "order": 760,
+  "title": "iCloud Photos",
+  "videoUrl": "",
+  "drDigitalIntro": "iCloud Photos syncs your photos across all your Apple devices — Mac, iPhone, iPad. When you take a photo on your iPhone, it appears in Photos on your Mac automatically. You get 5GB free; if you need more, subscribe to iCloud+. iCloud also backs up your photos so if you lose your Mac, your photos are safe in the cloud.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Your photos are backed up and accessible everywhere!",
+  "drDigitalHint": "iCloud Photos requires enabling in System Settings."
+}

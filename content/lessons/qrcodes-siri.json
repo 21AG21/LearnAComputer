@@ -1,0 +1,12 @@
+{
+  "slug": "qrcodes-siri",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Smart Features",
+  "order": 1260,
+  "title": "QR Codes and Siri",
+  "videoUrl": "",
+  "drDigitalIntro": "QR codes are squares with patterns — open Camera or Notes and point at one to scan it. QR codes often link to websites or apps. Siri is Apple's voice assistant. Click the Siri icon or press Command+Space and say 'Hey Siri' to ask questions, set reminders, or control your Mac. Siri is faster than typing sometimes.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know about modern convenience features!",
+  "drDigitalHint": "Siri improves with use — it learns your voice."
+}

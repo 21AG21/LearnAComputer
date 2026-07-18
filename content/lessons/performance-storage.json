@@ -1,0 +1,12 @@
+{
+  "slug": "performance-storage",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Performance",
+  "order": 1160,
+  "title": "Storage Full and Slowness",
+  "videoUrl": "",
+  "drDigitalIntro": "Mac running slow: check storage (System Settings > General > Storage). If full, delete old files, apps you don't use, or old downloads. Too many open apps slow things down — close unnecessary ones. Restart your Mac — it's remarkable how often that fixes slowness. If still slow, check Activity Monitor for apps using too much CPU or memory.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can speed up your Mac!",
+  "drDigitalHint": "Delete old downloads — they pile up and slow you down."
+}

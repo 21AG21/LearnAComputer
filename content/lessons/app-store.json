@@ -1,0 +1,12 @@
+{
+  "slug": "app-store",
+  "unit": "Unit 8: Apps and the App Store",
+  "module": "Understanding Apps",
+  "order": 810,
+  "title": "The App Store",
+  "videoUrl": "",
+  "drDigitalIntro": "The App Store is Apple's marketplace for Mac apps. Open the App Store app and you'll see thousands of apps: games, productivity tools, photo editors, and more. You can search for specific apps or browse by category. Many apps are free; some cost money. Buy an app once and it's yours forever — or pay a subscription for ongoing access. All apps in the App Store are reviewed by Apple for safety.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know where to find and buy apps!",
+  "drDigitalHint": "App Store is the safest place to get Mac apps."
+}

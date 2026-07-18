@@ -1,0 +1,12 @@
+{
+  "slug": "daily-tasks",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Daily Computing",
+  "order": 1200,
+  "title": "Common Daily Tasks",
+  "videoUrl": "",
+  "drDigitalIntro": "Most people use their Mac for a few main things: checking email, browsing the web, watching videos, organizing files, and communicating with family. This unit covers these everyday tasks so you feel confident using your Mac for whatever you need.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You're ready for everyday Mac use!",
+  "drDigitalHint": "The skills you've learned so far cover most of what you'll do daily."
+}

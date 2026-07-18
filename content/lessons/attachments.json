@@ -1,0 +1,12 @@
+{
+  "slug": "attachments",
+  "unit": "Unit 6: Email",
+  "module": "Email Documents",
+  "order": 650,
+  "title": "Attachments",
+  "videoUrl": "",
+  "drDigitalIntro": "You can attach files to emails — photos, documents, PDFs, anything. Click the paperclip icon and choose a file from your computer. The file gets sent with your email. The recipient can open or download the file. Large files take longer to send. Some email services have limits on attachment size — if your file is too big, send it with a file-sharing service instead.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can share files through email!",
+  "drDigitalHint": "Attachments are perfect for sending documents and photos."
+}

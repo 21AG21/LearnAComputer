@@ -1,0 +1,12 @@
+{
+  "slug": "notes-documents",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Creating Content",
+  "order": 1240,
+  "title": "Notes and Documents",
+  "videoUrl": "",
+  "drDigitalIntro": "Notes app is perfect for quick ideas, shopping lists, recipes, or anything you want to remember. Write, add checklists, and sync across devices. For longer documents, use Pages (like Microsoft Word) or Google Docs. For spreadsheets, use Numbers or Excel. These tools let you create, organize, and share documents.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can create and organize your ideas!",
+  "drDigitalHint": "Notes syncs to iCloud — your ideas are safe and accessible everywhere."
+}

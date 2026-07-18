@@ -1,0 +1,12 @@
+{
+  "slug": "maps-navigation",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Finding Your Way",
+  "order": 1230,
+  "title": "Maps and Navigation",
+  "videoUrl": "",
+  "drDigitalIntro": "Maps shows you how to get anywhere. Type a restaurant, address, or landmark and Maps shows directions, drive time, public transit options, and walking routes. You can search for nearby coffee shops, gas stations, or stores. Save your favorite places. Maps is perfect for planning trips and finding new spots.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can navigate anywhere!",
+  "drDigitalHint": "Maps works on your Mac, iPhone, and Apple Watch together."
+}

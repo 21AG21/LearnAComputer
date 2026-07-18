@@ -1,0 +1,12 @@
+{
+  "slug": "recently-deleted",
+  "unit": "Unit 7: Photos",
+  "module": "Cloud Storage",
+  "order": 770,
+  "title": "Recently Deleted",
+  "videoUrl": "",
+  "drDigitalIntro": "Deleted a photo by accident? It goes to Recently Deleted for 30 days. You can restore it anytime within that window. After 30 days, it's permanently gone. This safety net means you can delete freely without worrying about losing a photo forever.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know how to recover deleted photos!",
+  "drDigitalHint": "Recently Deleted is in the Albums sidebar."
+}

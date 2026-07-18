@@ -1,0 +1,12 @@
+{
+  "slug": "photo-people",
+  "unit": "Unit 7: Photos",
+  "module": "Organizing Photos",
+  "order": 730,
+  "title": "People and Places",
+  "videoUrl": "",
+  "drDigitalIntro": "Photos automatically recognizes faces in your photos and groups them. You can name people ('Mom', 'Dad', 'Grandma') and Photos will find all photos of that person. Places shows where photos were taken on a map. Memories is an automatic feature that creates slideshows of your best moments from a specific time period or location. These features help you relive memories and find photos easily.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand how Photos organizes by people and places!",
+  "drDigitalHint": "Name faces so Photos can find all photos of that person."
+}

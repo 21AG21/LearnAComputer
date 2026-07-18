@@ -1,0 +1,12 @@
+{
+  "slug": "safari-bookmarks",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Using Safari",
+  "order": 470,
+  "title": "Bookmarks: Favorite Sites",
+  "videoUrl": "",
+  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click Bookmarks > Bookmark This Page or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather, etc.). The Bookmarks menu and sidebar show all your saved sites. Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can save your favorite websites for quick access!",
+  "drDigitalHint": "Bookmark sites you visit regularly — saves time!"
+}

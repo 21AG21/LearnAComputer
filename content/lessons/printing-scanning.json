@@ -1,0 +1,12 @@
+{
+  "slug": "printing-scanning",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Real-World Tasks",
+  "order": 1270,
+  "title": "Printing and Scanning",
+  "videoUrl": "",
+  "drDigitalIntro": "Printing: open a document and choose File > Print, select your printer, and click Print. Scanning: use a scanner app or your printer's scanner (if it has one). Your iPhone can act as a scanner — use Notes to scan documents instantly. PDFs are perfect for saving and sharing printed documents.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can print and scan!",
+  "drDigitalHint": "Scan documents to create digital backups."
+}

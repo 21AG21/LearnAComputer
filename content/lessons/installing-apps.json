@@ -1,0 +1,12 @@
+{
+  "slug": "installing-apps",
+  "unit": "Unit 8: Apps and the App Store",
+  "module": "Installing Apps",
+  "order": 830,
+  "title": "Installing Apps",
+  "videoUrl": "",
+  "drDigitalIntro": "Install an app from the App Store by clicking Install, or from a developer's website by downloading and running the installer. Some apps need to be dragged into your Applications folder. Once installed, your Mac has a new program you can use. You'll see it in Launchpad and Spotlight search. An app stays on your Mac until you delete it.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can install apps on your Mac!",
+  "drDigitalHint": "Installed apps appear in Applications > Utilities."
+}

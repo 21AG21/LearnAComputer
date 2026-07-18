@@ -1,0 +1,12 @@
+{
+  "slug": "system-settings",
+  "unit": "Unit 9: System Settings",
+  "module": "Customizing Your Mac",
+  "order": 900,
+  "title": "System Settings Overview",
+  "videoUrl": "",
+  "drDigitalIntro": "System Settings is where you customize how your Mac works. Open Apple menu > System Settings. You'll find options for everything: how your trackpad works, when your screen turns off, privacy settings, sound, display, keyboard behavior. Think of System Settings like your home — you adjust it so it's comfortable and works the way you like.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know where to find Mac settings!",
+  "drDigitalHint": "System Settings is where you personalize your Mac."
+}

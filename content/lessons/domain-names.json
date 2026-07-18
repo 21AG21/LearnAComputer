@@ -1,0 +1,12 @@
+{
+  "slug": "domain-names",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Internet Basics",
+  "order": 430,
+  "title": "Domain Names",
+  "videoUrl": "",
+  "drDigitalIntro": "A domain name is the core of a website's address. In google.com, 'google' is the domain name and '.com' is the extension. .com means commercial, .org means organization, .edu means education. Some sites use country codes: .uk for United Kingdom, .ca for Canada. Domain names are unique — only one website can own google.com. If you want to start a website, you need to buy a domain name.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand how domain names and extensions work!",
+  "drDigitalHint": "The extension (.com, .org) tells you something about the site."
+}

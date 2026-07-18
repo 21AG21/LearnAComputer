@@ -1,0 +1,12 @@
+{
+  "slug": "moving-files",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Working with Files",
+  "order": 360,
+  "title": "Moving Files",
+  "videoUrl": "",
+  "drDigitalIntro": "Once you have folders, you can move files into them. There are three ways: drag a file into a folder (click and drag), cut and paste (Command+X to cut, Command+V to paste), or use the sidebar to move files by dragging them to a folder. When a file is inside a folder, it's still on your computer — it's just organized.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can organize your files wherever you want!",
+  "drDigitalHint": "Try dragging a file into a folder — it's the easiest way to organize."
+}

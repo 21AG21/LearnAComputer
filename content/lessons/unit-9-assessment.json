@@ -1,0 +1,12 @@
+{
+  "slug": "unit-9-assessment",
+  "unit": "Unit 9: System Settings",
+  "module": "Unit 9 Assessment",
+  "order": 960,
+  "title": "Customize Your Mac",
+  "videoUrl": "",
+  "drDigitalIntro": "Your task is to adjust multiple settings to make your Mac work the way you want. Change the display theme, adjust trackpad sensitivity, set up notification preferences, change the wallpaper, and check storage. This is how you make your Mac your own.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Your Mac is customized just the way you like it!",
+  "drDigitalHint": "Start with Appearance, then try hardware and notification settings."
+}

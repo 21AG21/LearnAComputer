@@ -64,7 +64,7 @@ components/
       MessagingApp.tsx      # Chat app (persistent threads via localStorage)
       filesData.ts          # Shared file/folder tree used by FilesApp and EditFileTask
 
-content/lessons/           # 47 lesson JSON files (see Lesson schema below)
+content/lessons/           # 48 lesson JSON files (see Lesson schema below)
 
 lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
@@ -85,7 +85,7 @@ Each file defines one sub-lesson:
   slug: string;           // unique, matches filename
   unit: string;           // "Unit 1: ..." or "Unit 2: ..."
   module: string;         // groups sub-lessons into one routable page
-  order: number;          // global sort order (100-series = Unit 1, 200-series = Unit 2)
+  order: number;          // global sort order (1–26 = Unit 1, 200–290 = Unit 2)
   title: string;
   videoUrl: string;       // unused for now, reserved
   drDigitalIntro: string;
@@ -144,9 +144,177 @@ After completing a module, the user can navigate to the next module or back to `
 - **FakeDesktop**: A self-contained macOS-like environment. Apps open in `AppWindow` frames. The menu bar has a working clock, battery indicator (real Battery API), and WiFi panel. The dock shows open-app indicators (green dots).
 - **Validation**: All task validation lives in `TaskChecker.ts` as pure functions. Components call the appropriate checker and pass `onResult(boolean)` up to `LessonModuleRunner`.
 
-## Adding a New Playground
+## Adding New Units and Lessons
 
-1. Pick an existing `PlaygroundTask` type from the union in `lib/lessons.ts`
-2. Set the `playgroundTask` field in the lesson's JSON file
-3. Update `drDigitalSuccess` and `drDigitalHint` to reference the activity
-4. If you need a new task type: add to the union in `lib/lessons.ts`, create a component, add a checker in `TaskChecker.ts`, wire it into `LessonPlaygroundPane.tsx`
+No code changes are needed to add lessons. Create JSON files in `content/lessons/` and the site picks them up automatically.
+
+### Step 1: Plan the unit structure
+
+Decide the unit name, modules, and sub-lessons. A **unit** is a top-level grouping (e.g. "Unit 3: The Internet"). A **module** groups related sub-lessons onto one page. A sub-lesson is a single JSON file.
+
+### Step 2: Pick `order` numbers
+
+`order` controls the global sort order of all lessons. Existing ranges:
+- Unit 1: `1`–`26`
+- Unit 2: `200`–`290`
+
+For Unit 3, start at `300`. Within a module, use consecutive integers (`300`, `301`, `302`). Between modules, leave a gap of 10 (`300`-series, `310`-series, `320`-series) so lessons can be inserted later.
+
+### Step 3: Create one JSON file per sub-lesson
+
+Save as `content/lessons/{slug}.json`. The `slug` must be unique across all lessons and match the filename (without `.json`). Use lowercase kebab-case (e.g. `internet-what-is-wifi`).
+
+Every file must have this exact shape:
+
+```json
+{
+  "slug": "internet-what-is-wifi",
+  "unit": "Unit 3: The Internet",
+  "module": "What is the Internet?",
+  "order": 300,
+  "title": "What is WiFi?",
+  "videoUrl": "",
+  "drDigitalIntro": "WiFi is how your laptop connects to the internet without any wires...",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Now you know what WiFi is!",
+  "drDigitalHint": "Just read along and click Continue when you're ready."
+}
+```
+
+**Rules:**
+- `unit` must be identical across every lesson in the same unit (exact string match, including capitalization and colon)
+- `module` must be identical across every lesson in the same module
+- `videoUrl` is always `""` (reserved for future use)
+- `drDigitalIntro` is the teaching content — Dr. Digital explains the concept in friendly, simple language for absolute beginners
+- `drDigitalSuccess` congratulates the learner after they complete the activity (or auto-advances if `type: "none"`)
+- `drDigitalHint` gives a nudge if they're stuck on the activity
+
+### Step 4: Choose a playground activity
+
+Use `{ "type": "none" }` for lessons that are explanation-only (no interactive activity). For lessons that should have an activity, pick from the types below. **Do not create new playground types** — only use the ones listed here.
+
+#### `none` — No activity, auto-advances
+```json
+"playgroundTask": { "type": "none" }
+```
+
+#### `type-text` — Type exact text
+The learner types the target text into an input box. Set `exact: true` for case-sensitive matching (capitals, punctuation must match). Without `exact`, comparison is case-insensitive.
+```json
+"playgroundTask": {
+  "type": "type-text",
+  "instructions": "Type the words below — don't worry about capitals.",
+  "targetText": "hello dr digital",
+  "exact": false
+}
+```
+```json
+"playgroundTask": {
+  "type": "type-text",
+  "instructions": "Type this sentence exactly as shown, including capitals and punctuation.",
+  "targetText": "Dr. Digital says: WOW!",
+  "exact": true
+}
+```
+
+#### `edit-text` — Fix mistakes in pre-filled text
+The learner edits text in a textarea. Validation uses `mustInclude` (strings that must be present) and `mustNotInclude` (strings that must be gone). `correctText` is optional — shown as a "Show example" reference.
+```json
+"playgroundTask": {
+  "type": "edit-text",
+  "instructions": "This sentence has extra letters — use Delete to fix them.",
+  "startingText": "Helllo, my namme is Dr. Diggital!",
+  "correctText": "Hello, my name is Dr. Digital!",
+  "mustInclude": ["Hello, my name is Dr. Digital!"],
+  "mustNotInclude": ["Helllo", "namme", "Diggital"]
+}
+```
+
+#### `edit-file` — Edit a file inside the Files app
+Same validation as `edit-text`, but the learner edits inside a simulated file manager. `fileName` must match a file in `filesData.ts`.
+```json
+"playgroundTask": {
+  "type": "edit-file",
+  "instructions": "Open the invitation file and fix the date.",
+  "fileName": "PartyInvitation.txt",
+  "startingText": "You're invited to my party on Janurary 15!",
+  "correctText": "You're invited to my party on January 15!",
+  "mustInclude": ["January 15"],
+  "mustNotInclude": ["Janurary"]
+}
+```
+
+#### `keyboard-shortcut` — Copy and paste text
+The learner copies source text with Cmd+C and pastes it with Cmd+V.
+```json
+"playgroundTask": {
+  "type": "keyboard-shortcut",
+  "instructions": "Select the text, press Command+C to copy, click the box below, then Command+V to paste.",
+  "sourceText": "The quick brown fox jumps over the lazy dog.",
+  "successCondition": "pasted-matches-source"
+}
+```
+
+#### `compose-email` — Write and send an email
+The learner opens the Mail app, composes, and sends. Validation checks `to`, `subject`, and `requiredBody`.
+```json
+"playgroundTask": {
+  "type": "compose-email",
+  "instructions": "Open Mail, click the pencil to compose, and type this message exactly...",
+  "to": "doctordigital@example.com",
+  "subject": "THANKS DOCTOR DIGITAL",
+  "requiredBody": "Hi Doctor Digital! Thanks for teaching me!"
+}
+```
+
+#### `message-reply` — Reply in the Messaging app
+The learner types a reply to an incoming message. `requiredResponse` must be typed exactly (case-insensitive).
+```json
+"playgroundTask": {
+  "type": "message-reply",
+  "instructions": "Doggo sent a message — type Dr. Digital's reply exactly as shown.",
+  "contactName": "Doggo",
+  "incomingMessage": "I'm hungry. Can you give me food?",
+  "requiredResponse": "Sure Doggo, I will give you 32 pebbles and 6 bones."
+}
+```
+
+#### Other types (use only where appropriate)
+These types have hardcoded UI — the JSON fields configure them but the visual experience is fixed:
+
+| Type | What it does | Required fields |
+|------|-------------|----------------|
+| `shape-click-game` | Click falling shapes to reach a score | `instructions`, `targetScore` (number) |
+| `file-explorer-open` | Double-click files to open them | `instructions`, `filesToOpen` (string array of filenames) |
+| `browser-right-click` | Right-click a link to open in new tab | `instructions` |
+| `browser-scroll-code` | Scroll to find a hidden code | `instructions`, `code` (string) |
+| `pinch-zoom` | Ctrl+scroll to zoom and read digits | `instructions` |
+| `match-parts` | Drag laptop part labels to positions | `instructions` |
+| `open-all-apps` | Open every dock app | `instructions` |
+
+### Step 5: Verify
+
+After creating the JSON files, run:
+```sh
+npm run build
+```
+If it builds without errors, the lessons are valid. Visit `/lessons` to see them in the catalog.
+
+### Example: Adding a 3-lesson module
+
+Three files create a module called "What is the Internet?" inside "Unit 3: The Internet":
+
+**`content/lessons/internet-intro.json`** — order 300, `type: "none"` (explanation only)
+**`content/lessons/internet-wifi.json`** — order 301, `type: "none"` (explanation only)
+**`content/lessons/internet-practice.json`** — order 302, `type: "type-text"` (type "wifi" to practice)
+
+All three share `"unit": "Unit 3: The Internet"` and `"module": "What is the Internet?"`. They'll appear as a 3-step module at `/lessons/what-is-the-internet`.
+
+## Adding a New Playground Type
+
+This requires code changes — do not attempt with Haiku.
+
+1. Add to the `PlaygroundTask` union in `lib/lessons.ts`
+2. Create a component in `components/Playground/`
+3. Add a checker in `TaskChecker.ts`
+4. Wire it into `LessonPlaygroundPane.tsx`

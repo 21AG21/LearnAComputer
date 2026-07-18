@@ -1,0 +1,12 @@
+{
+  "slug": "composing-email",
+  "unit": "Unit 6: Email",
+  "module": "Composing Email",
+  "order": 620,
+  "title": "Writing an Email",
+  "videoUrl": "",
+  "drDigitalIntro": "To compose an email, click New Message. Enter the recipient's email address in the To field, write a clear subject line, and type your message. A good subject tells the recipient what the email is about. Be polite and clear in your message. Click Send to deliver it. The other person gets it in their Inbox. If you're not ready to send, save it as a Draft and finish it later.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can write and send professional emails!",
+  "drDigitalHint": "A clear subject line helps the recipient understand what your email is about."
+}

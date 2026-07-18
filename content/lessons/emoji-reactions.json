@@ -1,0 +1,12 @@
+{
+  "slug": "emoji-reactions",
+  "unit": "Unit 5: Messages and FaceTime",
+  "module": "Messages Basics",
+  "order": 540,
+  "title": "Emoji and Reactions",
+  "videoUrl": "",
+  "drDigitalIntro": "Emoji are small pictures you can use to express feelings. Instead of typing 'haha', you can send a laughing emoji 😂. Messages has thousands of emoji to choose from. You can also react to someone else's message — double-tap a message and choose a reaction (thumbs up, love, laughing, etc.). Reactions are a quick way to respond without typing a full message.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can express yourself with emoji and reactions!",
+  "drDigitalHint": "Emoji make messaging more fun and expressive."
+}

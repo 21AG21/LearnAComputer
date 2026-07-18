@@ -1,0 +1,12 @@
+{
+  "slug": "unit-3-assessment",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Unit 3 Assessment",
+  "order": 390,
+  "title": "Professor Pixel's Messy Laptop",
+  "videoUrl": "",
+  "drDigitalIntro": "Professor Pixel's laptop is a disaster — files are scattered everywhere, duplicates exist, and nothing is organized. Your job is to help them clean up by creating folders, renaming files with clear names, organizing documents into those folders, locating a specific missing file they need, and deleting duplicate copies. This is what file management looks like in real life!",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You've organized Professor Pixel's entire file system! You're ready to manage your own files.",
+  "drDigitalHint": "Start by creating folders for common categories: Photos, Documents, Invoices, etc. Then move files into them."
+}

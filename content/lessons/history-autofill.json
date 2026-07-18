@@ -1,0 +1,12 @@
+{
+  "slug": "history-autofill",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Using Safari",
+  "order": 490,
+  "title": "History and Autofill",
+  "videoUrl": "",
+  "drDigitalIntro": "Safari remembers everywhere you go — that's History. Click Bookmarks > Show History or press Command+Y to see all the sites you've visited. You can search for something you saw earlier. Autofill automatically fills in forms with information Safari knows: your name, address, phone number, or credit card (if you've saved it). When you type in a form, Safari suggests what to fill. You can manage autofill in Preferences.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand how Safari remembers and helps with forms!",
+  "drDigitalHint": "You can clear history if you want privacy — useful on shared computers."
+}

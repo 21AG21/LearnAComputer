@@ -1,0 +1,12 @@
+{
+  "slug": "cookies",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Online Safety",
+  "order": 497,
+  "title": "Cookies: Website Memory",
+  "videoUrl": "",
+  "drDigitalIntro": "Cookies are small files websites store on your computer. They remember information about you: what's in your shopping cart, your login info, your preferences. Most cookies are helpful — they make websites work better. When you return to Amazon, it remembers what you looked at. But some websites track your behavior across the internet. You can see your cookies in Safari Preferences and delete them anytime. Many people delete cookies regularly for privacy.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand cookies and how they work!",
+  "drDigitalHint": "Cookies remember you, but they can also track you."
+}

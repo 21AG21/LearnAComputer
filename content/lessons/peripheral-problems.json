@@ -1,0 +1,12 @@
+{
+  "slug": "peripheral-problems",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Connectivity",
+  "order": 1150,
+  "title": "Printer and Bluetooth Issues",
+  "videoUrl": "",
+  "drDigitalIntro": "Printer won't print: make sure it's turned on and connected, restart both printer and Mac, check if it's set as default printer. Bluetooth device won't connect: restart both devices, re-pair them in System Settings > Bluetooth, make sure the device is charged. Devices disconnect randomly: they might be too far away, or low battery.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can troubleshoot peripherals!",
+  "drDigitalHint": "Always restart both the Mac and the device first."
+}

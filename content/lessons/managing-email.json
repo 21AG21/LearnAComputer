@@ -1,0 +1,12 @@
+{
+  "slug": "managing-email",
+  "unit": "Unit 6: Email",
+  "module": "Email Documents",
+  "order": 660,
+  "title": "Managing Your Inbox",
+  "videoUrl": "",
+  "drDigitalIntro": "Email adds up fast. Create folders for topics (Recipes, Bills, Work). Search Mail for specific senders or subjects. Mark emails as unread if you need to handle them later. Unsubscribe from newsletters you don't read — look for an Unsubscribe link at the bottom. Delete emails you don't need. Archive important emails for later. A clean Inbox makes it easier to find what you need.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can keep your inbox organized and manageable!",
+  "drDigitalHint": "Regular cleanup keeps email from becoming overwhelming."
+}

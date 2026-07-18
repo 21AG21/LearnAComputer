@@ -1,0 +1,12 @@
+{
+  "slug": "inbox-organization",
+  "unit": "Unit 6: Email",
+  "module": "Email Essentials",
+  "order": 610,
+  "title": "Inbox, Sent, Drafts, and Archive",
+  "videoUrl": "",
+  "drDigitalIntro": "Your Mail app has several folders: Inbox (emails you receive), Sent (emails you've sent), Drafts (emails you started but haven't sent yet), Archive (emails you don't need in Inbox but want to keep). Spam automatically goes to a Spam folder. You can create custom folders to organize emails by topic or person. Archive emails to keep them but clean up your Inbox.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can organize your email like a filing system!",
+  "drDigitalHint": "Archive emails instead of deleting them — you can always find them later."
+}

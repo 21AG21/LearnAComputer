@@ -1,0 +1,12 @@
+{
+  "slug": "notifications-sound",
+  "unit": "Unit 9: System Settings",
+  "module": "System Behavior",
+  "order": 940,
+  "title": "Notifications and Sound",
+  "videoUrl": "",
+  "drDigitalIntro": "Control which apps can send notifications and how. Some notifications are important (calendar alerts), others are distracting (game notifications). Mute or adjust volume in Sound settings. Enable Do Not Disturb when you want quiet time — notifications will wait until you're ready. These settings help you focus and avoid interruptions.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can manage distractions!",
+  "drDigitalHint": "Notification settings are in System Settings > Notifications."
+}

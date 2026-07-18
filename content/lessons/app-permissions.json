@@ -1,0 +1,12 @@
+{
+  "slug": "app-permissions",
+  "unit": "Unit 8: Apps and the App Store",
+  "module": "Installing Apps",
+  "order": 820,
+  "title": "Permissions and Privacy",
+  "videoUrl": "",
+  "drDigitalIntro": "When you install an app, it might ask for permissions to access your camera, microphone, location, or files. Allow only what makes sense — a photo editor needs access to Photos, but a game probably shouldn't need your location. You can change permissions later in System Settings. Check permissions for apps you don't trust. This protects your privacy and security.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can control what information apps can see!",
+  "drDigitalHint": "Only grant permissions that make sense for the app."
+}

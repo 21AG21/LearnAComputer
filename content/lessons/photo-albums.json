@@ -1,0 +1,12 @@
+{
+  "slug": "photo-albums",
+  "unit": "Unit 7: Photos",
+  "module": "Managing Photos",
+  "order": 710,
+  "title": "Creating Albums",
+  "videoUrl": "",
+  "drDigitalIntro": "Albums organize your photos by topic. Create an album for a vacation, a holiday, or people. Drag photos into an album to organize them. Albums don't move the actual photos — they're just folders that group photos. You can have photos in multiple albums. Albums are great for creating collections to share with family or print.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can organize photos into albums!",
+  "drDigitalHint": "Albums are like folders for your photos."
+}

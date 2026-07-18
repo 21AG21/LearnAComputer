@@ -1,0 +1,12 @@
+{
+  "slug": "pdfs-reading",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Real-World Tasks",
+  "order": 1280,
+  "title": "PDFs and Reading",
+  "videoUrl": "",
+  "drDigitalIntro": "PDFs are files that look the same on every computer. Open them with Preview. You can annotate (add notes and highlights), fill out forms, and sign PDFs. Read ebooks with Apple Books or Kindle. Read articles offline with Safari's Reader mode. These are everyday ways people consume information.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can read and work with PDFs!",
+  "drDigitalHint": "Preview has powerful annotation tools."
+}

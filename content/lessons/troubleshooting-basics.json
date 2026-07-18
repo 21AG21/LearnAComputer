@@ -1,0 +1,12 @@
+{
+  "slug": "troubleshooting-basics",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Fixing Problems",
+  "order": 1110,
+  "title": "General Troubleshooting Steps",
+  "videoUrl": "",
+  "drDigitalIntro": "When something breaks, don't panic. Follow these steps: 1) Turn it off and on again (restart). 2) Check if the problem happens with other apps or just one. 3) Look for error messages and write them down. 4) Google the error message — someone else probably had the same problem. 5) Contact support if nothing works. Most problems are easy to fix if you stay calm and think systematically.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know how to troubleshoot!",
+  "drDigitalHint": "Restarting fixes most problems — it's the first thing to try."
+}

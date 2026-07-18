@@ -1,0 +1,12 @@
+{
+  "slug": "software-problems",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Fixing Problems",
+  "order": 1130,
+  "title": "Software Issues",
+  "videoUrl": "",
+  "drDigitalIntro": "Software problems: an app won't open (try restarting, check for updates), an app crashes when you do something specific (try a different approach or update), a file won't open (check if the app is installed, try a different app). Restart your Mac first. Update all apps and macOS. Clear cache in System Preferences > General > Storage. If an app keeps crashing, delete and reinstall it.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can fix software issues!",
+  "drDigitalHint": "Most software problems go away with a restart or update."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "photo-favorites",
+  "unit": "Unit 7: Photos",
+  "module": "Managing Photos",
+  "order": 720,
+  "title": "Favorites and Search",
+  "videoUrl": "",
+  "drDigitalIntro": "Mark your best photos as Favorites by clicking the heart icon. Favorites are easy to find in the sidebar. You can also search photos by date, location, or who's in the photo. Search for 'beach' and Photos finds all photos tagged with beach-related keywords. This makes finding specific photos fast, especially when you have thousands.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can find any photo quickly!",
+  "drDigitalHint": "Use Favorites for your best photos."
+}

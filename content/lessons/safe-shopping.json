@@ -1,0 +1,12 @@
+{
+  "slug": "safe-shopping",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Online Transactions",
+  "order": 1060,
+  "title": "Safe Online Shopping",
+  "videoUrl": "",
+  "drDigitalIntro": "Shop safely online by using trusted websites (Amazon, Apple, known retailers). Look for the lock icon and https:// in the address bar. Use credit cards or PayPal for protection against fraud — they offer refunds for fake charges. Avoid unusual payment methods (wire transfer, gift cards). Never share your full credit card number via email. Check your statements regularly for unauthorized purchases. Shopping online is safe when you're careful.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can shop online with confidence!",
+  "drDigitalHint": "Credit cards offer buyer protection that debit cards don't."
+}

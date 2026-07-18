@@ -1,0 +1,12 @@
+{
+  "slug": "passkeys",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Passwords and Access",
+  "order": 1030,
+  "title": "Passkeys (the Future)",
+  "videoUrl": "",
+  "drDigitalIntro": "Passkeys are the next generation of password security — they replace passwords entirely. Instead of typing a password, you verify with your face (Face ID) or fingerprint. Passkeys are cryptographically secure and phishing-proof. Apple is rolling out passkeys for iCloud, banking, and shopping websites. You don't need to remember anything — your Mac or iPhone handles it. Passkeys are coming to everything, and they're much safer than passwords.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand the future of passwords!",
+  "drDigitalHint": "Passkeys use biometric verification — your face or fingerprint."
+}

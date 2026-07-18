@@ -1,0 +1,12 @@
+{
+  "slug": "display-theme",
+  "unit": "Unit 9: System Settings",
+  "module": "Appearance",
+  "order": 920,
+  "title": "Dark Mode and Wallpaper",
+  "videoUrl": "",
+  "drDigitalIntro": "Dark Mode makes your screen easier on your eyes by using dark backgrounds and light text. Light Mode is the traditional look. You can schedule Dark Mode to turn on automatically at night. Your wallpaper is the background image on your desktop. Choose from built-in images or upload your own photos. A comfortable display makes using your Mac more enjoyable.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can customize how your Mac looks!",
+  "drDigitalHint": "System Settings > Appearance for theme options."
+}

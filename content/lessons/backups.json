@@ -1,0 +1,12 @@
+{
+  "slug": "backups",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "System Health",
+  "order": 1090,
+  "title": "Backing Up Your Mac",
+  "videoUrl": "",
+  "drDigitalIntro": "A backup is a copy of all your files stored somewhere safe. Time Machine (built into macOS) automatically backs up your Mac to an external drive. iCloud also backs up your files. If your Mac breaks, gets stolen, or is hit by ransomware, you can restore from backup. Never rely on just your Mac's drive. A good backup strategy saves you from disaster. Set up Time Machine today.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You're protected by a backup!",
+  "drDigitalHint": "Time Machine needs an external drive."
+}

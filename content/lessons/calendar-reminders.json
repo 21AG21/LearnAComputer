@@ -1,0 +1,12 @@
+{
+  "slug": "calendar-reminders",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Organization",
+  "order": 1220,
+  "title": "Calendar and Reminders",
+  "videoUrl": "",
+  "drDigitalIntro": "The Calendar app keeps track of appointments and events. Create a new event, set a date and time, and it appears on your calendar. Reminders app is for tasks and to-do lists — check them off when complete. Both sync across your devices. Use them together: an appointment goes on Calendar, to-do items go in Reminders.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can stay organized!",
+  "drDigitalHint": "Set reminders so you don't forget important events."
+}

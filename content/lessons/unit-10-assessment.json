@@ -1,0 +1,12 @@
+{
+  "slug": "unit-10-assessment",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Unit 10 Assessment",
+  "order": 1100,
+  "title": "Security Scenarios",
+  "videoUrl": "",
+  "drDigitalIntro": "You'll face realistic security scenarios: identifying phishing emails, recognizing suspicious websites, deciding whether to click links, handling scam text messages, and making safe shopping decisions. This tests your ability to apply security knowledge in real-world situations. Pass this assessment and you're ready to navigate the internet safely.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You're a security expert! Stay safe out there.",
+  "drDigitalHint": "When in doubt, don't click. Ask for help if something feels wrong."
+}

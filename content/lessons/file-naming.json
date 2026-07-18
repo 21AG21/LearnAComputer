@@ -1,0 +1,12 @@
+{
+  "slug": "file-naming",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Working with Files",
+  "order": 340,
+  "title": "Naming Files Well",
+  "videoUrl": "",
+  "drDigitalIntro": "File names matter — a good name tells you what's inside. Compare: IMG_48293 tells you nothing, but Vacation_Hawaii_2026 tells you exactly what it is. Use descriptive names with spaces or underscores. Avoid special characters like * or / — they confuse your Mac. Include a date if it helps you find things later: Invoice_2026_July. Good names save you time when you're searching for files later.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You'll save yourself headaches by naming files clearly!",
+  "drDigitalHint": "Future you will be grateful for a clear, descriptive file name."
+}

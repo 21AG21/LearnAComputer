@@ -1,0 +1,12 @@
+{
+  "slug": "public-wifi",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Online Transactions",
+  "order": 1070,
+  "title": "Public Wi-Fi Safety",
+  "videoUrl": "",
+  "drDigitalIntro": "Public Wi-Fi at cafés and airports is convenient but risky — hackers can intercept your data. Never do sensitive things on public Wi-Fi: don't log into banking, don't enter credit cards, don't check email passwords. If you must, use a VPN (Virtual Private Network) that encrypts your connection. When you're home or on trusted networks, it's safe. Know the difference between safe and risky places to browse.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand public Wi-Fi risks!",
+  "drDigitalHint": "VPN encrypts your data so hackers can't see it."
+}

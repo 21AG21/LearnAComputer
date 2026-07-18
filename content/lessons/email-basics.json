@@ -1,0 +1,12 @@
+{
+  "slug": "email-basics",
+  "unit": "Unit 6: Email",
+  "module": "Email Essentials",
+  "order": 600,
+  "title": "Email Basics",
+  "videoUrl": "",
+  "drDigitalIntro": "Email is how you send messages and documents over the internet. Unlike text messages, email is a more formal way to communicate — great for work, business, or longer conversations. Every email has a recipient (To), a subject line (what it's about), and a message body (your message). Email is free and can be used from any device. Mail is the app on your Mac that handles email.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand the basics of email!",
+  "drDigitalHint": "Email is slower than text but works for everyone with an email address."
+}

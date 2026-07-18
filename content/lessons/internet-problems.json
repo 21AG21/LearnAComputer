@@ -1,0 +1,12 @@
+{
+  "slug": "internet-problems",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Connectivity",
+  "order": 1140,
+  "title": "Internet and Wi-Fi Issues",
+  "videoUrl": "",
+  "drDigitalIntro": "No internet: check if you're connected to Wi-Fi (look at Wi-Fi icon), restart your router (unplug it, wait 30 seconds, plug it back in), forget the network and reconnect. Sites won't load: try a different site first (might be the website, not your Mac), restart your router, clear browser cache. Video streaming is slow: might mean your internet is slow (test with speedtest.com), or the video quality is set too high.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can fix internet connection problems!",
+  "drDigitalHint": "Restarting your router fixes most internet issues."
+}

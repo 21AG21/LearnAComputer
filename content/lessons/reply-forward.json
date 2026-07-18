@@ -1,0 +1,12 @@
+{
+  "slug": "reply-forward",
+  "unit": "Unit 6: Email",
+  "module": "Composing Email",
+  "order": 630,
+  "title": "Reply and Forward",
+  "videoUrl": "",
+  "drDigitalIntro": "Reply sends a message back to the person who emailed you. Your reply includes the original email in quotes so they remember what they asked. Forward sends someone else's email to another person — useful when you want to share information. Reply includes only the sender; Reply All sends to everyone who was on the original email chain.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can participate in email conversations!",
+  "drDigitalHint": "Use Reply All carefully — only use it when everyone needs to see your message."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "reading-list",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Using Safari",
+  "order": 480,
+  "title": "Reading List: Articles to Explore",
+  "videoUrl": "",
+  "drDigitalIntro": "Reading List is different from bookmarks — it's for articles you want to read later. See an article that looks interesting but don't have time now? Add it to Reading List with Shift+Command+D. Later, click the Reading List sidebar icon and browse what you've saved. Articles in Reading List can be read offline — Safari caches them. It's perfect for saving recipes, news articles, or blog posts to read when you have time.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You have a place to save articles for later!",
+  "drDigitalHint": "Reading List is for temporary articles; bookmarks are for sites you return to."
+}

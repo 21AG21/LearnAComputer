@@ -1,0 +1,12 @@
+{
+  "slug": "saving-files",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Working with Files",
+  "order": 330,
+  "title": "Saving Files",
+  "videoUrl": "",
+  "drDigitalIntro": "When you create something — like writing a letter, downloading a photo, or saving a webpage — you're saving a file to your computer. Most apps have a File menu with a Save option. When you save, your computer asks where you want to save it: maybe your Desktop, Documents, or a folder you created. Downloads also happens automatically — files you download from the internet go to your Downloads folder unless you tell them to go somewhere else.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand how files get saved and where they go!",
+  "drDigitalHint": "Most apps have File > Save. Your Downloads folder is where things from the internet end up."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "scams-phishing",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Recognizing Threats",
+  "order": 1040,
+  "title": "Scams and Phishing",
+  "videoUrl": "",
+  "drDigitalIntro": "Phishing is when criminals pretend to be Apple, your bank, or a trusted company to steal your password. They send emails or texts with fake links saying 'Verify your account now!' Never click unexpected links. Go directly to the official website instead. Real companies never ask for passwords by email. If something feels wrong, ask a friend or call the company directly. Trust your instincts.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can spot phishing attempts!",
+  "drDigitalHint": "Real companies never ask for passwords by email."
+}

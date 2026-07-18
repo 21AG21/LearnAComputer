@@ -1,0 +1,12 @@
+{
+  "slug": "browser-vs-search",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Internet Basics",
+  "order": 410,
+  "title": "Browser vs Search Engine",
+  "videoUrl": "",
+  "drDigitalIntro": "Safari is your browser — it's the app that shows you websites. Google is a search engine — it helps you find websites. Think of Safari like a car, and Google like a map. You drive the car (Safari) and use the map (Google) to figure out where to go. You can use different search engines inside Safari: Google, Bing, DuckDuckGo. But they all work inside Safari.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand the difference between browser and search engine!",
+  "drDigitalHint": "Browser shows websites. Search engine helps you find them."
+}

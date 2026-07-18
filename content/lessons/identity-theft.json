@@ -1,0 +1,12 @@
+{
+  "slug": "identity-theft",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Recognizing Threats",
+  "order": 1050,
+  "title": "Identity Theft",
+  "videoUrl": "",
+  "drDigitalIntro": "Identity theft is when someone uses your personal information to pretend to be you — they might open credit cards, take out loans, or commit crimes in your name. Protect yourself by not sharing your Social Security Number, birth date, or financial info with anyone you don't trust. Monitor your credit reports. Use strong, unique passwords. Enable 2FA. If you think you're a victim, contact your bank and the FTC immediately.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know how to protect your identity!",
+  "drDigitalHint": "Monitoring your credit is a good habit."
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "sharing-photos",
+  "unit": "Unit 7: Photos",
+  "module": "Editing Photos",
+  "order": 750,
+  "title": "Sharing Photos",
+  "videoUrl": "",
+  "drDigitalIntro": "Share photos with family through Messages, Mail, or AirDrop (wirelessly to nearby Macs or iPhones). Use the Share Sheet to send photos or create a shared album that people can add to. Export photos to save copies in different formats or locations. Print photos directly from Photos. Sharing is how you preserve memories with others.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can share photos with anyone!",
+  "drDigitalHint": "Right-click a photo and choose Share to see options."
+}

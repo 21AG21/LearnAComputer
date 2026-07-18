@@ -1,0 +1,12 @@
+{
+  "slug": "file-what-is-folder",
+  "unit": "Unit 3: Files and Finder",
+  "module": "Understanding Files",
+  "order": 310,
+  "title": "What is a Folder?",
+  "videoUrl": "",
+  "drDigitalIntro": "A folder is like a filing cabinet drawer. Just like you organize papers into different drawers so you can find them later, you organize files into folders. A folder is an empty container until you put files inside it. You can have folders inside folders — like having dividers inside a drawer.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You understand folders! They're how we keep files organized.",
+  "drDigitalHint": "Think of your desktop like a real desk — folders are like the drawers you keep things in."
+}

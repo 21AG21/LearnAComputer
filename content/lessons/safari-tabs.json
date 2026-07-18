@@ -1,0 +1,12 @@
+{
+  "slug": "safari-tabs",
+  "unit": "Unit 4: Internet and Safari",
+  "module": "Using Safari",
+  "order": 440,
+  "title": "Tabs: Visit Multiple Sites",
+  "videoUrl": "",
+  "drDigitalIntro": "Tabs let you visit multiple websites at once without opening new Safari windows. Click the + button to open a new tab. Each tab shows a different website. Click a tab to switch between them. You can have dozens of tabs open. Close a tab with the X, or press Command+W to close the current tab. Tabs are temporary — when you close Safari, the tabs go away.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can now browse multiple sites without clutter!",
+  "drDigitalHint": "Use tabs to keep things organized — one tab per website."
+}

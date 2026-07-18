@@ -1,0 +1,12 @@
+{
+  "slug": "spam-phishing",
+  "unit": "Unit 6: Email",
+  "module": "Email Safety",
+  "order": 670,
+  "title": "Spam and Phishing",
+  "videoUrl": "",
+  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Mark emails as spam and they go to your Spam folder. Phishing is a scam where criminals pretend to be your bank or Apple and ask you to click a link or enter your password. Never click links or download attachments from suspicious emails. Never reply with passwords or personal information. If an email looks wrong, ask someone you trust or contact the company directly.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can identify and avoid email scams!",
+  "drDigitalHint": "When in doubt, don't click. Contact the company directly instead."
+}

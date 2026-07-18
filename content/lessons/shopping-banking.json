@@ -1,0 +1,12 @@
+{
+  "slug": "shopping-banking",
+  "unit": "Unit 12: Everyday Life with Your Mac",
+  "module": "Online Services",
+  "order": 1250,
+  "title": "Online Shopping and Banking",
+  "videoUrl": "",
+  "drDigitalIntro": "Shopping: Amazon, Target, and other retailers let you browse and buy online. Use a credit card for fraud protection. Banking: check your account, transfer money, pay bills through your bank's website or app. Always verify you're on the secure website (look for the lock icon). Never share passwords or full credit card numbers. These are essential services people use daily.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You can confidently shop and bank online!",
+  "drDigitalHint": "Bookmark your bank's website so you're never tricked by fakes."
+}
