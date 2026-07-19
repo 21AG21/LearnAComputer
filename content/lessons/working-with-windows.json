@@ -5,10 +5,41 @@
   "order": 26,
   "title": "Working with windows",
   "videoUrl": "",
-  "drDigitalIntro": "Soon you'll arrange windows like a pro.\n• Move, resize, maximize, and minimize them.\n• Go full screen, or see two side by side with Split View.\n• This lesson is coming soon!",
+  "drDigitalIntro": "Every app opens in a window — a rectangle you can move and resize.\n• Move a window by dragging its title bar.\n• Resize it by dragging the corner handle.\n• Minimize hides it to the taskbar. Maximize fills the screen.\n• Close removes the window entirely.",
   "playgroundTask": {
-    "type": "placeholder"
+    "type": "guided-desktop",
+    "goal": "You moved, resized, minimized, maximized, and closed a window",
+    "steps": [
+      {
+        "say": "Drag the title bar (the yellow strip at the top of the window) to move the window.",
+        "action": "move"
+      },
+      {
+        "say": "Drag the striped corner handle at the bottom-right to resize the window.",
+        "action": "resize"
+      },
+      {
+        "say": "Click the − button to minimize the window.",
+        "action": "minimize"
+      },
+      {
+        "say": "Click the 'Notes' button in the taskbar at the bottom to bring the window back.",
+        "action": "restore"
+      },
+      {
+        "say": "Click the □ button to maximize the window so it fills the screen.",
+        "action": "maximize"
+      },
+      {
+        "say": "Click the □ button again to restore the window to its normal size.",
+        "action": "restore-max"
+      },
+      {
+        "say": "Click the ✕ button to close the window.",
+        "action": "close"
+      }
+    ]
   },
-  "drDigitalSuccess": "You're all caught up — window skills are on the way!",
-  "drDigitalHint": "This lesson is coming soon — click Continue for now."
+  "drDigitalSuccess": "You moved, resized, minimized, maximized, and closed a window — you're a window expert!",
+  "drDigitalHint": "Look for the yellow highlight — it shows exactly what to click or drag next."
 }

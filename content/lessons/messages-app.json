@@ -7,12 +7,21 @@
   "videoUrl": "",
   "drDigitalIntro": "Messages is how you text on your computer.\n• Start a new message with someone in your Contacts.\n• Type your message and press Enter to send.\n• Each conversation stays in the list, and it syncs with your phone.",
   "playgroundTask": {
-    "type": "message-reply",
-    "instructions": "Alex wants to make plans! Type Dr. Digital's reply exactly as shown, then press Enter.",
-    "contactName": "Alex",
-    "incomingMessage": "Hey! Want to meet at the coffee shop at 3pm tomorrow?",
-    "requiredResponse": "Yes, that sounds great! See you then."
+    "type": "guided-messaging",
+    "goal": "You replied to Alex's message",
+    "steps": [
+      {
+        "say": "Click on Alex to open their conversation.",
+        "action": "select-contact",
+        "target": "alex"
+      },
+      {
+        "say": "Type a reply to Alex and send it.",
+        "action": "send-message",
+        "value": "Hey"
+      }
+    ]
   },
   "drDigitalSuccess": "Message sent! You just texted from your computer — it works exactly like texting from your phone.",
-  "drDigitalHint": "Click the message box at the bottom, type the reply exactly as shown, then press Enter or click Send."
+  "drDigitalHint": "Click Alex in the left panel, type anything in the box at the bottom, and press Enter or click Send."
 }

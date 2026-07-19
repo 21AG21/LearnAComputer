@@ -28,6 +28,8 @@ import GuidedAppStoreTask from "@/components/Playground/GuidedAppStoreTask";
 import GuidedSecurityTask from "@/components/Playground/GuidedSecurityTask";
 import GuidedTroubleshootingTask from "@/components/Playground/GuidedTroubleshootingTask";
 import GuidedCalendarTask from "@/components/Playground/GuidedCalendarTask";
+import GuidedDesktopTask from "@/components/Playground/GuidedDesktopTask";
+import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -164,6 +166,10 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           {task.type === "guided-calendar" && (
             <GuidedCalendarTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
+          {task.type === "guided-desktop" && (
+            <GuidedDesktopTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "keyboard-nav-game" && <KeyboardNavTask onResult={onResult} />}
         </div>
       )}
     </div>

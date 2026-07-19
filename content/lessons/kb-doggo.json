@@ -1,0 +1,17 @@
+{
+  "slug": "kb-doggo",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 213,
+  "title": "Typing challenge: reply to Doggo",
+  "videoUrl": "",
+  "drDigitalIntro": "You have learned the whole keyboard — now let's put it to work!\n• Doggo is hungry and needs a reply.\n• Type Dr. Digital's message exactly as shown.\n• You will need letters, numbers, spaces, punctuation, and Shift.",
+  "playgroundTask": {
+    "type": "type-text",
+    "instructions": "Type Dr. Digital's reply to Doggo exactly — match every capital letter, number, and punctuation mark.",
+    "targetText": "Sure Doggo, I will give you 32 pebbles and 6 bones. Is that okay?",
+    "exact": true
+  },
+  "drDigitalSuccess": "Doggo is thrilled — and your typing skills are impressive! You used capitals, numbers, commas, and a question mark all in one go.",
+  "drDigitalHint": "Use Shift for the capital S in 'Sure', and for the question mark at the end. The commas are regular punctuation keys — no Shift needed for those."
+}

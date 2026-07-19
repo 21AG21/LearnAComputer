@@ -7,8 +7,8 @@
   "videoUrl": "",
   "drDigitalIntro": "You can move around using just the keyboard.\n• Press Tab to jump to the next button or box.\n• Press Shift+Tab to jump back.\n• Use the arrow keys to move through text or lists.",
   "playgroundTask": {
-    "type": "none"
+    "type": "keyboard-nav-game"
   },
-  "drDigitalSuccess": "Now you can get around hands-on-keyboard — Tab forward, Shift+Tab back!",
-  "drDigitalHint": "Read through the navigation keys, then click Continue whenever you're ready."
+  "drDigitalSuccess": "Excellent! You navigated a whole form using only the keyboard — no mouse needed!",
+  "drDigitalHint": "Click 'Start keyboard navigation', then use Tab to move forward through the fields and buttons, Shift+Tab to go back, and Enter to click a button."
 }

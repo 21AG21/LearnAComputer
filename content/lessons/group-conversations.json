@@ -7,27 +7,21 @@
   "videoUrl": "",
   "drDigitalIntro": "A group chat sends a message to several people at once.\n• Click compose and add multiple contacts.\n• Everyone in the group sees the replies.\n• Great for events, family, and plans. You can add or remove people anytime.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What is a group chat in Messages?",
-    "options": [
+    "type": "guided-messaging",
+    "goal": "You started a new conversation with Jordan",
+    "steps": [
       {
-        "text": "A chat where only one person can send messages",
-        "correct": false
+        "say": "Click on Jordan to open a different conversation.",
+        "action": "select-contact",
+        "target": "jordan"
       },
       {
-        "text": "A conversation with multiple people at once",
-        "correct": true
-      },
-      {
-        "text": "An audio-only phone call",
-        "correct": false
-      },
-      {
-        "text": "An email chain",
-        "correct": false
+        "say": "Send Jordan a message.",
+        "action": "send-message",
+        "value": "Hey"
       }
     ]
   },
-  "drDigitalSuccess": "Right! Group chats include multiple people — everyone sees every message and can reply.",
-  "drDigitalHint": "Group = more than one person. Chat = conversation. Group chat = conversation with more than one person."
+  "drDigitalSuccess": "Nice! You can have separate conversations with different people — each one stays in its own thread.",
+  "drDigitalHint": "Click Jordan in the contacts panel on the left, type anything in the message box, and press Enter or Send."
 }

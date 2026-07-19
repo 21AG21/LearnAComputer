@@ -5,14 +5,10 @@
   "order": 2,
   "title": "Keyboard",
   "videoUrl": "",
-  "drDigitalIntro": "The keyboard is the part you type on.\n• It has 80 to 100 buttons called keys.\n• Keys let you type letters, numbers, and symbols.\n• Try it now: type my reply to Doggo, who's asking for food!",
+  "drDigitalIntro": "The keyboard is the part you type on.\n• It has 80 to 100 buttons called keys.\n• Keys let you type letters, numbers, and symbols.\n• You will learn every important key in Unit 2 — Keyboard and Typing.",
   "playgroundTask": {
-    "type": "message-reply",
-    "instructions": "Doggo is hungry! Click the box at the bottom, type Dr. Digital's exact reply, then press Enter to send it.",
-    "contactName": "Doggo",
-    "incomingMessage": "I'm hungry. Can you please give me some food Doctor Digital?",
-    "requiredResponse": "Sure Doggo, I will give you 32 pebbles and 6 bones. Is that okay?"
+    "type": "none"
   },
-  "drDigitalSuccess": "Message sent! Doggo is thrilled — and your keyboard skills are already paying off.",
-  "drDigitalHint": "Click the long box at the bottom that says Type Here, then type my reply exactly as written, including the punctuation: \"Sure Doggo, I will give you 32 pebbles and 6 bones. Is that okay?\" Press Enter to send it."
+  "drDigitalSuccess": "Now you know what the keyboard is! You will practice using it properly in Unit 2.",
+  "drDigitalHint": "Just read through the description and click Continue when you're ready."
 }

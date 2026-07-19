@@ -11,21 +11,21 @@
     "goal": "You sent a message and made a video call",
     "steps": [
       {
-        "say": "Click on Grandma to open her conversation.",
+        "say": "Click on Sam to open their conversation.",
         "action": "select-contact",
-        "target": "grandma"
+        "target": "sam"
       },
       {
-        "say": "Type a message: 'Hi Grandma! How are you?' and send it.",
+        "say": "Type a message: 'Hi Sam! How are you?' and send it.",
         "action": "send-message",
-        "value": "Hi Grandma"
+        "value": "Hi Sam"
       },
       {
-        "say": "React to Grandma's message with an emoji.",
+        "say": "React to Sam's message with an emoji.",
         "action": "add-reaction"
       },
       {
-        "say": "Start a video call with Grandma.",
+        "say": "Start a video call with Sam.",
         "action": "start-call"
       },
       {
@@ -34,6 +34,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You sent a message and made a video call! Staying in touch is just a tap away.",
-  "drDigitalHint": "Click on a contact, type your message, click Send, then use the camera icon for a video call."
+  "drDigitalSuccess": "You sent a message to Sam and made a video call! Staying in touch is just a tap away.",
+  "drDigitalHint": "Click on Sam, type your message, click Send, then react to their message and use the camera icon for a video call."
 }

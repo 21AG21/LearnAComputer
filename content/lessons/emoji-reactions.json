@@ -7,27 +7,20 @@
   "videoUrl": "",
   "drDigitalIntro": "Emoji are small pictures that show feelings.\n• Instead of typing \"haha\", send a laughing emoji 😂.\n• There are thousands to choose from.\n• You can also react to a message with a thumbs up, heart, or laugh.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "How do you react to someone's message with a thumbs up in Messages?",
-    "options": [
+    "type": "guided-messaging",
+    "goal": "You reacted to a message with an emoji",
+    "steps": [
       {
-        "text": "Type the word 'thumbs up' and send it",
-        "correct": false
+        "say": "Click on Sam to open their conversation.",
+        "action": "select-contact",
+        "target": "sam"
       },
       {
-        "text": "Hover over the message and click the smiley face icon",
-        "correct": true
-      },
-      {
-        "text": "Hold down Ctrl while clicking the message",
-        "correct": false
-      },
-      {
-        "text": "Right-click and choose Translate",
-        "correct": false
+        "say": "React to Sam's message with an emoji.",
+        "action": "add-reaction"
       }
     ]
   },
-  "drDigitalSuccess": "Hover over the message to reveal the tapback reactions — a quick way to respond without typing anything.",
-  "drDigitalHint": "Move your cursor over a message in the conversation and watch what appears near it."
+  "drDigitalSuccess": "A quick emoji reaction — no typing needed. A great way to say 'I saw this' or show how you feel.",
+  "drDigitalHint": "Click Sam, then hover over one of their messages and click the smiley face that appears. Pick any emoji to react."
 }

@@ -227,7 +227,16 @@ export type PlaygroundTask =
         target?: string;
         value?: string;
       }>;
-    };
+    }
+  | {
+      type: "guided-desktop";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close";
+      }>;
+    }
+  | { type: "keyboard-nav-game" };
 
 export interface Lesson {
   slug: string;
