@@ -5,14 +5,14 @@
   "order": 1140,
   "title": "Internet Problems",
   "videoUrl": "",
-  "drDigitalIntro": "No internet? Work through this: Is WiFi on? (check the menu bar). Can you reach your router's settings page (usually 192.168.1.1)? Try turning WiFi off and back on. Restart your router by unplugging it for 30 seconds. If other devices in your home also have no internet, the problem is with your internet provider — call them. If only your Mac is affected, it's a Mac or router issue.",
+  "drDigitalIntro": "No internet? Work through this: Is WiFi on? (check the menu bar). Can you reach your router's settings page (usually 192.168.1.1)? Try turning WiFi off and back on. Restart your router by unplugging it for 30 seconds. If other devices in your home also have no internet, the problem is with your internet provider — call them. If only your computer is affected, it's a computer or router issue.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "Your Mac has no internet. Your phone also has no WiFi. Your neighbor's internet is also out. Where is the problem?",
+    "question": "Your computer has no internet. Your phone also has no WiFi. Your neighbor's internet is also out. Where is the problem?",
     "options": [
-      { "text": "Your Mac has a serious hardware defect", "correct": false },
+      { "text": "Your computer has a serious hardware defect", "correct": false },
       { "text": "Your internet service provider (ISP) is having an outage", "correct": true },
-      { "text": "Your Mac needs a software update", "correct": false },
+      { "text": "Your computer needs a software update", "correct": false },
       { "text": "Your keyboard settings are wrong", "correct": false }
     ]
   },

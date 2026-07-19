@@ -5,14 +5,14 @@
   "order": 1080,
   "title": "Keeping Software Up to Date",
   "videoUrl": "",
-  "drDigitalIntro": "Software updates aren't just new features — they also fix security vulnerabilities. When hackers find a weakness in macOS or an app, Apple releases an update to close that hole. If you don't install the update, you stay vulnerable. Turn on automatic updates so your Mac installs security patches without you having to remember. It's one of the easiest ways to stay safe.",
+  "drDigitalIntro": "Software updates aren't just new features — they also fix security vulnerabilities. When hackers find a weakness in the operating system or an app, the developer releases an update to close that hole. If you don't install the update, you stay vulnerable. Turn on automatic updates so your computer installs security patches without you having to remember. It's one of the easiest ways to stay safe.",
   "playgroundTask": {
     "type": "find-in-settings",
-    "instructions": "Turn on Automatic Updates so your Mac stays secure without you having to remember.",
+    "instructions": "Turn on Automatic Updates so your computer stays secure without you having to remember.",
     "targetPanel": "Software Update",
     "toggleLabel": "Automatic Updates",
     "targetValue": true
   },
-  "drDigitalSuccess": "Automatic Updates keeps your Mac patched against the latest security threats — no action needed from you.",
+  "drDigitalSuccess": "Automatic Updates keeps your computer patched against the latest security threats — no action needed from you.",
   "drDigitalHint": "Open Software Update in Settings and look for the Automatic Updates toggle."
 }

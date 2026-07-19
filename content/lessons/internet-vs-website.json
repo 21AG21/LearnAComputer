@@ -1,6 +1,6 @@
 {
   "slug": "internet-vs-website",
-  "unit": "Unit 4: The Internet and Safari",
+  "unit": "Unit 4: The Internet and Browsing",
   "module": "Internet Basics",
   "order": 400,
   "title": "Internet vs Website",
@@ -10,7 +10,7 @@
     "type": "guided-browser",
     "goal": "Visit two different websites on the internet",
     "steps": [
-      { "say": "The internet connects you to websites. Click the address bar, type apple.com and press Enter to visit Apple's website.", "action": "navigate", "url": "apple.com" },
+      { "say": "The internet connects you to websites. Click the address bar, type shop.example and press Enter to visit a website.", "action": "navigate", "url": "shop.example" },
       { "say": "That's one website. There are billions more! Visit another: type wikipedia.org and press Enter.", "action": "navigate", "url": "wikipedia.org" }
     ]
   },

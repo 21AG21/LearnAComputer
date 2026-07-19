@@ -119,14 +119,15 @@ Each file defines one sub-lesson:
 | `spot-the-fake` | SpotTheFakeTask | Click the scam/fake among 2–3 item cards |
 | `find-in-settings` | FindInSettingsTask | Navigate a fake System Settings UI, toggle a setting |
 | `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
-| `guided-files` | GuidedFilesTask | Step-by-step guided Finder: open/create/rename/move/search/delete/restore/save real files |
-| `guided-browser` | GuidedBrowserTask | Step-by-step guided Safari: navigate/search/tabs/windows/bookmarks/reading-list/history/downloads/lock/cookies/popups/reload/zoom |
+| `guided-files` | GuidedFilesTask | Step-by-step guided file manager: open/create/rename/move/search/delete/restore/save real files |
+| `guided-browser` | GuidedBrowserTask | Step-by-step guided browser: navigate/search/tabs/windows/bookmarks/reading-list/history/downloads/lock/cookies/popups/reload/zoom |
+| `guided-messaging` | GuidedMessagingTask | Step-by-step guided messaging and video calls: select contacts, send messages, react, attach photos, start/mute/camera-off/end video calls |
 
 **Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). Multiple-choice quizzes test recognition, not skill; do not add them to new lessons. `guided-files` is the reference pattern for a guided simulator.
 
 #### `guided-files` schema
 
-A self-contained simulated Finder. The JSON provides a `goal` and an array of `steps`; each step highlights exactly what to click next and only advances when done. The virtual filesystem (Home + Documents/Pictures/Downloads/Trash, plus a standard set of files) is hardcoded in `GuidedFilesTask.tsx`.
+A self-contained simulated file manager. The JSON provides a `goal` and an array of `steps`; each step highlights exactly what to click next and only advances when done. The virtual filesystem (Home + Documents/Pictures/Downloads/Trash, plus a standard set of files) is hardcoded in `GuidedFilesTask.tsx`.
 
 ```json
 "playgroundTask": {
@@ -150,21 +151,21 @@ Actions: `open-file`, `open-folder`, `go-to` (sidebar), `new-folder` (`value`), 
 
 #### `guided-browser` schema
 
-A self-contained simulated Safari. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. The set of fake websites (Apple, Google, Wikipedia, Weather, Daily News, Recipe Box, Free Games) lives hardcoded in `GuidedBrowserTask.tsx` — reference their `url` (e.g. `apple.com`, `weather.com`, `freegames.example`) in `navigate` steps.
+A self-contained simulated browser. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. The set of fake websites (Shop, Google, Wikipedia, Weather, Daily News, Recipe Box, Free Games) lives hardcoded in `GuidedBrowserTask.tsx` — reference their `url` (e.g. `shop.example`, `google.com`, `weather.com`, `freegames.example`) in `navigate` steps.
 
 ```json
 "playgroundTask": {
   "type": "guided-browser",
   "goal": "Short summary shown when finished",
   "steps": [
-    { "say": "Type apple.com and press Enter.", "action": "navigate", "url": "apple.com" },
+    { "say": "Type shop.example and press Enter.", "action": "navigate", "url": "shop.example" },
     { "say": "Search for something.", "action": "search", "query": "apple pie", "reveal": "Recipe Box" },
     { "say": "Open a new tab.", "action": "new-tab" },
     { "say": "Close the Google tab.", "action": "close-tab", "title": "Google" },
     { "say": "Open a new window.", "action": "new-window" },
     { "say": "Bookmark this page.", "action": "bookmark" },
     { "say": "Save to reading list.", "action": "reading-list-add" },
-    { "say": "Reopen Apple from History.", "action": "history-visit", "title": "Apple" },
+    { "say": "Reopen Shop from History.", "action": "history-visit", "title": "Shop" },
     { "say": "Download the file.", "action": "download" },
     { "say": "Open the Downloads panel.", "action": "open-downloads" },
     { "say": "Check the lock icon.", "action": "lock-click" },
@@ -177,6 +178,29 @@ A self-contained simulated Safari. The JSON provides a `goal` and `steps`; each 
 ```
 
 Pages with special behavior: `weather.com` shows a cookie banner, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button. Cookie/popup/download steps must be preceded by a `navigate` to the matching page.
+
+#### `guided-messaging` schema
+
+A self-contained simulated messaging and video calling app. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. Four contacts are hardcoded: Alex, Jordan, Sam, Grandma — each with preset conversation threads.
+
+```json
+"playgroundTask": {
+  "type": "guided-messaging",
+  "goal": "Short summary shown when finished",
+  "steps": [
+    { "say": "Click on Alex to open their conversation.", "action": "select-contact", "target": "alex" },
+    { "say": "Type a message and send it.", "action": "send-message", "value": "Hello!" },
+    { "say": "React to their message.", "action": "add-reaction" },
+    { "say": "Send a photo.", "action": "attach-photo" },
+    { "say": "Start a video call.", "action": "start-call" },
+    { "say": "Mute your microphone.", "action": "mute" },
+    { "say": "Turn off your camera.", "action": "camera-off" },
+    { "say": "End the call.", "action": "end-call" }
+  ]
+}
+```
+
+Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/grandma), `send-message` (2-phase: focus input then send; `value` is the required text), `add-reaction` (2-phase: click message then pick emoji), `attach-photo` (2-phase: click + button then pick photo), `start-call`, `mute`, `camera-off`, `end-call`. Video call actions (`mute`, `camera-off`, `end-call`) require an active call started by `start-call`.
 
 ### Progress
 
@@ -204,7 +228,7 @@ After completing a module, the user can navigate to the next module or back to `
 
 - **Server vs Client**: Lesson data loading (`getAllLessons`, etc.) is server-only (uses `fs`). Progress, chat, and all playground components are `"use client"`.
 - **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
-- **FakeDesktop**: A self-contained macOS-like environment. Apps open in `AppWindow` frames. The menu bar has a working clock, battery indicator (real Battery API), and WiFi panel. The dock shows open-app indicators (green dots).
+- **FakeDesktop**: A self-contained desktop environment. Apps open in `AppWindow` frames. The menu bar has a working clock, battery indicator (real Battery API), and WiFi panel. The taskbar shows open-app indicators (green dots).
 - **Validation**: All task validation lives in `TaskChecker.ts` as pure functions. Components call the appropriate checker and pass `onResult(boolean)` up to `LessonModuleRunner`.
 
 ## Adding New Units and Lessons
@@ -220,9 +244,9 @@ Decide the unit name, modules, and sub-lessons. A **unit** is a top-level groupi
 `order` controls the global sort order of all lessons. Existing ranges:
 - Unit 1: `1`–`26`
 - Unit 2: `200`–`290`
-- Unit 3 (Files & Finder): `300`–`390`
-- Unit 4 (Internet & Safari): `400`–`496`
-- Unit 5 (Messages & FaceTime): `500`–`570`
+- Unit 3 (Files & Folders): `300`–`390`
+- Unit 4 (Internet & Browsing): `400`–`496`
+- Unit 5 (Messages & Video Calls): `500`–`570`
 - Unit 6 (Email): `600`–`680`
 - Unit 7 (Photos): `700`–`780`
 - Unit 8 (Apps): `800`–`870`

@@ -5,17 +5,17 @@
   "order": 1110,
   "title": "Troubleshooting Basics",
   "videoUrl": "",
-  "drDigitalIntro": "Troubleshooting means figuring out why something isn't working and fixing it. The golden rule: try the simplest fix first. Restart the app. If that doesn't work, restart the Mac. If still broken, check if you're connected to the internet. Search the error message online — you're never the first person to have this problem. Stay calm; almost every problem has a solution.",
+  "drDigitalIntro": "Troubleshooting means figuring out why something isn't working and fixing it. The golden rule: try the simplest fix first. Restart the app. If that doesn't work, restart the computer. If still broken, check if you're connected to the internet. Search the error message online — you're never the first person to have this problem. Stay calm; almost every problem has a solution.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "An app on your Mac has frozen and won't respond. What should you try FIRST?",
+    "question": "An app on your computer has frozen and won't respond. What should you try FIRST?",
     "options": [
-      { "text": "Take the Mac to a repair shop immediately", "correct": false },
+      { "text": "Take the computer to a repair shop immediately", "correct": false },
       { "text": "Force quit the frozen app and reopen it", "correct": true },
-      { "text": "Delete the app and buy a new Mac", "correct": false },
+      { "text": "Delete the app and buy a new computer", "correct": false },
       { "text": "Unplug the power cable", "correct": false }
     ]
   },
-  "drDigitalSuccess": "Force quit (Cmd+Option+Esc) closes a frozen app without restarting. Start with the simplest fix before escalating!",
+  "drDigitalSuccess": "Force quit (Ctrl+Option+Esc) closes a frozen app without restarting. Start with the simplest fix before escalating!",
   "drDigitalHint": "What's the least drastic thing you can try that might fix a frozen app?"
 }

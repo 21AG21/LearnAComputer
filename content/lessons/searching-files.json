@@ -1,11 +1,11 @@
 {
   "slug": "searching-files",
-  "unit": "Unit 3: Files and Finder",
+  "unit": "Unit 3: Files and Folders",
   "module": "Working with Files",
   "order": 370,
   "title": "Searching for Files",
   "videoUrl": "",
-  "drDigitalIntro": "When you have lots of files, you don't have to hunt through folders — you can search. The search box is in the top-right corner of Finder. Type part of a file's name and Finder shows only the files that match. Let's find a file by searching.",
+  "drDigitalIntro": "When you have lots of files, you don't have to hunt through folders — you can search. The search box is in the top-right corner of the file manager. Type part of a file's name and the file manager shows only the files that match. Let's find a file by searching.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Find a file using search",
@@ -14,6 +14,6 @@
       { "say": "There it is! Double-click Budget.xlsx to open it.", "action": "open-file", "target": "Budget.xlsx" }
     ]
   },
-  "drDigitalSuccess": "You searched for 'budget' and Finder found it instantly. Searching is the fastest way to find any file.",
+  "drDigitalSuccess": "You searched for 'budget' and the file manager found it instantly. Searching is the fastest way to find any file.",
   "drDigitalHint": "Click the glowing Search box in the top-right corner and type the word budget."
 }

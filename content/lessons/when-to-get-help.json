@@ -5,17 +5,17 @@
   "order": 1180,
   "title": "When to Get Professional Help",
   "videoUrl": "",
-  "drDigitalIntro": "You don't have to fix every problem yourself. Get professional help when: the Mac won't turn on at all, the screen is cracked, a liquid was spilled inside, you hear grinding noises, or you've tried everything and it's still broken. Apple Support (support.apple.com) offers chat, phone, and in-person help at Apple Stores (Genius Bar). Many community libraries and senior centers also offer free tech help. Asking for help is always the right call.",
+  "drDigitalIntro": "You don't have to fix every problem yourself. Get professional help when: the computer won.t turn on at all, the screen is cracked, a liquid was spilled inside, you hear grinding noises, or you've tried everything and it's still broken. The manufacturer.s support website offers chat, phone, and sometimes in-person help. Many community libraries and senior centers also offer free tech help. Asking for help is always the right call.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "You accidentally spill coffee on your MacBook keyboard. What should you do immediately?",
+    "question": "You accidentally spill coffee on your computerBook keyboard. What should you do immediately?",
     "options": [
       { "text": "Keep using it and hope it dries out on its own", "correct": false },
-      { "text": "Turn it off immediately, flip it upside down, and take it to Apple for repair", "correct": true },
+      { "text": "Turn it off immediately, flip it upside down, and take it to a repair shop", "correct": true },
       { "text": "Blow-dry it on high heat to dry the components quickly", "correct": false },
-      { "text": "Try reinstalling macOS to fix the damage", "correct": false }
+      { "text": "Try reinstalling the operating system to fix the damage", "correct": false }
     ]
   },
-  "drDigitalSuccess": "Power off immediately and let professionals handle it — liquid inside a Mac can cause serious damage if it stays on or dries in the wrong position.",
+  "drDigitalSuccess": "Power off immediately and let professionals handle it — liquid inside a computer can cause serious damage if it stays on or dries in the wrong position.",
   "drDigitalHint": "Liquid and electricity don't mix. What's the first priority?"
 }

@@ -1,20 +1,20 @@
 {
   "slug": "finder-overview",
-  "unit": "Unit 3: Files and Finder",
+  "unit": "Unit 3: Files and Folders",
   "module": "Understanding Files",
   "order": 320,
-  "title": "Finder: Your File Manager",
+  "title": "the file manager: Your File Manager",
   "videoUrl": "",
-  "drDigitalIntro": "Finder is the app that shows all your files and folders. The list on the left side is called the sidebar — it has shortcuts to the important places on your Mac: Home, Documents, Pictures, Downloads, and Trash. Click any of them to jump straight there. Let's practice getting around.",
+  "drDigitalIntro": "the file manager is the app that shows all your files and folders. The list on the left side is called the sidebar — it has shortcuts to the important places on your computer: Home, Documents, Pictures, Downloads, and Trash. Click any of them to jump straight there. Let's practice getting around.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Use the sidebar to move between places",
     "steps": [
       { "say": "The sidebar on the left jumps between places. Click Pictures.", "action": "go-to", "target": "Pictures" },
       { "say": "Now click Downloads to see what's saved there.", "action": "go-to", "target": "Downloads" },
-      { "say": "Click Home to return to your main files. That's how you get around in Finder!", "action": "go-to", "target": "Home" }
+      { "say": "Click Home to return to your main files. That's how you get around in the file manager!", "action": "go-to", "target": "Home" }
     ]
   },
-  "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. That's how you navigate everywhere in Finder.",
+  "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. That's how you navigate everywhere in the file manager.",
   "drDigitalHint": "Single-click the glowing place in the sidebar on the left."
 }

@@ -5,13 +5,13 @@
   "order": 1150,
   "title": "Peripheral Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Peripherals are devices you connect to your Mac — printers, external monitors, mice, USB drives, and headphones. When a peripheral isn't working: unplug and replug it. Try a different USB port. Restart the Mac with the peripheral connected. Check System Settings > Printers & Scanners (for printers). Update drivers if needed. Make sure the peripheral is charged if it's wireless. Most peripheral problems resolve with these simple steps.",
+  "drDigitalIntro": "Peripherals are devices you connect to your computer — printers, external monitors, mice, USB drives, and headphones. When a peripheral isn't working: unplug and replug it. Try a different USB port. Restart your computer with the peripheral connected. Check System Settings > Printers & Scanners (for printers). Update drivers if needed. Make sure the peripheral is charged if it's wireless. Most peripheral problems resolve with these simple steps.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "You plug in a USB flash drive but your Mac doesn't recognize it. What should you try first?",
+    "question": "You plug in a USB flash drive but your computer doesn't recognize it. What should you try first?",
     "options": [
-      { "text": "Buy a new Mac — your USB ports are broken", "correct": false },
-      { "text": "Unplug it and try a different USB port on your Mac", "correct": true },
+      { "text": "Buy a new computer — your USB ports are broken", "correct": false },
+      { "text": "Unplug it and try a different USB port on your computer", "correct": true },
       { "text": "Format your internal hard drive", "correct": false },
       { "text": "Turn off Bluetooth", "correct": false }
     ]

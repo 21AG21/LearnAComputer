@@ -1,11 +1,11 @@
 {
   "slug": "accessibility",
   "unit": "Unit 9: System Settings",
-  "module": "Customizing Your Mac",
+  "module": "Customizing Your computer",
   "order": 910,
   "title": "Accessibility",
   "videoUrl": "",
-  "drDigitalIntro": "Accessibility settings make your Mac easier to use for anyone with different needs. Zoom enlarges everything on screen. Pointer size lets you make the cursor bigger. VoiceOver reads text aloud. Color Blind mode adjusts colors for people with color blindness. Caption Preferences adds subtitles. Don't hesitate to use accessibility features — they're designed to help everyone work comfortably.",
+  "drDigitalIntro": "Accessibility settings make your computer easier to use for anyone with different needs. Zoom enlarges everything on screen. Pointer size lets you make the cursor bigger. VoiceOver reads text aloud. Color Blind mode adjusts colors for people with color blindness. Caption Preferences adds subtitles. Don't hesitate to use accessibility features — they're designed to help everyone work comfortably.",
   "playgroundTask": {
     "type": "find-in-settings",
     "instructions": "Someone needs a bigger cursor. Open Accessibility settings and turn on Pointer Size (Larger Text).",

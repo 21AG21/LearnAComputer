@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 /**
- * A hands-on, guided Finder. The learner performs REAL file operations —
+ * A hands-on, guided file manager. The learner performs REAL file operations —
  * opening, creating folders, renaming, moving, searching, deleting, restoring,
  * saving — one guided step at a time. Each step pulses the exact thing to click
  * next and only advances when the correct action is done, so an absolute
@@ -360,7 +360,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
         </p>
       </div>
 
-      {/* Finder window */}
+      {/* File manager window */}
       <div className="flex-1 min-h-0 p-3">
         <div className="h-full flex flex-col border-4 border-black rounded-lg overflow-hidden shadow-lg">
           {/* Title bar */}

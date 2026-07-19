@@ -1,21 +1,21 @@
 {
   "slug": "installing-apps",
-  "unit": "Unit 8: Apps and the App Store",
+  "unit": "Unit 8: Apps",
   "module": "Installing Apps",
   "order": 830,
   "title": "Installing Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Install an app from the App Store by clicking Install, or from a developer's website by downloading and running the installer. Some apps need to be dragged into your Applications folder. Once installed, your Mac has a new program you can use. You'll see it in Launchpad and Spotlight search. An app stays on your Mac until you delete it.",
+  "drDigitalIntro": "Install an app from the app store by clicking Install, or from a developer's website by downloading and running the installer. Some apps need to be dragged into your Applications folder. Once installed, your computer has a new program you can use. You'll see it in Launchpad and Spotlight search. An app stays on your computer until you delete it.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "After installing an app from the App Store, where can you find it?",
+    "question": "After installing an app from the app store, where can you find it?",
     "options": [
-      { "text": "Only in Safari bookmarks", "correct": false },
+      { "text": "Only in the browser bookmarks", "correct": false },
       { "text": "In the Applications folder and Launchpad", "correct": true },
       { "text": "Only in System Settings", "correct": false },
       { "text": "It appears on your Desktop automatically", "correct": false }
     ]
   },
   "drDigitalSuccess": "Installed apps live in the Applications folder — and Launchpad shows them all in a grid for easy access.",
-  "drDigitalHint": "After installing, look in Launchpad (the rocket icon in the Dock) or the Applications folder in Finder."
+  "drDigitalHint": "After installing, look in Launchpad (the rocket icon in the taskbar) or the Applications folder in the file manager."
 }

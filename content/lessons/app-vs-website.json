@@ -1,17 +1,17 @@
 {
   "slug": "app-vs-website",
-  "unit": "Unit 8: Apps and the App Store",
+  "unit": "Unit 8: Apps",
   "module": "Understanding Apps",
   "order": 800,
   "title": "Website vs App vs Developer",
   "videoUrl": "",
-  "drDigitalIntro": "A website runs in your browser — you visit it with Safari. An app is software you install on your Mac — it's its own program, like Mail or Photos. A developer is the company or person who created the app. Most apps are made by real companies (Apple, Netflix, Microsoft). You can get apps from the App Store or directly from developers' websites.",
+  "drDigitalIntro": "A website runs in your browser — you visit it with the browser. An app is software you install on your computer — it's its own program, like Mail or Photos. A developer is the company or person who created the app. Most apps are made by real companies (Google, Netflix, Microsoft). You can get apps from the app store or directly from developers' websites.",
   "playgroundTask": {
     "type": "drag-sort-files",
     "instructions": "Sort each into App or Website.",
     "categories": ["App", "Website"],
     "items": [
-      { "label": "Safari", "category": "App" },
+      { "label": "the browser", "category": "App" },
       { "label": "facebook.com", "category": "Website" },
       { "label": "Photos", "category": "App" },
       { "label": "amazon.com", "category": "Website" },
@@ -19,6 +19,6 @@
       { "label": "weather.com", "category": "Website" }
     ]
   },
-  "drDigitalSuccess": "Apps are installed programs on your Mac. Websites live on the internet and open in Safari.",
-  "drDigitalHint": "If you open it by clicking an icon on your Mac — it's an app. If you go to it in Safari — it's a website."
+  "drDigitalSuccess": "Apps are installed programs on your computer. Websites live on the internet and open in the browser.",
+  "drDigitalHint": "If you open it by clicking an icon on your computer — it's an app. If you go to it in the browser — it's a website."
 }

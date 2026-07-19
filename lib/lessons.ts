@@ -129,6 +129,24 @@ export type PlaygroundTask =
         query?: string;
         reveal?: string;
       }>;
+    }
+  | {
+      type: "guided-messaging";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "select-contact"
+          | "send-message"
+          | "add-reaction"
+          | "attach-photo"
+          | "start-call"
+          | "mute"
+          | "camera-off"
+          | "end-call";
+        target?: string;
+        value?: string;
+      }>;
     };
 
 export interface Lesson {

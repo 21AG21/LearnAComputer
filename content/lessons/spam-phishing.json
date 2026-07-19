@@ -5,19 +5,19 @@
   "order": 670,
   "title": "Spam and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Mark emails as spam and they go to your Spam folder. Phishing is a scam where criminals pretend to be your bank or Apple and ask you to click a link or enter your password. Never click links or download attachments from suspicious emails. Never reply with passwords or personal information. If an email looks wrong, ask someone you trust or contact the company directly.",
+  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Mark emails as spam and they go to your Spam folder. Phishing is a scam where criminals pretend to be your bank or a big company and ask you to click a link or enter your password. Never click links or download attachments from suspicious emails. Never reply with passwords or personal information. If an email looks wrong, ask someone you trust or contact the company directly.",
   "playgroundTask": {
     "type": "spot-the-fake",
     "instructions": "One of these emails is a phishing scam. Which one?",
     "items": [
       {
-        "label": "From: Apple",
-        "preview": "Your receipt for iCloud+ ($2.99/month). View in your account at apple.com.",
+        "label": "From: Cloud Storage",
+        "preview": "Your receipt for Cloud+ ($2.99/month). View in your account online.",
         "isFake": false
       },
       {
-        "label": "From: Apple Support ⚠️",
-        "preview": "URGENT: Your Apple ID has been locked! Verify NOW at apple-id-verify.net/login or lose access!",
+        "label": "From: Cloud Support ⚠️",
+        "preview": "URGENT: Your account has been locked! Verify NOW at account-verify-login.net/login or lose access!",
         "isFake": true
       },
       {
@@ -26,7 +26,7 @@
         "isFake": false
       }
     ],
-    "fakeExplanation": "Real Apple emails never link to suspicious domains like 'apple-id-verify.net'. Always check the actual email address and URL, not just the display name."
+    "fakeExplanation": "Real companies never link to suspicious domains. Always check the actual email address and URL, not just the display name."
   },
   "drDigitalSuccess": "You spotted the phishing email! Urgency + suspicious link + strange domain = scam every time.",
   "drDigitalHint": "Hover over the link (don't click it!) and check the real URL. Legitimate companies use their own domain, not lookalike URLs."

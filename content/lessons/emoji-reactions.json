@@ -1,6 +1,6 @@
 {
   "slug": "emoji-reactions",
-  "unit": "Unit 5: Messages and FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
   "module": "Messages Basics",
   "order": 540,
   "title": "Emoji and Reactions",
@@ -12,7 +12,7 @@
     "options": [
       { "text": "Type the word 'thumbs up' and send it", "correct": false },
       { "text": "Hover over the message and click the smiley face icon", "correct": true },
-      { "text": "Hold down Command while clicking the message", "correct": false },
+      { "text": "Hold down Ctrl while clicking the message", "correct": false },
       { "text": "Right-click and choose Translate", "correct": false }
     ]
   },

@@ -1,21 +1,20 @@
 {
   "slug": "messages-contacts",
-  "unit": "Unit 5: Messages and FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
   "module": "Messages Basics",
   "order": 500,
   "title": "Contacts",
   "videoUrl": "",
-  "drDigitalIntro": "Before you send messages or make FaceTime calls, you need contacts — a list of people and their phone numbers or email addresses. The Contacts app lets you create and organize contact information. Each contact has a name and can have multiple phone numbers, email addresses, and addresses. You can organize contacts into groups (Family, Friends, Work). Once someone is a contact, messaging apps can find them easily.",
+  "drDigitalIntro": "Before you send messages, you need contacts — a list of people and their phone numbers or email addresses. The Contacts list lets you create and organize contact information. Each contact has a name and can have phone numbers, email addresses, and notes. Once someone is a contact, messaging apps can find them easily. Let's practice selecting contacts.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What is a Contact on your Mac?",
-    "options": [
-      { "text": "An email saved in your Drafts folder", "correct": false },
-      { "text": "A saved person with their phone number or email address", "correct": true },
-      { "text": "A file you downloaded", "correct": false },
-      { "text": "A browser bookmark", "correct": false }
+    "type": "guided-messaging",
+    "goal": "You browsed your contacts and opened a conversation",
+    "steps": [
+      { "say": "Click on Alex in the contacts list to open their conversation.", "action": "select-contact", "target": "alex" },
+      { "say": "Now click on Grandma to switch to her conversation.", "action": "select-contact", "target": "grandma" },
+      { "say": "Send Grandma a reply. Click the message box, type 'I miss you too' and click Send.", "action": "send-message", "value": "i miss you too" }
     ]
   },
-  "drDigitalSuccess": "Exactly! Contacts are like a digital address book — each person has their info stored so you can reach them easily.",
-  "drDigitalHint": "Think of Contacts as a digital version of the address book people used to keep by the phone."
+  "drDigitalSuccess": "You selected contacts and sent a message! That's how you navigate between conversations — just click any contact to switch.",
+  "drDigitalHint": "Click the contact's name in the left sidebar to open their conversation."
 }

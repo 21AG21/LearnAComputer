@@ -1,21 +1,21 @@
 {
   "slug": "daily-tasks",
-  "unit": "Unit 12: Everyday Life with Your Mac",
+  "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Daily Computing",
   "order": 1200,
   "title": "Common Daily Tasks",
   "videoUrl": "",
-  "drDigitalIntro": "Once you're comfortable with your Mac, you'll find yourself doing the same things every day: checking email, browsing the web, reading the news, watching videos, video calling family, writing notes, and managing files. The more you practice these everyday tasks, the faster and easier they become. Your Mac is a versatile tool — in this unit we'll bring all your skills together for real-life use.",
+  "drDigitalIntro": "Once you're comfortable with your computer, you'll find yourself doing the same things every day: checking email, browsing the web, reading the news, watching videos, video calling family, writing notes, and managing files. The more you practice these everyday tasks, the faster and easier they become. Your computer is a versatile tool — in this unit we'll bring all your skills together for real-life use.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "You want to video call your grandchild who has an iPhone. Which Apple app lets you do this for free?",
+    "question": "You want to video call your grandchild who has an phone. Which type of app lets you do this for free?",
     "options": [
-      { "text": "Safari", "correct": false },
-      { "text": "FaceTime", "correct": true },
-      { "text": "Finder", "correct": false },
+      { "text": "the browser", "correct": false },
+      { "text": "Video Calling", "correct": true },
+      { "text": "the file manager", "correct": false },
       { "text": "Notes", "correct": false }
     ]
   },
-  "drDigitalSuccess": "FaceTime is Apple's free video and audio calling app — works between Macs, iPhones, and iPads.",
-  "drDigitalHint": "Which app is specifically designed for video calls on Apple devices?"
+  "drDigitalSuccess": "Video calling apps let you make free video and audio calls over the internet.",
+  "drDigitalHint": "Which app is specifically designed for video calls on devices?"
 }

@@ -5,10 +5,10 @@
   "order": 950,
   "title": "Storage and Battery",
   "videoUrl": "",
-  "drDigitalIntro": "Check how much storage your Mac has and what's using space. Large files and apps take up storage. Battery shows how long until your Mac needs charging and offers Low Power Mode to extend battery life. If you're running low on storage, delete old files or apps you don't use. These settings help keep your Mac running smoothly.",
+  "drDigitalIntro": "Check how much storage your computer has and what's using space. Large files and apps take up storage. Battery shows how long until your computer needs charging and offers Low Power Mode to extend battery life. If you're running low on storage, delete old files or apps you don't use. These settings help keep your computer running smoothly.",
   "playgroundTask": {
     "type": "find-in-settings",
-    "instructions": "Your Mac battery is running low. Open Battery settings and turn on Low Power Mode.",
+    "instructions": "Your computer battery is running low. Open Battery settings and turn on Low Power Mode.",
     "targetPanel": "Battery",
     "toggleLabel": "Low Power Mode",
     "targetValue": true

@@ -1,11 +1,11 @@
 {
   "slug": "safari-windows",
-  "unit": "Unit 4: The Internet and Safari",
-  "module": "Using Safari",
+  "unit": "Unit 4: The Internet and Browsing",
+  "module": "Using the browser",
   "order": 450,
   "title": "Windows: Organize Your Browsing",
   "videoUrl": "",
-  "drDigitalIntro": "Windows are separate Safari experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Command+N. Windows are useful when you want to keep things completely organized.",
+  "drDigitalIntro": "Windows are separate the browser experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Ctrl+N. Windows are useful when you want to keep things completely organized.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Open a second, separate browser window",

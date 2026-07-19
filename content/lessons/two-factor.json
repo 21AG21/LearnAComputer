@@ -16,6 +16,6 @@
       { "text": "Reply to the text with your password", "correct": false }
     ]
   },
-  "drDigitalSuccess": "Correct! If you get a 2FA code you didn't request, someone tried to log in as you. Never share the code — your bank or Apple will never ask for it.",
+  "drDigitalSuccess": "Correct! If you get a 2FA code you didn't request, someone tried to log in as you. Never share the code — your bank will never ask for it.",
   "drDigitalHint": "A 2FA code that arrives when you're not logging in is a warning sign. What should you do with it?"
 }

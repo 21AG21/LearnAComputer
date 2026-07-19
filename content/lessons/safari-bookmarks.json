@@ -1,19 +1,19 @@
 {
   "slug": "safari-bookmarks",
-  "unit": "Unit 4: The Internet and Safari",
-  "module": "Using Safari",
+  "unit": "Unit 4: The Internet and Browsing",
+  "module": "Using the browser",
   "order": 470,
   "title": "Bookmarks: Favorite Sites",
   "videoUrl": "",
-  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click the star and choose Add Bookmark, or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather). Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
+  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click the star and choose Add Bookmark, or press Ctrl+D. the browser saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather). Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Bookmark a favorite website",
     "steps": [
-      { "say": "Let's save a favorite site. First go to apple.com — type it in the address bar and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "Let's save a favorite site. First go to shop.example — type it in the address bar and press Enter.", "action": "navigate", "url": "shop.example" },
       { "say": "Now click the ☆ star, then Add Bookmark. It'll be one click away anytime.", "action": "bookmark" }
     ]
   },
-  "drDigitalSuccess": "You bookmarked Apple. See it appear in the bookmarks bar — now you can return with a single click, no typing.",
+  "drDigitalSuccess": "You bookmarked a site. See it appear in the bookmarks bar — now you can return with a single click, no typing.",
   "drDigitalHint": "The ☆ star is at the right end of the address bar. Click it, then click Add Bookmark."
 }

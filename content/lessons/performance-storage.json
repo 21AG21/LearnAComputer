@@ -3,17 +3,17 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Performance",
   "order": 1160,
-  "title": "Mac Running Slowly",
+  "title": "Computer Running Slowly",
   "videoUrl": "",
-  "drDigitalIntro": "A slow Mac often has a simple cause. Too many apps open at once = less memory, slower performance. A full hard drive (less than 10% free) also slows things down. Check storage in Apple menu > About This Mac > Storage. Close apps you aren't using. Delete large files you don't need. Restart your Mac — this clears the memory. Old Macs also run newer software harder; check Activity Monitor to see what's using CPU.",
+  "drDigitalIntro": "A slow computer often has a simple cause. Too many apps open at once = less memory, slower performance. A full hard drive (less than 10% free) also slows things down. Check storage in Settings or System Information. Close apps you aren't using. Delete large files you don't need. Restart your computer — this clears the memory. Older computers also run newer software harder; check Activity Monitor to see what's using CPU.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "Your Mac has been on for two weeks without a restart and is running slowly. What is the most likely fix?",
+    "question": "Your computer has been on for two weeks without a restart and is running slowly. What is the most likely fix?",
     "options": [
-      { "text": "Buy more RAM — the Mac is permanently broken", "correct": false },
-      { "text": "Restart the Mac — it clears memory and fixes many slowdowns", "correct": true },
+      { "text": "Buy more RAM — the computer is permanently broken", "correct": false },
+      { "text": "Restart the computer — it clears memory and fixes many slowdowns", "correct": true },
       { "text": "Delete your entire Documents folder", "correct": false },
-      { "text": "Uninstall Safari", "correct": false }
+      { "text": "Uninstall the browser", "correct": false }
     ]
   },
   "drDigitalSuccess": "Restarting clears temporary files and frees memory — it's the single best fix for a gradual slowdown.",

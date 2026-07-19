@@ -1,21 +1,20 @@
 {
   "slug": "facetime-basics",
-  "unit": "Unit 5: Messages and FaceTime",
-  "module": "FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
+  "module": "Video Calling",
   "order": 550,
-  "title": "FaceTime: Video Calls",
+  "title": "Video Calls: Basics",
   "videoUrl": "",
-  "drDigitalIntro": "FaceTime is video calling on your Mac. Open FaceTime, select a contact, and click the video icon to start a call. Your camera turns on and the other person sees you. You see them on your screen. Press the red phone icon to end the call. FaceTime is how families stay connected across distances — you can see each other while talking, which is much more personal than a voice call.",
+  "drDigitalIntro": "Video calling lets you see and talk to someone face-to-face through your screen. Apps like Zoom, Google Meet, FaceTime, and WhatsApp all do video calls. You select a contact and tap the video call button. Your camera turns on and the other person sees you. You see them on your screen. Press the red phone icon to end the call. Video calls are how families stay connected across distances — you can see each other while talking!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What app do you use for video calls on a Mac?",
-    "options": [
-      { "text": "Messages", "correct": false },
-      { "text": "Safari", "correct": false },
-      { "text": "FaceTime", "correct": true },
-      { "text": "Mail", "correct": false }
+    "type": "guided-messaging",
+    "goal": "You started and ended a video call",
+    "steps": [
+      { "say": "Click on Grandma to open her conversation.", "action": "select-contact", "target": "grandma" },
+      { "say": "Start a video call with Grandma — click the green Video Call button.", "action": "start-call" },
+      { "say": "Great! You're connected. Now end the call by clicking the red phone button.", "action": "end-call" }
     ]
   },
-  "drDigitalSuccess": "FaceTime! It's Apple's built-in video calling app — free for calls between Apple devices.",
-  "drDigitalHint": "It's in your Applications folder. The name 'FaceTime' is a clue — seeing someone's face in real time."
+  "drDigitalSuccess": "You made a video call! The green button starts it, the red button ends it. That's all there is to it.",
+  "drDigitalHint": "Select Grandma first, then click the green Video Call button at the top of the chat."
 }

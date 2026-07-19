@@ -1,11 +1,11 @@
 {
   "slug": "unit-4-assessment",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Browsing",
   "module": "Unit 4 Assessment",
   "order": 496,
   "title": "Research a Recipe Safely",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put everything together! Your task is to research a recipe for a meal you want to cook. Use Safari to search for recipes, check multiple websites, and avoid clicking on suspicious ads or fake download buttons. Identify which sites are secure, bookmark your favorite recipe, and add it to Reading List for later. This is how real people use the internet — searching for information while staying safe.",
+  "drDigitalIntro": "Time to put everything together! Your task is to research a recipe for a meal you want to cook. Use the browser to search for recipes, check multiple websites, and avoid clicking on suspicious ads or fake download buttons. Identify which sites are secure, bookmark your favorite recipe, and add it to Reading List for later. This is how real people use the internet — searching for information while staying safe.",
   "playgroundTask": { "type": "none" },
   "drDigitalSuccess": "You navigated the internet safely and found what you needed!",
   "drDigitalHint": "Look for the lock icon, avoid weird popups, and bookmark what you like."

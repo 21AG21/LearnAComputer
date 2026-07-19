@@ -5,13 +5,13 @@
   "order": 1130,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Software problems include apps crashing, not opening, or behaving strangely. Common fixes: force quit and reopen the app (Cmd+Option+Esc), restart your Mac, update the app (buggy old versions are a common cause), or delete and reinstall the app. If macOS itself seems broken, try a Safe Mode restart — hold Shift at startup. Safe Mode loads only essential software, which helps isolate the problem.",
+  "drDigitalIntro": "Software problems include apps crashing, not opening, or behaving strangely. Common fixes: force quit and reopen the app (Ctrl+Option+Esc), restart your computer, update the app (buggy old versions are a common cause), or delete and reinstall the app. If the operating system itself seems broken, try a Safe Mode restart — hold Shift at startup. Safe Mode loads only essential software, which helps isolate the problem.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "Safari keeps crashing every time you try to open it. You've tried restarting. What should you try next?",
+    "question": "the browser keeps crashing every time you try to open it. You've tried restarting. What should you try next?",
     "options": [
-      { "text": "Call Apple Support immediately — it must be a serious hardware failure", "correct": false },
-      { "text": "Check for a Safari or macOS update — buggy software versions are a common cause", "correct": true },
+      { "text": "Call tech support immediately — it must be a serious hardware failure", "correct": false },
+      { "text": "Check for a the browser or the operating system update — buggy software versions are a common cause", "correct": true },
       { "text": "Delete all your photos to free up space", "correct": false },
       { "text": "Turn off WiFi", "correct": false }
     ]

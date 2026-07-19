@@ -5,15 +5,15 @@
   "order": 1120,
   "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems involve the physical parts of your Mac: the screen, keyboard, trackpad, battery, or speakers. Symptoms include: screen flickering, keys not responding, trackpad not clicking, battery draining very fast, or speakers making no sound. First try a restart — sometimes hardware glitches clear. Check System Settings to confirm the hardware is recognized. Serious hardware problems usually need an Apple Store repair.",
+  "drDigitalIntro": "Hardware problems involve the physical parts of your computer: the screen, keyboard, trackpad, battery, or speakers. Symptoms include: screen flickering, keys not responding, trackpad not clicking, battery draining very fast, or speakers making no sound. First try a restart — sometimes hardware glitches clear. Check System Settings to confirm the hardware is recognized. Serious hardware problems usually need an professional repair.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "Your Mac's keyboard randomly types the wrong letters. What is the most likely cause?",
+    "question": "Your computer's keyboard randomly types the wrong letters. What is the most likely cause?",
     "options": [
       { "text": "Your WiFi password is wrong", "correct": false },
       { "text": "A hardware or driver issue with the keyboard itself", "correct": true },
       { "text": "You have too many browser tabs open", "correct": false },
-      { "text": "Your iCloud storage is full", "correct": false }
+      { "text": "Your the cloud storage is full", "correct": false }
     ]
   },
   "drDigitalSuccess": "Keyboard issues are hardware or driver problems — not related to WiFi or storage. A restart is the first thing to try.",

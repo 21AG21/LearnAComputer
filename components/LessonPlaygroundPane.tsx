@@ -21,6 +21,7 @@ import FindInSettingsTask from "@/components/Playground/FindInSettingsTask";
 import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
 import GuidedFilesTask from "@/components/Playground/GuidedFilesTask";
 import GuidedBrowserTask from "@/components/Playground/GuidedBrowserTask";
+import GuidedMessagingTask from "@/components/Playground/GuidedMessagingTask";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -135,6 +136,9 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-browser" && (
             <GuidedBrowserTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-messaging" && (
+            <GuidedMessagingTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
         </div>
       )}

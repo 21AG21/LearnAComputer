@@ -1,19 +1,19 @@
 {
   "slug": "browser-vs-search",
-  "unit": "Unit 4: The Internet and Safari",
+  "unit": "Unit 4: The Internet and Browsing",
   "module": "Internet Basics",
   "order": 410,
   "title": "Browser vs Search Engine",
   "videoUrl": "",
-  "drDigitalIntro": "Safari is your browser — it's the app that shows you websites. Google is a search engine — it helps you find websites. Think of Safari like a car, and Google like a map. You drive the car (Safari) and use the map (Google) to figure out where to go. You can use different search engines inside Safari: Google, Bing, DuckDuckGo. But they all work inside Safari.",
+  "drDigitalIntro": "the browser is your browser — it's the app that shows you websites. Google is a search engine — it helps you find websites. Think of the browser like a car, and Google like a map. You drive the car (the browser) and use the map (Google) to figure out where to go. You can use different search engines inside the browser: Google, Bing, DuckDuckGo. But they all work inside the browser.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Use a search engine inside your browser",
     "steps": [
-      { "say": "This whole window is Safari — your browser. Google is a search engine you visit inside it. Type google.com in the address bar and press Enter.", "action": "navigate", "url": "google.com" },
+      { "say": "This whole window is the browser — your browser. Google is a search engine you visit inside it. Type google.com in the address bar and press Enter.", "action": "navigate", "url": "google.com" },
       { "say": "Now use the search engine to find something. Type apple pie recipe in the search box and press Enter.", "action": "search", "query": "apple pie recipe", "reveal": "Recipe Box" }
     ]
   },
-  "drDigitalSuccess": "You used Google (a search engine) inside Safari (a browser). The browser shows websites; the search engine helps you find them.",
+  "drDigitalSuccess": "You used Google (a search engine) inside the browser (a browser). The browser shows websites; the search engine helps you find them.",
   "drDigitalHint": "First go to google.com in the address bar. Then type your search into the search box on the Google page."
 }

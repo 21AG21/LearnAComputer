@@ -16,6 +16,6 @@
       { "text": "Print the file first, then scan it", "correct": false }
     ]
   },
-  "drDigitalSuccess": "The paperclip icon is the universal symbol for attachments — click it to add any file from your Mac.",
+  "drDigitalSuccess": "The paperclip icon is the universal symbol for attachments — click it to add any file from your computer.",
   "drDigitalHint": "Look for a paperclip icon in the email composer toolbar."
 }

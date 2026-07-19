@@ -1,12 +1,12 @@
 {
   "slug": "unit-5-assessment",
-  "unit": "Unit 5: Messages and FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
   "module": "Unit 5 Assessment",
   "order": 570,
   "title": "Family Group Chat",
   "videoUrl": "",
-  "drDigitalIntro": "You're organizing a family vacation and need to coordinate with relatives. Your task is to create a group chat, reply to messages, send a photo, add reactions to messages, and answer a FaceTime call from a family member. During the FaceTime call, you'll mute your microphone and turn off your camera as requested. This is how families really use Messages and FaceTime!",
+  "drDigitalIntro": "You're organizing a family vacation and need to coordinate with relatives. Your task is to reply to messages, send a photo, add reactions, and handle a video call from a family member. During the call, you'll mute your microphone and turn off your camera. This is how families really use messaging and video calls!",
   "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You coordinated a family event using Messages and FaceTime!",
-  "drDigitalHint": "Start with a group message, then handle the FaceTime call."
+  "drDigitalSuccess": "You coordinated a family event using messages and video calls!",
+  "drDigitalHint": "Start with a group message, then handle the video call."
 }

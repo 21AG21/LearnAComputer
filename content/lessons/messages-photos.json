@@ -1,21 +1,20 @@
 {
   "slug": "messages-photos",
-  "unit": "Unit 5: Messages and FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
   "module": "Messages Basics",
   "order": 530,
-  "title": "Sending Photos",
+  "title": "Sending Photos and Reactions",
   "videoUrl": "",
-  "drDigitalIntro": "You can send photos through Messages. Click the + button and choose from your Photos app or take a new photo. Add a caption if you like, then send. The other person receives the photo instantly. Photos through Messages can be edited with effects before sending. This is how people share memories with family and friends instantly.",
+  "drDigitalIntro": "You can send photos through Messages by clicking the + button and choosing a photo. You can also react to messages — tap and hold (or click) a message to add an emoji reaction like a thumbs up or heart. Reactions are a quick way to acknowledge a message without typing. Let's practice both!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "How do you send a photo in Messages on your Mac?",
-    "options": [
-      { "text": "Attach it to an email first", "correct": false },
-      { "text": "Click the + button and choose from your Photos", "correct": true },
-      { "text": "Take a screenshot and hope they see it", "correct": false },
-      { "text": "Upload it to Safari first, then share the link", "correct": false }
+    "type": "guided-messaging",
+    "goal": "You sent a photo and reacted to a message",
+    "steps": [
+      { "say": "Click on Jordan to open their conversation.", "action": "select-contact", "target": "jordan" },
+      { "say": "React to Jordan's message — click on it to see reaction options.", "action": "add-reaction" },
+      { "say": "Now send Jordan a photo. Click the + button next to the message box.", "action": "attach-photo" }
     ]
   },
-  "drDigitalSuccess": "The + button is your attachment button in Messages — use it to add photos, files, or anything else.",
-  "drDigitalHint": "Look for the + (plus) icon next to the message box. It opens an attachment picker."
+  "drDigitalSuccess": "You reacted with an emoji and sent a photo! The + button is your attachment button — use it to add photos, files, or anything else.",
+  "drDigitalHint": "Click on the message bubble to react. Then use the + button to attach a photo."
 }

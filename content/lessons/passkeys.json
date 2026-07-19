@@ -5,7 +5,7 @@
   "order": 1030,
   "title": "Passkeys",
   "videoUrl": "",
-  "drDigitalIntro": "Passkeys are a new, more secure way to sign in without typing a password at all. Instead of a password, your Mac or iPhone uses Face ID, Touch ID, or your PIN to prove who you are. Passkeys are stored on your device — they can't be stolen in a data breach. More and more websites (Google, Apple, Amazon) are switching to passkeys as a simpler, safer alternative to passwords.",
+  "drDigitalIntro": "Passkeys are a new, more secure way to sign in without typing a password at all. Instead of a password, your computer or phone uses Face ID, Touch ID, or your PIN to prove who you are. Passkeys are stored on your device — they can't be stolen in a data breach. More and more websites (Google, Amazon, Microsoft) are switching to passkeys as a simpler, safer alternative to passwords.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "What makes passkeys safer than regular passwords?",

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 /**
- * A hands-on, guided web browser (Safari-like). The learner performs REAL
+ * A hands-on, guided web browser (browser). The learner performs REAL
  * browsing actions — typing URLs, opening tabs and windows, bookmarking,
  * saving to a reading list, using history, downloading, checking the lock
  * icon, dismissing cookie banners and scam popups, reloading, and zooming —
@@ -41,7 +41,7 @@ interface GuidedBrowserTaskProps {
   onResult: (success: boolean) => void;
 }
 
-type PageId = "newtab" | "apple" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames";
+type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames";
 
 interface Page {
   title: string;
@@ -57,7 +57,7 @@ interface Page {
 
 const PAGES: Record<PageId, Page> = {
   newtab: { title: "New Tab", url: "", secure: true, icon: "➕", kind: "newtab" },
-  apple: { title: "Apple", url: "apple.com", secure: true, icon: "🍎", kind: "site", body: "iPhone. Mac. iPad. Watch. The best products, all in one place." },
+  shop: { title: "Shop", url: "shop.example", secure: true, icon: "🛒", kind: "site", body: "Laptops. Tablets. Phones. Headphones. The best deals, all in one place." },
   google: { title: "Google", url: "google.com", secure: true, icon: "🔍", kind: "search" },
   wikipedia: { title: "Wikipedia", url: "wikipedia.org", secure: true, icon: "📚", kind: "site", body: "Wikipedia, the free encyclopedia that anyone can edit. 6 million+ articles in English." },
   weather: { title: "Weather", url: "weather.com", secure: true, icon: "☀️", kind: "site", body: "Today: Sunny, 72°F. Tonight: Clear, 58°F. Tomorrow: Partly cloudy.", cookie: true },
@@ -70,7 +70,7 @@ const URL_TO_PAGE: Record<string, PageId> = Object.fromEntries(
   (Object.keys(PAGES) as PageId[]).filter((id) => PAGES[id].url).map((id) => [PAGES[id].url, id])
 ) as Record<string, PageId>;
 
-const FAVORITES: PageId[] = ["apple", "google", "wikipedia", "weather", "news", "recipes"];
+const FAVORITES: PageId[] = ["shop", "google", "wikipedia", "weather", "news", "recipes"];
 
 function normUrl(raw: string): string {
   return raw.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");

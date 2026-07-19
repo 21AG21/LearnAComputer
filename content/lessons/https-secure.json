@@ -1,6 +1,6 @@
 {
   "slug": "https-secure",
-  "unit": "Unit 4: The Internet and Safari",
+  "unit": "Unit 4: The Internet and Browsing",
   "module": "Online Safety",
   "order": 491,
   "title": "HTTPS and Secure Websites",
@@ -10,7 +10,7 @@
     "type": "guided-browser",
     "goal": "Check that a site is secure before trusting it",
     "steps": [
-      { "say": "Before typing anything private, check the site is secure. Go to apple.com — type it and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "Before typing anything private, check the site is secure. Go to shop.example — type it and press Enter.", "action": "navigate", "url": "shop.example" },
       { "say": "See the 🔒 lock next to the address? Click it to confirm your connection is secure.", "action": "lock-click" }
     ]
   },

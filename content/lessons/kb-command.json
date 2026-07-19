@@ -3,10 +3,10 @@
   "unit": "Unit 2: Keyboard and Typing",
   "module": "Keyboard Tour",
   "order": 208,
-  "title": "Command",
+  "title": "Shortcut Keys (Ctrl / Command)",
   "videoUrl": "",
-  "drDigitalIntro": "Command is the main action key on a Mac, used in shortcuts to tell your computer what to do. Hold it and press S to save, or hold it and press P to print. On Windows computers, this key is the Windows key instead.",
+  "drDigitalIntro": "Every computer has a special key for keyboard shortcuts. On most computers (Windows, Chromebook, Linux), it's Ctrl. On Mac, it's Command. Hold this key and press another letter to do something quickly — like Ctrl+S to save, Ctrl+C to copy, or Ctrl+V to paste. These shortcuts work in almost every app!",
   "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "That's Command — the key that powers almost every handy shortcut!",
-  "drDigitalHint": "Look for Command (⌘) next to the space bar, then click Continue."
+  "drDigitalSuccess": "That's your shortcut key — Ctrl (or Command on Mac). It powers almost every handy shortcut!",
+  "drDigitalHint": "Look for Ctrl in the bottom-left corner of your keyboard (or Command next to the space bar on Mac), then click Continue."
 }

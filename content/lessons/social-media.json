@@ -1,6 +1,6 @@
 {
   "slug": "social-media",
-  "unit": "Unit 12: Everyday Life with Your Mac",
+  "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Social and Entertainment",
   "order": 1210,
   "title": "Social Media and Videos",
@@ -12,7 +12,7 @@
     "options": [
       { "text": "google.com", "correct": false },
       { "text": "youtube.com", "correct": true },
-      { "text": "apple.com", "correct": false },
+      { "text": "google.com", "correct": false },
       { "text": "mail.com", "correct": false }
     ]
   },

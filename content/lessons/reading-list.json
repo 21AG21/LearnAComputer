@@ -1,11 +1,11 @@
 {
   "slug": "reading-list",
-  "unit": "Unit 4: The Internet and Safari",
-  "module": "Using Safari",
+  "unit": "Unit 4: The Internet and Browsing",
+  "module": "Using the browser",
   "order": 480,
   "title": "Reading List: Articles to Explore",
   "videoUrl": "",
-  "drDigitalIntro": "Reading List is different from bookmarks — it's for articles you want to read later. See an article that looks interesting but don't have time now? Add it to your Reading List. Later, open the Reading List and browse what you saved. Articles can be read offline — Safari saves a copy. It's perfect for recipes, news articles, or blog posts you'll get to later.",
+  "drDigitalIntro": "Reading List is different from bookmarks — it's for articles you want to read later. See an article that looks interesting but don't have time now? Add it to your Reading List. Later, open the Reading List and browse what you saved. Articles can be read offline — the browser saves a copy. It's perfect for recipes, news articles, or blog posts you'll get to later.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Save an article to read later",

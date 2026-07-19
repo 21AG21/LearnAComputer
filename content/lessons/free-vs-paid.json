@@ -1,6 +1,6 @@
 {
   "slug": "free-vs-paid",
-  "unit": "Unit 8: Apps and the App Store",
+  "unit": "Unit 8: Apps",
   "module": "Managing Apps",
   "order": 860,
   "title": "Free vs Paid Apps",
@@ -13,7 +13,7 @@
       { "text": "Costs exactly $0.99", "correct": false },
       { "text": "Has a free tier and a paid upgrade", "correct": true },
       { "text": "Is only available to students", "correct": false },
-      { "text": "Is made by Apple and always free", "correct": false }
+      { "text": "Is always free no matter what", "correct": false }
     ]
   },
   "drDigitalSuccess": "Freemium = free to start, pay to unlock more. Many popular apps use this model.",

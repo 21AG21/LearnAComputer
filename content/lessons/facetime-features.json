@@ -1,21 +1,22 @@
 {
   "slug": "facetime-features",
-  "unit": "Unit 5: Messages and FaceTime",
-  "module": "FaceTime",
+  "unit": "Unit 5: Messages and Video Calls",
+  "module": "Video Calling",
   "order": 560,
-  "title": "FaceTime Features",
+  "title": "Video Call Controls",
   "videoUrl": "",
-  "drDigitalIntro": "During a FaceTime call, you can mute your microphone (so they can't hear you), turn off your camera (they see a black screen instead of video), or switch to audio-only. If you want to share what's on your screen, FaceTime has screen-sharing. Portrait mode makes your background blurry and puts you in focus. Noise cancellation reduces background noise. You can also group FaceTime with up to 32 people.",
+  "drDigitalIntro": "During a video call, you have controls at the bottom of the screen. You can mute your microphone (so they can't hear you) or turn off your camera (they see a blank screen instead of video). The microphone button shows a mic icon — tap it to mute. The camera button shows a camera icon — tap it to hide your video. These are essential when there's background noise or you need a moment of privacy.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "During a FaceTime call, how do you mute your microphone?",
-    "options": [
-      { "text": "Say 'mute me please' out loud", "correct": false },
-      { "text": "Click the microphone icon in the call controls", "correct": true },
-      { "text": "Close the FaceTime app", "correct": false },
-      { "text": "Turn off your Wi-Fi", "correct": false }
+    "type": "guided-messaging",
+    "goal": "You used all the video call controls",
+    "steps": [
+      { "say": "Click on Sam to open their conversation.", "action": "select-contact", "target": "sam" },
+      { "say": "Start a video call with Sam.", "action": "start-call" },
+      { "say": "Someone's being noisy! Click the microphone button to mute yourself.", "action": "mute" },
+      { "say": "Now turn off your camera — click the camera button.", "action": "camera-off" },
+      { "say": "All done — end the call with the red button.", "action": "end-call" }
     ]
   },
-  "drDigitalSuccess": "The microphone icon in the call controls toggles mute on and off. The icon changes to show when you're muted.",
-  "drDigitalHint": "Look at the row of icons at the bottom of the FaceTime screen during a call."
+  "drDigitalSuccess": "You muted, turned off the camera, and ended the call! Those three controls are all you need to manage any video call.",
+  "drDigitalHint": "Look at the row of circle buttons at the bottom of the call screen."
 }

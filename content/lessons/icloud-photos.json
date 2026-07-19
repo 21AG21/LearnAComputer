@@ -3,19 +3,19 @@
   "unit": "Unit 7: Photos",
   "module": "Cloud Storage",
   "order": 760,
-  "title": "iCloud Photos",
+  "title": "the cloud Photos",
   "videoUrl": "",
-  "drDigitalIntro": "iCloud Photos syncs your photos across all your Apple devices — Mac, iPhone, iPad. When you take a photo on your iPhone, it appears in Photos on your Mac automatically. You get 5GB free; if you need more, subscribe to iCloud+. iCloud also backs up your photos so if you lose your Mac, your photos are safe in the cloud.",
+  "drDigitalIntro": "the cloud Photos syncs your photos across all your devices — computer, phone, tablet. When you take a photo on your phone, it appears in Photos on your computer automatically. You get 5GB free; if you need more, subscribe to the cloud+. the cloud also backs up your photos so if you lose your computer, your photos are safe in the cloud.",
   "playgroundTask": {
     "type": "multiple-choice",
-    "question": "With iCloud Photos turned on, what happens when you take a photo on your iPhone?",
+    "question": "With the cloud Photos turned on, what happens when you take a photo on your phone?",
     "options": [
-      { "text": "It saves only on your iPhone", "correct": false },
-      { "text": "It automatically appears on all your Apple devices", "correct": true },
-      { "text": "You have to manually transfer it to your Mac", "correct": false },
+      { "text": "It saves only on your phone", "correct": false },
+      { "text": "It automatically appears on all your devices", "correct": true },
+      { "text": "You have to manually transfer it to your computer", "correct": false },
       { "text": "It gets emailed to you", "correct": false }
     ]
   },
-  "drDigitalSuccess": "iCloud Photos is seamless sync — snap a photo on your phone, it's on your Mac in seconds.",
-  "drDigitalHint": "iCloud connects all your Apple devices. With Photos enabled, your photo library is one shared library across all of them."
+  "drDigitalSuccess": "the cloud Photos is seamless sync — snap a photo on your phone, it's on your computer in seconds.",
+  "drDigitalHint": "the cloud connects all your devices. With Photos enabled, your photo library is one shared library across all of them."
 }

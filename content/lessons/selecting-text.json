@@ -5,7 +5,7 @@
   "order": 230,
   "title": "Selecting text",
   "videoUrl": "",
-  "drDigitalIntro": "Selecting text tells the computer which words you want to work with. There are lots of ways: click and drag across words, double-click to select one word, triple-click to select a whole line or paragraph, hold Shift and press the arrow keys to stretch your selection, or press Command+A to select everything at once.",
+  "drDigitalIntro": "Selecting text tells the computer which words you want to work with. There are lots of ways: click and drag across words, double-click to select one word, triple-click to select a whole line or paragraph, hold Shift and press the arrow keys to stretch your selection, or press Ctrl+A to select everything at once.",
   "playgroundTask": {
     "type": "edit-text",
     "instructions": "Two sentences sneaked in that don't belong. Select each one and press Delete to remove it — try double-clicking a word, then holding Shift and pressing the right arrow key to stretch your selection across the whole sentence.",

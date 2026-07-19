@@ -13,7 +13,7 @@
       { "text": "Edit and retouch portrait photos automatically", "correct": false },
       { "text": "Find all photos that include a specific person", "correct": true },
       { "text": "Print photos at the right size", "correct": false },
-      { "text": "Back up photos to iCloud", "correct": false }
+      { "text": "Back up photos to the cloud", "correct": false }
     ]
   },
   "drDigitalSuccess": "Face recognition lets you search by person — name someone once and Photos can show you all their photos instantly.",

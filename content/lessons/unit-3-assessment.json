@@ -1,12 +1,12 @@
 {
   "slug": "unit-3-assessment",
-  "unit": "Unit 3: Files and Finder",
+  "unit": "Unit 3: Files and Folders",
   "module": "Unit 3 Assessment",
   "order": 390,
-  "title": "Professor Pixel's Messy Laptop",
+  "title": "Organize a Real Folder",
   "videoUrl": "",
-  "drDigitalIntro": "Professor Pixel's laptop is a disaster — files are scattered everywhere, duplicates exist, and nothing is organized. Your job is to help them clean up by creating folders, renaming files with clear names, organizing documents into those folders, locating a specific missing file they need, and deleting duplicate copies. This is what file management looks like in real life!",
+  "drDigitalIntro": "Time to practice on your real computer! Download the practice folder from the link below — it contains a messy mix of files (photos, documents, and junk). Your job is to sort them into folders that make sense to you. Here are some ideas: create a 'Photos' folder for images, a 'Documents' folder for text files, and delete anything that looks like junk. There's no single right answer — organize it however makes sense to you!\n\nDownload link: (Your instructor will provide a .zip file with practice files)\n\nWhen you're done, click Continue. We won't check your work — this is real practice for you to keep!",
   "playgroundTask": { "type": "none" },
-  "drDigitalSuccess": "You've organized Professor Pixel's entire file system! You're ready to manage your own files.",
-  "drDigitalHint": "Start by creating folders for common categories: Photos, Documents, Invoices, etc. Then move files into them."
+  "drDigitalSuccess": "Great job organizing those files! You now have real experience managing folders on your own computer. The more you practice, the easier it gets.",
+  "drDigitalHint": "Download the .zip file, unzip it, then create folders and drag files into them. There's no wrong answer — just organize it in a way that makes sense to you."
 }

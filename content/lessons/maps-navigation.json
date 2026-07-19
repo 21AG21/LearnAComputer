@@ -1,18 +1,18 @@
 {
   "slug": "maps-navigation",
-  "unit": "Unit 12: Everyday Life with Your Mac",
+  "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Finding Your Way",
   "order": 1230,
   "title": "Maps and Navigation",
   "videoUrl": "",
-  "drDigitalIntro": "Apple Maps and Google Maps help you find directions, explore places, and plan trips. Search for an address or a business name to get turn-by-turn directions. Maps works on your iPhone for navigation while driving. On your Mac, you can plan a route and send it to your iPhone with one tap. You can also search for restaurants, gas stations, or pharmacies near you.",
+  "drDigitalIntro": "Maps and Google Maps help you find directions, explore places, and plan trips. Search for an address or a business name to get turn-by-turn directions. Maps works on your phone for navigation while driving. On your computer, you can plan a route and send it to your phone with one tap. You can also search for restaurants, gas stations, or pharmacies near you.",
   "playgroundTask": {
     "type": "url-navigator",
-    "instructions": "Practice navigating to Apple Maps online. Type the address in the browser bar.",
-    "prompt": "Type: maps.apple.com",
-    "targetUrl": "maps.apple.com",
-    "successTitle": "Apple Maps"
+    "instructions": "Practice navigating to Maps online. Type the address in the browser bar.",
+    "prompt": "Type: maps.google.com",
+    "targetUrl": "maps.google.com",
+    "successTitle": "Maps"
   },
-  "drDigitalSuccess": "You navigated to maps.apple.com — Apple Maps is available in your browser too, not just on your phone!",
-  "drDigitalHint": "Type maps.apple.com in the address bar and press Enter or Go."
+  "drDigitalSuccess": "You navigated to maps.google.com — Maps is available in your browser too, not just on your phone!",
+  "drDigitalHint": "Type maps.google.com in the address bar and press Enter or Go."
 }
