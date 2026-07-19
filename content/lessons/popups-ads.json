@@ -1,33 +1,19 @@
 {
   "slug": "popups-ads",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Online Safety",
   "order": 493,
   "title": "Popups and Ads",
   "videoUrl": "",
-  "drDigitalIntro": "Popups are windows that suddenly appear on websites — some are legitimate, some are scams. Safari blocks most popups automatically. Ads are how many websites make money — you'll see banner ads on news sites. Some ads are scams pretending to be download buttons or security warnings. Don't click on ads that look suspicious. If something says 'Click here to download!' but you're not on a download page, it's probably a fake ad.",
+  "drDigitalIntro": "Popups are windows that suddenly appear on websites — some are scams. Ads are how many sites make money, but some pretend to be download buttons or security warnings. A popup that says 'VIRUS DETECTED!' or 'Your computer is infected!' is ALWAYS fake. Never click it — just close it with its X. Real virus warnings never appear inside a web page.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "Which popup is a scam?",
-    "items": [
-      {
-        "label": "Newsletter signup",
-        "preview": "Want weekly recipe ideas? Enter your email to subscribe. You can unsubscribe anytime.",
-        "isFake": false
-      },
-      {
-        "label": "⚠️ URGENT SECURITY ALERT",
-        "preview": "YOUR MAC HAS 5 VIRUSES! CLICK NOW TO CLEAN IMMEDIATELY OR YOUR FILES WILL BE DELETED!",
-        "isFake": true
-      },
-      {
-        "label": "Cookie notice",
-        "preview": "This website uses cookies to improve your experience. Accept or Decline.",
-        "isFake": false
-      }
-    ],
-    "fakeExplanation": "Fake virus warnings in the browser are one of the most common scams. Real security warnings NEVER come from a website popup — they come from your Mac's own software."
+    "type": "guided-browser",
+    "goal": "Close a scam popup without clicking it",
+    "steps": [
+      { "say": "Go to freegames.example — type it and press Enter. Careful: sketchy sites throw popups at you.", "action": "navigate", "url": "freegames.example" },
+      { "say": "A scary popup claims your computer has a virus. It's FAKE — never click inside it. Click the ✕ in the corner to close it.", "action": "close-popup" }
+    ]
   },
-  "drDigitalSuccess": "You caught the scam! Browser popups that claim you have viruses are always fake. Never click them.",
-  "drDigitalHint": "All-caps urgency, exclamation marks, and 'your computer is infected' messages in a browser are 100% scams."
+  "drDigitalSuccess": "You closed the fake popup without touching it. A browser popup claiming you have a virus is always a scam — close it with the ✕ every time.",
+  "drDigitalHint": "Don't click the red CLEAN NOW button — that's the trap. Click the small ✕ in the top corner of the popup."
 }

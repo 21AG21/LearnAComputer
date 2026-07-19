@@ -1,24 +1,19 @@
 {
   "slug": "domain-names",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Internet Basics",
   "order": 430,
   "title": "Domain Names",
   "videoUrl": "",
   "drDigitalIntro": "A domain name is the core of a website's address. In google.com, 'google' is the domain name and '.com' is the extension. .com means commercial, .org means organization, .edu means education. Some sites use country codes: .uk for United Kingdom, .ca for Canada. Domain names are unique — only one website can own google.com.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Sort these websites by their domain extension.",
-    "categories": [".com", ".org", ".edu"],
-    "items": [
-      { "label": "apple.com", "category": ".com" },
-      { "label": "wikipedia.org", "category": ".org" },
-      { "label": "harvard.edu", "category": ".edu" },
-      { "label": "amazon.com", "category": ".com" },
-      { "label": "redcross.org", "category": ".org" },
-      { "label": "mit.edu", "category": ".edu" }
+    "type": "guided-browser",
+    "goal": "Notice the different endings on web addresses",
+    "steps": [
+      { "say": "apple.com ends in .com — that means a company. Type apple.com and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "wikipedia.org ends in .org — an organization, not a business. Type wikipedia.org and press Enter to see the different ending.", "action": "navigate", "url": "wikipedia.org" }
     ]
   },
-  "drDigitalSuccess": "Perfect! .com = commercial business, .org = non-profit organization, .edu = educational institution.",
-  "drDigitalHint": "Look at what comes after the dot at the end of the address."
+  "drDigitalSuccess": "You visited a .com (company) and a .org (organization). The ending after the dot tells you what kind of site it is.",
+  "drDigitalHint": "Type each address in the bar and press Enter. Watch the ending: .com vs .org."
 }

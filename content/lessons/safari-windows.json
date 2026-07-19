@@ -1,21 +1,18 @@
 {
   "slug": "safari-windows",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Using Safari",
   "order": 450,
   "title": "Windows: Organize Your Browsing",
   "videoUrl": "",
   "drDigitalIntro": "Windows are separate Safari experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Command+N. Windows are useful when you want to keep things completely organized.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What is the difference between tabs and windows in Safari?",
-    "options": [
-      { "text": "Nothing, they're the same thing", "correct": false },
-      { "text": "Tabs are within one window; windows are entirely separate", "correct": true },
-      { "text": "Windows are faster than tabs", "correct": false },
-      { "text": "You can only have one tab per window", "correct": false }
+    "type": "guided-browser",
+    "goal": "Open a second, separate browser window",
+    "steps": [
+      { "say": "A window is a whole separate browser. Click New Window to open a second one.", "action": "new-window" }
     ]
   },
-  "drDigitalSuccess": "Exactly! Tabs share a window. Windows are independent — each can have their own tabs.",
-  "drDigitalHint": "Think of a window as an entire browser session, and tabs as pages within that session."
+  "drDigitalSuccess": "You opened a second window. Windows are fully separate — one for work, one for shopping — each with its own tabs.",
+  "drDigitalHint": "Look for the 🪟 New Window button in the action bar and click it."
 }

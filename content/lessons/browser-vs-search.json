@@ -1,24 +1,19 @@
 {
   "slug": "browser-vs-search",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Internet Basics",
   "order": 410,
   "title": "Browser vs Search Engine",
   "videoUrl": "",
   "drDigitalIntro": "Safari is your browser — it's the app that shows you websites. Google is a search engine — it helps you find websites. Think of Safari like a car, and Google like a map. You drive the car (Safari) and use the map (Google) to figure out where to go. You can use different search engines inside Safari: Google, Bing, DuckDuckGo. But they all work inside Safari.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Sort each into Browser or Search Engine.",
-    "categories": ["Browser", "Search Engine"],
-    "items": [
-      { "label": "Safari", "category": "Browser" },
-      { "label": "Google", "category": "Search Engine" },
-      { "label": "Chrome", "category": "Browser" },
-      { "label": "Bing", "category": "Search Engine" },
-      { "label": "Firefox", "category": "Browser" },
-      { "label": "DuckDuckGo", "category": "Search Engine" }
+    "type": "guided-browser",
+    "goal": "Use a search engine inside your browser",
+    "steps": [
+      { "say": "This whole window is Safari — your browser. Google is a search engine you visit inside it. Type google.com in the address bar and press Enter.", "action": "navigate", "url": "google.com" },
+      { "say": "Now use the search engine to find something. Type apple pie recipe in the search box and press Enter.", "action": "search", "query": "apple pie recipe", "reveal": "Recipe Box" }
     ]
   },
-  "drDigitalSuccess": "Spot on! Browsers display websites; search engines help you find them. You use one inside the other.",
-  "drDigitalHint": "A browser is software on your Mac. A search engine is a website you visit inside that browser."
+  "drDigitalSuccess": "You used Google (a search engine) inside Safari (a browser). The browser shows websites; the search engine helps you find them.",
+  "drDigitalHint": "First go to google.com in the address bar. Then type your search into the search box on the Google page."
 }

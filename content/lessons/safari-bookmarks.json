@@ -1,21 +1,19 @@
 {
   "slug": "safari-bookmarks",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Using Safari",
   "order": 470,
   "title": "Bookmarks: Favorite Sites",
   "videoUrl": "",
-  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click Bookmarks > Bookmark This Page or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather, etc.). Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
+  "drDigitalIntro": "Bookmarks are your favorites — websites you visit often. When you find a site you like, click the star and choose Add Bookmark, or press Command+D. Safari saves the address so you can return with one click. You can organize bookmarks into folders (News, Shopping, Weather). Unlike history, which is automatic, bookmarks are websites you manually choose to remember.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What does bookmarking a website do?",
-    "options": [
-      { "text": "Downloads the website to your Mac", "correct": false },
-      { "text": "Saves it so you can find it quickly later", "correct": true },
-      { "text": "Sends a link to your friends automatically", "correct": false },
-      { "text": "Adds it to your Reading List", "correct": false }
+    "type": "guided-browser",
+    "goal": "Bookmark a favorite website",
+    "steps": [
+      { "say": "Let's save a favorite site. First go to apple.com — type it in the address bar and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "Now click the ☆ star, then Add Bookmark. It'll be one click away anytime.", "action": "bookmark" }
     ]
   },
-  "drDigitalSuccess": "Bookmarks save sites for quick return visits. Think of them as sticky notes on your favorite web addresses.",
-  "drDigitalHint": "The word 'bookmark' is a hint — just like marking a page in a physical book to find it again."
+  "drDigitalSuccess": "You bookmarked Apple. See it appear in the bookmarks bar — now you can return with a single click, no typing.",
+  "drDigitalHint": "The ☆ star is at the right end of the address bar. Click it, then click Add Bookmark."
 }

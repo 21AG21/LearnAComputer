@@ -1,21 +1,19 @@
 {
   "slug": "zooming-webpages",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Using Safari",
   "order": 495,
   "title": "Zooming Web Pages",
   "videoUrl": "",
-  "drDigitalIntro": "Some websites are hard to read if the text is tiny. You can zoom in with Command+Plus or zoom out with Command+Minus. You can also pinch on the trackpad to zoom. Press Command+0 to return to normal size. Each website remembers your zoom level — when you return, it's zoomed how you like it.",
+  "drDigitalIntro": "Some websites are hard to read if the text is tiny. You can zoom in with Command+Plus to make everything bigger, or Command+Minus to make it smaller. You can also pinch on the trackpad. Press Command+0 to return to normal size. Each website remembers your zoom level, so when you return it's sized how you like it.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Which keyboard shortcut makes text bigger on a webpage?",
-    "options": [
-      { "text": "Command + = (plus)", "correct": true },
-      { "text": "Command + - (minus)", "correct": false },
-      { "text": "Command + 0", "correct": false },
-      { "text": "Command + T", "correct": false }
+    "type": "guided-browser",
+    "goal": "Make a page's text bigger",
+    "steps": [
+      { "say": "Go to wikipedia.org — type it and press Enter. Imagine the text is too small to read comfortably.", "action": "navigate", "url": "wikipedia.org" },
+      { "say": "Click the + zoom button twice to enlarge everything (or press Command+Plus). Watch the page grow.", "action": "zoom-in" }
     ]
   },
-  "drDigitalSuccess": "Command + Plus zooms in. Command + Minus zooms out. Command + 0 resets to normal.",
-  "drDigitalHint": "+ means bigger, - means smaller. That's all there is to it."
+  "drDigitalSuccess": "You zoomed in and the whole page got bigger and easier to read. Command+Plus zooms in, Command+Minus zooms out, Command+0 resets.",
+  "drDigitalHint": "Find the zoom control on the right of the action bar and click the + twice to reach 150%."
 }

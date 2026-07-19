@@ -120,6 +120,7 @@ Each file defines one sub-lesson:
 | `find-in-settings` | FindInSettingsTask | Navigate a fake System Settings UI, toggle a setting |
 | `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
 | `guided-files` | GuidedFilesTask | Step-by-step guided Finder: open/create/rename/move/search/delete/restore/save real files |
+| `guided-browser` | GuidedBrowserTask | Step-by-step guided Safari: navigate/search/tabs/windows/bookmarks/reading-list/history/downloads/lock/cookies/popups/reload/zoom |
 
 **Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). Multiple-choice quizzes test recognition, not skill; do not add them to new lessons. `guided-files` is the reference pattern for a guided simulator.
 
@@ -146,6 +147,36 @@ A self-contained simulated Finder. The JSON provides a `goal` and an array of `s
 ```
 
 Actions: `open-file`, `open-folder`, `go-to` (sidebar), `new-folder` (`value`), `rename` (`target`+`value`), `move` (`target`+`into`, drag or click-file-then-folder), `search` (`value`+`reveal`), `delete` (`target`), `restore` (`target`), `save` (`value`+`into`). Available folders for `move`/`save`/`go-to`: Documents, Pictures, Downloads (and Home/Trash for `go-to`).
+
+#### `guided-browser` schema
+
+A self-contained simulated Safari. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. The set of fake websites (Apple, Google, Wikipedia, Weather, Daily News, Recipe Box, Free Games) lives hardcoded in `GuidedBrowserTask.tsx` — reference their `url` (e.g. `apple.com`, `weather.com`, `freegames.example`) in `navigate` steps.
+
+```json
+"playgroundTask": {
+  "type": "guided-browser",
+  "goal": "Short summary shown when finished",
+  "steps": [
+    { "say": "Type apple.com and press Enter.", "action": "navigate", "url": "apple.com" },
+    { "say": "Search for something.", "action": "search", "query": "apple pie", "reveal": "Recipe Box" },
+    { "say": "Open a new tab.", "action": "new-tab" },
+    { "say": "Close the Google tab.", "action": "close-tab", "title": "Google" },
+    { "say": "Open a new window.", "action": "new-window" },
+    { "say": "Bookmark this page.", "action": "bookmark" },
+    { "say": "Save to reading list.", "action": "reading-list-add" },
+    { "say": "Reopen Apple from History.", "action": "history-visit", "title": "Apple" },
+    { "say": "Download the file.", "action": "download" },
+    { "say": "Open the Downloads panel.", "action": "open-downloads" },
+    { "say": "Check the lock icon.", "action": "lock-click" },
+    { "say": "Decline the cookie banner.", "action": "cookie-decline" },
+    { "say": "Close the scam popup.", "action": "close-popup" },
+    { "say": "Reload the page.", "action": "reload" },
+    { "say": "Zoom in twice.", "action": "zoom-in" }
+  ]
+}
+```
+
+Pages with special behavior: `weather.com` shows a cookie banner, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button. Cookie/popup/download steps must be preceded by a `navigate` to the matching page.
 
 ### Progress
 

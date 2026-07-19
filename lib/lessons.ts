@@ -102,6 +102,33 @@ export type PlaygroundTask =
         into?: string;
         reveal?: string;
       }>;
+    }
+  | {
+      type: "guided-browser";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "navigate"
+          | "search"
+          | "new-tab"
+          | "close-tab"
+          | "new-window"
+          | "reload"
+          | "bookmark"
+          | "reading-list-add"
+          | "history-visit"
+          | "lock-click"
+          | "cookie-decline"
+          | "close-popup"
+          | "zoom-in"
+          | "download"
+          | "open-downloads";
+        url?: string;
+        title?: string;
+        query?: string;
+        reveal?: string;
+      }>;
     };
 
 export interface Lesson {

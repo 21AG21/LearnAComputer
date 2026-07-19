@@ -1,33 +1,19 @@
 {
   "slug": "https-secure",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Online Safety",
   "order": 491,
   "title": "HTTPS and Secure Websites",
   "videoUrl": "",
-  "drDigitalIntro": "When a website is secure, its URL starts with https:// (the 's' stands for secure). A lock icon appears in the address bar. This means your connection is encrypted — information you send (passwords, credit card numbers, personal data) is scrambled and safe. If a site is just http:// without the 's', it's not secure. Never enter passwords or credit card numbers on an unsecured site.",
+  "drDigitalIntro": "When a website is secure, its URL starts with https:// (the 's' stands for secure) and a lock icon appears in the address bar. This means your connection is encrypted — information you send (passwords, credit card numbers) is scrambled and safe. If a site shows 'Not Secure', never type passwords or card numbers into it. Always check for the lock before entering anything private.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "Which website is NOT safe to enter your password on?",
-    "items": [
-      {
-        "label": "https://amazon.com",
-        "preview": "🔒 amazon.com — Secure checkout. Trusted retailer since 1995.",
-        "isFake": false
-      },
-      {
-        "label": "http://amaz0n-deals.net",
-        "preview": "⚠️ No lock icon. amaz0n-deals.net — HUGE SALE click to buy now!!!",
-        "isFake": true
-      },
-      {
-        "label": "https://apple.com",
-        "preview": "🔒 apple.com — Official Apple Store. Shop with confidence.",
-        "isFake": false
-      }
-    ],
-    "fakeExplanation": "http:// (no 's') means no encryption, and the misspelled URL ('amaz0n' with a zero) is a classic phishing trick."
+    "type": "guided-browser",
+    "goal": "Check that a site is secure before trusting it",
+    "steps": [
+      { "say": "Before typing anything private, check the site is secure. Go to apple.com — type it and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "See the 🔒 lock next to the address? Click it to confirm your connection is secure.", "action": "lock-click" }
+    ]
   },
-  "drDigitalSuccess": "You spotted it! Always look for https:// and the 🔒 lock icon before entering sensitive information.",
-  "drDigitalHint": "Look for two things: does it say https (with an s)? Is the domain name spelled correctly?"
+  "drDigitalSuccess": "You checked the lock icon — it confirms the connection is encrypted and safe. Always look for 🔒 before typing passwords or card numbers.",
+  "drDigitalHint": "The 🔒 lock is on the left side of the address bar, just before the web address. Click it."
 }

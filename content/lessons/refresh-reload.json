@@ -1,21 +1,19 @@
 {
   "slug": "refresh-reload",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Using Safari",
   "order": 494,
   "title": "Refresh and Reload",
   "videoUrl": "",
-  "drDigitalIntro": "Sometimes a website loads partially or gets stuck — clicking the Refresh button (the circular arrow icon) reloads the page. Press Command+R for refresh. If that doesn't work, try a 'hard refresh' with Command+Shift+R — this clears cached data and gets the newest version. Most of the time, a simple refresh fixes loading problems.",
+  "drDigitalIntro": "Sometimes a website loads partially or gets stuck — clicking the Reload button (the circular arrow) loads the page again. You can also press Command+R. If a page looks broken or old, a reload usually fixes it by fetching a fresh copy. It's the first thing to try when a page acts up.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "A webpage is stuck loading. What keyboard shortcut refreshes it?",
-    "options": [
-      { "text": "Command + R", "correct": true },
-      { "text": "Command + F", "correct": false },
-      { "text": "Command + W", "correct": false },
-      { "text": "Command + L", "correct": false }
+    "type": "guided-browser",
+    "goal": "Reload a page that got stuck",
+    "steps": [
+      { "say": "Go to apple.com — type it and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "Imagine the page got stuck. Click the ⟳ Reload button (or press Command+R) to load it fresh.", "action": "reload" }
     ]
   },
-  "drDigitalSuccess": "Command + R — R for Reload! It's the first thing to try when a page acts up.",
-  "drDigitalHint": "R for Reload, or Refresh — same letter, same Command pattern."
+  "drDigitalSuccess": "You reloaded the page. When a site looks broken or won't finish loading, the ⟳ reload button is the first thing to try.",
+  "drDigitalHint": "The ⟳ circular-arrow Reload button is in the toolbar, just left of the address bar."
 }

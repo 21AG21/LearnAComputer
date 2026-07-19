@@ -1,21 +1,20 @@
 {
   "slug": "history-autofill",
-  "unit": "Unit 4: Internet and Safari",
+  "unit": "Unit 4: The Internet and Safari",
   "module": "Using Safari",
   "order": 490,
   "title": "History and Autofill",
   "videoUrl": "",
-  "drDigitalIntro": "Safari remembers everywhere you go — that's History. Click Bookmarks > Show History or press Command+Y to see all the sites you've visited. You can search for something you saw earlier. Autofill automatically fills in forms with information Safari knows: your name, address, phone number, or credit card (if you've saved it). When you type in a form, Safari suggests what to fill.",
+  "drDigitalIntro": "Safari remembers everywhere you go — that's History. Open your History to see all the sites you've visited, and click one to go back. This is handy when you saw something earlier but forgot to bookmark it. Autofill automatically fills in forms with information Safari knows: your name, address, or phone number, so you don't have to retype it every time.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What is Safari's History?",
-    "options": [
-      { "text": "Your saved passwords", "correct": false },
-      { "text": "A log of websites you've visited", "correct": true },
-      { "text": "Your Reading List", "correct": false },
-      { "text": "Your bookmarks", "correct": false }
+    "type": "guided-browser",
+    "goal": "Revisit an earlier site using History",
+    "steps": [
+      { "say": "First, visit a site so it's in your history. Type apple.com and press Enter.", "action": "navigate", "url": "apple.com" },
+      { "say": "Now visit another: type google.com and press Enter. Safari quietly remembers both.", "action": "navigate", "url": "google.com" },
+      { "say": "Want to go back to Apple without retyping? Click 🕐 History, then click Apple in the list.", "action": "history-visit", "title": "Apple" }
     ]
   },
-  "drDigitalSuccess": "History is a complete log of your past visits — useful for finding something you saw but forgot to bookmark.",
-  "drDigitalHint": "History records the past. Think: where have I been?"
+  "drDigitalSuccess": "You used History to jump back to a site you visited earlier — no need to remember the address. Safari kept the trail for you.",
+  "drDigitalHint": "Visit both sites first. Then open 🕐 History and click the Apple entry to return to it."
 }
