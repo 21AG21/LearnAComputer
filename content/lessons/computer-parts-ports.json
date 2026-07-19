@@ -5,8 +5,10 @@
   "order": 8,
   "title": "Ports",
   "videoUrl": "",
-  "drDigitalIntro": "Ports are the small plug-in slots along the sides of your laptop, where you connect cords and accessories — like your charger, a mouse, or a flash drive.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Ports are the small slots along the sides of your laptop.\n• You plug cords and accessories into them.\n• Examples: your charger, a mouse, or a flash drive.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Those are your ports! You now know every major part of the laptop.",
   "drDigitalHint": "Take a look along the sides of your laptop, then click Continue whenever you're ready."
 }

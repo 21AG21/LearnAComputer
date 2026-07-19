@@ -5,15 +5,27 @@
   "order": 1090,
   "title": "Backing Up Your Data",
   "videoUrl": "",
-  "drDigitalIntro": "A backup is a copy of your important files stored somewhere safe. If your laptop breaks, gets stolen, or is hit by ransomware, a backup lets you recover everything. Time Machine backs up your computer automatically to an external hard drive. the cloud backs up photos and documents online. The rule is 3-2-1: 3 copies of your data, on 2 different types of storage, with 1 offsite. Even one backup is much better than none.",
+  "drDigitalIntro": "A backup is a copy of your files kept somewhere safe.\n• If your device breaks or is stolen, a backup restores everything.\n• Back up automatically to an external drive or the cloud.\n• The rule is 3-2-1: 3 copies, 2 types of storage, 1 offsite.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "Your computer is stolen. You have no backup. What happens to all your photos and documents?",
     "options": [
-      { "text": "The company can always recover them for you", "correct": false },
-      { "text": "They are gone permanently — there's no way to get them back", "correct": true },
-      { "text": "They are automatically saved in your email", "correct": false },
-      { "text": "The police can extract them from the stolen laptop", "correct": false }
+      {
+        "text": "The company can always recover them for you",
+        "correct": false
+      },
+      {
+        "text": "They are gone permanently — there's no way to get them back",
+        "correct": true
+      },
+      {
+        "text": "They are automatically saved in your email",
+        "correct": false
+      },
+      {
+        "text": "The police can extract them from the stolen laptop",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Without a backup, lost data is usually gone forever. Time Machine or the cloud can save you from this — back up regularly!",

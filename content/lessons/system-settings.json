@@ -5,7 +5,7 @@
   "order": 900,
   "title": "System Settings Overview",
   "videoUrl": "",
-  "drDigitalIntro": "System Settings is where you customize how your computer works. Open the Settings app. You'll find options for everything: how your trackpad works, when your screen turns off, privacy settings, sound, display, keyboard behavior. Think of System Settings like your home — you adjust it so it's comfortable and works the way you like.",
+  "drDigitalIntro": "System Settings is where you customize how your computer works.\n• Open the Settings app.\n• Adjust the trackpad, screen, sound, privacy, and keyboard.\n• Think of it like your home — set it up the way you like.",
   "playgroundTask": {
     "type": "find-in-settings",
     "instructions": "Explore System Settings. Navigate to Appearance and turn on Dark Mode.",

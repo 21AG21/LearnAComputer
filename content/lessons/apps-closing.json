@@ -5,8 +5,10 @@
   "order": 24,
   "title": "Closing apps",
   "videoUrl": "",
-  "drDigitalIntro": "⚠️ Careful: don't actually press Ctrl+Q (or Control+Q) right now — on a real computer that would close your whole browser! In this lesson, just click the red X inside the playground on the right to practice closing an app safely. To just move a window out of your way instead of closing it, click the yellow minus button next to the red X.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "⚠️ Don't press Ctrl+Q right now — on a real computer that closes your whole browser!\n• In this lesson, click the red X in the playground to close an app safely.\n• To just move a window aside, click the yellow minus button instead.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Red X to close, yellow minus to tuck it away — you've got it!",
   "drDigitalHint": "Open an app in the playground and try the red X and the minus button, then click Continue."
 }

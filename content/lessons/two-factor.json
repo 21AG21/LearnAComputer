@@ -5,17 +5,39 @@
   "order": 1020,
   "title": "Two-Factor Authentication",
   "videoUrl": "",
-  "drDigitalIntro": "Two-factor authentication (2FA) adds a second check after your password — like a one-time code sent to your phone. Even if someone steals your password, they can't log in without your phone. Always enable 2FA when a site offers it, especially for email, banking, and social media. The extra step takes only seconds but makes your account dramatically more secure.",
+  "drDigitalIntro": "Two-factor authentication (2FA) adds a second check after your password.\n• Usually a one-time code sent to your phone.\n• Even a stolen password won't get someone in without your phone.\n• Turn it on for email, banking, and social media.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You logged in with two-factor authentication",
     "steps": [
-      { "say": "Go to the Login tab.", "action": "go-to-section", "target": "login" },
-      { "say": "Type your username: 'drdigital@example.com'.", "action": "type-username", "value": "drdigital@example.com" },
-      { "say": "Type your password: 'Secure#2025!'.", "action": "type-login-password", "value": "Secure#2025!" },
-      { "say": "Click Login — a 2FA code will be sent to your phone.", "action": "login" },
-      { "say": "Enter the 6-digit code shown: '847291'.", "action": "enter-2fa-code", "value": "847291" },
-      { "say": "Click Verify to complete the 2FA check.", "action": "verify-2fa" }
+      {
+        "say": "Go to the Login tab.",
+        "action": "go-to-section",
+        "target": "login"
+      },
+      {
+        "say": "Type your username: 'drdigital@example.com'.",
+        "action": "type-username",
+        "value": "drdigital@example.com"
+      },
+      {
+        "say": "Type your password: 'Secure#2025!'.",
+        "action": "type-login-password",
+        "value": "Secure#2025!"
+      },
+      {
+        "say": "Click Login — a 2FA code will be sent to your phone.",
+        "action": "login"
+      },
+      {
+        "say": "Enter the 6-digit code shown: '847291'.",
+        "action": "enter-2fa-code",
+        "value": "847291"
+      },
+      {
+        "say": "Click Verify to complete the 2FA check.",
+        "action": "verify-2fa"
+      }
     ]
   },
   "drDigitalSuccess": "You used two-factor authentication! Even with your password, hackers need your phone too.",

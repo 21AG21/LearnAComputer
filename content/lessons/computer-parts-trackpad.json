@@ -5,8 +5,10 @@
   "order": 3,
   "title": "Trackpad",
   "videoUrl": "",
-  "drDigitalIntro": "This is your trackpad — the flat rectangle just below your keyboard. It's your laptop's built-in mouse, and it controls the little pointy arrow on your screen called the cursor. It lets you point at things and click on them. We'll practice using it in the next lesson.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The trackpad is the flat rectangle below your keyboard.\n• It's your laptop's built-in mouse.\n• It moves the little arrow on screen, called the cursor.\n• You use it to point at things and click them.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's the trackpad! You'll be using it constantly, so we'll spend a whole lesson practicing it soon.",
   "drDigitalHint": "Take a moment to find your own trackpad, then click Continue when you're ready."
 }

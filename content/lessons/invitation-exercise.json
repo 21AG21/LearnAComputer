@@ -5,7 +5,7 @@
   "order": 280,
   "title": "Fix the birthday invitation",
   "videoUrl": "",
-  "drDigitalIntro": "Time for a real challenge! A new file just showed up in your Files app — someone typed up a birthday invitation for me, but it's a mess: misspelled words, mixed-up details, and a couple of rambling sentences that need to go. Open it up, click into full screen, and fix it using only the keyboard.",
+  "drDigitalIntro": "Time for a real challenge!\n• A messy birthday invitation just showed up in your Files app.\n• It has misspelled words, wrong details, and rambling sentences.\n• Open it, go full screen, and fix it using only the keyboard.",
   "playgroundTask": {
     "type": "edit-file",
     "instructions": "Fix the invitation: correct the spelling, delete the extra sentence that repeats the title, straighten out the Date/Time/Location so each label matches its real value, and trim the rambling ending down to one closing sentence. Then click Check my work.",

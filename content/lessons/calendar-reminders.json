@@ -5,20 +5,52 @@
   "order": 1220,
   "title": "Calendar and Reminders",
   "videoUrl": "",
-  "drDigitalIntro": "A digital calendar keeps your schedule organized. You can add events with a time and date — they sync to all your devices so you never miss an appointment. Reminders are like sticky notes for things to do without a specific time. Color-coding by calendar (Work = green, Personal = blue) makes it easy to see what type of event is coming up. Let's practice adding an event and a reminder!",
+  "drDigitalIntro": "A digital calendar keeps your schedule organized.\n• Add events with a time and date — they sync across your devices.\n• Reminders are like sticky notes for to-dos.\n• Color-code by calendar: Work in green, Personal in blue.",
   "playgroundTask": {
     "type": "guided-calendar",
     "goal": "You added a calendar event and a reminder",
     "steps": [
-      { "say": "Click on day 18 in the calendar to select it.", "action": "select-day", "target": "18" },
-      { "say": "Click '+' to create a new event on the 18th.", "action": "create-event" },
-      { "say": "Type 'Dentist Appointment' as the event title.", "action": "set-title", "value": "Dentist Appointment" },
-      { "say": "Set the time to '9:00 AM'.", "action": "set-time", "value": "9:00 AM" },
-      { "say": "Save the event.", "action": "save-event" },
-      { "say": "Switch to the Reminders view.", "action": "switch-view", "value": "reminders" },
-      { "say": "Click + to add a new reminder.", "action": "create-reminder" },
-      { "say": "Type 'Buy vitamins' as your reminder.", "action": "set-reminder-text", "value": "Buy vitamins" },
-      { "say": "Save the reminder.", "action": "save-reminder" }
+      {
+        "say": "Click on day 18 in the calendar to select it.",
+        "action": "select-day",
+        "target": "18"
+      },
+      {
+        "say": "Click '+' to create a new event on the 18th.",
+        "action": "create-event"
+      },
+      {
+        "say": "Type 'Dentist Appointment' as the event title.",
+        "action": "set-title",
+        "value": "Dentist Appointment"
+      },
+      {
+        "say": "Set the time to '9:00 AM'.",
+        "action": "set-time",
+        "value": "9:00 AM"
+      },
+      {
+        "say": "Save the event.",
+        "action": "save-event"
+      },
+      {
+        "say": "Switch to the Reminders view.",
+        "action": "switch-view",
+        "value": "reminders"
+      },
+      {
+        "say": "Click + to add a new reminder.",
+        "action": "create-reminder"
+      },
+      {
+        "say": "Type 'Buy vitamins' as your reminder.",
+        "action": "set-reminder-text",
+        "value": "Buy vitamins"
+      },
+      {
+        "say": "Save the reminder.",
+        "action": "save-reminder"
+      }
     ]
   },
   "drDigitalSuccess": "Your event and reminder are saved! Your calendar now keeps track of your appointment automatically.",

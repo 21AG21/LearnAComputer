@@ -5,14 +5,24 @@
   "order": 550,
   "title": "Video Calls: Basics",
   "videoUrl": "",
-  "drDigitalIntro": "Video calling lets you see and talk to someone face-to-face through your screen. Apps like Zoom, Google Meet, FaceTime, and WhatsApp all do video calls. You select a contact and tap the video call button. Your camera turns on and the other person sees you. You see them on your screen. Press the red phone icon to end the call. Video calls are how families stay connected across distances — you can see each other while talking!",
+  "drDigitalIntro": "Video calling lets you see and talk to someone face-to-face.\n• Apps like Zoom, Google Meet, and WhatsApp all do video calls.\n• Pick a contact and tap the video call button.\n• Your camera turns on; tap the red phone icon to end the call.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You started and ended a video call",
     "steps": [
-      { "say": "Click on Grandma to open her conversation.", "action": "select-contact", "target": "grandma" },
-      { "say": "Start a video call with Grandma — click the green Video Call button.", "action": "start-call" },
-      { "say": "Great! You're connected. Now end the call by clicking the red phone button.", "action": "end-call" }
+      {
+        "say": "Click on Grandma to open her conversation.",
+        "action": "select-contact",
+        "target": "grandma"
+      },
+      {
+        "say": "Start a video call with Grandma — click the green Video Call button.",
+        "action": "start-call"
+      },
+      {
+        "say": "Great! You're connected. Now end the call by clicking the red phone button.",
+        "action": "end-call"
+      }
     ]
   },
   "drDigitalSuccess": "You made a video call! The green button starts it, the red button ends it. That's all there is to it.",

@@ -5,14 +5,26 @@
   "order": 830,
   "title": "App Permissions",
   "videoUrl": "",
-  "drDigitalIntro": "When you install an app, it may ask for permissions — access to your camera, microphone, location, or contacts. You get to decide what each app can access. Think before you allow: does a flashlight app really need your contacts? You should usually deny permissions that seem unrelated to the app's purpose. You can always change permissions later in your device's settings.",
+  "drDigitalIntro": "Apps may ask for permissions when you install them.\n• They might want your camera, microphone, location, or contacts.\n• You decide what to allow.\n• Deny anything unrelated — a flashlight doesn't need your contacts.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You evaluated and responded to app permissions",
     "steps": [
-      { "say": "Click on NoteMaster to see it in the store.", "action": "select-app", "target": "NoteMaster" },
-      { "say": "Install NoteMaster.", "action": "install", "target": "NoteMaster" },
-      { "say": "NoteMaster needs Storage access to save your notes. Click Allow.", "action": "allow-permission", "value": "Storage" }
+      {
+        "say": "Click on NoteMaster to see it in the store.",
+        "action": "select-app",
+        "target": "NoteMaster"
+      },
+      {
+        "say": "Install NoteMaster.",
+        "action": "install",
+        "target": "NoteMaster"
+      },
+      {
+        "say": "NoteMaster needs Storage access to save your notes. Click Allow.",
+        "action": "allow-permission",
+        "value": "Storage"
+      }
     ]
   },
   "drDigitalSuccess": "You managed app permissions! Only grant access the app actually needs to work.",

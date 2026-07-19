@@ -5,14 +5,21 @@
   "order": 207,
   "title": "Delete",
   "videoUrl": "",
-  "drDigitalIntro": "The Delete key erases the letter or space directly to the left of your blinking cursor. It's your go-to for fixing typing mistakes.",
+  "drDigitalIntro": "The Delete key erases mistakes.\n• It removes the letter or space just left of your cursor.\n• It's your go-to for fixing typos.",
   "playgroundTask": {
     "type": "edit-text",
     "instructions": "This sentence has extra letters sprinkled in — use the Delete key to erase each one. Click into the text, use the arrow keys to find the extras, and press Delete to remove them.",
     "startingText": "Helllo, my namme is Dr. Diggital and I lovve computers!",
     "correctText": "Hello, my name is Dr. Digital and I love computers!",
-    "mustInclude": ["Hello, my name is Dr. Digital and I love computers!"],
-    "mustNotInclude": ["Helllo", "namme", "Diggital", "lovve"]
+    "mustInclude": [
+      "Hello, my name is Dr. Digital and I love computers!"
+    ],
+    "mustNotInclude": [
+      "Helllo",
+      "namme",
+      "Diggital",
+      "lovve"
+    ]
   },
   "drDigitalSuccess": "That's Delete — mistakes, begone! You cleaned up every extra letter.",
   "drDigitalHint": "Look for letters that appear twice where they should appear once: the extra l in 'Helllo', the extra m in 'namme', the extra g in 'Diggital', and the extra v in 'lovve'. Click next to each one and press Delete."

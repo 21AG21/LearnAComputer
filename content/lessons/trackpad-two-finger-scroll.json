@@ -5,7 +5,7 @@
   "order": 15,
   "title": "Two-finger scrolling",
   "videoUrl": "",
-  "drDigitalIntro": "Let's say you're on a website and want to see more of the page. Place two fingers side by side on the trackpad, like for a right click, but instead of clicking, move them up or down to scroll. Scroll down in the browser below to find a secret code, then scroll back up and type it in the box.",
+  "drDigitalIntro": "Scrolling lets you see more of a page.\n• Put two fingers on the trackpad and slide up or down.\n• Scroll down in the browser to find a secret code.\n• Then scroll back up and type the code in the box.",
   "playgroundTask": {
     "type": "browser-scroll-code",
     "instructions": "Scroll down using two fingers to find the code, then scroll back up and type it into the box.",

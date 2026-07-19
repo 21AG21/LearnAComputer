@@ -5,8 +5,10 @@
   "order": 496,
   "title": "Research a Recipe Safely",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put everything together! Your task is to research a recipe for a meal you want to cook. Use the browser to search for recipes, check multiple websites, and avoid clicking on suspicious ads or fake download buttons. Identify which sites are secure, bookmark your favorite recipe, and add it to Reading List for later. This is how real people use the internet — searching for information while staying safe.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Time to put everything together!\n• Use the browser to search for a recipe you'd like to cook.\n• Check a few websites and avoid suspicious ads or fake download buttons.\n• Bookmark your favorite recipe and add it to your Reading List.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You navigated the internet safely and found what you needed!",
   "drDigitalHint": "Look for the lock icon, avoid weird popups, and bookmark what you like."
 }

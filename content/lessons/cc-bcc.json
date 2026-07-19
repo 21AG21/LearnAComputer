@@ -5,17 +5,39 @@
   "order": 640,
   "title": "CC and BCC",
   "videoUrl": "",
-  "drDigitalIntro": "CC (Carbon Copy) sends a copy of an email to someone extra — everyone can see who was CC'd. BCC (Blind Carbon Copy) is a secret copy — the main recipient can't see who was BCC'd. Use CC to keep people informed, like copying a coworker on a work email. Use BCC when you want someone to see an email privately, or when emailing a large group where people don't know each other.",
+  "drDigitalIntro": "CC and BCC send extra copies of an email.\n• CC (Carbon Copy) is a visible copy — everyone sees who got it.\n• BCC (Blind Carbon Copy) is a secret copy — others can't see it.\n• Use CC to keep people informed; use BCC for privacy or large groups.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You used CC and BCC to send copies of an email",
     "steps": [
-      { "say": "Click Compose to start a new email.", "action": "compose" },
-      { "say": "Type 'mom@example.com' in the To field, then click another field.", "action": "set-to", "value": "mom@example.com" },
-      { "say": "Type 'sister@example.com' in the CC field (everyone will see this).", "action": "set-cc", "value": "sister@example.com" },
-      { "say": "Type 'me@example.com' in the BCC field (secret copy for yourself).", "action": "set-bcc", "value": "me@example.com" },
-      { "say": "Type 'Family Dinner' as the subject.", "action": "set-subject", "value": "Family Dinner" },
-      { "say": "Send the email.", "action": "send" }
+      {
+        "say": "Click Compose to start a new email.",
+        "action": "compose"
+      },
+      {
+        "say": "Type 'mom@example.com' in the To field, then click another field.",
+        "action": "set-to",
+        "value": "mom@example.com"
+      },
+      {
+        "say": "Type 'sister@example.com' in the CC field (everyone will see this).",
+        "action": "set-cc",
+        "value": "sister@example.com"
+      },
+      {
+        "say": "Type 'me@example.com' in the BCC field (secret copy for yourself).",
+        "action": "set-bcc",
+        "value": "me@example.com"
+      },
+      {
+        "say": "Type 'Family Dinner' as the subject.",
+        "action": "set-subject",
+        "value": "Family Dinner"
+      },
+      {
+        "say": "Send the email.",
+        "action": "send"
+      }
     ]
   },
   "drDigitalSuccess": "CC = visible copy, BCC = secret copy. Now you can share emails with the right people!",

@@ -5,7 +5,7 @@
   "order": 240,
   "title": "Copy, paste, cut, undo, redo",
   "videoUrl": "",
-  "drDigitalIntro": "Now the moves you'll use every day. Select some text, then: Ctrl+C copies it, Ctrl+V pastes it somewhere else, and Ctrl+X cuts it (copy plus remove). Made a change you don't like? Ctrl+Z undoes it, and Ctrl+Shift+Z redoes it. And Ctrl+A selects everything.",
+  "drDigitalIntro": "Here are the moves you'll use every day.\n• Ctrl+C copies; Ctrl+V pastes; Ctrl+X cuts.\n• Ctrl+Z undoes; Ctrl+Shift+Z redoes.\n• Ctrl+A selects everything.",
   "playgroundTask": {
     "type": "keyboard-shortcut",
     "instructions": "Copy the text below, then paste it into the box.",

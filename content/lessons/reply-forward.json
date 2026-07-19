@@ -5,19 +5,47 @@
   "order": 630,
   "title": "Reply and Forward",
   "videoUrl": "",
-  "drDigitalIntro": "Reply sends your response back to the person who emailed you — their address is automatically filled in. Forward sends the email to someone new, sharing the original message with them. Use Reply to continue a conversation. Use Forward to share information with someone who wasn't originally included. You can add your own message when forwarding to give context.",
+  "drDigitalIntro": "Reply and Forward do different things.\n• Reply sends your response back to the sender, address filled in for you.\n• Forward shares the email with someone new.\n• Use Reply to continue a chat; use Forward to pass information along.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You replied to an email and forwarded another",
     "steps": [
-      { "say": "Open the email from Mom.", "action": "open-email", "target": "Dinner Sunday?" },
-      { "say": "Click Reply to respond to Mom.", "action": "reply" },
-      { "say": "Type your reply in the message body.", "action": "set-body", "value": "Yes" },
-      { "say": "Send your reply.", "action": "send" },
-      { "say": "Open the email from Boss.", "action": "open-email", "target": "Meeting Tuesday" },
-      { "say": "Forward this to a colleague — click Forward.", "action": "forward" },
-      { "say": "Type 'colleague@example.com' in the To field.", "action": "set-to", "value": "colleague@example.com" },
-      { "say": "Send the forwarded email.", "action": "send" }
+      {
+        "say": "Open the email from Mom.",
+        "action": "open-email",
+        "target": "Dinner Sunday?"
+      },
+      {
+        "say": "Click Reply to respond to Mom.",
+        "action": "reply"
+      },
+      {
+        "say": "Type your reply in the message body.",
+        "action": "set-body",
+        "value": "Yes"
+      },
+      {
+        "say": "Send your reply.",
+        "action": "send"
+      },
+      {
+        "say": "Open the email from Boss.",
+        "action": "open-email",
+        "target": "Meeting Tuesday"
+      },
+      {
+        "say": "Forward this to a colleague — click Forward.",
+        "action": "forward"
+      },
+      {
+        "say": "Type 'colleague@example.com' in the To field.",
+        "action": "set-to",
+        "value": "colleague@example.com"
+      },
+      {
+        "say": "Send the forwarded email.",
+        "action": "send"
+      }
     ]
   },
   "drDigitalSuccess": "You replied and forwarded! Reply keeps the conversation going, Forward shares it with someone new.",

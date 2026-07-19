@@ -5,13 +5,21 @@
   "order": 740,
   "title": "Sharing Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Sharing a photo sends a copy to someone else — via email, text message, social media, or other apps. You don't lose your photo; they get a copy. The photo file is attached to a message, email, or post. Photo quality can vary — sending over email may compress the image. For the best quality, use a cloud photo link or send from a photo app directly.",
+  "drDigitalIntro": "Sharing sends a copy of a photo to someone else.\n• Send it by email, text, or social media.\n• You keep your photo; they get a copy.\n• For best quality, share a cloud link or send from the photo app directly.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You shared a photo",
     "steps": [
-      { "say": "Click on the Garden Flowers photo to open it.", "action": "select-photo", "target": "Garden Flowers" },
-      { "say": "Click the Share button to send this photo to someone.", "action": "share", "target": "Garden Flowers" }
+      {
+        "say": "Click on the Garden Flowers photo to open it.",
+        "action": "select-photo",
+        "target": "Garden Flowers"
+      },
+      {
+        "say": "Click the Share button to send this photo to someone.",
+        "action": "share",
+        "target": "Garden Flowers"
+      }
     ]
   },
   "drDigitalSuccess": "You shared a photo! Sharing sends a copy — your original photo stays safe in your library.",

@@ -5,14 +5,21 @@
   "order": 1180,
   "title": "When to Ask for Help",
   "videoUrl": "",
-  "drDigitalIntro": "Some problems you can fix yourself, but some need a professional. Get help if: your computer makes unusual sounds (could be hardware failure), you see a blue or black screen you can't get out of, you suspect a virus, or you've tried the basics and nothing works. You can also search for help online — most error messages, if you copy them into a search engine, will show forum posts with solutions from others who had the same problem.",
+  "drDigitalIntro": "Some problems need a professional.\n• Get help for strange sounds, a stuck screen, or a suspected virus.\n• Also if you've tried the basics and nothing works.\n• Tip: paste the error message into a search engine to find solutions.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You found help for a computer problem",
     "scenario": "A persistent error keeps appearing",
     "steps": [
-      { "say": "Read the error message carefully.", "action": "read-error" },
-      { "say": "Search for help on this error message.", "action": "search-help", "value": "blue screen error restart loop" }
+      {
+        "say": "Read the error message carefully.",
+        "action": "read-error"
+      },
+      {
+        "say": "Search for help on this error message.",
+        "action": "search-help",
+        "value": "blue screen error restart loop"
+      }
     ]
   },
   "drDigitalSuccess": "You searched for help! Copying an error message into a search engine is often the fastest way to find a solution.",

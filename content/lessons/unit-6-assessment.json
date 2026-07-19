@@ -5,8 +5,10 @@
   "order": 680,
   "title": "Manage a Busy Inbox",
   "videoUrl": "",
-  "drDigitalIntro": "You've inherited a messy inbox with 20 unread emails. Your task: read through emails, identify which are important, reply to a few, forward one to a colleague, attach a document to an email, delete spam, and organize everything into folders. You'll also practice identifying a phishing email and avoiding it. This is how people manage email in the real world.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "You've inherited a messy inbox with 20 unread emails.\n• Read them, reply to a few, and forward one to a colleague.\n• Attach a document, and delete the spam.\n• Spot the phishing email and avoid it — just like real life.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You can manage a complex email inbox like a professional!",
   "drDigitalHint": "Start by scanning subjects to find the important emails."
 }

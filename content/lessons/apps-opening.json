@@ -5,7 +5,7 @@
   "order": 23,
   "title": "Opening apps",
   "videoUrl": "",
-  "drDigitalIntro": "To open an app, go to your dock and click the app you want to open. If it's not there, search your computer's files for that app. Let's practice: open all four apps in the dock.",
+  "drDigitalIntro": "To open an app, click its icon in the dock.\n• If it's not in the dock, search your computer's files for it.\n• Let's practice: open all four apps in the dock.",
   "playgroundTask": {
     "type": "open-all-apps",
     "instructions": "Click each icon in the dock to open all four apps"

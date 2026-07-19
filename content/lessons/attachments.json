@@ -5,17 +5,38 @@
   "order": 650,
   "title": "Sending Attachments",
   "videoUrl": "",
-  "drDigitalIntro": "An attachment is a file you add to an email — like a photo, document, or PDF. The recipient can download and open it. Click the paperclip icon (📎) or Attach button to add a file. You can attach multiple files to one email. Be careful with attachments you receive from strangers — never open attachments from people you don't know, as they can contain viruses.",
+  "drDigitalIntro": "An attachment is a file you add to an email.\n• It can be a photo, document, or PDF.\n• Click the paperclip icon (📎) to add one.\n• Never open attachments from strangers — they can contain viruses.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You attached a file and sent it",
     "steps": [
-      { "say": "Click Compose to start a new email.", "action": "compose" },
-      { "say": "Type 'friend@example.com' in the To field.", "action": "set-to", "value": "friend@example.com" },
-      { "say": "Type 'Vacation Photos' as the subject.", "action": "set-subject", "value": "Vacation Photos" },
-      { "say": "Click the 📎 Attach button to add a file.", "action": "attach" },
-      { "say": "Type a short message in the body.", "action": "set-body", "value": "Here" },
-      { "say": "Click Send to deliver the email with the attachment.", "action": "send" }
+      {
+        "say": "Click Compose to start a new email.",
+        "action": "compose"
+      },
+      {
+        "say": "Type 'friend@example.com' in the To field.",
+        "action": "set-to",
+        "value": "friend@example.com"
+      },
+      {
+        "say": "Type 'Vacation Photos' as the subject.",
+        "action": "set-subject",
+        "value": "Vacation Photos"
+      },
+      {
+        "say": "Click the 📎 Attach button to add a file.",
+        "action": "attach"
+      },
+      {
+        "say": "Type a short message in the body.",
+        "action": "set-body",
+        "value": "Here"
+      },
+      {
+        "say": "Click Send to deliver the email with the attachment.",
+        "action": "send"
+      }
     ]
   },
   "drDigitalSuccess": "You attached a file and sent it! Look for the 📎 button whenever you need to add a photo or document.",

@@ -5,14 +5,26 @@
   "order": 500,
   "title": "Contacts",
   "videoUrl": "",
-  "drDigitalIntro": "Before you send messages, you need contacts — a list of people and their phone numbers or email addresses. The Contacts list lets you create and organize contact information. Each contact has a name and can have phone numbers, email addresses, and notes. Once someone is a contact, messaging apps can find them easily. Let's practice selecting contacts.",
+  "drDigitalIntro": "Before you send messages, you need contacts.\n• A contact is a person plus their phone number or email.\n• Each contact has a name and details you can save.\n• Once someone's a contact, apps can find them easily. Let's practice.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You browsed your contacts and opened a conversation",
     "steps": [
-      { "say": "Click on Alex in the contacts list to open their conversation.", "action": "select-contact", "target": "alex" },
-      { "say": "Now click on Grandma to switch to her conversation.", "action": "select-contact", "target": "grandma" },
-      { "say": "Send Grandma a reply. Click the message box, type 'I miss you too' and click Send.", "action": "send-message", "value": "i miss you too" }
+      {
+        "say": "Click on Alex in the contacts list to open their conversation.",
+        "action": "select-contact",
+        "target": "alex"
+      },
+      {
+        "say": "Now click on Grandma to switch to her conversation.",
+        "action": "select-contact",
+        "target": "grandma"
+      },
+      {
+        "say": "Send Grandma a reply. Click the message box, type 'I miss you too' and click Send.",
+        "action": "send-message",
+        "value": "i miss you too"
+      }
     ]
   },
   "drDigitalSuccess": "You selected contacts and sent a message! That's how you navigate between conversations — just click any contact to switch.",

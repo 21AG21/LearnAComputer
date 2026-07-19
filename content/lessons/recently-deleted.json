@@ -5,16 +5,36 @@
   "order": 750,
   "title": "Deleted Photos",
   "videoUrl": "",
-  "drDigitalIntro": "When you delete a photo, it goes to a Recently Deleted folder — it's not gone yet! This gives you 30 days to change your mind. After 30 days, it's permanently deleted. You can also permanently delete immediately if you need the space. Go to the Recently Deleted section to see deleted photos and recover them if needed. This safety net prevents accidental permanent loss.",
+  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n• It goes to a Recently Deleted folder for 30 days.\n• You can recover it there if you change your mind.\n• After 30 days it's deleted for good. Let's delete and recover one.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You deleted and recovered a photo",
     "steps": [
-      { "say": "Click the Cat Sleeping photo to open it.", "action": "select-photo", "target": "Cat Sleeping" },
-      { "say": "Click Delete to move it to Recently Deleted.", "action": "delete", "target": "Cat Sleeping" },
-      { "say": "Click 'Recently Deleted' in the sidebar to see deleted photos.", "action": "go-to-album", "target": "Recently Deleted" },
-      { "say": "Click the Cat Sleeping photo to open it in Recently Deleted.", "action": "select-photo", "target": "Cat Sleeping" },
-      { "say": "Click Recover to put it back in your library.", "action": "recover", "target": "Cat Sleeping" }
+      {
+        "say": "Click the Cat Sleeping photo to open it.",
+        "action": "select-photo",
+        "target": "Cat Sleeping"
+      },
+      {
+        "say": "Click Delete to move it to Recently Deleted.",
+        "action": "delete",
+        "target": "Cat Sleeping"
+      },
+      {
+        "say": "Click 'Recently Deleted' in the sidebar to see deleted photos.",
+        "action": "go-to-album",
+        "target": "Recently Deleted"
+      },
+      {
+        "say": "Click the Cat Sleeping photo to open it in Recently Deleted.",
+        "action": "select-photo",
+        "target": "Cat Sleeping"
+      },
+      {
+        "say": "Click Recover to put it back in your library.",
+        "action": "recover",
+        "target": "Cat Sleeping"
+      }
     ]
   },
   "drDigitalSuccess": "You deleted and recovered a photo! Recently Deleted gives you 30 days to change your mind.",

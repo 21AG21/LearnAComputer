@@ -5,14 +5,24 @@
   "order": 460,
   "title": "Downloads: Saving from the Internet",
   "videoUrl": "",
-  "drDigitalIntro": "When you download something — a PDF, an image, a document — it comes from the internet to your computer. Click a download link and the browser saves it to your Downloads folder. You can see recent downloads in the browser's Downloads panel. From there, you can open the file, show it in the file manager, or move it to a folder. Downloads always go to the same place so you know where to look.",
+  "drDigitalIntro": "Downloading brings a file from the internet to your computer.\n• Click a download link and the browser saves the file.\n• It goes to your Downloads folder.\n• Find recent files in the browser's Downloads panel.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Download a file and find it",
     "steps": [
-      { "say": "Let's download a recipe. First go to the recipe site — type recipebox.example and press Enter.", "action": "navigate", "url": "recipebox.example" },
-      { "say": "Click the blue Download button to save the recipe PDF to your computer.", "action": "download" },
-      { "say": "Where did it go? Click ⬇️ Downloads to see the file you just saved.", "action": "open-downloads" }
+      {
+        "say": "Let's download a recipe. First go to the recipe site — type recipebox.example and press Enter.",
+        "action": "navigate",
+        "url": "recipebox.example"
+      },
+      {
+        "say": "Click the blue Download button to save the recipe PDF to your computer.",
+        "action": "download"
+      },
+      {
+        "say": "Where did it go? Click ⬇️ Downloads to see the file you just saved.",
+        "action": "open-downloads"
+      }
     ]
   },
   "drDigitalSuccess": "You downloaded a file and found it in the Downloads panel. That's always where the browser puts things you save.",

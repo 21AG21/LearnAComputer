@@ -5,16 +5,32 @@
   "order": 560,
   "title": "Video Call Controls",
   "videoUrl": "",
-  "drDigitalIntro": "During a video call, you have controls at the bottom of the screen. You can mute your microphone (so they can't hear you) or turn off your camera (they see a blank screen instead of video). The microphone button shows a mic icon — tap it to mute. The camera button shows a camera icon — tap it to hide your video. These are essential when there's background noise or you need a moment of privacy.",
+  "drDigitalIntro": "During a call, you have controls at the bottom of the screen.\n• Tap the microphone button to mute so they can't hear you.\n• Tap the camera button to hide your video.\n• These help with background noise or a moment of privacy.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You used all the video call controls",
     "steps": [
-      { "say": "Click on Sam to open their conversation.", "action": "select-contact", "target": "sam" },
-      { "say": "Start a video call with Sam.", "action": "start-call" },
-      { "say": "Someone's being noisy! Click the microphone button to mute yourself.", "action": "mute" },
-      { "say": "Now turn off your camera — click the camera button.", "action": "camera-off" },
-      { "say": "All done — end the call with the red button.", "action": "end-call" }
+      {
+        "say": "Click on Sam to open their conversation.",
+        "action": "select-contact",
+        "target": "sam"
+      },
+      {
+        "say": "Start a video call with Sam.",
+        "action": "start-call"
+      },
+      {
+        "say": "Someone's being noisy! Click the microphone button to mute yourself.",
+        "action": "mute"
+      },
+      {
+        "say": "Now turn off your camera — click the camera button.",
+        "action": "camera-off"
+      },
+      {
+        "say": "All done — end the call with the red button.",
+        "action": "end-call"
+      }
     ]
   },
   "drDigitalSuccess": "You muted, turned off the camera, and ended the call! Those three controls are all you need to manage any video call.",

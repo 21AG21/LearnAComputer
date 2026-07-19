@@ -5,14 +5,26 @@
   "order": 670,
   "title": "Spam and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Phishing is when criminals pretend to be your bank or a big company to steal your information. Warning signs of phishing: urgent language ('Act NOW!'), suspicious email addresses, misspelled domains, requests for your password. Never click links in suspicious emails. Mark them as spam. Your email app learns over time and gets better at filtering junk automatically.",
+  "drDigitalIntro": "Spam is junk email; phishing tries to steal your information.\n• Phishing pretends to be your bank or a big company.\n• Warning signs: urgent language, odd addresses, requests for your password.\n• Never click links in suspicious emails — mark them as spam.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You identified and reported a phishing email",
     "steps": [
-      { "say": "Look at your inbox. One email looks suspicious — click on 'You won $1,000,000!!!' to inspect it.", "action": "open-email", "target": "You won $1,000,000!!!" },
-      { "say": "This is a scam! Click 'Spam' to report it and move it out of your inbox.", "action": "mark-spam", "target": "You won $1,000,000!!!" },
-      { "say": "Click the Spam folder in the sidebar to confirm it moved there.", "action": "go-to-folder", "target": "Spam" }
+      {
+        "say": "Look at your inbox. One email looks suspicious — click on 'You won $1,000,000!!!' to inspect it.",
+        "action": "open-email",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "This is a scam! Click 'Spam' to report it and move it out of your inbox.",
+        "action": "mark-spam",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "Click the Spam folder in the sidebar to confirm it moved there.",
+        "action": "go-to-folder",
+        "target": "Spam"
+      }
     ]
   },
   "drDigitalSuccess": "You spotted and reported the phishing email! Urgency + suspicious content = scam. Always mark these as spam.",

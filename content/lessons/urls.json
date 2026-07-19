@@ -5,12 +5,16 @@
   "order": 420,
   "title": "URLs: Website Addresses",
   "videoUrl": "",
-  "drDigitalIntro": "Every website has an address called a URL (Uniform Resource Locator). It starts with http:// or https:// and looks like: www.google.com or www.wikipedia.org. The address tells your browser where to go on the internet. Type a URL in the browser's address bar and press Return — the browser takes you there. You might see URLs written on signs, in emails, or in books: type them to visit.",
+  "drDigitalIntro": "Every website has an address called a URL.\n• It looks like www.google.com or www.wikipedia.org.\n• It tells your browser where to go.\n• Type it in the address bar and press Return to visit.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Type a web address to visit a site",
     "steps": [
-      { "say": "A URL is a website's address. Click the address bar, type google.com and press Enter to go there.", "action": "navigate", "url": "google.com" }
+      {
+        "say": "A URL is a website's address. Click the address bar, type google.com and press Enter to go there.",
+        "action": "navigate",
+        "url": "google.com"
+      }
     ]
   },
   "drDigitalSuccess": "You typed a URL and the browser took you straight there. That's how you reach any website when you know its address.",

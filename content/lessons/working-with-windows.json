@@ -5,8 +5,10 @@
   "order": 26,
   "title": "Working with windows",
   "videoUrl": "",
-  "drDigitalIntro": "Soon you'll learn to arrange your windows like a pro — moving them around, resizing them, maximizing, minimizing, going full screen, using Split View to see two at once, and switching between windows. This lesson is coming soon!",
-  "playgroundTask": { "type": "placeholder" },
+  "drDigitalIntro": "Soon you'll arrange windows like a pro.\n• Move, resize, maximize, and minimize them.\n• Go full screen, or see two side by side with Split View.\n• This lesson is coming soon!",
+  "playgroundTask": {
+    "type": "placeholder"
+  },
   "drDigitalSuccess": "You're all caught up — window skills are on the way!",
   "drDigitalHint": "This lesson is coming soon — click Continue for now."
 }

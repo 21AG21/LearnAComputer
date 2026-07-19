@@ -5,15 +5,27 @@
   "order": 1270,
   "title": "Printing and Scanning",
   "videoUrl": "",
-  "drDigitalIntro": "To print from your computer, press Ctrl+P in any app — a print dialog appears. Choose your printer, number of copies, and which pages. Set up a printer in System Settings > Printers & Scanners. To scan a document, place it on the scanner and use Image Capture or the printer's own app. You can also scan documents with your phone camera — many apps like Notes create a PDF scan automatically.",
+  "drDigitalIntro": "You can print and scan from your computer.\n• Press Ctrl+P in any app to print, then choose your printer and pages.\n• Set up a printer in Settings > Printers & Scanners.\n• To scan, use the scanner — or snap a document with your phone camera.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "You want to print an email. You're in the Mail app. What keyboard shortcut opens the print dialog?",
     "options": [
-      { "text": "Ctrl+S", "correct": false },
-      { "text": "Ctrl+P", "correct": true },
-      { "text": "Ctrl+D", "correct": false },
-      { "text": "Ctrl+X", "correct": false }
+      {
+        "text": "Ctrl+S",
+        "correct": false
+      },
+      {
+        "text": "Ctrl+P",
+        "correct": true
+      },
+      {
+        "text": "Ctrl+D",
+        "correct": false
+      },
+      {
+        "text": "Ctrl+X",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Ctrl+P opens the print dialog in almost every app on your computer — it's a universal shortcut.",

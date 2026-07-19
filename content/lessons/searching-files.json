@@ -5,13 +5,22 @@
   "order": 370,
   "title": "Searching for Files",
   "videoUrl": "",
-  "drDigitalIntro": "When you have lots of files, you don't have to hunt through folders — you can search. The search box is in the top-right corner of the file manager. Type part of a file's name and the file manager shows only the files that match. Let's find a file by searching.",
+  "drDigitalIntro": "With lots of files, you can search instead of hunting.\n• The search box is in the top-right corner.\n• Type part of a file's name.\n• Only matching files show up. Let's find one.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Find a file using search",
     "steps": [
-      { "say": "Instead of hunting, you can search. Click the Search box and type budget to find your budget file.", "action": "search", "value": "budget", "reveal": "Budget.xlsx" },
-      { "say": "There it is! Double-click Budget.xlsx to open it.", "action": "open-file", "target": "Budget.xlsx" }
+      {
+        "say": "Instead of hunting, you can search. Click the Search box and type budget to find your budget file.",
+        "action": "search",
+        "value": "budget",
+        "reveal": "Budget.xlsx"
+      },
+      {
+        "say": "There it is! Double-click Budget.xlsx to open it.",
+        "action": "open-file",
+        "target": "Budget.xlsx"
+      }
     ]
   },
   "drDigitalSuccess": "You searched for 'budget' and the file manager found it instantly. Searching is the fastest way to find any file.",

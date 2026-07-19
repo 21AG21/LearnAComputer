@@ -5,7 +5,7 @@
   "order": 203,
   "title": "Shift",
   "videoUrl": "",
-  "drDigitalIntro": "Holding Shift while typing a letter makes it uppercase. Holding it while pressing a number types the symbol shown on the top half of that key — like turning 1 into an exclamation point.",
+  "drDigitalIntro": "Shift changes what a key types.\n• Hold Shift with a letter to make it uppercase.\n• Hold Shift with a number to type the symbol above it — like 1 becoming !.",
   "playgroundTask": {
     "type": "type-text",
     "instructions": "Type the sentence exactly as shown — hold Shift to make capital letters and the exclamation point!",

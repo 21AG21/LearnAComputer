@@ -5,8 +5,10 @@
   "order": 1,
   "title": "Screen",
   "videoUrl": "",
-  "drDigitalIntro": "Let's meet the parts of your laptop, one at a time. First up is the part you're looking at right now — your screen! It's made up of millions of tiny colored lights called pixels, and together they paint everything you see: words, pictures, videos, all of it.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Let's meet your laptop's parts, starting with the screen.\n• The screen is the part you're looking at right now.\n• It's made of millions of tiny colored lights called pixels.\n• Together they show everything — words, pictures, and videos.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's your screen! Every single thing on your laptop shows up there. Let's look at the next part.",
   "drDigitalHint": "No rush — just take a look at your own screen, then click Continue whenever you're ready."
 }

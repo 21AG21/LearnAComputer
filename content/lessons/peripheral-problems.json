@@ -5,15 +5,24 @@
   "order": 1150,
   "title": "Peripherals Not Working",
   "videoUrl": "",
-  "drDigitalIntro": "Peripherals are devices you plug into your computer — keyboard, mouse, printer, headphones. If they stop working: check the cable or wireless connection, try unplugging and replugging, check if the device needs a battery change, and restart your computer. Sometimes your computer needs to 'see' the device again. Printers often need a driver (software) installed before they work.",
+  "drDigitalIntro": "Peripherals are devices you plug in — keyboard, mouse, printer, headphones.\n• If one stops working, check the cable or wireless connection.\n• Unplug and replug it, or change the battery.\n• Restart your computer so it can \"see\" the device again.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You reconnected a peripheral device",
     "scenario": "A peripheral device is not connecting",
     "steps": [
-      { "say": "Read the error message about the peripheral.", "action": "read-error" },
-      { "say": "Check whether the cable is connected properly.", "action": "check-cable" },
-      { "say": "Try restarting the computer to force it to detect devices.", "action": "restart-computer" }
+      {
+        "say": "Read the error message about the peripheral.",
+        "action": "read-error"
+      },
+      {
+        "say": "Check whether the cable is connected properly.",
+        "action": "check-cable"
+      },
+      {
+        "say": "Try restarting the computer to force it to detect devices.",
+        "action": "restart-computer"
+      }
     ]
   },
   "drDigitalSuccess": "You troubleshot a peripheral! Check cable → restart — most peripheral issues are that simple.",

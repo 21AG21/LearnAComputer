@@ -5,7 +5,7 @@
   "order": 16,
   "title": "Pinch to zoom",
   "videoUrl": "",
-  "drDigitalIntro": "What if you'd like to zoom in on pictures or text? Spread two fingers apart on the trackpad to make something bigger, or move two fingers closer together to make it smaller. In the activity, open the browser and use the three-dot menu (⋮) next to the search icon to zoom in — then find the hidden number in the text!",
+  "drDigitalIntro": "Zooming makes things bigger or smaller.\n• Spread two fingers apart to zoom in.\n• Pinch two fingers together to zoom out.\n• In the activity, zoom in to find the hidden number in the text.",
   "playgroundTask": {
     "type": "pinch-zoom",
     "instructions": "Open the browser, then click the ⋮ menu next to the search icon and choose Zoom In to make the text bigger. Find the hidden number that appears, then type the full code."

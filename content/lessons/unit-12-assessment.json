@@ -5,8 +5,10 @@
   "order": 1290,
   "title": "A Day in Your Digital Life",
   "videoUrl": "",
-  "drDigitalIntro": "You'll simulate a day using your computer: check email, look up directions, read weather, watch a video, add a calendar event, set a reminder, search for something, take a note, and use banking or shopping. This assessment brings together years of learning into realistic, everyday tasks.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Simulate a full day on your computer.\n• Check email, look up directions, and read the weather.\n• Add a calendar event, set a reminder, and take a note.\n• Use banking or shopping. This brings together everything you've learned.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You're ready for real computer use!",
   "drDigitalHint": "This is how people actually use computers — for real things."
 }

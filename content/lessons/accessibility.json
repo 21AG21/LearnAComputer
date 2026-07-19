@@ -5,7 +5,7 @@
   "order": 910,
   "title": "Accessibility",
   "videoUrl": "",
-  "drDigitalIntro": "Accessibility settings make your computer easier to use for anyone with different needs. Zoom enlarges everything on screen. Pointer size lets you make the cursor bigger. VoiceOver reads text aloud. Color Blind mode adjusts colors for people with color blindness. Caption Preferences adds subtitles. Don't hesitate to use accessibility features — they're designed to help everyone work comfortably.",
+  "drDigitalIntro": "Accessibility settings make your computer easier for everyone to use.\n• Zoom enlarges the screen; Pointer size makes the cursor bigger.\n• A screen reader reads text aloud.\n• Captions add subtitles. Use whatever helps you work comfortably.",
   "playgroundTask": {
     "type": "find-in-settings",
     "instructions": "Someone needs a bigger cursor. Open Accessibility settings and turn on Pointer Size (Larger Text).",

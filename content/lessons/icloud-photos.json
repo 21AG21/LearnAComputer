@@ -5,15 +5,27 @@
   "order": 760,
   "title": "the cloud Photos",
   "videoUrl": "",
-  "drDigitalIntro": "the cloud Photos syncs your photos across all your devices — computer, phone, tablet. When you take a photo on your phone, it appears in Photos on your computer automatically. You get 5GB free; if you need more, subscribe to the cloud+. the cloud also backs up your photos so if you lose your computer, your photos are safe in the cloud.",
+  "drDigitalIntro": "Cloud photos sync your pictures across all your devices.\n• Take a photo on your phone and it appears on your computer.\n• You get some free storage, with more available for a fee.\n• The cloud also backs up your photos, so they're safe if a device breaks.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "With the cloud Photos turned on, what happens when you take a photo on your phone?",
     "options": [
-      { "text": "It saves only on your phone", "correct": false },
-      { "text": "It automatically appears on all your devices", "correct": true },
-      { "text": "You have to manually transfer it to your computer", "correct": false },
-      { "text": "It gets emailed to you", "correct": false }
+      {
+        "text": "It saves only on your phone",
+        "correct": false
+      },
+      {
+        "text": "It automatically appears on all your devices",
+        "correct": true
+      },
+      {
+        "text": "You have to manually transfer it to your computer",
+        "correct": false
+      },
+      {
+        "text": "It gets emailed to you",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "the cloud Photos is seamless sync — snap a photo on your phone, it's on your computer in seconds.",

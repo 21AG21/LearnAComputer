@@ -5,7 +5,7 @@
   "order": 200,
   "title": "Letters",
   "videoUrl": "",
-  "drDigitalIntro": "Welcome to the keyboard! Let's meet the keys. The letter keys let you type words, sentences, and messages — just like on a classic typewriter.",
+  "drDigitalIntro": "Welcome to the keyboard! Let's meet the keys.\n• The letter keys type words, sentences, and messages.\n• They work just like a classic typewriter.",
   "playgroundTask": {
     "type": "type-text",
     "instructions": "Give the letter keys a spin! Type the words below — don't worry about capital letters, just the letters and spaces.",

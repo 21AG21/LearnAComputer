@@ -5,8 +5,10 @@
   "order": 870,
   "title": "Find and Install an App",
   "videoUrl": "",
-  "drDigitalIntro": "Your task is to search the app store for a specific type of app (like a recipe manager or note-taker), read the description and reviews, check the permissions it needs, and install it. Then practice using the app, updating it, and managing its permissions in System Settings. This is how people find and install real apps.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Time to find and install a real app.\n• Search the store for something like a recipe manager or note-taker.\n• Read the description, reviews, and permissions, then install it.\n• Practice using it, updating it, and managing its permissions.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You can confidently install and manage apps!",
   "drDigitalHint": "Look at reviews and ratings to find quality apps."
 }

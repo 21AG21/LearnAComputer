@@ -5,14 +5,25 @@
   "order": 440,
   "title": "Tabs: Visit Multiple Sites",
   "videoUrl": "",
-  "drDigitalIntro": "Tabs let you visit multiple websites at once without opening new the browser windows. Click the + button to open a new tab. Each tab shows a different website. Click a tab to switch between them. You can have dozens of tabs open. Close a tab with the X, or press Ctrl+W. Tabs are temporary — when you close the browser, the tabs go away.",
+  "drDigitalIntro": "Tabs let you visit several websites in one window.\n• Click the + button to open a new tab.\n• Click a tab to switch between sites.\n• Close a tab with its X, or press Ctrl+W.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Open a tab, use it, then close it",
     "steps": [
-      { "say": "Tabs let you keep several sites open at once. Click the + button to open a new tab.", "action": "new-tab" },
-      { "say": "Your new tab is empty. Type google.com in the address bar and press Enter to load a site in it.", "action": "navigate", "url": "google.com" },
-      { "say": "Done with a tab? Click the ✕ on the Google tab to close it.", "action": "close-tab", "title": "Google" }
+      {
+        "say": "Tabs let you keep several sites open at once. Click the + button to open a new tab.",
+        "action": "new-tab"
+      },
+      {
+        "say": "Your new tab is empty. Type google.com in the address bar and press Enter to load a site in it.",
+        "action": "navigate",
+        "url": "google.com"
+      },
+      {
+        "say": "Done with a tab? Click the ✕ on the Google tab to close it.",
+        "action": "close-tab",
+        "title": "Google"
+      }
     ]
   },
   "drDigitalSuccess": "You opened a new tab, loaded a site, and closed it. Tabs let you juggle many websites in one window.",

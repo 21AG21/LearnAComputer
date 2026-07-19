@@ -5,7 +5,7 @@
   "order": 2,
   "title": "Keyboard",
   "videoUrl": "",
-  "drDigitalIntro": "Next is your keyboard — what you type on. It has somewhere between 80 and 100 buttons, called keys, that let you type numbers, letters, and symbols. Let's try it out: my friend Doggo just sent me a message asking for food, but my hands are tied — can you type my reply for me?",
+  "drDigitalIntro": "The keyboard is the part you type on.\n• It has 80 to 100 buttons called keys.\n• Keys let you type letters, numbers, and symbols.\n• Try it now: type my reply to Doggo, who's asking for food!",
   "playgroundTask": {
     "type": "message-reply",
     "instructions": "Doggo is hungry! Click the box at the bottom, type Dr. Digital's exact reply, then press Enter to send it.",

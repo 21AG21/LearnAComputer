@@ -5,16 +5,30 @@
   "order": 1115,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Software problems are issues with programs rather than hardware. Common signs: an app crashes or freezes, buttons don't work, or an error message appears. Solutions: force-quit and restart the app, restart your computer, or update the software. If the problem persists, try uninstalling and reinstalling the app. Most software problems are fixed by a simple restart.",
+  "drDigitalIntro": "Software problems are issues with programs, not hardware.\n• Signs: an app crashes, freezes, or shows an error.\n• Try force-quitting and restarting the app, then restart the computer.\n• If it continues, uninstall and reinstall the app.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You fixed a frozen video editing app",
     "scenario": "The video editor is frozen and not responding",
     "steps": [
-      { "say": "Read the error message that appeared.", "action": "read-error" },
-      { "say": "Open Task Manager to see the running processes.", "action": "open-task-manager" },
-      { "say": "Video Editor is Not Responding. Force Quit it.", "action": "force-quit", "target": "Video Editor" },
-      { "say": "Restart the Video Editor app.", "action": "restart-app", "target": "Video Editor" }
+      {
+        "say": "Read the error message that appeared.",
+        "action": "read-error"
+      },
+      {
+        "say": "Open Task Manager to see the running processes.",
+        "action": "open-task-manager"
+      },
+      {
+        "say": "Video Editor is Not Responding. Force Quit it.",
+        "action": "force-quit",
+        "target": "Video Editor"
+      },
+      {
+        "say": "Restart the Video Editor app.",
+        "action": "restart-app",
+        "target": "Video Editor"
+      }
     ]
   },
   "drDigitalSuccess": "You fixed the software problem! Restart > Force Quit > Reinstall — try in that order.",

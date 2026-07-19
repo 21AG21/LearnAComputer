@@ -5,13 +5,22 @@
   "order": 350,
   "title": "Creating Folders",
   "videoUrl": "",
-  "drDigitalIntro": "You can make your own folders to organize your files however you like — a folder for taxes, one for photos, one for recipes. Making a folder and putting the right files inside keeps everything tidy and easy to find. Let's make one and move a file into it.",
+  "drDigitalIntro": "You can make your own folders to organize files your way.\n• One for taxes, one for photos, one for recipes.\n• Put the right files inside to keep things tidy.\n• Let's make a folder and move a file into it.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Make a folder and put a file inside it",
     "steps": [
-      { "say": "Folders keep your files organized. Click New Folder, type the name Taxes, and press Enter.", "action": "new-folder", "value": "Taxes" },
-      { "say": "Now drag TaxReturn.pdf onto your new Taxes folder — or click the file once, then click the Taxes folder.", "action": "move", "target": "TaxReturn.pdf", "into": "Taxes" }
+      {
+        "say": "Folders keep your files organized. Click New Folder, type the name Taxes, and press Enter.",
+        "action": "new-folder",
+        "value": "Taxes"
+      },
+      {
+        "say": "Now drag TaxReturn.pdf onto your new Taxes folder — or click the file once, then click the Taxes folder.",
+        "action": "move",
+        "target": "TaxReturn.pdf",
+        "into": "Taxes"
+      }
     ]
   },
   "drDigitalSuccess": "You created a Taxes folder and filed your tax return inside it. That's exactly how you keep a computer organized!",

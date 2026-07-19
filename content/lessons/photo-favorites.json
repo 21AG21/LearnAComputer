@@ -5,16 +5,36 @@
   "order": 710,
   "title": "Favoriting Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Favoriting a photo marks it with a heart — it still stays in your library but also appears in a special Favorites section so you can find your best photos quickly. Tap the heart icon while viewing a photo to add it to Favorites. Tap it again to remove it. Most people have hundreds or thousands of photos, so Favorites is a great way to gather the ones you love most.",
+  "drDigitalIntro": "Favoriting marks a photo with a heart.\n• The photo stays in your library and joins a Favorites section.\n• Tap the heart to add it; tap again to remove it.\n• With hundreds of photos, Favorites gathers the ones you love most.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You favorited and unfavorited photos",
     "steps": [
-      { "say": "Click the Beach Sunset photo to open it.", "action": "select-photo", "target": "Beach Sunset" },
-      { "say": "Click the heart ♡ button to add it to your Favorites.", "action": "favorite", "target": "Beach Sunset" },
-      { "say": "Click the Family Dinner photo to open it.", "action": "select-photo", "target": "Family Dinner" },
-      { "say": "Add it to Favorites too.", "action": "favorite", "target": "Family Dinner" },
-      { "say": "Go to the Favorites section in the sidebar to see your favorited photos.", "action": "go-to-album", "target": "Favorites" }
+      {
+        "say": "Click the Beach Sunset photo to open it.",
+        "action": "select-photo",
+        "target": "Beach Sunset"
+      },
+      {
+        "say": "Click the heart ♡ button to add it to your Favorites.",
+        "action": "favorite",
+        "target": "Beach Sunset"
+      },
+      {
+        "say": "Click the Family Dinner photo to open it.",
+        "action": "select-photo",
+        "target": "Family Dinner"
+      },
+      {
+        "say": "Add it to Favorites too.",
+        "action": "favorite",
+        "target": "Family Dinner"
+      },
+      {
+        "say": "Go to the Favorites section in the sidebar to see your favorited photos.",
+        "action": "go-to-album",
+        "target": "Favorites"
+      }
     ]
   },
   "drDigitalSuccess": "Your favorite photos are saved in one place! The heart ♡ icon marks your best shots.",

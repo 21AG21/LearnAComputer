@@ -5,13 +5,21 @@
   "order": 300,
   "title": "What is a File?",
   "videoUrl": "",
-  "drDigitalIntro": "Everything you keep on a computer is stored as a file. A photo is a file. A letter you typed is a file. A song is a file. Each file has a name and holds one piece of your stuff. Let's open a few files and see what's inside them.",
+  "drDigitalIntro": "Everything you keep on a computer is stored as a file.\n• A photo is a file. A typed letter is a file. A song is a file.\n• Each file has a name and holds one piece of your stuff.\n• Let's open a few files and see what's inside.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Open two files to see what a file is",
     "steps": [
-      { "say": "Everything on a computer is stored as a file. Double-click GroceryList.txt to open it.", "action": "open-file", "target": "GroceryList.txt" },
-      { "say": "That file held a list of words. Files can hold pictures too — double-click VacationPhoto.png.", "action": "open-file", "target": "VacationPhoto.png" }
+      {
+        "say": "Everything on a computer is stored as a file. Double-click GroceryList.txt to open it.",
+        "action": "open-file",
+        "target": "GroceryList.txt"
+      },
+      {
+        "say": "That file held a list of words. Files can hold pictures too — double-click VacationPhoto.png.",
+        "action": "open-file",
+        "target": "VacationPhoto.png"
+      }
     ]
   },
   "drDigitalSuccess": "You opened two files! One held words, one held a picture. A file is just one saved piece of your stuff.",

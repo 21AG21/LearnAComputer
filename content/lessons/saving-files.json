@@ -5,12 +5,17 @@
   "order": 330,
   "title": "Saving Files",
   "videoUrl": "",
-  "drDigitalIntro": "When you make something on a computer — a note, a letter, a drawing — it disappears when you close the app unless you SAVE it. Saving keeps a copy as a file. When you save, you give the file a name and choose which folder to keep it in. Let's save a note.",
+  "drDigitalIntro": "When you make something, it disappears when you close the app — unless you SAVE it.\n• Saving keeps a copy as a file.\n• You give the file a name and pick a folder for it.\n• Let's save a note.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Save your note into a folder",
     "steps": [
-      { "say": "You typed a note. Follow the yellow highlights: press Save, type the name shopping-list, choose the Documents folder, then press Save.", "action": "save", "value": "shopping-list", "into": "Documents" }
+      {
+        "say": "You typed a note. Follow the yellow highlights: press Save, type the name shopping-list, choose the Documents folder, then press Save.",
+        "action": "save",
+        "value": "shopping-list",
+        "into": "Documents"
+      }
     ]
   },
   "drDigitalSuccess": "You saved your note as shopping-list in the Documents folder. Now you can find it again any time!",

@@ -5,16 +5,33 @@
   "order": 1210,
   "title": "Staying Connected Online",
   "videoUrl": "",
-  "drDigitalIntro": "Staying in touch with friends and family is one of the best things computers and phones can do. You can send messages, make video calls, share photos, and react to what others post. Good digital citizenship means being kind online, respecting privacy (ask before sharing others' photos), and being thoughtful about what you post — anything online can be shared further. Let's practice staying in touch!",
+  "drDigitalIntro": "Staying in touch is one of the best things a computer can do.\n• Send messages, video call, and share photos.\n• Be kind, and ask before sharing others' photos.\n• Remember: anything you post online can be shared further.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You sent a message and made a video call",
     "steps": [
-      { "say": "Click on Grandma to open her conversation.", "action": "select-contact", "target": "grandma" },
-      { "say": "Type a message: 'Hi Grandma! How are you?' and send it.", "action": "send-message", "value": "Hi Grandma" },
-      { "say": "React to Grandma's message with an emoji.", "action": "add-reaction" },
-      { "say": "Start a video call with Grandma.", "action": "start-call" },
-      { "say": "End the call.", "action": "end-call" }
+      {
+        "say": "Click on Grandma to open her conversation.",
+        "action": "select-contact",
+        "target": "grandma"
+      },
+      {
+        "say": "Type a message: 'Hi Grandma! How are you?' and send it.",
+        "action": "send-message",
+        "value": "Hi Grandma"
+      },
+      {
+        "say": "React to Grandma's message with an emoji.",
+        "action": "add-reaction"
+      },
+      {
+        "say": "Start a video call with Grandma.",
+        "action": "start-call"
+      },
+      {
+        "say": "End the call.",
+        "action": "end-call"
+      }
     ]
   },
   "drDigitalSuccess": "You sent a message and made a video call! Staying in touch is just a tap away.",

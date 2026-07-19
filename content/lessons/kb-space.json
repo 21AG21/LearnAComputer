@@ -5,8 +5,10 @@
   "order": 202,
   "title": "Space",
   "videoUrl": "",
-  "drDigitalIntro": "The space bar is the long bar at the bottom of the keyboard. It inserts a blank space between words so they don't run together.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The space bar is the long bar at the bottom of the keyboard.\n• It adds a blank space between words.\n• That keeps your words from running together.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's the space bar — it keeps your words from bumping into each other!",
   "drDigitalHint": "It's the big long key at the bottom. Find it, then click Continue."
 }

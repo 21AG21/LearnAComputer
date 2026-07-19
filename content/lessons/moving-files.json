@@ -5,13 +5,22 @@
   "order": 360,
   "title": "Moving Files",
   "videoUrl": "",
-  "drDigitalIntro": "Moving a file puts it in a different folder. You can drag a file on top of a folder to drop it inside — or click the file once and then click the folder. Moving files is how you tidy up: put photos in Pictures, documents in Documents. Let's move a file.",
+  "drDigitalIntro": "Moving a file puts it in a different folder.\n• Drag a file onto a folder to drop it inside.\n• Or click the file once, then click the folder.\n• This is how you tidy up. Let's move a file.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Move a file into the Documents folder",
     "steps": [
-      { "say": "Let's tidy up. Drag Budget.xlsx onto the Documents folder — or click Budget.xlsx once, then click Documents.", "action": "move", "target": "Budget.xlsx", "into": "Documents" },
-      { "say": "Let's check it worked. Double-click the Documents folder to see Budget.xlsx now inside.", "action": "open-folder", "target": "Documents" }
+      {
+        "say": "Let's tidy up. Drag Budget.xlsx onto the Documents folder — or click Budget.xlsx once, then click Documents.",
+        "action": "move",
+        "target": "Budget.xlsx",
+        "into": "Documents"
+      },
+      {
+        "say": "Let's check it worked. Double-click the Documents folder to see Budget.xlsx now inside.",
+        "action": "open-folder",
+        "target": "Documents"
+      }
     ]
   },
   "drDigitalSuccess": "You moved Budget.xlsx into Documents and checked it landed there. That's how you organize files into folders.",

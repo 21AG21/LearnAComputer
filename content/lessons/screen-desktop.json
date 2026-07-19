@@ -5,8 +5,10 @@
   "order": 17,
   "title": "Desktop",
   "videoUrl": "",
-  "drDigitalIntro": "Now let's understand everything you see on your screen. First, the desktop: this is the main screen you see when you turn on your computer. It's the starting point where you keep your folders and open your apps.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The desktop is the main screen you see when your computer turns on.\n• It's your starting point.\n• You keep folders and open apps from here.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's your desktop — home base for everything you do!",
   "drDigitalHint": "Take a look around the playground desktop on the right, then click Continue whenever you're ready."
 }

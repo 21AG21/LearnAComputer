@@ -5,16 +5,36 @@
   "order": 610,
   "title": "Inbox, Sent, Drafts, and Archive",
   "videoUrl": "",
-  "drDigitalIntro": "Keeping your inbox organized makes email much less stressful. Mark junk emails as Spam so your email app learns to filter them. Archive emails you want to keep but don't need in your Inbox — they're stored safely and searchable later. Delete emails you no longer need. Moving emails to the right folders keeps your Inbox clean and easy to manage.",
+  "drDigitalIntro": "An organized inbox makes email much less stressful.\n• Mark junk as Spam so your app learns to filter it.\n• Archive emails you want to keep but don't need in your Inbox.\n• Delete emails you no longer need.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You organized your inbox like a pro",
     "steps": [
-      { "say": "That 'You won $1,000,000!!!' email looks suspicious. Click on it.", "action": "open-email", "target": "You won $1,000,000!!!" },
-      { "say": "This is spam! Mark it as Spam so it goes to the Spam folder.", "action": "mark-spam", "target": "You won $1,000,000!!!" },
-      { "say": "Open the email from Amazon about your order.", "action": "open-email", "target": "Your order shipped" },
-      { "say": "You got your package. Archive this email to keep it but clear your inbox.", "action": "archive", "target": "Your order shipped" },
-      { "say": "Click Spam in the sidebar to see where spam goes.", "action": "go-to-folder", "target": "Spam" }
+      {
+        "say": "That 'You won $1,000,000!!!' email looks suspicious. Click on it.",
+        "action": "open-email",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "This is spam! Mark it as Spam so it goes to the Spam folder.",
+        "action": "mark-spam",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "Open the email from Amazon about your order.",
+        "action": "open-email",
+        "target": "Your order shipped"
+      },
+      {
+        "say": "You got your package. Archive this email to keep it but clear your inbox.",
+        "action": "archive",
+        "target": "Your order shipped"
+      },
+      {
+        "say": "Click Spam in the sidebar to see where spam goes.",
+        "action": "go-to-folder",
+        "target": "Spam"
+      }
     ]
   },
   "drDigitalSuccess": "Your inbox is organized! Spam goes to Spam, archived emails are stored safely, and your Inbox stays clean.",

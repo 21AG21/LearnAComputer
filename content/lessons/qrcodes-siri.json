@@ -5,15 +5,27 @@
   "order": 1260,
   "title": "QR Codes and Siri",
   "videoUrl": "",
-  "drDigitalIntro": "QR codes are square black-and-white patterns you scan with your phone camera to open a website or menu. Just open the Camera app and point it at the QR code — a link appears. Siri is a voice assistant. Ask Siri questions, set timers, send messages, or open apps just by talking. On your computer, activate your voice assistant by saying its wake word or clicking its icon. 'Hey Siri' works hands-free if enabled.",
+  "drDigitalIntro": "QR codes and voice assistants make things quick.\n• A QR code is a square pattern — point your camera at it to open a link.\n• A voice assistant answers questions and sets timers when you talk to it.\n• Activate it by its wake word or by clicking its icon.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "At a restaurant, your paper menu is replaced with a QR code. How do you view the menu?",
     "options": [
-      { "text": "Type 'restaurant menu' into Google", "correct": false },
-      { "text": "Open your phone Camera app and point it at the QR code", "correct": true },
-      { "text": "Scan it with your computerBook's webcam in the file manager", "correct": false },
-      { "text": "Ask the waiter to email it to you", "correct": false }
+      {
+        "text": "Type 'restaurant menu' into Google",
+        "correct": false
+      },
+      {
+        "text": "Open your phone Camera app and point it at the QR code",
+        "correct": true
+      },
+      {
+        "text": "Scan it with your computerBook's webcam in the file manager",
+        "correct": false
+      },
+      {
+        "text": "Ask the waiter to email it to you",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Your phone Camera app scans QR codes automatically — just point and tap the link that appears!",

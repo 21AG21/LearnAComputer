@@ -5,15 +5,27 @@
   "order": 1200,
   "title": "Common Daily Tasks",
   "videoUrl": "",
-  "drDigitalIntro": "Once you're comfortable with your computer, you'll find yourself doing the same things every day: checking email, browsing the web, reading the news, watching videos, video calling family, writing notes, and managing files. The more you practice these everyday tasks, the faster and easier they become. Your computer is a versatile tool — in this unit we'll bring all your skills together for real-life use.",
+  "drDigitalIntro": "Soon you'll do the same things on your computer every day.\n• Email, browsing, news, videos, and video calls.\n• Writing notes and managing files.\n• The more you practice, the faster and easier it gets.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "You want to video call your grandchild who has an phone. Which type of app lets you do this for free?",
     "options": [
-      { "text": "the browser", "correct": false },
-      { "text": "Video Calling", "correct": true },
-      { "text": "the file manager", "correct": false },
-      { "text": "Notes", "correct": false }
+      {
+        "text": "the browser",
+        "correct": false
+      },
+      {
+        "text": "Video Calling",
+        "correct": true
+      },
+      {
+        "text": "the file manager",
+        "correct": false
+      },
+      {
+        "text": "Notes",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Video calling apps let you make free video and audio calls over the internet.",

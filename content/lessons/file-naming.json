@@ -5,13 +5,22 @@
   "order": 340,
   "title": "Naming Files Well",
   "videoUrl": "",
-  "drDigitalIntro": "A good file name tells you what's inside without opening it. 'Beach-Vacation-2025.jpg' is clear. 'img_20250104_FINAL(2).jpg' is confusing — you'd have to open it to know what it is. Let's rename a messy file to something useful.",
+  "drDigitalIntro": "A good file name tells you what's inside without opening it.\n• \"Beach-Vacation-2025.jpg\" is clear.\n• \"img_20250104_FINAL(2).jpg\" is confusing.\n• Let's rename a messy file to something useful.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Rename a messy file to something clear",
     "steps": [
-      { "say": "A badly-named file is hiding in Downloads. Click Downloads to find it.", "action": "go-to", "target": "Downloads" },
-      { "say": "See 'img_20250104_FINAL(2).jpg'? Nobody can tell what that is. Click it, click Rename, then type Beach-Vacation-2025.jpg and press Enter.", "action": "rename", "target": "img_20250104_FINAL(2).jpg", "value": "Beach-Vacation-2025.jpg" }
+      {
+        "say": "A badly-named file is hiding in Downloads. Click Downloads to find it.",
+        "action": "go-to",
+        "target": "Downloads"
+      },
+      {
+        "say": "See 'img_20250104_FINAL(2).jpg'? Nobody can tell what that is. Click it, click Rename, then type Beach-Vacation-2025.jpg and press Enter.",
+        "action": "rename",
+        "target": "img_20250104_FINAL(2).jpg",
+        "value": "Beach-Vacation-2025.jpg"
+      }
     ]
   },
   "drDigitalSuccess": "Much better! 'Beach-Vacation-2025.jpg' tells you exactly what the file is. Good names save you time.",

@@ -5,14 +5,26 @@
   "order": 1050,
   "title": "Protecting Your Identity",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft happens when someone steals your personal information — name, social security number, bank details — and uses it to commit fraud. Protect yourself: never share your full social security number online, use strong passwords, enable 2FA, monitor your bank statements for suspicious charges, and don't overshare on social media. If you think your identity was stolen, contact your bank and credit bureaus immediately.",
+  "drDigitalIntro": "Identity theft is when someone uses your personal information for fraud.\n• Never share your full social security number online.\n• Use strong passwords, turn on 2FA, and watch your bank statements.\n• If it happens, contact your bank and credit bureaus right away.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You reviewed your privacy settings to protect your identity",
     "steps": [
-      { "say": "Go to the Privacy tab to review your security settings.", "action": "go-to-section", "target": "privacy" },
-      { "say": "Ad Tracking is on — turn it off to protect your privacy.", "action": "toggle-setting", "target": "Ad Tracking" },
-      { "say": "Turn off Cookies to reduce tracking.", "action": "toggle-setting", "target": "Cookies" }
+      {
+        "say": "Go to the Privacy tab to review your security settings.",
+        "action": "go-to-section",
+        "target": "privacy"
+      },
+      {
+        "say": "Ad Tracking is on — turn it off to protect your privacy.",
+        "action": "toggle-setting",
+        "target": "Ad Tracking"
+      },
+      {
+        "say": "Turn off Cookies to reduce tracking.",
+        "action": "toggle-setting",
+        "target": "Cookies"
+      }
     ]
   },
   "drDigitalSuccess": "You adjusted your privacy settings! Limiting tracking is an easy way to protect your identity.",

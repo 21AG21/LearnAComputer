@@ -5,8 +5,10 @@
   "order": 204,
   "title": "Caps Lock",
   "videoUrl": "",
-  "drDigitalIntro": "Pressing Caps Lock locks your keyboard into typing ONLY CAPITAL LETTERS. Press it once to turn it on, and press it again to turn it off.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Caps Lock types ONLY CAPITAL LETTERS.\n• Press it once to turn it on.\n• Press it again to turn it off.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's Caps Lock — press once for all capitals, press again to go back!",
   "drDigitalHint": "Find Caps Lock on the left side, just above Shift, then click Continue."
 }

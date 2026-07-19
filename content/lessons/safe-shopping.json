@@ -5,16 +5,36 @@
   "order": 1060,
   "title": "Shopping Safely Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online shopping is convenient, but some sites are fake. Before buying: check that the address bar shows 'https://' with a padlock icon (means it's encrypted), look for reviews and a contact address, avoid deals that seem too good to be true, and use a credit card (not debit) for better fraud protection. Well-known retailers are generally safe. For a new store, search its name plus 'reviews' or 'scam' first.",
+  "drDigitalIntro": "Online shopping is convenient, but some sites are fake.\n• Check for https:// and a padlock before buying.\n• Look for reviews, and beware deals that seem too good to be true.\n• Use a credit card for better fraud protection.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You learned to identify safe online shopping links",
     "steps": [
-      { "say": "Go to the Phishing tab to inspect some shopping links.", "action": "go-to-section", "target": "phishing" },
-      { "say": "Inspect 'Complete Your Purchase'.", "action": "inspect-link", "target": "Complete Your Purchase" },
-      { "say": "That's shop.example.com with https — mark it Safe.", "action": "mark-safe", "target": "Complete Your Purchase" },
-      { "say": "Now inspect 'Enter Card Details'.", "action": "inspect-link", "target": "Enter Card Details" },
-      { "say": "That URL is suspicious — mark it Dangerous.", "action": "mark-dangerous", "target": "Enter Card Details" }
+      {
+        "say": "Go to the Phishing tab to inspect some shopping links.",
+        "action": "go-to-section",
+        "target": "phishing"
+      },
+      {
+        "say": "Inspect 'Complete Your Purchase'.",
+        "action": "inspect-link",
+        "target": "Complete Your Purchase"
+      },
+      {
+        "say": "That's shop.example.com with https — mark it Safe.",
+        "action": "mark-safe",
+        "target": "Complete Your Purchase"
+      },
+      {
+        "say": "Now inspect 'Enter Card Details'.",
+        "action": "inspect-link",
+        "target": "Enter Card Details"
+      },
+      {
+        "say": "That URL is suspicious — mark it Dangerous.",
+        "action": "mark-dangerous",
+        "target": "Enter Card Details"
+      }
     ]
   },
   "drDigitalSuccess": "You know how to spot safe vs. dangerous shopping links! HTTPS + a known domain = safe to buy.",

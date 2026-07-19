@@ -5,13 +5,20 @@
   "order": 850,
   "title": "Deleting Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Delete apps you no longer use to free up storage space. When you delete an app, the app itself is removed, but your data (like game saves or documents) may be stored in the cloud and restored if you reinstall. You can always reinstall a free app at no cost. Paid apps can also be reinstalled for free if you bought them from the same account.",
+  "drDigitalIntro": "Delete apps you don't use to free up space.\n• The app is removed, but your data may be saved in the cloud.\n• You can reinstall a free app anytime at no cost.\n• Paid apps reinstall free from the same account.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You deleted an app you no longer need",
     "steps": [
-      { "say": "Go to My Apps to see your installed apps.", "action": "go-to-installed" },
-      { "say": "Find Puzzle Quest and click the Delete button next to it.", "action": "delete-app", "target": "Puzzle Quest" }
+      {
+        "say": "Go to My Apps to see your installed apps.",
+        "action": "go-to-installed"
+      },
+      {
+        "say": "Find Puzzle Quest and click the Delete button next to it.",
+        "action": "delete-app",
+        "target": "Puzzle Quest"
+      }
     ]
   },
   "drDigitalSuccess": "You deleted an app! You can always reinstall it for free from the store later.",

@@ -5,8 +5,10 @@
   "order": 18,
   "title": "Dock",
   "videoUrl": "",
-  "drDigitalIntro": "The dock is the bar of icons, usually at the bottom of the screen, that holds your favorite and currently open apps. You can click these icons to quickly open what you need.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The dock is the bar of icons, usually at the bottom of the screen.\n• It holds your favorite and open apps.\n• Click an icon to open that app quickly.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's the dock — your app shortcut shelf!",
   "drDigitalHint": "Look at the icons at the bottom of the playground desktop, then click Continue whenever you're ready."
 }

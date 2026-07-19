@@ -5,7 +5,7 @@
   "order": 1080,
   "title": "Keeping Software Up to Date",
   "videoUrl": "",
-  "drDigitalIntro": "Software updates aren't just new features — they also fix security vulnerabilities. When hackers find a weakness in the operating system or an app, the developer releases an update to close that hole. If you don't install the update, you stay vulnerable. Turn on automatic updates so your computer installs security patches without you having to remember. It's one of the easiest ways to stay safe.",
+  "drDigitalIntro": "Updates don't just add features — they fix security holes.\n• When hackers find a weakness, an update closes it.\n• Skipping updates leaves you vulnerable.\n• Turn on automatic updates so patches install themselves.",
   "playgroundTask": {
     "type": "find-in-settings",
     "instructions": "Turn on Automatic Updates so your computer stays secure without you having to remember.",

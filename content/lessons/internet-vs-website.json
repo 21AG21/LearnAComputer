@@ -5,13 +5,21 @@
   "order": 400,
   "title": "Internet vs Website",
   "videoUrl": "",
-  "drDigitalIntro": "The internet is a giant network connecting computers all over the world. Think of it like a highway system — the internet is the highways. A website is one location on the internet, like a store on that highway. Google, Facebook, YouTube — those are all websites. They live on the internet. You use the internet to reach websites.",
+  "drDigitalIntro": "The internet is a giant network connecting computers worldwide.\n• Think of the internet as a highway system.\n• A website is one place on it, like a store on that highway.\n• Google, Facebook, and YouTube are all websites you reach through the internet.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Visit two different websites on the internet",
     "steps": [
-      { "say": "The internet connects you to websites. Click the address bar, type shop.example and press Enter to visit a website.", "action": "navigate", "url": "shop.example" },
-      { "say": "That's one website. There are billions more! Visit another: type wikipedia.org and press Enter.", "action": "navigate", "url": "wikipedia.org" }
+      {
+        "say": "The internet connects you to websites. Click the address bar, type shop.example and press Enter to visit a website.",
+        "action": "navigate",
+        "url": "shop.example"
+      },
+      {
+        "say": "That's one website. There are billions more! Visit another: type wikipedia.org and press Enter.",
+        "action": "navigate",
+        "url": "wikipedia.org"
+      }
     ]
   },
   "drDigitalSuccess": "You just visited two websites on the internet. The internet is the network; each website is one place you travel to on it.",

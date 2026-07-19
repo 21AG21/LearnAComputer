@@ -5,8 +5,10 @@
   "order": 20,
   "title": "Clock",
   "videoUrl": "",
-  "drDigitalIntro": "The clock shows you the current time and date, usually in a corner of your screen. Clicking it often opens up a calendar.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The clock shows the current time and date.\n• You'll usually find it in a corner of the screen.\n• Clicking it often opens a calendar.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's the clock — time and date, always a glance away.",
   "drDigitalHint": "Find the time in the corner of the playground desktop, then click Continue whenever you're ready."
 }

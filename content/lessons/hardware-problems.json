@@ -5,15 +5,24 @@
   "order": 1120,
   "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems involve the physical parts of your computer — the screen, keyboard, mouse, or ports. Common issues: a monitor that shows nothing (check the cable and that the display input is correct), a mouse or keyboard that isn't responding (check if it's plugged in or the battery), a slow computer (storage may be full). Start by checking the obvious: cables, power, and connections.",
+  "drDigitalIntro": "Hardware problems involve the physical parts of your computer.\n• A blank monitor? Check the cable and display input.\n• A dead mouse or keyboard? Check the plug or battery.\n• Start with the obvious: cables, power, and connections.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You diagnosed and fixed a hardware problem",
     "scenario": "The monitor is not showing a picture",
     "steps": [
-      { "say": "There's a display problem. Read the error message first.", "action": "read-error" },
-      { "say": "Check that the video cable is properly connected.", "action": "check-cable" },
-      { "say": "The cable looks fine. Try switching the display input source.", "action": "change-input" }
+      {
+        "say": "There's a display problem. Read the error message first.",
+        "action": "read-error"
+      },
+      {
+        "say": "Check that the video cable is properly connected.",
+        "action": "check-cable"
+      },
+      {
+        "say": "The cable looks fine. Try switching the display input source.",
+        "action": "change-input"
+      }
     ]
   },
   "drDigitalSuccess": "You fixed a hardware problem! Always check cables and connections before assuming something is broken.",

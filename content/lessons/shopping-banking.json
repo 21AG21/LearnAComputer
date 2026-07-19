@@ -5,16 +5,36 @@
   "order": 1250,
   "title": "Online Shopping and Banking",
   "videoUrl": "",
-  "drDigitalIntro": "Online banking lets you check your balance, pay bills, and transfer money from your computer. Online shopping lets you buy almost anything and have it delivered. Both are safe when used on trusted websites. Key rules: only use official bank websites (type the address yourself — never follow emailed links), look for the padlock/https, and never do banking on public WiFi without a VPN. Let's practice checking links before shopping.",
+  "drDigitalIntro": "Online banking and shopping are safe on trusted sites.\n• Only use official bank websites — type the address yourself.\n• Look for the padlock and https://.\n• Never bank on public WiFi without a VPN. Let's check some links.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You verified safe banking and shopping links",
     "steps": [
-      { "say": "Go to the Phishing tab to check some banking links.", "action": "go-to-section", "target": "phishing" },
-      { "say": "Inspect 'Bank of America Login' to check the URL.", "action": "inspect-link", "target": "Bank of America Login" },
-      { "say": "bankofamerica.com with https — that's safe. Mark it Safe.", "action": "mark-safe", "target": "Bank of America Login" },
-      { "say": "Now inspect 'Enter Card Details'.", "action": "inspect-link", "target": "Enter Card Details" },
-      { "say": "That URL is suspicious — mark it Dangerous.", "action": "mark-dangerous", "target": "Enter Card Details" }
+      {
+        "say": "Go to the Phishing tab to check some banking links.",
+        "action": "go-to-section",
+        "target": "phishing"
+      },
+      {
+        "say": "Inspect 'Bank of America Login' to check the URL.",
+        "action": "inspect-link",
+        "target": "Bank of America Login"
+      },
+      {
+        "say": "bankofamerica.com with https — that's safe. Mark it Safe.",
+        "action": "mark-safe",
+        "target": "Bank of America Login"
+      },
+      {
+        "say": "Now inspect 'Enter Card Details'.",
+        "action": "inspect-link",
+        "target": "Enter Card Details"
+      },
+      {
+        "say": "That URL is suspicious — mark it Dangerous.",
+        "action": "mark-dangerous",
+        "target": "Enter Card Details"
+      }
     ]
   },
   "drDigitalSuccess": "You checked banking links for safety! Always verify the URL before entering card details.",

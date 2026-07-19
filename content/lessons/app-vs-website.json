@@ -5,8 +5,10 @@
   "order": 800,
   "title": "Apps vs. Websites",
   "videoUrl": "",
-  "drDigitalIntro": "What's the difference between an app and a website? A website opens in your browser — you type a web address and it loads. An app is a separate program you download and install — it gets its own icon. Most apps have a matching website. Apps can often work offline, send you notifications, and access your camera or location. Websites work anywhere with a browser. You'll use both!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Apps and websites are different.\n• A website opens in your browser when you type its address.\n• An app is a program you install, with its own icon.\n• Apps can work offline and send alerts; websites work anywhere. You'll use both!",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Apps live on your device, websites live in your browser. Both are useful!",
   "drDigitalHint": "Just read along and click Continue."
 }

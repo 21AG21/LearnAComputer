@@ -5,8 +5,10 @@
   "order": 25,
   "title": "Closing a window vs. quitting",
   "videoUrl": "",
-  "drDigitalIntro": "Closing a window moves it out of your way, but the app is still running. Quitting the app shuts it down completely. If an app is minimized but not quit, it shows a little green dot in the corner of its icon on the desktop.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Closing and quitting are not the same thing.\n• Closing a window moves it aside, but the app keeps running.\n• Quitting shuts the app down completely.\n• A minimized app shows a little green dot on its icon.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Exactly — out of the way isn't the same as off. You now know the difference!",
   "drDigitalHint": "In the playground, minimize an app with the minus button and notice it keeps everything for when you come back. Then click Continue."
 }

@@ -5,8 +5,10 @@
   "order": 570,
   "title": "Family Group Chat",
   "videoUrl": "",
-  "drDigitalIntro": "You're organizing a family vacation and need to coordinate with relatives. Your task is to reply to messages, send a photo, add reactions, and handle a video call from a family member. During the call, you'll mute your microphone and turn off your camera. This is how families really use messaging and video calls!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "You're coordinating a family vacation!\n• Reply to messages and send a photo.\n• Add reactions to messages.\n• Handle a video call — mute your mic and turn off your camera during it.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You coordinated a family event using messages and video calls!",
   "drDigitalHint": "Start with a group message, then handle the video call."
 }

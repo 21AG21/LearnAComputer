@@ -5,15 +5,27 @@
   "order": 730,
   "title": "People and Places",
   "videoUrl": "",
-  "drDigitalIntro": "Photos automatically recognizes faces in your photos and groups them. You can name people ('Mom', 'Dad', 'Grandma') and Photos will find all photos of that person. Places shows where photos were taken on a map. Memories is an automatic feature that creates slideshows of your best moments from a specific time period or location.",
+  "drDigitalIntro": "Your photo app recognizes faces and groups them.\n• Name people like \"Mom\" or \"Grandma\" to find all their photos.\n• Places shows where photos were taken on a map.\n• Memories builds slideshows of your best moments.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "Photos recognizes faces to help you:",
     "options": [
-      { "text": "Edit and retouch portrait photos automatically", "correct": false },
-      { "text": "Find all photos that include a specific person", "correct": true },
-      { "text": "Print photos at the right size", "correct": false },
-      { "text": "Back up photos to the cloud", "correct": false }
+      {
+        "text": "Edit and retouch portrait photos automatically",
+        "correct": false
+      },
+      {
+        "text": "Find all photos that include a specific person",
+        "correct": true
+      },
+      {
+        "text": "Print photos at the right size",
+        "correct": false
+      },
+      {
+        "text": "Back up photos to the cloud",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Face recognition lets you search by person — name someone once and Photos can show you all their photos instantly.",

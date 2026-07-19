@@ -5,14 +5,25 @@
   "order": 810,
   "title": "The App Store",
   "videoUrl": "",
-  "drDigitalIntro": "The App Store (or Play Store) is where you download new apps safely. Every app is reviewed before it's listed, which protects you from many types of malware. You can browse categories, search by name, or see what's trending. Each app has a description, screenshots, ratings, and reviews from other users. Free apps cost nothing to download; paid apps charge a one-time fee.",
+  "drDigitalIntro": "The App Store is where you download new apps safely.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or see what's trending.\n• Each app shows a description, ratings, and reviews.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You found an app in the store",
     "steps": [
-      { "say": "You're in the App Store. Click on 'Games' in the category list.", "action": "go-to-category", "target": "Games" },
-      { "say": "Click on Puzzle Quest to see its details.", "action": "select-app", "target": "Puzzle Quest" },
-      { "say": "Click 'Go to Store' to go back to the main store page.", "action": "go-to-store" }
+      {
+        "say": "You're in the App Store. Click on 'Games' in the category list.",
+        "action": "go-to-category",
+        "target": "Games"
+      },
+      {
+        "say": "Click on Puzzle Quest to see its details.",
+        "action": "select-app",
+        "target": "Puzzle Quest"
+      },
+      {
+        "say": "Click 'Go to Store' to go back to the main store page.",
+        "action": "go-to-store"
+      }
     ]
   },
   "drDigitalSuccess": "You browsed the App Store! Categories help you discover apps, and each app page shows ratings and reviews.",

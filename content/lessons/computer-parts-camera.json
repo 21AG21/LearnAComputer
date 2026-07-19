@@ -5,8 +5,10 @@
   "order": 5,
   "title": "Camera",
   "videoUrl": "",
-  "drDigitalIntro": "Your camera sits at the top of your screen. When it's in use, it can snap photos, record videos, or let you video call other people.",
-  "playgroundTask": { "type": "placeholder" },
+  "drDigitalIntro": "Your camera sits at the top of the screen.\n• It can take photos and record videos.\n• It also lets you video call other people.",
+  "playgroundTask": {
+    "type": "placeholder"
+  },
   "drDigitalSuccess": "That's your camera! We'll practice taking a real photo together soon.",
   "drDigitalHint": "This activity is coming soon — click Continue for now."
 }

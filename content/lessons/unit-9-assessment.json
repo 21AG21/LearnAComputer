@@ -5,8 +5,10 @@
   "order": 960,
   "title": "Customize Your computer",
   "videoUrl": "",
-  "drDigitalIntro": "Your task is to adjust multiple settings to make your computer work the way you want. Change the display theme, adjust trackpad sensitivity, set up notification preferences, change the wallpaper, and check storage. This is how you make your computer your own.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Make your computer work the way you want.\n• Change the display theme and the wallpaper.\n• Adjust trackpad sensitivity and notification settings.\n• Check your storage. This is how you make your computer your own.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Your computer is customized just the way you like it!",
   "drDigitalHint": "Start with Appearance, then try hardware and notification settings."
 }

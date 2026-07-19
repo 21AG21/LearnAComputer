@@ -5,7 +5,7 @@
   "order": 14,
   "title": "Right click",
   "videoUrl": "",
-  "drDigitalIntro": "Normally you click with one finger. But if you click with two fingers at the same time — like your middle and ring finger — you open a hidden menu of extra options. That's called a right click. Try right-clicking the link below to open it in a new tab.",
+  "drDigitalIntro": "A right click opens a hidden menu of extra options.\n• Click with two fingers at once instead of one.\n• Try it: right-click the link below to open it in a new tab.",
   "playgroundTask": {
     "type": "browser-right-click",
     "instructions": "Right-click the link below, then choose \"Open link in new tab\"."

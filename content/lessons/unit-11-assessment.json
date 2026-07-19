@@ -5,8 +5,10 @@
   "order": 1190,
   "title": "Diagnose and Fix Problems",
   "videoUrl": "",
-  "drDigitalIntro": "You'll face a series of problems: internet won't connect, an app crashes, printer not working, computer is slow. For each, you'll diagnose the cause and apply the right fix. This tests whether you understand troubleshooting logic — not just following steps, but thinking about why something might break.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Time to solve a series of problems.\n• Internet won't connect, an app crashes, the printer's dead, the computer's slow.\n• Diagnose the cause of each one.\n• Apply the right fix — it's about thinking, not just following steps.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You're a troubleshooting pro!",
   "drDigitalHint": "Always start with the simplest fix: restart."
 }

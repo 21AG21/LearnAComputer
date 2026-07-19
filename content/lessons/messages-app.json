@@ -5,7 +5,7 @@
   "order": 510,
   "title": "Messaging Basics",
   "videoUrl": "",
-  "drDigitalIntro": "Messages is how you text on your computer — you can send and receive text messages just like on a phone. Open the Messages app and start a new message with someone in your Contacts. Type your message and press Enter to send. Each conversation stays in the list so you can return to old chats. Messages syncs across your devices — if you reply on your computer, your phone knows about it.",
+  "drDigitalIntro": "Messages is how you text on your computer.\n• Start a new message with someone in your Contacts.\n• Type your message and press Enter to send.\n• Each conversation stays in the list, and it syncs with your phone.",
   "playgroundTask": {
     "type": "message-reply",
     "instructions": "Alex wants to make plans! Type Dr. Digital's reply exactly as shown, then press Enter.",

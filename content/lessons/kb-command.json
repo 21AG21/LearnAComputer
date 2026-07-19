@@ -5,8 +5,10 @@
   "order": 208,
   "title": "Shortcut Keys (Ctrl / Command)",
   "videoUrl": "",
-  "drDigitalIntro": "Every computer has a special key for keyboard shortcuts. On most computers (Windows, Chromebook, Linux), it's Ctrl. On Mac, it's Command. Hold this key and press another letter to do something quickly — like Ctrl+S to save, Ctrl+C to copy, or Ctrl+V to paste. These shortcuts work in almost every app!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Every computer has a special key for shortcuts.\n• On Windows, Chromebook, and Linux it's Ctrl. On Mac it's Command.\n• Hold it and press a letter to do something fast — like Ctrl+C to copy.\n• These shortcuts work in almost every app.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's your shortcut key — Ctrl (or Command on Mac). It powers almost every handy shortcut!",
   "drDigitalHint": "Look for Ctrl in the bottom-left corner of your keyboard (or Command next to the space bar on Mac), then click Continue."
 }

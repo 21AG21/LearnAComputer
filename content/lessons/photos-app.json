@@ -5,14 +5,26 @@
   "order": 700,
   "title": "Your Photo Library",
   "videoUrl": "",
-  "drDigitalIntro": "Your photo app is where all the pictures on your computer or phone live. You can scroll through every photo you've taken — newest ones appear first. Tap or click a photo to see it full size. Your library automatically organizes photos by date. You can also search for photos by what's in them. Let's explore the photo library!",
+  "drDigitalIntro": "Your photo app is where all your pictures live.\n• Scroll through every photo — newest first.\n• Click a photo to see it full size.\n• Photos are organized by date, and you can search them. Let's explore!",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You explored your photo library",
     "steps": [
-      { "say": "Click on the Beach Sunset photo to view it.", "action": "select-photo", "target": "Beach Sunset" },
-      { "say": "Click on the Dog in Park photo.", "action": "select-photo", "target": "Dog in Park" },
-      { "say": "Click on the Birthday Cake photo.", "action": "select-photo", "target": "Birthday Cake" }
+      {
+        "say": "Click on the Beach Sunset photo to view it.",
+        "action": "select-photo",
+        "target": "Beach Sunset"
+      },
+      {
+        "say": "Click on the Dog in Park photo.",
+        "action": "select-photo",
+        "target": "Dog in Park"
+      },
+      {
+        "say": "Click on the Birthday Cake photo.",
+        "action": "select-photo",
+        "target": "Birthday Cake"
+      }
     ]
   },
   "drDigitalSuccess": "You found your way around the photo library! Click any photo to view it full size.",

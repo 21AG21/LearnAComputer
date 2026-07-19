@@ -5,15 +5,30 @@
   "order": 820,
   "title": "Installing an App",
   "videoUrl": "",
-  "drDigitalIntro": "Installing an app downloads it and puts it on your device. Free apps: just tap Install. Paid apps: you'll be charged to your payment method on file. The app download progress shows in the store. Once installed, the app appears on your home screen or app list. Installation is usually fast — a few seconds to a minute depending on your internet speed and the app size.",
+  "drDigitalIntro": "Installing an app puts it on your device.\n• For free apps, just tap Install.\n• Paid apps charge your payment method on file.\n• Once installed, the app appears in your app list.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You installed a free app",
     "steps": [
-      { "say": "Search for 'Puzzle Quest' in the search bar.", "action": "search", "target": "Puzzle Quest" },
-      { "say": "Click on Puzzle Quest from the results.", "action": "select-app", "target": "Puzzle Quest" },
-      { "say": "Click Install to download and install it.", "action": "install", "target": "Puzzle Quest" },
-      { "say": "Click 'My Apps' in the tab bar to see your installed apps.", "action": "go-to-installed" }
+      {
+        "say": "Search for 'Puzzle Quest' in the search bar.",
+        "action": "search",
+        "target": "Puzzle Quest"
+      },
+      {
+        "say": "Click on Puzzle Quest from the results.",
+        "action": "select-app",
+        "target": "Puzzle Quest"
+      },
+      {
+        "say": "Click Install to download and install it.",
+        "action": "install",
+        "target": "Puzzle Quest"
+      },
+      {
+        "say": "Click 'My Apps' in the tab bar to see your installed apps.",
+        "action": "go-to-installed"
+      }
     ]
   },
   "drDigitalSuccess": "You installed an app! Free apps install instantly. Check My Apps to see everything you've installed.",

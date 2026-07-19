@@ -5,8 +5,10 @@
   "order": 250,
   "title": "The shortcut pattern",
   "videoUrl": "",
-  "drDigitalIntro": "Here's the secret: you don't have to memorize dozens of shortcuts. Almost all of them follow one pattern — hold Command and press a letter to do something. C copies, V pastes, X cuts, A selects all, Z undoes, S saves, P prints, F finds, N makes a new one, W closes, and T opens a new tab. Once you see the pattern, they're easy to remember!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Here's the secret: shortcuts follow one simple pattern.\n• Hold Ctrl (or Command) and press a letter.\n• C copies, V pastes, X cuts, Z undoes, S saves.\n• A selects all, F finds, P prints, N is new, W closes, T is a new tab.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You've got the pattern — Command plus a letter. That unlocks almost every shortcut!",
   "drDigitalHint": "Take your time with the pattern, then click Continue whenever you're ready."
 }

@@ -5,13 +5,20 @@
   "order": 494,
   "title": "Refresh and Reload",
   "videoUrl": "",
-  "drDigitalIntro": "Sometimes a website loads partially or gets stuck — clicking the Reload button (the circular arrow) loads the page again. You can also press Ctrl+R. If a page looks broken or old, a reload usually fixes it by fetching a fresh copy. It's the first thing to try when a page acts up.",
+  "drDigitalIntro": "Reloading loads a stuck or broken page again.\n• Click the circular arrow button, or press Ctrl+R.\n• It fetches a fresh copy of the page.\n• It's the first thing to try when a page acts up.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Reload a page that got stuck",
     "steps": [
-      { "say": "Go to shop.example — type it and press Enter.", "action": "navigate", "url": "shop.example" },
-      { "say": "Imagine the page got stuck. Click the ⟳ Reload button (or press Ctrl+R) to load it fresh.", "action": "reload" }
+      {
+        "say": "Go to shop.example — type it and press Enter.",
+        "action": "navigate",
+        "url": "shop.example"
+      },
+      {
+        "say": "Imagine the page got stuck. Click the ⟳ Reload button (or press Ctrl+R) to load it fresh.",
+        "action": "reload"
+      }
     ]
   },
   "drDigitalSuccess": "You reloaded the page. When a site looks broken or won't finish loading, the ⟳ reload button is the first thing to try.",

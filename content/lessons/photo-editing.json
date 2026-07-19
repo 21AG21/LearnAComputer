@@ -5,17 +5,41 @@
   "order": 730,
   "title": "Basic Photo Editing",
   "videoUrl": "",
-  "drDigitalIntro": "You don't need to be a professional to improve your photos! Basic edits can make a big difference. Rotate: turns the photo 90 degrees if it's sideways. Crop: trims the edges to focus on the main subject. Brightness: makes the photo lighter or darker. Filters: applies a color effect. The best part: you can always revert to the original if you don't like the result!",
+  "drDigitalIntro": "You can improve photos without being a pro.\n• Rotate turns a sideways photo upright.\n• Crop trims the edges; Brightness makes it lighter or darker.\n• Filters add a color effect — and you can always revert to the original.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You edited a photo and reverted it",
     "steps": [
-      { "say": "Click the Mountain Hike photo to open it.", "action": "select-photo", "target": "Mountain Hike" },
-      { "say": "Click Rotate to turn the photo 90 degrees.", "action": "rotate", "target": "Mountain Hike" },
-      { "say": "Click Crop to trim the photo.", "action": "crop", "target": "Mountain Hike" },
-      { "say": "Adjust the brightness by clicking Brightness.", "action": "adjust-brightness", "target": "Mountain Hike" },
-      { "say": "Apply a filter to change the mood of the photo.", "action": "apply-filter", "target": "Mountain Hike" },
-      { "say": "Click Revert to undo all changes and restore the original.", "action": "revert", "target": "Mountain Hike" }
+      {
+        "say": "Click the Mountain Hike photo to open it.",
+        "action": "select-photo",
+        "target": "Mountain Hike"
+      },
+      {
+        "say": "Click Rotate to turn the photo 90 degrees.",
+        "action": "rotate",
+        "target": "Mountain Hike"
+      },
+      {
+        "say": "Click Crop to trim the photo.",
+        "action": "crop",
+        "target": "Mountain Hike"
+      },
+      {
+        "say": "Adjust the brightness by clicking Brightness.",
+        "action": "adjust-brightness",
+        "target": "Mountain Hike"
+      },
+      {
+        "say": "Apply a filter to change the mood of the photo.",
+        "action": "apply-filter",
+        "target": "Mountain Hike"
+      },
+      {
+        "say": "Click Revert to undo all changes and restore the original.",
+        "action": "revert",
+        "target": "Mountain Hike"
+      }
     ]
   },
   "drDigitalSuccess": "You edited a photo and reverted it! The original is always preserved — you can always undo edits.",

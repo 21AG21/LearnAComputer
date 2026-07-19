@@ -5,7 +5,7 @@
   "order": 205,
   "title": "Typing practice",
   "videoUrl": "",
-  "drDigitalIntro": "Let's put it all together — letters, numbers, spaces, Shift, and Caps Lock. Type this sentence exactly, capital letters, commas, and all: Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!",
+  "drDigitalIntro": "Let's put it all together — letters, numbers, spaces, Shift, and Caps Lock.\n• Type the sentence exactly as shown.\n• Include the capital letters and commas.",
   "playgroundTask": {
     "type": "compose-email",
     "instructions": "Open the Mail app, click the pencil to compose a new email, and type this message exactly: \"Hi Doctor Digital! Are you having a good day today? Thanks for teaching me like 9,003,751 new things!\" Then click Send.",

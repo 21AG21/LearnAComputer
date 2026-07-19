@@ -5,8 +5,10 @@
   "order": 206,
   "title": "Return",
   "videoUrl": "",
-  "drDigitalIntro": "Pressing Return moves your typing cursor down to a new line, like starting a fresh paragraph. It also acts as an Enter or OK button to confirm actions on your screen.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Return starts a new line, like a fresh paragraph.\n• It moves your cursor down.\n• It also works as an Enter or OK button to confirm things.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's Return — new lines, and your all-purpose OK button!",
   "drDigitalHint": "Find the large Return (or Enter) key on the right side, then click Continue."
 }

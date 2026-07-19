@@ -5,14 +5,24 @@
   "order": 1280,
   "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDFs (Portable Document Format) are files that look the same on any device or computer — used for forms, receipts, contracts, and documents. You can open a PDF in your browser by clicking on it. You can also download it to save it to your computer. To save a webpage as a PDF, look for Print > Save as PDF. PDFs can't usually be edited unless you have special software.",
+  "drDigitalIntro": "PDFs look the same on any device.\n• They're used for forms, receipts, and contracts.\n• Open one in your browser, or download it to save it.\n• To make a PDF, use Print > Save as PDF.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "You downloaded a PDF from a website",
     "steps": [
-      { "say": "Navigate to recipebox.example to find a recipe PDF.", "action": "navigate", "url": "recipebox.example" },
-      { "say": "Click the Download button to save the recipe PDF.", "action": "download" },
-      { "say": "Open the Downloads panel to see your saved file.", "action": "open-downloads" }
+      {
+        "say": "Navigate to recipebox.example to find a recipe PDF.",
+        "action": "navigate",
+        "url": "recipebox.example"
+      },
+      {
+        "say": "Click the Download button to save the recipe PDF.",
+        "action": "download"
+      },
+      {
+        "say": "Open the Downloads panel to see your saved file.",
+        "action": "open-downloads"
+      }
     ]
   },
   "drDigitalSuccess": "You downloaded a PDF! Downloads go to your Downloads folder where you can find them later.",

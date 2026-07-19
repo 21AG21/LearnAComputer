@@ -5,7 +5,7 @@
   "order": 1240,
   "title": "Notes and Documents",
   "videoUrl": "",
-  "drDigitalIntro": "The Notes app is perfect for quick ideas, shopping lists, recipes, and anything you want to remember. Notes sync across all your devices via the cloud. For longer documents — letters, reports, essays — use a word processor like Google Docs, Microsoft Word, or LibreOffice. You can create a new note by pressing Ctrl+N in the Notes app. Notes can include text, photos, checklists, and sketches.",
+  "drDigitalIntro": "The Notes app is great for quick ideas and lists.\n• Jot down shopping lists, recipes, and reminders.\n• Notes sync across your devices.\n• For longer writing, use a word processor like Google Docs or Word.",
   "playgroundTask": {
     "type": "type-text",
     "instructions": "Practice typing a quick note. Type the words below exactly.",

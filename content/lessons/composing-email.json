@@ -5,7 +5,7 @@
   "order": 620,
   "title": "Writing an Email",
   "videoUrl": "",
-  "drDigitalIntro": "To compose an email, click New Message. Enter the recipient's email address in the To field, write a clear subject line, and type your message. A good subject tells the recipient what the email is about. Be polite and clear in your message. Click Send to deliver it. The other person gets it in their Inbox. If you're not ready to send, save it as a Draft and finish it later.",
+  "drDigitalIntro": "To write an email, click New Message.\n• Put the recipient's address in the To field.\n• Write a clear subject line that says what it's about.\n• Type your message, then click Send. Not ready? Save it as a Draft.",
   "playgroundTask": {
     "type": "compose-email",
     "instructions": "Practice composing an email! Open Mail, click the pencil to compose, and type this message exactly.",

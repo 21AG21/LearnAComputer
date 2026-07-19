@@ -5,15 +5,27 @@
   "order": 520,
   "title": "Group Conversations",
   "videoUrl": "",
-  "drDigitalIntro": "Send a message to multiple people at once using group chats. Click the compose button and add multiple contacts, then type your message. Everyone in the group sees the message and can reply. Group chats are great for organizing events, coordinating with family, or discussing plans with friends. You can add or remove people from a group at any time.",
+  "drDigitalIntro": "A group chat sends a message to several people at once.\n• Click compose and add multiple contacts.\n• Everyone in the group sees the replies.\n• Great for events, family, and plans. You can add or remove people anytime.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "What is a group chat in Messages?",
     "options": [
-      { "text": "A chat where only one person can send messages", "correct": false },
-      { "text": "A conversation with multiple people at once", "correct": true },
-      { "text": "An audio-only phone call", "correct": false },
-      { "text": "An email chain", "correct": false }
+      {
+        "text": "A chat where only one person can send messages",
+        "correct": false
+      },
+      {
+        "text": "A conversation with multiple people at once",
+        "correct": true
+      },
+      {
+        "text": "An audio-only phone call",
+        "correct": false
+      },
+      {
+        "text": "An email chain",
+        "correct": false
+      }
     ]
   },
   "drDigitalSuccess": "Right! Group chats include multiple people — everyone sees every message and can reply.",

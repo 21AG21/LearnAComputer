@@ -5,8 +5,10 @@
   "order": 210,
   "title": "Escape",
   "videoUrl": "",
-  "drDigitalIntro": "Located in the very top-left corner, the Escape key lets you cancel, exit, or back out of an action or a full-screen window.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The Escape key backs you out of things.\n• You'll find it in the very top-left corner.\n• Use it to cancel, exit, or leave a full-screen window.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's Escape — your friendly 'never mind, back out' button!",
   "drDigitalHint": "It's the top-left key, often labeled Esc. Find it, then click Continue."
 }

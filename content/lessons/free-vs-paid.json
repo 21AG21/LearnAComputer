@@ -5,14 +5,25 @@
   "order": 860,
   "title": "Free vs. Paid Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Free apps don't cost anything to download. They may make money through ads (showing you advertisements), in-app purchases (optional extras you can buy inside the app), or subscriptions (a monthly or yearly fee for premium features). Paid apps cost a one-time fee upfront. Some apps have both a free version and a paid version with more features. Read the description carefully to understand what you're getting.",
+  "drDigitalIntro": "Free and paid apps make money differently.\n• Free apps may show ads, offer in-app purchases, or charge a subscription.\n• Paid apps cost a one-time fee upfront.\n• Some have both a free and paid version — read the description first.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You compared free and paid apps in the store",
     "steps": [
-      { "say": "Click on PhotoFun to see its details.", "action": "select-app", "target": "PhotoFun" },
-      { "say": "Go back to the store home.", "action": "go-to-store" },
-      { "say": "Click on Calculator Pro to compare a free app.", "action": "select-app", "target": "Calculator Pro" }
+      {
+        "say": "Click on PhotoFun to see its details.",
+        "action": "select-app",
+        "target": "PhotoFun"
+      },
+      {
+        "say": "Go back to the store home.",
+        "action": "go-to-store"
+      },
+      {
+        "say": "Click on Calculator Pro to compare a free app.",
+        "action": "select-app",
+        "target": "Calculator Pro"
+      }
     ]
   },
   "drDigitalSuccess": "You compared free and paid apps! Check if a free version meets your needs before buying the paid one.",

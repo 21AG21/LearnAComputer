@@ -5,14 +5,26 @@
   "order": 320,
   "title": "the file manager: Your File Manager",
   "videoUrl": "",
-  "drDigitalIntro": "the file manager is the app that shows all your files and folders. The list on the left side is called the sidebar — it has shortcuts to the important places on your computer: Home, Documents, Pictures, Downloads, and Trash. Click any of them to jump straight there. Let's practice getting around.",
+  "drDigitalIntro": "The file manager is the app that shows all your files and folders.\n• The list on the left is called the sidebar.\n• It has shortcuts: Home, Documents, Pictures, Downloads, and Trash.\n• Click any of them to jump straight there.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Use the sidebar to move between places",
     "steps": [
-      { "say": "The sidebar on the left jumps between places. Click Pictures.", "action": "go-to", "target": "Pictures" },
-      { "say": "Now click Downloads to see what's saved there.", "action": "go-to", "target": "Downloads" },
-      { "say": "Click Home to return to your main files. That's how you get around in the file manager!", "action": "go-to", "target": "Home" }
+      {
+        "say": "The sidebar on the left jumps between places. Click Pictures.",
+        "action": "go-to",
+        "target": "Pictures"
+      },
+      {
+        "say": "Now click Downloads to see what's saved there.",
+        "action": "go-to",
+        "target": "Downloads"
+      },
+      {
+        "say": "Click Home to return to your main files. That's how you get around in the file manager!",
+        "action": "go-to",
+        "target": "Home"
+      }
     ]
   },
   "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. That's how you navigate everywhere in the file manager.",

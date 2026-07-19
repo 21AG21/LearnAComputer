@@ -5,8 +5,10 @@
   "order": 201,
   "title": "Numbers",
   "videoUrl": "",
-  "drDigitalIntro": "Located in a row above the letters, the number keys let you type digits from 0 to 9 to enter any numerical information.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The number keys type digits from 0 to 9.\n• You'll find them in a row above the letters.\n• Use them to enter any numbers.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's your number row — 0 through 9, right above the letters!",
   "drDigitalHint": "Look along the top row above the letters for the numbers, then click Continue."
 }

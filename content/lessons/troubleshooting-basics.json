@@ -5,16 +5,30 @@
   "order": 1110,
   "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Computers can act up — apps freeze, things slow down, errors pop up. Don't panic! Most problems have simple solutions. The most powerful fix? Restarting. Turn it off and on again. This solves the majority of computer problems by clearing the computer's temporary memory. If restarting doesn't help, the next step is to identify what's causing the problem. Let's practice handling a frozen app!",
+  "drDigitalIntro": "Computers act up sometimes — don't panic.\n• Most problems have simple fixes.\n• The most powerful one is restarting: turn it off and on again.\n• That clears the computer's temporary memory. Let's fix a frozen app!",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You fixed a frozen app",
     "scenario": "The browser is frozen and not responding",
     "steps": [
-      { "say": "There's an error on the screen. Click Dismiss to read it first.", "action": "read-error" },
-      { "say": "The browser app is frozen. Open Task Manager to see what's running.", "action": "open-task-manager" },
-      { "say": "The browser shows 'Not Responding' — click Force Quit to stop it.", "action": "force-quit", "target": "Browser" },
-      { "say": "Now restart the browser app.", "action": "restart-app", "target": "Browser" }
+      {
+        "say": "There's an error on the screen. Click Dismiss to read it first.",
+        "action": "read-error"
+      },
+      {
+        "say": "The browser app is frozen. Open Task Manager to see what's running.",
+        "action": "open-task-manager"
+      },
+      {
+        "say": "The browser shows 'Not Responding' — click Force Quit to stop it.",
+        "action": "force-quit",
+        "target": "Browser"
+      },
+      {
+        "say": "Now restart the browser app.",
+        "action": "restart-app",
+        "target": "Browser"
+      }
     ]
   },
   "drDigitalSuccess": "You fixed the frozen app! Task Manager shows what's running so you can force-quit stuck apps.",

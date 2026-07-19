@@ -5,14 +5,26 @@
   "order": 600,
   "title": "Your Inbox",
   "videoUrl": "",
-  "drDigitalIntro": "Email is like sending a letter, but instantly. Your Inbox is where emails from other people arrive. The Sent folder holds emails you've sent. Drafts are emails you started but haven't sent yet. Spam is where junk mail goes automatically. You can also Archive emails — that moves them out of your Inbox without deleting them, so you can find them later. Let's explore a real email inbox!",
+  "drDigitalIntro": "Email is like sending a letter, but instantly.\n• Your Inbox is where emails arrive; Sent holds emails you've sent.\n• Drafts are emails you started but haven't sent.\n• Spam is junk mail; Archive stores emails out of your Inbox. Let's explore!",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You explored your inbox and read emails",
     "steps": [
-      { "say": "Click on the email from Mom to read it.", "action": "open-email", "target": "Dinner Sunday?" },
-      { "say": "Now click on the email from Dr. Digital.", "action": "open-email", "target": "Great Progress!" },
-      { "say": "Click Inbox in the sidebar to go back to all emails.", "action": "go-to-folder", "target": "Inbox" }
+      {
+        "say": "Click on the email from Mom to read it.",
+        "action": "open-email",
+        "target": "Dinner Sunday?"
+      },
+      {
+        "say": "Now click on the email from Dr. Digital.",
+        "action": "open-email",
+        "target": "Great Progress!"
+      },
+      {
+        "say": "Click Inbox in the sidebar to go back to all emails.",
+        "action": "go-to-folder",
+        "target": "Inbox"
+      }
     ]
   },
   "drDigitalSuccess": "You opened and read emails like a pro! Your Inbox is the starting point for all email communication.",

@@ -5,17 +5,41 @@
   "order": 720,
   "title": "Creating Albums",
   "videoUrl": "",
-  "drDigitalIntro": "Albums are folders for your photos. You might create an album called 'Vacation 2024', 'Family', or 'Recipes'. Photos can be in multiple albums at once — adding a photo to an album doesn't move or copy it, it just creates a link. You can create as many albums as you want to organize your photos the way that makes sense to you.",
+  "drDigitalIntro": "Albums are folders for your photos.\n• Make albums like \"Vacation 2024\", \"Family\", or \"Recipes\".\n• A photo can be in several albums at once.\n• Adding to an album doesn't move or copy the photo.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You created an album and added photos to it",
     "steps": [
-      { "say": "Click the + New Album button to create a new album.", "action": "create-album", "value": "Vacation" },
-      { "say": "Now click the Dog in Park photo to open it.", "action": "select-photo", "target": "Dog in Park" },
-      { "say": "Click 'Add to Album' to add it to your Vacation album.", "action": "add-to-album", "value": "Vacation" },
-      { "say": "Open Beach Sunset and add it to the Vacation album too.", "action": "select-photo", "target": "Beach Sunset" },
-      { "say": "Add Beach Sunset to the Vacation album.", "action": "add-to-album", "value": "Vacation" },
-      { "say": "Click the Vacation album in the sidebar to see your photos.", "action": "go-to-album", "target": "Vacation" }
+      {
+        "say": "Click the + New Album button to create a new album.",
+        "action": "create-album",
+        "value": "Vacation"
+      },
+      {
+        "say": "Now click the Dog in Park photo to open it.",
+        "action": "select-photo",
+        "target": "Dog in Park"
+      },
+      {
+        "say": "Click 'Add to Album' to add it to your Vacation album.",
+        "action": "add-to-album",
+        "value": "Vacation"
+      },
+      {
+        "say": "Open Beach Sunset and add it to the Vacation album too.",
+        "action": "select-photo",
+        "target": "Beach Sunset"
+      },
+      {
+        "say": "Add Beach Sunset to the Vacation album.",
+        "action": "add-to-album",
+        "value": "Vacation"
+      },
+      {
+        "say": "Click the Vacation album in the sidebar to see your photos.",
+        "action": "go-to-album",
+        "target": "Vacation"
+      }
     ]
   },
   "drDigitalSuccess": "You created an album and added photos to it! Albums are a great way to keep related photos together.",

@@ -5,8 +5,10 @@
   "order": 270,
   "title": "Bold, italics, and underline",
   "videoUrl": "",
-  "drDigitalIntro": "You can change how your words look to add emphasis. Select some text, then press Ctrl+B to make it bold, Ctrl+I to make it italic, or Ctrl+U to underline it. Notice the pattern again — Command plus the first letter of what you want!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "You can change how your words look to add emphasis.\n• Select some text first.\n• Ctrl+B makes it bold; Ctrl+I makes it italic; Ctrl+U underlines it.\n• Same pattern: Ctrl plus the first letter of what you want.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Bold, italic, underline — now your writing can stand out!",
   "drDigitalHint": "Read through the three formatting shortcuts, then click Continue whenever you're ready."
 }

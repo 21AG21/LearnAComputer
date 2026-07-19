@@ -5,8 +5,10 @@
   "order": 211,
   "title": "Tab",
   "videoUrl": "",
-  "drDigitalIntro": "The Tab key jumps your cursor forward by several spaces to indent a paragraph, or moves you to the next box when filling out a form online.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "The Tab key jumps your cursor forward.\n• Use it to indent a paragraph.\n• Use it to move to the next box in an online form.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "That's Tab — great for indenting and for hopping between form boxes!",
   "drDigitalHint": "Find Tab on the far left, above Caps Lock, then click Continue."
 }

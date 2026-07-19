@@ -5,15 +5,31 @@
   "order": 1230,
   "title": "Using Maps Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online maps let you find locations, get directions, check traffic, and explore new areas. You can search for a business name, address, or type of place ('coffee shop near me'). Maps can give you directions by car, walking, cycling, or public transit. You can also switch between map view and satellite view to see real aerial photos. Maps are one of the most useful things you can do on a computer!",
+  "drDigitalIntro": "Online maps help you find places and get directions.\n• Search a business, an address, or \"coffee shop near me\".\n• Get directions by car, walking, cycling, or transit.\n• Switch to satellite view to see real aerial photos.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "You looked up directions using an online map",
     "steps": [
-      { "say": "Navigate to weather.com to start — we'll check location services.", "action": "navigate", "url": "weather.com" },
-      { "say": "A cookie banner appeared — click Decline to keep your privacy.", "action": "cookie-decline" },
-      { "say": "Now navigate to google.com to search for directions.", "action": "navigate", "url": "google.com" },
-      { "say": "Search for 'directions to nearest library'.", "action": "search", "query": "directions to nearest library", "reveal": "Daily News" }
+      {
+        "say": "Navigate to weather.com to start — we'll check location services.",
+        "action": "navigate",
+        "url": "weather.com"
+      },
+      {
+        "say": "A cookie banner appeared — click Decline to keep your privacy.",
+        "action": "cookie-decline"
+      },
+      {
+        "say": "Now navigate to google.com to search for directions.",
+        "action": "navigate",
+        "url": "google.com"
+      },
+      {
+        "say": "Search for 'directions to nearest library'.",
+        "action": "search",
+        "query": "directions to nearest library",
+        "reveal": "Daily News"
+      }
     ]
   },
   "drDigitalSuccess": "You used an online map! Search for any place or address to get directions and information.",

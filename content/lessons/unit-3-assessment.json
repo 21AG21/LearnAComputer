@@ -5,8 +5,10 @@
   "order": 390,
   "title": "Organize a Real Folder",
   "videoUrl": "",
-  "drDigitalIntro": "Time to practice on your real computer! Download the practice folder from the link below — it contains a messy mix of files (photos, documents, and junk). Your job is to sort them into folders that make sense to you. Here are some ideas: create a 'Photos' folder for images, a 'Documents' folder for text files, and delete anything that looks like junk. There's no single right answer — organize it however makes sense to you!\n\nDownload link: (Your instructor will provide a .zip file with practice files)\n\nWhen you're done, click Continue. We won't check your work — this is real practice for you to keep!",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Time to practice on your real computer!\n• Download the practice folder from the link below.\n• Sort the messy files into folders that make sense — like \"Photos\" and \"Documents\".\n• Delete any junk. There's no single right answer, and we won't check your work.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "Great job organizing those files! You now have real experience managing folders on your own computer. The more you practice, the easier it gets.",
   "drDigitalHint": "Download the .zip file, unzip it, then create folders and drag files into them. There's no wrong answer — just organize it in a way that makes sense to you."
 }

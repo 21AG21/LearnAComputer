@@ -5,8 +5,10 @@
   "order": 780,
   "title": "Organize Vacation Photos",
   "videoUrl": "",
-  "drDigitalIntro": "You have dozens of photos from a family vacation scattered in your Photos library. Your task is to create an album for the trip, mark your favorite photos, edit a photo by cropping and adjusting brightness, organize photos by people and places, share an album with family, and archive photos you don't want visible. This is what managing a photo library looks like.",
-  "playgroundTask": { "type": "none" },
+  "drDigitalIntro": "Your vacation photos are scattered across your library.\n• Make an album for the trip and mark your favorites.\n• Edit a photo — crop it and adjust the brightness.\n• Organize by people and places, and share the album with family.",
+  "playgroundTask": {
+    "type": "none"
+  },
   "drDigitalSuccess": "You're now a Photos pro!",
   "drDigitalHint": "Start by creating an album and dragging vacation photos into it."
 }

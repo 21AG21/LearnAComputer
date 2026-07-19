@@ -5,13 +5,20 @@
   "order": 492,
   "title": "Cookies: Website Memory",
   "videoUrl": "",
-  "drDigitalIntro": "Cookies are small files websites store on your computer. They remember information about you: what's in your shopping cart, your login, your preferences. Most cookies are helpful. But some track your behavior across the internet. Many sites now show a cookie banner asking permission when you arrive — you can Accept or Decline. If you'd rather not be tracked, it's fine to Decline.",
+  "drDigitalIntro": "Cookies are small files websites store on your computer.\n• They remember things like your cart, login, and preferences.\n• Most are helpful, but some track you across the internet.\n• If a cookie banner appears, it's fine to Decline.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Respond to a cookie banner",
     "steps": [
-      { "say": "Go to weather.com — type it and press Enter. Many sites greet you with a cookie notice.", "action": "navigate", "url": "weather.com" },
-      { "say": "A cookie banner appeared at the bottom. You can Accept or Decline. Click Decline to say no to tracking.", "action": "cookie-decline" }
+      {
+        "say": "Go to weather.com — type it and press Enter. Many sites greet you with a cookie notice.",
+        "action": "navigate",
+        "url": "weather.com"
+      },
+      {
+        "say": "A cookie banner appeared at the bottom. You can Accept or Decline. Click Decline to say no to tracking.",
+        "action": "cookie-decline"
+      }
     ]
   },
   "drDigitalSuccess": "You handled the cookie banner by declining. You're always allowed to say no to tracking cookies — the site still works.",

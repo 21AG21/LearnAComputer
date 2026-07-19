@@ -5,7 +5,7 @@
   "order": 9,
   "title": "Match the parts",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see how much you remember! Match each part of the laptop to its name.",
+  "drDigitalIntro": "Let's see how much you remember!\n• Match each part of the laptop to its name.",
   "playgroundTask": {
     "type": "match-parts",
     "instructions": "Click a dot on the laptop, then click the name it belongs to."

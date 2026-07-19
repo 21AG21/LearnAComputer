@@ -5,16 +5,36 @@
   "order": 660,
   "title": "Managing Your Email",
   "videoUrl": "",
-  "drDigitalIntro": "A cluttered inbox is stressful. The key to a clean inbox: delete emails you don't need, archive emails you might need later, and create a routine to check email regularly. Most people check email once or twice a day — not constantly. Your Sent folder keeps a record of every email you've sent, which is useful when you need to remember what you wrote.",
+  "drDigitalIntro": "A cluttered inbox is stressful, so keep it tidy.\n• Delete emails you don't need.\n• Archive emails you might need later.\n• Check email on a routine — once or twice a day is plenty.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You cleaned up your inbox",
     "steps": [
-      { "say": "Open the email from Amazon about your order.", "action": "open-email", "target": "Your order shipped" },
-      { "say": "The package arrived. Delete this email — click the Delete button.", "action": "delete", "target": "Your order shipped" },
-      { "say": "Open the email from Boss.", "action": "open-email", "target": "Meeting Tuesday" },
-      { "say": "The meeting is over. Archive this email to store it safely.", "action": "archive", "target": "Meeting Tuesday" },
-      { "say": "Click Sent in the sidebar to see emails you've sent.", "action": "go-to-folder", "target": "Sent" }
+      {
+        "say": "Open the email from Amazon about your order.",
+        "action": "open-email",
+        "target": "Your order shipped"
+      },
+      {
+        "say": "The package arrived. Delete this email — click the Delete button.",
+        "action": "delete",
+        "target": "Your order shipped"
+      },
+      {
+        "say": "Open the email from Boss.",
+        "action": "open-email",
+        "target": "Meeting Tuesday"
+      },
+      {
+        "say": "The meeting is over. Archive this email to store it safely.",
+        "action": "archive",
+        "target": "Meeting Tuesday"
+      },
+      {
+        "say": "Click Sent in the sidebar to see emails you've sent.",
+        "action": "go-to-folder",
+        "target": "Sent"
+      }
     ]
   },
   "drDigitalSuccess": "Your inbox is cleaner now! Delete what you don't need, archive what you might need later.",

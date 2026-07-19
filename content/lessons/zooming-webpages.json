@@ -5,13 +5,20 @@
   "order": 495,
   "title": "Zooming Web Pages",
   "videoUrl": "",
-  "drDigitalIntro": "Some websites are hard to read if the text is tiny. You can zoom in with Ctrl+Plus to make everything bigger, or Ctrl+Minus to make it smaller. You can also pinch on the trackpad. Press Ctrl+0 to return to normal size. Each website remembers your zoom level, so when you return it's sized how you like it.",
+  "drDigitalIntro": "You can zoom when text is too small to read.\n• Press Ctrl+Plus to zoom in, Ctrl+Minus to zoom out.\n• Press Ctrl+0 to return to normal size.\n• Each website remembers your zoom level.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Make a page's text bigger",
     "steps": [
-      { "say": "Go to wikipedia.org — type it and press Enter. Imagine the text is too small to read comfortably.", "action": "navigate", "url": "wikipedia.org" },
-      { "say": "Click the + zoom button twice to enlarge everything (or press Ctrl+Plus). Watch the page grow.", "action": "zoom-in" }
+      {
+        "say": "Go to wikipedia.org — type it and press Enter. Imagine the text is too small to read comfortably.",
+        "action": "navigate",
+        "url": "wikipedia.org"
+      },
+      {
+        "say": "Click the + zoom button twice to enlarge everything (or press Ctrl+Plus). Watch the page grow.",
+        "action": "zoom-in"
+      }
     ]
   },
   "drDigitalSuccess": "You zoomed in and the whole page got bigger and easier to read. Ctrl+Plus zooms in, Ctrl+Minus zooms out, Ctrl+0 resets.",

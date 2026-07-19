@@ -5,12 +5,15 @@
   "order": 450,
   "title": "Windows: Organize Your Browsing",
   "videoUrl": "",
-  "drDigitalIntro": "Windows are separate the browser experiences. Each window can have its own tabs. You might open one window for shopping and another for work — they're completely separate. Create a new window with File > New Window or Ctrl+N. Windows are useful when you want to keep things completely organized.",
+  "drDigitalIntro": "Windows are separate browser workspaces.\n• Each window has its own tabs.\n• Keep one window for shopping and another for work.\n• Open a new window with Ctrl+N.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Open a second, separate browser window",
     "steps": [
-      { "say": "A window is a whole separate browser. Click New Window to open a second one.", "action": "new-window" }
+      {
+        "say": "A window is a whole separate browser. Click New Window to open a second one.",
+        "action": "new-window"
+      }
     ]
   },
   "drDigitalSuccess": "You opened a second window. Windows are fully separate — one for work, one for shopping — each with its own tabs.",

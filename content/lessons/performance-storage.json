@@ -5,15 +5,24 @@
   "order": 1160,
   "title": "Slow Computer and Full Storage",
   "videoUrl": "",
-  "drDigitalIntro": "A slow computer often has too many apps running, or the storage is almost full. When storage is 90% full, performance suffers. Fix it: delete files you no longer need, empty the trash, remove old apps, and move large files to an external drive or cloud storage. Also close apps you're not using — having many apps open uses memory and makes everything slower.",
+  "drDigitalIntro": "A slow computer often has too many apps open or full storage.\n• Performance suffers when storage is over 90% full.\n• Delete files you don't need and empty the trash.\n• Close apps you're not using to free up memory.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You freed up storage to improve performance",
     "scenario": "The computer is running slow due to full storage",
     "steps": [
-      { "say": "Read the error about storage being full.", "action": "read-error" },
-      { "say": "Check how much storage you have left.", "action": "check-storage" },
-      { "say": "The drive is nearly full! Clear old files and cache to free up space.", "action": "clear-storage" }
+      {
+        "say": "Read the error about storage being full.",
+        "action": "read-error"
+      },
+      {
+        "say": "Check how much storage you have left.",
+        "action": "check-storage"
+      },
+      {
+        "say": "The drive is nearly full! Clear old files and cache to free up space.",
+        "action": "clear-storage"
+      }
     ]
   },
   "drDigitalSuccess": "You freed up storage! A fuller drive = a slower computer. Keep at least 10% of your storage free.",

@@ -5,13 +5,21 @@
   "order": 430,
   "title": "Domain Names",
   "videoUrl": "",
-  "drDigitalIntro": "A domain name is the core of a website's address. In google.com, 'google' is the domain name and '.com' is the extension. .com means commercial, .org means organization, .edu means education. Some sites use country codes: .uk for United Kingdom, .ca for Canada. Domain names are unique — only one website can own google.com.",
+  "drDigitalIntro": "A domain name is the core of a website's address.\n• In google.com, \"google\" is the domain and \".com\" is the extension.\n• .com means commercial, .org means organization, .edu means education.\n• Country codes like .uk and .ca show the country. Each domain is unique.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Notice the different endings on web addresses",
     "steps": [
-      { "say": "google.com ends in .com — that means a company. Type google.com and press Enter.", "action": "navigate", "url": "google.com" },
-      { "say": "wikipedia.org ends in .org — an organization, not a business. Type wikipedia.org and press Enter to see the different ending.", "action": "navigate", "url": "wikipedia.org" }
+      {
+        "say": "google.com ends in .com — that means a company. Type google.com and press Enter.",
+        "action": "navigate",
+        "url": "google.com"
+      },
+      {
+        "say": "wikipedia.org ends in .org — an organization, not a business. Type wikipedia.org and press Enter to see the different ending.",
+        "action": "navigate",
+        "url": "wikipedia.org"
+      }
     ]
   },
   "drDigitalSuccess": "You visited a .com (company) and a .org (organization). The ending after the dot tells you what kind of site it is.",
