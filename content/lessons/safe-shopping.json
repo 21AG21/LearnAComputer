@@ -3,26 +3,20 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Online Transactions",
   "order": 1060,
-  "title": "Safe Online Shopping",
+  "title": "Shopping Safely Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online shopping is convenient but has risks. Before entering your credit card, check: Is the URL correct (amazon.com, not amaz0n-deals.net)? Does the address bar show https:// with a padlock icon? Does the site look professional or rushed/suspicious? Stick to well-known retailers or sites you've used before. Use a credit card (not debit) — credit cards have better fraud protection.",
+  "drDigitalIntro": "Online shopping is convenient, but some sites are fake. Before buying: check that the address bar shows 'https://' with a padlock icon (means it's encrypted), look for reviews and a contact address, avoid deals that seem too good to be true, and use a credit card (not debit) for better fraud protection. Well-known retailers are generally safe. For a new store, search its name plus 'reviews' or 'scam' first.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "You want to buy shoes online. One of these sites is a scam. Which one?",
-    "items": [
-      {
-        "label": "amazon.com",
-        "preview": "🔒 https://www.amazon.com — Millions of products, trusted reviews, free Prime shipping. Credit card info protected by SSL encryption.",
-        "isFake": false
-      },
-      {
-        "label": "amaz0n-deals.net",
-        "preview": "AMAZING DEALS!! 90% off ALL shoes TODAY ONLY!! Enter your credit card at checkout. No returns needed — guaranteed lowest prices!! Limited time: next 10 minutes!",
-        "isFake": true
-      }
-    ],
-    "fakeExplanation": "Red flags: 'amaz0n' uses a zero instead of 'o', it's a .net domain instead of .com, excessive exclamation marks, unbelievable discounts, and extreme time pressure — all classic scam tactics."
+    "type": "guided-security",
+    "goal": "You learned to identify safe online shopping links",
+    "steps": [
+      { "say": "Go to the Phishing tab to inspect some shopping links.", "action": "go-to-section", "target": "phishing" },
+      { "say": "Inspect 'Complete Your Purchase'.", "action": "inspect-link", "target": "Complete Your Purchase" },
+      { "say": "That's shop.example.com with https — mark it Safe.", "action": "mark-safe", "target": "Complete Your Purchase" },
+      { "say": "Now inspect 'Enter Card Details'.", "action": "inspect-link", "target": "Enter Card Details" },
+      { "say": "That URL is suspicious — mark it Dangerous.", "action": "mark-dangerous", "target": "Enter Card Details" }
+    ]
   },
-  "drDigitalSuccess": "You spotted the fake store! Check the URL carefully, look for https://, and be very suspicious of deals that seem too good to be true.",
-  "drDigitalHint": "Look very closely at the web address spelling. Is anything slightly off?"
+  "drDigitalSuccess": "You know how to spot safe vs. dangerous shopping links! HTTPS + a known domain = safe to buy.",
+  "drDigitalHint": "Click Inspect to see a link's real URL, then decide if it's from a trustworthy site."
 }

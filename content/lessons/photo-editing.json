@@ -2,20 +2,22 @@
   "slug": "photo-editing",
   "unit": "Unit 7: Photos",
   "module": "Editing Photos",
-  "order": 740,
-  "title": "Editing Photos",
+  "order": 730,
+  "title": "Basic Photo Editing",
   "videoUrl": "",
-  "drDigitalIntro": "Photos lets you edit photos without a separate app. Double-click a photo to open the editor. You can crop (change the size or angle), rotate, adjust brightness and contrast, and apply filters. All edits are non-destructive — the original is always saved. Undo changes anytime. Photos editing is perfect for quick adjustments before sharing.",
+  "drDigitalIntro": "You don't need to be a professional to improve your photos! Basic edits can make a big difference. Rotate: turns the photo 90 degrees if it's sideways. Crop: trims the edges to focus on the main subject. Brightness: makes the photo lighter or darker. Filters: applies a color effect. The best part: you can always revert to the original if you don't like the result!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What does 'non-destructive editing' mean in Photos?",
-    "options": [
-      { "text": "You can't make permanent changes to photos", "correct": false },
-      { "text": "Edits are permanent and cannot be undone", "correct": false },
-      { "text": "The original photo is always preserved — you can revert anytime", "correct": true },
-      { "text": "Only one edit can be applied at a time", "correct": false }
+    "type": "guided-photos",
+    "goal": "You edited a photo and reverted it",
+    "steps": [
+      { "say": "Click the Mountain Hike photo to open it.", "action": "select-photo", "target": "Mountain Hike" },
+      { "say": "Click Rotate to turn the photo 90 degrees.", "action": "rotate", "target": "Mountain Hike" },
+      { "say": "Click Crop to trim the photo.", "action": "crop", "target": "Mountain Hike" },
+      { "say": "Adjust the brightness by clicking Brightness.", "action": "adjust-brightness", "target": "Mountain Hike" },
+      { "say": "Apply a filter to change the mood of the photo.", "action": "apply-filter", "target": "Mountain Hike" },
+      { "say": "Click Revert to undo all changes and restore the original.", "action": "revert", "target": "Mountain Hike" }
     ]
   },
-  "drDigitalSuccess": "Non-destructive means safe to experiment! You can always click 'Revert to Original' to undo everything.",
-  "drDigitalHint": "'Non-destructive' = not destroying anything. The original is always safe underneath."
+  "drDigitalSuccess": "You edited a photo and reverted it! The original is always preserved — you can always undo edits.",
+  "drDigitalHint": "Open a photo first, then use the editing buttons that appear. Use Revert to undo all changes."
 }

@@ -22,6 +22,12 @@ import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
 import GuidedFilesTask from "@/components/Playground/GuidedFilesTask";
 import GuidedBrowserTask from "@/components/Playground/GuidedBrowserTask";
 import GuidedMessagingTask from "@/components/Playground/GuidedMessagingTask";
+import GuidedEmailTask from "@/components/Playground/GuidedEmailTask";
+import GuidedPhotosTask from "@/components/Playground/GuidedPhotosTask";
+import GuidedAppStoreTask from "@/components/Playground/GuidedAppStoreTask";
+import GuidedSecurityTask from "@/components/Playground/GuidedSecurityTask";
+import GuidedTroubleshootingTask from "@/components/Playground/GuidedTroubleshootingTask";
+import GuidedCalendarTask from "@/components/Playground/GuidedCalendarTask";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -139,6 +145,24 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-messaging" && (
             <GuidedMessagingTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-email" && (
+            <GuidedEmailTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-photos" && (
+            <GuidedPhotosTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-app-store" && (
+            <GuidedAppStoreTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-security" && (
+            <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-troubleshooting" && (
+            <GuidedTroubleshootingTask goal={task.goal} scenario={task.scenario} steps={task.steps} onResult={onResult} />
+          )}
+          {task.type === "guided-calendar" && (
+            <GuidedCalendarTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
         </div>
       )}

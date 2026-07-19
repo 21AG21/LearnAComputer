@@ -1,24 +1,12 @@
 {
   "slug": "app-vs-website",
   "unit": "Unit 8: Apps",
-  "module": "Understanding Apps",
+  "module": "Apps vs Websites",
   "order": 800,
-  "title": "Website vs App vs Developer",
+  "title": "Apps vs. Websites",
   "videoUrl": "",
-  "drDigitalIntro": "A website runs in your browser — you visit it with the browser. An app is software you install on your computer — it's its own program, like Mail or Photos. A developer is the company or person who created the app. Most apps are made by real companies (Google, Netflix, Microsoft). You can get apps from the app store or directly from developers' websites.",
-  "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Sort each into App or Website.",
-    "categories": ["App", "Website"],
-    "items": [
-      { "label": "the browser", "category": "App" },
-      { "label": "facebook.com", "category": "Website" },
-      { "label": "Photos", "category": "App" },
-      { "label": "amazon.com", "category": "Website" },
-      { "label": "Mail", "category": "App" },
-      { "label": "weather.com", "category": "Website" }
-    ]
-  },
-  "drDigitalSuccess": "Apps are installed programs on your computer. Websites live on the internet and open in the browser.",
-  "drDigitalHint": "If you open it by clicking an icon on your computer — it's an app. If you go to it in the browser — it's a website."
+  "drDigitalIntro": "What's the difference between an app and a website? A website opens in your browser — you type a web address and it loads. An app is a separate program you download and install — it gets its own icon. Most apps have a matching website. Apps can often work offline, send you notifications, and access your camera or location. Websites work anywhere with a browser. You'll use both!",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Apps live on your device, websites live in your browser. Both are useful!",
+  "drDigitalHint": "Just read along and click Continue."
 }

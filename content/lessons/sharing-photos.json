@@ -2,20 +2,18 @@
   "slug": "sharing-photos",
   "unit": "Unit 7: Photos",
   "module": "Editing Photos",
-  "order": 750,
+  "order": 740,
   "title": "Sharing Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Share photos with family through Messages, Mail, or AirDrop (wirelessly to nearby Macs or phones). Use the Share Sheet to send photos or create a shared album that people can add to. Export photos to save copies in different formats or locations. Print photos directly from Photos. Sharing is how you preserve memories with others.",
+  "drDigitalIntro": "Sharing a photo sends a copy to someone else — via email, text message, social media, or other apps. You don't lose your photo; they get a copy. The photo file is attached to a message, email, or post. Photo quality can vary — sending over email may compress the image. For the best quality, use a cloud photo link or send from a photo app directly.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "To wirelessly share a photo with a family member in the same room, you use:",
-    "options": [
-      { "text": "USB cable transfer", "correct": false },
-      { "text": "Email as an attachment", "correct": false },
-      { "text": "AirDrop", "correct": true },
-      { "text": "Bluetooth", "correct": false }
+    "type": "guided-photos",
+    "goal": "You shared a photo",
+    "steps": [
+      { "say": "Click on the Garden Flowers photo to open it.", "action": "select-photo", "target": "Garden Flowers" },
+      { "say": "Click the Share button to send this photo to someone.", "action": "share", "target": "Garden Flowers" }
     ]
   },
-  "drDigitalSuccess": "You shared a photo! Modern devices have built-in wireless sharing (like AirDrop or Nearby Share) — fast, direct, no internet needed.",
-  "drDigitalHint": "AirDrop works like a wireless 'drop' — you drop files right onto someone else's device."
+  "drDigitalSuccess": "You shared a photo! Sharing sends a copy — your original photo stays safe in your library.",
+  "drDigitalHint": "Open a photo, then click the Share button (it looks like an arrow pointing up)."
 }

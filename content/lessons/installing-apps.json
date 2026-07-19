@@ -1,21 +1,21 @@
 {
   "slug": "installing-apps",
   "unit": "Unit 8: Apps",
-  "module": "Installing Apps",
-  "order": 830,
-  "title": "Installing Apps",
+  "module": "Getting Apps",
+  "order": 820,
+  "title": "Installing an App",
   "videoUrl": "",
-  "drDigitalIntro": "Install an app from the app store by clicking Install, or from a developer's website by downloading and running the installer. Some apps need to be dragged into your Applications folder. Once installed, your computer has a new program you can use. You'll see it in Launchpad and Spotlight search. An app stays on your computer until you delete it.",
+  "drDigitalIntro": "Installing an app downloads it and puts it on your device. Free apps: just tap Install. Paid apps: you'll be charged to your payment method on file. The app download progress shows in the store. Once installed, the app appears on your home screen or app list. Installation is usually fast — a few seconds to a minute depending on your internet speed and the app size.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "After installing an app from the app store, where can you find it?",
-    "options": [
-      { "text": "Only in the browser bookmarks", "correct": false },
-      { "text": "In the Applications folder and Launchpad", "correct": true },
-      { "text": "Only in System Settings", "correct": false },
-      { "text": "It appears on your Desktop automatically", "correct": false }
+    "type": "guided-app-store",
+    "goal": "You installed a free app",
+    "steps": [
+      { "say": "Search for 'Puzzle Quest' in the search bar.", "action": "search", "target": "Puzzle Quest" },
+      { "say": "Click on Puzzle Quest from the results.", "action": "select-app", "target": "Puzzle Quest" },
+      { "say": "Click Install to download and install it.", "action": "install", "target": "Puzzle Quest" },
+      { "say": "Click 'My Apps' in the tab bar to see your installed apps.", "action": "go-to-installed" }
     ]
   },
-  "drDigitalSuccess": "Installed apps live in the Applications folder — and Launchpad shows them all in a grid for easy access.",
-  "drDigitalHint": "After installing, look in Launchpad (the rocket icon in the taskbar) or the Applications folder in the file manager."
+  "drDigitalSuccess": "You installed an app! Free apps install instantly. Check My Apps to see everything you've installed.",
+  "drDigitalHint": "Search for an app, click its name, then click the Install button."
 }

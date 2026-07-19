@@ -3,19 +3,18 @@
   "unit": "Unit 6: Email",
   "module": "Email Essentials",
   "order": 600,
-  "title": "Email Basics",
+  "title": "Your Inbox",
   "videoUrl": "",
-  "drDigitalIntro": "Email is how you send messages and documents over the internet. Unlike text messages, email is a more formal way to communicate — great for work, business, or longer conversations. Every email has a recipient (To), a subject line (what it's about), and a message body (your message). Email is free and can be used from any device. Mail is the app on your computer that handles email.",
+  "drDigitalIntro": "Email is like sending a letter, but instantly. Your Inbox is where emails from other people arrive. The Sent folder holds emails you've sent. Drafts are emails you started but haven't sent yet. Spam is where junk mail goes automatically. You can also Archive emails — that moves them out of your Inbox without deleting them, so you can find them later. Let's explore a real email inbox!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What does the Subject line of an email tell the recipient?",
-    "options": [
-      { "text": "Who sent the email", "correct": false },
-      { "text": "When the email was sent", "correct": false },
-      { "text": "What the email is about", "correct": true },
-      { "text": "How large the attachment is", "correct": false }
+    "type": "guided-email",
+    "goal": "You explored your inbox and read emails",
+    "steps": [
+      { "say": "Click on the email from Mom to read it.", "action": "open-email", "target": "Dinner Sunday?" },
+      { "say": "Now click on the email from Dr. Digital.", "action": "open-email", "target": "Great Progress!" },
+      { "say": "Click Inbox in the sidebar to go back to all emails.", "action": "go-to-folder", "target": "Inbox" }
     ]
   },
-  "drDigitalSuccess": "Exactly — the Subject line is a preview of what your email is about. A clear subject helps the recipient know what to expect.",
-  "drDigitalHint": "The Subject is like the title of a letter. It tells you what's inside before you open it."
+  "drDigitalSuccess": "You opened and read emails like a pro! Your Inbox is the starting point for all email communication.",
+  "drDigitalHint": "Click on an email in the list to open and read it. Then click Inbox in the left sidebar."
 }

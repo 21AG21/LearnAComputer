@@ -5,17 +5,21 @@
   "order": 630,
   "title": "Reply and Forward",
   "videoUrl": "",
-  "drDigitalIntro": "Reply sends a message back to the person who emailed you. Your reply includes the original email in quotes so they remember what they asked. Forward sends someone else's email to another person — useful when you want to share information. Reply includes only the sender; Reply All sends to everyone who was on the original email chain.",
+  "drDigitalIntro": "Reply sends your response back to the person who emailed you — their address is automatically filled in. Forward sends the email to someone new, sharing the original message with them. Use Reply to continue a conversation. Use Forward to share information with someone who wasn't originally included. You can add your own message when forwarding to give context.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You receive an email from your sister. To send a response only to her, you click:",
-    "options": [
-      { "text": "Forward", "correct": false },
-      { "text": "Reply All", "correct": false },
-      { "text": "Reply", "correct": true },
-      { "text": "New Message", "correct": false }
+    "type": "guided-email",
+    "goal": "You replied to an email and forwarded another",
+    "steps": [
+      { "say": "Open the email from Mom.", "action": "open-email", "target": "Dinner Sunday?" },
+      { "say": "Click Reply to respond to Mom.", "action": "reply" },
+      { "say": "Type your reply in the message body.", "action": "set-body", "value": "Yes" },
+      { "say": "Send your reply.", "action": "send" },
+      { "say": "Open the email from Boss.", "action": "open-email", "target": "Meeting Tuesday" },
+      { "say": "Forward this to a colleague — click Forward.", "action": "forward" },
+      { "say": "Type 'colleague@example.com' in the To field.", "action": "set-to", "value": "colleague@example.com" },
+      { "say": "Send the forwarded email.", "action": "send" }
     ]
   },
-  "drDigitalSuccess": "Reply goes back to just the sender. Reply All goes to everyone. Forward sends to someone new entirely.",
-  "drDigitalHint": "Reply = respond to the person who wrote to you. Just them, no one else."
+  "drDigitalSuccess": "You replied and forwarded! Reply keeps the conversation going, Forward shares it with someone new.",
+  "drDigitalHint": "Open an email first, then look for the Reply and Forward buttons near the top of the email."
 }

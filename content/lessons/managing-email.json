@@ -3,22 +3,20 @@
   "unit": "Unit 6: Email",
   "module": "Email Documents",
   "order": 660,
-  "title": "Managing Your Inbox",
+  "title": "Managing Your Email",
   "videoUrl": "",
-  "drDigitalIntro": "Email adds up fast. Create folders for topics (Recipes, Bills, Work). Search Mail for specific senders or subjects. Mark emails as unread if you need to handle them later. Unsubscribe from newsletters you don't read — look for an Unsubscribe link at the bottom. Delete emails you don't need. Archive important emails for later. A clean Inbox makes it easier to find what you need.",
+  "drDigitalIntro": "A cluttered inbox is stressful. The key to a clean inbox: delete emails you don't need, archive emails you might need later, and create a routine to check email regularly. Most people check email once or twice a day — not constantly. Your Sent folder keeps a record of every email you've sent, which is useful when you need to remember what you wrote.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Decide what to do with each email.",
-    "categories": ["Keep (Inbox)", "Archive", "Delete"],
-    "items": [
-      { "label": "Meeting invite for tomorrow", "category": "Keep (Inbox)" },
-      { "label": "Doctor appointment receipt", "category": "Archive" },
-      { "label": "50% off sale from random store", "category": "Delete" },
-      { "label": "Old newsletter you never read", "category": "Delete" },
-      { "label": "Bank statement from last month", "category": "Archive" },
-      { "label": "Friend asking about dinner plans", "category": "Keep (Inbox)" }
+    "type": "guided-email",
+    "goal": "You cleaned up your inbox",
+    "steps": [
+      { "say": "Open the email from Amazon about your order.", "action": "open-email", "target": "Your order shipped" },
+      { "say": "The package arrived. Delete this email — click the Delete button.", "action": "delete", "target": "Your order shipped" },
+      { "say": "Open the email from Boss.", "action": "open-email", "target": "Meeting Tuesday" },
+      { "say": "The meeting is over. Archive this email to store it safely.", "action": "archive", "target": "Meeting Tuesday" },
+      { "say": "Click Sent in the sidebar to see emails you've sent.", "action": "go-to-folder", "target": "Sent" }
     ]
   },
-  "drDigitalSuccess": "Great inbox management! Action items stay in Inbox, records get archived, junk gets deleted.",
-  "drDigitalHint": "Ask yourself: do I need to act on this? Keep it. Might need to reference it? Archive it. Neither? Delete it."
+  "drDigitalSuccess": "Your inbox is cleaner now! Delete what you don't need, archive what you might need later.",
+  "drDigitalHint": "Open an email first, then use the Delete or Archive buttons that appear at the top."
 }

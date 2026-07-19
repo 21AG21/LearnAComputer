@@ -5,20 +5,18 @@
   "order": 610,
   "title": "Inbox, Sent, Drafts, and Archive",
   "videoUrl": "",
-  "drDigitalIntro": "Your Mail app has several folders: Inbox (emails you receive), Sent (emails you've sent), Drafts (emails you started but haven't sent yet), Archive (emails you don't need in Inbox but want to keep). Spam automatically goes to a Spam folder. You can create custom folders to organize emails by topic or person. Archive emails to keep them but clean up your Inbox.",
+  "drDigitalIntro": "Keeping your inbox organized makes email much less stressful. Mark junk emails as Spam so your email app learns to filter them. Archive emails you want to keep but don't need in your Inbox — they're stored safely and searchable later. Delete emails you no longer need. Moving emails to the right folders keeps your Inbox clean and easy to manage.",
   "playgroundTask": {
-    "type": "drag-sort-files",
-    "instructions": "Sort each email into the correct Mail folder.",
-    "categories": ["Inbox", "Sent", "Drafts", "Spam"],
-    "items": [
-      { "label": "Unfinished note to Mom", "category": "Drafts" },
-      { "label": "Birthday message from Tom", "category": "Inbox" },
-      { "label": "Reply you sent to your doctor", "category": "Sent" },
-      { "label": "You've won $1,000,000!!", "category": "Spam" },
-      { "label": "Your bank statement", "category": "Inbox" },
-      { "label": "Directions you emailed yourself", "category": "Sent" }
+    "type": "guided-email",
+    "goal": "You organized your inbox like a pro",
+    "steps": [
+      { "say": "That 'You won $1,000,000!!!' email looks suspicious. Click on it.", "action": "open-email", "target": "You won $1,000,000!!!" },
+      { "say": "This is spam! Mark it as Spam so it goes to the Spam folder.", "action": "mark-spam", "target": "You won $1,000,000!!!" },
+      { "say": "Open the email from Amazon about your order.", "action": "open-email", "target": "Your order shipped" },
+      { "say": "You got your package. Archive this email to keep it but clear your inbox.", "action": "archive", "target": "Your order shipped" },
+      { "say": "Click Spam in the sidebar to see where spam goes.", "action": "go-to-folder", "target": "Spam" }
     ]
   },
-  "drDigitalSuccess": "You sorted them all correctly! Inbox = received, Sent = sent by you, Drafts = unfinished, Spam = junk.",
-  "drDigitalHint": "Think about the status of each email: Did you receive it? Send it? Start but not finish it? Or is it suspicious?"
+  "drDigitalSuccess": "Your inbox is organized! Spam goes to Spam, archived emails are stored safely, and your Inbox stays clean.",
+  "drDigitalHint": "Open an email first, then use the action buttons that appear at the top to mark as spam, archive, or delete."
 }

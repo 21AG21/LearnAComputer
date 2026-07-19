@@ -3,19 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Connectivity",
   "order": 1150,
-  "title": "Peripheral Problems",
+  "title": "Peripherals Not Working",
   "videoUrl": "",
-  "drDigitalIntro": "Peripherals are devices you connect to your computer — printers, external monitors, mice, USB drives, and headphones. When a peripheral isn't working: unplug and replug it. Try a different USB port. Restart your computer with the peripheral connected. Check System Settings > Printers & Scanners (for printers). Update drivers if needed. Make sure the peripheral is charged if it's wireless. Most peripheral problems resolve with these simple steps.",
+  "drDigitalIntro": "Peripherals are devices you plug into your computer — keyboard, mouse, printer, headphones. If they stop working: check the cable or wireless connection, try unplugging and replugging, check if the device needs a battery change, and restart your computer. Sometimes your computer needs to 'see' the device again. Printers often need a driver (software) installed before they work.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You plug in a USB flash drive but your computer doesn't recognize it. What should you try first?",
-    "options": [
-      { "text": "Buy a new computer — your USB ports are broken", "correct": false },
-      { "text": "Unplug it and try a different USB port on your computer", "correct": true },
-      { "text": "Format your internal hard drive", "correct": false },
-      { "text": "Turn off Bluetooth", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You reconnected a peripheral device",
+    "scenario": "A peripheral device is not connecting",
+    "steps": [
+      { "say": "Read the error message about the peripheral.", "action": "read-error" },
+      { "say": "Check whether the cable is connected properly.", "action": "check-cable" },
+      { "say": "Try restarting the computer to force it to detect devices.", "action": "restart-computer" }
     ]
   },
-  "drDigitalSuccess": "A different USB port often solves recognition issues — one port may be faulty while others work fine.",
-  "drDigitalHint": "What's the simplest, least drastic step when a USB port doesn't recognize something?"
+  "drDigitalSuccess": "You troubleshot a peripheral! Check cable → restart — most peripheral issues are that simple.",
+  "drDigitalHint": "Read the error, check cable connections, then restart your computer."
 }

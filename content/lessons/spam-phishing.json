@@ -5,29 +5,16 @@
   "order": 670,
   "title": "Spam and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Mark emails as spam and they go to your Spam folder. Phishing is a scam where criminals pretend to be your bank or a big company and ask you to click a link or enter your password. Never click links or download attachments from suspicious emails. Never reply with passwords or personal information. If an email looks wrong, ask someone you trust or contact the company directly.",
+  "drDigitalIntro": "Spam is unwanted email — advertisements, fake offers, or worse. Phishing is when criminals pretend to be your bank or a big company to steal your information. Warning signs of phishing: urgent language ('Act NOW!'), suspicious email addresses, misspelled domains, requests for your password. Never click links in suspicious emails. Mark them as spam. Your email app learns over time and gets better at filtering junk automatically.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "One of these emails is a phishing scam. Which one?",
-    "items": [
-      {
-        "label": "From: Cloud Storage",
-        "preview": "Your receipt for Cloud+ ($2.99/month). View in your account online.",
-        "isFake": false
-      },
-      {
-        "label": "From: Cloud Support ⚠️",
-        "preview": "URGENT: Your account has been locked! Verify NOW at account-verify-login.net/login or lose access!",
-        "isFake": true
-      },
-      {
-        "label": "From: Amazon",
-        "preview": "Your order of 'Running Shoes' has shipped! Track your package: amazon.com/orders",
-        "isFake": false
-      }
-    ],
-    "fakeExplanation": "Real companies never link to suspicious domains. Always check the actual email address and URL, not just the display name."
+    "type": "guided-email",
+    "goal": "You identified and reported a phishing email",
+    "steps": [
+      { "say": "Look at your inbox. One email looks suspicious — click on 'You won $1,000,000!!!' to inspect it.", "action": "open-email", "target": "You won $1,000,000!!!" },
+      { "say": "This is a scam! Click 'Spam' to report it and move it out of your inbox.", "action": "mark-spam", "target": "You won $1,000,000!!!" },
+      { "say": "Click the Spam folder in the sidebar to confirm it moved there.", "action": "go-to-folder", "target": "Spam" }
+    ]
   },
-  "drDigitalSuccess": "You spotted the phishing email! Urgency + suspicious link + strange domain = scam every time.",
-  "drDigitalHint": "Hover over the link (don't click it!) and check the real URL. Legitimate companies use their own domain, not lookalike URLs."
+  "drDigitalSuccess": "You spotted and reported the phishing email! Urgency + suspicious content = scam. Always mark these as spam.",
+  "drDigitalHint": "Open the suspicious email, then click the Spam button to report it and move it to the Spam folder."
 }

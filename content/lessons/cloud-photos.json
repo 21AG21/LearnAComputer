@@ -1,0 +1,12 @@
+{
+  "slug": "cloud-photos",
+  "unit": "Unit 7: Photos",
+  "module": "Organizing Photos",
+  "order": 770,
+  "title": "Cloud Photo Storage",
+  "videoUrl": "",
+  "drDigitalIntro": "Cloud storage keeps a copy of your photos online — so if your phone or computer is lost, broken, or stolen, your photos are still safe. Your photos sync automatically across all your devices. When cloud storage is on, photos taken on your phone appear on your computer too. Most cloud services offer some free storage (5-15 GB) and charge a monthly fee for more.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "Cloud storage keeps your photos safe even if your device breaks. Set it up once and it works automatically!",
+  "drDigitalHint": "Just read and click Continue when you're ready."
+}

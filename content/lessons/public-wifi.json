@@ -5,17 +5,18 @@
   "order": 1070,
   "title": "Public WiFi Safety",
   "videoUrl": "",
-  "drDigitalIntro": "Free public WiFi at coffee shops, airports, or hotels is convenient but risky. Other people on the same network can potentially see what you're doing. Avoid logging into your bank or entering passwords on public WiFi. If you must use public WiFi, stick to browsing sites (news, weather) and avoid anything sensitive. Consider using your phone's mobile hotspot instead — that's private and safe.",
+  "drDigitalIntro": "Public WiFi at cafes, airports, and hotels is convenient, but less secure than your home network. Anyone on the same network could potentially intercept your data. Safety tips: avoid logging into banking or email on public WiFi, use HTTPS websites (the padlock), consider a VPN (Virtual Private Network) for an extra layer of security. Public WiFi is fine for reading news — just avoid anything sensitive.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You're at a coffee shop and need to check your bank balance. What's the safest option?",
-    "options": [
-      { "text": "Use the free coffee shop WiFi — it's probably fine", "correct": false },
-      { "text": "Use your phone's mobile hotspot instead of the public WiFi", "correct": true },
-      { "text": "Use the coffee shop WiFi but type very quietly", "correct": false },
-      { "text": "Ask the barista for the WiFi password — the private one is safer", "correct": false }
+    "type": "guided-security",
+    "goal": "You identified risks on public WiFi",
+    "steps": [
+      { "say": "Go to the Phishing tab to check a suspicious WiFi login page.", "action": "go-to-section", "target": "phishing" },
+      { "say": "Inspect 'Free WiFi Login' — this link is from a suspicious sign-in portal.", "action": "inspect-link", "target": "Free WiFi Login" },
+      { "say": "The URL is unsecured. Mark it Dangerous.", "action": "mark-dangerous", "target": "Free WiFi Login" },
+      { "say": "Now go to Privacy and turn off Location when on public networks.", "action": "go-to-section", "target": "privacy" },
+      { "say": "Toggle off Location sharing.", "action": "toggle-setting", "target": "Location" }
     ]
   },
-  "drDigitalSuccess": "Your phone's cellular connection (hotspot) is private and encrypted — other people at the coffee shop can't see your banking traffic.",
-  "drDigitalHint": "Public WiFi is shared with strangers. What connection is only yours?"
+  "drDigitalSuccess": "You identified public WiFi risks! Be cautious about what you access on public networks.",
+  "drDigitalHint": "Inspect links for unsecured URLs and limit what personal info your device shares on public networks."
 }

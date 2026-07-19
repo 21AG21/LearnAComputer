@@ -3,19 +3,20 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Fixing Problems",
   "order": 1110,
-  "title": "Troubleshooting Basics",
+  "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Troubleshooting means figuring out why something isn't working and fixing it. The golden rule: try the simplest fix first. Restart the app. If that doesn't work, restart the computer. If still broken, check if you're connected to the internet. Search the error message online — you're never the first person to have this problem. Stay calm; almost every problem has a solution.",
+  "drDigitalIntro": "Computers can act up — apps freeze, things slow down, errors pop up. Don't panic! Most problems have simple solutions. The most powerful fix? Restarting. Turn it off and on again. This solves the majority of computer problems by clearing the computer's temporary memory. If restarting doesn't help, the next step is to identify what's causing the problem. Let's practice handling a frozen app!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "An app on your computer has frozen and won't respond. What should you try FIRST?",
-    "options": [
-      { "text": "Take the computer to a repair shop immediately", "correct": false },
-      { "text": "Force quit the frozen app and reopen it", "correct": true },
-      { "text": "Delete the app and buy a new computer", "correct": false },
-      { "text": "Unplug the power cable", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You fixed a frozen app",
+    "scenario": "The browser is frozen and not responding",
+    "steps": [
+      { "say": "There's an error on the screen. Click Dismiss to read it first.", "action": "read-error" },
+      { "say": "The browser app is frozen. Open Task Manager to see what's running.", "action": "open-task-manager" },
+      { "say": "The browser shows 'Not Responding' — click Force Quit to stop it.", "action": "force-quit", "target": "Browser" },
+      { "say": "Now restart the browser app.", "action": "restart-app", "target": "Browser" }
     ]
   },
-  "drDigitalSuccess": "Force quit (Ctrl+Option+Esc) closes a frozen app without restarting. Start with the simplest fix before escalating!",
-  "drDigitalHint": "What's the least drastic thing you can try that might fix a frozen app?"
+  "drDigitalSuccess": "You fixed the frozen app! Task Manager shows what's running so you can force-quit stuck apps.",
+  "drDigitalHint": "Open Task Manager, find the Not Responding app, and click Force Quit."
 }

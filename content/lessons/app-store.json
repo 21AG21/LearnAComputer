@@ -1,21 +1,20 @@
 {
   "slug": "app-store",
   "unit": "Unit 8: Apps",
-  "module": "Understanding Apps",
+  "module": "Getting Apps",
   "order": 810,
-  "title": "The the app store",
+  "title": "The App Store",
   "videoUrl": "",
-  "drDigitalIntro": "The the app store is your computer's marketplace for apps. Open the app store app and you'll see thousands of apps: games, productivity tools, photo editors, and more. You can search for specific apps or browse by category. Many apps are free; some cost money. Buy an app once and it's yours forever — or pay a subscription for ongoing access. All apps in the app store are reviewed for safety.",
+  "drDigitalIntro": "The App Store (or Play Store) is where you download new apps safely. Every app is reviewed before it's listed, which protects you from many types of malware. You can browse categories, search by name, or see what's trending. Each app has a description, screenshots, ratings, and reviews from other users. Free apps cost nothing to download; paid apps charge a one-time fee.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Why is the app store the safest place to get apps?",
-    "options": [
-      { "text": "Apps are always the cheapest there", "correct": false },
-      { "text": "Every app is reviewed for security before listing it", "correct": true },
-      { "text": "It's the only place apps can be downloaded", "correct": false },
-      { "text": "Apps from the app store never need updating", "correct": false }
+    "type": "guided-app-store",
+    "goal": "You found an app in the store",
+    "steps": [
+      { "say": "You're in the App Store. Click on 'Games' in the category list.", "action": "go-to-category", "target": "Games" },
+      { "say": "Click on Puzzle Quest to see its details.", "action": "select-app", "target": "Puzzle Quest" },
+      { "say": "Click 'Go to Store' to go back to the main store page.", "action": "go-to-store" }
     ]
   },
-  "drDigitalSuccess": "The review process is the key — apps are checked each app for malware and policy violations before it goes live.",
-  "drDigitalHint": "The the app store is like a trusted store with a strict return policy — only vetted apps get in."
+  "drDigitalSuccess": "You browsed the App Store! Categories help you discover apps, and each app page shows ratings and reviews.",
+  "drDigitalHint": "Click a category to browse, then click an app name to see its details."
 }

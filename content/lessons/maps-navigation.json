@@ -3,16 +3,19 @@
   "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Finding Your Way",
   "order": 1230,
-  "title": "Maps and Navigation",
+  "title": "Using Maps Online",
   "videoUrl": "",
-  "drDigitalIntro": "Maps and Google Maps help you find directions, explore places, and plan trips. Search for an address or a business name to get turn-by-turn directions. Maps works on your phone for navigation while driving. On your computer, you can plan a route and send it to your phone with one tap. You can also search for restaurants, gas stations, or pharmacies near you.",
+  "drDigitalIntro": "Online maps let you find locations, get directions, check traffic, and explore new areas. You can search for a business name, address, or type of place ('coffee shop near me'). Maps can give you directions by car, walking, cycling, or public transit. You can also switch between map view and satellite view to see real aerial photos. Maps are one of the most useful things you can do on a computer!",
   "playgroundTask": {
-    "type": "url-navigator",
-    "instructions": "Practice navigating to Maps online. Type the address in the browser bar.",
-    "prompt": "Type: maps.google.com",
-    "targetUrl": "maps.google.com",
-    "successTitle": "Maps"
+    "type": "guided-browser",
+    "goal": "You looked up directions using an online map",
+    "steps": [
+      { "say": "Navigate to weather.com to start — we'll check location services.", "action": "navigate", "url": "weather.com" },
+      { "say": "A cookie banner appeared — click Decline to keep your privacy.", "action": "cookie-decline" },
+      { "say": "Now navigate to google.com to search for directions.", "action": "navigate", "url": "google.com" },
+      { "say": "Search for 'directions to nearest library'.", "action": "search", "query": "directions to nearest library", "reveal": "Daily News" }
+    ]
   },
-  "drDigitalSuccess": "You navigated to maps.google.com — Maps is available in your browser too, not just on your phone!",
-  "drDigitalHint": "Type maps.google.com in the address bar and press Enter or Go."
+  "drDigitalSuccess": "You used an online map! Search for any place or address to get directions and information.",
+  "drDigitalHint": "Navigate to a search engine, then type your destination in the search bar."
 }

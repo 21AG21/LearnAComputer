@@ -2,20 +2,21 @@
   "slug": "software-problems",
   "unit": "Unit 11: Troubleshooting",
   "module": "Fixing Problems",
-  "order": 1130,
+  "order": 1115,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Software problems include apps crashing, not opening, or behaving strangely. Common fixes: force quit and reopen the app (Ctrl+Option+Esc), restart your computer, update the app (buggy old versions are a common cause), or delete and reinstall the app. If the operating system itself seems broken, try a Safe Mode restart — hold Shift at startup. Safe Mode loads only essential software, which helps isolate the problem.",
+  "drDigitalIntro": "Software problems are issues with programs rather than hardware. Common signs: an app crashes or freezes, buttons don't work, or an error message appears. Solutions: force-quit and restart the app, restart your computer, or update the software. If the problem persists, try uninstalling and reinstalling the app. Most software problems are fixed by a simple restart.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "the browser keeps crashing every time you try to open it. You've tried restarting. What should you try next?",
-    "options": [
-      { "text": "Call tech support immediately — it must be a serious hardware failure", "correct": false },
-      { "text": "Check for a the browser or the operating system update — buggy software versions are a common cause", "correct": true },
-      { "text": "Delete all your photos to free up space", "correct": false },
-      { "text": "Turn off WiFi", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You fixed a frozen video editing app",
+    "scenario": "The video editor is frozen and not responding",
+    "steps": [
+      { "say": "Read the error message that appeared.", "action": "read-error" },
+      { "say": "Open Task Manager to see the running processes.", "action": "open-task-manager" },
+      { "say": "Video Editor is Not Responding. Force Quit it.", "action": "force-quit", "target": "Video Editor" },
+      { "say": "Restart the Video Editor app.", "action": "restart-app", "target": "Video Editor" }
     ]
   },
-  "drDigitalSuccess": "Software updates often fix crash bugs — checking for updates is a great second step after restarting.",
-  "drDigitalHint": "If restarting didn't fix a specific app crashing, what might have changed recently that could cause bugs?"
+  "drDigitalSuccess": "You fixed the software problem! Restart > Force Quit > Reinstall — try in that order.",
+  "drDigitalHint": "Read the error, open Task Manager, force quit the frozen app, then reopen it."
 }

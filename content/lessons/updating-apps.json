@@ -5,17 +5,15 @@
   "order": 840,
   "title": "Updating Apps",
   "videoUrl": "",
-  "drDigitalIntro": "App developers regularly release updates — new features, bug fixes, or security improvements. Check the app store for updates by clicking your profile icon. Enable automatic updates so your apps stay current without you thinking about it. Keeping apps updated is important for security and fixes.",
+  "drDigitalIntro": "App updates bring improvements: new features, bug fixes, and security patches. It's important to keep apps updated, especially for security. Most devices can update apps automatically — you won't need to do anything. Or you can update manually from the App Store. Updates are free if the app was free. Always keep your apps and your device's operating system updated for the best security.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Why should you update your apps regularly?",
-    "options": [
-      { "text": "So they look better with nicer colors", "correct": false },
-      { "text": "To get new features and fix security problems", "correct": true },
-      { "text": "Because companies require it every week", "correct": false },
-      { "text": "To free up storage space", "correct": false }
+    "type": "guided-app-store",
+    "goal": "You updated an app",
+    "steps": [
+      { "say": "Click 'My Apps' to see your installed apps.", "action": "go-to-installed" },
+      { "say": "WeatherNow has an update available — click Update next to it.", "action": "update-app", "target": "WeatherNow" }
     ]
   },
-  "drDigitalSuccess": "Security fixes are the most important reason — outdated apps can have vulnerabilities that hackers exploit.",
-  "drDigitalHint": "Updates aren't just about new features — they often fix bugs and security holes discovered after launch."
+  "drDigitalSuccess": "You updated an app! Keeping apps updated protects you from security vulnerabilities.",
+  "drDigitalHint": "Go to My Apps and look for apps with an Update button next to them."
 }

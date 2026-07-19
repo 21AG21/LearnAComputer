@@ -5,17 +5,16 @@
   "order": 1280,
   "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDF is the most common document format — used for forms, statements, manuals, and tickets. Your computer opens PDFs automatically in Preview app. In Preview, you can highlight text, add notes, fill in forms, and sign documents with your finger or trackpad. To save a webpage as a PDF: File > Print > PDF > Save as PDF. This is great for keeping records of receipts or tickets when you can't print them.",
+  "drDigitalIntro": "PDFs (Portable Document Format) are files that look the same on any device or computer — used for forms, receipts, contracts, and documents. You can open a PDF in your browser by clicking on it. You can also download it to save it to your computer. To save a webpage as a PDF, look for Print > Save as PDF. PDFs can't usually be edited unless you have special software.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You receive an important bank statement as a PDF. Which app on your computer opens PDFs automatically?",
-    "options": [
-      { "text": "Pages", "correct": false },
-      { "text": "Preview", "correct": true },
-      { "text": "Calendar", "correct": false },
-      { "text": "Numbers", "correct": false }
+    "type": "guided-browser",
+    "goal": "You downloaded a PDF from a website",
+    "steps": [
+      { "say": "Navigate to recipebox.example to find a recipe PDF.", "action": "navigate", "url": "recipebox.example" },
+      { "say": "Click the Download button to save the recipe PDF.", "action": "download" },
+      { "say": "Open the Downloads panel to see your saved file.", "action": "open-downloads" }
     ]
   },
-  "drDigitalSuccess": "Preview is your computer's built-in PDF viewer — it opens automatically when you double-click a PDF file.",
-  "drDigitalHint": "Which app is specifically for viewing images and PDF files?"
+  "drDigitalSuccess": "You downloaded a PDF! Downloads go to your Downloads folder where you can find them later.",
+  "drDigitalHint": "Navigate to the page, click Download, then open the Downloads panel to confirm."
 }

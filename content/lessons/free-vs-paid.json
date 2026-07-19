@@ -3,19 +3,18 @@
   "unit": "Unit 8: Apps",
   "module": "Managing Apps",
   "order": 860,
-  "title": "Free vs Paid Apps",
+  "title": "Free vs. Paid Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Some apps are free forever. Others cost a one-time price. Some have a free version with limited features and a paid version for more. Subscriptions charge regularly (monthly or yearly) for ongoing access. In-app purchases let you unlock features within an app by paying. Read app descriptions to understand what you're paying for.",
+  "drDigitalIntro": "Free apps don't cost anything to download. They may make money through ads (showing you advertisements), in-app purchases (optional extras you can buy inside the app), or subscriptions (a monthly or yearly fee for premium features). Paid apps cost a one-time fee upfront. Some apps have both a free version and a paid version with more features. Read the description carefully to understand what you're getting.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "A 'freemium' app is one that:",
-    "options": [
-      { "text": "Costs exactly $0.99", "correct": false },
-      { "text": "Has a free tier and a paid upgrade", "correct": true },
-      { "text": "Is only available to students", "correct": false },
-      { "text": "Is always free no matter what", "correct": false }
+    "type": "guided-app-store",
+    "goal": "You compared free and paid apps in the store",
+    "steps": [
+      { "say": "Click on PhotoFun to see its details.", "action": "select-app", "target": "PhotoFun" },
+      { "say": "Go back to the store home.", "action": "go-to-store" },
+      { "say": "Click on Calculator Pro to compare a free app.", "action": "select-app", "target": "Calculator Pro" }
     ]
   },
-  "drDigitalSuccess": "Freemium = free to start, pay to unlock more. Many popular apps use this model.",
-  "drDigitalHint": "Freemium = free + premium. You get the basics for free and can pay to unlock more features."
+  "drDigitalSuccess": "You compared free and paid apps! Check if a free version meets your needs before buying the paid one.",
+  "drDigitalHint": "Click an app name in the store to read its description and see if it's free or paid."
 }

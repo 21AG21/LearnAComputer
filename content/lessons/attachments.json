@@ -3,19 +3,21 @@
   "unit": "Unit 6: Email",
   "module": "Email Documents",
   "order": 650,
-  "title": "Attachments",
+  "title": "Sending Attachments",
   "videoUrl": "",
-  "drDigitalIntro": "You can attach files to emails — photos, documents, PDFs, anything. Click the paperclip icon and choose a file from your computer. The file gets sent with your email. The recipient can open or download the file. Large files take longer to send. Some email services have limits on attachment size — if your file is too big, send it with a file-sharing service instead.",
+  "drDigitalIntro": "An attachment is a file you add to an email — like a photo, document, or PDF. The recipient can download and open it. Click the paperclip icon (📎) or Attach button to add a file. You can attach multiple files to one email. Be careful with attachments you receive from strangers — never open attachments from people you don't know, as they can contain viruses.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "How do you add a file to an email before sending it?",
-    "options": [
-      { "text": "Paste the file's name in the message body", "correct": false },
-      { "text": "Click the paperclip icon and choose a file", "correct": true },
-      { "text": "Type the file's web address", "correct": false },
-      { "text": "Print the file first, then scan it", "correct": false }
+    "type": "guided-email",
+    "goal": "You attached a file and sent it",
+    "steps": [
+      { "say": "Click Compose to start a new email.", "action": "compose" },
+      { "say": "Type 'friend@example.com' in the To field.", "action": "set-to", "value": "friend@example.com" },
+      { "say": "Type 'Vacation Photos' as the subject.", "action": "set-subject", "value": "Vacation Photos" },
+      { "say": "Click the 📎 Attach button to add a file.", "action": "attach" },
+      { "say": "Type a short message in the body.", "action": "set-body", "value": "Here" },
+      { "say": "Click Send to deliver the email with the attachment.", "action": "send" }
     ]
   },
-  "drDigitalSuccess": "The paperclip icon is the universal symbol for attachments — click it to add any file from your computer.",
-  "drDigitalHint": "Look for a paperclip icon in the email composer toolbar."
+  "drDigitalSuccess": "You attached a file and sent it! Look for the 📎 button whenever you need to add a photo or document.",
+  "drDigitalHint": "Click Compose, fill in To and Subject, then click the 📎 Attach button before sending."
 }

@@ -3,19 +3,18 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Recognizing Threats",
   "order": 1050,
-  "title": "Identity Theft",
+  "title": "Protecting Your Identity",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft is when someone steals your personal information — name, Social Security number, credit card, or bank details — to commit fraud. They might open new credit cards in your name, drain your bank account, or file fake taxes. Protect yourself: never share sensitive info in emails, check your bank statements regularly, use strong passwords, and be wary of oversharing on social media.",
+  "drDigitalIntro": "Identity theft happens when someone steals your personal information — name, social security number, bank details — and uses it to commit fraud. Protect yourself: never share your full social security number online, use strong passwords, enable 2FA, monitor your bank statements for suspicious charges, and don't overshare on social media. If you think your identity was stolen, contact your bank and credit bureaus immediately.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You receive a text from 'your bank' asking you to reply with your account number and Social Security number to verify your identity. What should you do?",
-    "options": [
-      { "text": "Reply with the information — banks need to verify customers regularly", "correct": false },
-      { "text": "Do not reply. Call your bank's official number to check if it's real", "correct": true },
-      { "text": "Forward the text to your friends so they know about it", "correct": false },
-      { "text": "Reply and ask them to prove they work at the bank first", "correct": false }
+    "type": "guided-security",
+    "goal": "You reviewed your privacy settings to protect your identity",
+    "steps": [
+      { "say": "Go to the Privacy tab to review your security settings.", "action": "go-to-section", "target": "privacy" },
+      { "say": "Ad Tracking is on — turn it off to protect your privacy.", "action": "toggle-setting", "target": "Ad Tracking" },
+      { "say": "Turn off Cookies to reduce tracking.", "action": "toggle-setting", "target": "Cookies" }
     ]
   },
-  "drDigitalSuccess": "Never send sensitive personal information by text or email. Call your bank at their official number — not a number in the message — to check if it's legitimate.",
-  "drDigitalHint": "Banks and the government will never ask for your SSN or account number by text. What's the safe move here?"
+  "drDigitalSuccess": "You adjusted your privacy settings! Limiting tracking is an easy way to protect your identity.",
+  "drDigitalHint": "Click the toggles to turn off tracking settings that you don't need."
 }

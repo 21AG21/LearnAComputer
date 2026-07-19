@@ -147,6 +147,86 @@ export type PlaygroundTask =
         target?: string;
         value?: string;
       }>;
+    }
+  | {
+      type: "guided-email";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "open-email" | "compose" | "set-to" | "set-cc" | "set-bcc"
+          | "set-subject" | "set-body" | "attach" | "send" | "reply"
+          | "forward" | "delete" | "mark-spam" | "archive" | "go-to-folder";
+        target?: string;
+        value?: string;
+      }>;
+    }
+  | {
+      type: "guided-photos";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "select-photo" | "favorite" | "unfavorite" | "delete" | "recover"
+          | "create-album" | "add-to-album" | "go-to-album" | "crop" | "rotate"
+          | "adjust-brightness" | "apply-filter" | "revert" | "share" | "search";
+        target?: string;
+        value?: string;
+      }>;
+    }
+  | {
+      type: "guided-app-store";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "search" | "select-app" | "install" | "allow-permission" | "deny-permission"
+          | "go-to-installed" | "go-to-store" | "update-app" | "delete-app" | "open-app"
+          | "go-to-category";
+        target?: string;
+        value?: string;
+      }>;
+    }
+  | {
+      type: "guided-security";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "type-password" | "check-strength" | "type-username" | "type-login-password"
+          | "login" | "enter-2fa-code" | "verify-2fa" | "inspect-link" | "mark-safe"
+          | "mark-dangerous" | "toggle-setting" | "go-to-section";
+        target?: string;
+        value?: string;
+      }>;
+    }
+  | {
+      type: "guided-troubleshooting";
+      goal: string;
+      scenario: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "read-error" | "open-task-manager" | "force-quit" | "restart-app"
+          | "open-wifi-settings" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
+          | "restart-computer" | "check-storage" | "clear-storage" | "update-system"
+          | "search-help" | "check-cable" | "change-input";
+        target?: string;
+        value?: string;
+      }>;
+    }
+  | {
+      type: "guided-calendar";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action:
+          | "select-day" | "create-event" | "set-title" | "set-time" | "set-repeat"
+          | "save-event" | "create-reminder" | "set-reminder-text" | "save-reminder"
+          | "complete-reminder" | "switch-view" | "select-calendar";
+        target?: string;
+        value?: string;
+      }>;
     };
 
 export interface Lesson {

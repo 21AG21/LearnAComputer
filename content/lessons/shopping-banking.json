@@ -5,24 +5,18 @@
   "order": 1250,
   "title": "Online Shopping and Banking",
   "videoUrl": "",
-  "drDigitalIntro": "Online banking lets you check balances, pay bills, and transfer money without visiting a branch. Use your bank's official app or website (type the URL yourself — never click email links). Online shopping (Amazon, local store websites) lets you order from home with home delivery. Always check for https:// and the padlock icon before entering card details. Keep your receipts and check your statements for unexpected charges.",
+  "drDigitalIntro": "Online banking lets you check your balance, pay bills, and transfer money from your computer. Online shopping lets you buy almost anything and have it delivered. Both are safe when used on trusted websites. Key rules: only use official bank websites (type the address yourself — never follow emailed links), look for the padlock/https, and never do banking on public WiFi without a VPN. Let's practice checking links before shopping.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "You want to check your bank balance online. Which site is your real bank?",
-    "items": [
-      {
-        "label": "chaseonline.com",
-        "preview": "CLICK HERE — Your Chase account needs IMMEDIATE VERIFICATION. Enter your username, password, and 16-digit card number NOW to avoid suspension. Offer expires in 10 minutes!",
-        "isFake": true
-      },
-      {
-        "label": "chase.com",
-        "preview": "🔒 https://www.chase.com — Sign in to access your accounts, pay bills, view statements, and transfer money. Protected by 256-bit encryption.",
-        "isFake": false
-      }
-    ],
-    "fakeExplanation": "Real bank sites never ask for your card number on the login page. 'chaseonline.com' is not Chase's real domain — banks own their exact name, like chase.com or bankofamerica.com. Urgency and countdown timers are major scam red flags."
+    "type": "guided-security",
+    "goal": "You verified safe banking and shopping links",
+    "steps": [
+      { "say": "Go to the Phishing tab to check some banking links.", "action": "go-to-section", "target": "phishing" },
+      { "say": "Inspect 'Bank of America Login' to check the URL.", "action": "inspect-link", "target": "Bank of America Login" },
+      { "say": "bankofamerica.com with https — that's safe. Mark it Safe.", "action": "mark-safe", "target": "Bank of America Login" },
+      { "say": "Now inspect 'Enter Card Details'.", "action": "inspect-link", "target": "Enter Card Details" },
+      { "say": "That URL is suspicious — mark it Dangerous.", "action": "mark-dangerous", "target": "Enter Card Details" }
+    ]
   },
-  "drDigitalSuccess": "You spotted the fake bank site! Always type your bank's address yourself and never click links from emails claiming to be from your bank.",
-  "drDigitalHint": "What is the actual web address? And does a real bank ever demand your card number with a 10-minute countdown?"
+  "drDigitalSuccess": "You checked banking links for safety! Always verify the URL before entering card details.",
+  "drDigitalHint": "Click Inspect on each link to see the real URL, then judge whether it's safe."
 }

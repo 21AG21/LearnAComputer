@@ -1,21 +1,22 @@
 {
   "slug": "photo-favorites",
   "unit": "Unit 7: Photos",
-  "module": "Managing Photos",
-  "order": 720,
-  "title": "Favorites and Search",
+  "module": "Your Photo Library",
+  "order": 710,
+  "title": "Favoriting Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Mark your best photos as Favorites by clicking the heart icon. Favorites are easy to find in the sidebar. You can also search photos by date, location, or who's in the photo. Search for 'beach' and Photos finds all photos tagged with beach-related keywords. This makes finding specific photos fast, especially when you have thousands.",
+  "drDigitalIntro": "Favoriting a photo marks it with a heart — it still stays in your library but also appears in a special Favorites section so you can find your best photos quickly. Tap the heart icon while viewing a photo to add it to Favorites. Tap it again to remove it. Most people have hundreds or thousands of photos, so Favorites is a great way to gather the ones you love most.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "How do you mark a photo as a Favorite in the Photos app?",
-    "options": [
-      { "text": "Right-click and choose 'Mark as Favorite'", "correct": false },
-      { "text": "Click the heart icon on the photo", "correct": true },
-      { "text": "Rename the file with 'FAV' at the start", "correct": false },
-      { "text": "Drag it to a special Favorites folder", "correct": false }
+    "type": "guided-photos",
+    "goal": "You favorited and unfavorited photos",
+    "steps": [
+      { "say": "Click the Beach Sunset photo to open it.", "action": "select-photo", "target": "Beach Sunset" },
+      { "say": "Click the heart ♡ button to add it to your Favorites.", "action": "favorite", "target": "Beach Sunset" },
+      { "say": "Click the Family Dinner photo to open it.", "action": "select-photo", "target": "Family Dinner" },
+      { "say": "Add it to Favorites too.", "action": "favorite", "target": "Family Dinner" },
+      { "say": "Go to the Favorites section in the sidebar to see your favorited photos.", "action": "go-to-album", "target": "Favorites" }
     ]
   },
-  "drDigitalSuccess": "The heart icon is your Favorite button — click it once to mark, click again to unmark.",
-  "drDigitalHint": "Hearts mean favorites everywhere on the internet — Photos uses the same symbol."
+  "drDigitalSuccess": "Your favorite photos are saved in one place! The heart ♡ icon marks your best shots.",
+  "drDigitalHint": "Click a photo first to open it, then click the heart button that appears."
 }

@@ -5,17 +5,17 @@
   "order": 1120,
   "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems involve the physical parts of your computer: the screen, keyboard, trackpad, battery, or speakers. Symptoms include: screen flickering, keys not responding, trackpad not clicking, battery draining very fast, or speakers making no sound. First try a restart — sometimes hardware glitches clear. Check System Settings to confirm the hardware is recognized. Serious hardware problems usually need an professional repair.",
+  "drDigitalIntro": "Hardware problems involve the physical parts of your computer — the screen, keyboard, mouse, or ports. Common issues: a monitor that shows nothing (check the cable and that the display input is correct), a mouse or keyboard that isn't responding (check if it's plugged in or the battery), a slow computer (storage may be full). Start by checking the obvious: cables, power, and connections.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Your computer's keyboard randomly types the wrong letters. What is the most likely cause?",
-    "options": [
-      { "text": "Your WiFi password is wrong", "correct": false },
-      { "text": "A hardware or driver issue with the keyboard itself", "correct": true },
-      { "text": "You have too many browser tabs open", "correct": false },
-      { "text": "Your the cloud storage is full", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You diagnosed and fixed a hardware problem",
+    "scenario": "The monitor is not showing a picture",
+    "steps": [
+      { "say": "There's a display problem. Read the error message first.", "action": "read-error" },
+      { "say": "Check that the video cable is properly connected.", "action": "check-cable" },
+      { "say": "The cable looks fine. Try switching the display input source.", "action": "change-input" }
     ]
   },
-  "drDigitalSuccess": "Keyboard issues are hardware or driver problems — not related to WiFi or storage. A restart is the first thing to try.",
-  "drDigitalHint": "The keyboard is physical hardware. Which option is related to physical hardware behavior?"
+  "drDigitalSuccess": "You fixed a hardware problem! Always check cables and connections before assuming something is broken.",
+  "drDigitalHint": "Read the error, then try the physical checks: cable first, then display input."
 }

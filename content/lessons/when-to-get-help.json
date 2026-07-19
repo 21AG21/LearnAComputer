@@ -3,19 +3,18 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Getting Support",
   "order": 1180,
-  "title": "When to Get Professional Help",
+  "title": "When to Ask for Help",
   "videoUrl": "",
-  "drDigitalIntro": "You don't have to fix every problem yourself. Get professional help when: the computer won.t turn on at all, the screen is cracked, a liquid was spilled inside, you hear grinding noises, or you've tried everything and it's still broken. The manufacturer.s support website offers chat, phone, and sometimes in-person help. Many community libraries and senior centers also offer free tech help. Asking for help is always the right call.",
+  "drDigitalIntro": "Some problems you can fix yourself, but some need a professional. Get help if: your computer makes unusual sounds (could be hardware failure), you see a blue or black screen you can't get out of, you suspect a virus, or you've tried the basics and nothing works. You can also search for help online — most error messages, if you copy them into a search engine, will show forum posts with solutions from others who had the same problem.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You accidentally spill coffee on your computerBook keyboard. What should you do immediately?",
-    "options": [
-      { "text": "Keep using it and hope it dries out on its own", "correct": false },
-      { "text": "Turn it off immediately, flip it upside down, and take it to a repair shop", "correct": true },
-      { "text": "Blow-dry it on high heat to dry the components quickly", "correct": false },
-      { "text": "Try reinstalling the operating system to fix the damage", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You found help for a computer problem",
+    "scenario": "A persistent error keeps appearing",
+    "steps": [
+      { "say": "Read the error message carefully.", "action": "read-error" },
+      { "say": "Search for help on this error message.", "action": "search-help", "value": "blue screen error restart loop" }
     ]
   },
-  "drDigitalSuccess": "Power off immediately and let professionals handle it — liquid inside a computer can cause serious damage if it stays on or dries in the wrong position.",
-  "drDigitalHint": "Liquid and electricity don't mix. What's the first priority?"
+  "drDigitalSuccess": "You searched for help! Copying an error message into a search engine is often the fastest way to find a solution.",
+  "drDigitalHint": "Read the error, then type it into the search bar to find help."
 }

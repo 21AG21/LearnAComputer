@@ -3,26 +3,22 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Recognizing Threats",
   "order": 1040,
-  "title": "Scams and Phishing",
+  "title": "Spotting Scams and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Phishing is when criminals send fake emails or messages pretending to be a trusted company — your bank, a big company, or the government. They want you to click a link and enter your password or personal information. Warning signs: urgent language ('Your account will be closed!'), unexpected requests for passwords, sender addresses that are slightly off (bankk.com instead of bank.com), and links that don't match the company's real website.",
+  "drDigitalIntro": "Phishing is when criminals send fake emails or messages pretending to be your bank, a delivery company, or a trusted service — trying to steal your password or credit card number. Warning signs: urgent language, misspelled domains, suspicious senders, and links that don't match what they say. Hover over a link before clicking to see where it really goes. When in doubt, go directly to the website instead of clicking the link.",
   "playgroundTask": {
-    "type": "spot-the-fake",
-    "instructions": "One of these emails is a phishing scam. Click the fake one.",
-    "items": [
-      {
-        "label": "From: mybank.com",
-        "preview": "Your the cloud storage is almost full. You can upgrade your plan at icloud.com/upgrade. Monthly plans start at $0.99/month.",
-        "isFake": false
-      },
-      {
-        "label": "From: mybank-security-alert.net",
-        "preview": "URGENT: Your account has been suspended! Click here immediately to verify your account: verify-account-now.net — or your account will be permanently deleted within 24 hours.",
-        "isFake": true
-      }
-    ],
-    "fakeExplanation": "Real bank emails come from @mybank.com — not 'mybank-security-alert.net'. Scams use urgency ('permanently deleted in 24 hours') and suspicious links to panic you into clicking."
+    "type": "guided-security",
+    "goal": "You identified safe and dangerous links",
+    "steps": [
+      { "say": "Go to the Phishing tab to practice spotting fake links.", "action": "go-to-section", "target": "phishing" },
+      { "say": "Look at 'Verify your account' — hover to see the real URL. Is it safe?", "action": "inspect-link", "target": "Verify your account" },
+      { "say": "That URL looks suspicious — mark it as Dangerous.", "action": "mark-dangerous", "target": "Verify your account" },
+      { "say": "Now inspect 'View your order'.", "action": "inspect-link", "target": "View your order" },
+      { "say": "That URL is amazon.com — mark it as Safe.", "action": "mark-safe", "target": "View your order" },
+      { "say": "Inspect 'Claim 90% Discount NOW'.", "action": "inspect-link", "target": "Claim 90% Discount NOW" },
+      { "say": "That URL looks sketchy — mark it as Dangerous.", "action": "mark-dangerous", "target": "Claim 90% Discount NOW" }
+    ]
   },
-  "drDigitalSuccess": "You spotted the phishing email! Look at the sender's domain and be suspicious of urgent threats. Real companies don't threaten you like that.",
-  "drDigitalHint": "Check the sender's email address carefully. Does it end in the real company's domain?"
+  "drDigitalSuccess": "You spotted the phishing links! Always check where a link goes before clicking.",
+  "drDigitalHint": "Click Inspect on each link to see its real URL, then mark it Safe or Dangerous."
 }

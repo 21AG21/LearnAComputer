@@ -3,19 +3,19 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Performance",
   "order": 1160,
-  "title": "Computer Running Slowly",
+  "title": "Slow Computer and Full Storage",
   "videoUrl": "",
-  "drDigitalIntro": "A slow computer often has a simple cause. Too many apps open at once = less memory, slower performance. A full hard drive (less than 10% free) also slows things down. Check storage in Settings or System Information. Close apps you aren't using. Delete large files you don't need. Restart your computer — this clears the memory. Older computers also run newer software harder; check Activity Monitor to see what's using CPU.",
+  "drDigitalIntro": "A slow computer often has too many apps running, or the storage is almost full. When storage is 90% full, performance suffers. Fix it: delete files you no longer need, empty the trash, remove old apps, and move large files to an external drive or cloud storage. Also close apps you're not using — having many apps open uses memory and makes everything slower.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Your computer has been on for two weeks without a restart and is running slowly. What is the most likely fix?",
-    "options": [
-      { "text": "Buy more RAM — the computer is permanently broken", "correct": false },
-      { "text": "Restart the computer — it clears memory and fixes many slowdowns", "correct": true },
-      { "text": "Delete your entire Documents folder", "correct": false },
-      { "text": "Uninstall the browser", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You freed up storage to improve performance",
+    "scenario": "The computer is running slow due to full storage",
+    "steps": [
+      { "say": "Read the error about storage being full.", "action": "read-error" },
+      { "say": "Check how much storage you have left.", "action": "check-storage" },
+      { "say": "The drive is nearly full! Clear old files and cache to free up space.", "action": "clear-storage" }
     ]
   },
-  "drDigitalSuccess": "Restarting clears temporary files and frees memory — it's the single best fix for a gradual slowdown.",
-  "drDigitalHint": "What happens to memory and temporary files when you restart a computer that's been running for weeks?"
+  "drDigitalSuccess": "You freed up storage! A fuller drive = a slower computer. Keep at least 10% of your storage free.",
+  "drDigitalHint": "Check Storage first to see how full it is, then click Clear Storage to clean up."
 }

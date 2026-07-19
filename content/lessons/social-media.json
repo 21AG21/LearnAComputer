@@ -3,19 +3,20 @@
   "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Social and Entertainment",
   "order": 1210,
-  "title": "Social Media and Videos",
+  "title": "Staying Connected Online",
   "videoUrl": "",
-  "drDigitalIntro": "Social media platforms let you share photos, stay in touch with family, and follow news. Popular ones include Facebook, Instagram, and YouTube. YouTube is great for tutorials, entertainment, and watching TV clips. To use them, create a free account on their website. Privacy tip: be thoughtful about what personal information you share publicly — use privacy settings to control who sees your posts.",
+  "drDigitalIntro": "Staying in touch with friends and family is one of the best things computers and phones can do. You can send messages, make video calls, share photos, and react to what others post. Good digital citizenship means being kind online, respecting privacy (ask before sharing others' photos), and being thoughtful about what you post — anything online can be shared further. Let's practice staying in touch!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You want to watch a tutorial video on how to bake a cake. Which website should you visit?",
-    "options": [
-      { "text": "google.com", "correct": false },
-      { "text": "youtube.com", "correct": true },
-      { "text": "google.com", "correct": false },
-      { "text": "mail.com", "correct": false }
+    "type": "guided-messaging",
+    "goal": "You sent a message and made a video call",
+    "steps": [
+      { "say": "Click on Grandma to open her conversation.", "action": "select-contact", "target": "grandma" },
+      { "say": "Type a message: 'Hi Grandma! How are you?' and send it.", "action": "send-message", "value": "Hi Grandma" },
+      { "say": "React to Grandma's message with an emoji.", "action": "add-reaction" },
+      { "say": "Start a video call with Grandma.", "action": "start-call" },
+      { "say": "End the call.", "action": "end-call" }
     ]
   },
-  "drDigitalSuccess": "YouTube is the world's largest video library — you can find tutorials for almost anything, including baking!",
-  "drDigitalHint": "Which website is specifically for watching and sharing videos?"
+  "drDigitalSuccess": "You sent a message and made a video call! Staying in touch is just a tap away.",
+  "drDigitalHint": "Click on a contact, type your message, click Send, then use the camera icon for a video call."
 }

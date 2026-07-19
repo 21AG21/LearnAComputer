@@ -1,0 +1,18 @@
+{
+  "slug": "photo-search",
+  "unit": "Unit 7: Photos",
+  "module": "Your Photo Library",
+  "order": 760,
+  "title": "Searching Your Photos",
+  "videoUrl": "",
+  "drDigitalIntro": "Modern photo apps can recognize what's in your photos — people's faces, places, animals, food, and more. You can search for 'beach' and see all your beach photos. Or 'dog' to see every photo with a dog. Or type someone's name. This saves enormous time when you have thousands of photos. The search happens right on your device; your photos aren't sent anywhere.",
+  "playgroundTask": {
+    "type": "guided-photos",
+    "goal": "You searched your photo library",
+    "steps": [
+      { "say": "Click the Search bar at the top.", "action": "search", "value": "beach" }
+    ]
+  },
+  "drDigitalSuccess": "You searched your photos! The photo app recognizes what's in your images so you can find them fast.",
+  "drDigitalHint": "Click the Search bar and type a word like 'beach' to find matching photos."
+}

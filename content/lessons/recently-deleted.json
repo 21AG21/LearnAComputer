@@ -1,21 +1,22 @@
 {
   "slug": "recently-deleted",
   "unit": "Unit 7: Photos",
-  "module": "Cloud Storage",
-  "order": 770,
-  "title": "Recently Deleted",
+  "module": "Organizing Photos",
+  "order": 750,
+  "title": "Deleted Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Deleted a photo by accident? It goes to Recently Deleted for 30 days. You can restore it anytime within that window. After 30 days, it's permanently gone. This safety net means you can delete freely without worrying about losing a photo forever.",
+  "drDigitalIntro": "When you delete a photo, it goes to a Recently Deleted folder — it's not gone yet! This gives you 30 days to change your mind. After 30 days, it's permanently deleted. You can also permanently delete immediately if you need the space. Go to the Recently Deleted section to see deleted photos and recover them if needed. This safety net prevents accidental permanent loss.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You delete a photo by accident. How long do you have to recover it from Recently Deleted?",
-    "options": [
-      { "text": "24 hours", "correct": false },
-      { "text": "7 days", "correct": false },
-      { "text": "30 days", "correct": true },
-      { "text": "It's gone immediately", "correct": false }
+    "type": "guided-photos",
+    "goal": "You deleted and recovered a photo",
+    "steps": [
+      { "say": "Click the Cat Sleeping photo to open it.", "action": "select-photo", "target": "Cat Sleeping" },
+      { "say": "Click Delete to move it to Recently Deleted.", "action": "delete", "target": "Cat Sleeping" },
+      { "say": "Click 'Recently Deleted' in the sidebar to see deleted photos.", "action": "go-to-album", "target": "Recently Deleted" },
+      { "say": "Click the Cat Sleeping photo to open it in Recently Deleted.", "action": "select-photo", "target": "Cat Sleeping" },
+      { "say": "Click Recover to put it back in your library.", "action": "recover", "target": "Cat Sleeping" }
     ]
   },
-  "drDigitalSuccess": "30 days! That's your safety window. After that, Recently Deleted clears automatically.",
-  "drDigitalHint": "Photos gives you a generous 30-day buffer — enough time to notice a mistake."
+  "drDigitalSuccess": "You deleted and recovered a photo! Recently Deleted gives you 30 days to change your mind.",
+  "drDigitalHint": "Delete a photo first, then go to Recently Deleted in the sidebar to recover it."
 }

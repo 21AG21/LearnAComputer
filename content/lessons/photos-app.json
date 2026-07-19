@@ -1,21 +1,20 @@
 {
   "slug": "photos-app",
   "unit": "Unit 7: Photos",
-  "module": "Managing Photos",
+  "module": "Your Photo Library",
   "order": 700,
-  "title": "Photos App Overview",
+  "title": "Your Photo Library",
   "videoUrl": "",
-  "drDigitalIntro": "The Photos app is where all your photos live — from your computer's camera, your phone, or photos you've downloaded. Open Photos and you'll see all your pictures organized chronologically. You can create albums, mark favorites, search by date or keywords, view people in your photos, and see where photos were taken on a map.",
+  "drDigitalIntro": "Your photo app is where all the pictures on your computer or phone live. You can scroll through every photo you've taken — newest ones appear first. Tap or click a photo to see it full size. Your library automatically organizes photos by date. You can also search for photos by what's in them. Let's explore the photo library!",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "The Photos app organizes your pictures by:",
-    "options": [
-      { "text": "File size only", "correct": false },
-      { "text": "Date, people, places, and albums", "correct": true },
-      { "text": "Color automatically", "correct": false },
-      { "text": "Which app created them", "correct": false }
+    "type": "guided-photos",
+    "goal": "You explored your photo library",
+    "steps": [
+      { "say": "Click on the Beach Sunset photo to view it.", "action": "select-photo", "target": "Beach Sunset" },
+      { "say": "Click on the Dog in Park photo.", "action": "select-photo", "target": "Dog in Park" },
+      { "say": "Click on the Birthday Cake photo.", "action": "select-photo", "target": "Birthday Cake" }
     ]
   },
-  "drDigitalSuccess": "Photos is smart — it uses date, faces, locations, and your albums to organize everything automatically.",
-  "drDigitalHint": "Photos does a lot of organizing for you — it uses information embedded in each photo file."
+  "drDigitalSuccess": "You found your way around the photo library! Click any photo to view it full size.",
+  "drDigitalHint": "Click on a photo thumbnail to open it and see it larger."
 }

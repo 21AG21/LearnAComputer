@@ -5,17 +5,19 @@
   "order": 640,
   "title": "CC and BCC",
   "videoUrl": "",
-  "drDigitalIntro": "CC (Carbon Copy) sends a copy of an email to someone in addition to the main recipient. Everyone can see who was CC'd. BCC (Blind Carbon Copy) sends a copy to someone without anyone else knowing they got it — the recipient isn't shown to others. Use CC to keep people informed and BCC when you want someone to see an email privately.",
+  "drDigitalIntro": "CC (Carbon Copy) sends a copy of an email to someone extra — everyone can see who was CC'd. BCC (Blind Carbon Copy) is a secret copy — the main recipient can't see who was BCC'd. Use CC to keep people informed, like copying a coworker on a work email. Use BCC when you want someone to see an email privately, or when emailing a large group where people don't know each other.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You send an email and add Bob to the CC field. What does this mean?",
-    "options": [
-      { "text": "Bob is the main recipient", "correct": false },
-      { "text": "Bob gets a copy and everyone can see he received it", "correct": true },
-      { "text": "Bob gets a secret copy that no one knows about", "correct": false },
-      { "text": "Bob won't receive the email", "correct": false }
+    "type": "guided-email",
+    "goal": "You used CC and BCC to send copies of an email",
+    "steps": [
+      { "say": "Click Compose to start a new email.", "action": "compose" },
+      { "say": "Type 'mom@example.com' in the To field, then click another field.", "action": "set-to", "value": "mom@example.com" },
+      { "say": "Type 'sister@example.com' in the CC field (everyone will see this).", "action": "set-cc", "value": "sister@example.com" },
+      { "say": "Type 'me@example.com' in the BCC field (secret copy for yourself).", "action": "set-bcc", "value": "me@example.com" },
+      { "say": "Type 'Family Dinner' as the subject.", "action": "set-subject", "value": "Family Dinner" },
+      { "say": "Send the email.", "action": "send" }
     ]
   },
-  "drDigitalSuccess": "CC = visible copy. Everyone in the email thread can see that Bob was included. BCC = invisible copy — only Bob knows.",
-  "drDigitalHint": "CC = Carbon Copy (visible). BCC = Blind Carbon Copy (secret). Blind means nobody can see it."
+  "drDigitalSuccess": "CC = visible copy, BCC = secret copy. Now you can share emails with the right people!",
+  "drDigitalHint": "Fill in each field one at a time and click the next field (or press Tab) to move on."
 }

@@ -3,19 +3,21 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Connectivity",
   "order": 1140,
-  "title": "Internet Problems",
+  "title": "Fixing Internet Problems",
   "videoUrl": "",
-  "drDigitalIntro": "No internet? Work through this: Is WiFi on? (check the menu bar). Can you reach your router's settings page (usually 192.168.1.1)? Try turning WiFi off and back on. Restart your router by unplugging it for 30 seconds. If other devices in your home also have no internet, the problem is with your internet provider — call them. If only your computer is affected, it's a computer or router issue.",
+  "drDigitalIntro": "Internet not working? First check: is WiFi on? Is your device connected to the right network? Try turning WiFi off and back on — this refreshes the connection. If that doesn't work, restart your router (unplug for 30 seconds, then plug back in). If your neighbor's internet works but yours doesn't, it may be an outage from your provider — check their website on your phone.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Your computer has no internet. Your phone also has no WiFi. Your neighbor's internet is also out. Where is the problem?",
-    "options": [
-      { "text": "Your computer has a serious hardware defect", "correct": false },
-      { "text": "Your internet service provider (ISP) is having an outage", "correct": true },
-      { "text": "Your computer needs a software update", "correct": false },
-      { "text": "Your keyboard settings are wrong", "correct": false }
+    "type": "guided-troubleshooting",
+    "goal": "You fixed the internet connection",
+    "scenario": "No internet connection",
+    "steps": [
+      { "say": "Read the error — no internet connection.", "action": "read-error" },
+      { "say": "Open WiFi Settings to check your connection.", "action": "open-wifi-settings" },
+      { "say": "WiFi is connected but no internet. Toggle WiFi off.", "action": "toggle-wifi" },
+      { "say": "Turn WiFi back on.", "action": "toggle-wifi" },
+      { "say": "Reconnect to your network.", "action": "reconnect-wifi" }
     ]
   },
-  "drDigitalSuccess": "If multiple devices and neighbors are all affected, the outage is with the internet provider — not something you can fix yourself.",
-  "drDigitalHint": "If every device in the area is affected, where is the problem likely coming from?"
+  "drDigitalSuccess": "You fixed the WiFi! Toggling WiFi off and on refreshes the connection — a simple first fix.",
+  "drDigitalHint": "Open WiFi Settings, toggle WiFi off then back on, and reconnect to your network."
 }
