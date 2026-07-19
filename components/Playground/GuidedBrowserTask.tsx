@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import SimulatorFrame from "./SimulatorFrame";
 
 /**
  * A hands-on, guided web browser (browser). The learner performs REAL
@@ -294,25 +295,18 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
   const showBookmarksBar = bookmarks.length > 0;
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden select-none">
-      {/* Guidance banner */}
-      <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
-            {finished ? "Done" : `Step ${stepIndex + 1} of ${steps.length}`}
-          </span>
-          <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
-            <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${(Math.min(stepIndex, steps.length) / steps.length) * 100}%` }} />
-          </div>
-        </div>
-        <p className="mt-1.5 text-lg font-semibold leading-snug">{done ? "🎉 " + goal + " — all done!" : step?.say}</p>
-      </div>
-
-      {/* Browser */}
-      <div className="flex-1 min-h-0 p-3">
-        <div className="relative h-full flex flex-col border-4 border-black rounded-lg overflow-hidden shadow-lg bg-white">
+    <SimulatorFrame
+      appName="Browser"
+      appIcon="🌐"
+      instruction={step?.say}
+      stepIndex={stepIndex}
+      totalSteps={steps.length}
+      done={done}
+      goal={goal}
+      flash={flash}
+    >
           {/* Tab strip */}
-          <div className="shrink-0 bg-gray-200 border-b-2 border-black flex items-stretch gap-1 px-2 pt-2">
+          <div className="shrink-0 bg-gray-200 border-b-2 border-gray-300 flex items-stretch gap-1 px-2 pt-2">
             {tabs.map((t) => {
               const p = PAGES[t.pageId];
               const active = t.id === activeId;
@@ -619,12 +613,15 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
 
           {/* Second window */}
           {newWindow && (
-            <div className="absolute inset-6 z-30 bg-white border-4 border-black rounded-lg shadow-2xl flex flex-col animate-pop-in">
-              <div className="bg-gray-200 border-b-2 border-black px-3 py-2 flex items-center gap-2">
-                <button onClick={() => setNewWindow(false)} aria-label="Close window" className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-700" />
-                <span className="w-3.5 h-3.5 rounded-full bg-yellow-400 border border-yellow-600" />
-                <span className="w-3.5 h-3.5 rounded-full bg-green-500 border border-green-700" />
-                <span className="font-bold text-sm ml-2">New Window</span>
+            <div className="absolute inset-6 z-30 bg-white border-2 border-gray-800 rounded-lg shadow-2xl flex flex-col animate-pop-in">
+              <div className="bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
+                <div className="flex gap-1.5" aria-hidden="true">
+                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
+                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
+                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
+                </div>
+                <span className="font-bold text-sm ml-1">New Window</span>
+                <button onClick={() => setNewWindow(false)} aria-label="Close window" className="ml-auto text-gray-500 hover:text-gray-800 font-bold">✕</button>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center p-4">
                 <span className="text-5xl">🪟</span>
@@ -634,15 +631,7 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
             </div>
           )}
 
-          {/* Completion tick */}
-          {flash && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-              <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">✓</div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </SimulatorFrame>
   );
 }
 

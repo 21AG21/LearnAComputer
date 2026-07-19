@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import SimulatorFrame from "./SimulatorFrame";
 
 /**
  * A hands-on, guided file manager. The learner performs REAL file operations —
@@ -341,55 +342,34 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
   const showSaveDoc = step?.action === "save" && !done;
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden select-none">
-      {/* Progress + guidance banner */}
-      <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
-            {finished ? "Done" : `Step ${stepIndex + 1} of ${steps.length}`}
-          </span>
-          <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
-            <div
-              className="h-full bg-green-400 transition-all duration-500"
-              style={{ width: `${(Math.min(stepIndex, steps.length) / steps.length) * 100}%` }}
-            />
-          </div>
+    <SimulatorFrame
+      appName="Files"
+      appIcon="📁"
+      instruction={step?.say}
+      stepIndex={stepIndex}
+      totalSteps={steps.length}
+      done={done}
+      goal={goal}
+      flash={flash}
+      titleBarRight={
+        <div
+          className={`flex items-center bg-white border-2 rounded-md px-2 py-1 ${
+            hl("search") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"
+          }`}
+        >
+          <span className="text-gray-400 mr-1">🔍</span>
+          <input
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search"
+            className="w-28 outline-none text-sm bg-transparent"
+          />
         </div>
-        <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? "🎉 " + goal + " — all done!" : step?.say}
-        </p>
-      </div>
-
-      {/* File manager window */}
-      <div className="flex-1 min-h-0 p-3">
-        <div className="h-full flex flex-col border-4 border-black rounded-lg overflow-hidden shadow-lg">
-          {/* Title bar */}
-          <div className="shrink-0 bg-gray-200 border-b-2 border-black px-3 py-2 flex items-center gap-3">
-            <div className="flex gap-1.5">
-              <span className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-700" />
-              <span className="w-3.5 h-3.5 rounded-full bg-yellow-400 border border-yellow-600" />
-              <span className="w-3.5 h-3.5 rounded-full bg-green-500 border border-green-700" />
-            </div>
-            <span className="font-bold text-gray-700">{LOC_TITLE[location]}</span>
-            <div className="flex-1" />
-            {/* Search box */}
-            <div
-              className={`flex items-center bg-white border-2 rounded-md px-2 py-1 ${
-                hl("search") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"
-              }`}
-            >
-              <span className="text-gray-400 mr-1">🔍</span>
-              <input
-                value={search}
-                onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search"
-                className="w-28 outline-none text-sm bg-transparent"
-              />
-            </div>
-          </div>
-
-          {/* Toolbar */}
-          <div className="shrink-0 bg-gray-100 border-b-2 border-black px-3 py-2 flex items-center gap-2">
+      }
+    >
+      {/* Toolbar */}
+      <div className="shrink-0 bg-gray-100 border-b-2 border-gray-300 px-3 py-2 flex items-center gap-2">
+        <span className="font-bold text-gray-600 text-sm mr-1">{LOC_TITLE[location]}</span>
             {!inTrash && (
               <>
                 <ToolbarBtn label="＋ New Folder" onClick={clickNewFolder} highlight={hl("toolbar-newfolder")} />
@@ -420,7 +400,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
           {/* Body: sidebar + files */}
           <div className="flex-1 min-h-0 flex">
             {/* Sidebar */}
-            <div className="w-40 shrink-0 bg-[#eef1f5] border-r-2 border-black py-2 overflow-auto">
+            <div className="w-40 shrink-0 bg-[#eef1f5] border-r-2 border-gray-300 py-2 overflow-auto">
               {SIDEBAR.map((s) => (
                 <button
                   key={s.id}
@@ -483,8 +463,6 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
       {/* Preview modal */}
       {preview && (
@@ -569,15 +547,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
         </Modal>
       )}
 
-      {/* Green tick flash */}
-      {flash && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-          <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            ✓
-          </div>
-        </div>
-      )}
-    </div>
+    </SimulatorFrame>
   );
 }
 

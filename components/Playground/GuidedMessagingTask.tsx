@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SimulatorFrame from "./SimulatorFrame";
 
 /**
  * A hands-on, guided messaging and video calling simulator. The learner
@@ -197,20 +198,17 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   // Video call overlay
   if (inCall) {
     return (
-      <div className="h-full flex flex-col bg-gray-900 text-white relative">
-        {/* Step banner */}
-        {!finished && step && (
-          <div className="bg-gray-800 border-b border-gray-700 px-4 py-3">
-            <div className="flex items-center gap-3 mb-1">
-              <span className="text-xs text-gray-400">Step {stepIndex + 1} of {steps.length}</span>
-              <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                <div className="h-full bg-green-500 transition-all" style={{ width: `${(stepIndex / steps.length) * 100}%` }} />
-              </div>
-            </div>
-            <p className="text-sm text-gray-200">{step.say}</p>
-          </div>
-        )}
-
+      <SimulatorFrame
+        appName="Video Call"
+        appIcon="📹"
+        instruction={step?.say}
+        stepIndex={stepIndex}
+        totalSteps={steps.length}
+        done={done}
+        goal={goal}
+        flash={flash}
+      >
+        <div className="flex-1 min-h-0 flex flex-col bg-gray-900 text-white">
         {/* Call display */}
         <div className="flex-1 flex items-center justify-center relative">
           {cameraOff ? (
@@ -259,38 +257,22 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
             📞
           </button>
         </div>
-
-        {flash && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-            <span className="text-green-400 text-5xl animate-ping-once">✓</span>
-          </div>
-        )}
-      </div>
+        </div>
+      </SimulatorFrame>
     );
   }
 
   return (
-    <div className="h-full flex flex-col bg-white relative">
-      {/* Step banner */}
-      {!finished && step && (
-        <div className="bg-gray-900 text-white px-4 py-3">
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-xs text-gray-400">Step {stepIndex + 1} of {steps.length}</span>
-            <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full bg-green-500 transition-all" style={{ width: `${(stepIndex / steps.length) * 100}%` }} />
-            </div>
-          </div>
-          <p className="text-sm text-gray-200">{step.say}</p>
-        </div>
-      )}
-
-      {done && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-white/95">
-          <p className="text-5xl mb-3">✅</p>
-          <p className="text-xl font-bold text-green-700">DONE — {goal}</p>
-        </div>
-      )}
-
+    <SimulatorFrame
+      appName="Messages"
+      appIcon="💬"
+      instruction={step?.say}
+      stepIndex={stepIndex}
+      totalSteps={steps.length}
+      done={done}
+      goal={goal}
+      flash={flash}
+    >
       <div className="flex-1 flex overflow-hidden">
         {/* Contacts sidebar */}
         <div className="w-48 border-r bg-gray-50 flex flex-col overflow-y-auto">
@@ -425,12 +407,6 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
           )}
         </div>
       </div>
-
-      {flash && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-          <span className="text-green-400 text-5xl animate-ping-once">✓</span>
-        </div>
-      )}
-    </div>
+    </SimulatorFrame>
   );
 }
