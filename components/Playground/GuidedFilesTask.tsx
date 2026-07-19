@@ -220,6 +220,12 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
   function onItemClick(item: Item) {
     setSelected(item.id);
     if (!step) return;
+    // A single click opens during an "open" step — double-clicking is fiddly for
+    // beginners, so we don't make them do it just to look inside a file or folder.
+    if ((step.action === "open-file" || step.action === "open-folder") && item.name === step.target) {
+      onItemDouble(item);
+      return;
+    }
     if (step.action === "rename" && phase === 0 && item.name === step.target) setPhase(1);
     if (step.action === "delete" && phase === 0 && item.name === step.target) setPhase(1);
     if (step.action === "restore" && phase === 1 && item.name === step.target) setPhase(2);

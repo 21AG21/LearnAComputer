@@ -29,13 +29,17 @@ const config: Config = {
           "0%": { opacity: "0", transform: "scale(0.85) translateY(12px)" },
           "100%": { opacity: "1", transform: "scale(1) translateY(0)" },
         },
+        // Minimize: the window shrinks and slides DOWN toward the dock/taskbar.
         "window-minimize": {
           "0%": { opacity: "1", transform: "scale(1) translateY(0)" },
-          "100%": { opacity: "0", transform: "scale(0.3) translateY(160px)" },
+          "60%": { opacity: "1" },
+          "100%": { opacity: "0", transform: "scale(0.18) translateY(140%)" },
         },
+        // Close: the window collapses in place with a small twist — clearly not the
+        // same motion as minimize, so the two actions look different.
         "window-close": {
-          "0%": { opacity: "1", transform: "scale(1)" },
-          "100%": { opacity: "0", transform: "scale(0.9)" },
+          "0%": { opacity: "1", transform: "scale(1) rotate(0deg)" },
+          "100%": { opacity: "0", transform: "scale(0.4) rotate(-8deg)" },
         },
         "ping-once": {
           "0%": { opacity: "0", transform: "scale(0.4)" },
@@ -49,8 +53,8 @@ const config: Config = {
         "slide-up": "slide-up 0.2s ease-out both",
         "pop-in": "pop-in 0.15s ease-out both",
         "window-open": "window-open 0.18s ease-out both",
-        "window-minimize": "window-minimize 0.22s ease-in both",
-        "window-close": "window-close 0.15s ease-in both",
+        "window-minimize": "window-minimize 0.32s ease-in both",
+        "window-close": "window-close 0.18s ease-in both",
       },
     },
   },

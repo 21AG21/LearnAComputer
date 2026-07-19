@@ -6,11 +6,21 @@ import BrowserSimulator from "./BrowserSimulator";
 import { checkTypeText } from "./TaskChecker";
 
 interface DesktopBrowserScrollTaskProps {
-  code: string;
+  /** Kept for lesson-schema compatibility; the code is now randomized each attempt. */
+  code?: string;
   onResult: (success: boolean) => void;
 }
 
-export default function DesktopBrowserScrollTask({ code, onResult }: DesktopBrowserScrollTaskProps) {
+// Skips easily-confused characters (0/O, 1/I) so beginners can read it cleanly.
+function randomCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
+export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScrollTaskProps) {
+  const [code] = useState(randomCode);
   const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
   const [scrolled, setScrolled] = useState(false);
   const [typed, setTyped] = useState("");
@@ -32,7 +42,7 @@ export default function DesktopBrowserScrollTask({ code, onResult }: DesktopBrow
     return (
       <BrowserSimulator
         tabTitle="Fun Computer Facts"
-        url="facts.learna.example"
+        url="facts.example"
         onExit={() => {
           setPhase("desktop");
           setScrolled(false);
@@ -111,13 +121,12 @@ export default function DesktopBrowserScrollTask({ code, onResult }: DesktopBrow
               apart to stop the mechanical arms from jamming together during fast typing.
             </p>
             <p>
-              The color of the first Apple computer was not white or silver — it was beige. The
-              company spent years perfecting the exact shade, eventually registering it as
-              &ldquo;Platinum&rdquo; in 1987. It was retired in 1998 when Steve Jobs introduced
-              the colorful iMac G3.
+              The very first webcam was set up at Cambridge University in 1991 — pointed at a coffee
+              pot. Researchers were tired of walking down the hall only to find it empty, so they
+              streamed a live picture of it to their computers instead.
             </p>
             {scrolled ? (
-              <div className="border-4 border-black p-4 bg-gray-50 space-y-2">
+              <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50 space-y-2">
                 <p className="font-bold">You scrolled down — great work!</p>
                 <p className="text-base text-gray-600">Type the secret code below to finish:</p>
                 <p className="font-mono text-xl font-bold tracking-widest">{code}</p>

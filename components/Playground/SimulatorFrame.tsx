@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import WindowControls from "./WindowControls";
 
 interface SimulatorFrameProps {
   /** App/window name shown in the title bar, e.g. "Mail", "Photos". */
@@ -68,17 +69,13 @@ export default function SimulatorFrame({
       <div className="flex-1 min-h-0 p-3">
         <div className="h-full flex flex-col border-2 border-gray-800 rounded-lg overflow-hidden shadow-md bg-white">
           {/* Title bar */}
-          <div className="shrink-0 bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-3">
-            <div className="flex gap-1.5" aria-hidden="true">
-              <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-              <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-              <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-            </div>
+          <div className="shrink-0 bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
             <span className="font-bold text-gray-700 flex items-center gap-1.5 font-[var(--font-app-title)]">
               {appIcon && <span aria-hidden="true">{appIcon}</span>}
               {appName}
             </span>
-            {titleBarRight && <div className="flex-1 flex justify-end">{titleBarRight}</div>}
+            <div className="flex-1 flex justify-end">{titleBarRight}</div>
+            <WindowControls />
           </div>
 
           {/* App body */}

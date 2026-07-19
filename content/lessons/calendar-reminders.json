@@ -36,7 +36,7 @@
       {
         "say": "Switch to the Reminders view.",
         "action": "switch-view",
-        "value": "reminders"
+        "target": "reminders"
       },
       {
         "say": "Click + to add a new reminder.",

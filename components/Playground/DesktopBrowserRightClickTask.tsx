@@ -49,8 +49,8 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
         tabActive={browserPhase !== "catPhoto"}
         url={
           browserPhase === "catPhoto"
-            ? "funny-cats.learna.example"
-            : "petnews.learna.example"
+            ? "funny-cats.example"
+            : "petnews.example"
         }
         onExit={() => setPhase("desktop")}
         bezel={false}
@@ -100,20 +100,20 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
                 {/* Context menu */}
                 {menuPos && (
                   <div
-                    className="absolute z-30 bg-white border-2 border-black shadow-lg animate-pop-in"
+                    className="absolute z-30 bg-white border-2 border-gray-300 rounded-lg shadow-xl animate-pop-in overflow-hidden min-w-[240px]"
                     style={{ left: menuPos.x, top: menuPos.y }}
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
                       onClick={handleOpenInNewTab}
-                      className="block w-full text-left px-4 py-2 text-base font-semibold hover:bg-gray-100 border-b border-gray-200"
+                      className="block w-full text-left px-4 py-2.5 text-base font-semibold hover:bg-blue-50 border-b border-gray-200 whitespace-nowrap"
                     >
                       Open link in new tab
                     </button>
-                    <button className="block w-full text-left px-4 py-2 text-base text-gray-400">
+                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-400 border-b border-gray-200 whitespace-nowrap">
                       Open link in new window
                     </button>
-                    <button className="block w-full text-left px-4 py-2 text-base text-gray-400">
+                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-400 whitespace-nowrap">
                       Copy link address
                     </button>
                   </div>

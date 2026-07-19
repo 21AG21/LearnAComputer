@@ -6,7 +6,7 @@ import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
 import FilesApp from "./Desktop/FilesApp";
 import MailApp from "./Desktop/MailApp";
-import { RedX, OrangeDash } from "./BrowserSimulator";
+import WindowControls from "./WindowControls";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail";
 
@@ -143,22 +143,7 @@ export default function FakeDesktop({ onAppOpened, filesHint, onFileOpened }: Fa
       <div className="relative h-9 shrink-0 bg-white flex items-center justify-between px-2 text-lg font-semibold border-b">
         <div className="flex items-center gap-2">
           {activeApp && (
-            <div className="flex shrink-0 border-2 border-black">
-              <button
-                onClick={() => closeApp(activeApp)}
-                aria-label={`Close ${APP_TITLES[activeApp]}`}
-                className="w-6 h-6 bg-white flex items-center justify-center border-r-2 border-black"
-              >
-                <RedX className="w-4 h-4" />
-              </button>
-              <button
-                onClick={minimizeApp}
-                aria-label={`Minimize ${APP_TITLES[activeApp]}`}
-                className="w-6 h-6 bg-white flex items-center justify-center"
-              >
-                <OrangeDash className="w-4 h-2.5" />
-              </button>
-            </div>
+            <WindowControls onClose={() => closeApp(activeApp)} onMinimize={minimizeApp} showMaximize={false} />
           )}
           <span className="font-[var(--font-app-title)]">{activeApp ? APP_TITLES[activeApp] : "Desktop"}</span>
         </div>

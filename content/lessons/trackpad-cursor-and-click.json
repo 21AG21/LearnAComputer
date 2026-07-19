@@ -8,9 +8,9 @@
   "drDigitalIntro": "Let's practice two skills: moving the cursor and clicking.\n• Slide one fingertip on the trackpad to move the cursor.\n• Press down until you feel a soft click to select something.\n• In the game, move to a falling shape and click it before it lands!",
   "playgroundTask": {
     "type": "shape-click-game",
-    "instructions": "Click each falling shape before it reaches the bottom — take your time, they fall slowly.",
+    "instructions": "Click each falling shape before it reaches the bottom. New ones keep dropping!",
     "targetScore": 10
   },
   "drDigitalSuccess": "Fantastic clicking! You've got moving the cursor and single-clicking down.",
-  "drDigitalHint": "Move your cursor right over a falling shape and click once. There's no rush — the shapes fall slowly on purpose."
+  "drDigitalHint": "Move your cursor right over a falling shape and click once. Don't worry if you miss one — more keep coming."
 }

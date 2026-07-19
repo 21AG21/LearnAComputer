@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+import WindowControls from "./WindowControls";
 
 interface ExtraTab {
   title: string;
@@ -63,60 +64,46 @@ export default function BrowserSimulator({
       <div
         className={`h-full w-full bg-white overflow-hidden flex flex-col ${bezel ? "rounded-lg shadow" : ""}`}
       >
-        {/* Tab row */}
-        <div className="flex items-stretch gap-3 px-2 pt-2">
-          {showControls && (
-            <div className="flex shrink-0">
-              <button
-                onClick={onExit}
-                aria-label="Exit activity"
-                className="w-16 h-14 border-4 border-black bg-white flex items-center justify-center"
-              >
-                <RedX className="w-9 h-9" />
-              </button>
-              {onMinimize && (
-                <button
-                  onClick={onMinimize}
-                  aria-label="Minimize"
-                  className="w-16 h-14 border-4 border-l-0 border-black bg-white flex items-center justify-center"
-                >
-                  <OrangeDash className="w-9 h-5" />
-                </button>
-              )}
-            </div>
-          )}
-          {/* Tab group — no gap so borders share */}
-          <div className="flex items-stretch">
+        {/* Tab strip */}
+        <div className="flex items-stretch gap-1 px-2 pt-2 bg-gray-200 border-b-2 border-gray-300">
+          {/* Tab group */}
+          <div className="flex items-stretch gap-1">
             <div
-              className={`h-14 border-4 border-black flex items-center gap-3 px-4 min-w-40 transition-colors duration-150 ${
-                tabActive ? "bg-white" : "bg-gray-100"
+              className={`h-11 rounded-t-lg border-2 border-b-0 flex items-center gap-3 px-4 min-w-40 transition-colors duration-150 ${
+                tabActive ? "bg-white border-gray-400" : "bg-gray-100 border-gray-300"
               }`}
             >
-              <span className="text-xl font-semibold flex-1 font-[var(--font-app-title)]">{tabTitle}</span>
+              <span className="text-lg font-semibold flex-1 font-[var(--font-app-title)] truncate">{tabTitle}</span>
               <button
                 onClick={onTabClose ?? onExit}
                 aria-label="Close tab"
-                className="shrink-0 flex items-center justify-center"
+                className="shrink-0 flex items-center justify-center hover:opacity-60"
               >
-                <DarkX className="w-6 h-6" />
+                <DarkX className="w-4 h-4" />
               </button>
             </div>
             {extraTabs?.map((tab, i) => (
               <button
                 key={i}
                 onClick={tab.onClick}
-                className={`h-14 border-4 border-l-0 border-black flex items-center px-4 min-w-36 animate-slide-down transition-colors duration-150 ${
-                  tab.active ? "bg-white" : "bg-gray-100"
+                className={`h-11 rounded-t-lg border-2 border-b-0 flex items-center px-4 min-w-36 animate-slide-down transition-colors duration-150 ${
+                  tab.active ? "bg-white border-gray-400" : "bg-gray-100 border-gray-300"
                 }`}
               >
-                <span className="text-lg font-semibold font-[var(--font-app-title)]">{tab.title}</span>
+                <span className="text-base font-semibold font-[var(--font-app-title)]">{tab.title}</span>
               </button>
             ))}
           </div>
+          <div className="flex-1" />
+          {showControls && (
+            <div className="flex items-center pb-1">
+              <WindowControls onMinimize={onMinimize} onClose={onExit} showMaximize={false} />
+            </div>
+          )}
         </div>
 
         {/* Toolbar */}
-        <div className="mx-2 mt-2 border-4 border-black flex items-center gap-3 px-3 py-2">
+        <div className="mx-2 mt-2 border-2 border-gray-300 rounded-lg bg-gray-50 flex items-center gap-3 px-3 py-2">
           <BackArrow className="w-9 h-7 shrink-0" />
           <ForwardArrow className="w-9 h-7 shrink-0" />
           <ReloadIcon className="w-7 h-7 shrink-0" />

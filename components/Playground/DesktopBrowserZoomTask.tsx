@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FakeDesktop from "./FakeDesktop";
 import BrowserSimulator from "./BrowserSimulator";
 import { checkTypeText } from "./TaskChecker";
@@ -9,79 +9,123 @@ interface DesktopBrowserZoomTaskProps {
   onResult: (success: boolean) => void;
 }
 
-// The hidden digit sits at 5px — only readable when zoomed way in.
-const HIDDEN_DIGIT = "7";
-const SECRET_CODE = `Z${HIDDEN_DIGIT}Q`;
+// Random each attempt so replaying is a fresh challenge. Skips look-alike characters.
+function randomCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
 
-const MIN_ZOOM = 10;
-const MAX_ZOOM = 28;
-const STEP = 4;
-const READABLE_ZOOM = 20; // digit is clearly visible at this zoom level and above
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 3;
+const STEP = 0.25;
+
+function clamp(z: number) {
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(z * 100) / 100));
+}
 
 export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomTaskProps) {
   const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
-  const [zoom, setZoom] = useState(14);
+  const [code] = useState(randomCode);
+  const [zoom, setZoom] = useState(1);
   const [typed, setTyped] = useState("");
   const finished = useRef(false);
+  const areaRef = useRef<HTMLDivElement>(null);
+
+  // A real trackpad pinch fires a wheel event with the Ctrl (or ⌘) key held. We
+  // attach a NON-passive listener so we can preventDefault and zoom the poster
+  // instead of letting the whole page zoom underneath the lesson.
+  useEffect(() => {
+    const el = areaRef.current;
+    if (!el || phase !== "browser") return;
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        setZoom((z) => clamp(z + (e.deltaY < 0 ? STEP : -STEP)));
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [phase]);
+
+  function changeZoom(delta: number) {
+    setZoom((z) => clamp(z + delta));
+  }
 
   function handleType(value: string) {
     setTyped(value);
-    if (!finished.current && checkTypeText(SECRET_CODE, value, false)) {
+    if (!finished.current && checkTypeText(code, value, false)) {
       finished.current = true;
       onResult(true);
     }
   }
 
-  const digitStyle = {
-    fontSize: zoom >= READABLE_ZOOM ? "inherit" : "5px",
-    display: "inline",
-  };
+  const readable = zoom >= 2;
 
   if (phase === "browser") {
     return (
       <BrowserSimulator
-        tabTitle="Animal Facts"
-        url="animals.learna.example"
+        tabTitle="Concert Tickets"
+        url="tickets.example"
         onExit={() => setPhase("desktop")}
         bezel={false}
         showControls={false}
-        onZoomIn={() => setZoom((z) => Math.min(z + STEP, MAX_ZOOM))}
-        onZoomOut={() => setZoom((z) => Math.max(z - STEP, MIN_ZOOM))}
       >
-        <div className="h-full overflow-y-auto p-6 space-y-4" style={{ fontSize: `${zoom}px` }}>
-          <h1 className="font-bold" style={{ fontSize: `${zoom * 1.4}px` }}>Amazing Animal Facts</h1>
-          <p>
-            A group of flamingos is called a <em>flamboyance</em>. Flamingos get their pink color from the
-            shrimp and algae they eat — baby flamingos are actually born grey!
-          </p>
-          <p>
-            Octopuses have three hearts and blue blood. Two hearts pump blood to the gills, and one pumps it to the
-            rest of the body. When an octopus swims, the heart that delivers blood to the body actually stops beating.
-          </p>
-          <p>
-            A day on Venus is longer than a year on Venus. It takes longer to spin once on its axis (243 Earth days)
-            than it takes to orbit the Sun (225 Earth days).
-          </p>
-          <p>
-            Sloths move so slowly that algae actually grows on their fur! The algae gives them a greenish tint that
-            helps them blend into the rainforest.
-          </p>
-          <div className="border-4 border-black p-4 bg-gray-50 space-y-3 mt-4">
-            <p className="font-bold">Find the secret code by zooming in with the ⋮ menu!</p>
-            <p>
-              The code is: Z<span style={digitStyle}>{HIDDEN_DIGIT}</span>Q
+        <div className="h-full flex flex-col bg-white">
+          {/* Zoom toolbar */}
+          <div className="shrink-0 flex items-center gap-3 px-4 py-2 border-b border-gray-200 bg-gray-50">
+            <p className="text-sm text-gray-600 flex-1">
+              Pinch two fingers <b>apart</b> on the trackpad to zoom in — or use the buttons. The promo code is in tiny print.
             </p>
-            <p className="text-gray-500" style={{ fontSize: `${Math.max(zoom - 2, 10)}px` }}>
-              (Use the three-dot menu ⋮ next to the search icon to zoom in.)
-            </p>
+            <button
+              onClick={() => changeZoom(-STEP)}
+              aria-label="Zoom out"
+              className="w-9 h-9 rounded-lg border-2 border-gray-300 bg-white text-xl font-bold hover:bg-gray-100 active:scale-95"
+            >
+              −
+            </button>
+            <span className="w-14 text-center font-semibold tabular-nums">{Math.round(zoom * 100)}%</span>
+            <button
+              onClick={() => changeZoom(STEP)}
+              aria-label="Zoom in"
+              className="w-9 h-9 rounded-lg border-2 border-gray-300 bg-white text-xl font-bold hover:bg-gray-100 active:scale-95"
+            >
+              +
+            </button>
+          </div>
+
+          {/* Zoomable poster */}
+          <div ref={areaRef} className="flex-1 overflow-auto bg-gray-100 p-4">
+            <div
+              style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}
+              className="mx-auto w-80 transition-transform duration-100"
+            >
+              <div className="bg-gradient-to-b from-indigo-600 to-purple-700 text-white rounded-xl p-5 shadow-lg text-center">
+                <p className="text-xs uppercase tracking-widest text-indigo-200">Live in concert</p>
+                <p className="text-2xl font-black mt-1">THE NIGHT OWLS</p>
+                <p className="text-sm mt-1">Saturday · 8 PM · City Arena</p>
+                <div className="mt-4 border-t border-white/30 pt-3">
+                  <p className="text-[7px] leading-tight text-indigo-100">
+                    Doors open one hour early. No refunds or exchanges. Present this page at the box office.
+                    Use promo code <span className="font-black tracking-widest text-white">{code}</span> for 10% off your tickets.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Answer box */}
+          <div className="shrink-0 border-t border-gray-200 bg-white px-4 py-3 flex items-center gap-3">
+            <label className="font-semibold text-gray-700 shrink-0">Promo code:</label>
             <input
               value={typed}
               onChange={(e) => handleType(e.target.value)}
               aria-label="Enter the code"
-              className="w-full border-2 border-black px-3 py-2 outline-none"
-              placeholder={`Type the code here…`}
-              style={{ fontSize: `${zoom}px` }}
+              placeholder="Type the tiny code…"
+              className="flex-1 border-2 border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-blue-400"
             />
+            {readable && <span className="text-green-600 text-sm font-semibold shrink-0">Now you can read it! 🔍</span>}
           </div>
         </div>
       </BrowserSimulator>

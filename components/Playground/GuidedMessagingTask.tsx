@@ -75,6 +75,9 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   const finished = stepIndex >= steps.length;
   const currentMessages = activeContact ? threads[activeContact] ?? [] : [];
   const currentContactObj = CONTACTS.find((c) => c.id === activeContact);
+  // Reactions attach to the contact's most recent message — which isn't the last
+  // message in the thread once the learner has sent their own reply.
+  const lastContactIdx = currentMessages.reduce((acc, m, i) => (m.from === "contact" ? i : acc), -1);
 
   function completeStep() {
     setFlash(true);
@@ -327,12 +330,12 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                 {currentMessages.map((msg, i) => (
                   <div key={i} className={`flex flex-col max-w-[75%] ${msg.from === "me" ? "self-end items-end" : "self-start items-start"}`}>
                     <div
-                      onClick={() => msg.from === "contact" && handleReactionClick(i)}
+                      onClick={() => msg.from === "contact" && i === lastContactIdx && handleReactionClick(i)}
                       className={`px-4 py-2 rounded-2xl text-sm cursor-pointer transition-all ${
                         msg.from === "me"
                           ? "bg-blue-500 text-white rounded-br-md"
                           : "bg-gray-200 text-gray-900 rounded-bl-md"
-                      } ${hl("message-bubble") && msg.from === "contact" && i === currentMessages.length - 1 ? pulse : ""}`}
+                      } ${hl("message-bubble") && msg.from === "contact" && i === lastContactIdx ? pulse : ""}`}
                     >
                       {msg.photo ? (
                         <span className="text-lg">🖼️ Photo</span>
@@ -348,7 +351,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                       </div>
                     )}
                     {/* Reaction picker */}
-                    {step?.action === "add-reaction" && phase === 1 && msg.from === "contact" && i === currentMessages.length - 1 && (
+                    {step?.action === "add-reaction" && phase === 1 && msg.from === "contact" && i === lastContactIdx && (
                       <div className={`flex gap-2 mt-2 p-2 bg-white border rounded-lg shadow-lg ${hl("reaction-picker") ? pulse : ""}`}>
                         {["👍", "❤️", "😂", "😮", "😢"].map((emoji) => (
                           <button key={emoji} onClick={() => handleReactionPick(emoji, i)} className="text-xl hover:scale-125 transition-transform">

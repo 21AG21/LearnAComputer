@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import WindowControls from "./WindowControls";
 
 /**
  * A hands-on, guided web browser (browser). The learner performs REAL
@@ -81,10 +82,12 @@ interface Tab {
   id: string;
   pageId: PageId;
   zoom: number;
+  back: PageId[];
+  fwd: PageId[];
 }
 
 export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrowserTaskProps) {
-  const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100 }]);
+  const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
   const [activeId, setActiveId] = useState("t1");
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
@@ -178,7 +181,7 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
 
   // ---- navigation ----
   function navigate(pageId: PageId) {
-    setTabs((prev) => prev.map((t) => (t.id === activeId ? { ...t, pageId, zoom: 100 } : t)));
+    setTabs((prev) => prev.map((t) => (t.id === activeId ? { ...t, pageId, zoom: 100, back: [...t.back, t.pageId], fwd: [] } : t)));
     setHistory((prev) => [...prev, pageId]);
     setEditing(false);
     setLockInfo(false);
@@ -206,7 +209,7 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
   // ---- handlers ----
   function newTab() {
     const id = "t" + Date.now();
-    setTabs((prev) => [...prev, { id, pageId: "newtab", zoom: 100 }]);
+    setTabs((prev) => [...prev, { id, pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
     setActiveId(id);
     setMenu(null);
     if (step?.action === "new-tab") completeStep();
@@ -226,6 +229,32 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
 
   function reload() {
     if (step?.action === "reload") completeStep();
+  }
+
+  // Free-exploration history: the learner can always step back/forward through the
+  // pages they've visited in this tab, even mid-lesson. Never gated on a step.
+  function goBack() {
+    const t = activeTab;
+    if (t.back.length === 0) return;
+    const prevPage = t.back[t.back.length - 1];
+    setTabs((prev) => prev.map((x) => (x.id === activeId ? { ...x, pageId: prevPage, back: x.back.slice(0, -1), fwd: [x.pageId, ...x.fwd], zoom: 100 } : x)));
+    afterHop(prevPage);
+  }
+  function goForward() {
+    const t = activeTab;
+    if (t.fwd.length === 0) return;
+    const nextPage = t.fwd[0];
+    setTabs((prev) => prev.map((x) => (x.id === activeId ? { ...x, pageId: nextPage, back: [...x.back, x.pageId], fwd: x.fwd.slice(1), zoom: 100 } : x)));
+    afterHop(nextPage);
+  }
+  function afterHop(pageId: PageId) {
+    setEditing(false);
+    setLockInfo(false);
+    setMenu(null);
+    setSearchResults(null);
+    setSearchInput("");
+    setCookieOpen(!!PAGES[pageId].cookie);
+    setPopupOpen(!!PAGES[pageId].popup);
   }
 
   function clickBookmarkStar() {
@@ -345,8 +374,22 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
 
           {/* Toolbar */}
           <div className="shrink-0 bg-gray-100 border-b-2 border-black flex items-center gap-2 px-3 py-2">
-            <span className="text-xl text-gray-400">‹</span>
-            <span className="text-xl text-gray-400">›</span>
+            <button
+              onClick={goBack}
+              disabled={activeTab.back.length === 0}
+              aria-label="Go back"
+              className={`text-xl px-1 rounded ${activeTab.back.length === 0 ? "text-gray-300 cursor-default" : "text-gray-700 hover:bg-gray-200"}`}
+            >
+              ‹
+            </button>
+            <button
+              onClick={goForward}
+              disabled={activeTab.fwd.length === 0}
+              aria-label="Go forward"
+              className={`text-xl px-1 rounded ${activeTab.fwd.length === 0 ? "text-gray-300 cursor-default" : "text-gray-700 hover:bg-gray-200"}`}
+            >
+              ›
+            </button>
             <button
               onClick={reload}
               aria-label="Reload"
@@ -615,13 +658,9 @@ export default function GuidedBrowserTask({ goal, steps, onResult }: GuidedBrows
           {newWindow && (
             <div className="absolute inset-6 z-30 bg-white border-2 border-gray-800 rounded-lg shadow-2xl flex flex-col animate-pop-in">
               <div className="bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
-                <div className="flex gap-1.5" aria-hidden="true">
-                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-                  <span className="w-3 h-3 rounded-full bg-gray-300 border border-gray-400" />
-                </div>
-                <span className="font-bold text-sm ml-1">New Window</span>
-                <button onClick={() => setNewWindow(false)} aria-label="Close window" className="ml-auto text-gray-500 hover:text-gray-800 font-bold">✕</button>
+                <span className="font-bold text-sm flex items-center gap-1.5"><span aria-hidden="true">🌐</span>New Window</span>
+                <div className="flex-1" />
+                <WindowControls onClose={() => setNewWindow(false)} />
               </div>
               <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center p-4">
                 <span className="text-5xl">🪟</span>

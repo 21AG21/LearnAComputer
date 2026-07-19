@@ -1,11 +1,11 @@
 {
   "slug": "capstone-pixel-vacation",
   "unit": "Final Capstone",
-  "module": "Professor Pixel's Vacation",
+  "module": "Dr. Digital's Vacation",
   "order": 1300,
-  "title": "Professor Pixel's Vacation (Capstone)",
+  "title": "Dr. Digital's Vacation (Capstone)",
   "videoUrl": "",
-  "drDigitalIntro": "Congratulations — you've completed all 12 units!\n• Professor Pixel is leaving for vacation and needs your help.\n• You'll connect to WiFi, browse, sign in, download files, send email, and more.\n• It ties together every skill you've learned. This is your graduation!",
+  "drDigitalIntro": "Congratulations — you've completed all 12 units!\n• Dr. Digital is leaving for vacation and needs your help.\n• You'll connect to WiFi, browse, sign in, download files, send email, and more.\n• It ties together every skill you've learned. This is your graduation!",
   "playgroundTask": {
     "type": "none"
   },

@@ -27,10 +27,11 @@ const SHAPE_SRC: Record<ShapeKind, string> = {
   hexagon: "/playgrounds/shape-hexagon.png",
   circle: "/playgrounds/shape-circle.png",
 };
-// Medium fall speed: a shape crosses the play area in roughly 12 seconds.
-const FALL_PERCENT_PER_TICK = 0.42;
+// Brisk but beginner-friendly: shapes fall a bit faster and spawn about twice as
+// often as before, so the play area stays lively instead of feeling empty.
+const FALL_PERCENT_PER_TICK = 0.62;
 const TICK_MS = 50;
-const SPAWN_MS = 1300;
+const SPAWN_MS = 700;
 
 export default function ShapeClickGame({ instructions, targetScore, onResult }: ShapeClickGameProps) {
   const [shapes, setShapes] = useState<FallingShape[]>([]);
@@ -81,7 +82,7 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
       <p className="text-xl font-semibold mb-3" aria-live="polite">
         Score: {score} / {targetScore}
       </p>
-      <div className="relative w-full max-w-5xl flex-1 border-4 border-black bg-[#c2e6fb] overflow-hidden">
+      <div className="relative w-full max-w-5xl flex-1 border-2 border-gray-300 rounded-lg bg-sky-50 overflow-hidden">
         {shapes.map((shape) => (
           <button
             key={shape.id}

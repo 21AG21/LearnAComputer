@@ -8,8 +8,8 @@
   "drDigitalIntro": "Zooming makes things bigger or smaller.\n• Spread two fingers apart to zoom in.\n• Pinch two fingers together to zoom out.\n• In the activity, zoom in to find the hidden number in the text.",
   "playgroundTask": {
     "type": "pinch-zoom",
-    "instructions": "Open the browser, then click the ⋮ menu next to the search icon and choose Zoom In to make the text bigger. Find the hidden number that appears, then type the full code."
+    "instructions": "Open the browser. Pinch two fingers apart on the trackpad to zoom in (or tap the + button). Read the tiny promo code, then type it in the box."
   },
-  "drDigitalSuccess": "You zoomed in and found the hidden code — great detective work!",
-  "drDigitalHint": "Click the three dots ⋮ next to the search icon in the browser toolbar, then choose Zoom In. Keep zooming until you can read the tiny hidden number, then type the full code."
+  "drDigitalSuccess": "You zoomed in and read the tiny code — great detective work!",
+  "drDigitalHint": "Put two fingers on the trackpad and spread them apart to zoom in — or click the + button. Keep zooming until the little promo code is easy to read, then type it in."
 }
