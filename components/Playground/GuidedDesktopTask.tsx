@@ -30,6 +30,8 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   const [stepIdx, setStepIdx] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const [pos, setPos] = useState({ x: INIT.x, y: INIT.y });
   const [size, setSize] = useState({ w: INIT.w, h: INIT.h });
   const [minimized, setMinimized] = useState(false);
@@ -64,6 +66,11 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
     setStepIdx(next);
     if (next >= steps.length) {
       setDone(true);
+      setShowCelebration(true);
+      setTimeout(() => {
+        setShowCelebration(false);
+        setShowCompleteBanner(true);
+      }, 1600);
       onResultRef.current(true);
     }
   }
@@ -182,9 +189,16 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
           </div>
         </div>
         <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? `🎉 ${goal} — all done!` : step?.say}
+          {done ? `${goal} — all done!` : step?.say}
         </p>
       </div>
+
+      {showCompleteBanner && (
+        <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
+          <span className="text-green-600">&#10003;</span>
+          Lesson complete! You can keep practicing here.
+        </div>
+      )}
 
       {/* Desktop area */}
       <div className="flex-1 min-h-0 relative bg-[#3b6ea5] overflow-hidden">
@@ -264,11 +278,11 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
         )}
       </div>
 
-      {/* Completion overlay */}
-      {done && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in">
+      {/* Celebration overlay — brief */}
+      {showCelebration && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
           <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            ✓
+            &#10003;
           </div>
           <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{goal}</p>
         </div>

@@ -11,11 +11,6 @@
     "goal": "You verified safe banking and shopping links",
     "steps": [
       {
-        "say": "Go to the Phishing tab to check some banking links.",
-        "action": "go-to-section",
-        "target": "phishing"
-      },
-      {
         "say": "Inspect 'Bank of America Login' to check the URL.",
         "action": "inspect-link",
         "target": "Bank of America Login"

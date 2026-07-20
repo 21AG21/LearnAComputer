@@ -1,6 +1,6 @@
 # LearnAComputer — QA Round 3 Execution Plan
 
-**Status:** Not started. Check items off (`[x]`) as you complete them.
+**Status:** Phase 0 complete (commit 32ceef6). Phase 1 in progress.
 **Audience:** This document is written for an executor model working phase by phase. Read `CLAUDE.md` at the repo root first — it describes the stack, lesson JSON schema, and every playground task type. This plan assumes that context.
 
 This plan translates ~78 pieces of user feedback into concrete, ordered work. Appendix A maps every feedback item to its section so nothing gets dropped. Appendix C contains **already-diagnosed root causes with file:line references** for the reported bugs — read it before touching any bug listed there.
@@ -30,31 +30,31 @@ This plan translates ~78 pieces of user feedback into concrete, ordered work. Ap
 ## Phase 0 — Hygiene (small, mechanical, do first)
 
 ### 0.1 Delete lessons
-- [ ] Delete `content/lessons/daily-tasks.json` (Unit 12 lesson 1 — redundant, and a multiple-choice violation).
-- [ ] Delete `content/lessons/trackpad-keyboard.json` (Unit 9 "Hardware" — the site cannot control a real trackpad, so the lesson is a dead end).
+- [x] Delete `content/lessons/daily-tasks.json` (Unit 12 lesson 1 — redundant, and a multiple-choice violation).
+- [x] Delete `content/lessons/trackpad-keyboard.json` (Unit 9 "Hardware" — the site cannot control a real trackpad, so the lesson is a dead end).
 
 ### 0.2 Fix `order` collisions and Unit 7 interleaving
 Current collisions: `email-thank-you` and `text-formatting` are both `270`; `photo-editing` and `photo-people` are both `730`; `icloud-photos` and `photo-search` are both `760`. Unit 7's modules are also interleaved (Organizing Photos at 720/730/750/770 with other modules between).
 
-- [ ] Renumber Unit 2 tail: `text-formatting` → `245`. (Leaves: editing 240, formatting 245, shortcuts 250, navigation 260, email-thank-you 270, invitation 280, assessment 290.)
-- [ ] Renumber Unit 7 so each module is contiguous:
+- [x] Renumber Unit 2 tail: `text-formatting` → `245`. (Leaves: editing 240, formatting 245, shortcuts 250, navigation 260, email-thank-you 270, invitation 280, assessment 290.)
+- [x] Renumber Unit 7 so each module is contiguous:
   - Your Photo Library: `photos-app` 700, `photo-favorites` 701, `photo-search` 702
   - Organizing Photos: `photo-albums` 710, `photo-people` 711, `recently-deleted` 712
   - Editing Photos: `photo-editing` 720, `sharing-photos` 721
   - Cloud Storage: `cloud-photos` 730 (see 3.7 — `icloud-photos` merges into it and is deleted)
   - Unit 7 Assessment: `unit-7-assessment` 780
-- [ ] Verify: `python3 -c "…"` — write a five-line script that loads all lesson JSONs and asserts orders are unique. Keep it as `scripts/check-lessons.py` and run it in every phase's verification.
+- [x] Verify: `python3 -c "…"` — write a five-line script that loads all lesson JSONs and asserts orders are unique. Keep it as `scripts/check-lessons.py` and run it in every phase's verification.
 
 ### 0.3 Unit/lesson breadcrumb in the header (feedback #30)
 `components/LessonModuleRunner.tsx:161-163` currently shows `{route.module} · {index+1} of {n}`.
-- [ ] Add the unit name: `Unit 5: Messages and Video Calls · Messages Basics · 2 of 5`. If `ModuleRoute` (in `lib/lessons.ts`) doesn't carry `unit`, add it there (the grouping code has it).
-- [ ] Also add it to the module-complete screen (line ~118).
+- [x] Add the unit name: `Unit 5: Messages and Video Calls · Messages Basics · 2 of 5`. If `ModuleRoute` (in `lib/lessons.ts`) doesn't carry `unit`, add it there (the grouping code has it).
+- [x] Also add it to the module-complete screen (line ~118).
 
 ### 0.4 Capitalization sweep (feedback #36)
-- [ ] Write and run a scanner (add to `scripts/check-lessons.py`): for every lesson JSON, flag any `drDigitalIntro`/`drDigitalSuccess`/`drDigitalHint`, any `playgroundTask.instructions`, and any step `say` whose first character is a lowercase letter. Fix each by hand (capitalize; don't blind-uppercase things like "iPhone" if any appear).
+- [x] Write and run a scanner (add to `scripts/check-lessons.py`): for every lesson JSON, flag any `drDigitalIntro`/`drDigitalSuccess`/`drDigitalHint`, any `playgroundTask.instructions`, and any step `say` whose first character is a lowercase letter. Fix each by hand (capitalize; don't blind-uppercase things like "iPhone" if any appear).
 
 ### 0.5 De-brand remaining Apple strings
-- [ ] `grep -ri "safari\|facetime\|icloud\|siri\|macos\|finder" content/ components/ --include='*.json' --include='*.tsx'` (slugs may keep the words; visible strings may not). Rewrite titles/copy: "Safari" → "your browser", "FaceTime" → "video calls", "iCloud" → "cloud storage", "Siri" → "your computer's voice assistant" (or drop the lesson content that's Siri-specific — see 3.12 for `qrcodes-siri`).
+- [x] `grep -ri "safari\|facetime\|icloud\|siri\|macos\|finder" content/ components/ --include='*.json' --include='*.tsx'` (slugs may keep the words; visible strings may not). Rewrite titles/copy: "Safari" → "your browser", "FaceTime" → "video calls", "iCloud" → "cloud storage", "Siri" → "your computer's voice assistant" (or drop the lesson content that's Siri-specific — see 3.12 for `qrcodes-siri`). **Note:** Only `app-store.json` and `qrcodes-siri.json` had visible branded strings; Safari/FaceTime/Finder lessons use generic titles already — their slugs are retained for progress compatibility.
 
 **Phase 0 verification:** build passes; `/lessons` catalog shows Unit 7 modules in clean order; header breadcrumb shows the unit everywhere.
 

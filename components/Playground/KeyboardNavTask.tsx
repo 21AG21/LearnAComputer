@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 /**
  * Keyboard navigation game: the learner uses Tab, Shift+Tab, and Enter to
@@ -71,6 +71,8 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
   const [stepIdx, setStepIdx] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const [wrongKey, setWrongKey] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const finished = useRef(false);
@@ -82,7 +84,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
     if (active) containerRef.current?.focus();
   }, [active]);
 
-  function advance(nextFocus: ItemId) {
+  const advance = useCallback(function advance(nextFocus: ItemId) {
     setFlash(true);
     setTimeout(() => setFlash(false), 500);
     setFocusId(nextFocus);
@@ -90,12 +92,17 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
     setStepIdx(nextStep);
     if (nextStep >= STEPS.length) {
       setDone(true);
+      setShowCelebration(true);
+      setTimeout(() => {
+        setShowCelebration(false);
+        setShowCompleteBanner(true);
+      }, 1600);
       if (!finished.current) {
         finished.current = true;
         onResult(true);
       }
     }
-  }
+  }, [stepIdx, onResult]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (!active || done || !step) return;
@@ -159,9 +166,16 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
           </div>
         </div>
         <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? "🎉 You navigated the whole form without touching the mouse!" : step?.instruction}
+          {done ? "You navigated the whole form without touching the mouse!" : step?.instruction}
         </p>
       </div>
+
+      {showCompleteBanner && (
+        <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
+          <span className="text-green-600">&#10003;</span>
+          Lesson complete! You can keep practicing here.
+        </div>
+      )}
 
       {/* Game area */}
       <div className="flex-1 min-h-0 flex flex-col items-center justify-center p-6 bg-gray-50">
@@ -260,11 +274,11 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
         )}
       </div>
 
-      {/* Completion overlay */}
-      {done && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in">
+      {/* Celebration overlay — brief */}
+      {showCelebration && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
           <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            ✓
+            &#10003;
           </div>
           <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">
             You navigated the whole form without touching the mouse!

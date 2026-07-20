@@ -11,11 +11,6 @@
     "goal": "You identified safe and dangerous links",
     "steps": [
       {
-        "say": "Go to the Phishing tab to practice spotting fake links.",
-        "action": "go-to-section",
-        "target": "phishing"
-      },
-      {
         "say": "Look at 'Verify your account' — hover to see the real URL. Is it safe?",
         "action": "inspect-link",
         "target": "Verify your account"

@@ -1,38 +1,21 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 
 interface SimulatorFrameProps {
-  /** App/window name shown in the title bar, e.g. "Mail", "Photos". */
   appName: string;
-  /** Optional emoji shown before the app name. */
   appIcon?: string;
-  /** The current instruction (step.say). Pass null/undefined when finished. */
   instruction?: string | null;
-  /** 0-based index of the current step. */
   stepIndex: number;
-  /** Total number of steps. */
   totalSteps: number;
-  /** True once all steps are complete — shows the DONE overlay. */
   done: boolean;
-  /** Short summary shown in the DONE overlay. */
   goal: string;
-  /** True briefly after each step to flash a green check. */
   flash?: boolean;
-  /** Optional content pinned to the right of the title bar (e.g. a search box). */
   titleBarRight?: ReactNode;
-  /** The app UI. Rendered in a flex column that fills the window body. */
   children: ReactNode;
 }
 
-/**
- * The shared chrome every guided simulator lives inside, so the whole course
- * feels like one generalized desktop computer rather than a set of unrelated
- * apps. Provides: the dark guidance banner (Step N of M + progress + the current
- * instruction), a neutral window shell with a title bar, and the completion /
- * per-step feedback overlays. Each simulator only supplies its own app body.
- */
 export default function SimulatorFrame({
   appName,
   appIcon,
@@ -48,6 +31,25 @@ export default function SimulatorFrame({
   const finished = stepIndex >= totalSteps;
   const pct = (Math.min(stepIndex, totalSteps) / totalSteps) * 100;
 
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showCompleteBanner, setShowCompleteBanner] = useState(false);
+  const celebrationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevDone = useRef(done);
+
+  useEffect(() => {
+    if (done && !prevDone.current) {
+      setShowCelebration(true);
+      celebrationTimer.current = setTimeout(() => {
+        setShowCelebration(false);
+        setShowCompleteBanner(true);
+      }, 1600);
+    }
+    prevDone.current = done;
+    return () => {
+      if (celebrationTimer.current) clearTimeout(celebrationTimer.current);
+    };
+  }, [done]);
+
   return (
     <div className="h-full flex flex-col bg-white overflow-hidden select-none relative">
       {/* Guidance banner */}
@@ -61,9 +63,17 @@ export default function SimulatorFrame({
           </div>
         </div>
         <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? "🎉 " + goal + " — all done!" : instruction}
+          {done ? goal + " — all done!" : instruction}
         </p>
       </div>
+
+      {/* Slim completion banner — visible after celebration clears */}
+      {showCompleteBanner && (
+        <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
+          <span className="text-green-600">&#10003;</span>
+          Lesson complete! You can keep practicing here.
+        </div>
+      )}
 
       {/* App window */}
       <div className="flex-1 min-h-0 p-3">
@@ -83,11 +93,11 @@ export default function SimulatorFrame({
         </div>
       </div>
 
-      {/* Completion overlay */}
-      {done && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in">
+      {/* Celebration overlay — shows briefly then disappears */}
+      {showCelebration && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
           <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            ✓
+            &#10003;
           </div>
           <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{goal}</p>
         </div>
@@ -96,7 +106,7 @@ export default function SimulatorFrame({
       {/* Per-step flash */}
       {flash && !done && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">✓</span>
+          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">&#10003;</span>
         </div>
       )}
     </div>

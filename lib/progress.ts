@@ -54,4 +54,8 @@ export function getCompletedSlugs(): string[] {
 
 export function resetProgress(): void {
   writeState({ version: SCHEMA_VERSION, completedSlugs: [] });
+  // Also clear sim state (installed apps, etc.)
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("lac-sim");
+  }
 }

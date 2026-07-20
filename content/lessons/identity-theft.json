@@ -5,18 +5,13 @@
   "order": 1050,
   "title": "Protecting Your Identity",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft is when someone uses your personal information for fraud.\n• Never share your full social security number online.\n• Use strong passwords, turn on 2FA, and watch your bank statements.\n• If it happens, contact your bank and credit bureaus right away.",
+  "drDigitalIntro": "Identity theft is when someone uses your personal information for fraud.\n\u2022 Never share your full social security number online.\n\u2022 Use strong passwords, turn on 2FA, and watch your bank statements.\n\u2022 If it happens, contact your bank and credit bureaus right away.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You reviewed your privacy settings to protect your identity",
     "steps": [
       {
-        "say": "Go to the Privacy tab to review your security settings.",
-        "action": "go-to-section",
-        "target": "privacy"
-      },
-      {
-        "say": "Ad Tracking is on — turn it off to protect your privacy.",
+        "say": "Ad Tracking is on \u2014 turn it off to protect your privacy.",
         "action": "toggle-setting",
         "target": "Ad Tracking"
       },

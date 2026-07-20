@@ -9,6 +9,7 @@ import { markComplete, getCompletedSlugs } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
 
 type AttemptState = "unattempted" | "failed" | "success";
+type FailInfo = { message: string } | null;
 
 interface LessonModuleRunnerProps {
   route: ModuleRoute;
@@ -19,6 +20,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
+  const [failInfo, setFailInfo] = useState<FailInfo>(null);
   const [started, setStarted] = useState(false);
   const [indexResolved, setIndexResolved] = useState(false);
   const [allModuleComplete, setAllModuleComplete] = useState(false);
@@ -35,6 +37,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
   useEffect(() => {
     setAttemptState("unattempted");
+    setFailInfo(null);
     setStarted(false);
     setActivityAttempt(0);
     setAlreadyDone(getCompletedSlugs().includes(subLesson.slug));
@@ -69,9 +72,14 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
     setStarted(true);
   }
 
-  function handleResult(success: boolean) {
+  function handleResult(success: boolean, failMessage?: string) {
     setAttemptState(success ? "success" : "failed");
-    if (success) markComplete(subLesson.slug);
+    if (success) {
+      markComplete(subLesson.slug);
+      setFailInfo(null);
+    } else {
+      setFailInfo({ message: failMessage || subLesson.drDigitalHint });
+    }
   }
 
   function handleNext() {
@@ -165,6 +173,23 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         </div>
 
         <DrDigital message={drDigitalMessage} mood={drDigitalMood} />
+
+        {failInfo && attemptState === "failed" && (
+          <div className="rounded-lg border-2 border-red-400 bg-red-50 p-4 space-y-3">
+            <p className="font-bold text-red-700">Activity failed</p>
+            <p className="text-sm text-red-900">{failInfo.message}</p>
+            <button
+              onClick={() => {
+                setActivityAttempt((n) => n + 1);
+                setAttemptState("unattempted");
+                setFailInfo(null);
+              }}
+              className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 active:scale-95 transition-all text-sm"
+            >
+              Try again
+            </button>
+          </div>
+        )}
 
         {subLesson.playgroundTask.type === "placeholder" && (
           <p className="text-sm text-gray-500 border rounded p-3 bg-gray-50">This activity is coming soon.</p>

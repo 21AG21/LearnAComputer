@@ -37,7 +37,7 @@ interface LessonPlaygroundPaneProps {
   task: PlaygroundTask;
   /** Whether the learner has started this sub-lesson's activity — owned by the parent so it can survive across the module's shared fullscreen session. */
   started: boolean;
-  onResult: (success: boolean) => void;
+  onResult: (success: boolean, failMessage?: string) => void;
   /** Closes the activity and returns to the idle desktop, without leaving fullscreen or advancing lessons. */
   onExit: () => void;
 }

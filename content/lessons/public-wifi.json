@@ -5,18 +5,13 @@
   "order": 1070,
   "title": "Public WiFi Safety",
   "videoUrl": "",
-  "drDigitalIntro": "Public WiFi is convenient but less secure than home.\n• Others on the network could see your data.\n• Avoid banking or email on it; stick to https sites.\n• A VPN adds protection. Reading the news is fine — just skip anything private.",
+  "drDigitalIntro": "Public WiFi is convenient but less secure than home.\n\u2022 Others on the network could see your data.\n\u2022 Avoid banking or email on it; stick to https sites.\n\u2022 A VPN adds protection. Reading the news is fine \u2014 just skip anything private.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You identified risks on public WiFi",
     "steps": [
       {
-        "say": "Go to the Phishing tab to check a suspicious WiFi login page.",
-        "action": "go-to-section",
-        "target": "phishing"
-      },
-      {
-        "say": "Inspect 'Free WiFi Login' — this link is from a suspicious sign-in portal.",
+        "say": "Inspect 'Free WiFi Login' \u2014 this link is from a suspicious sign-in portal.",
         "action": "inspect-link",
         "target": "Free WiFi Login"
       },
