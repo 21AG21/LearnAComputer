@@ -5,7 +5,7 @@
   "order": 1250,
   "title": "Online Shopping and Banking",
   "videoUrl": "",
-  "drDigitalIntro": "Online banking and shopping are safe on trusted sites.\n• Only use official bank websites — type the address yourself.\n• Look for the padlock and https://.\n• Never bank on public WiFi without a VPN. Let's check some links.",
+  "drDigitalIntro": "Online banking and shopping are safe on trusted sites.\n\u2022 Only use official bank websites \u2014 type the address yourself.\n\u2022 Look for the padlock and https://.\n\u2022 Never bank on public WiFi without a VPN. Let's check some links.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You verified safe banking and shopping links",
@@ -21,7 +21,7 @@
         "target": "Bank of America Login"
       },
       {
-        "say": "bankofamerica.com with https — that's safe. Mark it Safe.",
+        "say": "Bankofamerica.com with https \u2014 that's safe. Mark it Safe.",
         "action": "mark-safe",
         "target": "Bank of America Login"
       },
@@ -31,7 +31,7 @@
         "target": "Enter Card Details"
       },
       {
-        "say": "That URL is suspicious — mark it Dangerous.",
+        "say": "That URL is suspicious \u2014 mark it Dangerous.",
         "action": "mark-dangerous",
         "target": "Enter Card Details"
       }

@@ -2,10 +2,10 @@
   "slug": "sharing-photos",
   "unit": "Unit 7: Photos",
   "module": "Editing Photos",
-  "order": 740,
+  "order": 721,
   "title": "Sharing Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Sharing sends a copy of a photo to someone else.\n• Send it by email, text, or social media.\n• You keep your photo; they get a copy.\n• For best quality, share a cloud link or send from the photo app directly.",
+  "drDigitalIntro": "Sharing sends a copy of a photo to someone else.\n\u2022 Send it by email, text, or social media.\n\u2022 You keep your photo; they get a copy.\n\u2022 For best quality, share a cloud link or send from the photo app directly.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You shared a photo",
@@ -22,6 +22,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You shared a photo! Sharing sends a copy — your original photo stays safe in your library.",
+  "drDigitalSuccess": "You shared a photo! Sharing sends a copy \u2014 your original photo stays safe in your library.",
   "drDigitalHint": "Open a photo, then click the Share button (it looks like an arrow pointing up)."
 }

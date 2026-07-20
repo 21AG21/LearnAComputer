@@ -2,10 +2,10 @@
   "slug": "icloud-photos",
   "unit": "Unit 7: Photos",
   "module": "Cloud Storage",
-  "order": 760,
+  "order": 731,
   "title": "the cloud Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Cloud photos sync your pictures across all your devices.\n• Take a photo on your phone and it appears on your computer.\n• You get some free storage, with more available for a fee.\n• The cloud also backs up your photos, so they're safe if a device breaks.",
+  "drDigitalIntro": "Cloud photos sync your pictures across all your devices.\n\u2022 Take a photo on your phone and it appears on your computer.\n\u2022 You get some free storage, with more available for a fee.\n\u2022 The cloud also backs up your photos, so they're safe if a device breaks.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "With the cloud Photos turned on, what happens when you take a photo on your phone?",
@@ -28,6 +28,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "the cloud Photos is seamless sync — snap a photo on your phone, it's on your computer in seconds.",
-  "drDigitalHint": "the cloud connects all your devices. With Photos enabled, your photo library is one shared library across all of them."
+  "drDigitalSuccess": "The cloud Photos is seamless sync \u2014 snap a photo on your phone, it's on your computer in seconds.",
+  "drDigitalHint": "The cloud connects all your devices. With Photos enabled, your photo library is one shared library across all of them."
 }

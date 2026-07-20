@@ -5,7 +5,7 @@
   "order": 700,
   "title": "Your Photo Library",
   "videoUrl": "",
-  "drDigitalIntro": "Your photo app is where all your pictures live.\n• Scroll through every photo — newest first.\n• Click a photo to see it full size.\n• Photos are organized by date, and you can search them. Let's explore!",
+  "drDigitalIntro": "Your photo app is where all your pictures live.\n\u2022 Scroll through every photo \u2014 newest first.\n\u2022 Click a photo to see it full size.\n\u2022 Photos are organized by date, and you can search them. Let's explore!",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You explored your photo library",

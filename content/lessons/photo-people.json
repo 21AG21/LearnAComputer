@@ -2,10 +2,10 @@
   "slug": "photo-people",
   "unit": "Unit 7: Photos",
   "module": "Organizing Photos",
-  "order": 730,
+  "order": 711,
   "title": "People and Places",
   "videoUrl": "",
-  "drDigitalIntro": "Your photo app recognizes faces and groups them.\n• Name people like \"Mom\" or \"Grandma\" to find all their photos.\n• Places shows where photos were taken on a map.\n• Memories builds slideshows of your best moments.",
+  "drDigitalIntro": "Your photo app recognizes faces and groups them.\n\u2022 Name people like \"Mom\" or \"Grandma\" to find all their photos.\n\u2022 Places shows where photos were taken on a map.\n\u2022 Memories builds slideshows of your best moments.",
   "playgroundTask": {
     "type": "multiple-choice",
     "question": "Photos recognizes faces to help you:",
@@ -28,6 +28,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Face recognition lets you search by person — name someone once and Photos can show you all their photos instantly.",
+  "drDigitalSuccess": "Face recognition lets you search by person \u2014 name someone once and Photos can show you all their photos instantly.",
   "drDigitalHint": "The People album groups photos by the faces in them. Name the face once and Photos does the rest."
 }

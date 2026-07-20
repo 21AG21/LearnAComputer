@@ -115,7 +115,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
             ← All lessons
           </Link>
           <div>
-            <p className="text-sm text-gray-500">{route.module}</p>
+            <p className="text-sm text-gray-500">{route.unit} &middot; {route.module}</p>
             <h1 className="text-2xl font-bold">{route.module}</h1>
           </div>
           <div className="rounded-lg border-2 border-green-500 bg-green-50 p-6 text-center space-y-3">
@@ -159,7 +159,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         </Link>
         <div>
           <p className="text-sm text-gray-500">
-            {route.module} &middot; {index + 1} of {route.subLessons.length}
+            {route.unit} &middot; {route.module} &middot; {index + 1} of {route.subLessons.length}
           </p>
           <h1 className="text-2xl font-bold">{subLesson.title}</h1>
         </div>

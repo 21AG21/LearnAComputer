@@ -2,10 +2,10 @@
   "slug": "recently-deleted",
   "unit": "Unit 7: Photos",
   "module": "Organizing Photos",
-  "order": 750,
+  "order": 712,
   "title": "Deleted Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n• It goes to a Recently Deleted folder for 30 days.\n• You can recover it there if you change your mind.\n• After 30 days it's deleted for good. Let's delete and recover one.",
+  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n\u2022 It goes to a Recently Deleted folder for 30 days.\n\u2022 You can recover it there if you change your mind.\n\u2022 After 30 days it's deleted for good. Let's delete and recover one.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You deleted and recovered a photo",

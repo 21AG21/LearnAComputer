@@ -176,7 +176,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
     const perm = installQueue.app.permissions[installQueue.permIdx];
     return (
       <SimulatorFrame
-        appName="App Store"
+        appName="App Market"
         appIcon="🛍️"
         instruction={step?.say}
         stepIndex={stepIndex}
@@ -216,7 +216,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
 
   return (
     <SimulatorFrame
-      appName="App Store"
+      appName="App Market"
       appIcon="🛍️"
       instruction={step?.say}
       stepIndex={stepIndex}
@@ -231,7 +231,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
           onClick={() => { setTab("store"); setSelectedApp(null); if (step?.action === "go-to-store") completeStep(); }}
           className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "store" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("tab-store") ? pulse : ""}`}
         >
-          🏪 App Store
+          App Market
         </button>
         <button
           onClick={() => { setTab("installed"); setSelectedApp(null); if (step?.action === "go-to-installed") completeStep(); }}

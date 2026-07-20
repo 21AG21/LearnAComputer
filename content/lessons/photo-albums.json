@@ -2,10 +2,10 @@
   "slug": "photo-albums",
   "unit": "Unit 7: Photos",
   "module": "Organizing Photos",
-  "order": 720,
+  "order": 710,
   "title": "Creating Albums",
   "videoUrl": "",
-  "drDigitalIntro": "Albums are folders for your photos.\n• Make albums like \"Vacation 2024\", \"Family\", or \"Recipes\".\n• A photo can be in several albums at once.\n• Adding to an album doesn't move or copy the photo.",
+  "drDigitalIntro": "Albums are folders for your photos.\n\u2022 Make albums like \"Vacation 2024\", \"Family\", or \"Recipes\".\n\u2022 A photo can be in several albums at once.\n\u2022 Adding to an album doesn't move or copy the photo.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You created an album and added photos to it",

@@ -2,10 +2,10 @@
   "slug": "photo-search",
   "unit": "Unit 7: Photos",
   "module": "Your Photo Library",
-  "order": 760,
+  "order": 702,
   "title": "Searching Your Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Photo apps can recognize what's in your pictures.\n• Search \"beach\" to see all your beach photos.\n• Search \"dog\", or type someone's name.\n• It saves huge time, and the search happens right on your device.",
+  "drDigitalIntro": "Photo apps can recognize what's in your pictures.\n\u2022 Search \"beach\" to see all your beach photos.\n\u2022 Search \"dog\", or type someone's name.\n\u2022 It saves huge time, and the search happens right on your device.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You searched your photo library",

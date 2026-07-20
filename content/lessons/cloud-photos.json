@@ -1,11 +1,11 @@
 {
   "slug": "cloud-photos",
   "unit": "Unit 7: Photos",
-  "module": "Organizing Photos",
-  "order": 770,
+  "module": "Cloud Storage",
+  "order": 730,
   "title": "Cloud Photo Storage",
   "videoUrl": "",
-  "drDigitalIntro": "Cloud storage keeps a copy of your photos online.\n• If a device is lost or broken, your photos are still safe.\n• Photos sync automatically across your devices.\n• Most services give some free space and charge for more.",
+  "drDigitalIntro": "Cloud storage keeps a copy of your photos online.\n\u2022 If a device is lost or broken, your photos are still safe.\n\u2022 Photos sync automatically across your devices.\n\u2022 Most services give some free space and charge for more.",
   "playgroundTask": {
     "type": "none"
   },

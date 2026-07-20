@@ -2,10 +2,10 @@
   "slug": "photo-editing",
   "unit": "Unit 7: Photos",
   "module": "Editing Photos",
-  "order": 730,
+  "order": 720,
   "title": "Basic Photo Editing",
   "videoUrl": "",
-  "drDigitalIntro": "You can improve photos without being a pro.\n• Rotate turns a sideways photo upright.\n• Crop trims the edges; Brightness makes it lighter or darker.\n• Filters add a color effect — and you can always revert to the original.",
+  "drDigitalIntro": "You can improve photos without being a pro.\n\u2022 Rotate turns a sideways photo upright.\n\u2022 Crop trims the edges; Brightness makes it lighter or darker.\n\u2022 Filters add a color effect \u2014 and you can always revert to the original.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You edited a photo and reverted it",
@@ -42,6 +42,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You edited a photo and reverted it! The original is always preserved — you can always undo edits.",
+  "drDigitalSuccess": "You edited a photo and reverted it! The original is always preserved \u2014 you can always undo edits.",
   "drDigitalHint": "Open a photo first, then use the editing buttons that appear. Use Revert to undo all changes."
 }

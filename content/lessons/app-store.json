@@ -3,15 +3,15 @@
   "unit": "Unit 8: Apps",
   "module": "Getting Apps",
   "order": 810,
-  "title": "The App Store",
+  "title": "The App Market",
   "videoUrl": "",
-  "drDigitalIntro": "The App Store is where you download new apps safely.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or see what's trending.\n• Each app shows a description, ratings, and reviews.",
+  "drDigitalIntro": "Your computer has a built-in app market where you download new apps safely.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or see what's trending.\n• Each app shows a description, ratings, and reviews.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You found an app in the store",
     "steps": [
       {
-        "say": "You're in the App Store. Click on 'Games' in the category list.",
+        "say": "You're in the App Market. Click on 'Games' in the category list.",
         "action": "go-to-category",
         "target": "Games"
       },
@@ -26,6 +26,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You browsed the App Store! Categories help you discover apps, and each app page shows ratings and reviews.",
+  "drDigitalSuccess": "You browsed the App Market! Categories help you discover apps, and each app page shows ratings and reviews.",
   "drDigitalHint": "Click a category to browse, then click an app name to see its details."
 }
