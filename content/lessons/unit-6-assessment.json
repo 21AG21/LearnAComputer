@@ -5,10 +5,84 @@
   "order": 680,
   "title": "Manage a Busy Inbox",
   "videoUrl": "",
-  "drDigitalIntro": "You've inherited a messy inbox with 20 unread emails.\n• Read them, reply to a few, and forward one to a colleague.\n• Attach a document, and delete the spam.\n• Spot the phishing email and avoid it — just like real life.",
+  "drDigitalIntro": "Your inbox is full — time to clean it up!\n• Spot the scam and get rid of it.\n• Reply to an email, compose a new one with CC and an attachment.\n• Archive what you don't need anymore.\n• You know how to do all of this — let's go!",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-email",
+    "goal": "You cleaned up a messy inbox like a pro",
+    "steps": [
+      {
+        "say": "That email from URGENT WIN looks suspicious. Open it to check.",
+        "action": "open-email",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "Definitely a scam. Mark it as spam.",
+        "action": "mark-spam"
+      },
+      {
+        "say": "Go to the Spam folder to confirm it landed there.",
+        "action": "go-to-folder",
+        "target": "Spam"
+      },
+      {
+        "say": "Good — the scam is in Spam where it belongs. Go back to your Inbox.",
+        "action": "go-to-folder",
+        "target": "Inbox"
+      },
+      {
+        "say": "Mom asked about dinner. Open her email.",
+        "action": "open-email",
+        "target": "Dinner Sunday?"
+      },
+      {
+        "say": "Reply to Mom and say you'll be there.",
+        "action": "reply",
+        "value": "Yes, Sunday works! See you at 6."
+      },
+      {
+        "say": "Now compose a new email — click the compose button.",
+        "action": "compose"
+      },
+      {
+        "say": "Address it to your friend Jordan.",
+        "action": "set-to",
+        "value": "jordan@example.com"
+      },
+      {
+        "say": "CC your friend Alex so they're in the loop.",
+        "action": "set-cc",
+        "value": "alex@example.com"
+      },
+      {
+        "say": "Set the subject: Weekend plans",
+        "action": "set-subject",
+        "value": "Weekend plans"
+      },
+      {
+        "say": "Write: 'Hey! Want to get together this weekend? I attached the schedule.'",
+        "action": "set-body",
+        "value": "Hey! Want to get together this weekend? I attached the schedule."
+      },
+      {
+        "say": "Attach a file to the email.",
+        "action": "attach",
+        "target": "Budget.xlsx"
+      },
+      {
+        "say": "Send the email.",
+        "action": "send"
+      },
+      {
+        "say": "The Amazon shipping email is done — archive it to keep your inbox clean.",
+        "action": "open-email",
+        "target": "Your order shipped"
+      },
+      {
+        "say": "Archive it.",
+        "action": "archive"
+      }
+    ]
   },
-  "drDigitalSuccess": "You can manage a complex email inbox like a professional!",
-  "drDigitalHint": "Start by scanning subjects to find the important emails."
+  "drDigitalSuccess": "Inbox zero! You spotted the scam, replied to Mom, composed a professional email with CC and an attachment, and archived what you didn't need.",
+  "drDigitalHint": "Use the folder sidebar to navigate, the compose button to write new emails, and the action buttons when viewing an email."
 }

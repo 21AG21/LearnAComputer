@@ -2,25 +2,25 @@
   "slug": "zooming-webpages",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Using the browser",
-  "order": 495,
+  "order": 496,
   "title": "Zooming Web Pages",
   "videoUrl": "",
-  "drDigitalIntro": "You can zoom when text is too small to read.\n• Press Ctrl+Plus to zoom in, Ctrl+Minus to zoom out.\n• Press Ctrl+0 to return to normal size.\n• Each website remembers your zoom level.",
+  "drDigitalIntro": "Sometimes text on a page is too small to read.\n• Click the + button to zoom in and make everything bigger.\n• Click the - button to zoom back out.\n• Ctrl+0 resets to normal size.\n• Let's zoom in to read some tiny text.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Make a page's text bigger",
+    "goal": "Zoom in to read fine print",
     "steps": [
       {
-        "say": "Go to wikipedia.org — type it and press Enter. Imagine the text is too small to read comfortably.",
+        "say": "Go to dailynews.example — type it and press Enter. There's some fine print at the bottom you can't read yet.",
         "action": "navigate",
-        "url": "wikipedia.org"
+        "url": "dailynews.example"
       },
       {
-        "say": "Click the + zoom button twice to enlarge everything (or press Ctrl+Plus). Watch the page grow.",
+        "say": "Scroll down — see the tiny text? Click the + zoom button twice to make it readable (or press Ctrl+Plus).",
         "action": "zoom-in"
       }
     ]
   },
-  "drDigitalSuccess": "You zoomed in and the whole page got bigger and easier to read. Ctrl+Plus zooms in, Ctrl+Minus zooms out, Ctrl+0 resets.",
+  "drDigitalSuccess": "Now you can read the fine print! Ctrl+Plus zooms in, Ctrl+Minus zooms out, Ctrl+0 resets. The - and + buttons in the toolbar do the same thing.",
   "drDigitalHint": "Find the zoom control on the right of the action bar and click the + twice to reach 150%."
 }

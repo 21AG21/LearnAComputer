@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import FakeDesktop from "@/components/Playground/FakeDesktop";
 import CopyPasteTask from "@/components/Playground/CopyPasteTask";
 import TypeTextTask from "@/components/Playground/TypeTextTask";
@@ -17,20 +18,23 @@ import ComposeEmailTask from "@/components/Playground/ComposeEmailTask";
 import MultipleChoiceTask from "@/components/Playground/MultipleChoiceTask";
 import DragSortTask from "@/components/Playground/DragSortTask";
 import SpotTheFakeTask from "@/components/Playground/SpotTheFakeTask";
-import FindInSettingsTask from "@/components/Playground/FindInSettingsTask";
 import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
+import SimulatorFrame from "@/components/Playground/SimulatorFrame";
 import GuidedFilesTask from "@/components/Playground/GuidedFilesTask";
 import GuidedBrowserTask from "@/components/Playground/GuidedBrowserTask";
 import GuidedMessagingTask from "@/components/Playground/GuidedMessagingTask";
 import GuidedEmailTask from "@/components/Playground/GuidedEmailTask";
 import GuidedPhotosTask from "@/components/Playground/GuidedPhotosTask";
 import GuidedAppStoreTask from "@/components/Playground/GuidedAppStoreTask";
+import GuidedSettingsTask from "@/components/Playground/GuidedSettingsTask";
 import GuidedSecurityTask from "@/components/Playground/GuidedSecurityTask";
 import GuidedTroubleshootingTask from "@/components/Playground/GuidedTroubleshootingTask";
 import GuidedCalendarTask from "@/components/Playground/GuidedCalendarTask";
 import GuidedDesktopTask from "@/components/Playground/GuidedDesktopTask";
 import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
+import DesktopLaunch from "@/components/Playground/DesktopLaunch";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
+import { NoteIcon } from "@/components/Playground/Icons";
 import type { PlaygroundTask } from "@/lib/lessons";
 
 interface LessonPlaygroundPaneProps {
@@ -49,6 +53,17 @@ interface LessonPlaygroundPaneProps {
  * LessonModuleRunner, so switching between sub-lessons doesn't toggle fullscreen.
  */
 export default function LessonPlaygroundPane({ task, started, onResult, onExit }: LessonPlaygroundPaneProps) {
+  const [completed, setCompleted] = useState(false);
+
+  useEffect(() => {
+    if (!started) setCompleted(false);
+  }, [started]);
+
+  const wrappedOnResult = (success: boolean, failMessage?: string) => {
+    if (success) setCompleted(true);
+    onResult(success, failMessage);
+  };
+
   return (
     <div className="relative h-full w-full border-4 border-gray-300 bg-white overflow-hidden">
       {!started && <FakeDesktop />}
@@ -56,26 +71,31 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
       {started && (
         <div className="relative h-full w-full">
           {task.type === "keyboard-shortcut" && (
-            <div className="h-full flex items-center justify-center p-8">
-              <div className="w-full max-w-lg">
-                <CopyPasteTask instructions={task.instructions} sourceText={task.sourceText} onResult={onResult} />
+            <SimulatorFrame appName="Notes" appIcon={<NoteIcon size={18} />} instruction={task.instructions} done={completed} goal="Copy and paste complete">
+              <div className="h-full flex items-center justify-center p-8">
+                <div className="w-full max-w-lg">
+                  <CopyPasteTask sourceText={task.sourceText} onResult={wrappedOnResult} />
+                </div>
               </div>
-            </div>
+            </SimulatorFrame>
           )}
           {task.type === "type-text" && (
-            <div className="h-full flex items-center justify-center p-8">
-              <div className="w-full max-w-lg">
-                <TypeTextTask
-                  instructions={task.instructions}
-                  targetText={task.targetText}
-                  exact={task.exact}
-                  onResult={onResult}
-                />
+            <SimulatorFrame appName="Notes" appIcon={<NoteIcon size={18} />} instruction={task.instructions} done={completed} goal="Typing practice complete">
+              <div className="h-full flex items-center justify-center p-8">
+                <div className="w-full max-w-lg">
+                  <TypeTextTask
+                    targetText={task.targetText}
+                    exact={task.exact}
+                    onResult={wrappedOnResult}
+                  />
+                </div>
               </div>
-            </div>
+            </SimulatorFrame>
           )}
           {task.type === "shape-click-game" && (
-            <ShapeClickGame instructions={task.instructions} targetScore={task.targetScore} onResult={onResult} />
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="Target score reached">
+              <ShapeClickGame targetScore={task.targetScore} onResult={wrappedOnResult} />
+            </SimulatorFrame>
           )}
           {task.type === "file-explorer-open" && (
             <DesktopFileExplorerTask filesToOpen={task.filesToOpen} onResult={onResult} />
@@ -98,17 +118,22 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               onMinimize={onExit}
             />
           )}
-          {task.type === "match-parts" && <MatchPartsTask instructions={task.instructions} onResult={onResult} />}
+          {task.type === "match-parts" && (
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched">
+              <MatchPartsTask onResult={wrappedOnResult} />
+            </SimulatorFrame>
+          )}
           {task.type === "open-all-apps" && <OpenAllAppsTask instructions={task.instructions} onResult={onResult} />}
           {task.type === "edit-text" && (
-            <TextEditorTask
-              instructions={task.instructions}
-              startingText={task.startingText}
-              correctText={task.correctText}
-              mustInclude={task.mustInclude}
-              mustNotInclude={task.mustNotInclude}
-              onResult={onResult}
-            />
+            <SimulatorFrame appName="Notes" appIcon={<NoteIcon size={18} />} instruction={task.instructions} done={completed} goal="Text editing complete">
+              <TextEditorTask
+                startingText={task.startingText}
+                correctText={task.correctText}
+                mustInclude={task.mustInclude}
+                mustNotInclude={task.mustNotInclude}
+                onResult={wrappedOnResult}
+              />
+            </SimulatorFrame>
           )}
           {task.type === "edit-file" && (
             <EditFileTask
@@ -133,38 +158,54 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           {task.type === "spot-the-fake" && (
             <SpotTheFakeTask instructions={task.instructions} items={task.items} fakeExplanation={task.fakeExplanation} onResult={onResult} />
           )}
-          {task.type === "find-in-settings" && (
-            <FindInSettingsTask instructions={task.instructions} targetPanel={task.targetPanel} toggleLabel={task.toggleLabel} targetValue={task.targetValue} onResult={onResult} />
+          {task.type === "guided-settings" && (
+            <GuidedSettingsTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
           {task.type === "url-navigator" && (
             <UrlNavigatorTask instructions={task.instructions} prompt={task.prompt} targetUrl={task.targetUrl} successTitle={task.successTitle} onResult={onResult} />
           )}
           {task.type === "guided-files" && (
-            <GuidedFilesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="files">
+              <GuidedFilesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-browser" && (
-            <GuidedBrowserTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="browser">
+              <GuidedBrowserTask goal={task.goal} steps={task.steps} initialDownloads={task.initialDownloads} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-messaging" && (
-            <GuidedMessagingTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="messages">
+              <GuidedMessagingTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-email" && (
-            <GuidedEmailTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="mail">
+              <GuidedEmailTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-photos" && (
-            <GuidedPhotosTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="photos">
+              <GuidedPhotosTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-app-store" && (
-            <GuidedAppStoreTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="app-market">
+              <GuidedAppStoreTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-security" && (
-            <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app="browser">
+              <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-troubleshooting" && (
             <GuidedTroubleshootingTask goal={task.goal} scenario={task.scenario} steps={task.steps} onResult={onResult} />
           )}
           {task.type === "guided-calendar" && (
-            <GuidedCalendarTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <DesktopLaunch app={task.launchApp ?? "calendar"}>
+              <GuidedCalendarTask goal={task.goal} steps={task.steps} initialView={task.launchApp === "reminders" ? "reminders" : undefined} onResult={onResult} />
+            </DesktopLaunch>
           )}
           {task.type === "guided-desktop" && (
             <GuidedDesktopTask goal={task.goal} steps={task.steps} onResult={onResult} />

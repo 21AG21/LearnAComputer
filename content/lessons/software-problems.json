@@ -5,32 +5,33 @@
   "order": 1115,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Software problems are issues with programs, not hardware.\n• Signs: an app crashes, freezes, or shows an error.\n• Try force-quitting and restarting the app, then restart the computer.\n• If it continues, uninstall and reinstall the app.",
+  "drDigitalIntro": "Software problems are issues with programs, not hardware.\n• Signs: an app crashes, freezes, or shows an error message.\n• Step 1: Force-quit the app and reopen it.\n• Step 2: If it still doesn't work, restart the whole computer.\n• Step 3: Uninstall and reinstall the app as a last resort.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You fixed a frozen video editing app",
-    "scenario": "The video editor is frozen and not responding",
+    "goal": "You fixed a frozen app by force-quitting and reopening it",
+    "scenario": "Browser is frozen and not responding",
+    "launchApp": "browser",
     "steps": [
       {
-        "say": "Read the error message that appeared.",
-        "action": "read-error"
+        "say": "Browser is frozen — it shows 'Not Responding.' Try clicking on it.",
+        "action": "click-frozen"
       },
       {
-        "say": "Open Task Manager to see the running processes.",
-        "action": "open-task-manager"
+        "say": "It won't respond. Open the system menu (three dots) to access Force Quit.",
+        "action": "open-force-quit"
       },
       {
-        "say": "Video Editor is Not Responding. Force Quit it.",
+        "say": "Browser shows 'Not Responding.' Click Force Quit to close it.",
         "action": "force-quit",
-        "target": "Video Editor"
+        "target": "Browser"
       },
       {
-        "say": "Restart the Video Editor app.",
+        "say": "Now click Browser in the dock to reopen it.",
         "action": "restart-app",
-        "target": "Video Editor"
+        "target": "Browser"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the software problem! Restart > Force Quit > Reinstall — try in that order.",
-  "drDigitalHint": "Read the error, open Task Manager, force quit the frozen app, then reopen it."
+  "drDigitalSuccess": "You fixed the software problem! The order to try: Force Quit and reopen > Restart the computer > Reinstall the app.",
+  "drDigitalHint": "Click the frozen window, then use the system menu to Force Quit, and reopen from the dock."
 }

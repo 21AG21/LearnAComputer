@@ -5,7 +5,7 @@
   "order": 491,
   "title": "HTTPS and Secure Websites",
   "videoUrl": "",
-  "drDigitalIntro": "A secure website's address starts with https:// and shows a lock icon.\n• The \"s\" stands for secure — your connection is scrambled and safe.\n• It's safe to type passwords and card numbers there.\n• If a site says \"Not Secure\", never enter private information.",
+  "drDigitalIntro": "The lock icon means your connection is encrypted — scrambled so nobody between you and the site can read it.\n• Not the coffee-shop WiFi owner, not your internet provider.\n• But the lock does NOT mean the site itself is safe! A scam site can have a lock too.\n• The lock protects the pipe, not what's on the other end.\n• Always look for the lock before typing passwords or card numbers.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Check that a site is secure before trusting it",
@@ -16,11 +16,11 @@
         "url": "shop.example"
       },
       {
-        "say": "See the 🔒 lock next to the address? Click it to confirm your connection is secure.",
+        "say": "See the lock next to the address? Click it to learn what it means.",
         "action": "lock-click"
       }
     ]
   },
-  "drDigitalSuccess": "You checked the lock icon — it confirms the connection is encrypted and safe. Always look for 🔒 before typing passwords or card numbers.",
-  "drDigitalHint": "The 🔒 lock is on the left side of the address bar, just before the web address. Click it."
+  "drDigitalSuccess": "You read the lock info and clicked Got it. The lock means your connection is encrypted — but remember, even scam sites can have a lock. It protects the pipe, not the site.",
+  "drDigitalHint": "Click the lock icon in the address bar, read the explanation, then click Got it."
 }

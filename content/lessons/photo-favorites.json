@@ -5,30 +5,30 @@
   "order": 701,
   "title": "Favoriting Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Favoriting marks a photo with a heart.\n\u2022 The photo stays in your library and joins a Favorites section.\n\u2022 Tap the heart to add it; tap again to remove it.\n\u2022 With hundreds of photos, Favorites gathers the ones you love most.",
+  "drDigitalIntro": "Favoriting marks a photo with a heart.\n• The photo stays in your library and joins a Favorites section.\n• Click the heart to add it; click again to remove it.\n• With hundreds of photos, Favorites gathers the ones you love most.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You favorited and unfavorited photos",
     "steps": [
       {
-        "say": "Click the Beach Sunset photo to open it.",
+        "say": "Click the Beach Vacation photo to open it.",
         "action": "select-photo",
-        "target": "Beach Sunset"
+        "target": "Beach Vacation"
       },
       {
-        "say": "Click the heart \u2661 button to add it to your Favorites.",
+        "say": "Click the heart button to add it to your Favorites.",
         "action": "favorite",
-        "target": "Beach Sunset"
+        "target": "Beach Vacation"
       },
       {
-        "say": "Click the Family Dinner photo to open it.",
+        "say": "Click Back, then open the Dog at the Park photo.",
         "action": "select-photo",
-        "target": "Family Dinner"
+        "target": "Dog at the Park"
       },
       {
         "say": "Add it to Favorites too.",
         "action": "favorite",
-        "target": "Family Dinner"
+        "target": "Dog at the Park"
       },
       {
         "say": "Go to the Favorites section in the sidebar to see your favorited photos.",
@@ -37,6 +37,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Your favorite photos are saved in one place! The heart \u2661 icon marks your best shots.",
+  "drDigitalSuccess": "Your favorite photos are saved in one place! The heart icon marks your best shots.",
   "drDigitalHint": "Click a photo first to open it, then click the heart button that appears."
 }

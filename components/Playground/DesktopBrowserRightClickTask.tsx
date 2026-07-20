@@ -64,7 +64,7 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
         >
           {browserPhase === "catPhoto" ? (
             <div className="h-full flex flex-col items-center justify-center gap-4 bg-yellow-50 p-6">
-              <p className="text-2xl font-bold text-center">You opened a new tab! Great job! 🎉</p>
+              <p className="text-2xl font-bold text-center">You opened a new tab! Great job!</p>
               <div className="relative w-48 h-48">
                 <Image src="/playgrounds/Cat2.png" alt="Funny cat" fill sizes="192px" className="object-contain" />
               </div>
@@ -128,11 +128,11 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
 
   return (
     <div className="h-full flex flex-col">
-      <p className="shrink-0 text-base border-2 border-yellow-400 bg-yellow-100 px-4 py-2 mx-4 mt-3 rounded animate-slide-down">
-        Click the Browser icon at the bottom of the desktop to open it.
-      </p>
-      <div className="flex-1 min-h-0 p-3 pt-2">
-        <FakeDesktop onAppOpened={(app) => { if (app === "browser") setPhase("browser"); }} />
+      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
+        Open <span className="text-yellow-300">Browser</span> — click the glowing icon in the dock
+      </div>
+      <div className="flex-1 min-h-0 relative">
+        <FakeDesktop highlightApp="browser" onAppOpened={(app) => { if (app === "browser") setPhase("browser"); }} />
       </div>
     </div>
   );

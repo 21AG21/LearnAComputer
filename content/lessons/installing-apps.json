@@ -5,7 +5,7 @@
   "order": 820,
   "title": "Installing an App",
   "videoUrl": "",
-  "drDigitalIntro": "Installing an app puts it on your device.\n• For free apps, just tap Install.\n• Paid apps charge your payment method on file.\n• Once installed, the app appears in your app list.",
+  "drDigitalIntro": "Installing an app puts it on your device.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• For free apps, just click Install.\n• Paid apps charge your payment method on file.\n• Once installed, it appears in My Apps.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You installed a free app",
@@ -13,7 +13,7 @@
       {
         "say": "Search for 'Puzzle Quest' in the search bar.",
         "action": "search",
-        "target": "Puzzle Quest"
+        "value": "Puzzle"
       },
       {
         "say": "Click on Puzzle Quest from the results.",
@@ -26,11 +26,19 @@
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click 'My Apps' in the tab bar to see your installed apps.",
+        "say": "Puzzle Quest wants Camera access. This seems suspicious for a puzzle game, but allow it for now — we'll learn about permissions next.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "Allow Microphone access too.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "Click 'My Apps' to see your installed apps.",
         "action": "go-to-installed"
       }
     ]
   },
-  "drDigitalSuccess": "You installed an app! Free apps install instantly. Check My Apps to see everything you've installed.",
-  "drDigitalHint": "Search for an app, click its name, then click the Install button."
+  "drDigitalSuccess": "You installed an app! Check My Apps to see everything you've installed. Next we'll learn about those permission requests.",
+  "drDigitalHint": "Search for an app, click its name, then click the Install button. Allow the permissions when prompted."
 }

@@ -5,7 +5,7 @@
   "order": 560,
   "title": "Video Call Controls",
   "videoUrl": "",
-  "drDigitalIntro": "During a call, you have controls at the bottom of the screen.\n• Tap the microphone button to mute so they can't hear you.\n• Tap the camera button to hide your video.\n• These help with background noise or a moment of privacy.",
+  "drDigitalIntro": "During a call, you have controls at the bottom of the screen — each one has a label.\n• The Mute button silences your microphone so they can't hear you.\n• The Camera off button hides your video.\n• The wide red End call button hangs up.\n• These help with background noise, a moment of privacy, or ending the call when you're done.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You used all the video call controls",
@@ -20,19 +20,19 @@
         "action": "start-call"
       },
       {
-        "say": "Someone's being noisy! Click the microphone button to mute yourself.",
+        "say": "Someone's being noisy! Click the Mute button to silence your microphone.",
         "action": "mute"
       },
       {
-        "say": "Now turn off your camera — click the camera button.",
+        "say": "Now turn off your camera — click the Camera off button.",
         "action": "camera-off"
       },
       {
-        "say": "All done — end the call with the red button.",
+        "say": "All done — click the wide red End call button to hang up.",
         "action": "end-call"
       }
     ]
   },
   "drDigitalSuccess": "You muted, turned off the camera, and ended the call! Those three controls are all you need to manage any video call.",
-  "drDigitalHint": "Look at the row of circle buttons at the bottom of the call screen."
+  "drDigitalHint": "Look at the labeled buttons at the bottom of the call screen — each one says what it does."
 }

@@ -68,13 +68,6 @@ export type PlaygroundTask =
       fakeExplanation: string;
     }
   | {
-      type: "find-in-settings";
-      instructions: string;
-      targetPanel: string;
-      toggleLabel: string;
-      targetValue: boolean;
-    }
-  | {
       type: "url-navigator";
       instructions: string;
       prompt: string;
@@ -106,6 +99,8 @@ export type PlaygroundTask =
   | {
       type: "guided-browser";
       goal: string;
+      mode?: "guided" | "assessment";
+      initialDownloads?: string[];
       steps: Array<{
         say: string;
         action:
@@ -123,16 +118,20 @@ export type PlaygroundTask =
           | "close-popup"
           | "zoom-in"
           | "download"
-          | "open-downloads";
+          | "open-downloads"
+          | "open-result"
+          | "delete-download";
         url?: string;
         title?: string;
         query?: string;
         reveal?: string;
+        file?: string;
       }>;
     }
   | {
       type: "guided-messaging";
       goal: string;
+      mode?: "guided" | "assessment";
       steps: Array<{
         say: string;
         action:
@@ -151,12 +150,14 @@ export type PlaygroundTask =
   | {
       type: "guided-email";
       goal: string;
+      mode?: "guided" | "assessment";
       steps: Array<{
         say: string;
         action:
           | "open-email" | "compose" | "set-to" | "set-cc" | "set-bcc"
           | "set-subject" | "set-body" | "attach" | "send" | "reply"
-          | "forward" | "delete" | "mark-spam" | "archive" | "go-to-folder";
+          | "forward" | "delete" | "mark-spam" | "archive" | "go-to-folder"
+          | "unspam" | "move-to-inbox";
         target?: string;
         value?: string;
       }>;
@@ -169,7 +170,10 @@ export type PlaygroundTask =
         action:
           | "select-photo" | "favorite" | "unfavorite" | "delete" | "recover"
           | "create-album" | "add-to-album" | "go-to-album" | "crop" | "rotate"
-          | "adjust-brightness" | "apply-filter" | "revert" | "share" | "search";
+          | "adjust-brightness" | "adjust-contrast" | "apply-filter" | "revert"
+          | "share" | "search";
+        via?: "mail" | "messages";
+        to?: string;
         target?: string;
         value?: string;
       }>;
@@ -177,6 +181,7 @@ export type PlaygroundTask =
   | {
       type: "guided-app-store";
       goal: string;
+      mode?: "guided" | "assessment";
       steps: Array<{
         say: string;
         action:
@@ -188,29 +193,45 @@ export type PlaygroundTask =
       }>;
     }
   | {
-      type: "guided-security";
+      type: "guided-settings";
       goal: string;
       steps: Array<{
         say: string;
         action:
-          | "type-password" | "check-strength" | "type-username" | "type-login-password"
-          | "login" | "enter-2fa-code" | "verify-2fa" | "inspect-link" | "mark-safe"
+          | "open-section" | "toggle" | "slider" | "delete-item" | "empty-trash";
+        target?: string;
+        min?: number;
+        max?: number;
+      }>;
+    }
+  | {
+      type: "guided-security";
+      goal: string;
+      mode?: "guided" | "assessment";
+      steps: Array<{
+        say: string;
+        action:
+          | "type-password" | "type-username" | "type-login-password"
+          | "login" | "use-passkey" | "forgot-link" | "open-reset-email" | "click-reset-link"
+          | "enter-2fa-code" | "verify-2fa" | "inspect-link" | "mark-safe"
           | "mark-dangerous" | "toggle-setting" | "go-to-section";
         target?: string;
         value?: string;
+        minStrength?: number;
       }>;
     }
   | {
       type: "guided-troubleshooting";
       goal: string;
       scenario: string;
+      mode?: "guided" | "assessment";
+      launchApp?: "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
       steps: Array<{
         say: string;
         action:
-          | "read-error" | "open-task-manager" | "force-quit" | "restart-app"
-          | "open-wifi-settings" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
-          | "restart-computer" | "check-storage" | "clear-storage" | "update-system"
-          | "search-help" | "check-cable" | "change-input";
+          | "read-error" | "click-frozen" | "open-force-quit" | "force-quit" | "restart-app"
+          | "open-wifi-panel" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
+          | "copy-code" | "open-browser" | "paste-code" | "submit-support";
         target?: string;
         value?: string;
       }>;
@@ -218,6 +239,8 @@ export type PlaygroundTask =
   | {
       type: "guided-calendar";
       goal: string;
+      mode?: "guided" | "assessment";
+      launchApp?: "calendar" | "reminders";
       steps: Array<{
         say: string;
         action:

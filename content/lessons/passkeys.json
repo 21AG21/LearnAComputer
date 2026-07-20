@@ -7,27 +7,20 @@
   "videoUrl": "",
   "drDigitalIntro": "Passkeys let you sign in without typing a password.\n• Instead, your device uses Face ID, a fingerprint, or your PIN.\n• They're stored on your device and can't be stolen in a data breach.\n• More sites — Google, Amazon, Microsoft — are switching to them.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "What makes passkeys safer than regular passwords?",
-    "options": [
+    "type": "guided-security",
+    "goal": "You signed in with a passkey — no password needed",
+    "steps": [
       {
-        "text": "Passkeys are longer than passwords so they're harder to guess",
-        "correct": false
+        "say": "Type your email: 'drdigital@example.com'.",
+        "action": "type-username",
+        "value": "drdigital@example.com"
       },
       {
-        "text": "They are stored on your device and use biometrics — they can't be stolen in a data breach",
-        "correct": true
-      },
-      {
-        "text": "They change automatically every day",
-        "correct": false
-      },
-      {
-        "text": "You have to type them twice for extra security",
-        "correct": false
+        "say": "Instead of typing a password, click 'Sign in with Passkey' — your fingerprint does the rest.",
+        "action": "use-passkey"
       }
     ]
   },
-  "drDigitalSuccess": "Passkeys live on your device, not on a server. Even if a website is hacked, there's no password to steal.",
-  "drDigitalHint": "Think about what makes regular passwords vulnerable — where do they get stolen from?"
+  "drDigitalSuccess": "You signed in with a passkey! No password was typed or sent — your fingerprint stays on your device, so there's nothing for hackers to steal.",
+  "drDigitalHint": "Look below the Log In button for the 'Sign in with Passkey' option."
 }

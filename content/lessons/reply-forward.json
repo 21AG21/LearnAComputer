@@ -5,7 +5,7 @@
   "order": 630,
   "title": "Reply and Forward",
   "videoUrl": "",
-  "drDigitalIntro": "Reply and Forward do different things.\n• Reply sends your response back to the sender, address filled in for you.\n• Forward shares the email with someone new.\n• Use Reply to continue a chat; use Forward to pass information along.",
+  "drDigitalIntro": "Reply and Forward do different things.\n• Reply sends your response back to the sender, address filled in for you.\n• Forward shares the email with someone new.\n• Use Reply to continue a chat; use Forward to pass information along.\n• After you send a reply, most email apps give you a few seconds to Undo — look for the Undo button!",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You replied to an email and forwarded another",

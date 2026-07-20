@@ -2,25 +2,25 @@
   "slug": "refresh-reload",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Using the browser",
-  "order": 494,
+  "order": 495,
   "title": "Refresh and Reload",
   "videoUrl": "",
-  "drDigitalIntro": "Reloading loads a stuck or broken page again.\n• Click the circular arrow button, or press Ctrl+R.\n• It fetches a fresh copy of the page.\n• It's the first thing to try when a page acts up.",
+  "drDigitalIntro": "Sometimes a page doesn't load right — it looks broken or half-finished.\n• Click the ⟳ reload button to fetch a fresh copy.\n• It's the first thing to try when a page acts up.\n• Let's try it on a page that didn't load.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Reload a page that got stuck",
+    "goal": "Fix a broken page by reloading it",
     "steps": [
       {
-        "say": "Go to shop.example — type it and press Enter.",
+        "say": "Go to recipebox.example — type it and press Enter.",
         "action": "navigate",
-        "url": "shop.example"
+        "url": "recipebox.example"
       },
       {
-        "say": "Imagine the page got stuck. Click the ⟳ Reload button (or press Ctrl+R) to load it fresh.",
+        "say": "The page didn't load correctly — you can see the broken content. Click the ⟳ Reload button in the toolbar to load a fresh copy.",
         "action": "reload"
       }
     ]
   },
-  "drDigitalSuccess": "You reloaded the page. When a site looks broken or won't finish loading, the ⟳ reload button is the first thing to try.",
-  "drDigitalHint": "The ⟳ circular-arrow Reload button is in the toolbar, just left of the address bar."
+  "drDigitalSuccess": "The page loaded properly after reloading! When a site looks broken or won't finish loading, the ⟳ reload button is the first thing to try.",
+  "drDigitalHint": "The ⟳ circular-arrow Reload button is in the toolbar, to the right of the back/forward arrows."
 }

@@ -1,7 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import {
+  HomeIcon, FolderIcon, TrashIcon, SearchIcon, ImageIcon,
+  FileDocIcon, NoteIcon, SpreadsheetIcon, BookClosedIcon, MusicIcon,
+  PencilIcon, SaveIcon, UndoIcon,
+} from "./Icons";
 
 /**
  * A hands-on, guided file manager. The learner performs REAL file operations —
@@ -47,12 +52,12 @@ interface Item {
   body?: string;
 }
 
-const SIDEBAR: { id: Loc; label: string; icon: string }[] = [
-  { id: "home", label: "Home", icon: "🏠" },
-  { id: "documents", label: "Documents", icon: "📁" },
-  { id: "pictures", label: "Pictures", icon: "📁" },
-  { id: "downloads", label: "Downloads", icon: "📁" },
-  { id: "trash", label: "Trash", icon: "🗑️" },
+const SIDEBAR: { id: Loc; label: string; icon: ReactNode }[] = [
+  { id: "home", label: "Home", icon: <HomeIcon size={16} /> },
+  { id: "documents", label: "Documents", icon: <FolderIcon size={16} /> },
+  { id: "pictures", label: "Pictures", icon: <FolderIcon size={16} /> },
+  { id: "downloads", label: "Downloads", icon: <FolderIcon size={16} /> },
+  { id: "trash", label: "Trash", icon: <TrashIcon size={16} /> },
 ];
 
 function makeItems(): Item[] {
@@ -62,34 +67,34 @@ function makeItems(): Item[] {
     { id: "downloads", name: "Downloads", kind: "folder", loc: "home" },
     { id: "budget", name: "Budget.xlsx", kind: "file", loc: "home", ext: "xlsx", body: "A spreadsheet of this month's income and expenses." },
     { id: "grocery", name: "GroceryList.txt", kind: "file", loc: "home", ext: "txt", body: "Milk\nEggs\nBread\nApples" },
-    { id: "vacation", name: "VacationPhoto.png", kind: "file", loc: "home", ext: "png", body: "A photo from the beach 🏖️" },
-    { id: "song", name: "FavoriteSong.mp3", kind: "file", loc: "home", ext: "mp3", body: "♫ 3 minutes 24 seconds of music" },
+    { id: "vacation", name: "VacationPhoto.png", kind: "file", loc: "home", ext: "png", body: "A photo from the beach" },
+    { id: "song", name: "FavoriteSong.mp3", kind: "file", loc: "home", ext: "mp3", body: "3 minutes 24 seconds of music" },
     { id: "taxreturn", name: "TaxReturn.pdf", kind: "file", loc: "home", ext: "pdf", body: "Your 2025 tax return document." },
     { id: "resume", name: "Resume.pdf", kind: "file", loc: "documents", ext: "pdf", body: "Your work history and skills." },
     { id: "letter", name: "Letter.docx", kind: "file", loc: "documents", ext: "docx", body: "Dear Sir or Madam..." },
-    { id: "sunset", name: "Sunset.png", kind: "file", loc: "pictures", ext: "png", body: "An orange sunset 🌅" },
+    { id: "sunset", name: "Sunset.png", kind: "file", loc: "pictures", ext: "png", body: "An orange sunset" },
     { id: "messy", name: "img_20250104_FINAL(2).jpg", kind: "file", loc: "downloads", ext: "jpg", body: "A blurry photo with a confusing name." },
   ];
 }
 
-function iconFor(item: Item): string {
-  if (item.kind === "folder") return "📁";
+function iconFor(item: Item, sz = 40): ReactNode {
+  if (item.kind === "folder") return <FolderIcon size={sz} />;
   switch (item.ext) {
     case "png":
     case "jpg":
-      return "🖼️";
+      return <ImageIcon size={sz} />;
     case "txt":
-      return "📄";
+      return <FileDocIcon size={sz} />;
     case "docx":
-      return "📝";
+      return <NoteIcon size={sz} />;
     case "xlsx":
-      return "📊";
+      return <SpreadsheetIcon size={sz} />;
     case "pdf":
-      return "📕";
+      return <BookClosedIcon size={sz} />;
     case "mp3":
-      return "🎵";
+      return <MusicIcon size={sz} />;
     default:
-      return "📄";
+      return <FileDocIcon size={sz} />;
   }
 }
 
@@ -116,6 +121,9 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
   const [saveFolder, setSaveFolder] = useState<Loc | null>(null);
   const [flash, setFlash] = useState(false); // green tick after a step completes
   const [done, setDone] = useState(false);
+  const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const [draggedFile, setDraggedFile] = useState<string | null>(null);
+  const [nudge, setNudge] = useState<string | null>(null);
 
   const step = steps[stepIndex];
   const finished = stepIndex >= steps.length;
@@ -142,6 +150,9 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
     setSaveFolder(null);
     setSaveName("");
     setSearch("");
+    setNudge(null);
+    setDropTarget(null);
+    setDraggedFile(null);
     setTimeout(() => setFlash(false), 900);
     if (stepIndex + 1 >= steps.length) {
       setDone(true);
@@ -179,7 +190,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
         if (phase === 2) return kind === "toolbar-putback";
         return false;
       case "move":
-        return kind === "item" && (name === step.target || name === step.into);
+        return kind === "item" && name === step.target;
       case "save":
         if (saveStage === null) return kind === "save-open";
         if (saveStage === "doc") return kind === "save-open";
@@ -220,40 +231,30 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
   function onItemClick(item: Item) {
     setSelected(item.id);
     if (!step) return;
-    // A single click opens during an "open" step — double-clicking is fiddly for
-    // beginners, so we don't make them do it just to look inside a file or folder.
-    if ((step.action === "open-file" || step.action === "open-folder") && item.name === step.target) {
-      onItemDouble(item);
-      return;
-    }
     if (step.action === "rename" && phase === 0 && item.name === step.target) setPhase(1);
     if (step.action === "delete" && phase === 0 && item.name === step.target) setPhase(1);
     if (step.action === "restore" && phase === 1 && item.name === step.target) setPhase(2);
-    // click-to-move fallback: file already selected, click destination folder
-    if (
-      step.action === "move" &&
-      item.kind === "folder" &&
-      item.name === step.into &&
-      selected === itemIdByName(step.target)
-    ) {
-      doMove(step.target!, item.id as Loc);
-    }
   }
 
-  function itemIdByName(name?: string): string | null {
-    return items.find((it) => it.name === name)?.id ?? null;
-  }
-
-  function doMove(fileName: string, dest: Loc) {
+  function moveFileTo(fileName: string, dest: Loc) {
     setItems((prev) => prev.map((it) => (it.name === fileName ? { ...it, loc: dest } : it)));
-    completeStep();
+    setDraggedFile(null);
+    setDropTarget(null);
+    if (step?.action === "move" && fileName === step.target) {
+      if (LOC_TITLE[dest] === step.into) {
+        setNudge(null);
+        completeStep();
+      } else {
+        setNudge(`Oops — drag it into ${step.into} instead`);
+      }
+    }
   }
 
-  function onDrop(e: React.DragEvent, destItem: Item) {
+  function handleDrop(e: React.DragEvent, destLoc: Loc) {
+    e.preventDefault();
     const dragName = e.dataTransfer.getData("text/plain");
-    if (step?.action === "move" && dragName === step.target && destItem.name === step.into) {
-      doMove(dragName, destItem.id as Loc);
-    }
+    if (!dragName) return;
+    moveFileTo(dragName, destLoc);
   }
 
   function onSidebar(loc: Loc, label: string) {
@@ -288,12 +289,15 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
 
   function clickRename() {
     if (!selected) return;
+    const it = items.find((i) => i.id === selected);
+    if (!it) return;
+    if (done) {
+      setNaming({ id: it.id, draft: it.name });
+      return;
+    }
     if (step?.action === "rename" && phase === 1) {
-      const it = items.find((i) => i.id === selected);
-      if (it) {
-        setNaming({ id: it.id, draft: it.name });
-        setPhase(2);
-      }
+      setNaming({ id: it.id, draft: it.name });
+      setPhase(2);
     }
   }
 
@@ -350,7 +354,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
   return (
     <SimulatorFrame
       appName="Files"
-      appIcon="📁"
+      appIcon={<FolderIcon size={20} />}
       instruction={step?.say}
       stepIndex={stepIndex}
       totalSteps={steps.length}
@@ -363,7 +367,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
             hl("search") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"
           }`}
         >
-          <span className="text-gray-400 mr-1">🔍</span>
+          <span className="text-gray-400 mr-1"><SearchIcon size={16} /></span>
           <input
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -380,13 +384,13 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
               <>
                 <ToolbarBtn label="＋ New Folder" onClick={clickNewFolder} highlight={hl("toolbar-newfolder")} />
                 <ToolbarBtn
-                  label="✏️ Rename"
+                  label="Rename"
                   onClick={clickRename}
                   disabled={!selected}
                   highlight={hl("toolbar-rename")}
                 />
                 <ToolbarBtn
-                  label="🗑️ Move to Trash"
+                  label="Move to Trash"
                   onClick={clickTrash}
                   disabled={!selected}
                   highlight={hl("toolbar-trash")}
@@ -395,7 +399,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
             )}
             {inTrash && (
               <ToolbarBtn
-                label="↩️ Put Back"
+                label="Put Back"
                 onClick={clickPutBack}
                 disabled={!selected}
                 highlight={hl("toolbar-putback")}
@@ -407,22 +411,35 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
           <div className="flex-1 min-h-0 flex">
             {/* Sidebar */}
             <div className="w-40 shrink-0 bg-[#eef1f5] border-r-2 border-gray-300 py-2 overflow-auto">
-              {SIDEBAR.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => onSidebar(s.id, s.label)}
-                  className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm ${
-                    location === s.id ? "bg-blue-500 text-white" : "hover:bg-blue-100 text-gray-800"
-                  } ${hl("sidebar", s.label) ? "ring-4 ring-inset ring-yellow-400 animate-pulse" : ""}`}
-                >
-                  <span>{s.icon}</span>
-                  <span>{s.label}</span>
-                </button>
-              ))}
+              {SIDEBAR.map((s) => {
+                const droppable = s.id !== "home" && s.id !== "trash";
+                const isDropOver = dropTarget === `sidebar-${s.id}`;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => onSidebar(s.id, s.label)}
+                    onDragOver={droppable ? (e) => {
+                      e.preventDefault();
+                      setDropTarget(`sidebar-${s.id}`);
+                    } : undefined}
+                    onDragLeave={droppable ? () => {
+                      setDropTarget((prev) => prev === `sidebar-${s.id}` ? null : prev);
+                    } : undefined}
+                    onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
+                    className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
+                      location === s.id ? "bg-blue-500 text-white" : "hover:bg-blue-100 text-gray-800"
+                    } ${hl("sidebar", s.label) ? "ring-4 ring-inset ring-yellow-400 animate-pulse" : ""}${
+                      isDropOver ? " ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""}`}
+                  >
+                    <span>{s.icon}</span>
+                    <span>{s.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* File grid */}
-            <div className="flex-1 min-h-0 overflow-auto p-4 bg-white">
+            <div className="flex-1 min-h-0 overflow-auto p-4 bg-white relative">
               {visible.length === 0 && (
                 <p className="text-gray-400 text-center mt-10 text-lg">
                   {inTrash ? "The Trash is empty." : search ? "No files match your search." : "This folder is empty."}
@@ -431,20 +448,36 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
               <div className="grid grid-cols-3 gap-4 content-start">
                 {visible.map((item) => {
                   const isNaming = naming?.id === item.id;
+                  const isDropOver = dropTarget === item.id && item.kind === "folder";
                   return (
                     <div
                       key={item.id}
                       draggable={item.kind === "file" && !inTrash}
-                      onDragStart={(e) => e.dataTransfer.setData("text/plain", item.name)}
-                      onDragOver={(e) => item.kind === "folder" && e.preventDefault()}
-                      onDrop={(e) => item.kind === "folder" && onDrop(e, item)}
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData("text/plain", item.name);
+                        setDraggedFile(item.name);
+                        setNudge(null);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedFile(null);
+                        setDropTarget(null);
+                      }}
+                      onDragOver={item.kind === "folder" ? (e) => {
+                        e.preventDefault();
+                        setDropTarget(item.id);
+                      } : undefined}
+                      onDragLeave={item.kind === "folder" ? () => {
+                        setDropTarget((prev) => prev === item.id ? null : prev);
+                      } : undefined}
+                      onDrop={item.kind === "folder" ? (e) => handleDrop(e, item.id as Loc) : undefined}
                       onClick={() => onItemClick(item)}
                       onDoubleClick={() => onItemDouble(item)}
-                      className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 ${
+                      className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all ${
                         selected === item.id ? "bg-blue-100 border-blue-500" : "border-transparent hover:bg-gray-100"
-                      } ${hl("item", item.name) ? "ring-4 ring-yellow-400 animate-pulse border-yellow-400" : ""}`}
+                      } ${hl("item", item.name) ? "ring-4 ring-yellow-400 animate-pulse border-yellow-400" : ""}${
+                        isDropOver ? " ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""}`}
                     >
-                      <span className="text-5xl leading-none">{iconFor(item)}</span>
+                      <span className="text-gray-500">{iconFor(item)}</span>
                       {isNaming ? (
                         <input
                           autoFocus
@@ -467,6 +500,11 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
                   );
                 })}
               </div>
+              {nudge && (
+                <div className="sticky bottom-0 left-0 right-0 bg-orange-100 border-2 border-orange-400 text-orange-800 px-4 py-2 rounded-lg font-semibold text-sm text-center mt-4">
+                  {nudge}
+                </div>
+              )}
             </div>
           </div>
 
@@ -474,7 +512,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
       {preview && (
         <Modal onClose={handlePreviewClose}>
           <div className="flex flex-col items-center gap-3 p-6">
-            <span className="text-6xl">{iconFor(preview)}</span>
+            <span className="text-gray-500">{iconFor(preview, 56)}</span>
             <p className="text-xl font-black">{preview.name}</p>
             <p className="whitespace-pre-wrap text-center text-gray-700 text-lg">{preview.body}</p>
             <button
@@ -501,7 +539,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
                 hl("save-open") ? "ring-4 ring-yellow-400 animate-pulse" : ""
               }`}
             >
-              💾 Save
+              <span className="inline-flex items-center gap-1"><SaveIcon size={16} /> Save</span>
             </button>
           </div>
         </Modal>
@@ -537,7 +575,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
                     saveFolder === loc ? "bg-blue-500 text-white border-blue-700" : "bg-gray-100 border-gray-400"
                   } ${hl("save-folder", LOC_TITLE[loc]) ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
                 >
-                  📁 {LOC_TITLE[loc]}
+                  <span className="inline-flex items-center gap-1"><FolderIcon size={14} /> {LOC_TITLE[loc]}</span>
                 </button>
               ))}
             </div>

@@ -5,10 +5,61 @@
   "order": 1100,
   "title": "Security Scenarios",
   "videoUrl": "",
-  "drDigitalIntro": "Time for realistic security scenarios.\n• Spot phishing emails and suspicious websites.\n• Decide whether to click links, and handle scam texts.\n• Make safe shopping choices. Pass this and you're ready to browse safely.",
+  "drDigitalIntro": "Let's see if you can handle real security situations!\n• Create a strong password, handle two-factor authentication, and spot dangerous messages.\n• Take your time and think before you click.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-security",
+    "goal": "You handled passwords, 2FA, and identified scams",
+    "steps": [
+      {
+        "say": "Create a strong password. Type one that's at least 12 characters with uppercase, lowercase, numbers, and symbols.",
+        "action": "type-password",
+        "minStrength": 4
+      },
+      {
+        "say": "Now sign in to a website. Type your username: digitallearner",
+        "action": "type-username",
+        "value": "digitallearner"
+      },
+      {
+        "say": "Type the password you just created to log in.",
+        "action": "type-login-password"
+      },
+      {
+        "say": "Click Sign In.",
+        "action": "login"
+      },
+      {
+        "say": "A 2FA code was sent to your phone. Enter the code shown.",
+        "action": "enter-2fa-code"
+      },
+      {
+        "say": "Click Verify to confirm your code.",
+        "action": "verify-2fa"
+      },
+      {
+        "say": "Look at this message — is it safe or dangerous?",
+        "action": "inspect-link",
+        "target": "Your account has been compromised! Click here NOW: http://amaz0n-security.tk/verify"
+      },
+      {
+        "say": "That link looks suspicious. Mark it as dangerous.",
+        "action": "mark-dangerous"
+      },
+      {
+        "say": "What about this one?",
+        "action": "inspect-link",
+        "target": "Hi! Here's the shared Google Doc you asked for: https://docs.google.com/d/abc123"
+      },
+      {
+        "say": "This one's from someone you know, with a real Google link. Mark it as safe.",
+        "action": "mark-safe"
+      },
+      {
+        "say": "Try the passkey option for a faster, safer login.",
+        "action": "use-passkey"
+      }
+    ]
   },
-  "drDigitalSuccess": "You're a security expert! Stay safe out there.",
-  "drDigitalHint": "When in doubt, don't click. Ask for help if something feels wrong."
+  "drDigitalSuccess": "You passed every security test! Strong passwords, 2FA, spotting scams, and using passkeys — you're ready to stay safe online.",
+  "drDigitalHint": "Make passwords long and complex, always verify 2FA codes, and check URLs carefully before clicking."
 }

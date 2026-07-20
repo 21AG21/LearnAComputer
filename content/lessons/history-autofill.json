@@ -21,12 +21,12 @@
         "url": "google.com"
       },
       {
-        "say": "Want to go back to Shop without retyping? Click 🕐 History, then click Shop in the list.",
+        "say": "Want to go back to Shop without retyping? Click History, then click Shop in the list.",
         "action": "history-visit",
         "title": "Shop"
       }
     ]
   },
   "drDigitalSuccess": "You used History to jump back to a site you visited earlier — no need to remember the address. the browser kept the trail for you.",
-  "drDigitalHint": "Visit both sites first. Then open 🕐 History and click the Shop entry to return to it."
+  "drDigitalHint": "Visit both sites first. Then open History and click the Shop entry to return to it."
 }

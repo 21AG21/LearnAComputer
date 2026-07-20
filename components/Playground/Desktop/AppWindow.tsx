@@ -5,8 +5,7 @@ import WindowControls from "../WindowControls";
 
 interface AppWindowProps {
   title: string;
-  /** Optional emoji shown before the title, e.g. "📁". */
-  icon?: string;
+  icon?: ReactNode;
   onClose: () => void;
   onMinimize: () => void;
   /** False when opened from the fake desktop's dock — its shared menu bar hosts close/minimize instead. */

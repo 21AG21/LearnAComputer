@@ -3,16 +3,23 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 
+export interface ObjectiveItem {
+  label: string;
+  done: boolean;
+}
+
 interface SimulatorFrameProps {
   appName: string;
-  appIcon?: string;
+  appIcon?: ReactNode;
   instruction?: string | null;
-  stepIndex: number;
-  totalSteps: number;
+  stepIndex?: number;
+  totalSteps?: number;
   done: boolean;
   goal: string;
   flash?: boolean;
   titleBarRight?: ReactNode;
+  objectives?: ObjectiveItem[];
+  onHint?: () => void;
   children: ReactNode;
 }
 
@@ -26,11 +33,18 @@ export default function SimulatorFrame({
   goal,
   flash,
   titleBarRight,
+  objectives,
+  onHint,
   children,
 }: SimulatorFrameProps) {
-  const finished = stepIndex >= totalSteps;
-  const pct = (Math.min(stepIndex, totalSteps) / totalSteps) * 100;
+  const isAssessment = !!objectives;
+  const doneCount = objectives?.filter((o) => o.done).length ?? 0;
+  const objTotal = objectives?.length ?? 0;
+  const pct = isAssessment
+    ? objTotal > 0 ? (doneCount / objTotal) * 100 : 0
+    : totalSteps ? (Math.min(stepIndex ?? 0, totalSteps) / totalSteps) * 100 : 0;
 
+  const [expanded, setExpanded] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const celebrationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -55,16 +69,58 @@ export default function SimulatorFrame({
       {/* Guidance banner */}
       <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
-            {finished ? "Done" : `Step ${stepIndex + 1} of ${totalSteps}`}
-          </span>
-          <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
-            <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${pct}%` }} />
-          </div>
+          {(done || isAssessment || totalSteps != null) && (
+            <>
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
+                {done
+                  ? "Done"
+                  : isAssessment
+                    ? `Objectives: ${doneCount} of ${objTotal} done`
+                    : `Step ${(stepIndex ?? 0) + 1} of ${totalSteps ?? 0}`}
+              </span>
+              <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
+                <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${pct}%` }} />
+              </div>
+            </>
+          )}
         </div>
-        <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? goal + " — all done!" : instruction}
-        </p>
+        <div className="mt-1.5 flex items-start justify-between gap-3">
+          <p className="text-lg font-semibold leading-snug">
+            {done ? goal + " — all done!" : instruction ?? goal}
+          </p>
+          {isAssessment && !done && (
+            <div className="flex items-center gap-2 shrink-0">
+              {onHint && (
+                <button
+                  onClick={onHint}
+                  className="px-3 py-1 bg-yellow-500 text-black font-bold rounded text-sm hover:bg-yellow-400 transition-colors"
+                >
+                  Hint
+                </button>
+              )}
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-white/70 hover:text-white text-lg leading-none px-1"
+                aria-label={expanded ? "Collapse objectives" : "Expand objectives"}
+              >
+                {expanded ? "▲" : "▼"}
+              </button>
+            </div>
+          )}
+        </div>
+        {isAssessment && expanded && objectives && (
+          <div className="mt-2 border-t border-white/20 pt-2 space-y-1">
+            {objectives.map((obj, i) => (
+              <div
+                key={i}
+                className={`flex items-center gap-2 text-sm ${obj.done ? "text-green-400" : "text-white/60"}`}
+              >
+                <span className="w-4 text-center">{obj.done ? "✓" : "○"}</span>
+                <span>{obj.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Slim completion banner — visible after celebration clears */}

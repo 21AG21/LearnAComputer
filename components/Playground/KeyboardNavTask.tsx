@@ -1,18 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-
-/**
- * Keyboard navigation game: the learner uses Tab, Shift+Tab, and Enter to
- * move through a simulated form — no mouse allowed. The outer container
- * intercepts Tab key presses so real browser focus never escapes the activity.
- */
+import SimulatorFrame from "./SimulatorFrame";
 
 interface KeyboardNavTaskProps {
   onResult: (success: boolean) => void;
 }
 
-// Simulated form items
 const ITEMS = [
   { id: "name",   label: "Name",   kind: "input"  },
   { id: "email",  label: "Email",  kind: "input"  },
@@ -26,8 +20,8 @@ type ItemId = (typeof ITEMS)[number]["id"];
 interface Step {
   instruction: string;
   key: "Tab" | "Shift+Tab" | "Enter" | "Space";
-  expectedFocus?: ItemId;   // where focus lands after Tab/Shift+Tab
-  activates?: ItemId;       // which button Enter/Space activates
+  expectedFocus?: ItemId;
+  activates?: ItemId;
 }
 
 const STEPS: Step[] = [
@@ -64,22 +58,20 @@ const STEPS: Step[] = [
 ];
 
 const START_FOCUS: ItemId = "name";
+const GOAL = "You navigated the whole form without touching the mouse!";
 
 export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
-  const [active, setActive] = useState(false); // has the learner clicked into the game area
+  const [active, setActive] = useState(false);
   const [focusId, setFocusId] = useState<ItemId>(START_FOCUS);
   const [stepIdx, setStepIdx] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const [wrongKey, setWrongKey] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const finished = useRef(false);
 
   const step = done ? null : STEPS[stepIdx];
 
-  // Focus the container when the learner clicks "Start"
   useEffect(() => {
     if (active) containerRef.current?.focus();
   }, [active]);
@@ -92,11 +84,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
     setStepIdx(nextStep);
     if (nextStep >= STEPS.length) {
       setDone(true);
-      setShowCelebration(true);
-      setTimeout(() => {
-        setShowCelebration(false);
-        setShowCompleteBanner(true);
-      }, 1600);
       if (!finished.current) {
         finished.current = true;
         onResult(true);
@@ -112,7 +99,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
     const isEnter = e.key === "Enter";
     const isSpace = e.key === " ";
 
-    // Always prevent Tab from escaping the container
     if (e.key === "Tab") e.preventDefault();
 
     const currentIdx = ITEMS.findIndex((i) => i.id === focusId);
@@ -123,7 +109,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
       if (nextId === step.expectedFocus) {
         advance(nextId);
       } else {
-        // Let them Tab anyway; just don't advance the lesson step
         setFocusId(nextId);
       }
     } else if (step.key === "Shift+Tab" && isShiftTab) {
@@ -138,12 +123,10 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
       if (focusId === step.activates) {
         advance(focusId);
       } else {
-        // Wrong button or no button focused
         setWrongKey(true);
         setTimeout(() => setWrongKey(false), 600);
       }
     } else if (e.key === "Tab") {
-      // Tab pressed when Shift+Tab or Enter expected — move focus but warn
       const nextIdx = (currentIdx + 1) % ITEMS.length;
       setFocusId(ITEMS[nextIdx].id);
       setWrongKey(true);
@@ -151,33 +134,16 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
     }
   }
 
-  const pct = (Math.min(stepIdx, STEPS.length) / STEPS.length) * 100;
-
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden relative select-none">
-      {/* Guidance banner */}
-      <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
-            {done ? "Done" : `Step ${stepIdx + 1} of ${STEPS.length}`}
-          </span>
-          <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
-            <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${pct}%` }} />
-          </div>
-        </div>
-        <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? "You navigated the whole form without touching the mouse!" : step?.instruction}
-        </p>
-      </div>
-
-      {showCompleteBanner && (
-        <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
-          <span className="text-green-600">&#10003;</span>
-          Lesson complete! You can keep practicing here.
-        </div>
-      )}
-
-      {/* Game area */}
+    <SimulatorFrame
+      appName="Practice"
+      instruction={step?.instruction ?? GOAL}
+      stepIndex={stepIdx}
+      totalSteps={STEPS.length}
+      done={done}
+      goal={GOAL}
+      flash={flash}
+    >
       <div className="flex-1 min-h-0 flex flex-col items-center justify-center p-6 bg-gray-50">
         {!active ? (
           <div className="text-center space-y-4">
@@ -198,7 +164,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
             onKeyDown={handleKeyDown}
             className="w-full max-w-sm outline-none"
           >
-            {/* Key legend */}
             <div className="mb-4 flex gap-4 justify-center text-sm text-gray-500">
               <span>
                 <kbd className="bg-gray-200 border border-gray-400 rounded px-1.5 py-0.5 text-xs font-mono">Tab</kbd>
@@ -214,7 +179,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
               </span>
             </div>
 
-            {/* Simulated form */}
             <div className={`border-2 rounded-xl p-5 space-y-3 bg-white shadow-md transition-all ${
               wrongKey ? "border-red-400 animate-shake" : "border-gray-300"
             }`}>
@@ -273,25 +237,6 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
           </div>
         )}
       </div>
-
-      {/* Celebration overlay — brief */}
-      {showCelebration && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
-          <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            &#10003;
-          </div>
-          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">
-            You navigated the whole form without touching the mouse!
-          </p>
-        </div>
-      )}
-
-      {/* Per-step flash */}
-      {flash && !done && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">✓</span>
-        </div>
-      )}
-    </div>
+    </SimulatorFrame>
   );
 }

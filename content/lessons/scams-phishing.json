@@ -11,37 +11,37 @@
     "goal": "You identified safe and dangerous links",
     "steps": [
       {
-        "say": "Look at 'Verify your account' — hover to see the real URL. Is it safe?",
+        "say": "Click 'Reveal URL' on 'Verify your account' to see where the link really goes.",
         "action": "inspect-link",
         "target": "Verify your account"
       },
       {
-        "say": "That URL looks suspicious — mark it as Dangerous.",
+        "say": "That URL goes to fakesite.ru — mark it as Dangerous.",
         "action": "mark-dangerous",
         "target": "Verify your account"
       },
       {
-        "say": "Now inspect 'View your order'.",
+        "say": "Now reveal the URL for 'View your order'.",
         "action": "inspect-link",
         "target": "View your order"
       },
       {
-        "say": "That URL is amazon.com — mark it as Safe.",
+        "say": "That URL goes to amazon.com — mark it as Safe.",
         "action": "mark-safe",
         "target": "View your order"
       },
       {
-        "say": "Inspect 'Claim 90% Discount NOW'.",
+        "say": "Reveal the URL for 'Claim 90% Discount NOW'.",
         "action": "inspect-link",
         "target": "Claim 90% Discount NOW"
       },
       {
-        "say": "That URL looks sketchy — mark it as Dangerous.",
+        "say": "The URL goes to deals-4u-cheap.xyz with http:// — mark it Dangerous.",
         "action": "mark-dangerous",
         "target": "Claim 90% Discount NOW"
       }
     ]
   },
   "drDigitalSuccess": "You spotted the phishing links! Always check where a link goes before clicking.",
-  "drDigitalHint": "Click Inspect on each link to see its real URL, then mark it Safe or Dangerous."
+  "drDigitalHint": "Click 'Reveal URL' on each link to see its real URL, then mark it Safe or Dangerous."
 }

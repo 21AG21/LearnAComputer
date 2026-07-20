@@ -1,0 +1,14 @@
+{
+  "slug": "google-docs-share",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents in the Cloud",
+  "order": 1244,
+  "title": "Sharing a Document",
+  "videoUrl": "",
+  "drDigitalIntro": "One of the best things about online documents is sharing them — the other person doesn't need to download anything.\n\nTry it on your own computer with the document you made:\n\n1. Open the document you created in the last lesson (go to docs.google.com — it should be right there).\n2. Click the blue Share button in the top-right corner.\n3. In the \"Add people\" box, type a family member or friend's email address.\n4. Make sure the dropdown says \"Editor\" (so they can make changes) or \"Viewer\" (so they can only read it).\n5. Click Send.\n\nThey'll get an email with a link to your document. You can both look at it at the same time — changes show up live!",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "You shared a document! The other person can open your link in their browser and see it immediately — no attachments, no downloading.",
+  "drDigitalHint": "Open your document in Google Docs, click the blue Share button, type an email address, and click Send."
+}

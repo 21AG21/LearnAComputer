@@ -5,27 +5,36 @@
   "order": 860,
   "title": "Free vs. Paid Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Free and paid apps make money differently.\n• Free apps may show ads, offer in-app purchases, or charge a subscription.\n• Paid apps cost a one-time fee upfront.\n• Some have both a free and paid version — read the description first.",
+  "drDigitalIntro": "Free and paid apps make money differently.\n• Free apps may show ads or offer in-app purchases.\n• Paid apps cost money upfront but usually have no ads.\n• Compare both options before you decide — sometimes paying a few dollars saves you from constant interruptions.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You compared free and paid apps in the store",
+    "goal": "You compared a free app with ads to a paid app without ads",
     "steps": [
       {
-        "say": "Click on PhotoFun to see its details.",
-        "action": "select-app",
-        "target": "PhotoFun"
+        "say": "Click on the Games category to browse games.",
+        "action": "go-to-category",
+        "target": "Games"
       },
       {
-        "say": "Go back to the store home.",
+        "say": "Click on Bubble Pop — the free game. Look for the 'Ads' and 'In-app purchases' tags.",
+        "action": "select-app",
+        "target": "Bubble Pop"
+      },
+      {
+        "say": "Notice the orange tags: Contains ads and In-app purchases. Go back to compare with a paid option.",
         "action": "go-to-store"
       },
       {
-        "say": "Click on Calculator Pro to compare a free app.",
+        "say": "Now click on Zen Garden — the paid game with no ads.",
         "action": "select-app",
-        "target": "Calculator Pro"
+        "target": "Zen Garden"
+      },
+      {
+        "say": "Notice the green 'No ads' tag and the $4.99 price. Install whichever you prefer — there's no wrong answer!",
+        "action": "install"
       }
     ]
   },
-  "drDigitalSuccess": "You compared free and paid apps! Check if a free version meets your needs before buying the paid one.",
-  "drDigitalHint": "Click an app name in the store to read its description and see if it's free or paid."
+  "drDigitalSuccess": "You compared a free app with ads to a paid app without ads. Both are valid choices — now you know what to look for!",
+  "drDigitalHint": "Open each app listing to read the tags. 'Contains ads' means you'll see advertisements. 'No ads' means a clean experience."
 }

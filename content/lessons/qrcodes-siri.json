@@ -3,31 +3,12 @@
   "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Smart Features",
   "order": 1260,
-  "title": "QR Codes and Voice Assistants",
+  "title": "QR Codes",
   "videoUrl": "",
-  "drDigitalIntro": "QR codes and voice assistants make things quick.\n• A QR code is a square pattern — point your camera at it to open a link.\n• A voice assistant answers questions and sets timers when you talk to it.\n• Activate it by its wake word or by clicking its icon.",
+  "drDigitalIntro": "QR codes are those square black-and-white patterns you see on menus, signs, and packaging. They're just links in disguise.\n\nHow to scan a QR code:\n• On your phone, open the Camera app and point it at the QR code.\n• A link appears at the top of the screen — tap it.\n• That's it! The link opens in your browser.\n\nWhere you'll see them:\n• Restaurant menus (\"Scan here for our menu\")\n• Event tickets and boarding passes\n• Product packaging (links to instructions or warranty info)\n• Signs in stores or museums\n\nSafety tip: only scan QR codes from sources you trust. A QR code on a random sticker stuck to a lamp post could lead anywhere — treat it like clicking a link from a stranger.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "At a restaurant, your paper menu is replaced with a QR code. How do you view the menu?",
-    "options": [
-      {
-        "text": "Type 'restaurant menu' into Google",
-        "correct": false
-      },
-      {
-        "text": "Open your phone Camera app and point it at the QR code",
-        "correct": true
-      },
-      {
-        "text": "Scan it with your computerBook's webcam in the file manager",
-        "correct": false
-      },
-      {
-        "text": "Ask the waiter to email it to you",
-        "correct": false
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "Your phone Camera app scans QR codes automatically — just point and tap the link that appears!",
-  "drDigitalHint": "Which device always has a camera with you and can scan QR codes instantly?"
+  "drDigitalSuccess": "QR codes are just links you scan with your phone camera instead of typing. Quick and easy — just be smart about which ones you trust.",
+  "drDigitalHint": "Just read through and click Continue."
 }

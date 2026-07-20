@@ -5,34 +5,26 @@
   "order": 1140,
   "title": "Fixing Internet Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Internet not working? Start with the basics.\n• Is WiFi on and connected to the right network?\n• Turn WiFi off and back on to refresh the connection.\n• Still stuck? Restart your router by unplugging it for 30 seconds.",
+  "drDigitalIntro": "Internet not working? Start with the basics.\n• Check if WiFi is turned on — look for the WiFi icon in your menu bar or taskbar.\n• Turn WiFi off and back on to refresh the connection.\n• If that doesn't work, try forgetting the network and reconnecting.\n• Still stuck? Restart your router by unplugging it for 30 seconds.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You fixed the internet connection",
-    "scenario": "No internet connection",
+    "scenario": "No internet connection — WiFi is off",
     "steps": [
       {
-        "say": "Read the error — no internet connection.",
-        "action": "read-error"
+        "say": "No internet! Click the WiFi icon in the menu bar to check your connection.",
+        "action": "open-wifi-panel"
       },
       {
-        "say": "Open WiFi Settings to check your connection.",
-        "action": "open-wifi-settings"
-      },
-      {
-        "say": "WiFi is connected but no internet. Toggle WiFi off.",
+        "say": "WiFi is turned off. Toggle it on.",
         "action": "toggle-wifi"
       },
       {
-        "say": "Turn WiFi back on.",
-        "action": "toggle-wifi"
-      },
-      {
-        "say": "Reconnect to your network.",
+        "say": "WiFi is on but not connected. Click 'Join' next to CoolKids Network.",
         "action": "reconnect-wifi"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the WiFi! Toggling WiFi off and on refreshes the connection — a simple first fix.",
-  "drDigitalHint": "Open WiFi Settings, toggle WiFi off then back on, and reconnect to your network."
+  "drDigitalSuccess": "You fixed the WiFi! Toggling WiFi off and on refreshes the connection — it's the first thing to try when the internet stops working.",
+  "drDigitalHint": "Click the WiFi icon in the menu bar, toggle WiFi on, then join your network."
 }

@@ -2,13 +2,66 @@
   "slug": "unit-4-assessment",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Unit 4 Assessment",
-  "order": 496,
+  "order": 499,
   "title": "Research a Recipe Safely",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put everything together!\n• Use the browser to search for a recipe you'd like to cook.\n• Check a few websites and avoid suspicious ads or fake download buttons.\n• Bookmark your favorite recipe and add it to your Reading List.",
+  "drDigitalIntro": "Let's see how much you've learned!\n• You'll search for a recipe, handle a cookie banner, dodge a scam popup, and download a file.\n• No hints this time — you know what to do.\n• Take your time and remember everything we've practiced.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-browser",
+    "goal": "You safely navigated the web to find and download a recipe",
+    "steps": [
+      {
+        "say": "Start by going to google.com to search for a recipe.",
+        "action": "navigate",
+        "url": "google.com"
+      },
+      {
+        "say": "Search for apple pie recipe.",
+        "action": "search",
+        "query": "apple pie recipe",
+        "reveal": "Recipe Box"
+      },
+      {
+        "say": "Open the Recipe Box result to see the recipe.",
+        "action": "open-result",
+        "title": "Recipe Box"
+      },
+      {
+        "say": "Download the recipe so you can use it later.",
+        "action": "download"
+      },
+      {
+        "say": "Now open a new tab — you want to check the weather too.",
+        "action": "new-tab"
+      },
+      {
+        "say": "Go to weather.com to check the forecast.",
+        "action": "navigate",
+        "url": "weather.com"
+      },
+      {
+        "say": "A cookie banner appeared. Make the safe choice.",
+        "action": "cookie-decline"
+      },
+      {
+        "say": "Open another new tab — your friend mentioned a games site.",
+        "action": "new-tab"
+      },
+      {
+        "say": "Go to freegames.example to check it out.",
+        "action": "navigate",
+        "url": "freegames.example"
+      },
+      {
+        "say": "A popup appeared! Handle it safely.",
+        "action": "close-popup"
+      },
+      {
+        "say": "Open the Downloads panel to see your downloaded recipe.",
+        "action": "open-downloads"
+      }
+    ]
   },
-  "drDigitalSuccess": "You navigated the internet safely and found what you needed!",
-  "drDigitalHint": "Look for the lock icon, avoid weird popups, and bookmark what you like."
+  "drDigitalSuccess": "You did it all — searched safely, declined tracking cookies, closed a scam popup, and downloaded a recipe!\n\nNow for real: on your own computer, go to a trusted recipe site (like the BBC or a newspaper's food section), find a recipe you like, and download or print it. Look for the lock, and skip anything that flashes at you.",
+  "drDigitalHint": "Think about what you learned: search on Google, open the result, download the recipe, decline cookies, and close popups with the X."
 }

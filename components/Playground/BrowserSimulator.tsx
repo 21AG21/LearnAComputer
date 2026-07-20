@@ -116,7 +116,7 @@ export default function BrowserSimulator({
                 className="absolute left-0 top-full mt-2 z-30 w-64 border-2 border-black bg-white shadow-lg p-3 animate-slide-down"
                 onClick={(e) => e.stopPropagation()}
               >
-                <p className="text-sm font-semibold">🔒 This site is secure</p>
+                <p className="text-sm font-semibold">This site is secure</p>
                 <p className="text-xs text-gray-600 mt-1">
                   The lock means your connection to this page is private. Look for it before typing anything personal into a website.
                 </p>

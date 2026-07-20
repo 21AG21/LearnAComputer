@@ -3,12 +3,12 @@
   "unit": "Unit 9: System Settings",
   "module": "Unit 9 Assessment",
   "order": 960,
-  "title": "Customize Your computer",
+  "title": "Customize Your Computer",
   "videoUrl": "",
-  "drDigitalIntro": "Make your computer work the way you want.\n• Change the display theme and the wallpaper.\n• Adjust trackpad sensitivity and notification settings.\n• Check your storage. This is how you make your computer your own.",
+  "drDigitalIntro": "Now do it for real — on your own computer!\n\n1. Open Settings (or System Preferences on a Mac).\n2. Switch between light and dark mode — pick the one you like.\n3. Adjust the screen brightness to a comfortable level.\n4. Turn on Night Shift (or Night Light on Windows) for evening use.\n5. If the text feels small, look for a Display or Accessibility setting to make it larger.\n6. Check how much storage you have free.\n\nSkip trackpad sensitivity and notification settings — every computer does those differently. The important thing is that you know where Settings is and how to find things inside it.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "Your computer is customized just the way you like it!",
-  "drDigitalHint": "Start with Appearance, then try hardware and notification settings."
+  "drDigitalSuccess": "You know your way around Settings! The more you explore, the more comfortable your computer will feel.",
+  "drDigitalHint": "Open your computer's Settings app and try each step on the list above."
 }

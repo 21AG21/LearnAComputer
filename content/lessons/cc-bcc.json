@@ -41,5 +41,5 @@
     ]
   },
   "drDigitalSuccess": "CC = visible copy, BCC = secret copy. Now you can share emails with the right people!",
-  "drDigitalHint": "Fill in each field one at a time and click the next field (or press Tab) to move on."
+  "drDigitalHint": "Fill in each field one at a time. Press Tab to jump to the next box, or click it directly."
 }

@@ -1,0 +1,14 @@
+{
+  "slug": "google-drive-basics",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents in the Cloud",
+  "order": 1246,
+  "title": "Google Drive: Your Online Filing Cabinet",
+  "videoUrl": "",
+  "drDigitalIntro": "Google Drive is where all your online documents, photos, and files live — like a filing cabinet in the cloud.\n\nTry it on your own computer:\n\n1. Open your web browser.\n2. Go to drive.google.com (sign in if asked).\n3. Find the document you created in the last lesson — it's already there!\n4. Now try uploading a file from your computer: click the + New button, then File upload.\n5. Pick any file on your computer (a photo, a document, anything).\n6. Watch it upload — once it's done, that file now lives in the cloud too.\n\nYou get 15 GB of free space — plenty for documents and photos. If you ever need more, Google will offer a paid plan.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "You uploaded a file to Google Drive! Now it's backed up online and you can access it from any device with a web browser.",
+  "drDigitalHint": "Go to drive.google.com, click + New, then File upload, and pick a file from your computer."
+}

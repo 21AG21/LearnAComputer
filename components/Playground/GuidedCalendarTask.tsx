@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { CalendarIcon, CheckIcon } from "./Icons";
 
 export type GuidedCalendarStep = {
   say: string;
@@ -16,6 +17,7 @@ export type GuidedCalendarStep = {
 interface GuidedCalendarTaskProps {
   goal: string;
   steps: GuidedCalendarStep[];
+  initialView?: "month" | "reminders";
   onResult: (success: boolean) => void;
 }
 
@@ -51,11 +53,11 @@ const MONTH_START_DOW = 3; // Wednesday (0=Sun)
 const REPEAT_OPTIONS = ["None", "Daily", "Weekly", "Monthly", "Yearly"];
 const CALENDARS = ["Personal", "Work"];
 
-export default function GuidedCalendarTask({ goal, steps, onResult }: GuidedCalendarTaskProps) {
+export default function GuidedCalendarTask({ goal, steps, initialView, onResult }: GuidedCalendarTaskProps) {
   const [stepIndex, setStepIndex] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
-  const [view, setView] = useState<"month" | "day" | "reminders">("month");
+  const [view, setView] = useState<"month" | "day" | "reminders">(initialView ?? "month");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(PRESET_EVENTS);
   const [reminders, setReminders] = useState<Reminder[]>(PRESET_REMINDERS);
@@ -167,7 +169,7 @@ export default function GuidedCalendarTask({ goal, steps, onResult }: GuidedCale
   return (
     <SimulatorFrame
       appName="Calendar"
-      appIcon="📅"
+      appIcon={<CalendarIcon size={20} />}
       instruction={step?.say}
       stepIndex={stepIndex}
       totalSteps={steps.length}
@@ -186,7 +188,7 @@ export default function GuidedCalendarTask({ goal, steps, onResult }: GuidedCale
                 onClick={() => handleSwitchView(v)}
                 className={`px-2 py-2 text-xs rounded-lg text-left capitalize transition-all ${view === v ? "bg-blue-500 text-white" : "hover:bg-gray-100 text-gray-600"} ${hl("view-btn", v) ? pulse : ""}`}
               >
-                {v === "month" ? "📅" : v === "day" ? "📆" : "✅"} {v === "reminders" ? "Reminders" : v.charAt(0).toUpperCase() + v.slice(1)}
+                <span className="inline-flex items-center gap-1">{v === "month" ? <CalendarIcon size={12} /> : v === "day" ? <CalendarIcon size={12} /> : <CheckIcon size={12} />} {v === "reminders" ? "Reminders" : v.charAt(0).toUpperCase() + v.slice(1)}</span>
               </button>
             ))}
           </div>

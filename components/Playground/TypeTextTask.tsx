@@ -4,7 +4,7 @@ import { useState } from "react";
 import { checkTypeText } from "./TaskChecker";
 
 interface TypeTextTaskProps {
-  instructions: string;
+  instructions?: string;
   targetText: string;
   exact?: boolean;
   onResult: (success: boolean) => void;
@@ -19,7 +19,7 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
 
   return (
     <div className="h-full flex flex-col items-center bg-white px-8 py-6 gap-4">
-      <p className="text-lg text-gray-700 max-w-2xl text-center">{instructions}</p>
+      {instructions && <p className="text-lg text-gray-700 max-w-2xl text-center">{instructions}</p>}
       <div className="w-full max-w-2xl border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 text-center">
         <p className="text-xs font-bold uppercase text-gray-400 mb-1">Type this:</p>
         <p className="text-2xl font-mono tracking-wide">{targetText}</p>

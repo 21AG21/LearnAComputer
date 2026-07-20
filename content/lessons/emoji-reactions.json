@@ -5,7 +5,7 @@
   "order": 540,
   "title": "Emoji and Reactions",
   "videoUrl": "",
-  "drDigitalIntro": "Emoji are small pictures that show feelings.\n• Instead of typing \"haha\", send a laughing emoji 😂.\n• There are thousands to choose from.\n• You can also react to a message with a thumbs up, heart, or laugh.",
+  "drDigitalIntro": "Emoji are small pictures that show feelings.\n• Instead of typing \"haha\", send a laughing emoji.\n• There are thousands to choose from.\n• You can react to a message by double-clicking (or pressing and holding) it — a row of emoji appears and you pick one.\n• Reactions are a quick way to say \"I saw this\" or show how you feel without typing.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You reacted to a message with an emoji",
@@ -16,11 +16,11 @@
         "target": "sam"
       },
       {
-        "say": "React to Sam's message with an emoji.",
+        "say": "Double-click (or press and hold) Sam's message to react with an emoji.",
         "action": "add-reaction"
       }
     ]
   },
   "drDigitalSuccess": "A quick emoji reaction — no typing needed. A great way to say 'I saw this' or show how you feel.",
-  "drDigitalHint": "Click Sam, then hover over one of their messages and click the smiley face that appears. Pick any emoji to react."
+  "drDigitalHint": "Click Sam, then double-click their message bubble (or press and hold it). Pick any emoji from the row that appears."
 }

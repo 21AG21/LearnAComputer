@@ -5,43 +5,40 @@
   "order": 720,
   "title": "Basic Photo Editing",
   "videoUrl": "",
-  "drDigitalIntro": "You can improve photos without being a pro.\n\u2022 Rotate turns a sideways photo upright.\n\u2022 Crop trims the edges; Brightness makes it lighter or darker.\n\u2022 Filters add a color effect \u2014 and you can always revert to the original.",
+  "drDigitalIntro": "You can improve photos without being a pro.\n• This photo came out way too dark — let's fix it.\n• Drag the Brightness slider to make it lighter.\n• Drag the Contrast slider to sharpen the colors.\n• You can also Rotate, Crop, or Revert to undo all changes.",
   "playgroundTask": {
     "type": "guided-photos",
-    "goal": "You edited a photo and reverted it",
+    "goal": "You fixed a dark photo",
     "steps": [
       {
-        "say": "Click the Mountain Hike photo to open it.",
+        "say": "Click the Bird in Garden photo to open it.",
         "action": "select-photo",
-        "target": "Mountain Hike"
+        "target": "Bird in Garden"
+      },
+      {
+        "say": "This photo is too dark! Drag the Brightness slider up to about 90-110%.",
+        "action": "adjust-brightness",
+        "value": "90-110"
+      },
+      {
+        "say": "Now drag the Contrast slider up to about 90-110% to sharpen the colors.",
+        "action": "adjust-contrast",
+        "value": "90-110"
       },
       {
         "say": "Click Rotate to turn the photo 90 degrees.",
-        "action": "rotate",
-        "target": "Mountain Hike"
+        "action": "rotate"
       },
       {
-        "say": "Click Crop to trim the photo.",
-        "action": "crop",
-        "target": "Mountain Hike"
-      },
-      {
-        "say": "Adjust the brightness by clicking Brightness.",
-        "action": "adjust-brightness",
-        "target": "Mountain Hike"
-      },
-      {
-        "say": "Apply a filter to change the mood of the photo.",
-        "action": "apply-filter",
-        "target": "Mountain Hike"
+        "say": "Try a different crop — click Square to crop it square.",
+        "action": "crop"
       },
       {
         "say": "Click Revert to undo all changes and restore the original.",
-        "action": "revert",
-        "target": "Mountain Hike"
+        "action": "revert"
       }
     ]
   },
-  "drDigitalSuccess": "You edited a photo and reverted it! The original is always preserved \u2014 you can always undo edits.",
-  "drDigitalHint": "Open a photo first, then use the editing buttons that appear. Use Revert to undo all changes."
+  "drDigitalSuccess": "You fixed a dark photo and tried all the editing tools! The original is always preserved — you can always Revert.",
+  "drDigitalHint": "Open the photo first, then use the Brightness and Contrast sliders to fix it. Revert undoes all changes."
 }

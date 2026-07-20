@@ -40,6 +40,10 @@ components/
 
   Playground/
     TaskChecker.ts         # Pure validation functions for every task type
+    Icons.tsx              # Central SVG icon library (~70 icons, stroke style, currentColor)
+    SimulatorFrame.tsx     # Shared frame: dark banner, progress bar, celebration overlay
+    SimThemeContext.tsx     # Sim-wide theme state (dark mode, brightness, text scale, etc.)
+    DesktopLaunch.tsx      # Desktop-first wrapper: shows FakeDesktop, highlights dock icon
     TypeTextTask.tsx        # "Type this text" activity
     TextEditorTask.tsx      # Edit pre-filled text (delete/fix mistakes)
     EditFileTask.tsx        # Edit a file inside FilesApp with save validation
@@ -49,11 +53,23 @@ components/
     MatchPartsTask.tsx      # Drag-match laptop parts to labels
     OpenAllAppsTask.tsx     # Open all dock apps on FakeDesktop
     BrowserSimulator.tsx    # Shared browser chrome (tabs, address bar, lock icon)
+    GuidedBrowserTask.tsx   # Guided browser sim (navigate, search, tabs, cookies, etc.)
+    GuidedFilesTask.tsx     # Guided file manager sim (open, move, rename, etc.)
+    GuidedMessagingTask.tsx # Guided messaging + video calls sim
+    GuidedEmailTask.tsx     # Guided email sim (compose, reply, spam, attach, etc.)
+    GuidedPhotosTask.tsx    # Guided photos sim (edit, share, albums, etc.)
+    GuidedAppStoreTask.tsx  # Guided app store sim (search, install, permissions, etc.)
+    GuidedSettingsTask.tsx  # Guided settings sim (toggles, sliders, storage, etc.)
+    GuidedSecurityTask.tsx  # Guided security sim (passwords, 2FA, phishing, etc.)
+    GuidedTroubleshootingTask.tsx # Guided troubleshooting (frozen apps, WiFi, errors)
+    GuidedCalendarTask.tsx  # Guided calendar + reminders sim
+    GuidedDesktopTask.tsx   # Guided window management (move, resize, minimize, etc.)
+    KeyboardNavTask.tsx     # Keyboard navigation game (Tab, Enter, arrow keys)
     DesktopBrowserRightClickTask.tsx
     DesktopBrowserScrollTask.tsx
     DesktopBrowserZoomTask.tsx
     DesktopFileExplorerTask.tsx
-    FakeDesktop.tsx         # macOS-like desktop: dock, menu bar, battery, wifi, clock
+    FakeDesktop.tsx         # Desktop environment: 10-app dock, menu bar, battery, wifi, clock
     MusicNoteIcon.tsx       # SVG music note for file previews
 
     Desktop/               # Apps that run inside FakeDesktop
@@ -62,6 +78,8 @@ components/
       FilesApp.tsx          # File manager with sidebar + preview
       MailApp.tsx           # Email client
       MessagingApp.tsx      # Chat app (persistent threads via localStorage)
+      NotesApp.tsx           # Two-pane notes editor
+      SettingsApp.tsx        # Settings panels (appearance, display, accessibility, etc.)
       filesData.ts          # Shared file/folder tree used by FilesApp and EditFileTask
 
 content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
@@ -70,6 +88,7 @@ lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
   progress.ts              # localStorage read/write for completed slugs
   chat.ts                  # localStorage read/write for messaging threads
+  simState.ts              # localStorage read/write for persistent sim state (lac-sim)
 
 public/playgrounds/        # Static images used by playground components
 ```
@@ -114,16 +133,24 @@ Each file defines one sub-lesson:
 | `match-parts` | MatchPartsTask | Drag laptop part labels to correct spots |
 | `open-all-apps` | OpenAllAppsTask | Open every dock app |
 | `compose-email` | ComposeEmailTask | Write an email with required to/subject/body |
-| `multiple-choice` | MultipleChoiceTask | 4-option quiz (A/B/C/D) — **avoid for new lessons; prefer hands-on** |
+| `multiple-choice` | MultipleChoiceTask | **NEVER use — all remaining instances have been converted** |
 | `drag-sort-files` | DragSortTask | Click-to-place items into category buckets |
 | `spot-the-fake` | SpotTheFakeTask | Click the scam/fake among 2–3 item cards |
-| `find-in-settings` | FindInSettingsTask | Navigate a fake System Settings UI, toggle a setting |
 | `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
-| `guided-files` | GuidedFilesTask | Step-by-step guided file manager: open/create/rename/move/search/delete/restore/save real files |
-| `guided-browser` | GuidedBrowserTask | Step-by-step guided browser: navigate/search/tabs/windows/bookmarks/reading-list/history/downloads/lock/cookies/popups/reload/zoom |
-| `guided-messaging` | GuidedMessagingTask | Step-by-step guided messaging and video calls: select contacts, send messages, react, attach photos, start/mute/camera-off/end video calls |
+| `guided-files` | GuidedFilesTask | Guided file manager: open/create/rename/move/search/delete/restore/save |
+| `guided-browser` | GuidedBrowserTask | Guided browser: navigate/search/tabs/cookies/popups/reload/zoom/downloads |
+| `guided-messaging` | GuidedMessagingTask | Guided messaging + video calls: contacts, messages, reactions, photos, calls |
+| `guided-email` | GuidedEmailTask | Guided email: compose/reply/forward, spam, attach files, CC/BCC, unsend |
+| `guided-photos` | GuidedPhotosTask | Guided photos: edit (crop/rotate/brightness/contrast/filters), share, albums |
+| `guided-app-store` | GuidedAppStoreTask | Guided app store: search, install, permissions, update, delete |
+| `guided-settings` | GuidedSettingsTask | Guided settings: toggle, slider, storage cleanup, section navigation |
+| `guided-security` | GuidedSecurityTask | Guided security: passwords, 2FA, phishing, passkeys, password reset |
+| `guided-troubleshooting` | GuidedTroubleshootingTask | Guided troubleshooting: frozen apps, WiFi, error codes, support |
+| `guided-calendar` | GuidedCalendarTask | Guided calendar + reminders: create events, set times, reminders |
+| `guided-desktop` | GuidedDesktopTask | Guided window management: move, resize, minimize, maximize, close |
+| `keyboard-nav-game` | KeyboardNavTask | Keyboard navigation game (Tab, Enter, arrow keys) |
 
-**Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). Multiple-choice quizzes test recognition, not skill; do not add them to new lessons. `guided-files` is the reference pattern for a guided simulator.
+**Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). **NEVER use `multiple-choice`** — quizzes test recognition, not skill. All existing multiple-choice lessons have been converted to guided task types. `guided-files` is the reference pattern for a guided simulator.
 
 #### `guided-files` schema
 
@@ -157,9 +184,12 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
 "playgroundTask": {
   "type": "guided-browser",
   "goal": "Short summary shown when finished",
+  "mode": "guided",
+  "initialDownloads": ["SystemCleaner.exe"],
   "steps": [
     { "say": "Type shop.example and press Enter.", "action": "navigate", "url": "shop.example" },
     { "say": "Search for something.", "action": "search", "query": "apple pie", "reveal": "Recipe Box" },
+    { "say": "Open Recipe Box from the results.", "action": "open-result", "title": "Recipe Box" },
     { "say": "Open a new tab.", "action": "new-tab" },
     { "say": "Close the Google tab.", "action": "close-tab", "title": "Google" },
     { "say": "Open a new window.", "action": "new-window" },
@@ -168,6 +198,7 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
     { "say": "Reopen Shop from History.", "action": "history-visit", "title": "Shop" },
     { "say": "Download the file.", "action": "download" },
     { "say": "Open the Downloads panel.", "action": "open-downloads" },
+    { "say": "Delete the suspicious file.", "action": "delete-download", "file": "SystemCleaner.exe" },
     { "say": "Check the lock icon.", "action": "lock-click" },
     { "say": "Decline the cookie banner.", "action": "cookie-decline" },
     { "say": "Close the scam popup.", "action": "close-popup" },
@@ -177,7 +208,7 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
 }
 ```
 
-Pages with special behavior: `weather.com` shows a cookie banner, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button. Cookie/popup/download steps must be preceded by a `navigate` to the matching page.
+`mode` defaults to `"guided"`. Set `"assessment"` for objectives-only (no step-by-step highlighting). `initialDownloads` seeds the Downloads list on mount. Pages with special behavior: `weather.com` shows a cookie banner and ads, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button, `news.example` has fine print for zoom lessons. Cookie/popup/download steps must be preceded by a `navigate` to the matching page. Clicking **CLEAN NOW** on the popup fails the lesson with a message (teaches consequences). The `reload` action only completes when it fixes a broken page (pages navigated before a reload step render broken).
 
 #### `guided-messaging` schema
 
@@ -200,7 +231,201 @@ A self-contained simulated messaging and video calling app. The JSON provides a 
 }
 ```
 
-Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/grandma), `send-message` (2-phase: focus input then send; `value` is the required text), `add-reaction` (2-phase: click message then pick emoji), `attach-photo` (2-phase: click + button then pick photo), `start-call`, `mute`, `camera-off`, `end-call`. Video call actions (`mute`, `camera-off`, `end-call`) require an active call started by `start-call`.
+Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/grandma), `send-message` (2-phase: focus input then send; `value` is the required text), `add-reaction` (2-phase: double-click/long-press message then pick emoji), `attach-photo` (2-phase: click + button then pick photo from grid), `start-call`, `mute`, `camera-off`, `end-call`. Video call actions require an active call. Reactions require double-click or press-and-hold (never single click).
+
+#### `guided-email` schema
+
+A simulated email client with Inbox, Sent, Spam, Archive folders. The JSON provides a `goal` and `steps`.
+
+```json
+"playgroundTask": {
+  "type": "guided-email",
+  "goal": "Reply to Mom and archive the Amazon email",
+  "mode": "guided",
+  "steps": [
+    { "say": "Open the email from Mom.", "action": "open-email", "target": "Mom" },
+    { "say": "Click Reply.", "action": "reply" },
+    { "say": "Type your reply.", "action": "set-body", "value": "Thanks Mom!" },
+    { "say": "Send it.", "action": "send" },
+    { "say": "Mark the scam as spam.", "action": "mark-spam", "target": "Prince" },
+    { "say": "Go to Spam.", "action": "go-to-folder", "target": "Spam" },
+    { "say": "That email was not spam — move it back.", "action": "unspam", "target": "Newsletter" },
+    { "say": "Attach the vacation photo.", "action": "attach", "target": "VacationPhoto.png" },
+    { "say": "Archive the Amazon email.", "action": "archive", "target": "Amazon" }
+  ]
+}
+```
+
+Actions: `open-email` (`target`: sender name), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive`, `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
+
+#### `guided-photos` schema
+
+A simulated photo library with real images, editing tools, albums, and sharing.
+
+```json
+"playgroundTask": {
+  "type": "guided-photos",
+  "goal": "Edit and share a photo",
+  "steps": [
+    { "say": "Select Bird in Garden.", "action": "select-photo", "target": "Bird in Garden" },
+    { "say": "Increase brightness.", "action": "adjust-brightness", "value": "90-110" },
+    { "say": "Adjust contrast.", "action": "adjust-contrast", "value": "90-110" },
+    { "say": "Rotate the photo.", "action": "rotate" },
+    { "say": "Crop to Square.", "action": "crop", "value": "Square" },
+    { "say": "Undo all changes.", "action": "revert" },
+    { "say": "Share via Messages to Alex.", "action": "share", "via": "messages", "to": "Alex" },
+    { "say": "Create an album called Vacation.", "action": "create-album", "value": "Vacation" },
+    { "say": "Add this photo to Vacation.", "action": "add-to-album", "value": "Vacation" },
+    { "say": "Search for dog.", "action": "search", "value": "dog" },
+    { "say": "Delete the cat photo.", "action": "delete", "target": "Orange Cat" },
+    { "say": "Recover it.", "action": "recover", "target": "Orange Cat" }
+  ]
+}
+```
+
+Actions: `select-photo` (`target`), `favorite`, `unfavorite`, `delete` (`target`), `recover` (`target`, in Recently Deleted), `create-album` (`value`), `add-to-album` (`value`), `go-to-album` (`target`), `crop` (`value`: Original/Square/Wide), `rotate`, `adjust-brightness` (`value`: "min-max" range), `adjust-contrast` (`value`: range), `apply-filter` (`value`: filter name), `revert`, `share` (`via`: mail/messages, `to`: contact name), `search` (`value`).
+
+#### `guided-app-store` schema
+
+A simulated app marketplace with 12 apps across 4 categories, permissions, and persistence.
+
+```json
+"playgroundTask": {
+  "type": "guided-app-store",
+  "goal": "Install an app and manage permissions",
+  "mode": "guided",
+  "steps": [
+    { "say": "Search for weather.", "action": "search", "value": "weather" },
+    { "say": "Select WeatherNow.", "action": "select-app", "target": "WeatherNow" },
+    { "say": "Install it.", "action": "install" },
+    { "say": "Allow permissions.", "action": "allow-permission" },
+    { "say": "Go to My Apps.", "action": "go-to-installed" },
+    { "say": "Update the app.", "action": "update-app", "target": "WeatherNow" },
+    { "say": "Delete Puzzle Quest.", "action": "delete-app", "target": "Puzzle Quest" }
+  ]
+}
+```
+
+Actions: `search` (`value`), `select-app` (`target`), `install`, `allow-permission`, `deny-permission` (cancels install), `go-to-installed`, `go-to-store`, `update-app` (`target`), `delete-app` (`target`), `open-app` (`target`), `go-to-category` (`target`). Installed apps persist across lessons via `lac-sim-apps` in localStorage.
+
+#### `guided-settings` schema
+
+Wraps `SettingsApp` inside `FakeDesktop`. Settings changes are live — dark mode reskins the desktop, brightness dims the screen, Night Shift tints orange, text scale grows the UI.
+
+```json
+"playgroundTask": {
+  "type": "guided-settings",
+  "goal": "Customize your display settings",
+  "steps": [
+    { "say": "Open the Appearance section.", "action": "open-section", "target": "Appearance" },
+    { "say": "Turn on Dark Mode.", "action": "toggle", "target": "Dark Mode" },
+    { "say": "Open Display.", "action": "open-section", "target": "Display" },
+    { "say": "Set brightness between 40 and 60.", "action": "slider", "target": "Brightness", "min": 40, "max": 60 },
+    { "say": "Open Storage.", "action": "open-section", "target": "Storage" },
+    { "say": "Delete Old Videos.", "action": "delete-item", "target": "Old Videos" },
+    { "say": "Empty the trash.", "action": "empty-trash" }
+  ]
+}
+```
+
+Actions: `open-section` (`target`: Appearance/Display/Accessibility/WiFi/Notifications/Storage/About), `toggle` (`target`: setting name), `slider` (`target`, `min`/`max` range), `delete-item` (`target`), `empty-trash`.
+
+#### `guided-security` schema
+
+Multi-section security simulator: passwords (live strength meter), login, 2FA, phishing verdict, passkeys.
+
+```json
+"playgroundTask": {
+  "type": "guided-security",
+  "goal": "Create a strong password and log in securely",
+  "mode": "guided",
+  "steps": [
+    { "say": "Type a strong password.", "action": "type-password", "minStrength": 4 },
+    { "say": "Type your username.", "action": "type-username", "value": "drdigital" },
+    { "say": "Log in.", "action": "login" },
+    { "say": "Enter the 2FA code.", "action": "enter-2fa-code" },
+    { "say": "Verify.", "action": "verify-2fa" },
+    { "say": "Click Forgot Password.", "action": "forgot-link" },
+    { "say": "Open the reset email.", "action": "open-reset-email" },
+    { "say": "Click the reset link.", "action": "click-reset-link" },
+    { "say": "Reveal the URL.", "action": "inspect-link", "target": "Verify your account" },
+    { "say": "Mark it Dangerous.", "action": "mark-dangerous", "target": "Verify your account" },
+    { "say": "Mark it Safe.", "action": "mark-safe", "target": "View your order" },
+    { "say": "Use your passkey.", "action": "use-passkey" }
+  ]
+}
+```
+
+Actions: `type-password` (`minStrength`: 1–4, auto-completes when met), `type-username` (`value`), `type-login-password`, `login`, `use-passkey`, `forgot-link`, `open-reset-email`, `click-reset-link`, `enter-2fa-code`, `verify-2fa`, `inspect-link` (`target`), `mark-safe` (`target`), `mark-dangerous` (`target`), `toggle-setting`, `go-to-section`. Wrong phishing verdicts show immediate red feedback with an explanation; the item stays active for retry.
+
+#### `guided-troubleshooting` schema
+
+Scenarios for common computer problems. Each lesson specifies a `scenario` that determines the desktop state.
+
+```json
+"playgroundTask": {
+  "type": "guided-troubleshooting",
+  "goal": "Force quit the frozen app and restart it",
+  "scenario": "frozen-notes",
+  "launchApp": "notes",
+  "steps": [
+    { "say": "Click the frozen Notes window.", "action": "click-frozen" },
+    { "say": "Open the system menu.", "action": "open-force-quit" },
+    { "say": "Force Quit.", "action": "force-quit", "target": "Notes" },
+    { "say": "Reopen Notes from the dock.", "action": "restart-app", "target": "notes" }
+  ]
+}
+```
+
+`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`.
+
+#### `guided-calendar` schema
+
+Calendar and reminders simulator. Use `launchApp` to control which view opens first.
+
+```json
+"playgroundTask": {
+  "type": "guided-calendar",
+  "goal": "Create an event and a reminder",
+  "launchApp": "calendar",
+  "steps": [
+    { "say": "Click on Wednesday.", "action": "select-day", "target": "Wednesday" },
+    { "say": "Create a new event.", "action": "create-event" },
+    { "say": "Name it Dentist.", "action": "set-title", "value": "Dentist" },
+    { "say": "Set time to 2:00 PM.", "action": "set-time", "value": "2:00 PM" },
+    { "say": "Save it.", "action": "save-event" },
+    { "say": "Switch to Reminders.", "action": "switch-view", "target": "reminders" },
+    { "say": "Create a reminder.", "action": "create-reminder" },
+    { "say": "Type Buy groceries.", "action": "set-reminder-text", "value": "Buy groceries" },
+    { "say": "Save it.", "action": "save-reminder" },
+    { "say": "Mark it done.", "action": "complete-reminder", "target": "Buy groceries" }
+  ]
+}
+```
+
+`launchApp`: `"calendar"` (default) or `"reminders"` (opens on reminders view). Actions: `select-day` (`target`), `create-event`, `set-title` (`value`), `set-time` (`value`), `set-repeat` (`value`), `save-event`, `create-reminder`, `set-reminder-text` (`value`), `save-reminder`, `complete-reminder` (`target`), `switch-view` (`target`: calendar/reminders), `select-calendar` (`target`).
+
+#### `guided-desktop` schema
+
+Window management: the learner practices moving, resizing, minimizing, and closing windows on the desktop.
+
+```json
+"playgroundTask": {
+  "type": "guided-desktop",
+  "goal": "Manage windows like a pro",
+  "steps": [
+    { "say": "Drag the window to move it.", "action": "move" },
+    { "say": "Drag the corner to resize.", "action": "resize" },
+    { "say": "Click the minus button to minimize.", "action": "minimize" },
+    { "say": "Click the app in the dock to restore.", "action": "restore" },
+    { "say": "Click the expand button to maximize.", "action": "maximize" },
+    { "say": "Restore it from maximized.", "action": "restore-max" },
+    { "say": "Close the window.", "action": "close" }
+  ]
+}
+```
+
+Actions: `move`, `resize`, `minimize`, `restore`, `maximize`, `restore-max`, `close`.
 
 ### Progress
 
@@ -212,6 +437,10 @@ Stored in `localStorage` under key `"lac-progress"`:
 
 `LessonModuleRunner` calls `markComplete(slug)` when a sub-lesson's playground is finished.
 Sub-lessons with `type: "none"` or `"placeholder"` auto-advance (no gate).
+
+### Sim State
+
+Persistent simulator state is stored in `localStorage` under key `"lac-sim"` (one JSON object with namespaced sub-keys). Used by the App Market to persist installed apps across lessons (`lac-sim-apps`). The dashboard's "Reset all progress" button clears both `lac-progress` and `lac-sim`.
 
 ### Chat threads
 
@@ -228,8 +457,15 @@ After completing a module, the user can navigate to the next module or back to `
 
 - **Server vs Client**: Lesson data loading (`getAllLessons`, etc.) is server-only (uses `fs`). Progress, chat, and all playground components are `"use client"`.
 - **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
-- **FakeDesktop**: A self-contained desktop environment. Apps open in `AppWindow` frames. The menu bar has a working clock, battery indicator (real Battery API), and WiFi panel. The taskbar shows open-app indicators (green dots).
-- **Validation**: All task validation lives in `TaskChecker.ts` as pure functions. Components call the appropriate checker and pass `onResult(boolean)` up to `LessonModuleRunner`.
+- **FakeDesktop**: A self-contained desktop environment with a **10-app dock**: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes. The menu bar has a working clock, battery indicator (real Battery API), WiFi panel, and optional Do Not Disturb indicator. The taskbar shows open-app indicators (green dots). Settings changes (dark mode, brightness, Night Shift, text scale) are live via `SimThemeContext`.
+- **Desktop-first launching**: Every guided lesson starts on the desktop — the learner opens the app from the dock themselves. `DesktopLaunch` wraps guided sims: it renders FakeDesktop with a highlighted dock icon and a dark banner ("Open Mail — click the glowing icon"), then swaps to the guided sim once the app is opened. No guided lesson should auto-open its app.
+- **SimulatorFrame**: All playground activities share `SimulatorFrame` for visual consistency — a dark `#1d2733` banner with instructions, optional step progress bar, and a two-stage completion (1.6s celebration overlay, then a slim persistent "lesson complete" banner that doesn't block interaction). Older Unit 1–2 tasks are wrapped in SimulatorFrame in single-activity mode (no step counter).
+- **Non-blocking completion**: After finishing an activity, the sim remains interactive for free play. The celebration overlay clears after 1.6 seconds; a slim green banner stays. All read interactions (opening panels, switching folders, viewing popovers) continue working.
+- **Failure channel**: `onResult(success, failMessage?)` — when a sim reports failure, the left panel shows a red "Activity failed" card with the message and a "Try again" button. The playground stays mounted so the learner can see what happened. Dr. Digital switches to hint mood. Used by: CLEAN NOW click (browser popup), wrong ad click (assessment), wrong phishing verdict (with retry).
+- **Assessment mode**: Guided tasks with `mode: "assessment"` show objectives instead of step-by-step instructions. The `SimulatorFrame` banner displays "Objectives: N of M done" with an expandable checklist and a Hint button. **Assessment-authoring rules**: list objectives only, never write step-by-step walkthroughs. Hints give a nudge, not the answer.
+- **Validation**: All task validation lives in `TaskChecker.ts` as pure functions. Components call the appropriate checker and pass `onResult(boolean, failMessage?)` up to `LessonModuleRunner`.
+- **Icons**: All UI glyphs use SVG components from `components/Playground/Icons.tsx` — stroke style, `currentColor`, configurable `size` prop (default 20). Never use emoji for UI glyphs (buttons, indicators, sidebar items). **Allowed emoji**: reaction-picker emojis (they are the feature being taught) and app-identity emoji in content (e.g., app store catalog icons). Text characters (`✓`, `✗`, `✕`, `★`, `☆`, `&times;`) are not emoji and are kept as-is.
+- **No OS branding**: No Apple, macOS, Finder, Safari, FaceTime, iCloud, Siri, or "App Store" (as the app's own name) in the simulated OS. Real websites (Google, Wikipedia) inside the browser are fine. The settings app is "Settings" (never "System Settings"). The app store is "App Market".
 
 ## Adding New Units and Lessons
 
@@ -245,7 +481,7 @@ Decide the unit name, modules, and sub-lessons. A **unit** is a top-level groupi
 - Unit 1: `1`–`26`
 - Unit 2: `200`–`290`
 - Unit 3 (Files & Folders): `300`–`390`
-- Unit 4 (Internet & Browsing): `400`–`496`
+- Unit 4 (Internet & Browsing): `400`–`499`
 - Unit 5 (Messages & Video Calls): `500`–`570`
 - Unit 6 (Email): `600`–`680`
 - Unit 7 (Photos): `700`–`780`
@@ -283,9 +519,13 @@ Every file must have this exact shape:
 - `unit` must be identical across every lesson in the same unit (exact string match, including capitalization and colon)
 - `module` must be identical across every lesson in the same module
 - `videoUrl` is always `""` (reserved for future use)
-- `drDigitalIntro` is the teaching content — Dr. Digital explains the concept in friendly, simple language for absolute beginners
+- `drDigitalIntro` is the teaching content — Dr. Digital explains the concept in friendly, simple language for absolute beginners. Should be thorough enough that the learner could re-teach the concept (4–6 bullets: What is it? Why does it matter? How do I do it? What's the common mistake?).
 - `drDigitalSuccess` congratulates the learner after they complete the activity (or auto-advances if `type: "none"`)
 - `drDigitalHint` gives a nudge if they're stuck on the activity
+- **First letter capitalized** in every learner-facing sentence (`drDigitalIntro`, `drDigitalSuccess`, `drDigitalHint`, `instructions`, step `say`)
+- **Never rename an existing `slug`** — progress is stored by slug in localStorage. Deleting a lesson is fine; new lessons get new slugs.
+- **No emoji in Dr. Digital copy** — use plain text descriptions instead
+- **No OS brand names** in learner-facing text (see Key Patterns)
 
 ### Step 4: Choose a playground activity
 

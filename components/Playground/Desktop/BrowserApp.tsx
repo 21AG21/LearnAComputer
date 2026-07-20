@@ -1,6 +1,7 @@
 "use client";
 
 import BrowserSimulator from "../BrowserSimulator";
+import { NoConnectionIcon } from "../Icons";
 
 interface BrowserAppProps {
   onClose: () => void;
@@ -13,7 +14,7 @@ export default function BrowserApp({ onClose, onMinimize, noWifi = false }: Brow
     <BrowserSimulator onExit={onClose} onMinimize={onMinimize} bezel={false} showControls={false}>
       {noWifi ? (
         <div className="h-full flex flex-col items-center justify-center gap-2 bg-gray-50">
-          <p className="text-4xl">📵</p>
+          <NoConnectionIcon size={40} className="text-gray-400" />
           <p className="text-xl font-bold text-red-600">No WiFi</p>
           <p className="text-gray-500 text-sm">Connect to a network to browse.</p>
         </div>

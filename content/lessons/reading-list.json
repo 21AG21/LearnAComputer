@@ -16,11 +16,11 @@
         "url": "dailynews.example"
       },
       {
-        "say": "No time to read it now? Click 📖 Reading List to save this article for later.",
+        "say": "No time to read it now? Click Reading List to save this article for later.",
         "action": "reading-list-add"
       }
     ]
   },
   "drDigitalSuccess": "You saved the article to your Reading List — your 'read it later' pile. It'll be waiting when you have time.",
-  "drDigitalHint": "Go to the news site first, then click the 📖 Reading List button in the action bar to save it."
+  "drDigitalHint": "Go to the news site first, then click the Reading List button in the action bar to save it."
 }

@@ -3,31 +3,12 @@
   "unit": "Unit 12: Everyday Life with Your Computer",
   "module": "Real-World Tasks",
   "order": 1270,
-  "title": "Printing and Scanning",
+  "title": "Printing from Your Computer",
   "videoUrl": "",
-  "drDigitalIntro": "You can print and scan from your computer.\n• Press Ctrl+P in any app to print, then choose your printer and pages.\n• Set up a printer in Settings > Printers & Scanners.\n• To scan, use the scanner — or snap a document with your phone camera.",
+  "drDigitalIntro": "Printing lets you put what's on your screen onto paper. Try it right now!\n\n1. Open your web browser and find any page you'd like to print — a recipe, an article, or just this lesson.\n2. Press Ctrl+P (or Cmd+P on a Mac).\n3. The Print dialog appears, showing a preview of what will print.\n4. Choose your printer from the dropdown (if one is connected).\n5. Click Print.\n\nIf you don't have a printer:\n• The Print dialog still opens — you can choose \"Save as PDF\" instead of a real printer.\n• This creates a file you can email or take to a library or office supply store to print there.\n\nScanning works the other way: a scanner turns paper into a digital file. Many printers include a scanner on top — lift the lid, place your document face-down, and use the scanner software. Phone cameras with document scanning (built into most camera apps) work in a pinch too.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "You want to print an email. You're in the Mail app. What keyboard shortcut opens the print dialog?",
-    "options": [
-      {
-        "text": "Ctrl+S",
-        "correct": false
-      },
-      {
-        "text": "Ctrl+P",
-        "correct": true
-      },
-      {
-        "text": "Ctrl+D",
-        "correct": false
-      },
-      {
-        "text": "Ctrl+X",
-        "correct": false
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "Ctrl+P opens the print dialog in almost every app on your computer — it's a universal shortcut.",
-  "drDigitalHint": "P for Print — which command shortcut uses P?"
+  "drDigitalSuccess": "Ctrl+P (or Cmd+P) works in almost every app — browser, email, documents, everything. And Save as PDF is your backup when there's no printer around.",
+  "drDigitalHint": "Press Ctrl+P (or Cmd+P on Mac) in your browser to see the print dialog."
 }

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { checkShapeScore } from "./TaskChecker";
 
 interface ShapeClickGameProps {
-  instructions: string;
+  instructions?: string;
   targetScore: number;
   onResult: (success: boolean) => void;
 }
@@ -77,8 +77,8 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
   }
 
   return (
-    <div className="h-full flex flex-col items-center px-6 py-6 bg-white" aria-label={instructions}>
-      <h2 className="text-4xl font-bold mb-2 text-center">Click on {targetScore} falling shapes to advance!</h2>
+    <div className="h-full flex flex-col items-center px-6 py-6 bg-white" aria-label={instructions ?? `Click on ${targetScore} falling shapes`}>
+      {instructions && <h2 className="text-4xl font-bold mb-2 text-center">{instructions}</h2>}
       <p className="text-xl font-semibold mb-3" aria-live="polite">
         Score: {score} / {targetScore}
       </p>

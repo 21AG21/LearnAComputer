@@ -27,12 +27,12 @@ export default function OpenAllAppsTask({ instructions, onResult }: OpenAllAppsT
 
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="shrink-0 bg-yellow-100 border-b-2 border-yellow-300 px-4 py-2 text-center">
-        <span className="font-semibold" aria-live="polite">
+      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
+        <span aria-live="polite">
           {instructions} ({opened.size} / {ALL_APPS.length} opened)
         </span>
       </div>
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 relative">
         <FakeDesktop onAppOpened={handleAppOpened} />
       </div>
     </div>

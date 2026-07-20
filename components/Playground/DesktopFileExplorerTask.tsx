@@ -24,12 +24,13 @@ export default function DesktopFileExplorerTask({ filesToOpen, onResult }: Deskt
   return (
     <div className="h-full flex flex-col">
       {phase === "desktop" && (
-        <p className="shrink-0 text-base border-2 border-yellow-400 bg-yellow-100 px-4 py-2 mx-4 mt-3 rounded animate-slide-down">
-          Click the Files folder icon at the bottom of the desktop to open the Files app.
-        </p>
+        <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
+          Open <span className="text-yellow-300">Files</span> — click the glowing icon in the dock
+        </div>
       )}
-      <div className="flex-1 min-h-0 p-3 pt-2">
+      <div className="flex-1 min-h-0 relative">
         <FakeDesktop
+          highlightApp={phase === "desktop" ? "files" : undefined}
           onAppOpened={(app) => { if (app === "files") setPhase("files"); }}
           filesHint={`Double-click each file to open it: ${filesToOpen.join(", ")}`}
           onFileOpened={(name) =>

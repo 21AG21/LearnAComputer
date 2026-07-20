@@ -5,10 +5,31 @@
   "order": 1190,
   "title": "Diagnose and Fix Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Time to solve a series of problems.\n• Internet won't connect, an app crashes, the printer's dead, the computer's slow.\n• Diagnose the cause of each one.\n• Apply the right fix — it's about thinking, not just following steps.",
+  "drDigitalIntro": "Something's wrong with the computer — figure out what and fix it!\n• Look for clues: is an app frozen? Is the WiFi off? Is there an error?\n• Apply what you've learned to get things working again.\n• No hints this time — you're the expert now.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-troubleshooting",
+    "goal": "You diagnosed and fixed the problem",
+    "scenario": "frozen-app",
+    "steps": [
+      {
+        "say": "Something's wrong. Look at the desktop — what's going on?",
+        "action": "click-frozen"
+      },
+      {
+        "say": "The app is frozen. Open the system menu to force quit it.",
+        "action": "open-force-quit"
+      },
+      {
+        "say": "Force quit the frozen app.",
+        "action": "force-quit"
+      },
+      {
+        "say": "Good — the app is closed. Reopen it from the dock to make sure it works now.",
+        "action": "restart-app",
+        "target": "Notes"
+      }
+    ]
   },
-  "drDigitalSuccess": "You're a troubleshooting pro!",
-  "drDigitalHint": "Always start with the simplest fix: restart."
+  "drDigitalSuccess": "You identified a frozen app and fixed it with Force Quit! Remember: when an app stops responding, don't panic — open the system menu, force quit it, and reopen it from the dock.",
+  "drDigitalHint": "Click the frozen window to confirm it's not responding, then use the three-dot menu in the menu bar to find Force Quit."
 }

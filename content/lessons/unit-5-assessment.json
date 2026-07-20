@@ -5,10 +5,66 @@
   "order": 570,
   "title": "Family Group Chat",
   "videoUrl": "",
-  "drDigitalIntro": "You're coordinating a family vacation!\n• Reply to messages and send a photo.\n• Add reactions to messages.\n• Handle a video call — mute your mic and turn off your camera during it.",
+  "drDigitalIntro": "Time to put your messaging skills to the test!\n• You'll send messages, share a photo, react to a message, and handle a video call.\n• No hand-holding this time — you've got this!",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-messaging",
+    "goal": "You handled messages, photos, reactions, and a video call",
+    "steps": [
+      {
+        "say": "Open Alex's conversation and send them a message: 'See you Saturday!'",
+        "action": "select-contact",
+        "target": "alex"
+      },
+      {
+        "say": "Type 'See you Saturday!' and send it.",
+        "action": "send-message",
+        "value": "See you Saturday!"
+      },
+      {
+        "say": "Switch to Grandma's conversation and send her a photo.",
+        "action": "select-contact",
+        "target": "grandma"
+      },
+      {
+        "say": "Send Grandma a photo using the + button.",
+        "action": "attach-photo"
+      },
+      {
+        "say": "Now open Sam's conversation.",
+        "action": "select-contact",
+        "target": "sam"
+      },
+      {
+        "say": "React to Sam's latest message.",
+        "action": "add-reaction"
+      },
+      {
+        "say": "Switch to Jordan's conversation to video call them.",
+        "action": "select-contact",
+        "target": "jordan"
+      },
+      {
+        "say": "Start a video call with Jordan.",
+        "action": "start-call"
+      },
+      {
+        "say": "Mute your microphone — there's background noise.",
+        "action": "mute"
+      },
+      {
+        "say": "Turn off your camera for a moment.",
+        "action": "camera-off"
+      },
+      {
+        "say": "Turn your camera back on.",
+        "action": "camera-off"
+      },
+      {
+        "say": "End the call.",
+        "action": "end-call"
+      }
+    ]
   },
-  "drDigitalSuccess": "You coordinated a family event using messages and video calls!",
-  "drDigitalHint": "Start with a group message, then handle the video call."
+  "drDigitalSuccess": "You aced it! You sent messages, shared a photo, reacted with an emoji, and managed a full video call with all the controls.",
+  "drDigitalHint": "Select contacts from the sidebar, use the + button for photos, double-click messages to react, and use the call controls at the bottom."
 }

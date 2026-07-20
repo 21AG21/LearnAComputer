@@ -3,31 +3,29 @@
   "unit": "Unit 7: Photos",
   "module": "Organizing Photos",
   "order": 711,
-  "title": "People and Places",
+  "title": "Searching Your Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Your photo app recognizes faces and groups them.\n\u2022 Name people like \"Mom\" or \"Grandma\" to find all their photos.\n\u2022 Places shows where photos were taken on a map.\n\u2022 Memories builds slideshows of your best moments.",
+  "drDigitalIntro": "When you have hundreds of photos, Search is the fastest way to find what you need.\n• Type a word like 'dog' or 'beach' and matching photos appear instantly.\n• Real photo apps also recognize faces — name someone once, and the app finds every photo of them.\n• Let's practice searching to find a specific photo.",
   "playgroundTask": {
-    "type": "multiple-choice",
-    "question": "Photos recognizes faces to help you:",
-    "options": [
+    "type": "guided-photos",
+    "goal": "You found a photo by searching",
+    "steps": [
       {
-        "text": "Edit and retouch portrait photos automatically",
-        "correct": false
+        "say": "Type 'dog' in the search box to find all dog photos.",
+        "action": "search",
+        "value": "dog"
       },
       {
-        "text": "Find all photos that include a specific person",
-        "correct": true
+        "say": "Click the Dog at the Park photo to open it.",
+        "action": "select-photo",
+        "target": "Dog at the Park"
       },
       {
-        "text": "Print photos at the right size",
-        "correct": false
-      },
-      {
-        "text": "Back up photos to the cloud",
-        "correct": false
+        "say": "Mark this one as a favorite so you can find it quickly later.",
+        "action": "favorite"
       }
     ]
   },
-  "drDigitalSuccess": "Face recognition lets you search by person \u2014 name someone once and Photos can show you all their photos instantly.",
-  "drDigitalHint": "The People album groups photos by the faces in them. Name the face once and Photos does the rest."
+  "drDigitalSuccess": "You searched, found, and favorited a photo! Search works by name, place, or even what's in the photo — try it on your own computer's Photos app.",
+  "drDigitalHint": "Type 'dog' in the search bar at the top of the photo grid."
 }

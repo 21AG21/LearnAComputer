@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import WindowControls from "./WindowControls";
+import { NoteIcon } from "./Icons";
 
 /**
  * A guided window-management activity. The learner moves, resizes, minimizes,
@@ -223,7 +224,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
               }`}
               onMouseDown={onTitleDown}
             >
-              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)]">📝 Notes</span>
+              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)] inline-flex items-center gap-1"><NoteIcon size={16} /> Notes</span>
               <div className="flex-1" />
               <WindowControls
                 onMinimize={onMinimize}
@@ -273,7 +274,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
                 : "bg-gray-700 hover:bg-gray-600"
             }`}
           >
-            📝 Notes
+            <NoteIcon size={16} /> Notes
           </button>
         )}
       </div>
@@ -291,7 +292,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
       {/* Per-step flash */}
       {flash && !done && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">✓</span>
+          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">&#10003;</span>
         </div>
       )}
     </div>

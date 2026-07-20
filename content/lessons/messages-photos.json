@@ -5,7 +5,7 @@
   "order": 530,
   "title": "Sending Photos and Reactions",
   "videoUrl": "",
-  "drDigitalIntro": "You can send photos and react to messages.\n• Click the + button and choose a photo to send.\n• Click and hold a message to add an emoji reaction.\n• Reactions acknowledge a message without typing. Let's practice both!",
+  "drDigitalIntro": "You can send photos and react to messages.\n• Click the + button, then choose Photos to pick a picture.\n• Double-click (or press and hold) a message to react with an emoji.\n• Reactions acknowledge a message without typing. Let's practice both!",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You sent a photo and reacted to a message",
@@ -16,7 +16,7 @@
         "target": "jordan"
       },
       {
-        "say": "React to Jordan's message — click on it to see reaction options.",
+        "say": "React to Jordan's message — double-click (or press and hold) the message bubble.",
         "action": "add-reaction"
       },
       {
@@ -26,5 +26,5 @@
     ]
   },
   "drDigitalSuccess": "You reacted with an emoji and sent a photo! The + button is your attachment button — use it to add photos, files, or anything else.",
-  "drDigitalHint": "Click on the message bubble to react. Then use the + button to attach a photo."
+  "drDigitalHint": "Double-click their message bubble to react. Then use the + button and choose Photos to send a picture."
 }

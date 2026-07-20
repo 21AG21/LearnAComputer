@@ -5,33 +5,33 @@
   "order": 1060,
   "title": "Shopping Safely Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online shopping is convenient, but some sites are fake.\n\u2022 Check for https:// and a padlock before buying.\n\u2022 Look for reviews, and beware deals that seem too good to be true.\n\u2022 Use a credit card for better fraud protection.",
+  "drDigitalIntro": "Online shopping is convenient, but some sites are fake.\n• Check for https:// and a padlock before buying.\n• Look for reviews, and beware deals that seem too good to be true.\n• Use a credit card for better fraud protection.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You learned to identify safe online shopping links",
     "steps": [
       {
-        "say": "Inspect 'Complete Your Purchase'.",
+        "say": "Click 'Reveal URL' on 'Complete Your Purchase' to see where the link goes.",
         "action": "inspect-link",
         "target": "Complete Your Purchase"
       },
       {
-        "say": "That's shop.example.com with https \u2014 mark it Safe.",
+        "say": "That's shop.example with https — mark it Safe.",
         "action": "mark-safe",
         "target": "Complete Your Purchase"
       },
       {
-        "say": "Now inspect 'Enter Card Details'.",
+        "say": "Now reveal the URL for 'Enter Card Details'.",
         "action": "inspect-link",
         "target": "Enter Card Details"
       },
       {
-        "say": "That URL is suspicious \u2014 mark it Dangerous.",
+        "say": "That URL uses a zero instead of 'o' in the domain — mark it Dangerous.",
         "action": "mark-dangerous",
         "target": "Enter Card Details"
       }
     ]
   },
   "drDigitalSuccess": "You know how to spot safe vs. dangerous shopping links! HTTPS + a known domain = safe to buy.",
-  "drDigitalHint": "Click Inspect to see a link's real URL, then decide if it's from a trustworthy site."
+  "drDigitalHint": "Click 'Reveal URL' to see a link's real URL, then decide if it's from a trustworthy site."
 }

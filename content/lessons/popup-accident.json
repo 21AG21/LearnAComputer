@@ -1,0 +1,36 @@
+{
+  "slug": "popup-accident",
+  "unit": "Unit 4: The Internet and Browsing",
+  "module": "Online Safety",
+  "order": 494,
+  "title": "What If You Click a Scam?",
+  "videoUrl": "",
+  "drDigitalIntro": "What if you accidentally click a scam popup?\n• Don't panic — what matters is what you do next.\n• Never open any file it downloaded.\n• Delete the downloaded file immediately.\n• Let's practice cleaning up after a scam click.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "goal": "Clean up after accidentally clicking a scam popup",
+    "initialDownloads": ["SystemCleaner.exe"],
+    "steps": [
+      {
+        "say": "Go to freegames.example — type it and press Enter.",
+        "action": "navigate",
+        "url": "freegames.example"
+      },
+      {
+        "say": "Imagine you already clicked CLEAN NOW by accident and it downloaded a fake file. Close the popup with the ✕ first.",
+        "action": "close-popup"
+      },
+      {
+        "say": "Now open the Downloads panel to see what got downloaded.",
+        "action": "open-downloads"
+      },
+      {
+        "say": "There's SystemCleaner.exe — that's the fake file. Click the trash icon next to it to delete it immediately.",
+        "action": "delete-download",
+        "file": "SystemCleaner.exe"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You deleted the fake download before it could cause trouble. If you ever click a scam popup by accident: don't open the file, just delete it right away.",
+  "drDigitalHint": "Open Downloads in the action bar, then click the trash icon next to SystemCleaner.exe."
+}

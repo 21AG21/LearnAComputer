@@ -16,7 +16,7 @@
         "value": "Taxes"
       },
       {
-        "say": "Now drag TaxReturn.pdf onto your new Taxes folder — or click the file once, then click the Taxes folder.",
+        "say": "Now drag TaxReturn.pdf onto your new Taxes folder — it will light up blue when you hover over it.",
         "action": "move",
         "target": "TaxReturn.pdf",
         "into": "Taxes"
@@ -24,5 +24,5 @@
     ]
   },
   "drDigitalSuccess": "You created a Taxes folder and filed your tax return inside it. That's exactly how you keep a computer organized!",
-  "drDigitalHint": "Click the glowing New Folder button first, type Taxes, press Enter. Then drag the tax file onto the Taxes folder."
+  "drDigitalHint": "Click the glowing New Folder button first, type Taxes, press Enter. Then drag the tax file onto the Taxes folder — it turns blue when you hover."
 }

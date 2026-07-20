@@ -5,7 +5,7 @@
   "order": 24,
   "title": "Closing apps",
   "videoUrl": "",
-  "drDigitalIntro": "⚠️ Don't press Ctrl+Q right now — on a real computer that closes your whole browser!\n• In this lesson, click the red X in the playground to close an app safely.\n• To just move a window aside, click the yellow minus button instead.",
+  "drDigitalIntro": "Warning: Don't press Ctrl+Q right now — on a real computer that closes your whole browser!\n• In this lesson, click the red X in the playground to close an app safely.\n• To just move a window aside, click the yellow minus button instead.",
   "playgroundTask": {
     "type": "none"
   },

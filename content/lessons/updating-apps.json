@@ -5,11 +5,26 @@
   "order": 840,
   "title": "Updating Apps",
   "videoUrl": "",
-  "drDigitalIntro": "App updates bring new features and security fixes.\n• Keeping apps updated protects you.\n• Most devices update apps automatically.\n• Updates are free if the app was free.",
+  "drDigitalIntro": "App updates bring new features and security fixes.\n• Keeping apps updated protects you from bugs and security holes.\n• Most devices can update apps automatically.\n• Updates are free — even for paid apps.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You updated an app",
+    "goal": "You installed and updated an app",
     "steps": [
+      {
+        "say": "Search for 'Weather' in the App Market.",
+        "action": "search",
+        "value": "Weather"
+      },
+      {
+        "say": "Click on WeatherNow to see its details.",
+        "action": "select-app",
+        "target": "WeatherNow"
+      },
+      {
+        "say": "Install WeatherNow.",
+        "action": "install",
+        "target": "WeatherNow"
+      },
       {
         "say": "Click 'My Apps' to see your installed apps.",
         "action": "go-to-installed"
@@ -21,6 +36,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You updated an app! Keeping apps updated protects you from security vulnerabilities.",
-  "drDigitalHint": "Go to My Apps and look for apps with an Update button next to them."
+  "drDigitalSuccess": "You updated an app! Keeping apps updated protects you from security vulnerabilities and gives you new features.",
+  "drDigitalHint": "Install the app first, then go to My Apps and look for the Update button."
 }

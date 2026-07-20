@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AppWindow from "./AppWindow";
+import { NoConnectionIcon } from "../Icons";
 
 interface MailAppProps {
   onClose: () => void;
@@ -85,7 +86,7 @@ export default function MailApp({
       <div className="relative h-full flex px-2 pb-2">
       {noWifi && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/95 gap-2">
-          <p className="text-4xl">📵</p>
+          <NoConnectionIcon size={40} className="text-gray-400" />
           <p className="text-xl font-bold text-red-600">No WiFi</p>
           <p className="text-gray-500 text-sm">Connect to a network to use Mail.</p>
         </div>

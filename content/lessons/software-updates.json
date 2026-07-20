@@ -5,14 +5,15 @@
   "order": 1080,
   "title": "Keeping Software Up to Date",
   "videoUrl": "",
-  "drDigitalIntro": "Updates don't just add features — they fix security holes.\n• When hackers find a weakness, an update closes it.\n• Skipping updates leaves you vulnerable.\n• Turn on automatic updates so patches install themselves.",
+  "drDigitalIntro": "Updates don't just add features — they fix security holes.\n• When hackers find a weakness, an update closes it.\n• Skipping updates leaves you vulnerable.\n• Check your software version in Settings > About.",
   "playgroundTask": {
-    "type": "find-in-settings",
-    "instructions": "Turn on Automatic Updates so your computer stays secure without you having to remember.",
-    "targetPanel": "Software Update",
-    "toggleLabel": "Automatic Updates",
-    "targetValue": true
+    "type": "guided-settings",
+    "goal": "You checked your software version and explored WiFi settings",
+    "steps": [
+      { "say": "Click About in the sidebar to check your software version.", "action": "open-section", "target": "about" },
+      { "say": "Good — version 14.2.1. Now go to WiFi to check your connection.", "action": "open-section", "target": "wifi" }
+    ]
   },
-  "drDigitalSuccess": "Automatic Updates keeps your computer patched against the latest security threats — no action needed from you.",
-  "drDigitalHint": "Open Software Update in Settings and look for the Automatic Updates toggle."
+  "drDigitalSuccess": "You checked your software version and WiFi status. On a real computer, Settings will show if updates are available and let you install them.",
+  "drDigitalHint": "Click About in the sidebar, then click WiFi."
 }

@@ -3,12 +3,12 @@
   "unit": "Unit 7: Photos",
   "module": "Cloud Storage",
   "order": 730,
-  "title": "Cloud Photo Storage",
+  "title": "Cloud Photo Backup",
   "videoUrl": "",
-  "drDigitalIntro": "Cloud storage keeps a copy of your photos online.\n\u2022 If a device is lost or broken, your photos are still safe.\n\u2022 Photos sync automatically across your devices.\n\u2022 Most services give some free space and charge for more.",
+  "drDigitalIntro": "Cloud photo backup keeps copies of your photos on the internet, safely stored by a company like Google, Apple, or Microsoft.\n\nWhy it matters:\n• If your phone breaks, gets lost, or is stolen, your photos are still safe online.\n• When you take a photo on your phone, it shows up on your computer too — that's syncing.\n• \"Synced\" means the same photos appear on all your devices automatically.\n\nHow it works:\n• Most photo apps (Google Photos, Apple Photos, OneDrive) offer cloud backup built in.\n• You turn it on once, and it uploads every new photo over WiFi.\n• Most services give you some free space (usually 5–15 GB), then charge a monthly fee for more.\n\nThe bottom line: turn on cloud backup and forget about it. If anything ever happens to your device, your memories are safe.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "Cloud storage keeps your photos safe even if your device breaks. Set it up once and it works automatically!",
-  "drDigitalHint": "Just read and click Continue when you're ready."
+  "drDigitalSuccess": "Cloud backup = peace of mind. Turn it on once and your photos are safe no matter what happens to your device.",
+  "drDigitalHint": "Just read through and click Continue when ready."
 }

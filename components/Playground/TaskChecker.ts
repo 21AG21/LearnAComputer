@@ -43,6 +43,29 @@ export function checkZoomCode(typedDigits: string[], answerDigits: number[]): bo
   return answerDigits.every((digit, i) => typedDigits[i] === String(digit));
 }
 
+function normalize(s: string): string {
+  return s
+    .replace(/[‘’‚‛]/g, "'")
+    .replace(/[“”„‟]/g, '"')
+    .replace(/[–—]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function checkTextEdit(current: string, mustInclude: string[], mustNotInclude: string[]): boolean {
-  return mustInclude.every((s) => current.includes(s)) && mustNotInclude.every((s) => !current.includes(s));
+  const norm = normalize(current);
+  return mustInclude.every((s) => norm.includes(normalize(s))) && mustNotInclude.every((s) => !norm.includes(normalize(s)));
+}
+
+export interface TextEditFeedback {
+  pass: boolean;
+  missingRules: string[];
+  presentBadWords: string[];
+}
+
+export function checkTextEditDetailed(current: string, mustInclude: string[], mustNotInclude: string[]): TextEditFeedback {
+  const norm = normalize(current);
+  const missingRules = mustInclude.filter((s) => !norm.includes(normalize(s)));
+  const presentBadWords = mustNotInclude.filter((s) => norm.includes(normalize(s)));
+  return { pass: missingRules.length === 0 && presentBadWords.length === 0, missingRules, presentBadWords };
 }

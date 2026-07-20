@@ -5,23 +5,24 @@
   "order": 721,
   "title": "Sharing Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Sharing sends a copy of a photo to someone else.\n\u2022 Send it by email, text, or social media.\n\u2022 You keep your photo; they get a copy.\n\u2022 For best quality, share a cloud link or send from the photo app directly.",
+  "drDigitalIntro": "Sharing sends a copy of a photo to someone else.\n• Click Share, then choose how — Mail or Messages.\n• Pick a contact to send it to.\n• You keep your photo; they get a copy.",
   "playgroundTask": {
     "type": "guided-photos",
-    "goal": "You shared a photo",
+    "goal": "You shared a photo with a friend",
     "steps": [
       {
-        "say": "Click on the Garden Flowers photo to open it.",
+        "say": "Click on the Beach Vacation photo to open it.",
         "action": "select-photo",
-        "target": "Garden Flowers"
+        "target": "Beach Vacation"
       },
       {
-        "say": "Click the Share button to send this photo to someone.",
+        "say": "Click the Share button.",
         "action": "share",
-        "target": "Garden Flowers"
+        "via": "messages",
+        "to": "grandma"
       }
     ]
   },
-  "drDigitalSuccess": "You shared a photo! Sharing sends a copy \u2014 your original photo stays safe in your library.",
-  "drDigitalHint": "Open a photo, then click the Share button (it looks like an arrow pointing up)."
+  "drDigitalSuccess": "You shared a photo! Sharing sends a copy — your original photo stays safe in your library.",
+  "drDigitalHint": "Open a photo, then click Share. Choose Messages, then pick Grandma."
 }

@@ -1,50 +1,67 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
+import {
+  ImageIcon, HeartIcon, HeartFilledIcon, TrashIcon, FolderIcon,
+  ShareIcon, MailIcon, ChatIcon, RotateIcon, CropIcon, SquareIcon,
+  RectangleIcon, UndoIcon,
+} from "./Icons";
 
 export type GuidedPhotosStep = {
   say: string;
   action:
     | "select-photo" | "favorite" | "unfavorite" | "delete" | "recover"
     | "create-album" | "add-to-album" | "go-to-album" | "crop" | "rotate"
-    | "adjust-brightness" | "apply-filter" | "revert" | "share" | "search";
+    | "adjust-brightness" | "adjust-contrast" | "apply-filter" | "revert"
+    | "share" | "search";
   target?: string;
   value?: string;
+  via?: "mail" | "messages";
+  to?: string;
 };
 
 interface GuidedPhotosTaskProps {
   goal: string;
   steps: GuidedPhotosStep[];
-  onResult: (success: boolean) => void;
+  onResult: (success: boolean, failMessage?: string) => void;
 }
 
 interface Photo {
   id: string;
   label: string;
-  emoji: string;
-  color: string;
+  src: string;
   favorite: boolean;
   albums: string[];
   deleted: boolean;
 }
 
 const INITIAL_PHOTOS: Photo[] = [
-  { id: "beach-sunset", label: "Beach Sunset", emoji: "🌅", color: "#FED7AA", favorite: false, albums: [], deleted: false },
-  { id: "family-dinner", label: "Family Dinner", emoji: "👨‍👩‍👧", color: "#FCA5A5", favorite: false, albums: [], deleted: false },
-  { id: "dog-park", label: "Dog in Park", emoji: "🐕", color: "#86EFAC", favorite: false, albums: [], deleted: false },
-  { id: "birthday", label: "Birthday Cake", emoji: "🎂", color: "#F9A8D4", favorite: false, albums: [], deleted: false },
-  { id: "mountain", label: "Mountain Hike", emoji: "🏔️", color: "#93C5FD", favorite: false, albums: [], deleted: false },
-  { id: "flowers", label: "Garden Flowers", emoji: "🌺", color: "#D8B4FE", favorite: false, albums: [], deleted: false },
-  { id: "cat", label: "Cat Sleeping", emoji: "🐱", color: "#D1D5DB", favorite: false, albums: [], deleted: false },
-  { id: "holiday", label: "Holiday Tree", emoji: "🎄", color: "#6EE7B7", favorite: false, albums: [], deleted: false },
-  { id: "selfie", label: "Selfie", emoji: "📸", color: "#FDE68A", favorite: false, albums: [], deleted: false },
-  { id: "pizza", label: "Pizza Night", emoji: "🍕", color: "#FCA5A5", favorite: false, albums: [], deleted: false },
-  { id: "roadtrip", label: "Road Trip", emoji: "🚗", color: "#99F6E4", favorite: false, albums: [], deleted: false },
-  { id: "beach-day", label: "Beach Day", emoji: "⛱️", color: "#BAE6FD", favorite: false, albums: [], deleted: false },
+  { id: "vacation", label: "Beach Vacation", src: "/playgrounds/VacationPhoto.png", favorite: false, albums: [], deleted: false },
+  { id: "dog", label: "Dog at the Park", src: "/playgrounds/Dog.png", favorite: false, albums: [], deleted: false },
+  { id: "bird", label: "Bird in Garden", src: "/playgrounds/Bird.png", favorite: false, albums: [], deleted: false },
+  { id: "cow", label: "Cow on the Farm", src: "/playgrounds/Cow.png", favorite: false, albums: [], deleted: false },
+  { id: "snake", label: "Snake in the Sun", src: "/playgrounds/Snake.png", favorite: false, albums: [], deleted: false },
+  { id: "orange-cat", label: "Orange Cat", src: "/playgrounds/Cat1.png", favorite: false, albums: [], deleted: false },
+  { id: "grumpy-cat", label: "Grumpy Cat", src: "/playgrounds/Cat2.png", favorite: false, albums: [], deleted: false },
+  { id: "dog-walk", label: "Dog Walk", src: "/playgrounds/animal-dog.png", favorite: false, albums: [], deleted: false },
+  { id: "bird-flight", label: "Bird in Flight", src: "/playgrounds/animal-bird.png", favorite: false, albums: [], deleted: false },
+  { id: "cow-field", label: "Cow in Field", src: "/playgrounds/animal-cow.png", favorite: false, albums: [], deleted: false },
+  { id: "snake-coil", label: "Coiled Snake", src: "/playgrounds/animal-snake.png", favorite: false, albums: [], deleted: false },
+  { id: "budget", label: "Budget Screenshot", src: "/playgrounds/Budget.png", favorite: false, albums: [], deleted: false },
 ];
 
 const FILTERS = ["Vivid", "Dramatic", "B&W", "Warm", "Cool"];
+const CROP_PRESETS = ["Original", "Square", "Wide"] as const;
+type CropPreset = (typeof CROP_PRESETS)[number];
+
+const CONTACTS = [
+  { id: "alex", name: "Alex", avatar: "/playgrounds/Dog.png" },
+  { id: "jordan", name: "Jordan", avatar: "/playgrounds/Cat1.png" },
+  { id: "sam", name: "Sam", avatar: "/playgrounds/Bird.png" },
+  { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png" },
+];
 
 export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotosTaskProps) {
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
@@ -53,10 +70,13 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<string | null>(null);
-  const [rotated, setRotated] = useState(false);
-  const [cropped, setCropped] = useState(false);
-  const [brightness, setBrightness] = useState(50);
-  const [shareShown, setShareShown] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [cropPreset, setCropPreset] = useState<CropPreset>("Original");
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(100);
+  const [sharePhase, setSharePhase] = useState<null | "channel" | "contact">(null);
+  const [shareVia, setShareVia] = useState<"mail" | "messages" | null>(null);
+  const [shareToast, setShareToast] = useState<string | null>(null);
   const [albumPickerShown, setAlbumPickerShown] = useState(false);
   const [newAlbumInput, setNewAlbumInput] = useState("");
   const [creatingAlbum, setCreatingAlbum] = useState(false);
@@ -88,12 +108,16 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
       case "create-album": return creatingAlbum ? kind === "new-album-confirm" : kind === "new-album-btn";
       case "add-to-album": return albumPickerShown ? (kind === "album-choice" && name === step.value) : kind === "add-album-btn";
       case "go-to-album": return kind === "sidebar-item" && name === step.target;
-      case "crop": return kind === "crop-btn";
+      case "crop": return kind === "crop-preset" && name !== "Original";
       case "rotate": return kind === "rotate-btn";
       case "adjust-brightness": return kind === "brightness-slider";
+      case "adjust-contrast": return kind === "contrast-slider";
       case "apply-filter": return kind === "filter-btn" && name === step.value;
       case "revert": return kind === "revert-btn";
-      case "share": return kind === "share-btn";
+      case "share":
+        if (sharePhase === "contact") return kind === "share-contact" && name === step.to;
+        if (sharePhase === "channel") return kind === "share-channel" && name === step.via;
+        return kind === "share-btn";
       case "search": return kind === "search-input";
       default: return false;
     }
@@ -101,22 +125,28 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
 
   const pulse = "ring-4 ring-yellow-400 animate-pulse";
 
+  function resetEdits() {
+    setFilter(null);
+    setRotation(0);
+    setCropPreset("Original");
+    setBrightness(100);
+    setContrast(100);
+  }
+
   function getVisiblePhotos(): Photo[] {
     const active = photos.filter((p) => !p.deleted);
     if (section === "All Photos") return searchQuery ? active.filter((p) => p.label.toLowerCase().includes(searchQuery.toLowerCase())) : active;
     if (section === "Favorites") return active.filter((p) => p.favorite);
-    if (section === "People") return active.filter((p) => p.emoji === "👨‍👩‍👧" || p.emoji === "📸");
     if (section === "Recently Deleted") return photos.filter((p) => p.deleted);
     return active.filter((p) => p.albums.includes(section));
   }
 
   function handleSelectPhoto(photo: Photo) {
     setSelectedPhoto(photo);
-    setFilter(null);
-    setRotated(false);
-    setCropped(false);
-    setBrightness(50);
-    setShareShown(false);
+    resetEdits();
+    setSharePhase(null);
+    setShareVia(null);
+    setShareToast(null);
     setAlbumPickerShown(false);
     if (step?.action === "select-photo" && step.target === photo.label) completeStep();
   }
@@ -150,9 +180,6 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
 
   function handleCreateAlbum() {
     setCreatingAlbum(true);
-    if (step?.action === "create-album" && !creatingAlbum) {
-      // just opening the input; don't complete yet
-    }
   }
 
   function handleConfirmAlbum() {
@@ -174,19 +201,32 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     if (step?.action === "add-to-album" && step.value === albumName) completeStep();
   }
 
-  function handleCrop() {
-    setCropped(true);
-    if (step?.action === "crop") completeStep();
+  function handleCropPreset(preset: CropPreset) {
+    setCropPreset(preset);
+    if (step?.action === "crop" && preset !== "Original") completeStep();
   }
 
   function handleRotate() {
-    setRotated((r) => !r);
+    setRotation((r) => (r + 90) % 360);
     if (step?.action === "rotate") completeStep();
   }
 
   function handleBrightnessChange(val: number) {
     setBrightness(val);
-    if (step?.action === "adjust-brightness") completeStep();
+    if (step?.action === "adjust-brightness") {
+      const min = step.value ? Number(step.value.split("-")[0]) : 0;
+      const max = step.value ? Number(step.value.split("-")[1]) : 200;
+      if (val >= min && val <= max) completeStep();
+    }
+  }
+
+  function handleContrastChange(val: number) {
+    setContrast(val);
+    if (step?.action === "adjust-contrast") {
+      const min = step.value ? Number(step.value.split("-")[0]) : 0;
+      const max = step.value ? Number(step.value.split("-")[1]) : 200;
+      if (val >= min && val <= max) completeStep();
+    }
   }
 
   function handleApplyFilter(name: string) {
@@ -195,24 +235,53 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
   }
 
   function handleRevert() {
-    setFilter(null);
-    setRotated(false);
-    setCropped(false);
-    setBrightness(50);
+    resetEdits();
     if (step?.action === "revert") completeStep();
   }
 
-  function handleShare() {
-    setShareShown(true);
-    if (step?.action === "share") completeStep();
+  function handleShareClick() {
+    setSharePhase("channel");
+    if (step?.action === "share" && !step.via) completeStep();
   }
 
-  const SIDEBAR_SECTIONS = ["All Photos", "Favorites", "People", "Recently Deleted", ...albums];
+  function handleShareChannel(via: "mail" | "messages") {
+    setShareVia(via);
+    setSharePhase("contact");
+    if (step?.action === "share" && step.via === via && !step.to) completeStep();
+  }
+
+  function handleShareContact(contactId: string) {
+    const contact = CONTACTS.find((c) => c.id === contactId);
+    const label = via === "messages" ? "Messages" : "Mail";
+    setSharePhase(null);
+    setShareToast(`Sent to ${contact?.name ?? contactId} via ${label}`);
+    setTimeout(() => setShareToast(null), 3000);
+    if (step?.action === "share" && step.to === contactId) completeStep();
+  }
+
+  const via = shareVia;
+
+  const SIDEBAR_SECTIONS = ["All Photos", "Favorites", "Recently Deleted", ...albums];
+
+  const photoStyle = {
+    transform: rotation ? `rotate(${rotation}deg)` : "none",
+    filter: [
+      `brightness(${brightness / 100})`,
+      `contrast(${contrast / 100})`,
+      filter === "B&W" ? "grayscale(1)" : "",
+      filter === "Vivid" ? "saturate(2)" : "",
+      filter === "Dramatic" ? "contrast(1.5)" : "",
+      filter === "Warm" ? "sepia(0.4)" : "",
+      filter === "Cool" ? "hue-rotate(180deg) saturate(0.7)" : "",
+    ].filter(Boolean).join(" "),
+  };
+
+  const cropAspect = cropPreset === "Square" ? "aspect-square" : cropPreset === "Wide" ? "aspect-video" : "aspect-[4/3]";
 
   return (
     <SimulatorFrame
       appName="Photos"
-      appIcon="🖼️"
+      appIcon={<ImageIcon size={20} />}
       instruction={step?.say}
       stepIndex={stepIndex}
       totalSteps={steps.length}
@@ -220,10 +289,9 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
       goal={goal}
       flash={flash}
     >
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
         <div className="w-36 bg-gray-50 border-r flex flex-col flex-shrink-0 overflow-y-auto">
-          {/* Search */}
           <div className="p-2 border-b">
             <input
               value={searchQuery}
@@ -237,7 +305,6 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               className={`w-full px-2 py-1.5 text-xs border rounded outline-none focus:border-blue-400 ${hl("search-input") ? pulse : ""}`}
             />
           </div>
-          {/* Sections */}
           {SIDEBAR_SECTIONS.map((s) => (
             <button
               key={s}
@@ -246,10 +313,9 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
                 section === s ? "bg-blue-100 font-medium text-blue-700" : "text-gray-700"
               } ${hl("sidebar-item", s) ? pulse : ""}`}
             >
-              {s === "All Photos" ? "🖼️" : s === "Favorites" ? "❤️" : s === "People" ? "👤" : s === "Recently Deleted" ? "🗑️" : "📁"} {s}
+              <span className="inline-flex items-center gap-1.5">{s === "All Photos" ? <ImageIcon size={14} /> : s === "Favorites" ? <HeartFilledIcon size={14} className="text-red-500" /> : s === "Recently Deleted" ? <TrashIcon size={14} /> : <FolderIcon size={14} />} {s}</span>
             </button>
           ))}
-          {/* New album */}
           {creatingAlbum ? (
             <div className="p-2 border-b">
               <input
@@ -280,54 +346,71 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
         {/* Main */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {selectedPhoto ? (
-            /* Photo viewer */
             <div className="flex-1 overflow-y-auto">
+              {/* Toolbar */}
               <div className="p-3 border-b flex items-center gap-2 flex-wrap">
-                <button onClick={() => setSelectedPhoto(null)} className="text-gray-400 hover:text-gray-600 mr-1">← Back</button>
-                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 hover:bg-gray-50"} ${hl("fav-btn") ? pulse : ""}`}>
-                  {selectedPhoto.favorite ? "❤️" : "🤍"} Fav
+                <button onClick={() => { setSelectedPhoto(null); resetEdits(); }} className="text-gray-400 hover:text-gray-600 mr-1">← Back</button>
+                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 hover:bg-gray-50"} ${hl("fav-btn") ? pulse : ""}`}>
+                  {selectedPhoto.favorite ? <HeartFilledIcon size={12} /> : <HeartIcon size={12} />} Fav
                 </button>
-                <button onClick={handleShare} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 ${hl("share-btn") ? pulse : ""}`}>📤 Share</button>
-                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 ${hl("add-album-btn") ? pulse : ""}`}>📁 Album</button>
+                <button onClick={handleShareClick} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 inline-flex items-center gap-1 ${hl("share-btn") ? pulse : ""}`}><ShareIcon size={12} /> Share</button>
+                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 inline-flex items-center gap-1 ${hl("add-album-btn") ? pulse : ""}`}><FolderIcon size={12} /> Album</button>
                 {section !== "Recently Deleted" && (
-                  <button onClick={handleDelete} className={`px-2 py-1 text-xs rounded border border-red-200 text-red-600 hover:bg-red-50 ${hl("delete-btn") ? pulse : ""}`}>🗑 Delete</button>
+                  <button onClick={handleDelete} className={`px-2 py-1 text-xs rounded border border-red-200 text-red-600 hover:bg-red-50 inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 )}
               </div>
 
-              {/* Album picker */}
               {albumPickerShown && (
-                <div className="absolute top-20 left-40 z-30 bg-white border rounded-lg shadow-xl p-3 min-w-[150px]">
+                <div className="mx-4 mt-2 p-3 bg-white border rounded-lg shadow-lg z-30 relative">
                   <p className="text-xs font-medium text-gray-500 mb-2">Add to album:</p>
                   {albums.map((a) => (
-                    <button key={a} onClick={() => handlePickAlbum(a)} className={`block w-full text-left px-2 py-1.5 text-sm hover:bg-blue-50 rounded ${hl("album-choice", a) ? pulse : ""}`}>📁 {a}</button>
+                    <button key={a} onClick={() => handlePickAlbum(a)} className={`block w-full text-left px-2 py-1.5 text-sm hover:bg-blue-50 rounded ${hl("album-choice", a) ? pulse : ""}`}><span className="inline-flex items-center gap-1"><FolderIcon size={12} /> {a}</span></button>
                   ))}
                 </div>
               )}
 
               {/* Share sheet */}
-              {shareShown && (
+              {sharePhase === "channel" && (
                 <div className="mx-4 mt-2 p-3 bg-gray-50 border rounded-lg">
                   <p className="text-xs font-medium text-gray-500 mb-2">Share via:</p>
                   <div className="flex gap-3">
-                    {["💬 Message", "📧 Email", "📋 Copy"].map((opt) => (
-                      <button key={opt} onClick={() => setShareShown(false)} className="text-xs bg-white border rounded px-2 py-1.5 hover:bg-gray-50">{opt}</button>
+                    <button onClick={() => handleShareChannel("mail")} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-channel", "mail") ? pulse : ""}`}>
+                      <MailIcon size={16} /> Mail
+                    </button>
+                    <button onClick={() => handleShareChannel("messages")} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-channel", "messages") ? pulse : ""}`}>
+                      <ChatIcon size={16} /> Messages
+                    </button>
+                  </div>
+                </div>
+              )}
+              {sharePhase === "contact" && (
+                <div className="mx-4 mt-2 p-3 bg-gray-50 border rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 mb-2">Send to:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {CONTACTS.map((c) => (
+                      <button key={c.id} onClick={() => handleShareContact(c.id)} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-contact", c.id) ? pulse : ""}`}>
+                        <div className="w-5 h-5 rounded-full overflow-hidden relative flex-shrink-0">
+                          <Image src={c.avatar} alt={c.name} fill sizes="20px" className="object-cover" />
+                        </div>
+                        {c.name}
+                      </button>
                     ))}
                   </div>
+                </div>
+              )}
+              {shareToast && (
+                <div className="mx-4 mt-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700 font-medium">
+                  {shareToast}
                 </div>
               )}
 
               {/* Photo display */}
               <div className="flex items-center justify-center py-4 px-4">
                 <div
-                  className="w-48 h-48 rounded-xl flex items-center justify-center text-6xl transition-all"
-                  style={{
-                    backgroundColor: selectedPhoto.color,
-                    transform: rotated ? "rotate(90deg)" : "none",
-                    filter: filter === "B&W" ? "grayscale(1)" : filter === "Vivid" ? "saturate(2)" : filter === "Dramatic" ? "contrast(1.5)" : filter === "Warm" ? "sepia(0.4)" : filter === "Cool" ? "hue-rotate(180deg) saturate(0.7)" : `brightness(${0.5 + brightness / 100})`,
-                    clipPath: cropped ? "inset(10%)" : "none",
-                  }}
+                  className={`${cropAspect} w-48 rounded-xl overflow-hidden relative`}
+                  style={photoStyle}
                 >
-                  {selectedPhoto.emoji}
+                  <Image src={selectedPhoto.src} alt={selectedPhoto.label} fill sizes="200px" className="object-cover" />
                 </div>
               </div>
               <p className="text-center text-sm font-medium text-gray-700 mb-2">{selectedPhoto.label}</p>
@@ -335,16 +418,32 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               {/* Edit controls */}
               <div className="px-4 pb-4 flex flex-col gap-3">
                 <div className="flex gap-2 flex-wrap">
-                  <button onClick={handleCrop} className={`px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-all ${hl("crop-btn") ? pulse : ""}`}>✂️ Crop</button>
-                  <button onClick={handleRotate} className={`px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-all ${hl("rotate-btn") ? pulse : ""}`}>🔄 Rotate</button>
-                  <button onClick={handleRevert} className={`px-3 py-1.5 text-xs bg-orange-50 text-orange-700 hover:bg-orange-100 rounded transition-all ${hl("revert-btn") ? pulse : ""}`}>↺ Revert to Original</button>
+                  {CROP_PRESETS.map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => handleCropPreset(p)}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 hover:bg-gray-50"} ${hl("crop-preset", p) ? pulse : ""}`}
+                    >
+                      <span className="inline-flex items-center gap-1">{p === "Original" ? <CropIcon size={12} /> : p === "Square" ? <SquareIcon size={12} /> : <RectangleIcon size={12} />} {p}</span>
+                    </button>
+                  ))}
+                  <button onClick={handleRotate} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 transition-all inline-flex items-center gap-1 ${hl("rotate-btn") ? pulse : ""}`}><RotateIcon size={12} /> Rotate</button>
+                  <button onClick={handleRevert} className={`px-2 py-1 text-xs bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("revert-btn") ? pulse : ""}`}><UndoIcon size={12} /> Revert</button>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Brightness</label>
+                  <label className="text-xs text-gray-500 block mb-1">Brightness ({brightness}%)</label>
                   <input
-                    type="range" min={0} max={100} value={brightness}
+                    type="range" min={20} max={200} value={brightness}
                     onChange={(e) => handleBrightnessChange(Number(e.target.value))}
                     className={`w-full ${hl("brightness-slider") ? pulse : ""}`}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">Contrast ({contrast}%)</label>
+                  <input
+                    type="range" min={20} max={200} value={contrast}
+                    onChange={(e) => handleContrastChange(Number(e.target.value))}
+                    className={`w-full ${hl("contrast-slider") ? pulse : ""}`}
                   />
                 </div>
                 <div className="flex gap-2 flex-wrap">
@@ -361,14 +460,13 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               </div>
             </div>
           ) : section === "Recently Deleted" ? (
-            /* Recently Deleted */
             <div className="flex-1 overflow-y-auto">
               <div className="px-3 py-2 bg-gray-50 border-b text-xs text-gray-500">Photos are deleted permanently after 30 days.</div>
               <div className="p-3 grid grid-cols-3 gap-2">
                 {photos.filter((p) => p.deleted).map((photo) => (
                   <div key={photo.id} className="flex flex-col items-center gap-1">
-                    <div className="w-full aspect-square rounded-lg flex items-center justify-center text-3xl opacity-60" style={{ backgroundColor: photo.color }}>
-                      {photo.emoji}
+                    <div className="w-full aspect-square rounded-lg overflow-hidden relative opacity-60">
+                      <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
                     </div>
                     <p className="text-xs text-gray-500 text-center truncate w-full">{photo.label}</p>
                     <button
@@ -385,18 +483,16 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               </div>
             </div>
           ) : (
-            /* Photo grid */
             <div className="flex-1 overflow-y-auto p-3">
               <div className="grid grid-cols-3 gap-2">
                 {getVisiblePhotos().map((photo) => (
                   <button
                     key={photo.id}
                     onClick={() => handleSelectPhoto(photo)}
-                    className={`relative aspect-square rounded-lg flex items-center justify-center text-3xl hover:opacity-90 transition-all ${hl("photo", photo.label) ? pulse : ""}`}
-                    style={{ backgroundColor: photo.color }}
+                    className={`relative aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-all ${hl("photo", photo.label) ? pulse : ""}`}
                   >
-                    {photo.emoji}
-                    {photo.favorite && <span className="absolute top-1 right-1 text-xs">❤️</span>}
+                    <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
+                    {photo.favorite && <span className="absolute top-1 right-1 text-red-500 drop-shadow"><HeartFilledIcon size={14} /></span>}
                   </button>
                 ))}
                 {getVisiblePhotos().length === 0 && (

@@ -5,10 +5,81 @@
   "order": 780,
   "title": "Organize Vacation Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Your vacation photos are scattered across your library.\n\u2022 Make an album for the trip and mark your favorites.\n\u2022 Edit a photo \u2014 crop it and adjust the brightness.\n\u2022 Organize by people and places, and share the album with family.",
+  "drDigitalIntro": "Time to use everything you've learned about Photos!\n• Favorite photos, create albums, edit, share, and clean up.\n• You've done all of this before — now do it in one go.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-photos",
+    "goal": "You organized, edited, shared, and cleaned up your photo library",
+    "steps": [
+      {
+        "say": "Click the Beach Vacation photo to open it.",
+        "action": "select-photo",
+        "target": "Beach Vacation"
+      },
+      {
+        "say": "Favorite this vacation photo.",
+        "action": "favorite"
+      },
+      {
+        "say": "Now find the Orange Cat photo and open it.",
+        "action": "select-photo",
+        "target": "Orange Cat"
+      },
+      {
+        "say": "Favorite this one too.",
+        "action": "favorite"
+      },
+      {
+        "say": "Create a new album called Favorites Trip.",
+        "action": "create-album",
+        "value": "Favorites Trip"
+      },
+      {
+        "say": "Add the Beach Vacation to your new album.",
+        "action": "add-to-album",
+        "target": "Beach Vacation",
+        "value": "Favorites Trip"
+      },
+      {
+        "say": "Open the Bird in Garden photo — it's too dark.",
+        "action": "select-photo",
+        "target": "Bird in Garden"
+      },
+      {
+        "say": "Crop it to a square.",
+        "action": "crop"
+      },
+      {
+        "say": "The photo is too dark. Drag the Brightness slider up.",
+        "action": "adjust-brightness",
+        "value": "90-110"
+      },
+      {
+        "say": "Share a photo with Grandma. Open the Beach Vacation photo.",
+        "action": "select-photo",
+        "target": "Beach Vacation"
+      },
+      {
+        "say": "Share it with Grandma via Messages.",
+        "action": "share",
+        "via": "messages",
+        "to": "grandma"
+      },
+      {
+        "say": "Delete the Budget Screenshot — it doesn't belong in your photos.",
+        "action": "select-photo",
+        "target": "Budget Screenshot"
+      },
+      {
+        "say": "Delete it.",
+        "action": "delete"
+      },
+      {
+        "say": "Oops — you need that! Go to Recently Deleted and recover it.",
+        "action": "recover",
+        "target": "Budget Screenshot"
+      }
+    ]
   },
-  "drDigitalSuccess": "You're now a Photos pro!",
-  "drDigitalHint": "Start by creating an album and dragging vacation photos into it."
+  "drDigitalSuccess": "You did it all — favorited, organized into albums, edited, shared, deleted, and recovered. You're a Photos pro!",
+  "drDigitalHint": "Follow each step — favorite photos, create an album, edit with the brightness slider, share via Messages, and use Recently Deleted to recover."
 }

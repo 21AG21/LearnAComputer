@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 
 interface MatchPartsTaskProps {
-  instructions: string;
+  instructions?: string;
   onResult: (success: boolean) => void;
 }
 
@@ -51,11 +51,15 @@ export default function MatchPartsTask({ instructions, onResult }: MatchPartsTas
   }
 
   return (
-    <div className="h-full flex flex-col items-center bg-white px-6 py-6" aria-label={instructions}>
-      <h2 className="text-3xl font-bold mb-1 text-center">Match each part to its name</h2>
-      <p className="text-lg text-gray-600 mb-6 text-center">
-        Click a dot on the laptop, then click the name it belongs to.
-      </p>
+    <div className="h-full flex flex-col items-center bg-white px-6 py-6" aria-label={instructions ?? "Match each part to its name"}>
+      {instructions && (
+        <>
+          <h2 className="text-3xl font-bold mb-1 text-center">Match each part to its name</h2>
+          <p className="text-lg text-gray-600 mb-6 text-center">
+            Click a dot on the laptop, then click the name it belongs to.
+          </p>
+        </>
+      )}
 
       <div className="flex-1 w-full flex items-center justify-center gap-8">
         {/* Laptop with a dot centered on each part */}

@@ -5,7 +5,7 @@
   "order": 650,
   "title": "Sending Attachments",
   "videoUrl": "",
-  "drDigitalIntro": "An attachment is a file you add to an email.\n• It can be a photo, document, or PDF.\n• Click the paperclip icon (📎) to add one.\n• Never open attachments from strangers — they can contain viruses.",
+  "drDigitalIntro": "An attachment is a file you add to an email.\n• It can be a photo, document, or spreadsheet.\n• Click the Attach button to open a file picker, then choose the file you want.\n• Never open attachments from strangers — they can contain viruses.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You attached a file and sent it",
@@ -25,13 +25,14 @@
         "value": "Vacation Photos"
       },
       {
-        "say": "Click the 📎 Attach button to add a file.",
-        "action": "attach"
+        "say": "Click the Attach button to open the file picker.",
+        "action": "attach",
+        "target": "VacationPhoto.png"
       },
       {
-        "say": "Type a short message in the body.",
+        "say": "Type a message in the body: 'Hi! Here is the photo from our beach trip. Enjoy!'",
         "action": "set-body",
-        "value": "Here"
+        "value": "beach trip"
       },
       {
         "say": "Click Send to deliver the email with the attachment.",
@@ -39,6 +40,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You attached a file and sent it! Look for the 📎 button whenever you need to add a photo or document.",
-  "drDigitalHint": "Click Compose, fill in To and Subject, then click the 📎 Attach button before sending."
+  "drDigitalSuccess": "You attached a file and sent it! Click the Attach button whenever you need to add a photo or document.",
+  "drDigitalHint": "Click Compose, fill in To and Subject, then click the Attach button and pick VacationPhoto.png from the list."
 }

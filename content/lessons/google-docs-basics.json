@@ -1,0 +1,14 @@
+{
+  "slug": "google-docs-basics",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents in the Cloud",
+  "order": 1242,
+  "title": "Writing a Document Online",
+  "videoUrl": "",
+  "drDigitalIntro": "Google Docs is a free word processor that runs in your web browser — no software to install.\n\nTry it now on your own computer:\n\n1. Open your web browser.\n2. Go to docs.google.com (you'll need to sign in with a Google account — if you don't have one, you can create one for free).\n3. Click the + Blank button to create a new document.\n4. Type a short paragraph about anything you like — your favorite meal, a memory, what you did today.\n5. Watch the top of the page: it says \"Saving...\" then \"All changes saved.\" Your work is saved automatically — no need to click Save!\n\nThat's it — you just created a document that lives in the cloud and can be opened from any device.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "You created an online document that saves itself! Google Docs works just like a regular word processor, but your file lives on the internet so you can open it from any computer.",
+  "drDigitalHint": "Open your browser, go to docs.google.com, click Blank, and start typing."
+}

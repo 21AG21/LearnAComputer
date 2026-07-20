@@ -20,9 +20,14 @@
         "action": "search",
         "query": "apple pie recipe",
         "reveal": "Recipe Box"
+      },
+      {
+        "say": "Click the Recipe Box result to actually open the page — searching is just the first step.",
+        "action": "open-result",
+        "title": "Recipe Box"
       }
     ]
   },
-  "drDigitalSuccess": "You used Google (a search engine) inside the browser (a browser). The browser shows websites; the search engine helps you find them.",
-  "drDigitalHint": "First go to google.com in the address bar. Then type your search into the search box on the Google page."
+  "drDigitalSuccess": "You used Google (a search engine) inside the browser to find a recipe, then clicked to visit the actual page. That's how searching works!",
+  "drDigitalHint": "Click the blue 'Recipe Box' link in the search results to open that page."
 }

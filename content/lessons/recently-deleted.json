@@ -5,20 +5,20 @@
   "order": 712,
   "title": "Deleted Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n\u2022 It goes to a Recently Deleted folder for 30 days.\n\u2022 You can recover it there if you change your mind.\n\u2022 After 30 days it's deleted for good. Let's delete and recover one.",
+  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n• It goes to a Recently Deleted folder for 30 days.\n• You can recover it there if you change your mind.\n• After 30 days it's deleted for good. Let's delete and recover one.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You deleted and recovered a photo",
     "steps": [
       {
-        "say": "Click the Cat Sleeping photo to open it.",
+        "say": "Click the Orange Cat photo to open it.",
         "action": "select-photo",
-        "target": "Cat Sleeping"
+        "target": "Orange Cat"
       },
       {
         "say": "Click Delete to move it to Recently Deleted.",
         "action": "delete",
-        "target": "Cat Sleeping"
+        "target": "Orange Cat"
       },
       {
         "say": "Click 'Recently Deleted' in the sidebar to see deleted photos.",
@@ -26,14 +26,9 @@
         "target": "Recently Deleted"
       },
       {
-        "say": "Click the Cat Sleeping photo to open it in Recently Deleted.",
-        "action": "select-photo",
-        "target": "Cat Sleeping"
-      },
-      {
-        "say": "Click Recover to put it back in your library.",
+        "say": "Click the Recover button under the Orange Cat photo to put it back.",
         "action": "recover",
-        "target": "Cat Sleeping"
+        "target": "Orange Cat"
       }
     ]
   },

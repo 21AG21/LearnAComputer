@@ -5,26 +5,27 @@
   "order": 1160,
   "title": "Slow Computer and Full Storage",
   "videoUrl": "",
-  "drDigitalIntro": "A slow computer often has too many apps open or full storage.\n• Performance suffers when storage is over 90% full.\n• Delete files you don't need and empty the trash.\n• Close apps you're not using to free up memory.",
+  "drDigitalIntro": "A slow computer often has too many apps open or full storage.\n• Performance suffers when storage is over 90% full.\n• Delete files you don't need and empty the trash.\n• Close apps you're not using to free up memory.\n• Let's fix a slow computer by cleaning up storage.",
   "playgroundTask": {
-    "type": "guided-troubleshooting",
-    "goal": "You freed up storage to improve performance",
-    "scenario": "The computer is running slow due to full storage",
+    "type": "guided-settings",
+    "goal": "You freed up storage and your computer feels faster",
     "steps": [
       {
-        "say": "Read the error about storage being full.",
-        "action": "read-error"
+        "say": "Click Storage in the sidebar to check how full your drive is.",
+        "action": "open-section",
+        "target": "storage"
       },
       {
-        "say": "Check how much storage you have left.",
-        "action": "check-storage"
+        "say": "The storage bar is almost full! Delete 'Old Videos' to free up 4 GB.",
+        "action": "delete-item",
+        "target": "Old Videos"
       },
       {
-        "say": "The drive is nearly full! Clear old files and cache to free up space.",
-        "action": "clear-storage"
+        "say": "Now empty the Trash to actually reclaim the space.",
+        "action": "empty-trash"
       }
     ]
   },
-  "drDigitalSuccess": "You freed up storage! A fuller drive = a slower computer. Keep at least 10% of your storage free.",
-  "drDigitalHint": "Check Storage first to see how full it is, then click Clear Storage to clean up."
+  "drDigitalSuccess": "You freed up storage! The bar dropped and your computer feels faster. Keep at least 10% of your storage free.",
+  "drDigitalHint": "Click Storage in the sidebar, delete Old Videos, then empty the Trash."
 }

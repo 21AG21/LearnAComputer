@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SearchIcon, GlobeIcon, CheckCircleIcon, XCircleIcon } from "./Icons";
 
 interface UrlNavigatorTaskProps {
   instructions: string;
@@ -65,7 +66,7 @@ export default function UrlNavigatorTask({
         {/* Address bar */}
         <div className="flex-1 flex items-center gap-2">
           <div className="flex-1 flex items-center bg-white border-4 border-black rounded-lg overflow-hidden">
-            <span className="px-2 text-gray-400 text-lg select-none">🔍</span>
+            <span className="px-2 text-gray-400 select-none"><SearchIcon size={18} /></span>
             <input
               type="text"
               value={typed}
@@ -92,7 +93,7 @@ export default function UrlNavigatorTask({
       <div className="flex-1 flex items-center justify-center bg-white p-8">
         {!loaded && !error && (
           <div className="text-center flex flex-col items-center gap-4">
-            <p className="text-6xl">🌐</p>
+            <GlobeIcon size={56} className="text-gray-300" />
             <p className="text-2xl font-bold text-gray-400">
               Type a web address above and press Enter or Go
             </p>
@@ -103,7 +104,7 @@ export default function UrlNavigatorTask({
         )}
         {error && (
           <div className="text-center flex flex-col items-center gap-4">
-            <p className="text-6xl">❌</p>
+            <XCircleIcon size={56} className="text-red-400" />
             <p className="text-2xl font-bold text-red-500">
               That address didn&apos;t work.
             </p>
@@ -114,7 +115,7 @@ export default function UrlNavigatorTask({
         )}
         {loaded && (
           <div className="text-center flex flex-col items-center gap-4">
-            <p className="text-6xl">✅</p>
+            <CheckCircleIcon size={56} className="text-green-500" />
             <p className="text-4xl font-black text-gray-900">{successTitle}</p>
             <p className="text-xl text-gray-500 font-mono">
               {normalizeUrl(targetUrl)}

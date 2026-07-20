@@ -5,32 +5,33 @@
   "order": 1110,
   "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Computers act up sometimes — don't panic.\n• Most problems have simple fixes.\n• The most powerful one is restarting: turn it off and on again.\n• That clears the computer's temporary memory. Let's fix a frozen app!",
+  "drDigitalIntro": "Computers act up sometimes — don't panic.\n• Most problems have simple fixes.\n• If an app freezes (stops responding), you can force-quit it.\n• Then reopen it fresh — that usually fixes the problem.\n• Let's practice fixing a frozen app!",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You fixed a frozen app",
-    "scenario": "The browser is frozen and not responding",
+    "goal": "You fixed a frozen app by force-quitting and reopening it",
+    "scenario": "Notes is frozen and not responding",
+    "launchApp": "notes",
     "steps": [
       {
-        "say": "There's an error on the screen. Click Dismiss to read it first.",
-        "action": "read-error"
+        "say": "Notes is frozen — it shows 'Not Responding.' Try clicking on it to see what happens.",
+        "action": "click-frozen"
       },
       {
-        "say": "The browser app is frozen. Open Task Manager to see what's running.",
-        "action": "open-task-manager"
+        "say": "Nothing happened — the app is stuck. Click the system menu (three dots) in the menu bar to open Force Quit.",
+        "action": "open-force-quit"
       },
       {
-        "say": "The browser shows 'Not Responding' — click Force Quit to stop it.",
+        "say": "Notes shows 'Not Responding.' Click Force Quit to close it.",
         "action": "force-quit",
-        "target": "Browser"
+        "target": "Notes"
       },
       {
-        "say": "Now restart the browser app.",
+        "say": "Notes is closed. Click Notes in the dock to reopen it fresh.",
         "action": "restart-app",
-        "target": "Browser"
+        "target": "Notes"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the frozen app! Task Manager shows what's running so you can force-quit stuck apps.",
-  "drDigitalHint": "Open Task Manager, find the Not Responding app, and click Force Quit."
+  "drDigitalSuccess": "You fixed the frozen app! When an app stops responding: Force Quit it, then reopen it from the dock. Most freezes are temporary.",
+  "drDigitalHint": "Click the frozen window first, then use the system menu to Force Quit, and reopen from the dock."
 }

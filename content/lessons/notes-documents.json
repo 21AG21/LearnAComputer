@@ -5,13 +5,10 @@
   "order": 1240,
   "title": "Notes and Documents",
   "videoUrl": "",
-  "drDigitalIntro": "The Notes app is great for quick ideas and lists.\n• Jot down shopping lists, recipes, and reminders.\n• Notes sync across your devices.\n• For longer writing, use a word processor like Google Docs or Word.",
+  "drDigitalIntro": "The Notes app is perfect for quick ideas, lists, and reminders.\n\nTry it on your own computer:\n\n1. Open the Notes app (look for it in your apps or search for \"Notes\").\n2. Click New Note (or the + button).\n3. Type a shopping list:\n   Milk\n   Eggs\n   Bread\n   Butter\n4. Notice it saves automatically — no need to click Save.\n5. Close the app and open it again — your note is still there!\n\nNotes sync across your devices. If you write a note on your computer, it appears on your phone too (as long as you're signed in to the same account).\n\nFor longer writing like letters, reports, or school work, use a word processor like Google Docs (free in your browser) or Microsoft Word.",
   "playgroundTask": {
-    "type": "type-text",
-    "instructions": "Practice typing a quick note. Type the words below exactly.",
-    "targetText": "Milk, eggs, bread",
-    "exact": false
+    "type": "none"
   },
-  "drDigitalSuccess": "A quick typed note like this — ready in seconds, saved automatically, accessible on all your devices. That's the power of Notes!",
-  "drDigitalHint": "Type those three words exactly as shown and the note will be accepted."
+  "drDigitalSuccess": "Notes are saved automatically and sync across all your devices. Use Notes for quick thoughts, and Google Docs or Word for longer documents.",
+  "drDigitalHint": "Open the Notes app on your computer and try creating a new note."
 }

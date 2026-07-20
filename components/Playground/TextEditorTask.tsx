@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { checkTextEdit } from "./TaskChecker";
+import { checkTextEditDetailed, type TextEditFeedback } from "./TaskChecker";
 
 interface TextEditorTaskProps {
-  instructions: string;
+  instructions?: string;
   startingText: string;
   correctText?: string;
   mustInclude: string[];
@@ -21,24 +21,24 @@ export default function TextEditorTask({
   onResult,
 }: TextEditorTaskProps) {
   const [value, setValue] = useState(startingText);
-  const [wrong, setWrong] = useState(false);
+  const [feedback, setFeedback] = useState<TextEditFeedback | null>(null);
   const [showExample, setShowExample] = useState(false);
 
   function handleSubmit() {
-    const success = checkTextEdit(value, mustInclude, mustNotInclude);
-    setWrong(!success);
-    onResult(success);
+    const result = checkTextEditDetailed(value, mustInclude, mustNotInclude);
+    setFeedback(result.pass ? null : result);
+    onResult(result.pass);
   }
 
   return (
     <div className="h-full flex flex-col items-center bg-white px-8 py-6 gap-4">
-      <p className="text-lg text-gray-700 max-w-2xl text-center">{instructions}</p>
+      {instructions && <p className="text-lg text-gray-700 max-w-2xl text-center">{instructions}</p>}
       <div className="w-full max-w-2xl flex-1 flex gap-4 min-h-0">
         <textarea
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            setWrong(false);
+            setFeedback(null);
           }}
           aria-label="Text to edit"
           className={`border-2 border-black rounded p-4 text-lg leading-relaxed resize-none min-h-[200px] ${
@@ -61,7 +61,16 @@ export default function TextEditorTask({
             {showExample ? "Hide example" : "Show me an example"}
           </button>
         )}
-        {wrong && <p className="text-red-600 font-semibold">Not quite yet — keep editing and try again.</p>}
+        {feedback && (
+          <div className="text-red-600 text-sm font-medium max-w-md space-y-1">
+            {feedback.presentBadWords.length > 0 && (
+              <p>Misspellings to fix: {feedback.presentBadWords.map((w) => `"${w}"`).join(", ")}</p>
+            )}
+            {feedback.missingRules.length > 0 && (
+              <p>{feedback.missingRules.length === 1 ? "1 required line" : `${feedback.missingRules.length} required lines`} still {feedback.missingRules.length === 1 ? "needs" : "need"} work — try Show&nbsp;me&nbsp;an&nbsp;example.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

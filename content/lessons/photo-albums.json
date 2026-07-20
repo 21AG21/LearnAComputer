@@ -5,7 +5,7 @@
   "order": 710,
   "title": "Creating Albums",
   "videoUrl": "",
-  "drDigitalIntro": "Albums are folders for your photos.\n\u2022 Make albums like \"Vacation 2024\", \"Family\", or \"Recipes\".\n\u2022 A photo can be in several albums at once.\n\u2022 Adding to an album doesn't move or copy the photo.",
+  "drDigitalIntro": "Albums are folders for your photos.\n• Make albums like \"Vacation 2024\", \"Family\", or \"Recipes\".\n• A photo can be in several albums at once.\n• Adding to an album doesn't move or copy the photo.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You created an album and added photos to it",
@@ -16,22 +16,22 @@
         "value": "Vacation"
       },
       {
-        "say": "Now click the Dog in Park photo to open it.",
+        "say": "Now click the Dog at the Park photo to open it.",
         "action": "select-photo",
-        "target": "Dog in Park"
+        "target": "Dog at the Park"
       },
       {
-        "say": "Click 'Add to Album' to add it to your Vacation album.",
+        "say": "Click Album to add it to your Vacation album.",
         "action": "add-to-album",
         "value": "Vacation"
       },
       {
-        "say": "Open Beach Sunset and add it to the Vacation album too.",
+        "say": "Click Back, then open Beach Vacation.",
         "action": "select-photo",
-        "target": "Beach Sunset"
+        "target": "Beach Vacation"
       },
       {
-        "say": "Add Beach Sunset to the Vacation album.",
+        "say": "Add Beach Vacation to the Vacation album.",
         "action": "add-to-album",
         "value": "Vacation"
       },
@@ -43,5 +43,5 @@
     ]
   },
   "drDigitalSuccess": "You created an album and added photos to it! Albums are a great way to keep related photos together.",
-  "drDigitalHint": "Click + New Album, name it, then open a photo and click Add to Album."
+  "drDigitalHint": "Click + New Album, name it, then open a photo and click Album to add it."
 }

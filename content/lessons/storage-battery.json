@@ -5,14 +5,16 @@
   "order": 950,
   "title": "Storage and Battery",
   "videoUrl": "",
-  "drDigitalIntro": "Check what's using your storage and battery.\n• Storage shows what's taking up space — large files and apps.\n• Battery shows time left and offers Low Power Mode.\n• Low on space? Delete old files or apps you don't use.",
+  "drDigitalIntro": "When your computer is slow, storage might be full.\n• Storage shows what's taking up space — photos, apps, files.\n• Delete large files you don't need to free up space.\n• Empty the Trash to actually reclaim the space.",
   "playgroundTask": {
-    "type": "find-in-settings",
-    "instructions": "Your computer battery is running low. Open Battery settings and turn on Low Power Mode.",
-    "targetPanel": "Battery",
-    "toggleLabel": "Low Power Mode",
-    "targetValue": true
+    "type": "guided-settings",
+    "goal": "You freed up storage space",
+    "steps": [
+      { "say": "Click Storage in the sidebar to see what's using space.", "action": "open-section", "target": "storage" },
+      { "say": "Delete 'Old Videos' — you don't need them anymore.", "action": "delete-item", "target": "Old Videos" },
+      { "say": "Now empty the Trash to actually free the space.", "action": "empty-trash" }
+    ]
   },
-  "drDigitalSuccess": "Low Power Mode reduces background activity to stretch your battery life — useful when you can't plug in.",
-  "drDigitalHint": "Open Battery in Settings and look for the Low Power Mode toggle."
+  "drDigitalSuccess": "You freed up 4 GB! Remember: deleting files moves them to Trash. Empty the Trash to actually reclaim the space.",
+  "drDigitalHint": "Go to Storage, click Delete next to Old Videos, then click Empty Trash."
 }

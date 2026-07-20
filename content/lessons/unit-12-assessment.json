@@ -5,10 +5,10 @@
   "order": 1290,
   "title": "A Day in Your Digital Life",
   "videoUrl": "",
-  "drDigitalIntro": "Simulate a full day on your computer.\n• Check email, look up directions, and read the weather.\n• Add a calendar event, set a reminder, and take a note.\n• Use banking or shopping. This brings together everything you've learned.",
+  "drDigitalIntro": "You've learned everything you need. Now put it all together — on your real computer!\n\nHere's your final checklist. Try to do each one:\n\n1. Send an email to a friend or family member with a photo attached.\n2. Create a Google Doc at docs.google.com — type a short note and share it with someone.\n3. Go to maps.google.com and get walking directions to your nearest library.\n4. Make a video call to a family member (use Zoom, FaceTime, WhatsApp, or whatever app they use).\n5. Open your Calendar app and create an event for next week.\n\nYou don't have to do them all today — but try at least two or three. Every one of these is something you can now do confidently.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "You're ready for real computer use!",
-  "drDigitalHint": "This is how people actually use computers — for real things."
+  "drDigitalSuccess": "Congratulations — you've completed the course! You can now email, message, browse, manage files, take photos, install apps, and stay safe online. You're a confident computer user. Keep exploring and trying new things!",
+  "drDigitalHint": "Pick any two items from the checklist and try them on your real computer. You've practiced all of these in the lessons."
 }

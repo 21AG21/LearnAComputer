@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import AppWindow from "./AppWindow";
+import { FolderIcon } from "../Icons";
 import MusicNoteIcon from "../MusicNoteIcon";
 import { FILLER_FILES as FILES, FileEntry } from "./filesData";
 
@@ -24,7 +25,7 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, show
   }
 
   return (
-    <AppWindow title="Files" icon="📁" onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
+    <AppWindow title="Files" icon={<FolderIcon size={18} />} onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
       <div className="h-full bg-white flex flex-col gap-3 p-4">
         {hint && (
           <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2">{hint}</p>

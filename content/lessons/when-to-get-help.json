@@ -5,23 +5,40 @@
   "order": 1180,
   "title": "When to Ask for Help",
   "videoUrl": "",
-  "drDigitalIntro": "Some problems need a professional.\n• Get help for strange sounds, a stuck screen, or a suspected virus.\n• Also if you've tried the basics and nothing works.\n• Tip: paste the error message into a search engine to find solutions.",
+  "drDigitalIntro": "Some problems need a professional or a search.\n• If you see an error code, copy it and search for it — that's often the fastest fix.\n• Get help for strange sounds, a stuck screen, or a suspected virus.\n• Also if you've tried the basics (force quit, restart, check WiFi) and nothing works.\n• Tip: paste the error message into a search engine or support page to find solutions.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You found help for a computer problem",
-    "scenario": "A persistent error keeps appearing",
+    "goal": "You found help for an error by copying the error code",
+    "scenario": "Photos shows an error with code PX-4402",
     "steps": [
       {
-        "say": "Read the error message carefully.",
+        "say": "Photos crashed with an error. Click Copy to save the error code.",
+        "action": "copy-code",
+        "value": "PX-4402"
+      },
+      {
+        "say": "Good — you copied PX-4402. Now click OK to close this dialog.",
         "action": "read-error"
       },
       {
-        "say": "Search for help on this error message.",
-        "action": "search-help",
-        "value": "blue screen error restart loop"
+        "say": "Open Browser in the dock to search for help.",
+        "action": "open-browser"
+      },
+      {
+        "say": "Click Paste to put the error code into the support page.",
+        "action": "paste-code"
+      },
+      {
+        "say": "Click Submit to search for a solution.",
+        "action": "submit-support"
+      },
+      {
+        "say": "The solution says to reopen Photos. Click Photos in the dock.",
+        "action": "restart-app",
+        "target": "Photos"
       }
     ]
   },
-  "drDigitalSuccess": "You searched for help! Copying an error message into a search engine is often the fastest way to find a solution.",
-  "drDigitalHint": "Read the error, then type it into the search bar to find help."
+  "drDigitalSuccess": "You found help by copying the error code and searching for it! That's a real skill — tech support and search engines both work best when you give them the exact error.",
+  "drDigitalHint": "Copy the error code, open the browser, paste it into the support page, and submit."
 }

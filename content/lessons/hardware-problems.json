@@ -5,26 +5,25 @@
   "order": 1120,
   "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems involve the physical parts of your computer.\n• A blank monitor? Check the cable and display input.\n• A dead mouse or keyboard? Check the plug or battery.\n• Start with the obvious: cables, power, and connections.",
+  "drDigitalIntro": "Hardware problems involve the physical parts of your computer.\n• A dim screen is one of the most common — the brightness might be turned down.\n• A dead mouse or keyboard? Check the plug or battery.\n• Start with the obvious: check your settings, cables, power, and connections.",
   "playgroundTask": {
-    "type": "guided-troubleshooting",
-    "goal": "You diagnosed and fixed a hardware problem",
-    "scenario": "The monitor is not showing a picture",
+    "type": "guided-settings",
+    "goal": "You fixed a dim screen by adjusting the brightness",
     "steps": [
       {
-        "say": "There's a display problem. Read the error message first.",
-        "action": "read-error"
+        "say": "The screen looks dim. Click Display in the sidebar to check the brightness.",
+        "action": "open-section",
+        "target": "display"
       },
       {
-        "say": "Check that the video cable is properly connected.",
-        "action": "check-cable"
-      },
-      {
-        "say": "The cable looks fine. Try switching the display input source.",
-        "action": "change-input"
+        "say": "Drag the Brightness slider up past 80% to brighten the screen.",
+        "action": "slider",
+        "target": "brightness",
+        "min": 80,
+        "max": 100
       }
     ]
   },
-  "drDigitalSuccess": "You fixed a hardware problem! Always check cables and connections before assuming something is broken.",
-  "drDigitalHint": "Read the error, then try the physical checks: cable first, then display input."
+  "drDigitalSuccess": "You fixed the dim screen! Adjusting brightness is a common hardware fix you can do in Settings. For other hardware issues — check cables and connections first.",
+  "drDigitalHint": "Click Display in the sidebar, then drag the Brightness slider up to brighten the screen."
 }

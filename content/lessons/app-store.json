@@ -5,27 +5,27 @@
   "order": 810,
   "title": "The App Market",
   "videoUrl": "",
-  "drDigitalIntro": "Your computer has a built-in app market where you download new apps safely.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or see what's trending.\n• Each app shows a description, ratings, and reviews.",
+  "drDigitalIntro": "Your computer has a built-in app market where you download new apps safely.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or read reviews from other users.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You found an app in the store",
+    "goal": "You browsed the App Market",
     "steps": [
       {
-        "say": "You're in the App Market. Click on 'Games' in the category list.",
+        "say": "You're in the App Market. Click 'Games' to browse games.",
         "action": "go-to-category",
         "target": "Games"
       },
       {
-        "say": "Click on Puzzle Quest to see its details.",
+        "say": "Click on Puzzle Quest to see its details, reviews, and screenshots.",
         "action": "select-app",
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click 'Go to Store' to go back to the main store page.",
+        "say": "Nice! Now go back to the App Market tab.",
         "action": "go-to-store"
       }
     ]
   },
-  "drDigitalSuccess": "You browsed the App Market! Categories help you discover apps, and each app page shows ratings and reviews.",
-  "drDigitalHint": "Click a category to browse, then click an app name to see its details."
+  "drDigitalSuccess": "You browsed the App Market! Each app page shows ratings, reviews, and screenshots so you can decide before installing.",
+  "drDigitalHint": "Click a category to browse, then click an app name to see its full listing."
 }

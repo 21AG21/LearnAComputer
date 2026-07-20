@@ -5,28 +5,55 @@
   "order": 830,
   "title": "App Permissions",
   "videoUrl": "",
-  "drDigitalIntro": "Apps may ask for permissions when you install them.\n• They might want your camera, microphone, location, or contacts.\n• You decide what to allow.\n• Deny anything unrelated — a flashlight doesn't need your contacts.",
+  "drDigitalIntro": "Apps may ask for permissions when you install them.\n• They might want your camera, microphone, or other features.\n• You decide what to allow — and you can change your mind later in Settings.\n• If a permission seems unnecessary, deny it! A puzzle game shouldn't need your camera.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You evaluated and responded to app permissions",
+    "goal": "You learned to evaluate and respond to app permissions",
     "steps": [
       {
-        "say": "Click on NoteMaster to see it in the store.",
+        "say": "Search for 'Puzzle Quest' — a puzzle game that asks for suspicious permissions.",
+        "action": "search",
+        "value": "Puzzle"
+      },
+      {
+        "say": "Click on Puzzle Quest to see its details.",
         "action": "select-app",
-        "target": "NoteMaster"
+        "target": "Puzzle Quest"
       },
       {
-        "say": "Install NoteMaster.",
+        "say": "Click Install. Notice it asks for Camera access — a puzzle game doesn't need that!",
         "action": "install",
-        "target": "NoteMaster"
+        "target": "Puzzle Quest"
       },
       {
-        "say": "NoteMaster needs Storage access to save your notes. Click Allow.",
-        "action": "allow-permission",
-        "value": "Storage"
+        "say": "Click Don't Allow — a puzzle game shouldn't need your camera.",
+        "action": "deny-permission"
+      },
+      {
+        "say": "The installation was canceled. Now let's try ChatBuddy — it legitimately needs camera for video calls. Search for it.",
+        "action": "search",
+        "value": "ChatBuddy"
+      },
+      {
+        "say": "Click on ChatBuddy.",
+        "action": "select-app",
+        "target": "ChatBuddy"
+      },
+      {
+        "say": "Install ChatBuddy.",
+        "action": "install",
+        "target": "ChatBuddy"
+      },
+      {
+        "say": "ChatBuddy needs Camera for video calls — that makes sense. Click Allow.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "It also needs your Microphone for voice calls. Click Allow.",
+        "action": "allow-permission"
       }
     ]
   },
-  "drDigitalSuccess": "You managed app permissions! Only grant access the app actually needs to work.",
-  "drDigitalHint": "Install an app, then read each permission request carefully before allowing or denying."
+  "drDigitalSuccess": "You evaluated app permissions like a pro! Deny anything that seems unnecessary — a game doesn't need your camera.",
+  "drDigitalHint": "Read what the app is asking for. If a permission doesn't make sense for what the app does, click Don't Allow."
 }

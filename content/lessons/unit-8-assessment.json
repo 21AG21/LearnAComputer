@@ -5,10 +5,49 @@
   "order": 870,
   "title": "Find and Install an App",
   "videoUrl": "",
-  "drDigitalIntro": "Time to find and install a real app.\n• Search the store for something like a recipe manager or note-taker.\n• Read the description, reviews, and permissions, then install it.\n• Practice using it, updating it, and managing its permissions.",
+  "drDigitalIntro": "Let's put your app skills to the test!\n• Search for an app, install it, manage permissions, and update another.\n• Clean up an app you don't need anymore.\n• You know the drill — let's go!",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-app-store",
+    "goal": "You searched, installed, updated, and deleted apps",
+    "steps": [
+      {
+        "say": "Search for 'weather' in the App Market.",
+        "action": "search",
+        "value": "weather"
+      },
+      {
+        "say": "Open WeatherNow from the results.",
+        "action": "select-app",
+        "target": "WeatherNow"
+      },
+      {
+        "say": "Install WeatherNow.",
+        "action": "install"
+      },
+      {
+        "say": "The app needs camera and microphone access. Allow the permissions.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "Go to My Apps to see your installed apps.",
+        "action": "go-to-installed"
+      },
+      {
+        "say": "One of your apps has an update available. Update it.",
+        "action": "update-app",
+        "target": "WeatherNow"
+      },
+      {
+        "say": "You don't play Puzzle Quest anymore. Delete it.",
+        "action": "delete-app",
+        "target": "Puzzle Quest"
+      },
+      {
+        "say": "Go back to the store to browse.",
+        "action": "go-to-store"
+      }
+    ]
   },
-  "drDigitalSuccess": "You can confidently install and manage apps!",
-  "drDigitalHint": "Look at reviews and ratings to find quality apps."
+  "drDigitalSuccess": "You found, installed, updated, and deleted apps like a pro!\n\nNow for real: on your own computer, open its app store and install WhatsApp — or if it's already there, check whether it needs an update.",
+  "drDigitalHint": "Use the search bar to find apps, My Apps to manage them, and the trash icon to delete ones you don't need."
 }

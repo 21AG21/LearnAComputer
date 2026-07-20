@@ -5,14 +5,16 @@
   "order": 910,
   "title": "Accessibility",
   "videoUrl": "",
-  "drDigitalIntro": "Accessibility settings make your computer easier for everyone to use.\n• Zoom enlarges the screen; Pointer size makes the cursor bigger.\n• A screen reader reads text aloud.\n• Captions add subtitles. Use whatever helps you work comfortably.",
+  "drDigitalIntro": "Accessibility settings make your computer easier to use for everyone.\n• Make text bigger if it's hard to read.\n• Turn on Bold Text for easier reading.\n• These settings help people with different needs use computers comfortably.",
   "playgroundTask": {
-    "type": "find-in-settings",
-    "instructions": "Someone needs a bigger cursor. Open Accessibility settings and turn on Pointer Size (Larger Text).",
-    "targetPanel": "Accessibility",
-    "toggleLabel": "Larger Text",
-    "targetValue": true
+    "type": "guided-settings",
+    "goal": "You made text larger and bolder",
+    "steps": [
+      { "say": "Click Accessibility in the sidebar.", "action": "open-section", "target": "accessibility" },
+      { "say": "Drag the Text Size slider to make text bigger (at least 120%).", "action": "slider", "target": "text-size", "min": 120, "max": 140 },
+      { "say": "Now turn on Bold Text — notice how all the text gets heavier.", "action": "toggle", "target": "bold-text" }
+    ]
   },
-  "drDigitalSuccess": "Accessibility settings are in System Settings > Accessibility — always there when you need them.",
-  "drDigitalHint": "Open Accessibility from the sidebar and look for the Larger Text toggle."
+  "drDigitalSuccess": "Look at that bigger, bolder text! Accessibility settings help everyone use computers more comfortably.",
+  "drDigitalHint": "Click Accessibility, then drag the Text Size slider to the right and turn on Bold Text."
 }

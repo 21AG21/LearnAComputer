@@ -5,33 +5,10 @@
   "order": 1230,
   "title": "Using Maps Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online maps help you find places and get directions.\n• Search a business, an address, or \"coffee shop near me\".\n• Get directions by car, walking, cycling, or transit.\n• Switch to satellite view to see real aerial photos.",
+  "drDigitalIntro": "Online maps help you find places and get directions — try it right now on your own computer!\n\n1. Open your web browser.\n2. Go to maps.google.com (type it in the address bar and press Enter).\n3. In the search box, type \"library near me\" and press Enter.\n4. Click the library closest to you on the map.\n5. Click Directions.\n6. Click the walking icon (the little person).\n7. Read how many minutes the walk would take.\n\nRemember the walk time — we'll ask about it!",
   "playgroundTask": {
-    "type": "guided-browser",
-    "goal": "You looked up directions using an online map",
-    "steps": [
-      {
-        "say": "Navigate to weather.com to start — we'll check location services.",
-        "action": "navigate",
-        "url": "weather.com"
-      },
-      {
-        "say": "A cookie banner appeared — click Decline to keep your privacy.",
-        "action": "cookie-decline"
-      },
-      {
-        "say": "Now navigate to google.com to search for directions.",
-        "action": "navigate",
-        "url": "google.com"
-      },
-      {
-        "say": "Search for 'directions to nearest library'.",
-        "action": "search",
-        "query": "directions to nearest library",
-        "reveal": "Daily News"
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "You used an online map! Search for any place or address to get directions and information.",
-  "drDigitalHint": "Navigate to a search engine, then type your destination in the search bar."
+  "drDigitalSuccess": "You used Google Maps to find your nearest library and get walking directions! Maps work with any address, business name, or even just a category like \"pizza near me.\"",
+  "drDigitalHint": "Open your browser, go to maps.google.com, and search for \"library near me.\" Click the result, then Directions, then the walking icon."
 }
