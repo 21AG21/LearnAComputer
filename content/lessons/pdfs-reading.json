@@ -5,10 +5,10 @@
   "order": 1280,
   "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDFs look the same on any device.\n• They're used for forms, receipts, and contracts.\n• Open one in your browser, or download it to save it.\n• To make a PDF, use Print > Save as PDF.",
+  "drDigitalIntro": "PDFs look the same on any device — phone, tablet, or computer.\n• They are used for forms, receipts, invoices, and instruction manuals.\n• Open a PDF directly in your browser — no extra app needed.\n• Download it to save a copy in your Downloads folder.\n• Use the zoom controls at the top of the viewer to read the fine print.\n• To create a PDF from anything you can print, choose Print, then Save as PDF.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "You downloaded a PDF from a website",
+    "goal": "Download a PDF recipe and open it in the viewer",
     "steps": [
       {
         "say": "Navigate to recipebox.example to find a recipe PDF.",
@@ -22,9 +22,14 @@
       {
         "say": "Open the Downloads panel to see your saved file.",
         "action": "open-downloads"
+      },
+      {
+        "say": "Click Open next to ApplePieRecipe.pdf to read it.",
+        "action": "open-download",
+        "file": "ApplePieRecipe.pdf"
       }
     ]
   },
-  "drDigitalSuccess": "You downloaded a PDF! Downloads go to your Downloads folder where you can find them later.",
-  "drDigitalHint": "Navigate to the page, click Download, then open the Downloads panel to confirm."
+  "drDigitalSuccess": "You downloaded a PDF and opened it right in your browser! The file stays in your Downloads folder whenever you need it again.",
+  "drDigitalHint": "Navigate to recipebox.example, click Download, open the Downloads panel, then click the Open button next to the PDF file."
 }

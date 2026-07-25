@@ -201,6 +201,7 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
     { "say": "Download the file.", "action": "download" },
     { "say": "Open the Downloads panel.", "action": "open-downloads" },
     { "say": "Delete the suspicious file.", "action": "delete-download", "file": "SystemCleaner.exe" },
+    { "say": "Open the recipe PDF.", "action": "open-download", "file": "ApplePieRecipe.pdf" },
     { "say": "Check the lock icon.", "action": "lock-click" },
     { "say": "Decline the cookie banner.", "action": "cookie-decline" },
     { "say": "Close the scam popup.", "action": "close-popup" },
@@ -212,6 +213,8 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
 ```
 
 `mode` defaults to `"guided"`. Set `"assessment"` for objectives-only (no step-by-step highlighting). `initialDownloads` seeds the Downloads list on mount. Pages with special behavior: `weather.com` shows a cookie banner and ads, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button, `news.example` has fine print for zoom lessons. Cookie/popup/download steps must be preceded by a `navigate` to the matching page. Clicking **CLEAN NOW** on the popup fails the lesson with a message (teaches consequences). The `reload` action only completes when it fixes a broken page (pages navigated before a reload step render broken).
+
+**`open-download` action**: requires `file` field (filename string, e.g. `"ApplePieRecipe.pdf"`). Only PDF files show an Open button in the Downloads panel. Clicking it opens an in-browser PDF viewer window showing the Apple Pie Recipe (title, ingredients, numbered steps, page 1 of 2, working zoom controls). The step completes when the matching file is opened. Must be preceded by `download` and `open-downloads` steps.
 
 **`tab-sequence` action**: requires the learner to navigate to `pickacolor.example` first (preceding `navigate` step). The page shows three focusable color circles (red, green, blue) and a 10-item sequence tracker. The learner uses Tab/Shift+Tab to move focus and Enter (or click) to select. Wrong picks show a nudge; completing all 10 items in order completes the step. Only `pickacolor.example` supports this action.
 

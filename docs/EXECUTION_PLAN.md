@@ -751,10 +751,10 @@ See Appendix C. In `makeItems()` ([GuidedFilesTask.tsx:63-77](components/Playgro
 
 `recipes` page in `GuidedBrowserTask` has `download: "ApplePieRecipe.pdf"` ([GuidedBrowserTask.tsx:69](components/Playground/GuidedBrowserTask.tsx:69)). You can download it; you can never open it. `pdfs-reading` (1280) is supposed to teach exactly this.
 
-- [ ] Add an `open-download` step action to the `guided-browser` type ([lib/lessons.ts:104-129](lib/lessons.ts:104)).
-- [ ] Clicking a file in the Downloads panel opens a **PDF viewer window** rendering a real-looking recipe: title, ingredient list, numbered steps, page 1 of 2, and working zoom controls. It does not have to be a real PDF — it has to *look and behave* like opening one.
-- [ ] Wire it into `pdfs-reading` (1280) and any Unit 4 lesson that downloads it.
-- [ ] **Document `open-download` in `CLAUDE.md`.**
+- [x] Add an `open-download` step action to the `guided-browser` type ([lib/lessons.ts:104-129](lib/lessons.ts:104)).
+- [x] Clicking a file in the Downloads panel opens a **PDF viewer window** rendering a real-looking recipe: title, ingredient list, numbered steps, page 1 of 2, and working zoom controls. "Open" button only appears on `.pdf` files. PDF viewer has a dark title bar, zoom controls (50–200%), scrollable content with Grandma's Apple Pie (ingredients + 8-step instructions), and page 1 of 2 indicator.
+- [x] Wired into `pdfs-reading` (1280) with a 4-step flow: navigate → download → open-downloads → open-download. Dr. Digital intro expanded to 6 bullets. Browser-verified: all 4 steps complete, PDF viewer opens and renders correctly, DONE banner fires.
+- [x] **`open-download` documented in `CLAUDE.md`** — added to example steps and added explanation paragraph after the `tab-sequence` note.
 
 ---
 

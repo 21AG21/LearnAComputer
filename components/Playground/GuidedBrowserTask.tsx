@@ -30,6 +30,7 @@ export type GuidedBrowserStep = {
     | "open-downloads"
     | "open-result"
     | "delete-download"
+    | "open-download"
     | "tab-sequence";
   url?: string;
   title?: string;
@@ -139,6 +140,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
   const [tabSeqPos, setTabSeqPos] = useState(0);
   const [tabSeqWrong, setTabSeqWrong] = useState(false);
   const [tabFocused, setTabFocused] = useState<PickColor>("red");
+  const [pdfViewer, setPdfViewer] = useState<string | null>(null);
+  const [pdfZoom, setPdfZoom] = useState(100);
 
   const step = steps[stepIndex];
   const finished = stepIndex >= steps.length;
@@ -210,6 +213,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
         return kind === "search-result" && name === step.title;
       case "delete-download":
         return kind === "download-delete" && name === step.file;
+      case "open-download":
+        return kind === "download-open" && name === step.file;
       default:
         return false;
     }
@@ -385,6 +390,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
   function deleteDownload(file: string) {
     setDownloads((prev) => prev.filter((d) => d !== file));
     if (step?.action === "delete-download" && step.file === file) completeStep();
+  }
+
+  function openDownload(file: string) {
+    setPdfViewer(file);
+    setPdfZoom(100);
+    setMenu(null);
+    if (step?.action === "open-download" && step.file === file) completeStep();
   }
 
   function zoomIn() {
@@ -788,6 +800,17 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
                     <div key={d} className="px-3 py-2 flex items-center gap-2 text-sm border-b border-gray-100">
                       <span><FileDocIcon size={14} /></span>
                       <span className="font-medium flex-1">{d}</span>
+                      {d.endsWith(".pdf") && (
+                        <button
+                          onClick={() => openDownload(d)}
+                          aria-label={`Open ${d}`}
+                          className={`shrink-0 px-2 h-6 rounded text-xs font-semibold border border-gray-300 bg-white hover:bg-blue-50 hover:border-blue-400 text-gray-700 ${
+                            hl("download-open", d) ? "ring-4 ring-yellow-400 animate-pulse border-yellow-400" : ""
+                          }`}
+                        >
+                          Open
+                        </button>
+                      )}
                       <button
                         onClick={() => deleteDownload(d)}
                         aria-label={`Delete ${d}`}
@@ -824,6 +847,62 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
             <div className="flex justify-end gap-2">
               <button onClick={() => setBookmarkSheet(false)} className="px-4 py-1.5 border-2 border-gray-300 rounded-lg font-semibold text-sm">Cancel</button>
               <button onClick={confirmBookmark} className={`px-5 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-sm border-2 border-black ${hl("bookmark-add") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>Add Bookmark</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PDF Viewer */}
+      {pdfViewer && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/40">
+          <div className="bg-white border-2 border-black rounded-xl shadow-2xl flex flex-col w-[90%] max-w-lg max-h-[90%] overflow-hidden animate-pop-in">
+            {/* Title bar */}
+            <div className="shrink-0 bg-gray-800 text-white flex items-center gap-2 px-4 py-2">
+              <FileDocIcon size={16} />
+              <span className="font-semibold text-sm flex-1 truncate">{pdfViewer}</span>
+              <button onClick={() => setPdfViewer(null)} aria-label="Close PDF" className="w-7 h-7 flex items-center justify-center rounded hover:bg-white/20 font-bold text-lg leading-none">&times;</button>
+            </div>
+            {/* Toolbar */}
+            <div className="shrink-0 bg-gray-100 border-b border-gray-300 flex items-center justify-between px-4 py-1.5">
+              <span className="text-xs font-semibold text-gray-600">Page 1 of 2</span>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setPdfZoom(z => Math.max(z - 25, 50))} className="w-7 h-7 border border-gray-300 rounded bg-white font-bold hover:bg-gray-200 text-sm">−</button>
+                <span className="text-xs font-semibold tabular-nums w-12 text-center">{pdfZoom}%</span>
+                <button onClick={() => setPdfZoom(z => Math.min(z + 25, 200))} className="w-7 h-7 border border-gray-300 rounded bg-white font-bold hover:bg-gray-200 text-sm">+</button>
+              </div>
+            </div>
+            {/* Content */}
+            <div className="flex-1 overflow-auto bg-gray-200 p-4">
+              <div className="bg-white shadow-md rounded p-6 mx-auto" style={{ fontSize: `${pdfZoom}%`, maxWidth: "520px" }}>
+                <h1 className="text-xl font-black mb-0.5">Grandma&apos;s Classic Apple Pie</h1>
+                <p className="text-xs text-gray-500 mb-4 border-b pb-3">Recipe Box — recipebox.example</p>
+
+                <h2 className="font-bold text-sm uppercase tracking-wide text-gray-500 mb-2">Ingredients</h2>
+                <ul className="text-sm space-y-1 mb-5 list-disc list-inside text-gray-800">
+                  <li>2 cups all-purpose flour</li>
+                  <li>1 tsp salt</li>
+                  <li>2/3 cup cold butter, cubed</li>
+                  <li>6–8 tbsp ice water</li>
+                  <li>5 large Granny Smith apples</li>
+                  <li>3/4 cup sugar</li>
+                  <li>1 tsp ground cinnamon</li>
+                  <li>1/4 tsp nutmeg</li>
+                </ul>
+
+                <h2 className="font-bold text-sm uppercase tracking-wide text-gray-500 mb-2">Instructions</h2>
+                <ol className="text-sm space-y-2 list-decimal list-inside text-gray-800">
+                  <li>Mix flour and salt. Cut in cold butter until the mixture looks like coarse crumbs.</li>
+                  <li>Add ice water one tablespoon at a time, stirring gently, until the dough just holds together.</li>
+                  <li>Divide dough in half, flatten into discs, and refrigerate for 30 minutes.</li>
+                  <li>Peel, core, and thinly slice the apples.</li>
+                  <li>Toss apple slices with sugar, cinnamon, and nutmeg. Set aside.</li>
+                  <li>Preheat oven to 425°F (220°C).</li>
+                  <li>Roll out one dough disc on a floured surface and fit it into a 9-inch pie dish.</li>
+                  <li>Fill with the apple mixture, mounding it in the center.</li>
+                </ol>
+
+                <p className="mt-5 text-xs text-gray-400 border-t pt-3 text-center">Page 1 of 2 — continued on next page</p>
+              </div>
             </div>
           </div>
         </div>

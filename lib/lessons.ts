@@ -113,6 +113,7 @@ export type PlaygroundTask =
           | "open-downloads"
           | "open-result"
           | "delete-download"
+          | "open-download"
           | "tab-sequence";
         url?: string;
         title?: string;
