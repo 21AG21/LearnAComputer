@@ -57,7 +57,7 @@ interface Message {
 }
 
 const INITIAL_THREADS: Record<string, Message[]> = {
-  alex: [{ from: "contact", text: "Hey! Want to meet at the coffee shop at 3pm tomorrow?" }],
+  alex: [{ from: "contact", text: "What's your favorite animal?" }],
   jordan: [{ from: "contact", text: "Did you see that funny video I sent?" }],
   sam: [{ from: "contact", text: "Can you pick up milk on the way home?" }],
   grandma: [{ from: "contact", text: "Hi sweetheart! How are you doing? I miss you so much!" }],
@@ -321,7 +321,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
             {/* Self preview */}
             <div className="absolute bottom-4 right-4 w-24 h-32 bg-gray-700 rounded-lg border border-gray-600 overflow-hidden flex flex-col items-center justify-center">
               <div className="w-10 h-10 rounded-full bg-gray-500 mb-1" />
-              <span className="text-[10px] text-gray-300 bg-gray-800/80 px-1.5 py-0.5 rounded">You</span>
+              <span className="text-[10px] text-gray-300 bg-gray-800/80 px-1.5 py-0.5 rounded">You (pretend)</span>
             </div>
           </div>
 

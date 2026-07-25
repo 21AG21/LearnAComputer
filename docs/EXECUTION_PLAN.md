@@ -832,33 +832,31 @@ Typing an address for a site that doesn't exist in `PAGES` currently does nothin
 
 `messages-contacts` (500, 3 steps) and `messages-app` (510, 2 steps) both amount to "pick a contact and send a message."
 
-- [ ] Make `messages-contacts` genuinely about **contacts**: browse the contact list, look at who's there, open a conversation *without* sending, note the difference between the list and a thread. No `send-message` step.
-- [ ] `messages-app` becomes the first lesson where you actually send, and gets the favorite-animal message from 7.3.
+- [x] `messages-contacts` rewritten: 3 `select-contact` steps (Alex → Grandma → Sam), no `send-message`. Title changed to "Your Contact List". Intro updated to explain contact list, conversations, and read-without-sending. DONE banner verified.
+- [x] `messages-app` rewritten as "Sending Your First Message" — `select-contact` alex then `send-message` without `value` constraint (free response). DONE banner fires with "Reply to Alex's message — all done!" after any non-empty reply.
 
 ### 7.2 Lesson 3/5 becomes group chats (feedback #74)
 
 `group-conversations` (520) is titled for groups but its 2 steps are another 1:1 exchange.
 
-- [ ] Build real group-chat support in `GuidedMessagingTask`: a group thread with 3+ participants, each message labeled with its sender's name and avatar, and a header showing the member list.
-- [ ] Add step actions `create-group` (`value`: group name), `add-to-group` (`target`: contact), and `send-group-message`.
-- [ ] Lesson steps: create a group → add two contacts → name it → send a message → see replies from two different people.
+- [ ] **LEFT FOR LARGER MODEL** — requires new `create-group`, `add-to-group`, `send-group-message` actions, a group thread data structure, multi-sender rendering, and a group member header in `GuidedMessagingTask.tsx`. Too complex for Sonnet mid-plan.
 - [ ] **Document the new actions in `CLAUDE.md`.**
 
 ### 7.3 A message worth replying to (feedback #75)
 
-- [ ] Seed one contact's thread with *"What's your favorite animal?"* and make `messages-app`'s send step accept **any** non-empty reply (no `value` constraint). Letting the learner answer freely is the whole point.
+- [x] Changed `INITIAL_THREADS.alex` to `"What's your favorite animal?"` in `GuidedMessagingTask.tsx`. `messages-app` send step has no `value` field — any non-empty reply completes it. Browser-verified: "I love dogs!" accepted, DONE fires.
 
 ### 7.4 Emoji and reactions is repetitive (feedback #76)
 
 `emoji-reactions` (540) repeats the reaction taught in `messages-photos` (530).
 
-- [ ] Split cleanly: `messages-photos` covers **sending a photo** only — drop its reaction step. `emoji-reactions` covers **emoji in message text** (an emoji picker in the compose bar, which does not exist yet — build it) **and** reactions on a received message, which is then new material.
+- [ ] **LEFT FOR LARGER MODEL** — requires building an emoji picker in the compose bar (new UI component, new `send-emoji` or `pick-emoji` step action). The split between photo-only and emoji+reaction lessons is correct in principle; the blocker is the missing compose-bar emoji picker.
 - [ ] The reaction-picker emojis stay as emoji — they are the feature being taught and are the documented exception to the no-emoji rule.
 
 ### 7.5 Video calls: we cannot see you (feedback #77)
 
-- [ ] `facetime-basics` (550): add to the intro, prominently: *"This is a pretend video call. This website cannot turn on your real camera or microphone, and can't see or hear you. On a real call, your computer will ask for permission first — and you'll see a light next to your camera when it's on."*
-- [ ] Label the self-preview tile in the call UI *"You (pretend)"* so it is unmistakable.
+- [x] Added privacy disclaimer to `facetime-basics` drDigitalIntro: "This is a pretend video call. This website cannot turn on your real camera or microphone, and cannot see or hear you. On a real call, your computer will ask for permission first — and you will see a small light next to your camera when it is on."
+- [x] Changed self-preview tile label from "You" to "You (pretend)" in `GuidedMessagingTask.tsx`.
 
 ---
 

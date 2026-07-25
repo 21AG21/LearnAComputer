@@ -3,25 +3,24 @@
   "unit": "Unit 5: Messages and Video Calls",
   "module": "Messages Basics",
   "order": 510,
-  "title": "Messaging Basics",
+  "title": "Sending Your First Message",
   "videoUrl": "",
-  "drDigitalIntro": "Messages is how you text on your computer.\n• Start a new message with someone in your Contacts.\n• Type your message and press Enter to send.\n• Each conversation stays in the list, and it syncs with your phone.",
+  "drDigitalIntro": "Now that you know how to find a contact, let's actually send a message.\n• Click the message box at the bottom of the conversation — the cursor will appear there.\n• Type what you want to say. You can take as long as you like — nothing sends until you press Enter.\n• Press Enter or click the Send button and your message appears in the conversation.\n• The other person sees it on their phone or computer almost instantly.",
   "playgroundTask": {
     "type": "guided-messaging",
-    "goal": "You replied to Alex's message",
+    "goal": "Reply to Alex's message",
     "steps": [
       {
-        "say": "Click on Alex to open their conversation.",
+        "say": "Click on Alex — they sent you a question.",
         "action": "select-contact",
         "target": "alex"
       },
       {
-        "say": "Type a reply to Alex and send it.",
-        "action": "send-message",
-        "value": "Hey"
+        "say": "Alex asked: What's your favorite animal? Type your answer and send it.",
+        "action": "send-message"
       }
     ]
   },
-  "drDigitalSuccess": "Message sent! You just texted from your computer — it works exactly like texting from your phone.",
-  "drDigitalHint": "Click Alex in the left panel, type anything in the box at the bottom, and press Enter or click Send."
+  "drDigitalSuccess": "Your message was sent! Alex will see it right away. There are no wrong answers — every reply is a real conversation.",
+  "drDigitalHint": "Click the message box at the bottom, type your answer to Alex's question, then press Enter or click the Send button."
 }
