@@ -6,6 +6,7 @@
   "title": "Power button",
   "videoUrl": "",
   "drDigitalIntro": "The power button turns your laptop on.\n• It's usually the blank key in the top-right corner.\n• On many laptops it also reads your fingerprint to log you in.",
+  "media": { "src": "/playgrounds/power-button.png", "alt": "A classic power symbol — a circle with a vertical line at the top" },
   "playgroundTask": {
     "type": "none"
   },

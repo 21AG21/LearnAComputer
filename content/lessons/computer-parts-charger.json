@@ -6,6 +6,7 @@
   "title": "Charger",
   "videoUrl": "",
   "drDigitalIntro": "The charger is your laptop's power cord.\n• One end plugs into the wall outlet.\n• The other end plugs into the side of your laptop.\n• It fills up the battery.",
+  "media": { "src": "/playgrounds/charger.png", "alt": "A USB charging cable with plug connectors on both ends", "caption": "This is what a laptop charger looks like." },
   "playgroundTask": {
     "type": "none"
   },

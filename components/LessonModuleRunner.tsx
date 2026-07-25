@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import DrDigital from "@/components/DrDigital";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
+import LessonMedia from "@/components/LessonMedia";
 import { markComplete, getCompletedSlugs } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
 
@@ -164,7 +165,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
   return (
     <div className="h-full flex">
-      <div ref={leftPanelRef} className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
+      <div ref={leftPanelRef} className={`w-full shrink-0 overflow-y-auto p-6 space-y-6 ${subLesson.media || hasGate ? "lg:max-w-xl" : "lg:max-w-3xl mx-auto"}`}>
         <Link href="/lessons" className="text-sm text-gray-500 underline">
           ← All lessons
         </Link>
@@ -266,15 +267,21 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         </div>
       </div>
 
-      <div className="hidden lg:block flex-1 min-w-0 p-4">
-        <LessonPlaygroundPane
-          key={activityAttempt}
-          task={subLesson.playgroundTask}
-          started={started}
-          onResult={handleResult}
-          onExit={() => setStarted(false)}
-        />
-      </div>
+      {subLesson.media ? (
+        <div className="hidden lg:flex flex-1 min-w-0 bg-gray-50 border-l border-gray-200">
+          <LessonMedia src={subLesson.media.src} alt={subLesson.media.alt} caption={subLesson.media.caption} />
+        </div>
+      ) : hasGate ? (
+        <div className="hidden lg:block flex-1 min-w-0 p-4">
+          <LessonPlaygroundPane
+            key={activityAttempt}
+            task={subLesson.playgroundTask}
+            started={started}
+            onResult={handleResult}
+            onExit={() => setStarted(false)}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -272,6 +272,8 @@ export interface Lesson {
   playgroundTask: PlaygroundTask;
   drDigitalSuccess: string;
   drDigitalHint: string;
+  /** Optional still image shown in the right pane instead of the PlaygroundOS desktop. */
+  media?: { src: string; alt: string; caption?: string };
 }
 
 export interface ModuleGroup {
