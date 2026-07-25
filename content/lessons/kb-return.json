@@ -5,10 +5,13 @@
   "order": 206,
   "title": "Return",
   "videoUrl": "",
-  "drDigitalIntro": "Return starts a new line, like a fresh paragraph.\n• It moves your cursor down.\n• It also works as an Enter or OK button to confirm things.",
+  "drDigitalIntro": "Return (also called Enter) starts a new line — like pressing Return at the end of a paragraph.\n• In a document or notes app, it moves the cursor to the next line.\n• In a form or dialog box, it means OK or Submit.\n• Warning: in some chat apps, Return sends your message immediately! Look before you press.\n• Find it on the right side of your keyboard — it is one of the largest keys.",
   "playgroundTask": {
-    "type": "none"
+    "type": "type-text",
+    "instructions": "Type this two-line note exactly — you will need to press Return between the lines.",
+    "targetText": "Dear Dr. Digital,\nThank you for teaching me!",
+    "exact": false
   },
-  "drDigitalSuccess": "That's Return — new lines, and your all-purpose OK button!",
-  "drDigitalHint": "Find the large Return (or Enter) key on the right side, then click Continue."
+  "drDigitalSuccess": "You used Return to start a new line — that is exactly how paragraphs and new lines work everywhere.",
+  "drDigitalHint": "Type the first line, then press Return (or Enter) to move down, then type the second line."
 }

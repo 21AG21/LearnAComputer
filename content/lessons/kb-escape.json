@@ -5,10 +5,11 @@
   "order": 210,
   "title": "Escape",
   "videoUrl": "",
-  "drDigitalIntro": "The Escape key backs you out of things.\n• You'll find it in the very top-left corner.\n• Use it to cancel, exit, or leave a full-screen window.",
+  "drDigitalIntro": "The Escape key backs you out of things.\n• You will find it in the very top-left corner of your keyboard, often labeled Esc.\n• Use it to cancel, close a dialog box, or leave a full-screen window.\n• In menus and pop-ups, Escape closes them without doing anything.",
+  "warning": "Do not press Escape right now — it can close what you are working on. Just read along and click Continue when you are ready.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's Escape — your friendly 'never mind, back out' button!",
-  "drDigitalHint": "It's the top-left key, often labeled Esc. Find it, then click Continue."
+  "drDigitalSuccess": "That is Escape — your friendly 'never mind, back out' button!",
+  "drDigitalHint": "Find Escape in the top-left corner (labeled Esc), then click Continue."
 }

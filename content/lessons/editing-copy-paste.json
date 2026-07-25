@@ -3,15 +3,15 @@
   "unit": "Unit 2: Keyboard and Typing",
   "module": "Editing",
   "order": 240,
-  "title": "Copy, paste, cut, undo, redo",
+  "title": "Copy, Cut, and Paste",
   "videoUrl": "",
-  "drDigitalIntro": "Here are the moves you'll use every day.\n• Ctrl+C copies; Ctrl+V pastes; Ctrl+X cuts.\n• Ctrl+Z undoes; Ctrl+Shift+Z redoes.\n• Ctrl+A selects everything.",
+  "drDigitalIntro": "Copy, cut, and paste are the three moves you will use every day.\n• Ctrl+C (or Command+C) copies the selected text — the original stays.\n• Ctrl+X (or Command+X) cuts it — the original disappears.\n• Ctrl+V (or Command+V) pastes whatever is in your clipboard.\n• To use any of them: select the text first, then press the shortcut.\n• Common mistake: pressing Ctrl+V before copying — nothing pastes because the clipboard is empty.",
   "playgroundTask": {
     "type": "keyboard-shortcut",
-    "instructions": "Copy the text below, then paste it into the box.",
+    "instructions": "Select the text below, press Ctrl+C (or Command+C) to copy it, click the box, then press Ctrl+V (or Command+V) to paste.",
     "sourceText": "Hello, computer!",
     "successCondition": "pasted-matches-source"
   },
-  "drDigitalSuccess": "Nice work! Copy and paste will save you so much time from here on out.",
-  "drDigitalHint": "Select the text first — click and drag across it — then use Ctrl+C to copy and Ctrl+V to paste."
+  "drDigitalSuccess": "Copy and paste will save you so much time from here on out. Remember: copy first, then paste.",
+  "drDigitalHint": "Select the text by clicking and dragging across it. Then Ctrl+C to copy, click the empty box below, and Ctrl+V to paste."
 }

@@ -179,6 +179,12 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
             <h1 className="text-2xl font-bold">{subLesson.title}</h1>
           </div>
 
+          {subLesson.warning && (
+            <div className="rounded-lg border-2 border-amber-400 bg-amber-50 px-4 py-3 text-amber-900 font-medium text-sm">
+              Warning: {subLesson.warning}
+            </div>
+          )}
+
           <DrDigital message={drDigitalMessage} mood={drDigitalMood} />
 
           {failInfo && attemptState === "failed" && (

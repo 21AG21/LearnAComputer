@@ -1,0 +1,14 @@
+{
+  "slug": "editing-undo-redo",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Editing",
+  "order": 242,
+  "title": "Undo and Redo",
+  "videoUrl": "",
+  "drDigitalIntro": "Made a mistake? Undo it instantly — no retyping needed.\n• Ctrl+Z (or Command+Z) undoes your last action. Press it again to undo more.\n• Ctrl+Shift+Z (or Command+Shift+Z) redoes what you just undid. On Windows you can also use Ctrl+Y.\n• Undo works in almost every app: word processors, email, photos, drawing tools.\n• Common mistake: deleting a lot of text and panicking — just press Ctrl+Z a few times to bring it back.\n• You can undo many steps back, not just the very last one.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Remember: Ctrl+Z is your safety net. Made a mess? Undo it!",
+  "drDigitalHint": "Just read along and click Continue when ready."
+}

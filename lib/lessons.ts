@@ -266,6 +266,8 @@ export interface Lesson {
   playgroundTask: PlaygroundTask;
   drDigitalSuccess: string;
   drDigitalHint: string;
+  /** Warning shown above the Dr. Digital bubble — for keys/actions the learner must NOT press during this lesson. */
+  warning?: string;
   /** Optional still image shown in the right pane instead of the PlaygroundOS desktop. */
   media?: { src: string; alt: string; caption?: string };
 }

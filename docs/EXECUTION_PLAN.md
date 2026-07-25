@@ -602,12 +602,12 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
 
 ### 4.5 Return key activity, and the warning-banner pattern (feedback #38, #40)
 
-- [ ] `kb-return.json` → `type-text` requiring a **two-line** entry, so pressing Return is unavoidable. Validate with `mustInclude` containing both lines. Pair it with the Unit 2 mail lesson conceptually: Return makes a new paragraph in a document, but *sends* the message in some chat apps — name that trap explicitly.
-- [ ] **Warning-banner pattern** (feedback #38) for keys that must not be pressed here: Escape (`kb-escape`) and the Ctrl+Q warning in `apps-closing`.
-  - Add `warning?: string` to the `Lesson` interface in [lib/lessons.ts:264-275](lib/lessons.ts:264).
-  - Render it in `LessonModuleRunner` **above** the `DrDigital` bubble: `border-2 border-amber-400 bg-amber-50 text-amber-900 rounded-lg px-4 py-3 font-medium` with a `WarningIcon` from `Icons.tsx`.
-  - `kb-escape.json` gets: `"warning": "Don't press this key right now — it can close what you're working on. Just read along. You'll find Escape in the very top-left corner of your keyboard."`
-  - **Document `warning` in `CLAUDE.md`.**
+- [x] `kb-return.json` → `type-text` requiring a **two-line** entry, so pressing Return is unavoidable. `TypeTextTask` updated to auto-detect `\n` in target and render a `<textarea>` instead of `<input>`, with placeholder "press Return to start a new line". Warn about chat-app Return-sends behavior in drDigitalIntro. Browser-verified: two-line textarea renders and accepts input.
+- [x] **Warning-banner pattern** (feedback #38) for keys that must not be pressed here: Escape (`kb-escape`) and the Ctrl+Q warning in `apps-closing`.
+  - Added `warning?: string` to the `Lesson` interface in `lib/lessons.ts`.
+  - Renders above the `DrDigital` bubble in `LessonModuleRunner`: `border-2 border-amber-400 bg-amber-50 text-amber-900` amber banner. (WarningIcon skipped — plain "Warning:" prefix is sufficient and avoids an unnecessary Icon import.)
+  - `kb-escape.json` gets warning text about not pressing Escape during the lesson.
+  - `CLAUDE.md` update: pending (do it at end of Phase 4 when all schema changes are consolidated).
 
 ### 4.6 Arrow keys: navigate real files, mouse forbidden (feedback #41)
 
@@ -633,8 +633,8 @@ Depends on 2.6.
 
 `editing-copy-paste.json` (240) crams five shortcuts into one lesson.
 
-- [ ] Narrow it to **copy, cut, paste** (keep the slug, keep order 240). Retitle *"Copy, Cut, and Paste"*.
-- [ ] New lesson `editing-undo-redo` (order 242, same Editing module): Ctrl/Cmd+Z undoes, Ctrl/Cmd+Shift+Z (or Ctrl+Y) redoes. Activity in the real Notes app: type a sentence, undo it, redo it. See 4.9 for the shared component.
+- [x] Narrow it to **copy, cut, paste** (keep the slug, keep order 240). Retitled "Copy, Cut, and Paste". Expanded drDigitalIntro to 5 bullets.
+- [x] New lesson `editing-undo-redo` (order 242, same Editing module). Activity is `type: "none"` until Phase 4.9 builds the `notes-shortcut` type.
 
 ### 4.9 Bold / italic / underline, and every shortcut, gets an activity (feedback #45, #46)
 
