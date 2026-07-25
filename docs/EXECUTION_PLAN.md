@@ -41,17 +41,19 @@ This plan translates 112 pieces of user feedback into concrete, ordered work. **
 
 ### 0.1 Image files — **all available in `~/Downloads/Images/`**
 
-All eight image files are present at `~/Downloads/Images/`. No phases are blocked. Before any other work, copy them into `public/playgrounds/`:
+All eight image files are committed to the repo at `Images/` (added via commit `9c80862`). No phases are blocked. Before any other work, copy them into `public/playgrounds/` so Next.js can serve them statically:
 
 ```sh
-cp ~/Downloads/Images/DockIcons1.png     public/playgrounds/dock-icons-1.png
-cp ~/Downloads/Images/PowerButton.png    public/playgrounds/power-button.png
-cp ~/Downloads/Images/Charger.png        public/playgrounds/charger.png
-cp ~/Downloads/Images/Headphones.png     public/playgrounds/headphones.png
-cp ~/Downloads/Images/ImageInFiles.png   public/playgrounds/files-pictures.png
-cp ~/Downloads/Images/DownloadInFiles.png public/playgrounds/files-downloads.png
-cp ~/Downloads/Images/DigitalCookie.png  public/playgrounds/cookie.png
+cp Images/DockIcons1.png     public/playgrounds/dock-icons-1.png
+cp Images/PowerButton.png    public/playgrounds/power-button.png
+cp Images/Charger.png        public/playgrounds/charger.png
+cp Images/Headphones.png     public/playgrounds/headphones.png
+cp Images/ImageInFiles.png   public/playgrounds/files-pictures.png
+cp Images/DownloadInFiles.png public/playgrounds/files-downloads.png
+cp Images/DigitalCookie.png  public/playgrounds/cookie.png
 ```
+
+(`Images/` is in the repo root. `TabActivityIdea.png` stays in `Images/` — it's a design spec, not a public asset.)
 
 `TabActivityIdea.png` is a **design spec mockup**, not an image to embed — see §4.4 for how it translates to a page inside `GuidedBrowserTask`.
 
