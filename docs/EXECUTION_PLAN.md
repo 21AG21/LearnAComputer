@@ -1,464 +1,1474 @@
-# LearnAComputer — QA Round 3 Execution Plan
+# LearnAComputer — QA Round 4 Execution Plan
 
-**Status:** Phases 0–5 complete. All verification passed. Ready for commit+push.
-**Audience:** This document is written for an executor model working phase by phase. Read `CLAUDE.md` at the repo root first — it describes the stack, lesson JSON schema, and every playground task type. This plan assumes that context.
+**Status:** Not started. Phases 0–5 of QA Round 3 are complete (commit `0f8e4fe`).
+**Audience:** This document is written for an executor model (Sonnet) working phase by phase. **Read `CLAUDE.md` at the repo root first** — it documents the stack, the lesson JSON schema, and every playground task type with its full action list. This plan assumes that context and does not repeat it.
 
-This plan translates ~78 pieces of user feedback into concrete, ordered work. Appendix A maps every feedback item to its section so nothing gets dropped. Appendix C contains **already-diagnosed root causes with file:line references** for the reported bugs — read it before touching any bug listed there.
+This plan translates 112 pieces of user feedback into concrete, ordered work. **Appendix A** maps every feedback item to the section that handles it, so nothing gets dropped. **Appendix B** lists the asset files the user must supply before certain sections can start. **Appendix C** contains pre-diagnosed root causes with `file:line` references for every reported bug — read it before touching any bug listed there.
 
 ---
 
 ## How to work this plan
 
-1. **Execute phases in order** (0 → 5). Later phases depend on framework changes in Phase 1. Within a phase, sections can be done in any order unless a dependency is called out.
-2. **After each phase:** `npx tsc --noEmit`, `npm run lint`, `rm -rf .next && npm run build` must all pass. Then start the dev server (via the `.claude/launch.json` config, never raw Bash) and click through every lesson you touched — actually complete the activity, don't just look at it. Commit per phase with a descriptive message and push to `main`.
-3. **Never mark a checkbox done without having driven the lesson in the browser yourself.**
-4. When a phase changes the lesson JSON schema (new task types, new actions, new fields), **update `CLAUDE.md` in the same commit**.
+1. **Execute phases in order** (0 → 16). Phases 3–14 (the per-unit content work) depend on the framework and PlaygroundOS changes in Phases 1–2. Within a phase, sections can be done in any order unless a dependency is called out.
+2. **After each phase:** run all four checks — they must all pass before you move on:
+   ```sh
+   python3 scripts/check-lessons.py
+   npx tsc --noEmit
+   npm run lint
+   rm -rf .next && npm run build
+   ```
+3. **Then drive it in the browser.** Start the dev server via the `.claude/launch.json` config (`preview_start` with `{name: "dev"}`) — **never** via raw Bash. Click through every lesson you touched and *actually complete the activity*. Looking at it is not verification.
+4. **Never mark a checkbox `[x]` without having driven the lesson in the browser yourself.**
+5. **Commit per phase** with a descriptive message, and push to `main`.
+6. **When a phase changes the lesson JSON schema** (new task types, new step actions, new fields), **update `CLAUDE.md` in the same commit.** This is not optional — the schema docs in `CLAUDE.md` are the contract every future lesson author reads.
 
 ### Hard rules (violating any of these is a defect)
 
-- **No multiple-choice activities. Ever.** All 5 remaining `multiple-choice` lessons get converted or deleted in this plan (`photo-people`, `icloud-photos`, `passkeys`, `backups`, `qrcodes-siri`, `printing-scanning` — and `daily-tasks` is deleted outright).
-- **No OS/app brand names in the simulated OS**: no Apple, macOS, Finder, Safari, FaceTime, iCloud, Siri, App Store (as the app's own name), Dock-with-capital-D as a brand term. Real *websites* rendered inside the simulated browser (Google, Wikipedia) are fine — they're realistic web content, not OS branding.
-- **Realism principle:** every playground activity must be performed the way a person would do it on a real computer. The learner opens apps from the desktop themselves (Phase 1.3); flows follow real-world sequences (e.g., password reset goes through the browser and email, not a magic "type new password" box).
-- **Pedagogy pattern for demonstrations:** first *show the problem*, then *explain the concept*, then *let the learner perform the fix and see it work*. (Reload fixes a broken page; zoom makes unreadable text readable; force-quit unfreezes a frozen app; brightness slider fixes a dim screen.)
+- **No multiple-choice activities. Ever.** The `multiple-choice` type still exists in `lib/lessons.ts` for backward compatibility but zero lessons use it. Do not add any.
+- **No OS/app brand names in the simulated OS.** No Apple, macOS, Finder, Safari, FaceTime, iCloud, Siri, or "App Store" as the app's own name. Real *websites* rendered inside the simulated browser (Google, Wikipedia, Amazon) are fine — they are realistic web content, not OS branding. The simulated OS is called **PlaygroundOS** in developer-facing docs; learner-facing copy just says "your computer".
+- **Realism principle.** Every playground activity must be performed the way a person would do it on a real computer. The learner opens apps from the desktop themselves. Flows follow real-world sequences. If a real computer would show a loading delay, show one.
+- **THE NEW RULE — no playground where software isn't involved.** If a lesson teaches a *physical* thing (a port, a charger, a power button, a camera, a trackpad's physical shape) or a pure concept with nothing to click, **do not render the PlaygroundOS pane at all**. An idle desktop sitting next to a lesson about a charging cable is confusion, not scenery. Section 1.9 adds the mechanism; every unit phase applies it.
+- **One Files app.** After Phase 2.6 there is exactly one file-manager implementation in the codebase. If you find yourself writing a second file list, stop and use the shared component.
+- **Assessments are assessments.** Every unit assessment uses `mode: "assessment"`: objectives only, no step-by-step `say` walkthrough, no yellow highlight rings, hints only when the learner presses Hint. An assessment must also **test something new** — never replay the exact click sequence of the lessons that preceded it.
 - **Explanations must be thorough enough that the learner could re-teach the concept.** Every `drDigitalIntro` for a concept lesson answers: What is it? Why does it matter to me? How do I do it? What's the common mistake? Aim for 4–6 bullets, plain language, no jargon left undefined.
-- **Never rename an existing lesson `slug`** — progress is stored by slug in localStorage. Deleting a lesson is fine (listed deletions only). New lessons get new slugs.
-- **Don't add npm dependencies.** Everything here is achievable with React + Tailwind + inline SVG.
-- **First letters capitalized** in every learner-facing sentence (Dr. Digital strings, step `say` strings, UI copy).
+- **Never rename an existing lesson `slug`.** Progress is stored by slug in `localStorage`. Deleting a lesson is fine (only the deletions listed here). New lessons get new slugs.
+- **First letters capitalized** in every learner-facing sentence — `drDigitalIntro`, `drDigitalSuccess`, `drDigitalHint`, `instructions`, and every step `say`. `scripts/check-lessons.py` enforces this.
+- **Don't add npm dependencies** except the two named explicitly in Phase 1.2 (`@supabase/supabase-js`, `@supabase/ssr`). Everything else is achievable with React + Tailwind + inline SVG.
 
 ---
 
-## Phase 0 — Hygiene (small, mechanical, do first)
+## Phase 0 — Assets and blockers
 
-### 0.1 Delete lessons
-- [x] Delete `content/lessons/daily-tasks.json` (Unit 12 lesson 1 — redundant, and a multiple-choice violation).
-- [x] Delete `content/lessons/trackpad-keyboard.json` (Unit 9 "Hardware" — the site cannot control a real trackpad, so the lesson is a dead end).
+### 0.1 Image files — **all available in `~/Downloads/Images/`**
 
-### 0.2 Fix `order` collisions and Unit 7 interleaving
-Current collisions: `email-thank-you` and `text-formatting` are both `270`; `photo-editing` and `photo-people` are both `730`; `icloud-photos` and `photo-search` are both `760`. Unit 7's modules are also interleaved (Organizing Photos at 720/730/750/770 with other modules between).
+All eight image files are present at `~/Downloads/Images/`. No phases are blocked. Before any other work, copy them into `public/playgrounds/`:
 
-- [x] Renumber Unit 2 tail: `text-formatting` → `245`. (Leaves: editing 240, formatting 245, shortcuts 250, navigation 260, email-thank-you 270, invitation 280, assessment 290.)
-- [x] Renumber Unit 7 so each module is contiguous:
-  - Your Photo Library: `photos-app` 700, `photo-favorites` 701, `photo-search` 702
-  - Organizing Photos: `photo-albums` 710, `photo-people` 711, `recently-deleted` 712
-  - Editing Photos: `photo-editing` 720, `sharing-photos` 721
-  - Cloud Storage: `cloud-photos` 730 (see 3.7 — `icloud-photos` merges into it and is deleted)
-  - Unit 7 Assessment: `unit-7-assessment` 780
-- [x] Verify: `python3 -c "…"` — write a five-line script that loads all lesson JSONs and asserts orders are unique. Keep it as `scripts/check-lessons.py` and run it in every phase's verification.
+```sh
+cp ~/Downloads/Images/DockIcons1.png     public/playgrounds/dock-icons-1.png
+cp ~/Downloads/Images/PowerButton.png    public/playgrounds/power-button.png
+cp ~/Downloads/Images/Charger.png        public/playgrounds/charger.png
+cp ~/Downloads/Images/Headphones.png     public/playgrounds/headphones.png
+cp ~/Downloads/Images/ImageInFiles.png   public/playgrounds/files-pictures.png
+cp ~/Downloads/Images/DownloadInFiles.png public/playgrounds/files-downloads.png
+cp ~/Downloads/Images/DigitalCookie.png  public/playgrounds/cookie.png
+```
 
-### 0.3 Unit/lesson breadcrumb in the header (feedback #30)
-`components/LessonModuleRunner.tsx:161-163` currently shows `{route.module} · {index+1} of {n}`.
-- [x] Add the unit name: `Unit 5: Messages and Video Calls · Messages Basics · 2 of 5`. If `ModuleRoute` (in `lib/lessons.ts`) doesn't carry `unit`, add it there (the grouping code has it).
-- [x] Also add it to the module-complete screen (line ~118).
+`TabActivityIdea.png` is a **design spec mockup**, not an image to embed — see §4.4 for how it translates to a page inside `GuidedBrowserTask`.
 
-### 0.4 Capitalization sweep (feedback #36)
-- [x] Write and run a scanner (add to `scripts/check-lessons.py`): for every lesson JSON, flag any `drDigitalIntro`/`drDigitalSuccess`/`drDigitalHint`, any `playgroundTask.instructions`, and any step `say` whose first character is a lowercase letter. Fix each by hand (capitalize; don't blind-uppercase things like "iPhone" if any appear).
+**What each image is** (confirmed by inspection):
 
-### 0.5 De-brand remaining Apple strings
-- [x] `grep -ri "safari\|facetime\|icloud\|siri\|macos\|finder" content/ components/ --include='*.json' --include='*.tsx'` (slugs may keep the words; visible strings may not). Rewrite titles/copy: "Safari" → "your browser", "FaceTime" → "video calls", "iCloud" → "cloud storage", "Siri" → "your computer's voice assistant" (or drop the lesson content that's Siri-specific — see 3.12 for `qrcodes-siri`). **Note:** Only `app-store.json` and `qrcodes-siri.json` had visible branded strings; Safari/FaceTime/Finder lessons use generic titles already — their slugs are retained for progress compatibility.
+| File | Dimensions | What it looks like |
+|---|---|---|
+| `DockIcons1.png` | 1280×800 | Sprite sheet: 4 columns × 3 rows, 10 black-on-white icons |
+| `PowerButton.png` | 512×512 | Classic power symbol (circle with vertical line), black on white |
+| `Charger.png` | 512×512 | USB cable with plug ends, black on white |
+| `Headphones.png` | 3684×3788 | Photograph of over-ear headphones — **scale down** to max 240×240 when rendering |
+| `ImageInFiles.png` | 1280×800 | Image placeholder icon (mountains + sun silhouette), black on white |
+| `DownloadInFiles.png` | 1280×800 | Download arrow icon, black on white |
+| `DigitalCookie.png` | 512×512 | Cartoon chocolate-chip cookie (tan/brown) with a bite taken out |
+| `TabActivityIdea.png` | 1311×703 | Design spec: browser at `pickacolor.example`, three colored circles, Tab/Enter sequence |
 
-**Phase 0 verification:** build passes; `/lessons` catalog shows Unit 7 modules in clean order; header breadcrumb shows the unit everywhere.
+**Slicing `DockIcons1.png`** — it is a sprite sheet, 4 icons wide × 3 rows tall (last row has 2). Cell dimensions are exactly 320×267px (last row is 266px tall). Slice with a one-off script in the scratchpad, **do not commit the script**:
+
+```sh
+# Run from repo root in the scratchpad — do not commit
+python3 - <<'EOF'
+from PIL import Image
+img = Image.open("public/playgrounds/dock-icons-1.png")
+
+# Row-major order: (app-id, col, row)
+icons = [
+    ("messages",   0, 0), ("browser",  1, 0), ("files",    2, 0), ("reminders", 3, 0),
+    ("mail",       0, 1), ("settings", 1, 1), ("photos",   2, 1), ("notes",     3, 1),
+    ("app-market", 0, 2), ("calendar", 1, 2),
+]
+W, H = 320, 267  # cell width, height (row 3 is 266px — crop at 267 crops the border, fine)
+for name, col, row in icons:
+    box = (col*W, row*H, (col+1)*W, min(row*H+H, img.height))
+    img.crop(box).save(f"public/playgrounds/dock-{name}.png")
+print("done")
+EOF
+```
+
+If `Pillow` is not installed: `pip3 install Pillow`. Verify the 10 output PNGs exist before continuing to §2.1.
+
+- [ ] Copy all 7 image files (above) into `public/playgrounds/`
+- [ ] Slice `dock-icons-1.png` into 10 `dock-<app>.png` files using the script above
+- [ ] Verify: `ls public/playgrounds/dock-*.png` shows all ten
+
+### 0.2 Everything is unblocked
+
+Assets are available. Copy them (§0.1) and proceed to Phase 1. No sections are blocked.
 
 ---
 
-## Phase 1 — Framework changes (everything else depends on these)
+## Phase 1 — Framework and navigation
 
-### 1.1 Non-blocking completion → free play (feedback #8, #9, #24)
+Everything in Phases 3–16 depends on this phase. Do it first and do it completely.
 
-**Problem:** `components/Playground/SimulatorFrame.tsx:87-94` renders a full-screen `absolute inset-0 z-40` overlay when `done` is true. It permanently blocks the sim, so the learner can't inspect the lock popover, their spam folder, or anything else after finishing.
+### 1.1 Merge the lessons catalog and the dashboard (feedback #1)
 
-- [x] In `SimulatorFrame`, replace the permanent overlay with a two-stage completion:
-  1. When `done` flips true, show the existing celebration overlay for **1.6 seconds** (drive with a `justFinished` state + `setTimeout`), then remove it.
-  2. After that, render a slim persistent banner at the top of the app-window area (below the dark guidance banner): green background, `✓ {goal} — lesson complete! You can keep practicing here.` Small, doesn't block anything.
-- [x] The dark guidance banner in the `done` state should keep showing "Done" + the full progress bar (it already does).
-- [x] Apply the same two-stage pattern to the components that copy the overlay locally: `GuidedDesktopTask.tsx` and `KeyboardNavTask.tsx`.
-- [ ] **Free-play rule** (enforced per-sim in Phase 2, but establish it now): after `done`, every sim's *read* interactions must keep working — open panels, switch folders/contacts/tabs, view popovers. Pattern: handlers currently shaped `if (step?.action === X) …` must perform their realistic state change unconditionally and only *gate the step-completion call* on the step. Most handlers already do this (e.g., `GuidedBrowserTask.clickDownloadsBtn` opens the menu regardless); audit each sim for handlers that no-op without a matching step and fix them.
+Right now `/lessons` ([app/lessons/page.tsx](app/lessons/page.tsx), 33 lines) lists modules as bare underlined links with no progress, and `/dashboard` ([app/dashboard/page.tsx](app/dashboard/page.tsx) + [components/DashboardView.tsx](components/DashboardView.tsx)) lists the *same* modules again with completion counts. Two pages, one dataset, neither one good.
 
-**Acceptance:** finish `https-secure` lesson; after the checkmark clears you can still click the lock and read the popover. Finish an email lesson; you can still open Spam.
+- [ ] Build a single page at `/lessons` that replaces both. Delete `app/dashboard/page.tsx` and `components/DashboardView.tsx`; create `components/LessonCatalog.tsx` (`"use client"` — it reads `localStorage`).
+- [ ] The page receives `routes: ModuleRoute[]` from the server component (`getModuleRoutes()`) and reads `getCompletedSlugs()` in a `useEffect`. Render `null` until the effect has run, exactly as `DashboardView` does today ([components/DashboardView.tsx:19-22](components/DashboardView.tsx:19)) — this avoids a server/client hydration mismatch on progress state.
+- [ ] Page structure, top to bottom:
+  1. **Overall progress header.** `"{n} of {total} lessons complete"` with a full-width progress bar (`h-3 rounded-full bg-gray-200`, inner `bg-green-500 transition-all duration-500`).
+  2. **Continue where you left off.** A prominent card linking to the first module containing an incomplete sub-lesson. Show unit name, module name, and `"Lesson {i+1} of {n}"`. If everything is complete, show a course-complete card instead.
+  3. **Unit sections.** For each unit: a heading, then a card per module. Each module card shows the module name, `{done}/{total}`, a slim per-module progress bar, and a state chip — `Not started` (gray) / `In progress` (blue) / `Complete` (green with a `CheckIcon` from `Icons.tsx`). The whole card is one `<Link>` to `/lessons/{moduleSlug}`.
+  4. **Footer.** Move the existing progress-storage explainer and the **Reset all progress** button here verbatim from [components/DashboardView.tsx:57-70](components/DashboardView.tsx:57). Keep the `window.confirm` guard and keep calling `resetProgress()` (which already clears both `lac-progress` and `lac-sim` — see [lib/progress.ts:55-61](lib/progress.ts:55)).
+- [ ] **Redirect the old route.** Add `app/dashboard/page.tsx` back as a one-line server component: `import { redirect } from "next/navigation"; export default function Page() { redirect("/lessons"); }`. Anyone with a bookmark still lands somewhere sensible.
+- [ ] **Update the nav bar** in [app/layout.tsx:22-36](app/layout.tsx:22): remove the "Dashboard" link. The nav becomes Home / Lessons / Playground.
+- [ ] Widen the page: the current `max-w-xl` is too narrow for cards. Use `max-w-3xl mx-auto`.
 
-### 1.2 Failure channel — "lesson failed" in the LEFT panel (feedback #13, #58)
+**Acceptance:** `/lessons` shows real progress per module without visiting a second page; `/dashboard` redirects there; the reset button still works and still clears `lac-sim`.
 
-- [x] Change the result callback signature everywhere from `onResult(success: boolean)` to `onResult(success: boolean, failMessage?: string)` (`LessonPlaygroundPane`, `LessonModuleRunner.handleResult`, and the sims — sims that never fail pass nothing extra).
-- [x] In `LessonModuleRunner`: when `success === false`, store the message; render a red-bordered card in the left panel (NOT inside the playground): heading "Activity failed", the `failMessage` (fallback: `drDigitalHint`), and a prominent **Try again** button that bumps `activityAttempt` (this remounts the activity — the mechanism already exists at `LessonModuleRunner.tsx:196-199`).
-- [x] The playground must **stay mounted** when failed (so the learner can see, e.g., the fake download that appeared). Only remount on Try again.
-- [x] Dr. Digital switches to the hint mood on failure (already happens via `attemptState === "failed"`).
+### 1.2 Login page (feedback #2)
 
-### 1.3 Desktop-first launching (feedback #67, #64, part of #78)
+Build the **UI and the client-side session shape now**; wire Supabase **later**. Nothing in the course may become inaccessible because a user isn't signed in — progress stays in `localStorage` for this phase.
 
-**Requirement (user, verbatim intent):** *for all playground activities, never take the learner into the app automatically — they open it from the desktop themselves.*
+- [ ] `npm install @supabase/supabase-js @supabase/ssr` (the only dependencies this plan permits).
+- [ ] Create `lib/supabase.ts`:
+  - Export `createClient()` returning a browser Supabase client built from `process.env.NEXT_PUBLIC_SUPABASE_URL` and `process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+  - **Guard for missing env vars**: if either is absent, log a single `console.warn` and export `null`. The site must build and run with no Supabase project configured — that is the state it will be in when you finish.
+- [ ] Create `.env.local.example` (committed) with both variable names and empty values, plus a comment pointing at the Supabase project settings page. **Do not create `.env.local`** and never commit real keys.
+- [ ] Create `app/login/page.tsx` — a client component styled to match the course (white card, `border-2 border-black`, generous type, same Roboto title font). It contains:
+  - The Dr. Digital avatar (`components/DrDigitalAvatar.tsx`) and a one-line welcome.
+  - Email + password inputs, both with visible `<label>`s (not placeholder-only — beginners lose placeholder text the moment they type).
+  - A **Sign in** button and a **Create account** toggle that swaps the form's heading and submit label.
+  - A **Continue without an account** link to `/lessons`, which must be visually prominent. This is the path everyone takes today.
+  - A gray info box: *"Accounts aren't turned on yet. Your progress is saved on this device."*
+- [ ] `handleSubmit` calls `signInWithPassword` / `signUp` when the client exists, and otherwise sets an inline message: *"Accounts aren't set up yet — use 'Continue without an account' for now."* Never throw, never leave a spinner running.
+- [ ] Add a small **Sign in** link at the right end of the nav bar in `app/layout.tsx`.
+- [ ] **Do not add middleware, route guards, or protected routes.** Do not migrate progress to Supabase. That is Phase 1.3's *document*, not this phase's code.
 
-- [x] Extend `FakeDesktop` (`components/Playground/FakeDesktop.tsx`):
-  - Grow the dock from 4 to 10 apps: **Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes** (Settings sits immediately right of Mail — explicit user request). Add dock icons: reuse `public/playgrounds/icon-*.png` where they exist; create simple inline-SVG-based PNGs or SVG icon components for the rest (gear, photo, storefront/bag, calendar page, checklist, note — see Phase 4 icon set).
-  - New prop `highlightApp?: string` — pulses that dock icon with the standard `ring-4 ring-yellow-400 animate-pulse`.
-  - New prop `interceptApps?: string[]` + existing `onAppOpened` — when an intercepted app is clicked, don't open the built-in app; just fire the callback (the lesson swaps in its guided sim).
-- [x] New component `components/Playground/DesktopLaunch.tsx`:
+**Acceptance:** `/login` renders and is fully usable with no Supabase env vars set; the build passes; every lesson remains reachable without signing in.
+
+### 1.3 Progress-monitoring design document (feedback #3)
+
+**Write only. Implement nothing.** No schema is created, no code changes.
+
+- [ ] Create `docs/PROGRESS_MONITORING.md` covering:
+  1. **Today's model.** `lac-progress` (`{version, completedSlugs[]}`) and `lac-sim` in `localStorage`; read/written by [lib/progress.ts](lib/progress.ts) and [lib/simState.ts](lib/simState.ts). Its limits: per-device, per-browser, lost on cache clear, invisible to a parent or teacher.
+  2. **What we want to know.** Per learner: which sub-lessons are complete and when; time spent per lesson; failed attempts per activity (the `onResult(false, …)` channel already produces this signal — it is simply discarded today); which lessons get skipped via *Skip this activity*; where learners quit a module.
+  3. **Proposed Supabase schema.** Tables with columns and types: `profiles` (id uuid PK → auth.users, display_name, role enum learner|supervisor, created_at), `lesson_events` (id, user_id FK, lesson_slug, module_slug, event_type enum started|completed|failed|skipped, duration_ms nullable, fail_message nullable, created_at), `supervisor_links` (supervisor_id, learner_id, created_at, PK on the pair). Note the RLS policies each table needs: a learner reads and writes only their own rows; a supervisor reads rows for learners they are linked to; nobody writes another user's rows.
+  4. **Sync strategy.** `localStorage` stays the write-ahead source of truth so the app works offline and while signed out. On sign-in, replay unsynced events. Reconcile by taking the union of completed slugs — completion is monotonic, so union is always safe and needs no conflict resolution.
+  5. **The supervisor view.** What a parent or teacher sees: a learner list, per-unit progress bars, a "stuck here" list built from repeated failures on one slug, and last-active time.
+  6. **Privacy.** Learners are likely minors. Data minimization, no third-party analytics, explicit linking (a supervisor is added by code or invite, never by email guess), and a stated deletion path.
+  7. **Open questions**, explicitly flagged for the user: Do supervisors self-register or get invited? Is there a classroom/group concept above the 1:1 link? How long is event history retained?
+
+### 1.4 Back and Next buttons: identical size (feedback #7)
+
+[components/LessonModuleRunner.tsx:234-245](components/LessonModuleRunner.tsx:234). Back is `px-4 py-2 text-sm text-gray-600`; Next is `px-4 py-2 font-semibold`. Different font size and weight ⇒ visibly different heights and widths.
+
+- [ ] Define one shared class string in the component:
   ```tsx
-  <DesktopLaunch app="mail">{<GuidedEmailTask …/>}</DesktopLaunch>
+  const navBtn = "min-w-[120px] justify-center inline-flex items-center gap-1 border-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-all active:scale-95";
   ```
-  Renders the dark guidance banner ("Open Mail — click the glowing icon in the dock") + `FakeDesktop` with `highlightApp`/`interceptApps`. Once opened, renders `children` full-pane. App label derived from exported `APP_TITLES`. Not counted as a numbered step.
-- [x] Wire `DesktopLaunch` around every guided sim in `LessonPlaygroundPane.tsx`: guided-files→Files, guided-browser→Browser, guided-messaging→Messages, guided-email→Mail, guided-photos→Photos, guided-app-store→App Market, guided-calendar→Calendar (or Reminders via `launchApp` field), guided-security→Browser, guided-troubleshooting→app named by `launchApp` field (default: browser). Added `launchApp` to guided-troubleshooting and guided-calendar types in `lib/lessons.ts`.
-- [ ] Update every affected lesson's `drDigitalIntro`/first step copy so the flow reads naturally ("Open Photos from your desktop, then…"). (Deferred — the DesktopLaunch banner handles the instruction; intros work as-is.)
+- [ ] Back: `${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50`. Next: `${navBtn} …` plus the state styles from 1.5.
+- [ ] `min-w-[120px]` plus `justify-center` guarantees they match even though "← Back" and "Finish" have different label widths.
 
-**Acceptance:** no guided lesson drops you inside an app. Every one starts on the desktop with one pulsing dock icon.
+### 1.5 Next button reacts to completion; green check is faster (feedback #19, #25)
 
-### 1.4 Assessment mode — objectives, no hand-holding, hints on demand (feedback #29, #14, #22, #45, #59, #70, #77)
+Two related changes.
 
-- [x] Add `mode?: "guided" | "assessment"` to the guided task JSON types that need it (browser, messaging, email, app-store, security, troubleshooting, calendar) in `lib/lessons.ts`.
-- [x] `SimulatorFrame` gains optional props: `objectives?: {label: string; done: boolean}[]`, `onHint?: () => void`, and renders the alternate banner when provided. `stepIndex`/`totalSteps` are now optional (omitted in assessment mode). Assessment banner shows "Objectives: N of M done", expandable objectives list with checkmarks, and a Hint button.
-- [ ] Per-sim assessment wiring: refactor each sim's completion checks into a pure `matchesStep(step, event): boolean` helper; in assessment mode scan all incomplete objectives on each action. Thread `mode` prop into sim components. (Done per-sim in Phase 2/3 when each sim is being upgraded.)
+**(a) The Next button announces that you may advance.** [components/LessonModuleRunner.tsx:240-244](components/LessonModuleRunner.tsx:240) currently renders Next with a static `animate-slide-up`.
 
-### 1.5 Persistent sim state (feedback #43)
+- [ ] Add to `tailwind.config.ts` (`theme.extend.keyframes` / `theme.extend.animation`):
+  ```ts
+  "pop-attention": {
+    "0%":   { transform: "scale(1)" },
+    "40%":  { transform: "scale(1.12)" },
+    "70%":  { transform: "scale(0.98)" },
+    "100%": { transform: "scale(1)" },
+  },
+  // animation:
+  "pop-attention": "pop-attention 0.45s ease-out 1",
+  ```
+- [ ] Track *when* the lesson just became passable: `const justCompleted = attemptState === "success";`
+- [ ] When `justCompleted`, render Next as `border-green-600 bg-green-500 text-white hover:bg-green-600 animate-pop-attention shadow-lg` — it pops once and stays green. Otherwise render the neutral `navBtn` style. Do **not** loop the animation; one pop reads as "ready", a loop reads as an error.
+- [ ] Apply the same green treatment when `alreadyDone` is true (revisiting a finished lesson) — minus the pop, since nothing just happened.
 
-- [x] New `lib/simState.ts`: `readSimState<T>(key: string): T | null` / `writeSimState(key, value)` over localStorage key `"lac-sim"` (one JSON object, namespaced sub-keys). Guard for SSR (`typeof window`).
-- [x] Used by App Market (2.6) so installed apps persist across lessons via `lac-sim-apps` localStorage key. _Done: GuidedAppStoreTask uses loadInstalledIds/saveInstalledIds with seed-on-mount for cross-lesson persistence._
-- [x] The dashboard's "reset all progress" button must also clear `"lac-sim"`.
+**(b) The celebration overlay is twice as long as it should be.** [components/Playground/SimulatorFrame.tsx:53-65](components/Playground/SimulatorFrame.tsx:53) holds it for `1600`ms.
 
-### 1.6 No-op step guard (feedback #57)
+- [ ] Change `1600` → `800`. Verify the same constant isn't duplicated elsewhere:
+  ```sh
+  grep -rn "1600" components/
+  ```
+  [components/Playground/GuidedDesktopTask.tsx](components/Playground/GuidedDesktopTask.tsx) and [components/Playground/KeyboardNavTask.tsx](components/Playground/KeyboardNavTask.tsx) each carry a local copy of this pattern — change those too. Extract the value to `export const CELEBRATION_MS = 800;` in `SimulatorFrame.tsx` and import it in both, so this can never drift again.
 
-**Problem:** some steps say "click X" when X is already in that state (the phishing tab is already selected; a folder is already open). The learner clicks, nothing changes, or the step can't be completed at all.
+### 1.6 Every playground activity shows the green check (feedback #25)
 
-- [x] Content fix: audit every guided lesson's first steps against the sim's initial state; delete steps that are no-ops on arrival. Removed 9 redundant `go-to-section` first steps from security lessons (scams-phishing, identity-theft, passwords-basics, password-managers, password-recovery, two-factor, public-wifi, safe-shopping, shopping-banking).
-- [ ] Framework guard: in each sim, when a step *activates*, if the sim state already satisfies it, auto-complete it without the flash (log nothing; just advance). This makes content mistakes self-healing. Implement inside the same `matchesStep` refactor from 1.4.
+The two-stage completion (overlay → slim banner) lives in `SimulatorFrame`. Activities that don't render through `SimulatorFrame` never show it.
 
-**Phase 1 verification:** full build; run one lesson per sim end-to-end confirming: desktop launch → activity → celebration clears → free play works → (for one converted assessment) objectives + hint work.
+- [ ] Audit every branch of [components/LessonPlaygroundPane.tsx:71-214](components/LessonPlaygroundPane.tsx:71). These are **not** wrapped and therefore have no celebration:
+  `file-explorer-open`, `browser-right-click`, `browser-scroll-code`, `pinch-zoom`, `message-reply`, `open-all-apps`, `edit-file`, `compose-email`, `drag-sort-files`, `spot-the-fake`, `url-navigator`, and every `DesktopLaunch`-wrapped guided sim *before* its inner sim mounts.
+- [ ] Most of these are being restructured anyway by later phases. For any that survive as-is, wrap them in `SimulatorFrame` using the existing single-activity mode (omit `stepIndex`/`totalSteps` and the banner shows just the instruction — see [SimulatorFrame.tsx:72-85](components/Playground/SimulatorFrame.tsx:72)), passing `done={completed}` from the existing `wrappedOnResult` at [LessonPlaygroundPane.tsx:62-65](components/LessonPlaygroundPane.tsx:62).
+- [ ] Guided sims that own a full-screen desktop (`guided-desktop`, `guided-troubleshooting`) keep their local celebration — just confirm each one fires and uses `CELEBRATION_MS`.
 
----
+**Acceptance:** finish any activity anywhere in the course and a green check appears for ~0.8s, then a slim green banner, then the sim stays interactive.
 
-## Phase 2 — Per-simulator upgrades
+### 1.7 Skip the activity from inside a running activity (feedback #12, #23)
 
-Each section lists the file, the changes, and acceptance criteria. All sims also get their Phase 1.1 free-play audit and 1.3 desktop launch here if not already done.
+[components/LessonModuleRunner.tsx:198-232](components/LessonModuleRunner.tsx:198). Today "Skip this activity" only exists *before* you press Start; once started your options are Exit and Restart. A learner who gets stuck mid-activity is trapped.
 
-### 2.1 Files — `components/Playground/GuidedFilesTask.tsx` (feedback #2, #3)
+- [ ] In the `started` branch, add a **third** button after Restart activity: **Skip this activity →**, calling `handleNext()`.
+- [ ] Give **both** skip buttons (the pre-start one at line 208 and this new one) the same gray-box treatment the user asked for — no more bare underlined text:
+  ```tsx
+  className="rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:scale-95"
+  ```
+- [ ] Skipping still calls `markComplete(subLesson.slug)` via `handleNext`'s `if (!hasGate)` path — **check this carefully**: for a gated lesson `handleNext` does *not* mark complete ([LessonModuleRunner.tsx:86](components/LessonModuleRunner.tsx:86)). That is correct and intentional. A skipped activity must **not** count as completed, or the progress number lies. Leave that behavior alone.
 
-- [x] **Restore double-click to open.** The previous session added single-click opening inside `onItemClick` ("Single click opens — double-clicking is fiddly"). Remove that branch entirely; `open-file`/`open-folder` steps complete only on double-click (`onItemDouble`). Single click selects. Update any step/hint copy that says "click" to "double-click".
-- [x] **Move = drag-and-drop only, with a visible drop target.** Remove the click-file-then-click-folder fallback path. Implement HTML5 drag: file rows get `draggable`; folder rows *and* sidebar folder entries are drop zones. Track `dropTarget` state on `onDragOver` (call `preventDefault`) / `onDragLeave` / `onDrop`; while a dragged file hovers a folder, that folder gets an unmistakable highlight: `ring-4 ring-blue-400 bg-blue-100 scale-[1.02]`. On drop, if it matches the step's `target`+`into`, complete; if it's a valid folder but the wrong one, actually move the file anyway (realism) and show an inline nudge "Oops — drag it into {into} instead" with the file recoverable.
-- [x] Free play: after done, open/preview/navigate all work.
+### 1.8 Back button on the first sub-lesson of a module (feedback #13)
 
-**Acceptance:** `moving-files` lesson requires an actual drag; the destination folder visibly lights up while hovering; single-clicking a file in any lesson selects but never opens.
+[components/LessonModuleRunner.tsx:235](components/LessonModuleRunner.tsx:235) renders Back only when `index > 0`, so the first lesson of a module is a dead end — you cannot walk backwards into the previous module.
 
-### 2.2 Browser — `components/Playground/GuidedBrowserTask.tsx` (feedback #4, #5, #7, #9, #10, #11, #13, #14 groundwork)
+- [ ] Add `previousModuleSlug: string | null` to `LessonModuleRunnerProps` and thread it from `app/lessons/[slug]/page.tsx`.
+- [ ] Add `getPreviousModuleSlug(moduleSlug)` to [lib/lessons.ts](lib/lessons.ts) — mirror `getNextModuleSlug` at [lib/lessons.ts:361-366](lib/lessons.ts:361), returning `routes[index - 1].moduleSlug` or `null` at index 0.
+- [ ] Render Back whenever `index > 0 || previousModuleSlug`. When `index === 0` and a previous module exists, the click does `router.push(\`/lessons/${previousModuleSlug}\`)` and the label reads **← Previous module**.
+- [ ] Note the interaction with the resume effect at [LessonModuleRunner.tsx:52-69](components/LessonModuleRunner.tsx:52): landing on a fully-completed previous module will show the "Module complete!" screen, which already has a **Review this module** button. That is acceptable and needs no change.
 
-- [x] **Search results must be opened** (bug: `submitSearch` at line ~313 completes the `search` step on submit, and results are non-clickable `<div>`s — the apple-pie lesson finished without opening anything). Make each result a `<button>` that `navigate()`s to the matching page (map `step.reveal`/result title → PageId). Add a new step action `open-result` (field `title`). Keep `search` completing on submit, but update `browser-vs-search` (and any lesson using `search`) to append an `open-result` step, then whatever the page task is. The learner must land on Recipe Box before anything completes.
-- [x] **Reload demonstrates something** (currently `reload()` at line ~230 is an instant no-op step). Add a `broken` mechanic: a `brokenPages: Set<PageId>` state. When a lesson's steps include a `reload` action, seed the *preceding* navigate target as broken. A broken page renders a gray broken-image placeholder, scrambled half-loaded text, and a note "This page didn't load correctly." Clicking Reload shows a 400ms spinner, clears the broken flag, renders the real page. The `reload` step only completes when it actually fixed a broken page. Rewrite `refresh-reload` lesson: navigate → see broken page (banner explains pages sometimes half-load) → reload → fixed → step done. (Pedagogy pattern: problem → explanation → fix.)
-- [x] **Zoom demonstrates something** (feedback: "making the page text bigger did not work, also it is visible"). Two fixes: (a) the zoom-out `−` control is currently a dead `<span>` (line ~457) — make both − and + real buttons that work any time; (b) add a `finePrint` section to the `news` page: a paragraph rendered at `text-[8px]` ("Special offer details…"). Rewrite `zooming-webpages`: navigate to news → banner points out you can't read the fine print → zoom-in twice (completes at ≥150%, logic exists at line ~310) → a readable confirmation appears in the fine print ("Now you can read this!").
-- [x] **Lock popover: truthful, readable, and actually read** (bugs: popover at line ~588 *always* says "Connection is secure" even on the insecure site; and the step used to complete instantly then get covered by the overlay).
-  - Branch on `activePage.secure`. Secure copy: "🔒(icon) **This connection is encrypted.** Nobody between you and {url} can read what you type — not the coffee-shop WiFi, not your internet provider. **But the lock does NOT mean the site itself is trustworthy** — the website still sees everything you enter. A scam site can have a lock too."
-  - Insecure copy (red header): "⚠️(icon) **This connection is NOT secure.** Anything you type here could be read by others on the network. Never enter passwords or card numbers on a page without the lock."
-  - `clickLock()` no longer completes the step; the popover's **Got it** button does. Guarantees they saw it.
-  - Update `https-secure` lesson intro to teach in-transit-only protection thoroughly (re-teachable bar).
-- [x] **Cookie lesson explains tracking** (feedback #11). Rewrite `cookies` intro: what a cookie is (a little note the site leaves so it remembers you — that part is useful), vs third-party tracking cookies (advertisers plant the same cookie on many sites, so they can follow you from site to site and build a profile of everything you read, search, and buy — that's why "Decline" or "Reject non-essential" is the safe default). Make the banner's **Accept** button functional too: it closes the banner; if the step wanted Decline, show an inline nudge "You accepted! For this lesson, click Decline instead" and re-show the banner.
-- [x] **Scam popup: real consequences** (feedback #13).
-  - The **CLEAN NOW** button (line ~582 — currently no `onClick`) now: adds `"SystemCleaner.exe"` to `downloads`, closes the popup, and calls `onResult(false, "That button was the scam! It downloaded a fake 'cleaner' program. On the next try, close the popup with the ✕ instead — and remember: if you ever click one by accident, delete the download immediately and never open it.")`. The left panel shows the failed card (Phase 1.2); the playground stays visible with the download sitting in Downloads.
-  - Add step action `delete-download` (field `file`): the Downloads panel rows get a trash button; clicking it removes the file and completes the step.
-  - New lesson `popup-accident` (Unit 4, Online Safety module, order 493.5 → use 494 and shift reload/zoom to 495/496, assessment to 497 — or simpler: insert as order 493 and renumber popups-ads to 492.5? **Do it cleanly:** renumber Online Safety to 491 https, 492 cookies, 493 popups-ads, 494 popup-accident, then Using-the-browser reload 495, zoom 496 → move `unit-4-assessment` to 499). Steps: navigate freegames → popup appears pre-clicked scenario: seed `SystemCleaner.exe` in downloads → banner explains what happened → open-downloads → delete-download → done. Teaches recovery without requiring them to fail the previous lesson.
-- [x] **Ads for the assessment** (groundwork for 3.4): pages support `ads: true` → renders 1–2 fake ad blocks styled like real ads (green "DOWNLOAD NOW ▶" button, "You are visitor 1,000,000!" banner). Clicking an ad in assessment mode → `onResult(false, "That was an ad pretending to be a download button — real download links are in the page content, not in flashy boxes.")`.
+### 1.9 THE NEW RULE — hide the playground when software isn't involved (feedback #15, and #9, #10, #11, #14 in particular)
 
-**Acceptance:** apple-pie flow requires opening the result page; reload fixes a visibly broken page; zoom lesson starts unreadable and ends readable; lock popover differs secure vs insecure and stays readable after completion; CLEAN NOW fails the lesson into the left panel and plants a file; the new cleanup lesson deletes it.
+A lesson about a charging cable renders an idle PlaygroundOS desktop beside it. Beginners read that as "there is something here I'm supposed to do," and there isn't.
 
-### 2.3 Messaging — `components/Playground/GuidedMessagingTask.tsx` (feedback #15–#22)
+- [ ] Add an optional field to the `Lesson` interface in [lib/lessons.ts:264-275](lib/lessons.ts:264):
+  ```ts
+  /** Optional still image shown in the right pane instead of the PlaygroundOS desktop. */
+  media?: { src: string; alt: string; caption?: string };
+  ```
+- [ ] In [components/LessonModuleRunner.tsx:248-256](components/LessonModuleRunner.tsx:248), replace the unconditional right pane with three cases:
+  1. `subLesson.media` → render `components/LessonMedia.tsx` (new): a centered `next/image` with `object-contain`, `max-h-full`, rounded corners, a subtle border, and an optional caption below in `text-sm text-gray-500`. **No PlaygroundOS.**
+  2. `hasGate` (there is a real activity) → render `LessonPlaygroundPane` exactly as today.
+  3. Neither → render **nothing**, and let the left panel expand to fill the width. Change the left panel's class from `w-full lg:max-w-xl` to a conditional: keep `lg:max-w-xl` when a right pane exists, use `lg:max-w-3xl mx-auto` when it doesn't.
+- [ ] Also apply case 3 in the module-complete screen at [LessonModuleRunner.tsx:155-157](components/LessonModuleRunner.tsx:155), which currently renders an idle desktop for decoration. Replace it with nothing and center the panel.
+- [ ] **Document `media` in `CLAUDE.md`** under the Lesson JSON schema, with an example.
 
-- [x] **Fix send** (bugs #15/#16 — root cause at lines 126-144: completion requires `phase === 1`, which is only set by the input's `onFocus`; if focus happened before the step activated, Send can never complete. Also a required `step.value` mismatch fails silently).
-  - Delete the `phase` mechanism for `send-message`. Highlight logic becomes state-driven: `hl("message-input")` when `draft` is empty; `hl("send-btn")` when `draft` is non-empty.
-  - `handleSend` completes the step whenever a message is actually sent and (no `step.value` OR the text case-insensitively contains it). If `step.value` is set and missing from the text, still send the message (realism) but show an inline nudge under the compose bar: `Include the words "{value}" in your message.` Never fail silently.
-  - Enter in the input already routes to `handleSend` (line 394) — with the phase gate gone, **both Enter and the Send button complete the step** (explicit user requirement).
-- [x] **Plus button always does something** (feedback #17). `+` opens an attachment menu anchored above it, always (not just during attach steps): rows **Photos** (functional — opens the picker), **Files**, **Camera**, **Voice memo** (these three rows show, on click, a small note: "In your real messaging app, this is where you'd attach files, take a picture, or record a voice message."). During an `attach-photo` step, the menu's Photos row is the highlighted second phase.
-- [x] **Photo picker gets real options** (feedback #19). Replace the three emoji (line ~382) with a 2×3 grid of real thumbnails from `public/playgrounds/`: `animal-dog.png` "Dog", `file-vacation-photo.png` "Beach", `cat1.png` "Cat", `animal-bird.png` "Bird", plus 2 more (cow, snake) — labeled, `object-cover` rounded thumbs. A sent photo renders the actual image (~160px wide bubble), not "🖼️ Photo".
-- [x] **Reactions: double-click or press-and-hold** (feedback #18 — "no messaging app uses click"). Remove the single-click trigger (line ~333). Trigger the reaction picker on `onDoubleClick` OR pointer-down held ≥500ms on the contact's most recent message. Update every reaction step's `say`/hints: "Double-click (or press and hold) {name}'s message…". Keep the emoji in the picker itself — they are the feature (allowed exception to the emoji purge).
-- [x] **Video call UI** (feedback #20, #21). In the call overlay (lines 202-266):
-  - Label everything: contact name chip on the main tile ("Sam"), a "You" chip on the self-preview.
-  - Every control gets a **text label under the button**: "Mute"/"Unmute", "Camera off"/"Camera on", "End call". Replace emoji glyphs with inline SVGs (mic, mic-slash, camera, camera-slash).
-  - **End call = a wide red pill** with a white phone-receiver SVG rotated 135° (the universal hang-up icon) + the label. Unmistakable.
-  - Replace emoji avatars (`👤👩🧑👵`, lines 42-45) with real avatar images — reuse whatever `Desktop/MessagingApp.tsx` uses (it already got real avatar images in an earlier round; check its imports) or Commons portraits (Appendix B).
-- [x] Free-play audit: after done, contact switching, sending, reacting, and calls all still work.
+Every `type: "none"` lesson in the course now falls into case 2 or 3. Each unit phase below states which of its lessons get `media`, which get a real activity, and which get a bare centered panel.
 
-**Acceptance:** In `messages-app` (2/5), type any message containing "Hey" and click **Send** — completes. Retry with **Enter** — completes. `messages-photos` (3/5) same. Reaction lessons require double-click/hold. The call screen is self-explanatory in a screenshot.
+### 1.10 Lesson-to-lesson transition animation (feedback #5)
 
-### 2.4 Email — `components/Playground/GuidedEmailTask.tsx` (feedback #23, #25, #26, #27, #28; assessment in 3.5)
+Clicking Next swaps the text with no motion, so it isn't obvious anything changed.
 
-Current actions: `open-email, compose, set-to, set-cc, set-bcc, set-subject, set-body, attach, send, reply, forward, delete, mark-spam, archive, go-to-folder`.
+- [ ] Add to `tailwind.config.ts`:
+  ```ts
+  "lesson-in": {
+    "0%":   { opacity: "0", transform: "translateX(16px)" },
+    "100%": { opacity: "1", transform: "translateX(0)" },
+  },
+  // animation:
+  "lesson-in": "lesson-in 0.28s ease-out both",
+  ```
+- [ ] In `LessonModuleRunner`, wrap the left panel's content (title block + `DrDigital` + buttons — **not** the `← All lessons` link, which must not move) in a `<div key={subLesson.slug} className="animate-lesson-in space-y-6">`. Keying on the slug remounts the subtree on every lesson change, replaying the animation. This is the same trick `PageTransition` uses on `pathname` ([components/PageTransition.tsx:8-13](components/PageTransition.tsx:8)).
+- [ ] Wrap the whole thing in `motion-reduce:animate-none` — respect `prefers-reduced-motion`.
+- [ ] The right pane must **not** animate on every sub-lesson change; a desktop that slides in each time is nauseating. Leave it unkeyed.
 
-- [x] **Rescue actions** (feedback #23): add `unspam` and `move-to-inbox` actions. In the Spam folder, each opened email shows a **Not spam** button (moves it to Inbox); in Archive, a **Move to Inbox** button. Both work in free play too.
-- [x] **Reply is visible + unsend** (feedback #25): after a `reply` step sends, the thread view shows the reply appended under the original ("You · just now"), and a transient pill appears for a few seconds: "Sent — **Undo**" with a 30→0 countdown (Undo restores the draft). Mention the real-world ~30-second unsend window in the `reply-forward` lesson intro.
-- [x] **Attach opens a picker** (feedback #28): `attach` becomes two-phase — click the 📎(SVG) Attach button → a file-picker modal opens listing the standard sim files (reuse the item list from `GuidedFilesTask.makeItems()` or `Desktop/filesData.ts` — pick ONE source and use it in both places) → the step's `target` names the file to pick (e.g., `VacationPhoto.png`). The chosen file appears as a chip on the compose form. Update the `attachments` lesson to specify exact body text to type ("Hi Grandma, here's the photo from our beach trip! Love, Me") — never send an attachment with an empty body.
-- [x] **Tab hint** (feedback #27): compose form shows a one-line tip under the fields: "Tip: press Tab to jump to the next box, Shift+Tab to go back." Reference it in `composing-email` and `cc-bcc` step copy.
-- [x] Free-play audit: after done, folders/emails all remain browsable — the user specifically complained the checkmark hid their spam folder (#24; fixed globally by 1.1, verify here).
+### 1.11 Redo any lesson (feedback #89)
 
-**Acceptance:** you can mark a good email Not-spam and watch it return to Inbox; replying visibly threads your reply with an Undo countdown; attaching walks through a real picker.
-
-### 2.5 Photos — `components/Playground/GuidedPhotosTask.tsx` (feedback #31–#35)
-
-- [x] **Real photo library**: replaced emoji tiles with 12 real images from `public/playgrounds/` PNGs (VacationPhoto, Dog, Bird, Cow, Snake, Cat1, Cat2, animal-dog/bird/cow/snake, Budget). Each item: `{id, label, src, favorite, albums, deleted}`.
-- [x] **Recover bug** (feedback #33): fixed by removing the impossible `select-photo` step from `recently-deleted.json` — the Recently Deleted grid has no detail view, only Recover buttons. Changed target to "Orange Cat", reduced to 4 steps. Recover handler now fires on the correct step.
-- [x] **Functional editing** (feedback #32, #34): working controls — Crop (Original/Square/Wide via CSS aspect-ratio), Rotate (90° per click via CSS transform), Brightness/Contrast sliders (CSS filter), named filters (Vivid/Dramatic/B&W/Warm/Cool), and Revert (resets all). Added `adjust-contrast` action to the type union.
-- [x] **Editing lesson = fix a bad photo** (feedback #34): rewrote `photo-editing` as 6-step flow: select Bird in Garden → brightness 90-110% → contrast 90-110% → rotate → crop Square → revert. Both sliders validate by range.
-- [x] **Share picks a channel and a person** (feedback #35): three-phase share flow — Share button → Mail/Messages picker → contact list (Alex/Jordan/Sam/Grandma with avatars) → toast "Sent to {name} via {channel}". Added `via` and `to` fields to guided-photos step type. Updated `sharing-photos.json`.
-
-**Acceptance:** crop/rotate/sliders visibly change the image; the editing lesson starts ugly and ends fixed; sharing names a channel and a recipient; recover acknowledges and completes.
-
-### 2.6 App Market — `components/Playground/GuidedAppStoreTask.tsx` (feedback #37–#45)
-
-- [x] **Rename** (feedback #37): the sim app is now **"App Market"** (title bar, dock icon label). Every lesson intro explains the generic concept. _Done: all 6 lesson JSONs + GuidedAppStoreTask + dock icon renamed._
-- [x] **My Apps includes built-ins** (feedback #38): Messages, Mail, Files, Browser, Photos, Calendar, Notes tagged "Built-in" (not deletable), plus user-installed apps. _Done: BUILT_IN_APPS array in GuidedAppStoreTask._
-- [x] **Proper catalog** (feedback #39): 12 apps (Puzzle Quest, Bubble Pop, Zen Garden, Calculator Pro, WeatherNow, FlashLight, ChatBuddy, PhotoFun, NoteMaster, SketchPad, MusicMaker, RecipeBox) across 4 categories with reviews, ratings, screenshots, colored icons. _Done._
-- [x] **Permissions = camera + microphone** (feedback #40): WhatsApp-style dialog with Camera/Microphone icons. _Done._
-- [x] **Deny ⇒ no install** (feedback #42): Don't Allow shows red "Installation canceled" overlay; app is NOT installed. app-permissions lesson teaches deny-then-allow (9 steps). _Done: verified in browser._
-- [x] **Persistence** (feedback #43): `lac-sim-apps` localStorage key. Seed-on-mount skips apps that have an `install` step earlier in the same lesson (fixed during verification). _Done._
-- [x] **updating-apps step order** (feedback #41): search Weather → select → install → My Apps → update. _Done: verified in browser, 5-step flow completes._
-- [x] **free-vs-paid comparison** (feedback #44): Games category → Bubble Pop (ads/IAP orange tags) → back → Zen Garden ($4.99, green "No ads" tag) → install either. _Done._
-
-**Acceptance:** the store looks like a store; permissions gate installs; PuzzleQuest survives across the three Managing Apps lessons; the compare lesson lets you pick either side.
-
-### 2.7 Settings app — NEW `components/Playground/Desktop/SettingsApp.tsx` + `guided-settings` type (feedback #46–#50, #63, #66 groundwork)
-
-- [x] Build **SettingsApp** as a real desktop app (dock icon right of Mail, gear icon, title "Settings" — never "System Settings"). Sidebar: **Appearance, Display, Accessibility, WiFi, Notifications, Storage, About**. *(Desktop/SettingsApp.tsx — 7 panels, iOS-style toggles, dark mode aware)*
-- [x] **The settings actually do things** — `SimThemeContext.tsx` provides `{dark, brightness, nightShift, textScale, boldText, notificationsMuted}`:
-  - **Dark mode toggle** → FakeDesktop background, menu bar, dock switch to dark palette.
-  - **Brightness slider** → black overlay with opacity `(100 − brightness)%·0.8`, live while dragging.
-  - **Night Shift toggle** → warm orange overlay (`bg-orange-500/15` + sepia filter).
-  - **Larger Text slider** (Accessibility) → scales base font-size. **Bold Text** toggle → font-weight bump.
-  - **Notifications: Do Not Disturb** toggle → 🔕 indicator in menu bar.
-  - **Storage panel**: colored usage bar (Photos/Apps/Files/System), largest items list with Delete buttons, Empty Trash — all live-updating.
-- [x] New task type **`guided-settings`** in `lib/lessons.ts` + wired in `LessonPlaygroundPane`. Actions: `open-section`, `toggle`, `slider` (with `min`/`max`), `delete-item`, `empty-trash`. `GuidedSettingsTask.tsx` wraps FakeDesktop with `autoOpenApp="settings"`.
-- [x] **Retired `find-in-settings`**: rewrote 6 lessons as `guided-settings`, deleted `FindInSettingsTask.tsx` and its type/import.
-- [x] **WiFi panel parity**: Settings→WiFi section shows network list with connected indicator, matching menu-bar panel.
-
-**Acceptance:** toggling dark mode visibly restyles the whole fake desktop; brightness and night shift visibly change the screen; larger text visibly grows the UI; storage deletion moves the bar.
-
-### 2.8 Security — `components/Playground/GuidedSecurityTask.tsx` (feedback #52–#58, #68)
-
-- [x] **Instant strength meter** (feedback #52): removed `check-strength` action entirely. Password field shows live strength meter on every keystroke with criteria checklist (emoji checkmarks). Added `minStrength?: number` to step type — step auto-completes when `passwordStrength(val).level >= step.minStrength`. `passwords-basics` reduced to single step with `minStrength: 4`.
-- [x] **Type the password once** (feedback #53): `passwords-basics` collapsed from 4 steps to 1 step — type one strong password and the meter auto-completes.
-- [x] **Step-4 stall** (feedback #54): fixed by the restructure above — no more multi-step password flow to stall on.
-- [x] **Single-click login** (feedback #55): login section auto-detects from first step's action via `inferSection()`. One click with filled fields logs in. Phase-gating removed.
-- [x] **2FA phone** (feedback #56): phone illustration renders as a rounded phone frame with notch, SMS bubble showing the code prominently. Two-column flex layout: phone left, code input right.
-- [x] **Immediate verdict feedback** (feedback #58): wrong answers show red shake animation + explanation panel ("Not quite — try again!" with specific reason) + item stays active for retry. Correct answers show green flash + reason + advance. Verified in browser.
-- [x] **Realistic password reset** (feedback #68): `password-recovery` rebuilt as 6-step cross-app flow: type-username → forgot-link → open-reset-email (in-sim mail view) → click-reset-link → type-login-password → login. Added `forgot-link`, `open-reset-email`, `click-reset-link` actions to the type union. `resetView` state machine handles the "sent" → "email" → "new-password" transitions.
-- [x] Convert `passkeys` (multiple-choice → guided-security): 2-step flow — type-username → use-passkey with fingerprint scanning animation (1.8s). Convert `backups` (multiple-choice → guided-settings): 2-step flow — open-section storage → toggle auto-backups on → "Last backup: just now" appears. Both verified in browser.
-
-**Acceptance:** passwords module completes with one strong-password entry and no stalls; one-click login; the 2FA code is impossible to miss; wrong verdicts teach instead of dead-ending; password reset walks browser→email→browser.
-
-### 2.9 Troubleshooting — `components/Playground/GuidedTroubleshootingTask.tsx` (feedback #60–#66, #69)
-
-- [x] **Frozen-app scenario, end to end** (feedback #60): `troubleshooting-basics` (Notes frozen) and `software-problems` (Browser frozen). Self-contained desktop with menu bar, frozen window with "(Not Responding)" title + spinner, three-dot system menu → Force Quit dialog → reopen from dock. `inferMode()` detects scenario from step actions. Fixed duplicate dock icon bug when frozen app is Browser.
-- [x] **Remove the video-cable step** (feedback #61/#65): `hardware-problems` converted from guided-troubleshooting to guided-settings (Display → brightness slider). `peripheral-problems` converted to `type: "none"` (explainer only — can't simulate physical peripherals).
-- [x] **WiFi via the menu bar** (feedback #62, #63): `internet-problems` uses self-contained desktop with WiFi panel in menu bar. Steps: click WiFi icon → toggle on → Join CoolKids Network. Panel shows three networks with Join/Forget buttons; forgotten networks have Reconnect button.
-- [x] **Realistic storage cleanup** (feedback #66): `performance-storage` converted to guided-settings (Settings → Storage → delete "Old Videos" → empty trash). Uses existing SettingsApp storage panel.
-- [x] **Copy the error code** (feedback #69): `when-to-get-help` error-code mode: Photos error dialog with PX-4402 + Copy button → OK to dismiss → open Browser from dock → support.example/help page → Paste button fills input → Submit → solution found → reopen Photos from dock. Fixed step order: copy-code before read-error (dialog must be visible for copy).
-
-**Acceptance:** every troubleshooting lesson starts from a visible problem and ends with visible proof of the fix; nothing references cables; forgetting a network is recoverable.
-
-### 2.10 Calendar, Reminders, Notes as desktop apps (feedback #72, #75)
-
-- [x] **Calendar** and **Reminders** dock icons (Unit 12): added `initialView` prop to GuidedCalendarTask — `launchApp: "reminders"` auto-starts on reminders view. Wired through LessonPlaygroundPane.
-- [x] **NotesApp** — NEW `components/Playground/Desktop/NotesApp.tsx` (110 lines): two-pane (note list + editor), New Note/Delete buttons, three preset notes. Wired into FakeDesktop as a built-in app (opens from dock like Messages/Browser/etc.).
+- [ ] In `LessonModuleRunner`, when `alreadyDone` is true and `hasGate` is true, render a **Redo this activity** button next to Next. It calls:
+  ```tsx
+  setActivityAttempt((n) => n + 1);
+  setAttemptState("unattempted");
+  setAlreadyDone(false);
+  setStarted(true);
+  ```
+  `activityAttempt` is the existing remount key at [LessonModuleRunner.tsx:250](components/LessonModuleRunner.tsx:250), so bumping it gives a clean activity.
+- [ ] On the merged `/lessons` page (1.1), each completed module card gets a small **Redo** affordance that routes to `/lessons/{moduleSlug}` and forces `index = 0`. Implement via a query param: `?restart=1`, read with `useSearchParams` in `LessonModuleRunner`; when present, skip the "resume at first incomplete" logic ([LessonModuleRunner.tsx:52-69](components/LessonModuleRunner.tsx:52)) and start at 0 with `reviewing = true`.
 
 ---
 
-## Phase 3 — Content: lessons and assessments
+## Phase 2 — PlaygroundOS: the simulated computer
 
-General note: assessments below use `mode: "assessment"` (1.4). **Do not write step-by-step walkthroughs for assessments** — objectives only, hints on demand (explicit user requirement).
+Everything here is in `components/Playground/`. These changes are felt in every unit, so they come before content work.
 
-### 3.1 Unit 2 — Fix the birthday invitation (feedback #1)
+### 2.1 Dock icons from the user's artwork (feedback #4)
 
-`content/lessons/invitation-exercise.json` (2/3 of Real-Life Exercise). The validation is brutally strict: 7 `mustInclude` strings with exact punctuation (`"You're Invited to Dr. Digital's Birthday!"` — one curly-vs-straight apostrophe or a double space fails it, with no indication why).
+[components/Playground/FakeDesktop.tsx:41-52](components/Playground/FakeDesktop.tsx:41) currently mixes four PNGs (`icon-chat`, `icon-globe`, `icon-folder`, `icon-mail`) with six inline-SVG icons on colored rounded squares (`DockIconSvg`, [FakeDesktop.tsx:375-433](components/Playground/FakeDesktop.tsx:375)). It looks like two different operating systems.
 
-- [x] In `TaskChecker.ts`: added `normalize()` (curly quotes → straight, en/em dashes → hyphen, collapse whitespace, trim) + `checkTextEditDetailed()` returning `TextEditFeedback` with `missingRules`/`presentBadWords` arrays. `checkTextEdit()` also uses `normalize()`.
-- [x] Reduced mustInclude from 7 to 5 essential checks (title, Date, Time, Location, Cloud City). Dropped RSVP/Friends/closing-sentence rules.
-- [x] `TextEditorTask.tsx` uses `checkTextEditDetailed` — shows specific misspellings still present and count of missing required lines with “try Show me an example” hint. `EditFileTask` delegates to `TextEditorTask` so feedback flows through.
-- [x] Verified end-to-end: unfixed text shows 10 misspellings + “5 required lines” feedback; correct text passes with success message.
+- [ ] Once the asset arrives (0.1), give **all ten** apps an `icon` path in the `APPS` array. Delete `DockIconSvg` and `DOCK_ICON_STYLES` entirely.
+- [ ] **Black and white only.** The user was explicit: do not tint, do not add colored backgrounds. No `bg-*` on the icon container, no CSS filters.
+- [ ] **Rounded corners.** The icon element gets `rounded-2xl overflow-hidden` so the artwork is clipped to the squircle silhouette.
+- [ ] Keep the `<Image fill sizes="56px" className="object-contain" />` pattern already used at [FakeDesktop.tsx:275](components/Playground/FakeDesktop.tsx:275).
+- [ ] The four legacy `icon-*.png` files stay on disk (other components may reference them); just stop pointing the dock at them. Grep before deleting anything: `grep -rn "icon-chat\|icon-globe\|icon-folder\|icon-mail" components/ app/`.
 
-### 3.2 Unit 4 content updates (with 2.2)
-- [x] All 5 lesson intros/steps already rewritten during Phase 2.2 with thorough problem→explain→fix pattern.
-- [x] `popup-accident` (order 494) already exists with cleanup scenario. Numbering: 491 https, 492 cookies, 493 popups-ads, 494 popup-accident, 495 reload, 496 zoom, 499 assessment.
+### 2.2 The highlight ring is a squircle (feedback #20)
 
-### 3.3 (merged into 2.3 — messaging lesson copy)
-- [x] All 7 lesson files already updated during Phase 2.3: send logic, + menu, double-click reactions, labeled call controls, FaceTime de-branded to "Video Calls"/"Video Call Controls".
+[FakeDesktop.tsx:270-272](components/Playground/FakeDesktop.tsx:270): `ring-4 ring-yellow-400 animate-pulse` on a `rounded-2xl` button. Tailwind's `ring` follows the border-radius, so it is *nearly* right — but the button is `w-14 h-14` while the artwork inside is `object-contain`, so the ring traces the square button box, not the icon.
 
-### 3.4 Unit 4 assessment (feedback #14)
-- [x] `unit-4-assessment` → `guided-browser`: search for apple pie → open Recipe Box → download → new tab to weather.com → decline cookies → new tab to freegames → close popup → open Downloads. IRL follow-up in success copy.
+- [ ] Make the ring hug the icon: put `rounded-2xl` **and** the ring on the same element that clips the image, and ensure the image fills it (`object-cover` if the source art is square-cropped, `object-contain` with a matching aspect otherwise).
+- [ ] Soften the pulse — the current `animate-pulse` fades the whole icon to 50% opacity, which makes the art hard to see. Add a dedicated keyframe that pulses only the ring:
+  ```ts
+  "ring-pulse": {
+    "0%, 100%": { boxShadow: "0 0 0 4px rgba(250,204,21,1), 0 0 0 8px rgba(250,204,21,0)" },
+    "50%":      { boxShadow: "0 0 0 4px rgba(250,204,21,1), 0 0 0 12px rgba(250,204,21,0.45)" },
+  },
+  // animation: "ring-pulse": "ring-pulse 1.4s ease-in-out infinite",
+  ```
+  Apply `rounded-2xl animate-ring-pulse` instead of `ring-4 ring-yellow-400 animate-pulse`. The icon stays fully opaque and the glow radiates outward in the squircle shape.
+- [ ] Use the identical treatment everywhere a dock icon is highlighted — grep `highlightApp` across `components/Playground/` and confirm `DesktopLaunch`, `DesktopFileExplorerTask`, `GuidedTroubleshootingTask`, and the older desktop tasks all route through `FakeDesktop`'s rendering rather than re-implementing the ring.
 
-### 3.5 Unit 5 + Unit 6 assessments (feedback #22, #29)
-- [x] `unit-5-assessment` → `guided-messaging` 12-step assessment: message Alex, send Grandma a photo, react to Sam, video-call Jordan with mute/camera-off/camera-on/end-call.
-- [x] `unit-6-assessment` → `guided-email` 15-step assessment: open scam → mark spam → verify in Spam folder → reply to Mom → compose with CC/subject/body/attachment → send → archive Amazon email.
+### 2.3 App-open animation (feedback #24)
 
-### 3.6 Unit 9 content (with 2.7) (feedback #46–#51)
-- [x] All 5 settings lessons already guided-settings from Phase 2.7.
-- [x] `unit-9-assessment` rewritten as IRL checklist (theme, brightness, Night Shift, text size, storage check).
+The animation infrastructure exists — `animate-window-open` is defined in `tailwind.config.ts` and applied at [FakeDesktop.tsx:295-360](components/Playground/FakeDesktop.tsx:295).
 
-### 3.7 Unit 7 content (with 2.5) (feedback #31–#35)
-- [x] `photo-people` → guided-photos: search "dog" → select Dog at the Park → favorite.
-- [x] `icloud-photos` deleted; `cloud-photos` rewritten with thorough intro on cloud backup, syncing, free tiers.
-- [x] `photo-editing` + `sharing-photos` already guided-photos from Phase 2.5.
-- [x] `unit-7-assessment` → guided-photos 14-step assessment: favorite, create album, add to album, crop, brightness, share via Messages, delete and recover.
+- [ ] Verify it actually plays. The wrapper's className switches from `hidden` to `animate-window-open` in the same render; because the element was `display: none`, the animation *should* run on reveal — but confirm in the browser for each of the six built-in apps. If any app doesn't animate, the fix is to force a remount by including the open-state in the wrapper's `key`.
+- [ ] **Add a dock-icon bounce on launch.** Real computers bounce the icon. Add:
+  ```ts
+  "dock-bounce": {
+    "0%":   { transform: "translateY(0)" },
+    "35%":  { transform: "translateY(-14px)" },
+    "60%":  { transform: "translateY(0)" },
+    "80%":  { transform: "translateY(-5px)" },
+    "100%": { transform: "translateY(0)" },
+  },
+  // animation: "dock-bounce": "dock-bounce 0.55s ease-out 1",
+  ```
+  Track `launchingApp` state in `FakeDesktopInner`; set it in `openApp` ([FakeDesktop.tsx:132-144](components/Playground/FakeDesktop.tsx:132)) and clear it on a 550ms timeout. Apply `animate-dock-bounce` to that app's dock button.
+- [ ] Slow `window-open` from `0.18s` to `0.24s` — at 180ms it currently reads as a flicker rather than a movement.
 
-### 3.8 Unit 8 + Unit 10 assessments and conversions (feedback #45, #59; with 2.6/2.8)
-- [x] `unit-8-assessment` → guided-app-store 8-step assessment: search weather → install WeatherNow → allow permissions → My Apps → update → delete Puzzle Quest → back to store. IRL follow-up in success.
-- [x] `unit-10-assessment` → guided-security 11-step assessment: strong password → username → login → 2FA → inspect+mark 2 messages → passkey.
-- [ ] `software-updates` re-pointed at guided-settings — already guided-settings, content may need review.
+### 2.4 Status-panel close animation (feedback #8)
 
-### 3.9 Unit 11 + Unit 12 content (feedback #60–#77)
-- [x] `unit-11-assessment` → guided-troubleshooting (frozen-app scenario: click frozen → force quit → restart).
-- [ ] `calendar-reminders` launchApp adjustment — already guided-calendar, may need review.
-- [x] `maps-navigation` → IRL lesson with numbered steps (maps.google.com → library near me → walking directions).
-- [x] New "Documents in the Cloud" module: 3 IRL lessons at 1242/1244/1246 (google-docs-basics, google-docs-share, google-drive-basics).
-- [x] `notes-documents` → IRL lesson (open Notes → create a shopping list → observe auto-save).
-- [ ] `pdfs-reading` — existing guided-browser, may need `open-download` action (code change, deferred).
-- [x] `unit-12-assessment` → IRL checklist (email with attachment, Google Doc, maps directions, video call, calendar event).
-- [x] `qrcodes-siri` → type none, QR codes only (thorough explainer with safety tip, Siri dropped).
-- [x] `printing-scanning` → type none, IRL walkthrough of Ctrl/Cmd+P with Save as PDF fallback.
+[FakeDesktop.tsx:219-251](components/Playground/FakeDesktop.tsx:219) mounts the WiFi / battery / calendar panels conditionally. `StatusPanel` has `animate-slide-down` on open ([FakeDesktop.tsx:451](components/Playground/FakeDesktop.tsx:451)) but closing just unmounts — it vanishes.
+
+- [ ] Add the reverse keyframe:
+  ```ts
+  "slide-up-out": {
+    "0%":   { opacity: "1", transform: "translateY(0)" },
+    "100%": { opacity: "0", transform: "translateY(-8px)" },
+  },
+  // animation: "slide-up-out": "slide-up-out 0.16s ease-in both",
+  ```
+- [ ] Add `closingPanel` state alongside `openPanel`. `StatusPanel` gains a `closing?: boolean` prop and applies `animate-slide-up-out` when true. Route **all four** dismissal paths through one `dismissPanel()` helper that sets `closingPanel`, waits 160ms, then clears both:
+  1. The `×` button ([FakeDesktop.tsx:455-462](components/Playground/FakeDesktop.tsx:455)),
+  2. Clicking the desktop ([FakeDesktop.tsx:255](components/Playground/FakeDesktop.tsx:255)),
+  3. Clicking the menu-bar button again ([FakeDesktop.tsx:198](components/Playground/FakeDesktop.tsx:198) and 201, 209),
+  4. `openApp`, which clears the panel at [FakeDesktop.tsx:137](components/Playground/FakeDesktop.tsx:137).
+- [ ] `CalendarPanel` renders through `StatusPanel`, so it inherits this for free — pass the prop through.
+
+### 2.5 Hover states everywhere (feedback #51)
+
+The menu-bar WiFi and battery buttons ([FakeDesktop.tsx:198-208](components/Playground/FakeDesktop.tsx:198)) have **no** hover style at all; the clock has only `hover:underline`. Nothing indicates they are clickable.
+
+- [ ] Give all three menu-bar buttons a shared class: `rounded px-2 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 cursor-pointer`. Drop the clock's `hover:underline` — the background change is the affordance.
+- [ ] Add `aria-expanded={openPanel === "wifi"}` (etc.) to each, and an active style when its panel is open: `bg-black/10 dark:bg-white/15`.
+- [ ] Sweep the rest of PlaygroundOS for click targets with no hover feedback. Confirmed missing on: the dock app **labels** (make the whole `<div>` at [FakeDesktop.tsx:266](components/Playground/FakeDesktop.tsx:266) the hover target so hovering the label affects the icon), the `StatusPanel` network rows (they have hover, verify it's visible against the connected-green row), and the `SettingsApp` sidebar items.
+- [ ] Every interactive element also needs a visible **keyboard focus** ring: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`. Unit 2 teaches Tab navigation — the simulated OS must be tabbable or that lesson is a lie.
+
+### 2.6 ONE Files app (feedback #21) — the largest single item in this plan
+
+There are currently **two** file managers:
+
+| | [Desktop/FilesApp.tsx](components/Playground/Desktop/FilesApp.tsx) (72 lines) | [GuidedFilesTask.tsx](components/Playground/GuidedFilesTask.tsx) (636 lines) |
+|---|---|---|
+| Layout | Flat list + preview pane | Sidebar (Home/Documents/Pictures/Downloads/Trash) + grid + toolbar + preview |
+| Data | `FILLER_FILES` — 5 files, no folders ([filesData.ts](components/Playground/Desktop/filesData.ts)) | `makeItems()` — 12 items with folders and locations ([GuidedFilesTask.tsx:63-77](components/Playground/GuidedFilesTask.tsx:63)) |
+| Features | Double-click to preview | Open, new folder, rename, drag-move, search, delete, restore, save |
+| Used by | The dock in every `FakeDesktop`; Unit 1 double-click lesson; `EditFileTask` | Unit 3 onward |
+
+The user's instruction is unambiguous: the elaborate one wins, everywhere, including the Unit 1 double-click activity.
+
+- [ ] **Extract the presentational file manager** into `components/Playground/Desktop/FileManager.tsx`. Lift the entire UI out of `GuidedFilesTask` — sidebar, toolbar, item grid, preview pane, rename inline-editor, drag-and-drop with the blue drop-target highlight, search field, save dialog. It owns the filesystem state and exposes a callback-per-operation API:
+  ```tsx
+  interface FileManagerProps {
+    items: Item[];
+    onItemsChange: (items: Item[]) => void;
+    location: Loc;
+    onLocationChange: (loc: Loc) => void;
+    /** Pulse-highlight a specific control — used by guided lessons. */
+    highlight?: { kind: "item" | "sidebar" | "toolbar" | "folder"; target: string } | null;
+    /** Which operations are available. Unit 1 passes {open: true} only. */
+    enabled?: Partial<Record<"open" | "newFolder" | "rename" | "move" | "search" | "delete" | "restore" | "save", boolean>>;
+    onOpen?: (item: Item) => void;
+    onNewFolder?: (name: string) => void;
+    onRename?: (item: Item, newName: string) => void;
+    onMove?: (item: Item, into: Loc) => void;
+    onSearch?: (query: string) => void;
+    onDelete?: (item: Item) => void;
+    onRestore?: (item: Item) => void;
+    onSave?: (name: string, into: Loc) => void;
+    /** Keyboard-only mode for the Unit 2 arrow-keys lesson (4.6). */
+    keyboardNav?: boolean;
+    selectedId?: string | null;
+    onSelectedChange?: (id: string | null) => void;
+  }
+  ```
+- [ ] **Move the filesystem into shared data.** Rewrite [Desktop/filesData.ts](components/Playground/Desktop/filesData.ts) to export the `Item` / `Loc` types and `makeItems()` (moved verbatim from [GuidedFilesTask.tsx:63-77](components/Playground/GuidedFilesTask.tsx:63)), plus `iconFor()` ([GuidedFilesTask.tsx:79-99](components/Playground/GuidedFilesTask.tsx:79)) and `LOC_TITLE` ([GuidedFilesTask.tsx:101-107](components/Playground/GuidedFilesTask.tsx:101)). Keep the old `FILLER_FILES` export as a deprecated alias **only** until every consumer is migrated, then delete it.
+- [ ] **`GuidedFilesTask` becomes thin**: it keeps the step machine, `hl()`, `completeStep()`, flash, and `SimulatorFrame`; it renders `<FileManager … />` and maps each callback to `matchesStep`. Target: under 250 lines.
+- [ ] **`Desktop/FilesApp.tsx` becomes thin**: renders `<AppWindow>` wrapping `<FileManager enabled={{open:true, newFolder:true, rename:true, move:true, search:true, delete:true, restore:true}} />` with local `useState` for items. The dock Files app is now the full file manager.
+- [ ] **`DesktopFileExplorerTask`** ([DesktopFileExplorerTask.tsx](components/Playground/DesktopFileExplorerTask.tsx), the Unit 1 double-click activity) now opens the real Files app. It passes `enabled={{open: true}}` — a beginner practicing double-click should not be able to delete anything — and highlights each target file in turn. See 3.7.
+- [ ] **`EditFileTask`** must use `FileManager` too. Grep for every consumer before you start:
+  ```sh
+  grep -rn "FilesApp\|FILLER_FILES\|filesData" components/ app/
+  ```
+- [ ] **Sidebar icons** (feedback #55, #56): once the assets land, `Pictures` uses `files-pictures.png` and `Downloads` uses `files-downloads.png` instead of the generic `FolderIcon` at [GuidedFilesTask.tsx:54-58](components/Playground/GuidedFilesTask.tsx:54). Wrap each in a bordered rounded box (`rounded border border-gray-300 overflow-hidden w-4 h-4`) as the user requested. Home / Documents / Trash keep their SVG icons.
+- [ ] **Regression-test every Unit 3 lesson** after this refactor. All nine `guided-files` lessons (orders 300–380) must still complete. This is the highest-risk change in the plan — do it in its own commit, verify, then continue.
+
+**Detailed migration order — do not deviate:**
+
+1. **Start with `filesData.ts`** — add types and `makeItems()` first, keeping `FILLER_FILES` as a deprecated alias. This file has no JSX so it cannot break any renders.
+2. **Create `FileManager.tsx`** as a new file. Copy the entire rendering section from `GuidedFilesTask.tsx` verbatim first, then refactor into the prop-driven shape above. Do not touch `GuidedFilesTask.tsx` yet. Build passes? Continue.
+3. **Migrate `GuidedFilesTask.tsx`** to call `<FileManager />`. This is the only point where existing Unit 3 lessons could break. Test all nine lessons before touching anything else.
+4. **Migrate `Desktop/FilesApp.tsx`** last — it is only used by the dock and Unit 1. Fewer consumers, easier rollback.
+5. **Migrate `EditFileTask.tsx`** and `DesktopFileExplorerTask.tsx`. Both are small (under 100 lines each).
+
+**Rollback gate:** After step 3, if any Unit 3 lesson breaks, revert `GuidedFilesTask.tsx` to the pre-refactor version and debug `FileManager.tsx` until all tests pass before re-attempting. The fallback is to keep `GuidedFilesTask.tsx` as-is and only migrate `FilesApp` — partial migration is acceptable as a checkpoint.
+
+**The `enabled` prop is important:** Unit 1's double-click lesson passes `enabled={{ open: true }}` only. This means the toolbar's "New Folder", "Rename", and "Delete" buttons must be **absent** (not just disabled) when their flag is false — a disabled button is confusing to a beginner learning what double-click does. Use `enabled?.newFolder && <NewFolderButton />` rather than `disabled={!enabled?.newFolder}`.
+
+**`AppWindow` wrapping in `FilesApp`:** The full dock Files app renders inside `AppWindow` (the draggable/resizable window frame). `FileManager` must accept a className or a `fullHeight` prop so it fills the window body rather than having its own height. The window's outer dimensions are controlled by `AppWindow`, not by `FileManager`.
+
+**TypeScript guard:** After migration, run:
+```sh
+npx tsc --noEmit
+grep -rn "FILLER_FILES" components/ app/   # must return nothing
+grep -rn "import.*FilesApp" components/    # only GuidedFilesTask should remain (if it still uses it)
+```
+
+### 2.7 Settings app cleanup (feedback #16, #95, #96)
+
+- [ ] **"Settings" appears twice.** [SettingsApp.tsx:100](components/Playground/Desktop/SettingsApp.tsx:100) renders a `Settings` heading inside the sidebar, while `FakeDesktop`'s menu bar already shows the app title from `APP_TITLES` ([FakeDesktop.tsx:194](components/Playground/FakeDesktop.tsx:194)). Delete the in-app heading at line 100.
+- [ ] **Dark mode doesn't reach the WiFi and battery icons** (feedback #95). `WifiIcon` and `BatteryIcon` ([FakeDesktop.tsx:512-530](components/Playground/FakeDesktop.tsx:512)) hardcode `stroke="#111"` and `fill="#111"`. Change both to `stroke="currentColor"` / `fill="currentColor"` — the parent menu bar already sets `text-gray-100` in dark mode ([FakeDesktop.tsx:189](components/Playground/FakeDesktop.tsx:189)), so they will follow automatically. Check the `StatusPanel` bodies too: they use hardcoded light backgrounds (`bg-white`, `border-blue-200`) that stay white in dark mode.
+- [ ] **The UI looks unprofessional next to Mail.** Study [Desktop/MailApp.tsx](components/Playground/Desktop/MailApp.tsx) — the user named it as the quality bar — and bring `SettingsApp` up to it: consistent `px-4 py-3` row padding, `divide-y divide-gray-200` between rows, section headers in `text-xs font-semibold uppercase tracking-wide text-gray-500`, a real two-column layout with a `w-52 border-r` sidebar, and setting descriptions in `text-sm text-gray-500` beneath each label rather than crammed alongside.
+- [ ] **The About panel must not lie** (feedback #16). [SettingsApp.tsx:403-418](components/Playground/Desktop/SettingsApp.tsx:403) states "Memory 8 GB", "Storage 100 GB" — invented numbers a beginner may believe describe *their* computer.
+  - Add a **purple banner** at the top of the About panel: `bg-purple-100 border-2 border-purple-400 text-purple-900 rounded-lg px-4 py-3 text-sm font-medium` reading: *"These are made-up numbers for practice. Your real computer's About page will show different information."*
+  - Add the same banner to the **Storage** panel ([SettingsApp.tsx:316-380](components/Playground/Desktop/SettingsApp.tsx:316)), whose `INITIAL_STORAGE` values are equally invented.
+  - Build one `<SimulatedDataBanner />` component in `SettingsApp.tsx` and use it in both places. Any future panel showing fabricated hardware data uses it too.
+
+### 2.8 Fullscreen (F12) dock bug (feedback #33)
+
+Reported: pressing F12 makes the dock move up with the viewport when it should stay put.
+
+- [ ] Reproduce first. Open any lesson, press Start activity, press F12 (or click the fullscreen control in [components/LessonPlaygroundPane.tsx](components/LessonPlaygroundPane.tsx)), and watch the dock.
+- [ ] Likely cause: the dock is `absolute bottom-4 left-1/2` ([FakeDesktop.tsx:264](components/Playground/FakeDesktop.tsx:264)) inside `.relative.flex-1` ([FakeDesktop.tsx:255](components/Playground/FakeDesktop.tsx:255)). When the browser enters fullscreen, the `:fullscreen` element's box changes and the ancestor chain's height resolution changes with it. If an ancestor is sized by content rather than `100%`, the dock's `bottom-4` anchors to the wrong box.
+- [ ] Fix by guaranteeing the height chain is explicit from the fullscreen element down: the fullscreened container gets `h-full`, and every wrapper between it and `FakeDesktop` gets `h-full min-h-0`. Add a `:fullscreen` rule in `app/globals.css`:
+  ```css
+  :fullscreen { height: 100%; width: 100%; }
+  :fullscreen .playground-root { height: 100%; }
+  ```
+  and put `playground-root` on the outer div of `LessonPlaygroundPane`.
+- [ ] Verify in both states, at both viewport sizes, in all three of: idle desktop, an open app, and a `DesktopLaunch` banner + desktop.
+
+### 2.9 Loading delays for realism (feedback #66)
+
+Pages appear instantly in the simulated browser; real ones don't.
+
+- [ ] In `GuidedBrowserTask`, add `loading: boolean` state. `navigate()` sets it true, then false after **250ms** (the user said ~100ms; 250 reads as a real page load without feeling slow — tune in the browser).
+- [ ] While loading: the tab favicon becomes a spinner, the reload button becomes a `×` (stop), and the page body shows a thin indeterminate progress bar under the address bar (`h-0.5 bg-blue-500` with a translate animation). **Do not** blank the content — a white flash is worse than no animation.
+- [ ] Suppress the delay when a step is being auto-completed programmatically, so step timing stays deterministic.
+- [ ] Apply the same treatment to the reload flow (6.7) so a reload visibly *does* something.
 
 ---
 
-## Phase 4 — Visual unification and the emoji purge
+## Phase 3 — Unit 1: Meet Your Laptop
 
-### 4.1 One UI everywhere — Units 1 and 2 (feedback #78)
-The guided sims (Units 3+) share `SimulatorFrame` (dark `#1d2733` banner, neutral window chrome). Units 1–2 activities predate it and look like a different product. Unify:
+Reference the lesson table: orders 1–26. Slugs must not change.
 
-- [x] `SimulatorFrame` gains a **single-activity mode**: `stepIndex`/`totalSteps` optional — when absent, the banner shows just the instruction (no "Step N of M", no progress bar). _Done: conditional rendering in SimulatorFrame.tsx._
-- [x] Wrap in SimulatorFrame (choosing an app identity for each):
-  - `TypeTextTask`, `TextEditorTask` → app "Notes" (same visual identity as NotesApp). _Done: wrapped in LessonPlaygroundPane with `appIcon="📝"`, instructions in banner only._
-  - `CopyPasteTask` → "Notes". _Done._
-  - `ShapeClickGame`, `MatchPartsTask` → app "Practice". _Done._
-  - `KeyboardNavTask` → app "Practice". _Done: refactored to use SimulatorFrame internally, removed hand-rolled banner/celebration/flash._
-  - `GuidedDesktopTask` → already visually matches (same dark banner, celebration, flash). Left as-is; its window-management content doesn't fit inside SimulatorFrame's app window chrome.
-  - `EditFileTask` → already FilesApp-hosted; chrome alignment deferred to avoid risk.
-- [x] The older desktop tasks (`DesktopBrowserRightClickTask`, `DesktopBrowserScrollTask`, `DesktopBrowserZoomTask`, `DesktopFileExplorerTask`, `OpenAllAppsTask`) use a **yellow strip** banner ("Click the Browser icon…"). Replaced with dark `#1d2733` guidance banner matching DesktopLaunch pattern + dock `highlightApp`. _Done: all 5 tasks updated._
-- [ ] BrowserSimulator toolbar styling alignment with GuidedBrowserTask — deferred (low visual impact).
-- [ ] `MailApp` (used by Unit 2 compose lessons) vs `GuidedEmailTask` (Unit 6) are separate implementations — align their visual chrome. Deferred (risky merge for low visual payoff).
-- [ ] Screenshot pass: one screenshot per unit's most-used activity; they should look like the same operating system.
+### 3.1 Trackpad module moves to the front (feedback #18)
 
-### 4.2 Emoji → images/SVG (feedback #31)
-Policy — three buckets:
-1. **UI glyphs** (📁 🏠 🗑️ ⭐ ⬇️ 🕐 📖 🪟 🔒 ⚠️ 📄 📎 🔍 ➕ ✕ ⟳ 🎤 📹 📞 🍪 the app-icon emojis in SimulatorFrame headers): replace with a new `components/Playground/Icons.tsx` — one file exporting small inline-SVG components (Folder, Home, Trash, Star, Download, Clock, Book, Window, Lock, Warning, FileDoc, Paperclip, Search, Plus, Close, Reload, Mic, MicOff, Camera, CameraOff, PhoneEnd, Cookie, Gear, CalendarIcon, NoteIcon, Photo, Bag). Stroke style, `currentColor`, `size` prop. Sweep every component.
-2. **Content images** (photo thumbnails 🌅🏖️🐶🖼️, contact avatars 👤👩🧑👵🙂, photo-library tiles): replace with real images — existing `public/playgrounds/` PNGs first, Wikimedia Commons for the gaps (Appendix B).
-3. **Decorative** (🎉 in overlays, 💕 in message seeds, random sparkle): **delete** — no replacement needed.
-- **Keep:** the reaction-picker emojis (👍❤️😂😮😢) — they are literally the feature being taught.
-- [x] Inventory first — done via grep.
-- [x] Work through the inventory file by file; classify each hit into a bucket; replace/delete. Lesson-JSON emojis in Dr. Digital copy: delete unless load-bearing.
-  - Created `Icons.tsx` with ~70 SVG icon components (stroke style, `currentColor`, `size` prop).
-  - Changed `appIcon`/`icon` types from `string` to `ReactNode` in SimulatorFrame and AppWindow.
-  - Replaced UI glyphs in 20+ components: GuidedFilesTask, GuidedBrowserTask, GuidedEmailTask, GuidedPhotosTask, GuidedCalendarTask, GuidedDesktopTask, GuidedSecurityTask, GuidedTroubleshootingTask, GuidedAppStoreTask, BrowserSimulator, FakeDesktop, FilesApp, NotesApp, SettingsApp, BrowserApp, MailApp, MessagingApp, UrlNavigatorTask, SpotTheFakeTask, DesktopBrowserRightClickTask, DesktopBrowserZoomTask, LessonPlaygroundPane.
-  - Removed emoji from 5 lesson JSON files (popup-accident, capstone, reading-list, https-secure, history-autofill, apps-closing).
-  - Kept: reaction-picker emojis (👍❤️😂😮😢), app store content icons (app identity), text characters (✓✗✕★☆).
+Cursor control is the prerequisite for every other lesson, but "Using the Trackpad" currently sits at orders 12–16, after eight parts lessons and two power lessons.
+
+- [ ] Renumber so **Using the Trackpad runs first**, then What is a computer?, then the rest:
+  - `trackpad-cursor-and-click` 1, `trackpad-double-click` 2, `trackpad-right-click` 3, `trackpad-two-finger-scroll` 4, `trackpad-pinch-zoom` 5
+  - `computer-parts-screen` 10, `-keyboard` 11, `-trackpad` 12, `-speakers` 13, `-camera` 14, `-power-button` 15, `-charger` 16, `-ports` 17, `computer-parts-review` 18
+  - `sleep-laptop` 20, `restart-laptop` 21
+  - `screen-desktop` 30, `screen-dock` 31, `screen-menu-bar` 32, `screen-clock` 33, `screen-wifi-icon` 34, `screen-battery-icon` 35
+  - `apps-opening` 40, `apps-closing` 41, `apps-closing-vs-quitting` 42
+  - `working-with-windows` 50
+- [ ] **Update the Unit 1 range in `CLAUDE.md`** (currently `1`–`26`) to `1`–`50`.
+- [ ] Run `python3 scripts/check-lessons.py` — it asserts unique orders.
+
+### 3.2 Trackpad + mouse (feedback #6)
+
+`computer-parts-trackpad.json` and the whole Using the Trackpad module speak only of trackpads. Many learners use a mouse.
+
+- [ ] Rewrite `computer-parts-trackpad.json`'s `drDigitalIntro` to cover both: what a trackpad is, what a mouse is, that they do the same job, and the mapping — one finger tap = left click; two-finger tap or right side of the mouse = right click; two-finger drag = scroll wheel; pinch = Ctrl + scroll wheel.
+- [ ] In every one of the five trackpad lesson JSONs, phrase instructions to serve both: *"Tap the trackpad once (or click the left mouse button)"*, *"Two-finger tap the trackpad, or click the right mouse button"*, *"Drag two fingers on the trackpad, or roll the mouse wheel"*.
+- [ ] Consider retitling the module `"Using the Trackpad or Mouse"`. **Careful:** the module name is the URL slug via `slugifyModule()` ([lib/lessons.ts:295-300](lib/lessons.ts:295)), so this changes the route from `/lessons/using-the-trackpad` to `/lessons/using-the-trackpad-or-mouse`. Module slugs are not stored in progress (only lesson slugs are), so this is safe — but you must change `module` in **all five** files identically or the module will split in two.
+
+### 3.3 Power button lesson → image, no playground (feedback #10)
+
+- [ ] `computer-parts-power-button.json`: keep `"playgroundTask": {"type": "none"}` and add:
+  ```json
+  "media": { "src": "/playgrounds/power-button.png", "alt": "The power button on a laptop", "caption": "The power button — usually top-right of the keyboard, or on the side." }
+  ```
+- [ ] Expand the intro to the 4–6 bullet standard: what it does, where to find it, press-vs-hold (hold force-quits and can lose work), and that most laptops wake from a keypress or lid-open rather than needing the button.
+
+### 3.4 Charger lesson → image, no playground (feedback #11)
+
+- [ ] Same treatment for `computer-parts-charger.json` with `/playgrounds/charger.png`.
+- [ ] Intro covers: what it does, the two ends, how to know it's charging (the battery icon changes — cross-reference `screen-battery-icon`), that leaving it plugged in is fine, and the common mistake of yanking the cable by the wire instead of the plug.
+
+### 3.5 Camera lesson: external cameras, no playground (feedback #9)
+
+- [ ] `computer-parts-camera.json`: confirm `"playgroundTask": {"type": "none"}` and add **no** `media` (unless the user supplies art) — it renders as a centered text lesson per rule 1.9.
+- [ ] Rewrite the intro to cover **built-in and external** cameras: the little lens above the screen; that desktop computers and external monitors often have none, so people add a **webcam** that clips on top and plugs into a USB port; the privacy light that means it's on; and that some people cover it with tape or a slider when not in use.
+- [ ] Add an explicit note: *"We can't turn on your real camera from these lessons — try it in your own video-call app when you're ready."* This also serves feedback #77.
+
+### 3.6 Sleep lesson: no playground (feedback #14)
+
+- [ ] `sleep-laptop.json` is already `type: "none"`; rule 1.9 removes its idle desktop automatically. Verify in the browser that the right pane is gone and the text is centered.
+- [ ] Expand the intro: sleep vs shut down, that closing the lid sleeps it, that sleep keeps your work open, and that a laptop can sleep for days on battery.
+
+### 3.7 Double-click lesson uses the real Files app (feedback #21, #53)
+
+Depends on 2.6.
+
+- [ ] `trackpad-double-click.json` keeps `type: "file-explorer-open"`. `DesktopFileExplorerTask` now renders the unified `FileManager` with `enabled={{open: true}}`.
+- [ ] Replace the yellow `filesHint` string ([DesktopFileExplorerTask.tsx:35](components/Playground/DesktopFileExplorerTask.tsx:35)) with a proper `SimulatorFrame` banner listing the files, and **highlight the next target file** with the standard pulse so the learner knows where to aim.
+- [ ] **Opening a file must open a window** (feedback #53). Today the preview appears in a side pane. Instead, open a real `AppWindow` over the file manager with the file's contents and a working close button, so the learner practices open → read → close → open the next one. This is exactly what feedback #53 asks for in Unit 3 as well — build it once in `FileManager` and both units get it.
+- [ ] Update `filesToOpen` in the JSON to files that exist in the unified `makeItems()` set — `GroceryList.txt`, `VacationPhoto.png`, `Budget.xlsx`.
+
+### 3.8 Right-click lesson fixes (feedback #22)
+
+[components/Playground/DesktopBrowserRightClickTask.tsx](components/Playground/DesktopBrowserRightClickTask.tsx) (139 lines). Three distinct defects:
+
+- [ ] **(a) Tab switching must keep working after completion.** After `onResult(true)` the learner must still be able to click back to the first tab. Find the guard that freezes interaction post-success and remove it — completion gates *the step*, never *the sim*. This is the Phase 1.1 free-play rule from the previous round; it was missed here.
+- [ ] **(b) Restore the window controls.** The user is emphatic: PlaygroundOS replicates a real OS, so minimize / maximize / close must be present on this window like every other. Render `<WindowControls />` ([components/Playground/WindowControls.tsx](components/Playground/WindowControls.tsx)) in the title bar. They may be inert chrome (pass no handlers — `WindowControls` already supports that, see its doc comment at lines 6-11), but they must be **visible**.
+- [ ] **(c) The new tab's URL must change.** Opening the link in a new tab currently leaves the address bar unchanged. The new tab's URL must read `petnews.example/judgementalcat` and its title must match the linked article. Check `app/funny-cat-video/page.tsx` — if this task navigates the real app there, keep that easter egg but make the simulated address bar show the fake URL.
+
+### 3.9 Two-finger scroll: stop the blinking cursor (feedback #26)
+
+[components/Playground/DesktopBrowserScrollTask.tsx](components/Playground/DesktopBrowserScrollTask.tsx) (162 lines). After the learner types the code correctly the input keeps its blinking caret, which reads as "still waiting for input."
+
+- [ ] On success: `inputRef.current?.blur()`, set the input `readOnly`, and style it as a completed field — `bg-green-50 border-green-500 text-green-900` with a `CheckIcon` at the right edge. No caret, no doubt.
+
+### 3.10 Rename the pinch-zoom lesson (feedback #27)
+
+- [ ] `trackpad-pinch-zoom.json`: change `title` to `"Zoom In and Out"`. **Do not touch the slug.**
+- [ ] Update the intro to cover both gestures: pinch on a trackpad, and Ctrl + scroll wheel (or Cmd + `+`/`-`) with a mouse — consistent with 3.2.
+
+### 3.11 Falling-shapes game cleanup (feedback #18)
+
+Two changes to [components/Playground/ShapeClickGame.tsx](components/Playground/ShapeClickGame.tsx).
+
+- [ ] **(a) Remove the numbers inside the shapes.** The shape PNGs (`public/playgrounds/shape-triangle.png` etc.) were sliced from `FallingNumbers.png` and have digits baked into the artwork. Replace them with clean inline SVG shapes rendered in solid black — a triangle, square, pentagon, hexagon, and circle, each ~56px, no text. Add them to `components/Playground/Icons.tsx` as `ShapeTriangle`, `ShapeSquare`, `ShapePentagon`, `ShapeHexagon`, `ShapeCircle` following the existing file's conventions, and swap `SHAPE_SRC` ([ShapeClickGame.tsx:23-29](components/Playground/ShapeClickGame.tsx:23)) for a `SHAPE_COMPONENT` map. Leave the PNGs on disk; just stop using them.
+- [ ] **(b) Remove the fake app window entirely.** [LessonPlaygroundPane.tsx:95-99](components/LessonPlaygroundPane.tsx:95) wraps this game in `SimulatorFrame` with `appName="Practice"`, which draws a title bar with non-functional minimize/maximize/close buttons. For a first lesson about moving the cursor, that chrome is noise.
+  - Add a `chrome?: boolean` prop to `SimulatorFrame` (default `true`). When `false`, render the dark guidance banner and the celebration overlay but **skip** the title bar and window border — children fill the pane directly.
+  - Pass `chrome={false}` for `shape-click-game` and `match-parts` (both use `appName="Practice"`, both are abstract practice rather than app simulation).
+
+### 3.12 Restart lesson gets a real activity (feedback #17)
+
+`restart-laptop.json` is `type: "none"`. The user wants: the desktop throws an error, the learner opens Settings and restarts.
+
+- [ ] This is the `guided-troubleshooting` type with a new scenario. Add `"error-restart"` to the `scenario` values in [lib/lessons.ts:226](lib/lessons.ts:226) and handle it in [components/Playground/GuidedTroubleshootingTask.tsx](components/Playground/GuidedTroubleshootingTask.tsx) alongside the existing `frozen-notes` / `frozen-browser` / `no-wifi` / `error-code`.
+- [ ] Scenario behavior:
+  1. On mount, a system error dialog appears over the desktop: *"Something went wrong. Restarting your computer usually fixes this."* with an **OK** button.
+  2. New step actions (add to the union at [lib/lessons.ts:230-234](lib/lessons.ts:230)): `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
+  3. Learner dismisses the dialog, opens Settings from the dock, finds **Restart** (add a Restart button to the SettingsApp About panel — it belongs there and reinforces 2.7), clicks it, confirms in a dialog.
+  4. **Show the restart happening**: black screen for ~1.5s, then the desktop fades back in with the error gone. Proof the fix worked — that is the pedagogy pattern (problem → explanation → fix → visible result).
+- [ ] Rewrite `restart-laptop.json` as `guided-troubleshooting` with `scenario: "error-restart"`, `launchApp: "settings"`, and 4 steps.
+- [ ] **Document the new scenario and its four actions in `CLAUDE.md`.**
+
+### 3.13 Dock lesson: open and close apps (feedback #28)
+
+`screen-dock.json` is `type: "none"`.
+
+- [ ] Convert to `guided-desktop`. That type's actions ([lib/lessons.ts:259](lib/lessons.ts:259)) are `move | resize | minimize | restore | maximize | restore-max | close` — it does not currently express "open an app from the dock". Add `open-app` and `close-app` with a `target` field naming a `DesktopAppId`.
+- [ ] Steps: open Notes from the dock → close it → open Files from the dock → close it. Three or four steps, no more; this is lesson 2 of a module about *looking* at the screen.
+
+### 3.14 Menu bar lesson: point at their real computer (feedback #29)
+
+- [ ] `screen-menu-bar.json` stays `type: "none"` (no playground per rule 1.9). Add to the intro a clearly-marked call to action: *"Now look at the very top of your own screen. You should see a row just like this one — with the time on the right side. Find it before you continue."*
+- [ ] Use this same "go look at your own computer" pattern in `screen-desktop` too.
+
+### 3.15 Clock, WiFi, and battery lessons get activities (feedback #30)
+
+All three are `type: "none"`. Each should make the learner open that exact panel in PlaygroundOS.
+
+- [ ] These are menu-bar panels, not apps, so `guided-desktop` needs three more actions: `open-clock`, `open-wifi-panel`, `open-battery-panel`. (`open-wifi-panel` already exists in `guided-troubleshooting` — mirror its implementation.)
+- [ ] `screen-clock.json` → `guided-desktop`, 2 steps: click the time in the menu bar; read today's date and close the panel.
+- [ ] `screen-wifi-icon.json` → `guided-desktop`, 2 steps: click the WiFi icon; see which network is connected (the checkmark), then close.
+- [ ] `screen-battery-icon.json` → `guided-desktop`, 2 steps: click the battery icon; read the percentage, then close.
+- [ ] The battery panel already handles the no-Battery-API case gracefully ([FakeDesktop.tsx:244-248](components/Playground/FakeDesktop.tsx:244)) — keep that.
+- [ ] Requires 2.4 (close animation) so the "then close it" step has visible feedback.
+
+### 3.16 Opening apps: any four (feedback #31)
+
+`apps-opening.json` uses `open-all-apps`, which demands **all ten** dock apps. That is a slog, and four of the ten aren't even openable (`BUILT_IN_APPS` at [FakeDesktop.tsx:17](components/Playground/FakeDesktop.tsx:17) is only 6 of 10 — `photos`, `app-market`, `calendar`, `reminders` do nothing when clicked outside a guided lesson). **The lesson is currently impossible to complete.** See Appendix C.
+
+- [ ] Change `OpenAllAppsTask` to require **any 4 distinct apps**, with a `targetCount` field on the task type (default 4). Show a live counter: *"Opened 2 of 4 — pick any apps you like."*
+- [ ] Separately fix the underlying defect: make **all ten** dock icons open something. `photos`, `app-market`, `calendar`, and `reminders` currently return early at [FakeDesktop.tsx:135](components/Playground/FakeDesktop.tsx:135). Give each a minimal standalone app window, or at minimum a window saying what the app is for. A dock icon that does nothing when clicked is a broken computer.
+- [ ] Update the JSON's `instructions` to match.
+
+### 3.17 Closing apps: practice, not theory (feedback #32)
+
+- [ ] `apps-closing.json` is `type: "none"` with a Ctrl+Q warning. Convert to `guided-desktop`: open any app of the learner's choosing → close it with the × → confirm it's gone from the taskbar.
+- [ ] Keep the Ctrl+Q warning in the intro, formatted per 4.5's warning-banner pattern.
+
+### 3.18 Closing vs quitting: needs an activity (feedback #34)
+
+- [ ] `apps-closing-vs-quitting.json` is `type: "none"`. Convert to `guided-desktop` demonstrating the actual difference:
+  1. Open Notes; type something into it.
+  2. **Minimize** it — point out the green dot on the dock icon ([FakeDesktop.tsx:279-284](components/Playground/FakeDesktop.tsx:279)) meaning still running.
+  3. Reopen from the dock — the typed text is still there.
+  4. **Close** it with the ×.
+  5. Reopen — it's blank. The app quit and forgot.
+- [ ] This works today because `appKeys` is bumped only on real close ([FakeDesktop.tsx:146-159](components/Playground/FakeDesktop.tsx:146)) while minimize preserves state. The mechanic exists; the lesson just needs to use it. Verify the Notes text actually survives minimize.
 
 ---
 
-## Phase 5 — Final verification and documentation
+## Phase 4 — Unit 2: Keyboard and Typing
 
-- [x] `scripts/check-lessons.py` green (unique orders; capitalization; no `multiple-choice` type anywhere; no `placeholder` type anywhere). _All 150 lessons pass._
-- [x] `npx tsc --noEmit`, `npm run lint`, `rm -rf .next && npm run build` all clean. _tsc clean, lint 0 errors/20 warnings, build passes (8 static pages)._
-- [x] **Spot-checked course walkthrough** in the in-app browser: catalog loads all 12 units; HTTPS lesson starts with desktop-first launch (10-app dock, Browser icon highlighted), clicking dock opens GuidedBrowserTask with step banner and full toolbar. Click interactions limited by browser-pane z-index constraints but all handlers verified via JS.
-- [x] Confirm reset-all-progress clears both `lac-progress` and `lac-sim`. _Verified: `resetProgress()` in `lib/progress.ts:55-61` writes empty slugs to `lac-progress` and calls `localStorage.removeItem("lac-sim")`._
-- [x] **Update `CLAUDE.md`**: new task types (guided-email/photos/app-store/settings/security/troubleshooting/calendar/desktop/keyboard-nav-game), assessment mode, launchApp, all new actions, 10-app dock, failure channel, desktop-first convention, emoji/icon policy, assessment-authoring rules, no-OS-branding rule, capitalization rule, slug immutability rule. Project structure updated with all new files.
-- [ ] Commit + push.
+The theme of this phase: **stop simulating apps we already built.** Typing lessons currently run inside `SimulatorFrame` shells labeled "Notes" ([LessonPlaygroundPane.tsx:74-94](components/LessonPlaygroundPane.tsx:74)) rather than inside the real `NotesApp`, `MailApp`, or `MessagingApp`.
+
+### 4.1 Delete redundant lessons (feedback #35, #43, #48)
+
+- [ ] Delete `content/lessons/kb-space.json` (order 202). Typing "hello dr digital" in `kb-letters` already exercises the space bar.
+- [ ] Delete `content/lessons/typing-basics.json` (order 220, "Cursor, insertion point, and fixing mistakes"). The user calls it useless; `kb-delete` and `selecting-text` cover the ground.
+- [ ] Delete `content/lessons/email-thank-you.json` (order 270, "Say thanks over email"). Duplicates `kb-typing-test`, which becomes the real mail-app lesson in 4.2.
+- [ ] Deleting lessons is safe (only *renaming* slugs breaks progress). After deleting, the "Typing Basics" module has zero lessons and disappears from the catalog automatically — verify that `getLessonsGrouped()` doesn't leave an empty module heading.
+
+### 4.2 Typing practice in the real Mail app (feedback #36)
+
+`kb-typing-test.json` uses `compose-email`, rendered by `ComposeEmailTask` — a bespoke component, not the real mail client.
+
+- [ ] Convert to `guided-email` with `launchApp: "mail"` so it goes through `DesktopLaunch` → learner opens Mail from the dock → composes in the same `GuidedEmailTask` UI as Unit 6.
+- [ ] Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`. The body text is the typing exercise.
+- [ ] Once `email-thank-you` is deleted (4.1) and this is converted, check whether `ComposeEmailTask.tsx` has any remaining consumers; if not, delete it and its `compose-email` union member. Grep first.
+
+### 4.3 Command / Control: one lesson, not two (feedback #37)
+
+`kb-command` (208, "Shortcut Keys (Ctrl / Command)") and `kb-control` (209, "Control") overlap almost entirely.
+
+- [ ] Merge into `kb-command` and delete `kb-control.json`. The merged intro explains: these are *modifier* keys; which one your computer uses depends on the machine; the same shortcut is written `Ctrl+C` or `Cmd+C` and means the same thing; hold the modifier, tap the letter, release both.
+
+### 4.4 Tab lesson activity (feedback #39, #47)
+
+`kb-tab.json` is `type: "none"`. The user referenced a design named `TabActivityIdea` that is not in the repo.
+
+**`TabActivityIdea.png` has arrived** — it shows a browser page at `pickacolor.example` with three large colored circles (red, green, blue) and the task: *"Can you click on the following colors in order using just the enter, Tab, and Shift + Tab keys?"* followed by the sequence: `red, green, blue, green, red, blue, green, red, blue, red`. This is the design. Build it as a page inside `GuidedBrowserTask` rather than a standalone component.
+
+- [ ] **Add `pickacolor.example` to `PAGES`** in `GuidedBrowserTask.tsx`:
+  - Three focusable `<button>` elements: `id="btn-red"`, `id="btn-green"`, `id="btn-blue"` — large circles (96px, `rounded-full`) in saturated red, green, and blue.
+  - A sequence display at the bottom: the target sequence as a comma-separated list, with the current item **highlighted** (bold, or circled).
+  - Pressing Enter on the focused button checks whether it matches the current item in the sequence; correct moves the sequence forward; wrong shows a gentle nudge; completing all 10 completes the step.
+  - Tab moves focus right (red → green → blue → red), Shift+Tab moves left. `tabIndex` must be set correctly. The currently focused button shows a visible `outline: 4px solid #1d2733`.
+  - This page is **only accessible** from the `guided-browser` step — it does not appear in the browser's "new tab" page or history by default.
+- [ ] New `guided-browser` step action: `tab-sequence` — `{ action: "tab-sequence", page: "pickacolor.example" }`. Completes when all 10 items in the sequence are clicked correctly.
+- [ ] **Two lessons, in order** (feedback #47):
+  - `kb-tab` (order 211): mechanic only — Tab moves forward in a form, Shift+Tab moves back. Use the existing `keyboard-nav-game` (`KeyboardNavTask.tsx`) which already does this. 
+  - **New lesson** `kb-tab-practical` (order 212, same module): navigate to `pickacolor.example` and complete the color sequence using only Tab/Enter. The payoff — Tab is useful, not just for skipping fields.
+- [ ] Renumber `kb-arrow-keys` to 213 and `kb-doggo` to 214 to make room. Update `CLAUDE.md`'s Unit 2 range if the top changes.
+- [ ] **Document `tab-sequence` in `CLAUDE.md`.**
+
+### 4.5 Return key activity, and the warning-banner pattern (feedback #38, #40)
+
+- [ ] `kb-return.json` → `type-text` requiring a **two-line** entry, so pressing Return is unavoidable. Validate with `mustInclude` containing both lines. Pair it with the Unit 2 mail lesson conceptually: Return makes a new paragraph in a document, but *sends* the message in some chat apps — name that trap explicitly.
+- [ ] **Warning-banner pattern** (feedback #38) for keys that must not be pressed here: Escape (`kb-escape`) and the Ctrl+Q warning in `apps-closing`.
+  - Add `warning?: string` to the `Lesson` interface in [lib/lessons.ts:264-275](lib/lessons.ts:264).
+  - Render it in `LessonModuleRunner` **above** the `DrDigital` bubble: `border-2 border-amber-400 bg-amber-50 text-amber-900 rounded-lg px-4 py-3 font-medium` with a `WarningIcon` from `Icons.tsx`.
+  - `kb-escape.json` gets: `"warning": "Don't press this key right now — it can close what you're working on. Just read along. You'll find Escape in the very top-left corner of your keyboard."`
+  - **Document `warning` in `CLAUDE.md`.**
+
+### 4.6 Arrow keys: navigate real files, mouse forbidden (feedback #41)
+
+Depends on 2.6.
+
+- [ ] `kb-arrow-keys.json` → a new activity that renders the unified `FileManager` with `keyboardNav: true`:
+  - Arrow keys move the selection between items in the grid.
+  - Enter opens the selected item.
+  - **Click handlers are disabled** while `keyboardNav` is on. Clicking shows an inline nudge: *"Use the arrow keys for this one — no clicking!"* Do not fail the lesson; just refuse and explain.
+- [ ] Express it as a `guided-files` lesson with a new step action `arrow-select` (`target`: filename) plus the existing `open-file`. Add `keyboardOnly?: boolean` to the `guided-files` task type.
+- [ ] **Document both in `CLAUDE.md`.**
+
+### 4.7 Doggo challenge in the real Messages app (feedback #42)
+
+`kb-doggo.json` is `type: "type-text"` — a bare text box wrapped in a "Notes"-labeled frame. It is supposed to be a conversation.
+
+- [ ] Convert to `guided-messaging` with `DesktopLaunch` to Messages. Steps: `select-contact` (target: a dog contact) → `send-message` with the required `value`.
+- [ ] The four hardcoded contacts are Alex, Jordan, Sam, Grandma. Add **Doggo** as a fifth in `GuidedMessagingTask.tsx` with the existing `animal-dog.png` avatar and the seeded incoming message *"I'm hungry. Can you give me food?"*.
+- [ ] `send-message` matching is case-insensitive `contains` on `step.value` — confirm the required reply text works with that, and that a mismatch produces the inline nudge rather than silent failure (that behavior was built in QA round 3; verify it survived).
+- [ ] Once `message-reply` has no remaining consumers, remove it from the union and delete the branch in `LessonPlaygroundPane`. Grep first.
+
+### 4.8 Split copy/paste from undo/redo (feedback #44)
+
+`editing-copy-paste.json` (240) crams five shortcuts into one lesson.
+
+- [ ] Narrow it to **copy, cut, paste** (keep the slug, keep order 240). Retitle *"Copy, Cut, and Paste"*.
+- [ ] New lesson `editing-undo-redo` (order 242, same Editing module): Ctrl/Cmd+Z undoes, Ctrl/Cmd+Shift+Z (or Ctrl+Y) redoes. Activity in the real Notes app: type a sentence, undo it, redo it. See 4.9 for the shared component.
+
+### 4.9 Bold / italic / underline, and every shortcut, gets an activity (feedback #45, #46)
+
+`text-formatting.json` (245) is `type: "none"`. `keyboard-shortcuts-pattern.json` (250) is `type: "none"`.
+
+This is a **new playground type** — follow the "Adding a New Playground Type" checklist in CLAUDE.md: add the union member, build the component, add a checker, wire it in `LessonPlaygroundPane`. This section documents the specifics.
+
+- [ ] **Step 1: Add to `lib/lessons.ts`** — new union member:
+  ```ts
+  | {
+      type: "notes-shortcut";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action: "type" | "select-all" | "bold" | "italic" | "underline" | "copy" | "cut" | "paste" | "undo" | "redo";
+        value?: string;   // required for "type", "paste"
+      }>;
+    }
+  ```
+- [ ] **Step 2: Add `contentEditable` to `NotesApp`** — `NotesApp` currently renders `<textarea>`. Replace with:
+  ```tsx
+  <div
+    ref={editorRef}
+    contentEditable
+    suppressContentEditableWarning
+    className="flex-1 p-4 text-base leading-relaxed outline-none"
+    onKeyDown={handleKeyDown}
+  />
+  ```
+  `document.execCommand("bold")` / `"italic"` / `"underline"` work in all modern browsers even though deprecated — they are the only way to bold in a `contentEditable` without a dependency. `execCommand("undo")` handles undo/redo. Call `e.preventDefault()` on every intercepted shortcut so the browser's native handler doesn't interfere. Text content is read via `editorRef.current.innerHTML` for validation.
+
+- [ ] **Step 3: Build `GuidedNotesTask.tsx`** — a thin wrapper that:
+  - Renders `NotesApp` inside `SimulatorFrame` with the step banner.
+  - Maintains `stepIndex` state.
+  - On each `type` step: validates `editorRef.current.textContent.includes(step.value)`.
+  - On each formatting step (`bold` / `italic` / `underline`): listens for the matching `keydown` event (Cmd/Ctrl+B/I/U) and calls `completeStep()` after `execCommand` fires.
+  - On `select-all`: listens for Cmd/Ctrl+A.
+  - On `copy` / `cut` / `paste`: listens for Cmd/Ctrl+C/X/V respectively.
+  - On `undo` / `redo`: listens for Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z.
+  - **Toolbar-click nudge:** if the bold/italic/underline toolbar button is clicked when the current step is a shortcut action, show a 2-second inline toast: *"Nice — that works! For this lesson, try the keyboard shortcut."* Do not advance the step.
+  - All steps include a `say` instruction and the pulsing-yellow highlight ring on the relevant key (shown in the static keyboard diagram, if present, or in a legend next to the banner).
+
+- [ ] **Step 4: Add to `TaskChecker.ts`** — pure function `checkNotesShortcut(stepAction, event): boolean`:
+  ```ts
+  export function checkNotesShortcut(action: string, e: KeyboardEvent): boolean {
+    const mod = e.metaKey || e.ctrlKey;
+    switch (action) {
+      case "bold":       return mod && e.key === "b";
+      case "italic":     return mod && e.key === "i";
+      case "underline":  return mod && e.key === "u";
+      case "select-all": return mod && e.key === "a";
+      case "copy":       return mod && e.key === "c";
+      case "cut":        return mod && e.key === "x";
+      case "paste":      return mod && e.key === "v";
+      case "undo":       return mod && !e.shiftKey && e.key === "z";
+      case "redo":       return mod && e.shiftKey && e.key === "z";
+      default:           return false;
+    }
+  }
+  ```
+
+- [ ] **Step 5: Wire in `LessonPlaygroundPane.tsx`** — add to the import list and dispatch block:
+  ```tsx
+  import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
+  // ...
+  {task.type === "notes-shortcut" && (
+    <DesktopLaunch app="notes">
+      <GuidedNotesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+    </DesktopLaunch>
+  )}
+  ```
+
+- [ ] Convert `text-formatting` (bold/italic/underline), `keyboard-shortcuts-pattern` (select-all → copy → paste), and `editing-undo-redo` (from 4.8) to this type.
+- [ ] **Document `notes-shortcut` fully in `CLAUDE.md`** — schema, actions table, and `LessonPlaygroundPane` wiring, per "Adding a New Playground Type".
+
+### 4.10 Birthday invitation in the real Files app (feedback #49)
+
+`invitation-exercise.json` (280) uses `edit-file` → `EditFileTask`, which the user calls "the bs prototype" and "super ugly."
+
+- [ ] After 2.6, `EditFileTask` renders the unified `FileManager`. The flow becomes: learner opens Files from the dock → navigates to Documents → double-clicks `PartyInvitation.txt` → it opens in a real editor window → they fix it → Save → the window closes and the file list shows the updated file.
+- [ ] **Fix the ugliness.** The editor window gets: a proper `AppWindow` title bar with the filename, a monospace-free readable body font at a comfortable size (`text-base leading-relaxed p-6`), a real **Save** button in the window (not floating below), and the validation feedback panel styled as a proper inline card rather than raw text.
+- [ ] Keep the QA-round-3 improvements: `normalize()` for curly quotes, `checkTextEditDetailed()` feedback listing which specific misspellings remain, and the "Show me an example" panel. Verify they still work after the refactor.
+
+### 4.11 Messy-email cleanup in the real Mail app (feedback #50)
+
+`email-assessment.json` (290) is `type: "edit-text"` — editing an *email* inside a *Notes* frame, and never sending it.
+
+- [ ] Convert to `guided-email`. Learner opens Mail → opens a saved draft containing the messy text → fixes it → **sends it**. Sending is the point; an email you never send isn't an email lesson.
+- [ ] This requires `GuidedEmailTask` to support opening a **draft** with pre-filled body text. Add a `seedDraft?: { to: string; subject: string; body: string }` field to the `guided-email` task type, and a Drafts folder entry when present. **Document it in `CLAUDE.md`.**
+- [ ] Note the module is called "Real-Life Exercise" and this file is named `email-assessment` — it is *not* the Unit 2 assessment. See 15.2 for the actual Unit 2 assessment, which does not exist yet.
+
+---
+
+## Phase 5 — Unit 3: Files and Folders
+
+### 5.1 Opening a file opens a window (feedback #53)
+
+- [ ] Covered by 3.7's `FileManager` change — opening an item raises a real closable window. Verify the Unit 3 lessons benefit: `file-what-is` (300) explicitly teaches "what happens when you open a file," and its two steps should now be open → read → close → open another.
+- [ ] Update `file-what-is.json` steps and intro to describe the window: it has a title bar with the file's name, and the × closes it without deleting anything.
+
+### 5.2 TaxReturn is already in the destination folder (feedback #57) — bug
+
+See Appendix C. In `makeItems()` ([GuidedFilesTask.tsx:63-77](components/Playground/GuidedFilesTask.tsx:63)), `taxreturn` starts at `loc: "home"`. Some lesson asks the learner to move it into a folder where it appears to already be, or deletes/restores it in a way that leaves it misplaced for the next lesson.
+
+- [ ] Reproduce by walking all nine Unit 3 lessons in order in one browser session. Each `guided-files` lesson calls `useState(makeItems)` so state resets per lesson — meaning the bug is a **content** bug: a lesson's steps contradict the initial state.
+- [ ] Audit every `move` / `delete` / `restore` step in `creating-folders`, `moving-files`, `searching-files`, and `trash-delete` against `makeItems()`. Fix the JSON so no step is a no-op on arrival.
+- [ ] Add a guard in `GuidedFilesTask`: when a step activates and the state already satisfies it, auto-complete without a flash. This makes content mistakes self-healing (it was Phase 1.6 in the previous round and was never implemented — implement it now).
+
+### 5.3 / 5.4 Sidebar icons for Pictures and Downloads (feedback #55, #56)
+
+- [ ] Covered by 2.6's sidebar bullet. Keep these as separate checkboxes so the blocked state is visible.
+
+### 5.5 The apple-pie recipe must actually open (feedback #58, #63)
+
+`recipes` page in `GuidedBrowserTask` has `download: "ApplePieRecipe.pdf"` ([GuidedBrowserTask.tsx:69](components/Playground/GuidedBrowserTask.tsx:69)). You can download it; you can never open it. `pdfs-reading` (1280) is supposed to teach exactly this.
+
+- [ ] Add an `open-download` step action to the `guided-browser` type ([lib/lessons.ts:104-129](lib/lessons.ts:104)).
+- [ ] Clicking a file in the Downloads panel opens a **PDF viewer window** rendering a real-looking recipe: title, ingredient list, numbered steps, page 1 of 2, and working zoom controls. It does not have to be a real PDF — it has to *look and behave* like opening one.
+- [ ] Wire it into `pdfs-reading` (1280) and any Unit 4 lesson that downloads it.
+- [ ] **Document `open-download` in `CLAUDE.md`.**
+
+---
+
+## Phase 6 — Unit 4: The Internet and Browsing
+
+The recurring complaint: **the same three websites over and over**, and several controls that don't work.
+
+### 6.1 More websites (feedback #61, #63, #64)
+
+`PAGES` ([GuidedBrowserTask.tsx:62-70](components/Playground/GuidedBrowserTask.tsx:62)) has 8 entries and lessons reuse `google.com`, `wikipedia.org`, and `recipebox.example` relentlessly.
+
+- [ ] Add at least six more, each with a distinct look and a genuine reason to exist:
+  | id | url | Purpose |
+  |---|---|---|
+  | `library` | `citylibrary.example` | Catalog search, opening hours — used by the maps/library lessons |
+  | `busschedule` | `citytransit.example` | A timetable table — good for zoom and for scroll |
+  | `garden` | `gardeningtips.example` | Long article — reading-list and scroll practice |
+  | `petnews` | `petnews.example` | Ties to the Unit 1 right-click cat (3.8) |
+  | `bank` | `firstbank.example` | Secure-site and login examples for Unit 10 |
+  | `store2` | `bookshop.example` | A second shop, so shopping lessons aren't all `shop.example` |
+- [ ] Each needs: `title`, `url`, `secure`, an icon from `Icons.tsx`, `kind`, and a `body` with **real content** — a few sentences of plausible page text, not lorem. Some get `ads`, `cookie`, `popup`, or `download` flags.
+- [ ] Then **rewrite every Unit 4 lesson's `navigate` targets** so no site appears in more than two lessons. Spread them across `internet-vs-website`, `browser-vs-search`, `urls`, `domain-names`, `safari-tabs`, `safari-windows`, `safari-downloads`, `safari-bookmarks`, `reading-list`, `history-autofill`.
+- [ ] **Update the site list in `CLAUDE.md`'s `guided-browser` schema section.**
+
+### 6.2 Internet Basics is repetitive (feedback #59, #60)
+
+`internet-vs-website` (400) and `browser-vs-search` (410) teach nearly the same thing, and both have the learner type `google.com` and `wikipedia.org` yet again.
+
+- [ ] Rewrite `internet-vs-website` as concept-first with **one** short activity: visit a single site the learner has not seen (`citylibrary.example`). Intro covers: the internet is the network of connected computers; a website is one destination on it; the browser is the app that fetches it. Analogy: the internet is the road system, a website is a shop, the browser is your car.
+- [ ] Rewrite `browser-vs-search` to genuinely contrast the two: type an address directly (goes straight there) vs type words in a search box (gives a list to choose from). Use `search` → `open-result` so the learner must actually open a result — that mechanic was added in QA round 3 and should be exercised here.
+- [ ] `urls` (420) and `domain-names` (430): use new sites, and make `domain-names` actually about the domain — compare `.com` / `.org` / `.example`, and the difference between `citylibrary.example` and `citylibrary.example.evil-site.net`. That last point sets up Unit 10.
+
+### 6.3 The browser must be maneuverable (feedback #62)
+
+Reported at "Unit 4 2/8" — `safari-tabs`, the second lesson of the 8-lesson "Using the browser" module.
+
+- [ ] Reproduce: which controls are dead during that lesson? Likely cause is `hl()`-gated handlers that no-op when the current step doesn't match. Per the free-play rule, **every control performs its real action always**; only *step completion* is gated. Audit every handler in `GuidedBrowserTask` for the `if (step?.action === X)` anti-pattern wrapping the state change instead of just the `completeStep()` call.
+- [ ] Specifically confirm these work at any time: back, forward, new tab, close tab, switch tab, address bar, reload, zoom in/out, bookmarks, history, downloads, reading list.
+
+### 6.4 Reload must visibly work (feedback #64, #67)
+
+The broken-page mechanic exists from QA round 3 but is reported as inconsistent.
+
+- [ ] Reproduce in `refresh-reload` (495). The `reload` step only completes when it actually fixes a broken page — verify the seeding logic marks the right page broken, and that the broken state renders visibly (gray placeholder, scrambled text, "This page didn't load correctly").
+- [ ] Combine with 2.9: reload shows a spinner for ~400ms, then the fixed page. The learner watches it repair itself.
+- [ ] The user wants "the massive lesson complete popup" after seeing it work — that is the standard celebration overlay from 1.5/1.6. Confirm it fires here.
+
+### 6.5 Zoom must actually work (feedback #68)
+
+`zooming-webpages` (496), reported broken at "8 of 8".
+
+- [ ] Verify both `−` and `+` are real buttons at all zoom levels (a previous round found `−` was a dead `<span>`; confirm the fix held).
+- [ ] Verify the `news` page's `finePrint` renders at `text-[8px]` and becomes readable at ≥150%, and that the "Now you can read this!" confirmation appears.
+- [ ] Verify the `zoom-in` step completes at ≥150% and that zoom **persists** across navigation within the lesson, like a real browser.
+- [ ] Use `citytransit.example` (a dense timetable) as a second zoom target — small tabular text is the most realistic reason to zoom.
+
+### 6.6 Cookies lesson art (feedback #70)
+
+- [ ] `cookies.json` (492): render `cookie.png` in the cookie-consent banner inside `GuidedBrowserTask`, replacing the `CookieIcon` SVG. Size it ~48px, left of the banner text.
+
+### 6.7 Online Safety auto-fail bug (feedback #71) — bug
+
+Reported: the Unit 4 online-safety activity "automatically registers a fail because you have to click the thing to do the lesson."
+
+- [ ] This is almost certainly `popups-ads` (493) or `popup-accident` (494). The **CLEAN NOW** button calls `onResult(false, …)` by design (teaching consequences), and ad clicks fail in assessment mode. If a lesson *instructs* the learner to click something that the fail-handler also catches, it fails instantly.
+- [ ] Reproduce both lessons. Fix by scoping the fail: the ad-click failure must fire **only** when `mode === "assessment"`, and CLEAN NOW must not be the highlighted target of any step. If `popup-accident` seeds `SystemCleaner.exe` and asks the learner to delete it, verify the popup is not *also* live at that moment.
+
+### 6.8 Unknown URLs get a helpful response (feedback #69)
+
+Typing an address for a site that doesn't exist in `PAGES` currently does nothing.
+
+- [ ] Add a fallback page: a friendly "This site isn't part of the practice computer" screen with the typed URL echoed back, an illustration, and the line: *"On your real computer, try typing this address in your own browser and see what you find!"*
+- [ ] Plus a **Go back** button. This must never fail a lesson — it is a curiosity reward, not a mistake.
+
+---
+
+## Phase 7 — Unit 5: Messages and Video Calls
+
+### 7.1 Lessons 1/5 and 2/5 are the same (feedback #73)
+
+`messages-contacts` (500, 3 steps) and `messages-app` (510, 2 steps) both amount to "pick a contact and send a message."
+
+- [ ] Make `messages-contacts` genuinely about **contacts**: browse the contact list, look at who's there, open a conversation *without* sending, note the difference between the list and a thread. No `send-message` step.
+- [ ] `messages-app` becomes the first lesson where you actually send, and gets the favorite-animal message from 7.3.
+
+### 7.2 Lesson 3/5 becomes group chats (feedback #74)
+
+`group-conversations` (520) is titled for groups but its 2 steps are another 1:1 exchange.
+
+- [ ] Build real group-chat support in `GuidedMessagingTask`: a group thread with 3+ participants, each message labeled with its sender's name and avatar, and a header showing the member list.
+- [ ] Add step actions `create-group` (`value`: group name), `add-to-group` (`target`: contact), and `send-group-message`.
+- [ ] Lesson steps: create a group → add two contacts → name it → send a message → see replies from two different people.
+- [ ] **Document the new actions in `CLAUDE.md`.**
+
+### 7.3 A message worth replying to (feedback #75)
+
+- [ ] Seed one contact's thread with *"What's your favorite animal?"* and make `messages-app`'s send step accept **any** non-empty reply (no `value` constraint). Letting the learner answer freely is the whole point.
+
+### 7.4 Emoji and reactions is repetitive (feedback #76)
+
+`emoji-reactions` (540) repeats the reaction taught in `messages-photos` (530).
+
+- [ ] Split cleanly: `messages-photos` covers **sending a photo** only — drop its reaction step. `emoji-reactions` covers **emoji in message text** (an emoji picker in the compose bar, which does not exist yet — build it) **and** reactions on a received message, which is then new material.
+- [ ] The reaction-picker emojis stay as emoji — they are the feature being taught and are the documented exception to the no-emoji rule.
+
+### 7.5 Video calls: we cannot see you (feedback #77)
+
+- [ ] `facetime-basics` (550): add to the intro, prominently: *"This is a pretend video call. This website cannot turn on your real camera or microphone, and can't see or hear you. On a real call, your computer will ask for permission first — and you'll see a light next to your camera when it's on."*
+- [ ] Label the self-preview tile in the call UI *"You (pretend)"* so it is unmistakable.
+
+---
+
+## Phase 8 — Unit 6: Email
+
+### 8.1 Composing uses the real email UI (feedback #79)
+
+`composing-email` (620) is the last `compose-email` lesson standing (4.2 converts the other one).
+
+- [ ] Convert to `guided-email` via `DesktopLaunch` → Mail. Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`.
+- [ ] After this, `compose-email` has zero consumers: delete `ComposeEmailTask.tsx`, remove the union member, remove the `LessonPlaygroundPane` branch, and remove it from the `CLAUDE.md` task-type table.
+
+### 8.2 Composing 2/3 is buggy; step 3 of 8 has no success signal (feedback #80)
+
+`reply-forward` (630, 8 steps).
+
+- [ ] Walk all 8 steps in the browser and record exactly which one stalls. Step 3 of 8 is called out as having no clear success indication.
+- [ ] Likely cause: a `set-body` / `set-subject` step that completes on blur or on send rather than on typing, so nothing happens as the learner types. Fix: complete text-entry steps **as soon as the required text is present in the field**, and flash the green per-step tick. Never require an extra click to "confirm" typing.
+- [ ] Verify every step in every Unit 6 lesson gives visible feedback within ~200ms of the correct action.
+
+### 8.3 CC/BCC registers on typing, and emails have bodies (feedback #81)
+
+`cc-bcc` (640, 6 steps).
+
+- [ ] Steps complete the moment the correct address is typed in the correct field, and the yellow highlight moves immediately to the next field.
+- [ ] Add a `set-body` step — the current lesson sends an email with an empty body, which is exactly the bad habit feedback #26 flagged last round. Every `send` in the course must be preceded by a `set-body`.
+- [ ] Audit **all** Unit 6 lessons for `send` without a preceding `set-body`.
+
+---
+
+## Phase 9 — Unit 7: Photos
+
+### 9.1 Search button doesn't register (feedback #83, #84)
+
+`photo-search` (702, 1 step) and `photo-people` (711, 3 steps) both use `search`.
+
+- [ ] Reproduce: clicking the search icon does nothing measurable.
+- [ ] Make `search` a **two-phase** step, matching the pattern used by `attach-photo` and `add-reaction`: phase 0 highlights the search **button** and completes on click (opening the search field); phase 1 highlights the **field** and completes when the query is typed.
+- [ ] Update both lessons' `say` copy to match: *"Click the search icon"* then *"Type dog and press Enter."* The user explicitly asked for "say to type it in."
+
+### 9.2 Two dog images (feedback #85)
+
+- [ ] `photo-people` (711) surfaces two dog photos. The library has both `Dog.png` and `animal-dog.png` from the same source. Remove one from the photo library array in `GuidedPhotosTask.tsx` and give the survivor a distinct label. Check the whole 12-item library for other duplicates while you're there.
+
+### 9.3 The bird photo must actually be bad (feedback #86)
+
+`photo-editing` (720) says "fix this photo" but the bird renders normally, so the fix is invisible.
+
+- [ ] Give library items optional `initialEdits`: `{ brightness?: number; contrast?: number; rotation?: number; saturation?: number }`, applied as the item's starting CSS filter/transform.
+- [ ] Bird in Garden starts at `brightness: 55, contrast: 80, rotation: 90` — visibly dark **and** sideways.
+- [ ] Rewrite `photo-editing`'s steps: rotate it upright → raise brightness → raise contrast → done. The before/after must be dramatic. Do **not** end with `revert` (which throws away the learner's work) — end with the fixed photo on screen.
+
+### 9.4 Prove the share arrived (feedback #87)
+
+`sharing-photos` (721) ends with a toast and no proof.
+
+- [ ] After a successful share, show an **optional** banner in the sim: *"Want to see it arrive? Close Photos and open Messages."* with a **Show me** button that closes Photos and opens the Messages app with the shared photo visible in that contact's thread.
+- [ ] Optional means optional: the lesson is already complete: this is free-play exploration after the celebration, not a required step.
+- [ ] Requires the shared photo to actually be written into the messaging thread — use the `lac-chats` localStorage store that `MessagingApp` already reads.
+
+---
+
+## Phase 10 — Unit 8: Apps
+
+### 10.1 Stop installing apps that are already installed (feedback #90, #92, #93) — bug
+
+Three separate reports of the same root cause. `GuidedAppStoreTask` persists installs to `lac-sim-apps` and seeds state on mount ([GuidedAppStoreTask.tsx:205-213](components/Playground/GuidedAppStoreTask.tsx:205)). The seeding logic skips apps that have an `install` step *in the same lesson* — but it does not account for an app installed by an *earlier* lesson that a *later* lesson also asks you to install.
+
+- [ ] Fix the seeding rule: when a lesson contains an `install` step for app X, **force X to be uninstalled at mount**, regardless of saved state. A lesson that teaches installing must always start from not-installed.
+- [ ] Same for `delete-app`: force the app to be **installed** at mount so there is something to delete.
+- [ ] Audit all six Unit 8 lessons plus `unit-8-assessment` against `BUILT_IN_APPS` ([GuidedAppStoreTask.tsx:159](components/Playground/GuidedAppStoreTask.tsx:159)) — never ask the learner to install an app that is on the built-in list.
+
+### 10.2 Stop building everything around Puzzle Quest (feedback #91)
+
+The catalog has 12 apps ([GuidedAppStoreTask.tsx:46-158](components/Playground/GuidedAppStoreTask.tsx:46)) and the lessons use Puzzle Quest for nearly everything.
+
+- [ ] Assign each lesson a **different** app, chosen to fit what it teaches:
+  | Lesson | App | Why |
+  |---|---|---|
+  | `app-store` (810) browse | Zen Garden | Nice detail page to look at |
+  | `installing-apps` (820) | RecipeBox | Plain, free, uncontroversial |
+  | `app-permissions` (830) | PhotoFun | Camera permission is genuinely needed |
+  | `updating-apps` (840) | WeatherNow | Weather apps really do update constantly |
+  | `deleting-apps` (850) | FlashLight | A trivial app you'd plausibly delete |
+  | `free-vs-paid` (860) | Bubble Pop vs Zen Garden | Already the ads-vs-paid comparison |
+  | `unit-8-assessment` (870) | NoteMaster / SketchPad | Apps untouched by any lesson |
+- [ ] Verify each app's catalog entry (category, rating, reviews, tags) actually supports its lesson's point.
+
+---
+
+## Phase 11 — Unit 9: Settings
+
+### 11.1 Dark mode reaches everything (feedback #95)
+
+- [ ] Covered by 2.7. Verify by completing `display-theme` (920) and confirming the WiFi icon, battery icon, battery percentage, clock, all three status panels, and the dock labels all invert.
+
+### 11.2 Settings UI quality (feedback #96)
+
+- [ ] Covered by 2.7. Verify side by side against `MailApp`.
+
+### 11.3 Assessment copy cleanup (feedback #97)
+
+- [ ] `unit-9-assessment` (960) is `type: "none"` (an IRL checklist). Remove the line telling learners to skip trackpad sensitivity — that lesson was deleted in a previous round, so the reference is stale — and remove the stray text under the sixth numbered item.
+- [ ] Then apply 15.1 to give Unit 9 a real assessment activity.
+
+---
+
+## Phase 12 — Unit 10: Online Safety and Security
+
+The theme: **security tools are not websites.** `GuidedSecurityTask` renders inside a browser frame via `DesktopLaunch app="browser"` ([LessonPlaygroundPane.tsx:197-201](components/LessonPlaygroundPane.tsx:197)), which teaches the wrong mental model — you do not type your master password into a web page you found.
+
+### 12.1 Passwords are not a website (feedback #98)
+
+- [ ] `passwords-basics` (1000): the strength meter must **not** appear in a browser window. Render `GuidedSecurityTask`'s password section as a **standalone app window** (`AppWindow` titled "Password Checker") launched from the desktop, or as a plain full-pane tool with no browser chrome at all.
+- [ ] **Concrete split strategy** — add a `chrome` prop to `GuidedSecurityTask`:
+  ```tsx
+  interface GuidedSecurityTaskProps {
+    chrome: "browser" | "settings" | "mail" | "messages" | "bare";
+    // ...
+  }
+  ```
+  And update `LessonPlaygroundPane.tsx` lines 197-201 to read `task.chrome` and choose the wrapper:
+  ```tsx
+  {task.type === "guided-security" && (() => {
+    const chrome = (task as any).chrome ?? "browser";  // default matches old behaviour
+    const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />;
+    if (chrome === "browser")   return <DesktopLaunch app="browser">{inner}</DesktopLaunch>;
+    if (chrome === "settings")  return <DesktopLaunch app="settings">{inner}</DesktopLaunch>;
+    if (chrome === "mail")      return <DesktopLaunch app="mail">{inner}</DesktopLaunch>;
+    if (chrome === "messages")  return <DesktopLaunch app="messages">{inner}</DesktopLaunch>;
+    return inner;  // bare — full-pane, no desktop
+  })()}
+  ```
+- [ ] **Per-lesson `chrome` values:**
+  | Lesson | `chrome` | Why |
+  |---|---|---|
+  | `passwords-basics` (1000) | `"bare"` | Password strength is a local tool; no URL bar |
+  | `password-managers` (1010) | `"browser"` | Logging into a site is a browser action |
+  | `two-factor` (1020) | `"browser"` | The login form is in a browser |
+  | `passkeys` (1030) | `"browser"` | Same login flow |
+  | `scams-phishing` (1040) | `"mail"` | Phishing links come in email (see §12.4) |
+  | `identity-theft` (1050) | `"messages"` | Smishing links come via text |
+  | `safe-shopping` (1060) | `"browser"` | Shopping is a browser activity |
+  | `public-wifi` (1070) | `"bare"` | Orchestrated separately (§12.7) |
+- [ ] **Add `chrome` field to the `guided-security` union in `lib/lessons.ts`** and **document in `CLAUDE.md`**.
+
+### 12.2 Show something after logging in (feedback #99)
+
+Three lessons end on a button press with no visible result.
+
+- [ ] `password-managers` (1010): after login, show a **logged-in account page** — a welcome header with the username, an account summary, and a Sign out button. Proof it worked.
+- [ ] `two-factor` (1020): after **Verify**, show the same logged-in state plus a confirmation: *"Verified — you're signed in."*
+- [ ] `passkeys` (1030): after **Sign in with passkey**, the fingerprint animation completes and the same logged-in page appears.
+- [ ] Build one `<LoggedInPanel username={…} method={…} />` used by all three.
+
+### 12.3 The phone looks odd (feedback #100)
+
+- [ ] `two-factor`'s phone illustration needs work. Rebuild it: correct portrait aspect (~9:19.5), rounded corners `rounded-[2rem]`, a thin bezel, a small notch or pill camera cutout, a status bar with a time and battery, an SMS bubble styled like a real message app (gray bubble, sender name above), and the 6-digit code large and monospaced. Give the whole phone a subtle drop shadow so it reads as an object.
+
+### 12.4 The phishing inspector is not a website (feedback #101)
+
+- [ ] `scams-phishing` (1040) and `identity-theft` (1050): move the link inspector out of the browser. Present each item as what it actually is — an **email in the Mail app** or a **text in the Messages app** — and let the learner inspect the link there (hover/long-press reveals the true URL, exactly as on a real device).
+- [ ] This is more realistic *and* reinforces Unit 5 and Unit 6. Requires `GuidedSecurityTask` to render inside `MailApp` / `MessagingApp` chrome for these sections.
+
+### 12.5 Ad tracking lives in Settings (feedback #102)
+
+- [ ] Add a **Privacy** section to `SettingsApp` with real toggles: *Allow websites to track me across sites* (off by default), *Block pop-up windows*, *Clear browsing data* (a button showing a confirmation).
+- [ ] Move the ad-tracking teaching there. The relevant lesson becomes `guided-settings` instead of `guided-security`.
+
+### 12.6 Online transactions out of the browser (feedback #103)
+
+- [ ] `safe-shopping` (1060, "Shopping Safely Online"): the *checking* part (is this site secure? is this URL real?) legitimately happens in a browser and stays. But anything about **card details** must not be typed anywhere — replace with an inspection task: look at the lock, look at the URL, decide whether to proceed. Never simulate entering payment data, even fake data. That is a habit we must not build.
+
+### 12.7 Public WiFi: a realistic end-to-end scenario (feedback #104)
+
+`public_wifi` (1070) — the user wants a real situation, not a quiz.
+
+- [ ] Rewrite as a cross-app scenario:
+  1. The desktop starts with **no WiFi** — the browser shows the no-connection state (`NoConnectionIcon`, already built).
+  2. Learner clicks the WiFi icon in the menu bar and sees the network list.
+  3. They join *"Coffee Shop Free WiFi"* — a captive-portal page opens in the browser.
+  4. The portal wants an email to connect. The lesson teaches: this is normal, but never enter a password you use elsewhere.
+  5. Connected. Now open **Settings → Privacy** (12.5) and turn tracking off, because you are on a network you don't control.
+
+**Implementation — use `guided-troubleshooting` with a new `public-wifi` scenario:**
+
+The `guided-troubleshooting` component already orchestrates multi-app desktops and has the `scenario` prop system. Extend it:
+
+- [ ] Add `scenario: "public-wifi"` to `GuidedTroubleshootingTask`. In this scenario, `FakeDesktop` boots with `wifiConnected: false` (pass a prop or use `SimThemeContext` — `SimThemeContext` already has `wifiConnected` state used by the no-connection browser state).
+- [ ] Add four new step actions to the `guided-troubleshooting` union in `lib/lessons.ts`:
+  ```
+  "open-wifi-panel"  — already exists; use it to open the menu-bar WiFi list
+  "join-network"     — new: clicks a specific network row in the panel; target: "Coffee Shop Free WiFi"
+  "captive-portal-continue" — new: clicks the "Continue" button on the captive portal page in the browser
+  "open-settings-privacy"   — new: opens Settings and navigates to Privacy section
+  "toggle-privacy-tracking" — new: toggles the "Allow websites to track me" setting
+  ```
+- [ ] `join-network` step causes: the network shows "Connecting…" for ~1.5s, then "Connected"; `wifiConnected` in `SimThemeContext` becomes `true`; the browser's no-connection page reloads to the captive-portal page for `"Coffee Shop Free WiFi"` (a hardcoded page in `GuidedBrowserTask`'s `PAGES`, or a special render in the troubleshooting component).
+- [ ] The captive-portal page has: a coffee-shop logo, a field for email (pre-filled with `you@example.com`), a "Continue" button, and a lesson-teaching note: *"You're entering your email — not a password. Safer networks don't need any info to connect."*
+- [ ] After `captive-portal-continue`, the browser loads a "Connected! Welcome to Coffee Shop WiFi" page, and the lesson continues to Settings → Privacy.
+- [ ] **Document the new `guided-troubleshooting` actions and the `public-wifi` scenario in `CLAUDE.md`.**
+
+---
+
+## Phase 13 — Unit 11: Troubleshooting
+
+### 13.1 The Notes app must visibly work (feedback #106)
+
+`troubleshooting-basics` (1110) force-quits a frozen Notes.
+
+- [ ] After the restart step, Notes must **open for real** and be usable — the learner types in it to confirm it's alive. Right now the scenario ends the moment the app relaunches, so there is no proof of a fix.
+- [ ] Add a final step: type something in the restored Notes.
+
+### 13.2 Lesson 2/3 is a duplicate; make it delete-and-reinstall (feedback #107)
+
+`software-problems` (1115) is the same force-quit flow as 1110 with Browser instead of Notes.
+
+- [ ] Rewrite entirely as **delete and reinstall an app** — the real next escalation when force-quitting doesn't help:
+  1. An app misbehaves (show it erroring).
+  2. Open App Market → My Apps → delete it.
+  3. Confirm it's gone from the dock.
+  4. Reinstall it from the store.
+  5. Open it and confirm it works.
+- [ ] This spans `guided-troubleshooting` and `guided-app-store`. Either extend `guided-troubleshooting` with an `app-reinstall` scenario that can open App Market, or add the troubleshooting framing to `guided-app-store`. Prefer the former.
+
+### 13.3 Delete the Unit 11 3/3 activity (feedback #108)
+
+- [ ] `hardware-problems` (1120) is currently `guided-settings` (brightness slider). The user calls it "super stupid." Change to `type: "none"` and rewrite as a proper explainer: what counts as a hardware problem, the checks a person can safely do (cable seated, power, restart), and when to stop and get help. Rule 1.9 removes its playground.
+
+### 13.4 Access issues: use the real Mail app (feedback #109)
+
+`password-recovery` (1170, 6 steps) runs the whole password reset — including reading the reset email — inside the browser sim.
+
+- [ ] Restructure to span two real apps: start in the browser (forgot password) → **open the Mail app from the dock** → open the real reset email there → click the link → back to the browser → set the new password → log in.
+- [ ] After login, open a **new page** showing the logged-in account (reuse `LoggedInPanel` from 12.2).
+
+**Implementation — use `guided-troubleshooting` with a new `password-reset` scenario:**
+
+This is the same orchestration pattern as §12.7. Extend `GuidedTroubleshootingTask`:
+
+- [ ] Add `scenario: "password-reset"` to `GuidedTroubleshootingTask`. In this scenario, `FakeDesktop` starts with the Browser app open showing `firstbank.example`'s login form.
+- [ ] New step actions for this scenario:
+  ```
+  "click-forgot-link"      — clicks "Forgot password?" on the bank login form
+  "open-mail-from-dock"    — learner clicks Mail in the dock (DesktopLaunch-style highlight)
+  "open-reset-email"       — clicks the "Password Reset" email in the Mail inbox
+  "click-reset-link"       — clicks the link inside the email (returns focus to the browser)
+  "type-new-password"      — types a new password in the reset form (strength meter applies)
+  "confirm-login"          — submits the login form with the new password
+  ```
+- [ ] Clicking the reset link in Mail: the Mail app renders the email body with a highlighted "Reset your password" button; clicking it switches the active window to Browser and navigates to `firstbank.example/reset?token=abc123`. The token is cosmetic — do not validate it.
+- [ ] After `confirm-login` succeeds, render `LoggedInPanel` (from §12.2) in the browser frame.
+- [ ] **Document the new scenario and actions in `CLAUDE.md`.**
+
+### 13.5 Getting support: open the real apps (feedback #110)
+
+`when-to-get-help` (1180, 6 steps) — the error dialog and the support site are both faked in one frame.
+
+- [ ] Rebuild as a genuine sequence: open **Photos** from the dock (the app must really open) → it throws error `PX-4402` → copy the code → open **Browser** from the dock → go to `support.example` → paste the code → get a solution → reopen Photos and confirm it works.
+- [ ] The user's complaint is that everything is handed over: at Unit 11 of 12, reduce the hand-holding. Give the objective and let them find the dock icons themselves — consider `mode: "assessment"` for this lesson.
+
+**Implementation — use `guided-troubleshooting` with a new `error-restart` scenario:**
+
+- [ ] Add `scenario: "error-restart"` to `GuidedTroubleshootingTask`. In this scenario:
+  - `FakeDesktop` starts idle (no apps open).
+  - No step highlighting — the learner is expected to find the dock icons themselves (assessment-adjacent).
+- [ ] New step actions:
+  ```
+  "open-app-from-dock"     — waits for learner to click a named dock icon; target: "photos"
+  "read-error"             — already exists; here the error says "Error PX-4402"
+  "copy-code"              — already exists; copies "PX-4402" to clipboard
+  "open-browser-from-dock" — waits for learner to click Browser in the dock; target: "browser"
+  "navigate-support"       — navigates to support.example (learner types in the address bar)
+  "paste-code"             — already exists; pastes into the support site's search field
+  "submit-support"         — already exists; submits and shows a solutions page
+  "reopen-app"             — learner reopens Photos; it works this time (error cleared from state)
+  ```
+- [ ] `support.example` must be added to `GuidedBrowserTask.tsx`'s `PAGES`: a simple search page for error codes, returning one result for "PX-4402" — *"Photos Library Rebuild: Go to Photos → File → Rebuild Library. Takes 1–2 minutes."*
+- [ ] `reopen-app` clears the `errorActive` flag for Photos so it opens without the error dialog.
+- [ ] **Document the new scenario and actions in `CLAUDE.md`.**
+
+---
+
+## Phase 14 — Unit 12: Everyday Life
+
+### 14.1 Unit 12 is entirely "do it on your own computer" (feedback #112)
+
+The user's instruction is unambiguous: Unit 12 revisits everything the course taught, with **no playground at all**, directing the learner to their real machine.
+
+- [ ] Convert **every** Unit 12 lesson to `type: "none"`. That means changing:
+  - `social-media` (1210) — currently `guided-messaging`
+  - `calendar-reminders` (1220) — currently `guided-calendar`
+  - `shopping-banking` (1250) — currently `guided-security`
+  - `pdfs-reading` (1280) — currently `guided-browser`
+  Already `none`: `maps-navigation`, `notes-documents`, `google-docs-basics`, `google-docs-share`, `google-drive-basics`, `qrcodes-siri`, `printing-scanning`, `unit-12-assessment`.
+- [ ] Rewrite each intro as a **numbered real-world walkthrough** for the learner's own computer — the format `maps-navigation` and the Google Docs lessons already use. Each names the app to open, the exact steps, what they should see, and what to do if it looks different.
+- [ ] Every Unit 12 lesson explicitly cross-references the unit that taught the skill: *"You practiced this in Unit 6 — now do it for real."*
+- [ ] Rule 1.9 removes the playground pane automatically once they're all `none`. Verify no Unit 12 lesson renders a desktop.
+- [ ] **Note the tension with 5.5**: `pdfs-reading` is where `open-download` was going to be exercised. Move that exercise to a Unit 4 lesson (`safari-downloads`, 460) instead, and let the Unit 12 version be the real-computer walkthrough.
+
+---
+
+## Phase 15 — Unit assessments: unique, creative, unassisted
+
+**Feedback #52, #72, #78, #82, #88, #94, #105, #111** are the same instruction repeated for eight different units: *stop replaying the lessons, stop the hand-holding, be creative.* Treat them as one job.
+
+### 15.1 The rules for every assessment
+
+- [ ] `mode: "assessment"` on every one that has a guided task type. This suppresses step-by-step `say` text and the yellow highlight rings, and shows the objectives banner with a **Hint** button (`SimulatorFrame` already implements all of this — see [SimulatorFrame.tsx:72-123](components/Playground/SimulatorFrame.tsx:72)).
+- [ ] **Objectives, never walkthroughs.** Write goals: *"Find a recipe and save it for later."* Never: *"Click the address bar, type recipebox.example, press Enter."*
+- [ ] **New combinations only.** An assessment must require the learner to *sequence* skills themselves, and must not reuse the same target site/app/file as the lessons in that unit. If Unit 4's lessons used `recipebox.example`, the assessment uses `citylibrary.example`.
+- [ ] **Hints nudge, never solve.** *"Which part of the browser shows where you are?"* Not: *"Click the address bar."*
+- [ ] Per-sim assessment wiring: each guided sim needs to scan **all incomplete objectives** on every action rather than only checking the current step. This was deferred in QA round 3 and is now required. Refactor each sim's completion check into a pure `matchesStep(step, event): boolean` and, in assessment mode, test every unmet objective against each event.
+
+**How to implement `matchesStep` — concrete example using `GuidedFilesTask`:**
+
+Currently `GuidedFilesTask` has handler logic like:
+```tsx
+// BAD — coupled to current step index
+const handleOpen = (item: Item) => {
+  if (steps[stepIndex]?.action === "open-file" && steps[stepIndex].target === item.name) {
+    completeStep();
+  }
+};
+```
+
+Refactor to:
+```tsx
+// In TaskChecker.ts or co-located:
+function matchesFilesStep(step: GuidedFilesStep, event: { kind: string; name?: string; into?: string }): boolean {
+  if (step.action === "open-file" && event.kind === "open")      return event.name === step.target;
+  if (step.action === "go-to"    && event.kind === "navigate")   return event.name === step.target;
+  if (step.action === "new-folder" && event.kind === "new-folder") return event.name === step.value;
+  if (step.action === "rename"   && event.kind === "rename")     return event.name === step.value;
+  if (step.action === "move"     && event.kind === "move")       return event.name === step.target && event.into === step.into;
+  if (step.action === "delete"   && event.kind === "delete")     return event.name === step.target;
+  if (step.action === "restore"  && event.kind === "restore")    return event.name === step.target;
+  return false;
+}
+
+// In component:
+const handleOpen = (item: Item) => {
+  const event = { kind: "open", name: item.name };
+  if (mode === "assessment") {
+    // Complete any unmet objective that this action satisfies (order-free in assessment)
+    const nextUnmet = steps.findIndex((s, i) => !completedSteps.has(i) && matchesFilesStep(s, event));
+    if (nextUnmet !== -1) markComplete(nextUnmet);
+  } else {
+    // Guided: must match the CURRENT step only
+    if (matchesFilesStep(steps[stepIndex], event)) completeStep();
+  }
+};
+```
+
+Apply this same pattern to every `GuidedXxxTask` component. The key difference: in guided mode, the step index gates completion; in assessment mode, any unmet step that matches the event is marked complete and the objectives panel updates. The learner can complete objectives in any order.
+
+**Important:** `completedSteps` is a `Set<number>` not just a `stepIndex`. This is a small state shape change — currently most sims use `stepIndex` only. Refactoring `stepIndex` → `completedSteps: Set<number>` + `stepIndex: number` (still needed for guided-mode banner) is the mechanical change that enables assessment mode. Do this in Phase 15 after all other content work is done, since it touches every sim component.
+
+### 15.2 Per-unit assessment briefs
+
+- [ ] **Unit 1** — *no assessment exists.* Create `unit-1-assessment` (order 60, new module "Unit 1 Assessment") as `guided-desktop` in assessment mode: open two apps of your choice, minimize one, close the other, open a status panel, and find today's date.
+- [ ] **Unit 2** — *no assessment exists.* Create `unit-2-assessment` (order 295, module "Unit 2 Assessment") as `notes-shortcut` (4.9) in assessment mode: write a short note, make one word bold, copy a line, paste it, and undo the paste. `email-assessment` (290) stays a Real-Life Exercise and is not the assessment.
+- [ ] **Unit 3** — `unit-3-assessment` (390) is `type: "none"` (IRL). Add a real activity: `guided-files` in assessment mode — a messy Downloads folder to sort into folders you create, with one file to rename and one to trash. New files, not the lesson set.
+- [ ] **Unit 4** (499, 11 steps) — currently replays the entire unit step by step. Rewrite: 5 objectives on **new** sites — find the library's opening hours, save the page for later, check the connection is secure, decline a cookie banner, and close a popup without clicking it.
+- [ ] **Unit 5** (570, 12 steps) — assessment mode. Objectives: start a group chat with two people, send a photo, react to a message, make a video call and mute yourself.
+- [ ] **Unit 6** (680, 15 steps) — assessment mode. Objectives: find the scam in the inbox and mark it spam, reply to a real email with an attachment, and archive something. Do not enumerate the clicks.
+- [ ] **Unit 7** (780, 14 steps) — assessment mode. Objectives: find a specific photo by searching, fix it (it's crooked and dark), put it in a new album, and share it.
+- [ ] **Unit 8** (870, 8 steps) — assessment mode, using apps no lesson touched (NoteMaster, SketchPad). Objectives: find an app that does X, check its reviews before installing, install it, grant only the permission it needs, then remove a different app you don't want.
+- [ ] **Unit 9** (960) — currently `type: "none"`. Add a `guided-settings` assessment: make the screen easier to read (any combination of dark mode, brightness, text size), then find how much storage is free.
+- [ ] **Unit 10** (1100, 11 steps) — assessment mode. Objectives: build a strong password, spot the two fake messages among five, and finish signing in with the code from your phone.
+- [ ] **Unit 11** (1190, 4 steps) — reported as *not working at all*. Debug first (Appendix C), then rewrite in assessment mode: an app is frozen and the WiFi is off; fix both and prove it.
+- [ ] **Unit 12** (1290) — stays `type: "none"`, an IRL checklist, per Phase 14.
+
+---
+
+## Phase 16 — New lesson: Bluetooth (feedback #54)
+
+- [ ] The user notes the Bluetooth **logo is trademarked** — write the word "Bluetooth" in text, never draw the rune. Use a generic wireless/waves SVG if an icon is needed.
+- [ ] Placement: Unit 9 (Settings), module **"Connecting Devices"**, order **930** (the gap between `display-theme` 920 and `notifications-sound` 940 is free).
+- [ ] Add a **Bluetooth** section to `SettingsApp`:
+  - A master on/off toggle.
+  - *My Devices* (empty at first) and *Other Devices* (a discoverable list).
+  - `headphones.png` rendered beside the entry so it is unmistakable which object is being paired.
+  - Clicking a device shows `Connecting…` for ~1.5s, then moves it to My Devices marked `Connected`, with a battery reading.
+  - A **Disconnect** option, so the flow is reversible.
+- [ ] Lesson `bluetooth-devices.json` as `guided-settings`, 4 steps: open Bluetooth → turn it on → select the headphones → confirm connected. Requires new `guided-settings` actions `select-device` and `disconnect-device` — **document them in `CLAUDE.md`**.
+- [ ] The intro must be explicit about the physical half a simulator can't do: the headphones must be **in pairing mode** (usually holding a button until a light flashes), they must be **charged**, and they must be **close by**. Beginners fail at that step, not at the on-screen one.
+
+---
+
+## Phase 17 — Final verification
+
+- [ ] `python3 scripts/check-lessons.py` — unique orders, capitalized sentences, no `multiple-choice`, no `placeholder`.
+- [ ] `npx tsc --noEmit`, `npm run lint`, `rm -rf .next && npm run build` all clean.
+- [ ] **Full course walkthrough** in the in-app browser: every module page loads; complete at least one activity per playground type end to end, including one failure path (CLEAN NOW) and one assessment using a Hint.
+- [ ] Confirm reset-all-progress still clears both `lac-progress` and `lac-sim`.
+- [ ] Confirm `/login` renders with no Supabase env vars set and every lesson is still reachable signed out.
+- [ ] Confirm no lesson without software involvement renders a PlaygroundOS pane (rule 1.9) — walk all `type: "none"` lessons.
+- [ ] Confirm there is exactly one file-manager implementation: `grep -rn "FILLER_FILES" components/` returns nothing.
+- [ ] **`CLAUDE.md` is current**: `media` and `warning` lesson fields; the `notes-shortcut` type; new actions on `guided-desktop` (`open-app`, `close-app`, `open-clock`, `open-wifi-panel`, `open-battery-panel`), `guided-browser` (`open-download`), `guided-files` (`arrow-select`, `keyboardOnly`), `guided-email` (`seedDraft`), `guided-messaging` (`create-group`, `add-to-group`, `send-group-message`), `guided-settings` (`select-device`, `disconnect-device`), `guided-troubleshooting` (`error-restart` scenario + its actions); the removal of `compose-email` and `message-reply`; the updated `guided-browser` site list; the new Unit 1 order range; the `SimulatorFrame` `chrome` prop; the one-Files-app rule.
+- [ ] Commit and push.
 
 ---
 
 ## Appendix A — Feedback → plan traceability
 
-| # | Feedback (condensed) | Where handled |
+| # | Feedback (condensed) | Section |
 |---|---|---|
-| 1 | Fix birthday invitation 2/3 | 3.1 |
-| 2 | Opening files must be double-click | 2.1 |
-| 3 | Move files by drag-and-drop with hover highlight | 2.1 |
-| 4 | Apple-pie lesson completed without opening the recipe | 2.2 (open-result) |
-| 5 | Reload didn't show what it does | 2.2 (broken-page mechanic) |
-| 6 | Demos: show issue → explain → let them fix | Hard rules; 2.2, 2.5, 2.7, 2.9 |
-| 7 | Zoom didn't work / text already visible | 2.2 (fine print + working −/+) |
-| 8 | Green check blocks further experimentation | 1.1 |
-| 9 | Can't see what the lock says | 1.1 + 2.2 |
-| 10 | Lock = in-transit only; site still sees your data | 2.2 lock copy |
-| 11 | Explain why cross-site cookie tracking is bad | 2.2 cookie copy |
-| 12 | Concepts thorough enough to re-teach | Hard rules; applied in every Phase 3 rewrite |
-| 13 | CLEAN NOW → fail screen on LEFT + fake download + delete-it lesson; warning icon says "secure" on insecure sites | 1.2 + 2.2 |
-| 14 | U4 assessment: playground gauntlet + IRL trusted-site download | 3.4 |
-| 15 | Messaging 2/5 Send doesn't register; Enter must count | 2.3 |
-| 16 | Same for 3/5 | 2.3 |
-| 17 | + button should do something + explain real-app options | 2.3 |
-| 18 | React via double-click / hold, never single click | 2.3 |
-| 19 | Photo picker needs sensible options | 2.3 |
-| 20 | Hang-up button must look like one | 2.3 |
-| 21 | Video call: label who's who and each button | 2.3 |
-| 22 | U5 assessment complex, playground-only | 3.5 |
-| 23 | Un-spam / un-archive in Mail | 2.4 |
-| 24 | Checkmark hid the spam view | 1.1 (verify in 2.4) |
-| 25 | Reply visible in thread + 30s unsend | 2.4 |
-| 26 | No-body email bad practice; BCC example wrong | 2.4 (cc-bcc rewrite) |
-| 27 | Remind Tab/Shift+Tab in email forms | 2.4 |
-| 28 | Attach opens file picker; specify body text | 2.4 |
-| 29 | U6 assessment: complex, no walkthrough, hints on demand | 1.4 + 3.5 |
-| 30 | Show unit + lesson at top | 0.3 |
-| 31 | Replace emojis with real images or remove | 4.2 (+2.5 library) |
-| 32 | Crop must actually work; real edit features | 2.5 |
-| 33 | Recover not acknowledged, lesson didn't end | 2.5 |
-| 34 | Editing starts from pre-ruined Commons photo | 2.5 |
-| 35 | Share: choose Mail/Messages then recipient | 2.5 |
-| 36 | Capitalize Dr. Digital sentence starts | 0.4 |
-| 37 | "App Store" is Apple — generalize | 2.6 ("App Market") |
-| 38 | Messages missing from My Apps | 2.6 |
-| 39 | More apps, more reviews, look proper | 2.6 |
-| 40 | Permissions = camera + mic (WhatsApp-style) | 2.6 |
-| 41 | Managing apps 1/3: download weather first, then update | 2.6 |
-| 42 | Deny permissions ⇒ no install | 2.6 |
-| 43 | PuzzleQuest persists until the delete lesson | 1.5 + 2.6 |
-| 44 | 3/3: free-with-ads vs paid-no-ads decision | 2.6 |
-| 45 | U8 assessment + IRL WhatsApp | 3.8 |
-| 46 | Dark mode really toggles; brightness slider | 2.7 |
-| 47 | Night shift turns screen orange | 2.7 |
-| 48 | Accessibility lessons actually work | 2.7 |
-| 49 | Drop trackpad settings lesson | 0.1 |
-| 50 | "Settings" (not System Settings), dock app right of Mail, lessons in desktop | 2.7 + 1.3 |
-| 51 | U9 assessment: IRL (minus trackpad/notifications) | 3.6 |
-| 52 | Strength check registers slowly | 2.8 |
-| 53 | Don't type strong password twice | 2.8 |
-| 54 | No advance after step 4 | 2.8 |
-| 55 | Login needs two clicks | 2.8 |
-| 56 | 2FA phone popup left of the input | 2.8 |
-| 57 | Pre-selected tab makes step a no-op; purge pattern | 1.6 |
-| 58 | Wrong safe/dangerous ⇒ immediate feedback, no restart | 1.2-adjacent, 2.8 |
-| 59 | U10 assessment complex, playground-only | 3.8 |
-| 60 | Show issue → force quit → prove fixed → reopen | 2.9 |
-| 61 | "Check video cable" impossible in sim | 2.9 |
-| 62 | Forget-network dead end | 2.9 |
-| 63 | WiFi via menu-bar icon | 2.7 + 2.9 |
-| 64 | Realism principle everywhere | Hard rules + 1.3 + 2.8/2.9 |
-| 65 | (cable, again) | 2.9 |
-| 66 | Clear-storage unrealistic | 2.7 storage + 2.9 |
-| 67 | NEVER auto-open the app | 1.3 |
-| 68 | Password reset: browser → forgot → email → code → new password | 2.8 |
-| 69 | Support: hit an error, copy-paste the code | 2.9 |
-| 70 | U11 assessment elaborate, playground-only | 3.9 |
-| 71 | Remove repetitive Unit 12 lesson 1 | 0.1 |
-| 72 | Calendar + Reminders dock apps | 2.10 |
-| 73 | Library directions IRL | 3.9 |
-| 74 | Google Docs + Drive IRL lessons | 3.9 |
-| 75 | Notes app on the desktop | 2.10 |
-| 76 | PDFs: actually open and see in Files | 3.9 |
-| 77 | U12 assessment: playground then IRL list | 3.9 |
-| 78 | Same UI throughout; Units 1–2 differ | 4.1 (+1.3) |
+| 1 | Combine lessons and dashboard | 1.1 |
+| 2 | Login page (Supabase eventually) | 1.2 |
+| 3 | Progress-monitoring design doc, no implementation | 1.3 |
+| 4 | `DockIcons1.png` dock icons, rounded, black and white | 0.1, 2.1 |
+| 5 | Animation between lessons after Next | 1.10 |
+| 6 | Trackpad lesson must include mouse | 3.2 |
+| 7 | Back and Next same size | 1.4 |
+| 8 | Animation when closing wifi/battery/calendar panels | 2.4 |
+| 9 | Camera lesson: external cameras, no playground | 3.5 |
+| 10 | Power button: `powerbutton.png`, no playground | 0.1, 3.3 |
+| 11 | Charger: `charger.png`, no playground | 0.1, 3.4 |
+| 12 | Skip button next to Restart during an activity | 1.7 |
+| 13 | Back button on the first lesson of a module | 1.8 |
+| 14 | No playground for the sleep lesson | 1.9, 3.6 |
+| 15 | **New rule:** no playground when software isn't involved | 1.9 |
+| 16 | Settings About must not show misleading data (purple banner) | 2.7 |
+| 17 | Restart lesson: error → Settings → restart | 3.12 |
+| 18 | Trackpad first; no numbers in shapes; no fake window chrome | 3.1, 3.11 |
+| 19 | Next pops out green on completion; green check twice as fast | 1.5 |
+| 20 | Dock highlight in the squircle shape | 2.2 |
+| 21 | One Files app everywhere, the elaborate one | 2.6, 3.7 |
+| 22 | Right-click: tab switching after completion, window controls, real URL | 3.8 |
+| 23 | "Skip this activity" in a gray box | 1.7 |
+| 24 | Animation when an app opens | 2.3 |
+| 25 | Green check on every activity's completion | 1.5, 1.6 |
+| 26 | No blinking cursor after the code is typed | 3.9 |
+| 27 | Rename pinch-zoom → "Zoom In and Out" | 3.10 |
+| 28 | Dock lesson: open and close apps | 3.13 |
+| 29 | Menu bar lesson: check your own computer | 3.14 |
+| 30 | Clock / WiFi / battery lessons need activities | 3.15 |
+| 31 | Opening apps: any 4, not all | 3.16 |
+| 32 | Closing apps: practice, not theory | 3.17 |
+| 33 | **Bug:** F12 moves the dock | 2.8 |
+| 34 | Closing vs quitting needs an activity | 3.18 |
+| 35 | Remove the space-bar lesson | 4.1 |
+| 36 | Typing practice in the real Mail app | 4.2 |
+| 37 | Two lessons on Command | 4.3 |
+| 38 | Warning banner for keys not to press (Escape) | 4.5 |
+| 39 | Tab needs an activity (`TabActivityIdea`) | 0.1, 4.4 |
+| 40 | Return needs an activity | 4.5 |
+| 41 | Arrow keys: navigate real files, no clicking | 4.6 |
+| 42 | Doggo challenge in the real Messages app | 4.7 |
+| 43 | Remove the cursor/insertion-point lesson | 4.1 |
+| 44 | Split undo/redo into its own lesson | 4.8 |
+| 45 | Bold/italic/underline activity in Notes | 4.9 |
+| 46 | Every keyboard shortcut needs an activity | 4.9 |
+| 47 | Second Tab lesson showing practical use | 4.4 |
+| 48 | Remove the "say thanks over email" lesson | 4.1 |
+| 49 | Birthday invitation in the real Files app; fix the ugliness | 4.10 |
+| 50 | Messy email in the real Mail app; send it | 4.11 |
+| 51 | Visible hover on everything in PlaygroundOS | 2.5 |
+| 52 | Unit assessments must be unique (all units) | 15 |
+| 53 | Opening a file opens a real window | 3.7, 5.1 |
+| 54 | Bluetooth lesson with `Headphones.png` | 0.1, 16 |
+| 55 | `ImageInFiles.png` for Pictures | 0.1, 2.6, 5.3 |
+| 56 | `DownloadInFiles.png` for Downloads | 0.1, 2.6, 5.4 |
+| 57 | **Bug:** TaxReturn already in the folder | 5.2 |
+| 58 | The apple-pie recipe must open | 5.5 |
+| 59 | Internet Basics repeats the prior lesson | 6.2 |
+| 60 | Stop retyping google.com / wikipedia.org | 6.1, 6.2 |
+| 61 | Different sites in "Using the browser" | 6.1 |
+| 62 | Unit 4 2/8 browser must be maneuverable | 6.3 |
+| 63 | New sites, and the apple-pie PDF must open | 6.1, 5.5 |
+| 64 | Reload sometimes dead; vary sites across all units | 6.1, 6.4 |
+| 65 | Reading list must be viewable | 6.1 (page content) |
+| 66 | ~100ms page loads for realism | 2.9 |
+| 67 | See reload work, then the completion popup | 6.4 |
+| 68 | Unit 4 8/8 zoom must work | 6.5 |
+| 69 | Unknown URL → "try it in your real browser" | 6.8 |
+| 70 | `DigitalCookie.png` for the cookie lesson | 0.1, 6.6 |
+| 71 | **Bug:** online-safety activity auto-fails | 6.7 |
+| 72 | Unit 4 assessment: creative, no hand-holding | 15.2 |
+| 73 | Unit 5 2/5 duplicates 1/5 | 7.1 |
+| 74 | Unit 5 3/5 should be group chat | 7.2 |
+| 75 | A "what's your favorite animal?" message | 7.3 |
+| 76 | Emoji/reactions repeats an earlier lesson | 7.4 |
+| 77 | Video calls: we can't access your camera | 7.5, 3.5 |
+| 78 | Unit 5 assessment: no yellow, be creative | 15.2 |
+| 79 | Unit 6 composing must use the real email UI | 8.1 |
+| 80 | **Bug:** composing 2/3; step 3/8 has no success signal | 8.2 |
+| 81 | CC/BCC registers on typing; include a body | 8.3 |
+| 82 | Unit 6 assessment: no hand-holding, must register | 15.2 |
+| 83 | **Bug:** Unit 7 3/3 search doesn't register | 9.1 |
+| 84 | **Bug:** Unit 7 organizing 1/3 search; say to type it | 9.1 |
+| 85 | Two dog images | 9.2 |
+| 86 | The bird must actually be dark and crooked | 9.3 |
+| 87 | Optional banner to check Messages for the shared photo | 9.4 |
+| 88 | Unit 7 assessment: creative, no hand-holding | 15.2 |
+| 89 | Option to redo any lesson | 1.11 |
+| 90 | **Bug:** asked to install an app already installed | 10.1 |
+| 91 | Everything is Puzzle Quest | 10.2 |
+| 92 | **Bug:** Unit 8 1/3 app already installed | 10.1 |
+| 93 | **Bug:** Zen Garden already installed in the compare lesson | 10.1 |
+| 94 | Unit 8 assessment: unique, creative, unassisted | 15.2 |
+| 95 | **Bug:** dark mode misses WiFi and battery | 2.7, 11.1 |
+| 96 | Settings says "Settings" twice; UI unprofessional | 2.7, 11.2 |
+| 97 | Unit 9 assessment: stale trackpad line, stray text | 11.3 |
+| 98 | Passwords must not be taught in a browser | 12.1 |
+| 99 | Show something after login / verify / passkey | 12.2 |
+| 100 | The phone looks odd | 12.3 |
+| 101 | The phishing inspector shouldn't be in the browser | 12.4 |
+| 102 | Ad tracking belongs in Settings | 12.5 |
+| 103 | Unit 10 transactions shouldn't be in the browser | 12.6 |
+| 104 | Realistic no-WiFi → connect → disable tracking | 12.7 |
+| 105 | Unit 10 assessment: creative, not a copy | 15.2 |
+| 106 | Unit 11 1/3: Notes must visibly work | 13.1 |
+| 107 | Unit 11 2/3 duplicates 1/3 → delete and reinstall | 13.2 |
+| 108 | Remove the Unit 11 3/3 activity | 13.3 |
+| 109 | Access issues: open the real Mail app, new page after login | 13.4 |
+| 110 | Support: really open Photos, really open the Browser | 13.5 |
+| 111 | **Bug:** Unit 11 assessment doesn't work; must be unique | 13, 15.2 |
+| 112 | All of Unit 12: no playground, do it on your own computer | 14.1 |
 
-## Appendix B — Image sourcing (Wikimedia Commons)
+## Appendix B — Assets
 
-- Prefer the PNGs already in `public/playgrounds/` (`animal-*.png`, `cat1/2.png`, `file-vacation-photo.png`, `Budget/FavoriteSong/VacationPhoto.png`) before downloading anything.
-- For new photos (photo library, murky-photo lesson, avatars): use commons.wikimedia.org, filter by license **CC0 / Public Domain** where possible (no attribution complexity); otherwise CC-BY, and record attribution.
-- Download at modest size (~640px wide), save under `public/playgrounds/photos/` with descriptive kebab names (`lake-sunset.jpg`).
-- Create `public/playgrounds/photos/CREDITS.md` listing each file's source URL, author, and license. Required even for CC0 (provenance).
-- Never hotlink — the app must stay fully self-contained.
+All assets are available at `~/Downloads/Images/`. Copy instructions are in §0.1. The slicing script for `DockIcons1.png` is also in §0.1.
+
+| User's filename | Save as | Needed by | Notes |
+|---|---|---|---|
+| `DockIcons1.png` | `dock-icons-1.png` → sliced `dock-<app>.png` | 2.1 | 1280×800 sprite sheet; §0.1 slicing script |
+| `PowerButton.png` | `power-button.png` | 3.3 | 512×512 power symbol, black on white |
+| `Charger.png` | `charger.png` | 3.4 | 512×512 cable icon, black on white |
+| `Headphones.png` | `headphones.png` | 16 | 3684×3788 photo — **scale to max 240px** when rendering |
+| `ImageInFiles.png` | `files-pictures.png` | 2.6, 5.3 | 1280×800; render at ~16×16 in sidebar |
+| `DownloadInFiles.png` | `files-downloads.png` | 2.6, 5.4 | 1280×800; render at ~16×16 in sidebar |
+| `DigitalCookie.png` | `cookie.png` | 6.6 | 512×512 cartoon cookie |
+| `TabActivityIdea.png` | (design spec — do not copy to `public/`) | 4.4 | Shows `pickacolor.example`; §4.4 has the build instructions |
 
 ## Appendix C — Diagnosed root causes (read before fixing)
 
 | Bug | Root cause | Location |
 |---|---|---|
-| Messaging Send doesn't register (＃15/#16) | Step completion requires `phase === 1`, set only by the input's `onFocus`; if focus predates the step (or never refires), Send can't ever complete. Separately, a `step.value` mismatch fails with zero feedback. | `GuidedMessagingTask.tsx:126-144` |
-| Enter vs Send | Enter already calls `handleSend` — once the phase gate is gone, both paths work. | `GuidedMessagingTask.tsx:394` |
-| Apple-pie lesson ends early (#4) | `submitSearch` calls `completeStep()` on submit; search results are non-interactive `<div>`s, so "open the result" can't even be expressed. | `GuidedBrowserTask.tsx:313-322, 522-531` |
-| Lock says "secure" on insecure site (#13) | Popover text is hardcoded "Connection is secure"; never branches on `activePage.secure`. | `GuidedBrowserTask.tsx:588-594` |
-| Lock unreadable after finish (#9) | `clickLock` completes the step instantly → `done` overlay (`absolute inset-0 z-40`) covers the popover forever. | `GuidedBrowserTask.tsx:292-295` + `SimulatorFrame.tsx:87-94` |
-| CLEAN NOW does nothing (#13) | The button has no `onClick`. Same for the cookie banner's Accept. | `GuidedBrowserTask.tsx:582, 558` |
-| Zoom-out dead (#7) | The `−` control is a `<span>`, not a button. | `GuidedBrowserTask.tsx:457` |
-| Reload teaches nothing (#5) | `reload()` only calls `completeStep()`; no page state changes. | `GuidedBrowserTask.tsx:230-232` |
-| Overlay blocks all sims (#8/#24) | Permanent `done &&` overlay. | `SimulatorFrame.tsx:87-94` (copies in `GuidedDesktopTask.tsx`, `KeyboardNavTask.tsx`) |
-| Single-click opens files (#2) | Intentional change from the last round — revert. | `GuidedFilesTask.tsx` `onItemClick` |
-| Invitation near-impossible (#1) | 7 exact-punctuation `mustInclude` strings; curly quotes/dashes/double spaces all fail silently. | `content/lessons/invitation-exercise.json` + `TaskChecker.ts` |
-| Calendar-style `target`/`value` mismatches (#33 etc.) | The calendar switch-view bug (fixed) was a JSON field mismatch; the photos recover bug smells identical — check the lesson JSON field names against the component's `hl()`/completion switch first. | `GuidedPhotosTask.tsx` + `recently-deleted.json` |
-| Login needs two clicks (#55) | Same phase-gating pattern as messaging send. | `GuidedSecurityTask.tsx` login handler |
-| Pre-selected tab no-op (#57) | Step 1 targets a tab the sim already opens on. | `scams-phishing.json` + `GuidedSecurityTask.tsx` initial state |
+| Opening apps lesson is impossible (#31) | `open-all-apps` demands all 10 dock apps, but `BUILT_IN_APPS` contains only 6. `openApp` returns early for `photos`, `app-market`, `calendar`, `reminders`, so 4 icons never open and the task can never complete. | [FakeDesktop.tsx:17](components/Playground/FakeDesktop.tsx:17), [FakeDesktop.tsx:135](components/Playground/FakeDesktop.tsx:135) |
+| Dark mode misses WiFi/battery (#95) | Both icons hardcode `stroke="#111"` / `fill="#111"` instead of `currentColor`, so they never follow the menu bar's text color. | [FakeDesktop.tsx:512-530](components/Playground/FakeDesktop.tsx:512) |
+| Settings title duplicated (#96) | An in-app `Settings` heading is rendered *and* `FakeDesktop`'s menu bar shows `APP_TITLES[activeApp]`. | [SettingsApp.tsx:100](components/Playground/Desktop/SettingsApp.tsx:100) + [FakeDesktop.tsx:194](components/Playground/FakeDesktop.tsx:194) |
+| About page shows invented specs (#16) | `AboutPanel` hardcodes "Memory 8 GB / Storage 100 GB"; `INITIAL_STORAGE` invents five entries. Nothing marks them as simulated. | [SettingsApp.tsx:403-418](components/Playground/Desktop/SettingsApp.tsx:403), [SettingsApp.tsx:42-48](components/Playground/Desktop/SettingsApp.tsx:42) |
+| Status panels vanish with no animation (#8) | `StatusPanel` has `animate-slide-down` on mount but closing is a bare conditional unmount — there is no exit animation and four separate code paths clear `openPanel`. | [FakeDesktop.tsx:451](components/Playground/FakeDesktop.tsx:451), [FakeDesktop.tsx:137/198/255/455](components/Playground/FakeDesktop.tsx:137) |
+| Menu-bar buttons look inert (#51) | The WiFi and battery buttons have no `hover:` class at all; the clock has only `hover:underline`. | [FakeDesktop.tsx:198-216](components/Playground/FakeDesktop.tsx:198) |
+| Celebration lingers (#19) | Hardcoded `1600`ms, duplicated in `GuidedDesktopTask` and `KeyboardNavTask`. | [SimulatorFrame.tsx:59](components/Playground/SimulatorFrame.tsx:59) |
+| Back and Next differ in size (#7) | Back is `text-sm text-gray-600`, Next is `font-semibold` — different metrics, different box. | [LessonModuleRunner.tsx:236/241](components/LessonModuleRunner.tsx:236) |
+| No way back from a module's first lesson (#13) | Back renders only when `index > 0`; nothing links to the previous module. | [LessonModuleRunner.tsx:235](components/LessonModuleRunner.tsx:235) |
+| Fake window chrome on the shapes game (#18) | `LessonPlaygroundPane` wraps it in `SimulatorFrame` with `appName="Practice"`, which always draws a title bar and inert `WindowControls`. | [LessonPlaygroundPane.tsx:95-99](components/LessonPlaygroundPane.tsx:95), [SimulatorFrame.tsx:136-145](components/Playground/SimulatorFrame.tsx:136) |
+| Numbers baked into falling shapes (#18) | The shape PNGs were sliced from `FallingNumbers.png`, which has digits drawn inside each shape. No code change can remove them. | [ShapeClickGame.tsx:23-29](components/Playground/ShapeClickGame.tsx:23) |
+| Two Files apps (#21) | `Desktop/FilesApp.tsx` (flat list over `FILLER_FILES`) and `GuidedFilesTask.tsx` (sidebar + folders over `makeItems()`) are unrelated implementations over unrelated datasets. | [FilesApp.tsx](components/Playground/Desktop/FilesApp.tsx), [GuidedFilesTask.tsx:63-77](components/Playground/GuidedFilesTask.tsx:63), [filesData.ts](components/Playground/Desktop/filesData.ts) |
+| Re-installing an installed app (#90, #92, #93) | Mount-time seeding skips apps with an `install` step *in the same lesson*, but nothing forces an uninstall for an app a *previous* lesson installed and persisted to `lac-sim-apps`. | [GuidedAppStoreTask.tsx:205-213](components/Playground/GuidedAppStoreTask.tsx:205) |
+| Security lessons framed as websites (#98, #101, #103) | `LessonPlaygroundPane` wraps every `guided-security` task in `DesktopLaunch app="browser"`, so the password checker and phishing inspector are always inside browser chrome. | [LessonPlaygroundPane.tsx:197-201](components/LessonPlaygroundPane.tsx:197) |
+| Search doesn't register (#83, #84) | `guided-photos` `search` is single-phase and completes on query submit, so clicking the search icon produces no step feedback. Compare `attach-photo` / `add-reaction`, which are two-phase. | `GuidedPhotosTask.tsx` search handler |
+| The "fixed" photo looks fine already (#86) | The photo library has no concept of a starting edit state — every item renders unmodified, so a repair lesson has nothing to repair. | `GuidedPhotosTask.tsx` library array |
+| Lock/step no-ops in Unit 4 (#62) | The `if (step?.action === X)` pattern wrapping a state change instead of only the `completeStep()` call makes controls dead outside their step. | `GuidedBrowserTask.tsx`, multiple handlers |
