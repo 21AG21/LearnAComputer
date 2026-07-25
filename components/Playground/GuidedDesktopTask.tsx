@@ -6,19 +6,23 @@ import WindowControls from "./WindowControls";
 import { NoteIcon } from "./Icons";
 import { CELEBRATION_MS } from "./SimulatorFrame";
 
+type MenuPanel = "clock" | "wifi" | "battery" | null;
+
 /**
  * A guided window-management activity. The learner moves, resizes, minimizes,
  * restores, maximizes, and closes a simulated desktop window — one step at a time,
  * each with a pulsing yellow highlight on exactly what to click or drag next.
  */
 
-type StepAction = "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app";
+type StepAction = "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app" | "open-clock" | "open-wifi-panel" | "open-battery-panel" | "close-panel";
 
 export interface DesktopStep {
   say: string;
   action: StepAction;
   target?: string;
 }
+
+const HIDE_WINDOW_ACTIONS: StepAction[] = ["open-app", "open-clock", "open-wifi-panel", "open-battery-panel"];
 
 const DOCK_APPS = [
   { id: "notes",    label: "Notes",    icon: "/playgrounds/dock-notes.png" },
@@ -45,10 +49,12 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const [pos, setPos] = useState({ x: INIT.x, y: INIT.y });
   const [size, setSize] = useState({ w: INIT.w, h: INIT.h });
-  // window starts hidden if first step is open-app, otherwise visible
   const [minimized, setMinimized] = useState(false);
   const [maximized, setMaximized] = useState(false);
-  const [windowVisible, setWindowVisible] = useState(() => steps[0]?.action !== "open-app");
+  const [windowVisible, setWindowVisible] = useState(() => !HIDE_WINDOW_ACTIONS.includes(steps[0]?.action as StepAction));
+  const [menuPanel, setMenuPanel] = useState<MenuPanel>(null);
+  const [time, setTime] = useState("");
+  const [batteryPct, setBatteryPct] = useState(72);
   const firstOpenStep = steps.find((s) => s.action === "open-app");
   const defaultAppId = firstOpenStep?.target ?? (steps[0]?.action !== "open-app" ? "notes" : "notes");
   const [openedAppId, setOpenedAppId] = useState(defaultAppId);
@@ -137,6 +143,35 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
       window.removeEventListener("mouseup", onUp);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const fmt = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    setTime(fmt());
+    const id = setInterval(() => setTime(fmt()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    if (!("getBattery" in navigator)) return;
+    (navigator as unknown as { getBattery: () => Promise<{ level: number }> }).getBattery().then((b) => {
+      setBatteryPct(Math.round(b.level * 100));
+    }).catch(() => {});
+  }, []);
+
+  function handleMenuBarClick(panel: "clock" | "wifi" | "battery") {
+    const actionMap = { clock: "open-clock", wifi: "open-wifi-panel", battery: "open-battery-panel" } as const;
+    if (menuPanel === panel) {
+      setMenuPanel(null);
+      return;
+    }
+    setMenuPanel(panel);
+    if (step?.action === actionMap[panel]) advance();
+  }
+
+  function handleClosePanel() {
+    setMenuPanel(null);
+    if (step?.action === "close-panel") advance();
+  }
 
   function onTitleDown(e: React.MouseEvent) {
     if (maximized || step?.action !== "move") return;
@@ -234,6 +269,85 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "24px 24px" }}
         />
+
+        {/* Menu bar */}
+        <div className="absolute inset-x-0 top-0 h-6 z-10 flex items-center justify-between px-3 text-white text-[11px]" style={{ background: "rgba(20,30,45,0.88)" }}>
+          <span className="text-gray-400 font-semibold tracking-wide text-[10px] uppercase">PlaygroundOS</span>
+          <div className="flex items-center gap-3">
+            {/* WiFi */}
+            <button
+              onClick={() => handleMenuBarClick("wifi")}
+              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "wifi" ? "bg-white/20" : ""} ${step?.action === "open-wifi-panel" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+              aria-label="WiFi"
+            >
+              <svg viewBox="0 0 20 16" className="w-4 h-3.5" fill="currentColor"><path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/></svg>
+            </button>
+            {/* Battery */}
+            <button
+              onClick={() => handleMenuBarClick("battery")}
+              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "battery" ? "bg-white/20" : ""} ${step?.action === "open-battery-panel" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+              aria-label="Battery"
+            >
+              <svg viewBox="0 0 24 12" className="w-5 h-3" fill="currentColor">
+                <rect x="0.5" y="0.5" width="19" height="11" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.2"/>
+                <rect x="20" y="3.5" width="3" height="5" rx="1"/>
+                <rect x="2" y="2" width={Math.round(15 * batteryPct / 100)} height="8" rx="1.5"/>
+              </svg>
+            </button>
+            {/* Clock */}
+            <button
+              onClick={() => handleMenuBarClick("clock")}
+              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "clock" ? "bg-white/20" : ""} ${step?.action === "open-clock" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+              aria-label="Clock"
+            >
+              {time}
+            </button>
+          </div>
+        </div>
+
+        {/* Menu panels */}
+        {menuPanel && (
+          <div className="absolute top-6 right-2 z-20 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-slide-down">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gray-50">
+              <span className="text-xs font-semibold text-gray-700">
+                {menuPanel === "clock" ? "Date & Time" : menuPanel === "wifi" ? "WiFi" : "Battery"}
+              </span>
+              <button
+                onClick={handleClosePanel}
+                className={`text-gray-400 hover:text-gray-600 text-sm leading-none ${step?.action === "close-panel" ? "ring-2 ring-yellow-400 rounded animate-pulse" : ""}`}
+                aria-label="Close panel"
+              >
+                &times;
+              </button>
+            </div>
+            {menuPanel === "clock" && (
+              <div className="p-3 text-center">
+                <p className="text-2xl font-bold text-gray-800">{time}</p>
+                <p className="text-xs text-gray-500 mt-1">{new Date().toLocaleDateString([], { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</p>
+              </div>
+            )}
+            {menuPanel === "wifi" && (
+              <div className="p-3 space-y-1.5">
+                <div className="flex items-center justify-between text-xs px-2 py-1.5 bg-blue-50 border border-blue-200 rounded-lg">
+                  <span className="font-medium text-gray-700">CoolKids Network</span>
+                  <span className="text-blue-600 font-bold">&#10003;</span>
+                </div>
+                <div className="flex items-center justify-between text-xs px-2 py-1.5 rounded-lg text-gray-400">
+                  <span>Neighbor&apos;s WiFi</span>
+                </div>
+                <div className="flex items-center justify-between text-xs px-2 py-1.5 rounded-lg text-gray-400">
+                  <span>Coffee Shop</span>
+                </div>
+              </div>
+            )}
+            {menuPanel === "battery" && (
+              <div className="p-3 text-center">
+                <p className="text-2xl font-bold text-gray-800">{batteryPct}%</p>
+                <p className="text-xs text-gray-500 mt-1">{batteryPct > 20 ? "Battery is charged" : "Low battery — plug in soon"}</p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Window */}
         {windowVisible && !minimized && !isClosed && (

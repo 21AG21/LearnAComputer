@@ -3,12 +3,23 @@
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Understanding the Screen",
   "order": 33,
-  "title": "Clock",
+  "title": "Clock and Date",
   "videoUrl": "",
-  "drDigitalIntro": "The clock shows the current time and date.\n\u2022 You'll usually find it in a corner of the screen.\n\u2022 Clicking it often opens a calendar.",
+  "drDigitalIntro": "The clock in the top-right corner of the menu bar shows the current time.\n\u2022 Click on it to see today's full date and the time.\n\u2022 This is useful when you need to check what day it is without opening a calendar.\n\u2022 On a real computer, clicking the clock may also show upcoming calendar events.\n\u2022 Look at your own computer's menu bar right now \u2014 you should see the time in the top-right corner.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-desktop",
+    "goal": "Open the clock panel and read today's date",
+    "steps": [
+      {
+        "say": "Click the time in the top-right corner of the menu bar.",
+        "action": "open-clock"
+      },
+      {
+        "say": "Read today's date, then close the panel.",
+        "action": "close-panel"
+      }
+    ]
   },
-  "drDigitalSuccess": "That's the clock \u2014 time and date, always a glance away.",
-  "drDigitalHint": "Find the time in the corner of the playground desktop, then click Continue whenever you're ready."
+  "drDigitalSuccess": "You opened the clock panel and found the date \u2014 great exploring!",
+  "drDigitalHint": "Look at the very top-right of the playground. You should see the time. Click it to open the panel."
 }

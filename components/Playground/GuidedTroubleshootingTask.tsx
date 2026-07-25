@@ -9,7 +9,8 @@ export type GuidedTroubleshootingStep = {
   action:
     | "read-error" | "click-frozen" | "open-force-quit" | "force-quit" | "restart-app"
     | "open-wifi-panel" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
-    | "copy-code" | "open-browser" | "paste-code" | "submit-support";
+    | "copy-code" | "open-browser" | "paste-code" | "submit-support"
+    | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart";
   target?: string;
   value?: string;
 };
@@ -29,9 +30,10 @@ interface FrozenApp {
   closed: boolean;
 }
 
-function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" {
+function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" {
   if (steps.some((s) => s.action === "force-quit" || s.action === "click-frozen")) return "frozen";
   if (steps.some((s) => s.action === "copy-code" || s.action === "paste-code")) return "error-code";
+  if (steps.some((s) => s.action === "dismiss-error" || s.action === "click-restart")) return "error-restart";
   return "wifi";
 }
 
@@ -71,6 +73,13 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
   const [supportSubmitted, setSupportSubmitted] = useState(false);
   const [appReopened, setAppReopened] = useState(false);
 
+  // error-restart state
+  const [erSystemError, setErSystemError] = useState(() => mode === "error-restart");
+  const [erSettingsOpen, setErSettingsOpen] = useState(false);
+  const [erRestartConfirm, setErRestartConfirm] = useState(false);
+  const [erRestarting, setErRestarting] = useState(false);
+  const [erRestarted, setErRestarted] = useState(false);
+
   const [time, setTime] = useState("11:15 am");
   useEffect(() => {
     const update = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase());
@@ -107,6 +116,10 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
       case "open-browser": return kind === "dock-app" && name === "Browser";
       case "paste-code": return kind === "paste-input";
       case "submit-support": return kind === "submit-btn";
+      case "dismiss-error": return kind === "er-dismiss";
+      case "open-settings": return kind === "dock-app" && name === "Settings";
+      case "click-restart": return kind === "restart-btn";
+      case "confirm-restart": return kind === "confirm-btn";
       default: return false;
     }
   }
@@ -192,7 +205,33 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
     if (step?.action === "submit-support") completeStep();
   }
 
+  function handleErDismiss() {
+    setErSystemError(false);
+    if (step?.action === "dismiss-error") completeStep();
+  }
+
+  function handleErOpenSettings() {
+    setErSettingsOpen(true);
+    if (step?.action === "open-settings") completeStep();
+  }
+
+  function handleErClickRestart() {
+    setErRestartConfirm(true);
+    if (step?.action === "click-restart") completeStep();
+  }
+
+  function handleErConfirmRestart() {
+    setErRestartConfirm(false);
+    setErRestarting(true);
+    if (step?.action === "confirm-restart") completeStep();
+    setTimeout(() => {
+      setErRestarting(false);
+      setErRestarted(true);
+    }, 1500);
+  }
+
   const dockApps = (() => {
+    if (mode === "error-restart") return [{ id: "Settings", label: "Settings" }];
     if (mode === "error-code") return [{ id: "Photos", label: "Photos" }, { id: "Browser", label: "Browser" }, { id: "Notes", label: "Notes" }];
     if (mode === "wifi") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }, { id: "Settings", label: "Settings" }];
     const frozen = frozenTarget?.name ?? "Notes";
@@ -488,6 +527,94 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
               <p className="text-sm text-green-600 font-medium">{errorApp} is working again!</p>
             </div>
           )}
+
+          {/* Error-Restart: system error dialog */}
+          {mode === "error-restart" && erSystemError && (
+            <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
+              <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
+                <svg viewBox="0 0 24 24" className="w-10 h-10 mx-auto text-amber-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
+                <h3 className="font-bold text-base mb-1">Something went wrong</h3>
+                <p className="text-xs text-gray-500 mb-4">Restarting your computer usually fixes this.</p>
+                <button
+                  onClick={handleErDismiss}
+                  className={`w-full py-2 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 ${hl("er-dismiss") ? pulse : ""}`}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Error-Restart: desktop after dismissal */}
+          {mode === "error-restart" && !erSystemError && !erSettingsOpen && !erRestarting && !erRestarted && (
+            <div className="p-4 text-center py-8">
+              <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-amber-400 mb-2" fill="none" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
+              <p className="text-sm text-gray-600">Open Settings from the dock to restart.</p>
+            </div>
+          )}
+
+          {/* Error-Restart: Settings panel */}
+          {mode === "error-restart" && erSettingsOpen && !erRestarting && !erRestarted && (
+            <div className="h-full bg-white">
+              <div className="bg-gray-100 border-b px-4 py-2.5 flex items-center">
+                <button onClick={() => setErSettingsOpen(false)} className="text-gray-400 hover:text-gray-600 mr-2">&larr;</button>
+                <span className="text-sm font-semibold text-gray-700">Settings</span>
+              </div>
+              <div className="p-4 space-y-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 px-1">About</h3>
+                <div className="bg-gray-50 rounded-xl border border-gray-200 divide-y divide-gray-200 text-sm">
+                  <div className="flex justify-between px-4 py-2.5 text-gray-500"><span>Computer Name</span><span>My Computer</span></div>
+                  <div className="flex justify-between px-4 py-2.5 text-gray-500"><span>Software Version</span><span>14.2.1</span></div>
+                </div>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 px-1 pt-2">System</h3>
+                <div className="bg-gray-50 rounded-xl border border-gray-200 text-sm">
+                  <button
+                    onClick={handleErClickRestart}
+                    className={`w-full flex items-center justify-between px-4 py-3 text-amber-600 font-medium hover:bg-amber-50 rounded-xl ${hl("restart-btn") ? pulse : ""}`}
+                  >
+                    <span>Restart</span>
+                    <span>&rsaquo;</span>
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400 px-1">Restarting will close all open apps and reload your computer.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Error-Restart: confirm dialog */}
+          {mode === "error-restart" && erRestartConfirm && (
+            <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
+              <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
+                <h3 className="font-bold text-base mb-1">Restart your computer?</h3>
+                <p className="text-xs text-gray-500 mb-4">All unsaved work will be lost.</p>
+                <div className="flex gap-2">
+                  <button onClick={() => setErRestartConfirm(false)} className="flex-1 py-2 border border-gray-300 rounded-xl text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
+                  <button
+                    onClick={handleErConfirmRestart}
+                    className={`flex-1 py-2 bg-amber-500 text-white font-medium rounded-xl hover:bg-amber-600 ${hl("confirm-btn") ? pulse : ""}`}
+                  >
+                    Restart
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Error-Restart: black screen animation */}
+          {mode === "error-restart" && erRestarting && (
+            <div className="absolute inset-0 z-50 bg-black flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            </div>
+          )}
+
+          {/* Error-Restart: back to desktop, error gone */}
+          {mode === "error-restart" && erRestarted && (
+            <div className="p-4 text-center py-8">
+              <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
+              <p className="text-sm font-medium text-green-700">Your computer restarted successfully.</p>
+              <p className="text-xs text-gray-400 mt-1">The error is gone.</p>
+            </div>
+          )}
         </div>
 
         {/* Dock */}
@@ -505,6 +632,8 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
                 onClick={() => {
                   if (step?.action === "open-browser" && app.id === "Browser") {
                     handleOpenBrowser();
+                  } else if (mode === "error-restart" && app.id === "Settings") {
+                    handleErOpenSettings();
                   } else {
                     handleRestartApp(app.id);
                   }

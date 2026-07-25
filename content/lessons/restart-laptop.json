@@ -3,12 +3,32 @@
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Starting and Stopping",
   "order": 21,
-  "title": "Restarting",
+  "title": "Restarting your laptop",
   "videoUrl": "",
-  "drDigitalIntro": "Sometimes your laptop needs a restart.\n\u2022 Restarting turns it fully off and back on.\n\u2022 Do this if it gets slow or stuck.\n\u2022 It fixes most problems when closing an app doesn't.",
+  "drDigitalIntro": "Restarting your computer means turning it off and back on again. It is one of the most useful fixes in computing.\n\u2022 When something is acting strange, a restart often clears the problem.\n\u2022 Open Settings, find the About or System section, and look for a Restart button.\n\u2022 When you click Restart, your computer will warn you that unsaved work will be lost \u2014 save first if you can.\n\u2022 The computer goes dark for a moment, then starts up fresh. That's normal.\n\u2022 Note: restarting is different from Sleep. Sleep saves your work and wakes up quickly. Restart closes everything and starts clean.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-troubleshooting",
+    "goal": "Restart the computer to fix the error",
+    "scenario": "error-restart",
+    "steps": [
+      {
+        "say": "Read the error message, then click OK to dismiss it.",
+        "action": "dismiss-error"
+      },
+      {
+        "say": "Click Settings in the dock to open it.",
+        "action": "open-settings"
+      },
+      {
+        "say": "Click the Restart button.",
+        "action": "click-restart"
+      },
+      {
+        "say": "Click Restart again to confirm.",
+        "action": "confirm-restart"
+      }
+    ]
   },
-  "drDigitalSuccess": "Great \u2014 now you know when a restart can help.",
-  "drDigitalHint": "Take your time reading through this, then click Continue whenever you're ready."
+  "drDigitalSuccess": "You restarted the computer! The error is gone. Remember: when something's wrong, try restarting first.",
+  "drDigitalHint": "First dismiss the error dialog by clicking OK. Then open Settings from the dock and find the Restart button."
 }

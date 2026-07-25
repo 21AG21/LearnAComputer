@@ -3,12 +3,23 @@
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Understanding the Screen",
   "order": 34,
-  "title": "Wi-Fi icon",
+  "title": "WiFi Icon",
   "videoUrl": "",
-  "drDigitalIntro": "The Wi-Fi icon shows if you're connected to the internet.\n\u2022 It looks like a set of curved lines.\n\u2022 Click it to choose which wireless network to join.",
+  "drDigitalIntro": "The WiFi icon in the menu bar shows whether you are connected to the internet.\n\u2022 A solid icon means you are connected. A faded or crossed-out icon means you are not.\n\u2022 Click it to see a list of nearby networks and which one you are connected to (shown with a checkmark).\n\u2022 If you ever lose internet, this is the first place to look.\n\u2022 On a real computer, you can also turn WiFi on and off from this panel.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-desktop",
+    "goal": "Open the WiFi panel and check the connection",
+    "steps": [
+      {
+        "say": "Click the WiFi icon in the menu bar.",
+        "action": "open-wifi-panel"
+      },
+      {
+        "say": "Find the network with a checkmark, then close the panel.",
+        "action": "close-panel"
+      }
+    ]
   },
-  "drDigitalSuccess": "That's the Wi-Fi icon \u2014 your window to the internet connection.",
-  "drDigitalHint": "Spot the curved lines near the clock on the playground desktop, then click Continue whenever you're ready."
+  "drDigitalSuccess": "You found the WiFi panel and checked the connection. Now you know how to see which network you are on!",
+  "drDigitalHint": "Look in the top-right of the menu bar for the WiFi icon (it looks like curved lines). Click it."
 }

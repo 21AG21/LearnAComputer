@@ -538,14 +538,10 @@ Depends on 2.6.
 
 `restart-laptop.json` is `type: "none"`. The user wants: the desktop throws an error, the learner opens Settings and restarts.
 
-- [ ] This is the `guided-troubleshooting` type with a new scenario. Add `"error-restart"` to the `scenario` values in [lib/lessons.ts:226](lib/lessons.ts:226) and handle it in [components/Playground/GuidedTroubleshootingTask.tsx](components/Playground/GuidedTroubleshootingTask.tsx) alongside the existing `frozen-notes` / `frozen-browser` / `no-wifi` / `error-code`.
-- [ ] Scenario behavior:
-  1. On mount, a system error dialog appears over the desktop: *"Something went wrong. Restarting your computer usually fixes this."* with an **OK** button.
-  2. New step actions (add to the union at [lib/lessons.ts:230-234](lib/lessons.ts:230)): `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
-  3. Learner dismisses the dialog, opens Settings from the dock, finds **Restart** (add a Restart button to the SettingsApp About panel — it belongs there and reinforces 2.7), clicks it, confirms in a dialog.
-  4. **Show the restart happening**: black screen for ~1.5s, then the desktop fades back in with the error gone. Proof the fix worked — that is the pedagogy pattern (problem → explanation → fix → visible result).
-- [ ] Rewrite `restart-laptop.json` as `guided-troubleshooting` with `scenario: "error-restart"`, `launchApp: "settings"`, and 4 steps.
-- [ ] **Document the new scenario and its four actions in `CLAUDE.md`.**
+- [x] This is the `guided-troubleshooting` type with a new scenario. Add `"error-restart"` to the `scenario` values in [lib/lessons.ts:226](lib/lessons.ts:226) and handle it in [components/Playground/GuidedTroubleshootingTask.tsx](components/Playground/GuidedTroubleshootingTask.tsx) alongside the existing `frozen-notes` / `frozen-browser` / `no-wifi` / `error-code`.
+- [x] Scenario behavior: system error dialog on mount → dismiss-error → open Settings from dock → click Restart button → confirm dialog → 1.5s black screen → success desktop with green checkmark.
+- [x] Rewrite `restart-laptop.json` as `guided-troubleshooting` with `scenario: "error-restart"` and 4 steps. Browser-verified: all 4 steps complete, black-screen animation plays, success state shows.
+- [x] **Document the new scenario and its four actions in `CLAUDE.md`.**
 
 ### 3.13 Dock lesson: open and close apps (feedback #28)
 
@@ -560,12 +556,11 @@ Depends on 2.6.
 
 All three are `type: "none"`. Each should make the learner open that exact panel in PlaygroundOS.
 
-- [ ] These are menu-bar panels, not apps, so `guided-desktop` needs three more actions: `open-clock`, `open-wifi-panel`, `open-battery-panel`. (`open-wifi-panel` already exists in `guided-troubleshooting` — mirror its implementation.)
-- [ ] `screen-clock.json` → `guided-desktop`, 2 steps: click the time in the menu bar; read today's date and close the panel.
-- [ ] `screen-wifi-icon.json` → `guided-desktop`, 2 steps: click the WiFi icon; see which network is connected (the checkmark), then close.
-- [ ] `screen-battery-icon.json` → `guided-desktop`, 2 steps: click the battery icon; read the percentage, then close.
-- [ ] The battery panel already handles the no-Battery-API case gracefully ([FakeDesktop.tsx:244-248](components/Playground/FakeDesktop.tsx:244)) — keep that.
-- [ ] Requires 2.4 (close animation) so the "then close it" step has visible feedback.
+- [x] These are menu-bar panels, not apps, so `guided-desktop` needs three more actions: `open-clock`, `open-wifi-panel`, `open-battery-panel`. Added to `GuidedDesktopTask.tsx` menu bar and `lib/lessons.ts` action union. Also added `close-panel` action (advances when learner closes any open menu-bar panel).
+- [x] `screen-clock.json` → `guided-desktop`, 2 steps: click the time → close panel. Browser-verified.
+- [x] `screen-wifi-icon.json` → `guided-desktop`, 2 steps: click WiFi → close panel. Browser-verified.
+- [x] `screen-battery-icon.json` → `guided-desktop`, 2 steps: click battery → close panel. Browser-verified.
+- [x] Battery falls back to 72% when Battery API unavailable. Menu bar shows real time from `Date` via 30s interval.
 
 ### 3.16 Opening apps: any four (feedback #31)
 

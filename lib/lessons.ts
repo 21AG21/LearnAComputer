@@ -231,7 +231,8 @@ export type PlaygroundTask =
         action:
           | "read-error" | "click-frozen" | "open-force-quit" | "force-quit" | "restart-app"
           | "open-wifi-panel" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
-          | "copy-code" | "open-browser" | "paste-code" | "submit-support";
+          | "copy-code" | "open-browser" | "paste-code" | "submit-support"
+          | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart";
         target?: string;
         value?: string;
       }>;
@@ -256,7 +257,7 @@ export type PlaygroundTask =
       goal: string;
       steps: Array<{
         say: string;
-        action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app";
+        action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app" | "open-clock" | "open-wifi-panel" | "open-battery-panel" | "close-panel";
         target?: string;
       }>;
     }
