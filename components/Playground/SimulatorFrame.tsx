@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 
+export const CELEBRATION_MS = 800;
+
 export interface ObjectiveItem {
   label: string;
   done: boolean;
@@ -56,7 +58,7 @@ export default function SimulatorFrame({
       celebrationTimer.current = setTimeout(() => {
         setShowCelebration(false);
         setShowCompleteBanner(true);
-      }, 1600);
+      }, CELEBRATION_MS);
     }
     prevDone.current = done;
     return () => {

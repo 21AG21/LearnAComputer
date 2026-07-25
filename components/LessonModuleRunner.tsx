@@ -105,6 +105,12 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
 
   const drDigitalMood = attemptState === "success" ? "success" : attemptState === "failed" ? "hint" : "neutral";
 
+  const navBtn = "min-w-[120px] justify-center inline-flex items-center gap-1 border-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-all active:scale-95";
+  const skipBtn = "rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:scale-95";
+
+  const nextLabel = isLastSubLesson && !nextModuleSlug ? "Finish" : "Next →";
+  const justSucceeded = attemptState === "success";
+
   if (!indexResolved) {
     return (
       <div className="h-full flex">
@@ -137,7 +143,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
                 if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
                 else router.push("/lessons");
               }}
-              className="border rounded px-4 py-2 font-semibold"
+              className={`${navBtn} border-gray-900 bg-white text-gray-900 hover:bg-gray-50`}
             >
               {nextModuleSlug ? "Next module →" : "Finish"}
             </button>
@@ -146,14 +152,11 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
                 setReviewing(true);
                 setIndex(0);
               }}
-              className="border rounded px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100"
+              className={skipBtn}
             >
               Review this module
             </button>
           </div>
-        </div>
-        <div className="hidden lg:block flex-1 min-w-0 p-4">
-          <LessonPlaygroundPane task={{ type: "none" }} started={false} onResult={() => {}} onExit={() => {}} />
         </div>
       </div>
     );
@@ -165,83 +168,101 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
         <Link href="/lessons" className="text-sm text-gray-500 underline">
           ← All lessons
         </Link>
-        <div>
-          <p className="text-sm text-gray-500">
-            {route.unit} &middot; {route.module} &middot; {index + 1} of {route.subLessons.length}
-          </p>
-          <h1 className="text-2xl font-bold">{subLesson.title}</h1>
-        </div>
 
-        <DrDigital message={drDigitalMessage} mood={drDigitalMood} />
-
-        {failInfo && attemptState === "failed" && (
-          <div className="rounded-lg border-2 border-red-400 bg-red-50 p-4 space-y-3">
-            <p className="font-bold text-red-700">Activity failed</p>
-            <p className="text-sm text-red-900">{failInfo.message}</p>
-            <button
-              onClick={() => {
-                setActivityAttempt((n) => n + 1);
-                setAttemptState("unattempted");
-                setFailInfo(null);
-              }}
-              className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 active:scale-95 transition-all text-sm"
-            >
-              Try again
-            </button>
+        <div key={subLesson.slug} className="space-y-6 motion-reduce:animate-none animate-lesson-in">
+          <div>
+            <p className="text-sm text-gray-500">
+              {route.unit} &middot; {route.module} &middot; {index + 1} of {route.subLessons.length}
+            </p>
+            <h1 className="text-2xl font-bold">{subLesson.title}</h1>
           </div>
-        )}
 
-        {subLesson.playgroundTask.type === "placeholder" && (
-          <p className="text-sm text-gray-500 border rounded p-3 bg-gray-50">This activity is coming soon.</p>
-        )}
+          <DrDigital message={drDigitalMessage} mood={drDigitalMood} />
 
-        {hasGate && attemptState !== "success" && (
-          <div className="flex items-center gap-4">
-            {!started ? (
-              <>
-                <button
-                  onClick={handleStart}
-                  className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95"
-                >
-                  Start activity
-                </button>
-                <button onClick={handleNext} className="text-sm text-gray-500 underline transition-colors hover:text-gray-800">
-                  Skip this activity
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setStarted(false)}
-                  className="border-2 border-red-600 text-red-600 rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-red-600 hover:text-white active:scale-95"
-                >
-                  Exit activity
-                </button>
-                <button
-                  onClick={() => {
-                    setActivityAttempt((n) => n + 1);
-                    setAttemptState("unattempted");
-                  }}
-                  className="text-sm text-gray-500 underline transition-colors hover:text-gray-800"
-                >
-                  Restart activity
-                </button>
-              </>
+          {failInfo && attemptState === "failed" && (
+            <div className="rounded-lg border-2 border-red-400 bg-red-50 p-4 space-y-3">
+              <p className="font-bold text-red-700">Activity failed</p>
+              <p className="text-sm text-red-900">{failInfo.message}</p>
+              <button
+                onClick={() => {
+                  setActivityAttempt((n) => n + 1);
+                  setAttemptState("unattempted");
+                  setFailInfo(null);
+                }}
+                className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 active:scale-95 transition-all text-sm"
+              >
+                Try again
+              </button>
+            </div>
+          )}
+
+          {subLesson.playgroundTask.type === "placeholder" && (
+            <p className="text-sm text-gray-500 border rounded p-3 bg-gray-50">This activity is coming soon.</p>
+          )}
+
+          {hasGate && attemptState !== "success" && (
+            <div className="flex items-center gap-4">
+              {!started ? (
+                <>
+                  <button
+                    onClick={handleStart}
+                    className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95"
+                  >
+                    Start activity
+                  </button>
+                  <button onClick={handleNext} className={skipBtn}>
+                    Skip this activity
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setStarted(false)}
+                    className="border-2 border-red-600 text-red-600 rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-red-600 hover:text-white active:scale-95"
+                  >
+                    Exit activity
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActivityAttempt((n) => n + 1);
+                      setAttemptState("unattempted");
+                    }}
+                    className={skipBtn}
+                  >
+                    Restart activity
+                  </button>
+                  <button onClick={handleNext} className={skipBtn}>
+                    Skip this activity
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="flex items-center gap-3">
+            {index > 0 && (
+              <button
+                onClick={() => setIndex((i) => i - 1)}
+                className={`${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50`}
+              >
+                ← Back
+              </button>
+            )}
+            {canAdvance && (
+              <button
+                onClick={handleNext}
+                className={`${navBtn} ${
+                  justSucceeded
+                    ? "border-green-600 bg-green-500 text-white hover:bg-green-600 animate-pop-attention shadow-lg"
+                    : alreadyDone
+                    ? "border-green-600 bg-green-500 text-white hover:bg-green-600"
+                    : "border-gray-900 bg-white text-gray-900 hover:bg-gray-50"
+                }`}
+              >
+                {nextLabel}
+              </button>
             )}
           </div>
-        )}
-
-        <div className="flex items-center gap-3">
-          {index > 0 && (
-            <button onClick={() => setIndex((i) => i - 1)} className="border rounded px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100">
-              ← Back
-            </button>
-          )}
-          {canAdvance && (
-            <button onClick={handleNext} className="border rounded px-4 py-2 font-semibold animate-slide-up transition-colors hover:bg-gray-50 active:bg-gray-100">
-              {isLastSubLesson && !nextModuleSlug ? "Finish" : "Next"}
-            </button>
-          )}
         </div>
       </div>
 

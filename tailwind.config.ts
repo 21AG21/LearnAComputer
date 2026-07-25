@@ -56,6 +56,10 @@ const config: Config = {
           "70%":  { transform: "scale(0.96)" },
           "100%": { transform: "scale(1)" },
         },
+        "lesson-in": {
+          "0%":   { opacity: "0", transform: "translateX(16px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.2s ease-out both",
@@ -67,6 +71,7 @@ const config: Config = {
         "window-close": "window-close 0.18s ease-in both",
         "ring-pulse": "ring-pulse 1.4s ease-in-out infinite",
         "pop-attention": "pop-attention 0.35s ease-out 1",
+        "lesson-in": "lesson-in 0.28s ease-out both",
       },
     },
   },

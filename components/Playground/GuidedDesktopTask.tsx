@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import WindowControls from "./WindowControls";
 import { NoteIcon } from "./Icons";
+import { CELEBRATION_MS } from "./SimulatorFrame";
 
 /**
  * A guided window-management activity. The learner moves, resizes, minimizes,
@@ -71,7 +72,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
       setTimeout(() => {
         setShowCelebration(false);
         setShowCompleteBanner(true);
-      }, 1600);
+      }, CELEBRATION_MS);
       onResultRef.current(true);
     }
   }
