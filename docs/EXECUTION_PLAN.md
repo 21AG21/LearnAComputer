@@ -1,6 +1,6 @@
 # LearnAComputer — QA Round 4 Execution Plan
 
-**Status:** Not started. Phases 0–5 of QA Round 3 are complete (commit `0f8e4fe`).
+**Status (2026-07-25, commit `b41b77b`):** Phases 0, 3, 6 and most of 1, 2, 4, 5, 7, 8 are complete. Phases 9–17 have not started. **Read "Execution order — the work queue" below before doing anything** — many checkboxes in Phases 0–2 are stale, and the remaining work does not run in phase order.
 **Audience:** This document is written for an executor model (Sonnet) working phase by phase. **Read `CLAUDE.md` at the repo root first** — it documents the stack, the lesson JSON schema, and every playground task type with its full action list. This plan assumes that context and does not repeat it.
 
 This plan translates 112 pieces of user feedback into concrete, ordered work. **Appendix A** maps every feedback item to the section that handles it, so nothing gets dropped. **Appendix B** lists the asset files the user must supply before certain sections can start. **Appendix C** contains pre-diagnosed root causes with `file:line` references for every reported bug — read it before touching any bug listed there.
@@ -34,6 +34,176 @@ This plan translates 112 pieces of user feedback into concrete, ordered work. **
 - **Never rename an existing lesson `slug`.** Progress is stored by slug in `localStorage`. Deleting a lesson is fine (only the deletions listed here). New lessons get new slugs.
 - **First letters capitalized** in every learner-facing sentence — `drDigitalIntro`, `drDigitalSuccess`, `drDigitalHint`, `instructions`, and every step `say`. `scripts/check-lessons.py` enforces this.
 - **Don't add npm dependencies** except the two named explicitly in Phase 1.2 (`@supabase/supabase-js`, `@supabase/ssr`). Everything else is achievable with React + Tailwind + inline SVG.
+
+---
+
+# Execution order — the work queue
+
+**This section supersedes "execute phases in order" for anyone picking the plan up now.** The phase numbering below reflects *topic*, not sequence. Phases 0–8 are substantially built; the remaining work does not run in phase order because Phase 2.6 blocks five later sections and Phase 15 must run dead last.
+
+## Verified state as of 2026-07-25 (commit `b41b77b`)
+
+**The checkboxes in Phases 0–2 lie.** Much of that work shipped without the boxes being ticked. Verified against the filesystem, not the checkboxes:
+
+| Section | Real state | Evidence |
+|---|---|---|
+| 0.1 Assets | ✅ **Done** | All 12 `dock-*.png` sliced; `cookie/charger/power-button/headphones/files-pictures/files-downloads.png` all in `public/playgrounds/` |
+| 1.1 Merged catalog | ✅ **Done** | `LessonCatalog.tsx` wired into `app/lessons/page.tsx`; `/dashboard` redirects; nav is Home/Lessons/Playground |
+| 1.4 Button sizing | ✅ **Done** | `navBtn` shared class in `LessonModuleRunner` |
+| 1.5 Next pop + fast check | ✅ **Done** | `pop-attention` keyframe; `CELEBRATION_MS = 800` exported from `SimulatorFrame.tsx:6` |
+| 1.7 Skip mid-activity | ✅ **Done** | Two "Skip this activity" buttons |
+| 1.8 Back to prev module | ✅ **Done** | `previousModuleSlug` threaded through |
+| 1.9 THE NEW RULE | ✅ **Done** | `LessonMedia.tsx` wired at `LessonModuleRunner.tsx:299`; 3 lessons carry `media` |
+| 1.10 Lesson transition | ✅ **Done** | `lesson-in` keyframe |
+| 2.1 Dock icons | ✅ **Done** | 11 `dock-` refs in `FakeDesktop`; `DockIconSvg` deleted |
+| 2.2 Squircle ring | ✅ **Done** | `ring-pulse` in Tailwind + `FakeDesktop` |
+| 2.4 Panel close anim | ✅ **Done** | `slide-up-out` |
+| 2.5 Hover states | ✅ **Done** | `hover:bg-black/10` on menu-bar buttons |
+| 2.7 Settings cleanup | ✅ **Done** | `SimulatedDataBanner` ×3; zero hardcoded `#111` |
+| **1.6** Green check everywhere | ❌ **Not done** | 9 task components have no `SimulatorFrame`: `DesktopFileExplorerTask`, `DesktopBrowserRightClickTask`, `DesktopBrowserScrollTask`, `DesktopBrowserZoomTask`, `OpenAllAppsTask`, `EditFileTask`, `DragSortTask`, `SpotTheFakeTask`, `UrlNavigatorTask` |
+| **1.11** Redo | ⚠️ **Partial** | Runner has a Redo button; the catalog's `?restart=1` affordance is missing |
+| **2.6** One Files app | ❌ **Not done** | No `FileManager.tsx`; 6 live `FILLER_FILES` refs |
+
+Fully complete phases: **3** (except 3.6 verify, 3.7), **4** (except 4.6, 4.9, 4.10), **6** (all), **8.1/8.3**.
+Not started: **9, 10, 11, 12, 13, 14, 15, 16, 17**.
+
+## The queue
+
+Work top to bottom. Each stage is a commit boundary; run the four checks (`check-lessons.py`, `tsc --noEmit`, `lint`, `build`) plus a browser walkthrough at the end of every stage.
+
+### Stage A — Close out what's in flight (small, unblocked)
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 1 | 8.2 | Walk all 9 steps of `reply-forward` in the browser; fix any text-entry step that completes on blur instead of on typing | Last open item in the phase just committed |
+| 2 | 3.6 | Browser-verify the sleep lesson's right pane is gone and text is centered | 1.9 already shipped — this is a 2-minute confirmation |
+| 3 | 11.1, 11.2 | Browser-verify dark mode reaches WiFi/battery/panels/dock, and Settings against `MailApp` | Code landed in 2.7; these are verify-only |
+| 4 | — | Delete the orphaned `components/DashboardView.tsx` (zero importers since 1.1) | Dead file, one line of housekeeping |
+| 5 | 1.11 | Add the catalog `Redo` affordance: `?restart=1` read via `useSearchParams`, skips the resume-at-first-incomplete logic | Completes a partial item while `LessonCatalog` is fresh |
+
+### Stage B — Cheap, high-value bug fixes (Phases 9–11)
+
+Four feedback items collapse to one root cause in 10.1; Phase 9's bugs are all self-contained in `GuidedPhotosTask`. Do these before the big refactor so the course is demonstrably better even if 2.6 stalls.
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 6 | 10.1 | Force uninstall-at-mount for any app with an `install` step; force install for `delete-app` | One fix closes feedback #90, #92, #93. **Blocks 13.2.** |
+| 7 | 10.2 | Spread Unit 8 lessons across 7 different apps instead of Puzzle Quest | Content-only, follows directly from 10.1 |
+| 8 | 9.1 | Make `search` two-phase (click icon → type query), matching `attach-photo` | Closes #83, #84 |
+| 9 | 9.2 | Remove the duplicate dog photo; audit the 12-item library | One-line data fix |
+| 10 | 9.3 | Add `initialEdits` to library items; bird starts dark + rotated 90° | Makes `photo-editing` teach something visible |
+| 11 | 9.4 | Post-share "Show me" banner that opens Messages with the photo in the thread | Uses the existing `lac-chats` store |
+| 12 | 11.3 | Strip the stale trackpad line and stray text from `unit-9-assessment` | Pure copy edit |
+
+### Stage C — The big refactor and everything it unblocks
+
+**2.6 is the highest-risk change in the plan.** Do it alone, in its own commit, following the 5-step migration order and honoring the rollback gate after step 3. Nothing else in this stage can start until it lands.
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 13 | **2.6** | ONE Files app: extract `FileManager.tsx`, move the filesystem into `filesData.ts`, thin out `GuidedFilesTask`, migrate `FilesApp` / `EditFileTask` / `DesktopFileExplorerTask` | **Blocks 3.7, 4.6, 4.10, 5.1, 5.3/5.4, and Unit 3's assessment.** Regression-test all nine Unit 3 lessons before continuing. |
+| 14 | 5.1 | Opening an item raises a real closable window; update `file-what-is` steps and intro | The `FileManager` change that 3.7 also needs — build it once |
+| 15 | 3.7 | Double-click lesson renders `FileManager` with `enabled={{open: true}}` + per-file highlight | Direct consumer of 2.6 |
+| 16 | 5.3 / 5.4 | `files-pictures.png` and `files-downloads.png` in the sidebar, in bordered rounded boxes | Trivial once the sidebar has one owner |
+| 17 | 5.2 | No-op guard: auto-complete a step whose precondition is already satisfied | Deferred in QA3; cheap inside the new `FileManager` |
+| 18 | 4.10 | Birthday invitation opens in the real Files app; fix the editor-window ugliness | Consumer of 2.6 |
+| 19 | 4.6 | Arrow-key navigation: `keyboardNav` mode, click nudge, new `arrow-select` action + `keyboardOnly` flag | Last consumer of 2.6 |
+
+### Stage D — The one new playground type
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 20 | **4.9** | `notes-shortcut` type: union member → `contentEditable` `NotesApp` → `GuidedNotesTask.tsx` → `checkNotesShortcut` → wire in `LessonPlaygroundPane`. Convert `text-formatting`, `keyboard-shortcuts-pattern`, `editing-undo-redo` | **Blocks Unit 2's assessment (15.2).** Isolated from Stage C, so it can run in parallel if two people are working. |
+
+### Stage E — Unit 10 security restructure (Phase 12)
+
+Internally ordered: the `chrome` prop and `LoggedInPanel` are shared infrastructure the rest of the phase consumes.
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 21 | 12.1 | Add the `chrome` prop to `guided-security`; set per-lesson values | Infrastructure — **blocks 12.4, 12.6** |
+| 22 | 12.2 | Build `<LoggedInPanel />`; use it in `password-managers`, `two-factor`, `passkeys` | Shared component — **blocks 13.4** |
+| 23 | 12.3 | Rebuild the phone illustration | Self-contained visual work |
+| 24 | 12.4 | Move the phishing inspector into `MailApp` / `MessagingApp` chrome | Needs 12.1's `chrome` prop |
+| 25 | 12.5 | Add a **Privacy** section to `SettingsApp`; move ad-tracking there | **Blocks 12.7** |
+| 26 | 12.6 | `safe-shopping` becomes inspection-only — never simulate entering card data | Needs 12.1 |
+| 27 | 12.7 | `public-wifi` scenario: no WiFi → join network → captive portal → Settings → Privacy | Needs 12.5's Privacy section |
+
+### Stage F — Unit 11 troubleshooting (Phase 13)
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 28 | 13.3 | `hardware-problems` → `type: "none"` + proper explainer | Deletion is the cheapest item; do it first |
+| 29 | 13.1 | Restored Notes must be typeable — add a final type step | Small scenario extension |
+| 30 | 13.2 | Rewrite `software-problems` as delete-and-reinstall | **Needs 10.1** (Stage B) so the app-store state is trustworthy |
+| 31 | 13.4 | `password-reset` scenario spanning Browser → Mail → Browser | **Needs 12.2's `LoggedInPanel`** |
+| 32 | 13.5 | `error-restart` support scenario; add `support.example` to `PAGES` | Largest of the five; benefits from the patterns 13.4 establishes |
+
+### Stage G — Content-only, zero code (Phase 14)
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 33 | 14.1 | Convert all 4 remaining Unit 12 lessons to `type: "none"`; rewrite every intro as a numbered real-computer walkthrough | No dependencies at all. Good filler work between risky stages, or hand to a second worker. Note the 5.5 tension: move the `open-download` exercise to `safari-downloads` (460). |
+
+### Stage H — Previously deferred as too complex
+
+Both were marked "LEFT FOR LARGER MODEL" while running on Sonnet. Re-attempt them here.
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 34 | 7.2 | Group chats: `create-group`, `add-to-group`, `send-group-message`, group thread data, multi-sender rendering | **Blocks Unit 5's assessment**, which requires starting a group chat |
+| 35 | 7.4 | Compose-bar emoji picker + `pick-emoji` action; split `emoji-reactions` from `messages-photos` | Independent; finishes Unit 5 |
+
+### Stage I — New content (Phase 16)
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 36 | 16 | Bluetooth: `SettingsApp` section, `select-device`/`disconnect-device` actions, `bluetooth-devices.json` at order 930 | Additive and isolated. Write "Bluetooth" as text — the rune is trademarked. |
+
+### Stage J — Assessments (Phase 15) — **must be last**
+
+15.1 refactors `stepIndex` → `completedSteps: Set<number>` in *every* `GuidedXxxTask`. Running it before Stages C–I means redoing it for every sim those stages touch.
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 37 | 15.1 | Extract `matchesStep(step, event)` per sim; assessment mode scans all unmet objectives, guided mode gates on the current step | Touches every sim — all sim work must be finished first |
+| 38 | 15.2 | The 12 per-unit assessment briefs | Unit 2 needs 4.9, Unit 3 needs 2.6, Unit 5 needs 7.2 — all landed by now |
+
+### Stage K — Deferred infrastructure (no dependents)
+
+Nothing in the course depends on these, and nothing they depend on is missing. Slot them wherever there's a gap — they are listed late because they are the least user-visible, not because they are blocked.
+
+| # | Section | Task |
+|---|---|---|
+| 39 | 1.2 | Login page + `lib/supabase.ts` + `.env.local.example`. The site must build and every lesson stay reachable with no env vars set. |
+| 40 | 1.3 | Write `docs/PROGRESS_MONITORING.md`. **Write only — implement nothing.** |
+
+### Stage L — Sweep and ship
+
+| # | Section | Task | Why here |
+|---|---|---|---|
+| 41 | 1.6 | Wrap the 9 unwrapped task components in `SimulatorFrame` so every activity shows the green check | Deliberately last: Stages C–J delete or rewrite several of these components, so wrapping them earlier is wasted work |
+| 42 | 17 | Full-course walkthrough, all four checks, `CLAUDE.md` currency audit, commit and push | Final gate |
+
+## If you only have time for some of it
+
+Ranked by user-visible value per hour of work:
+
+1. **Stage B** (items 6–12) — seven reported bugs, all small, all independent.
+2. **Stage A** (items 1–5) — finishes work already 90% done.
+3. **Stage G** (item 33) — an entire unit fixed with zero code risk.
+4. **Stage C** (item 13) — the single largest quality win, and the single largest risk. Budget a full session.
+
+## Parallelization
+
+If more than one worker is available, these tracks share no files:
+
+- **Track 1:** Stage C (Files app) — `FileManager`, `GuidedFilesTask`, `FilesApp`, `EditFileTask`
+- **Track 2:** Stage D (4.9) — `NotesApp`, `GuidedNotesTask`
+- **Track 3:** Stage E (Phase 12) — `GuidedSecurityTask`, `SettingsApp`
+- **Track 4:** Stage G (14.1) — lesson JSON only
+
+Stages A, B, F, H, I, J, L must be serialized against these — they touch shared files or depend on the tracks above.
 
 ---
 
@@ -100,13 +270,13 @@ If `Pillow` is not installed: `pip3 install Pillow`. Verify the 10 output PNGs e
 
 ### 0.2 Everything is unblocked
 
-Assets are available. Copy them (§0.1) and proceed to Phase 1. No sections are blocked.
+**Phase 0 is complete** — every asset is already in `public/playgrounds/`, including all 12 sliced `dock-*.png` files. The checkboxes in §0.1 are stale; verify with `ls public/playgrounds/dock-*.png` rather than re-running the copy or the slicing script.
 
 ---
 
 ## Phase 1 — Framework and navigation
 
-Everything in Phases 3–16 depends on this phase. Do it first and do it completely.
+> **Stale checkboxes.** 1.1, 1.4, 1.5, 1.7, 1.8, 1.9 and 1.10 are built and shipped — the boxes were never ticked. Only **1.2**, **1.3**, **1.6** and the catalog half of **1.11** remain. See the verified-state table in "Execution order" above for the evidence.
 
 ### 1.1 Merge the lessons catalog and the dashboard (feedback #1)
 
@@ -282,6 +452,8 @@ Clicking Next swaps the text with no motion, so it isn't obvious anything change
 ## Phase 2 — PlaygroundOS: the simulated computer
 
 Everything here is in `components/Playground/`. These changes are felt in every unit, so they come before content work.
+
+> **Stale checkboxes.** 2.1, 2.2, 2.4, 2.5 and 2.7 are built and shipped — the boxes were never ticked. Only **2.6** remains, and it is the largest and riskiest item in the plan. See the verified-state table in "Execution order" above.
 
 ### 2.1 Dock icons from the user's artwork (feedback #4)
 
