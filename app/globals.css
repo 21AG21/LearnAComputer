@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Ensure FakeDesktop fills the fullscreen root and the dock stays anchored */
+:fullscreen { height: 100%; width: 100%; }
+:-webkit-full-screen { height: 100%; width: 100%; }
+:fullscreen .playground-root { height: 100%; }
+:-webkit-full-screen .playground-root { height: 100%; }

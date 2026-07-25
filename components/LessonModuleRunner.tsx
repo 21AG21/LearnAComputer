@@ -15,9 +15,10 @@ type FailInfo = { message: string } | null;
 interface LessonModuleRunnerProps {
   route: ModuleRoute;
   nextModuleSlug: string | null;
+  previousModuleSlug?: string | null;
 }
 
-export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModuleRunnerProps) {
+export default function LessonModuleRunner({ route, nextModuleSlug, previousModuleSlug }: LessonModuleRunnerProps) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
@@ -240,13 +241,35 @@ export default function LessonModuleRunner({ route, nextModuleSlug }: LessonModu
             </div>
           )}
 
-          <div className="flex items-center gap-3">
-            {index > 0 && (
+          {alreadyDone && hasGate && attemptState !== "success" && (
+            <div>
               <button
-                onClick={() => setIndex((i) => i - 1)}
+                onClick={() => {
+                  setActivityAttempt((n) => n + 1);
+                  setAttemptState("unattempted");
+                  setAlreadyDone(false);
+                  setStarted(true);
+                }}
+                className={skipBtn}
+              >
+                Redo this activity
+              </button>
+            </div>
+          )}
+
+          <div className="flex items-center gap-3">
+            {(index > 0 || previousModuleSlug) && (
+              <button
+                onClick={() => {
+                  if (index > 0) {
+                    setIndex((i) => i - 1);
+                  } else if (previousModuleSlug) {
+                    router.push(`/lessons/${previousModuleSlug}`);
+                  }
+                }}
                 className={`${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50`}
               >
-                ← Back
+                {index === 0 && previousModuleSlug ? "← Previous module" : "← Back"}
               </button>
             )}
             {canAdvance && (

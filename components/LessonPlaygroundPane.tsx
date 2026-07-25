@@ -65,7 +65,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
   };
 
   return (
-    <div className="relative h-full w-full border-4 border-gray-300 bg-white overflow-hidden">
+    <div className="playground-root relative h-full w-full border-4 border-gray-300 bg-white overflow-hidden">
       {!started && <FakeDesktop />}
 
       {started && (

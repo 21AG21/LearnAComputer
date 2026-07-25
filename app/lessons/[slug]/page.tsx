@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getModuleRouteBySlug, getNextModuleSlug } from "@/lib/lessons";
+import { getModuleRouteBySlug, getNextModuleSlug, getPreviousModuleSlug } from "@/lib/lessons";
 import LessonModuleRunner from "@/components/LessonModuleRunner";
 
 export default async function LessonModulePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -11,6 +11,7 @@ export default async function LessonModulePage({ params }: { params: Promise<{ s
   }
 
   const nextModuleSlug = getNextModuleSlug(slug);
+  const previousModuleSlug = getPreviousModuleSlug(slug);
 
-  return <LessonModuleRunner route={route} nextModuleSlug={nextModuleSlug} />;
+  return <LessonModuleRunner route={route} nextModuleSlug={nextModuleSlug} previousModuleSlug={previousModuleSlug} />;
 }

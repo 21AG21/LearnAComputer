@@ -366,3 +366,10 @@ export function getNextModuleSlug(moduleSlug: string): string | null {
   if (index === -1 || index === routes.length - 1) return null;
   return routes[index + 1].moduleSlug;
 }
+
+export function getPreviousModuleSlug(moduleSlug: string): string | null {
+  const routes = getModuleRoutes();
+  const index = routes.findIndex((route) => route.moduleSlug === moduleSlug);
+  if (index <= 0) return null;
+  return routes[index - 1].moduleSlug;
+}
