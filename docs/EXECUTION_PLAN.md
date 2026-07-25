@@ -587,18 +587,18 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
 
 **`TabActivityIdea.png` has arrived** — it shows a browser page at `pickacolor.example` with three large colored circles (red, green, blue) and the task: *"Can you click on the following colors in order using just the enter, Tab, and Shift + Tab keys?"* followed by the sequence: `red, green, blue, green, red, blue, green, red, blue, red`. This is the design. Build it as a page inside `GuidedBrowserTask` rather than a standalone component.
 
-- [ ] **Add `pickacolor.example` to `PAGES`** in `GuidedBrowserTask.tsx`:
-  - Three focusable `<button>` elements: `id="btn-red"`, `id="btn-green"`, `id="btn-blue"` — large circles (96px, `rounded-full`) in saturated red, green, and blue.
-  - A sequence display at the bottom: the target sequence as a comma-separated list, with the current item **highlighted** (bold, or circled).
-  - Pressing Enter on the focused button checks whether it matches the current item in the sequence; correct moves the sequence forward; wrong shows a gentle nudge; completing all 10 completes the step.
-  - Tab moves focus right (red → green → blue → red), Shift+Tab moves left. `tabIndex` must be set correctly. The currently focused button shows a visible `outline: 4px solid #1d2733`.
-  - This page is **only accessible** from the `guided-browser` step — it does not appear in the browser's "new tab" page or history by default.
-- [ ] New `guided-browser` step action: `tab-sequence` — `{ action: "tab-sequence", page: "pickacolor.example" }`. Completes when all 10 items in the sequence are clicked correctly.
-- [ ] **Two lessons, in order** (feedback #47):
-  - `kb-tab` (order 211): mechanic only — Tab moves forward in a form, Shift+Tab moves back. Use the existing `keyboard-nav-game` (`KeyboardNavTask.tsx`) which already does this. 
-  - **New lesson** `kb-tab-practical` (order 212, same module): navigate to `pickacolor.example` and complete the color sequence using only Tab/Enter. The payoff — Tab is useful, not just for skipping fields.
-- [ ] Renumber `kb-arrow-keys` to 213 and `kb-doggo` to 214 to make room. Update `CLAUDE.md`'s Unit 2 range if the top changes.
-- [ ] **Document `tab-sequence` in `CLAUDE.md`.**
+- [x] **Add `pickacolor.example` to `PAGES`** in `GuidedBrowserTask.tsx`:
+  - Three focusable `<button>` elements with `aria-label="red/green/blue"` — large circles (96px, `rounded-full`) in saturated red, green, and blue.
+  - A sequence display at the bottom: 10 colored pills; current item is `scale-110 shadow`, done items are `line-through opacity-50`.
+  - Clicking (or pressing Enter on) the focused button checks sequence; correct advances; wrong shows a red nudge text; completing all 10 completes the step.
+  - Tab moves focus right (red → green → blue → red), Shift+Tab moves left. The focused button shows `outline: 4px solid #1d2733`.
+  - Page only accessible via `guided-browser` navigate step; not in new-tab Favorites.
+- [x] New `guided-browser` step action: `tab-sequence` — `{ action: "tab-sequence", page: "pickacolor.example" }`. Completes when all 10 items in the sequence are clicked correctly.
+- [x] **Two lessons, in order** (feedback #47):
+  - `kb-tab` (order 211): updated to `keyboard-nav-game` (`KeyboardNavTask.tsx`) — Tab moves forward, Shift+Tab moves back, Enter clicks. 4-bullet drDigitalIntro explains the mechanic.
+  - **New lesson** `kb-tab-practical` (order 212, same module): navigate to `pickacolor.example` and complete the color sequence. Browser-verified: DesktopLaunch → Browser opens → navigate to pickacolor.example → 3 circles + 10-item sequence → completes on final click → success banner.
+- [x] Renumber `kb-arrow-keys` to 213 and `kb-doggo` to 214 to make room.
+- [ ] **Document `tab-sequence` and `seedDraft` in `CLAUDE.md`.** (deferred to end of Phase 4)
 
 ### 4.5 Return key activity, and the warning-banner pattern (feedback #38, #40)
 

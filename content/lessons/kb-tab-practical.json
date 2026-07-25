@@ -1,0 +1,27 @@
+{
+  "slug": "kb-tab-practical",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Keyboard Tour",
+  "order": 212,
+  "title": "Tab in action: pick a color",
+  "videoUrl": "",
+  "drDigitalIntro": "Tab is not just for forms — you can use it to move around any page without touching the mouse.\n• On a real website, pressing Tab jumps between links, buttons, and input boxes in order.\n• You can see which element has focus because it gets a visible border or highlight.\n• Press Enter when the right one is highlighted to activate it.\n• Try this now: navigate to pickacolor.example and complete the color sequence using only Tab and Enter.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "goal": "Complete the color sequence using Tab and Enter",
+    "steps": [
+      {
+        "say": "Type pickacolor.example in the address bar and press Enter (or click Go).",
+        "action": "navigate",
+        "url": "pickacolor.example"
+      },
+      {
+        "say": "Use Tab and Shift+Tab to move between the circles, then press Enter to select the highlighted one. Follow the sequence shown below the circles.",
+        "action": "tab-sequence",
+        "page": "pickacolor.example"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You completed the whole color sequence using only the keyboard — Tab and Enter are a powerful pair!",
+  "drDigitalHint": "Click the address bar, type pickacolor.example and press Enter. Then press Tab to move the focus ring between the circles, and press Enter when the right color is highlighted."
+}

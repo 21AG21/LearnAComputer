@@ -5,10 +5,10 @@
   "order": 211,
   "title": "Tab",
   "videoUrl": "",
-  "drDigitalIntro": "The Tab key jumps your cursor forward.\n• Use it to indent a paragraph.\n• Use it to move to the next box in an online form.",
+  "drDigitalIntro": "The Tab key jumps your cursor forward to the next spot.\n• On a keyboard, you will find Tab on the far left side, above Caps Lock — it often has an arrow or the word 'Tab'.\n• In a form with multiple boxes, Tab skips from one box to the next without touching the mouse.\n• Shift+Tab goes backwards to the previous box.\n• Try it now: the activity below has buttons linked together — Tab moves you forward, Shift+Tab moves you back, and Enter clicks.",
   "playgroundTask": {
-    "type": "none"
+    "type": "keyboard-nav-game"
   },
-  "drDigitalSuccess": "That's Tab — great for indenting and for hopping between form boxes!",
-  "drDigitalHint": "Find Tab on the far left, above Caps Lock, then click Continue."
+  "drDigitalSuccess": "You navigated the whole form using only Tab and Enter — no mouse needed!",
+  "drDigitalHint": "Press Tab to move to the next button, Shift+Tab to go back, and Enter to click the highlighted one."
 }

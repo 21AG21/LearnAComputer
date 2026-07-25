@@ -112,12 +112,14 @@ export type PlaygroundTask =
           | "download"
           | "open-downloads"
           | "open-result"
-          | "delete-download";
+          | "delete-download"
+          | "tab-sequence";
         url?: string;
         title?: string;
         query?: string;
         reveal?: string;
         file?: string;
+        page?: string;
       }>;
     }
   | {
