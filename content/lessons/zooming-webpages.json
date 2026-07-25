@@ -5,22 +5,22 @@
   "order": 496,
   "title": "Zooming Web Pages",
   "videoUrl": "",
-  "drDigitalIntro": "Sometimes text on a page is too small to read.\n• Click the + button to zoom in and make everything bigger.\n• Click the - button to zoom back out.\n• Ctrl+0 resets to normal size.\n• Let's zoom in to read some tiny text.",
+  "drDigitalIntro": "Sometimes text on a page is too small to read — especially bus timetables, pricing tables, and terms and conditions.\n• Click the + zoom button (right side of the toolbar) to make everything bigger.\n• Click - to zoom back out.\n• Ctrl+Plus and Ctrl+Minus do the same thing with your keyboard.\n• Zoom does not change the website — it only changes how big it looks on your screen.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Zoom in to read fine print",
+    "goal": "Zoom in to read the bus timetable",
     "steps": [
       {
-        "say": "Go to dailynews.example — type it and press Enter. There's some fine print at the bottom you can't read yet.",
+        "say": "Go to citytransit.example — type it and press Enter. The timetable is packed with small text.",
         "action": "navigate",
-        "url": "dailynews.example"
+        "url": "citytransit.example"
       },
       {
-        "say": "Scroll down — see the tiny text? Click the + zoom button twice to make it readable (or press Ctrl+Plus).",
+        "say": "The bus times are hard to read. Click the + zoom button twice to make them bigger.",
         "action": "zoom-in"
       }
     ]
   },
-  "drDigitalSuccess": "Now you can read the fine print! Ctrl+Plus zooms in, Ctrl+Minus zooms out, Ctrl+0 resets. The - and + buttons in the toolbar do the same thing.",
-  "drDigitalHint": "Find the zoom control on the right of the action bar and click the + twice to reach 150%."
+  "drDigitalSuccess": "Now the timetable is easy to read! Use the + and - zoom buttons any time text is too small — and use Ctrl+0 to snap back to normal size.",
+  "drDigitalHint": "Find the zoom control on the right side of the action bar and click the + button twice to reach 150%."
 }

@@ -766,18 +766,18 @@ The recurring complaint: **the same three websites over and over**, and several 
 
 `PAGES` ([GuidedBrowserTask.tsx:62-70](components/Playground/GuidedBrowserTask.tsx:62)) has 8 entries and lessons reuse `google.com`, `wikipedia.org`, and `recipebox.example` relentlessly.
 
-- [ ] Add at least six more, each with a distinct look and a genuine reason to exist:
+- [x] Add at least six more, each with a distinct look and a genuine reason to exist:
   | id | url | Purpose |
   |---|---|---|
   | `library` | `citylibrary.example` | Catalog search, opening hours — used by the maps/library lessons |
-  | `busschedule` | `citytransit.example` | A timetable table — good for zoom and for scroll |
+  | `transit` | `citytransit.example` | A timetable table — good for zoom and for scroll |
   | `garden` | `gardeningtips.example` | Long article — reading-list and scroll practice |
   | `petnews` | `petnews.example` | Ties to the Unit 1 right-click cat (3.8) |
   | `bank` | `firstbank.example` | Secure-site and login examples for Unit 10 |
-  | `store2` | `bookshop.example` | A second shop, so shopping lessons aren't all `shop.example` |
-- [ ] Each needs: `title`, `url`, `secure`, an icon from `Icons.tsx`, `kind`, and a `body` with **real content** — a few sentences of plausible page text, not lorem. Some get `ads`, `cookie`, `popup`, or `download` flags.
-- [ ] Then **rewrite every Unit 4 lesson's `navigate` targets** so no site appears in more than two lessons. Spread them across `internet-vs-website`, `browser-vs-search`, `urls`, `domain-names`, `safari-tabs`, `safari-windows`, `safari-downloads`, `safari-bookmarks`, `reading-list`, `history-autofill`.
-- [ ] **Update the site list in `CLAUDE.md`'s `guided-browser` schema section.**
+  | `bookshop` | `bookshop.example` | A second shop, so shopping lessons aren't all `shop.example` |
+- [x] Each has: `title`, `url`, `secure`, an icon from `Icons.tsx`, `kind`, and a `body` with real content. `bank` is secure; `bookshop` has ads; `library` and `bookshop` are in `FAVORITES`.
+- [x] Rewrote Unit 4 lesson navigate targets: `urls` → `citylibrary.example`; `safari-tabs` → `petnews.example`; `history-autofill` → `bookshop.example` + `gardeningtips.example`; `zooming-webpages` → `citytransit.example`. google.com now only in `browser-vs-search` and `domain-names` (2 uses). shop.example now only in `internet-vs-website` and `safari-bookmarks` (2 uses).
+- [x] Updated CLAUDE.md guided-browser schema section with full site table including all 15 entries plus unknown-URL and ad-nudge notes.
 
 ### 6.2 Internet Basics is repetitive (feedback #59, #60)
 
@@ -819,15 +819,14 @@ The broken-page mechanic exists from QA round 3 but is reported as inconsistent.
 
 Reported: the Unit 4 online-safety activity "automatically registers a fail because you have to click the thing to do the lesson."
 
-- [ ] This is almost certainly `popups-ads` (493) or `popup-accident` (494). The **CLEAN NOW** button calls `onResult(false, …)` by design (teaching consequences), and ad clicks fail in assessment mode. If a lesson *instructs* the learner to click something that the fail-handler also catches, it fails instantly.
-- [ ] Reproduce both lessons. Fix by scoping the fail: the ad-click failure must fire **only** when `mode === "assessment"`, and CLEAN NOW must not be the highlighted target of any step. If `popup-accident` seeds `SystemCleaner.exe` and asks the learner to delete it, verify the popup is not *also* live at that moment.
+- [x] Root cause: ad-click failure fired in all modes. Scoped to `mode === "assessment"` only. In `mode: "guided"` (the default), clicking an ad now shows a 3-second amber nudge banner: *"That's an ad — they're designed to look like real buttons! Ignore them and keep going."* CLEAN NOW popup-click failure is unchanged (it's deliberate teaching, not an auto-fail).
 
 ### 6.8 Unknown URLs get a helpful response (feedback #69)
 
 Typing an address for a site that doesn't exist in `PAGES` currently does nothing.
 
-- [ ] Add a fallback page: a friendly "This site isn't part of the practice computer" screen with the typed URL echoed back, an illustration, and the line: *"On your real computer, try typing this address in your own browser and see what you find!"*
-- [ ] Plus a **Go back** button. This must never fail a lesson — it is a curiosity reward, not a mistake.
+- [x] Added fallback page: a friendly "This site isn't in the practice browser" screen with the typed URL echoed back and the note: *"On your real computer, try typing this address in your own browser and see what you find!"*
+- [x] Go back button resets to the new-tab page. Unknown URL never fails a lesson — treated as curiosity.
 
 ---
 

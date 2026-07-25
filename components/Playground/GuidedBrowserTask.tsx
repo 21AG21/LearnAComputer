@@ -4,10 +4,10 @@ import { useMemo, useState, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import WindowControls from "./WindowControls";
 import {
-  PlusIcon, SearchIcon, CartIcon, BookIcon, ClockIcon,
+  PlusIcon, SearchIcon, CartIcon, BookIcon, BookClosedIcon, ClockIcon,
   DownloadIcon, WindowIcon, LockIcon, WarningIcon, StarIcon,
   StarFilledIcon, GlobeIcon, FileDocIcon, TrashIcon, CookieIcon,
-  ImageIcon, ReloadIcon,
+  ImageIcon, ReloadIcon, HeartIcon,
 } from "./Icons";
 
 export type GuidedBrowserStep = {
@@ -44,10 +44,12 @@ interface GuidedBrowserTaskProps {
   goal: string;
   steps: GuidedBrowserStep[];
   initialDownloads?: string[];
+  mode?: "guided" | "assessment";
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
-type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames" | "pickacolor";
+type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames" | "pickacolor"
+  | "library" | "transit" | "garden" | "petnews" | "bank" | "bookshop";
 
 interface Page {
   title: string;
@@ -72,6 +74,12 @@ const PAGES: Record<PageId, Page> = {
   recipes: { title: "Recipe Box", url: "recipebox.example", secure: true, icon: <BookIcon size={16} />, kind: "site", body: "Grandma's Classic Apple Pie — the flakiest crust you'll ever make.", download: "ApplePieRecipe.pdf" },
   freegames: { title: "Free Games!!!", url: "freegames.example", secure: false, icon: <GlobeIcon size={16} />, kind: "site", body: "Play 1000s of FREE games now! No download needed!", popup: true, ads: true },
   pickacolor: { title: "Pick a Color", url: "pickacolor.example", secure: true, icon: <GlobeIcon size={16} />, kind: "game" },
+  library: { title: "City Library", url: "citylibrary.example", secure: true, icon: <BookClosedIcon size={16} />, kind: "site", body: "Search our catalog, reserve books, renew loans, and find upcoming events. Open Monday–Saturday, 9 am–6 pm. Over 80,000 titles available online." },
+  transit: { title: "City Transit", url: "citytransit.example", secure: true, icon: <ClockIcon size={16} />, kind: "site", body: "Route 12 — Downtown to Airport: 7:00 am · 8:15 am · 9:30 am · 10:45 am · 12:00 pm · 1:15 pm · 2:30 pm · 3:45 pm · 5:00 pm · Last bus 10:00 pm. Tickets: Adult $2.50 · Senior/Student $1.25 · Children under 5 free." },
+  garden: { title: "Gardening Tips", url: "gardeningtips.example", secure: true, icon: <GlobeIcon size={16} />, kind: "site", body: "How to Grow Tomatoes at Home — plant in full sun, water deeply twice a week, and stake tall varieties. Most common mistake: overwatering in cool weather. Check back daily for seasonal guides." },
+  petnews: { title: "Pet News Daily", url: "petnews.example", secure: true, icon: <HeartIcon size={16} />, kind: "site", body: "Dog Wins National Frisbee Championship · Scientists Confirm Cats Nap 16 Hours a Day · Local Shelter Adopts Out 200 Animals This Month. Subscribe for daily updates." },
+  bank: { title: "First National Bank", url: "firstbank.example", secure: true, icon: <LockIcon size={16} />, kind: "site", body: "Online banking — check your balance, pay bills, and transfer funds securely. Your data is protected with 256-bit encryption. Never share your password." },
+  bookshop: { title: "Book Shop", url: "bookshop.example", secure: true, icon: <BookClosedIcon size={16} />, kind: "site", body: "Best-selling novels, cookbooks, children's books and more. New arrivals every week. Free shipping on orders over $35.", ads: true },
 };
 
 const URL_TO_PAGE: Record<string, PageId> = Object.fromEntries(
@@ -83,7 +91,7 @@ for (const id of Object.keys(PAGES) as PageId[]) {
   TITLE_TO_PAGE[PAGES[id].title] = id;
 }
 
-const FAVORITES: PageId[] = ["shop", "google", "wikipedia", "weather", "news", "recipes"];
+const FAVORITES: PageId[] = ["shop", "google", "wikipedia", "weather", "news", "recipes", "library", "bookshop"];
 
 const PICK_SEQ = ["red", "green", "blue", "green", "red", "blue", "green", "red", "blue", "red"] as const;
 type PickColor = (typeof PICK_SEQ)[number];
@@ -100,7 +108,7 @@ interface Tab {
   fwd: PageId[];
 }
 
-export default function GuidedBrowserTask({ goal, steps, initialDownloads, onResult }: GuidedBrowserTaskProps) {
+export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", onResult }: GuidedBrowserTaskProps) {
   const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
   const [activeId, setActiveId] = useState("t1");
   const [editing, setEditing] = useState(false);
@@ -142,6 +150,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
   const [tabFocused, setTabFocused] = useState<PickColor>("red");
   const [pdfViewer, setPdfViewer] = useState<string | null>(null);
   const [pdfZoom, setPdfZoom] = useState(100);
+  const [adNudge, setAdNudge] = useState(false);
+  const [unknownUrl, setUnknownUrl] = useState("");
 
   const step = steps[stepIndex];
   const finished = stepIndex >= steps.length;
@@ -231,6 +241,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
       setMenu(null);
       setSearchResults(null);
       setSearchInput("");
+      setUnknownUrl("");
       const pageIsBroken = brokenPages.has(pageId);
       setCookieOpen(!pageIsBroken && !!PAGES[pageId].cookie);
       setPopupOpen(!pageIsBroken && !!PAGES[pageId].popup);
@@ -246,8 +257,16 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
 
   function submitAddress() {
     const pageId = URL_TO_PAGE[normUrl(draft)];
-    if (pageId) navigate(pageId);
-    else setDraft("");
+    if (pageId) {
+      navigate(pageId);
+    } else if (draft.trim()) {
+      setUnknownUrl(normUrl(draft));
+      setEditing(false);
+      setMenu(null);
+      setSearchResults(null);
+    } else {
+      setDraft("");
+    }
   }
 
   function newTab() {
@@ -431,7 +450,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
   }
 
   function clickAd() {
-    onResult(false, "That was an ad pretending to be a download button — real download links are in the page content, not in flashy boxes.");
+    if (mode === "assessment") {
+      onResult(false, "That was an ad pretending to be a download button — real download links are in the page content, not in flashy boxes.");
+    } else {
+      setAdNudge(true);
+      setTimeout(() => setAdNudge(false), 3000);
+    }
   }
 
   function handlePickColor(color: PickColor) {
@@ -579,7 +603,21 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
 
       {/* Page content */}
       <div className="flex-1 min-h-0 overflow-auto bg-white relative">
-        {reloading ? (
+        {unknownUrl ? (
+          <div className="flex flex-col items-center justify-center gap-4 py-16 px-6 text-center">
+            <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center text-4xl">?</div>
+            <p className="font-black text-xl text-gray-800">This site isn&apos;t in the practice browser.</p>
+            <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
+              <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">{unknownUrl}</span> is not one of the practice websites for this lesson.
+            </p>
+            <p className="text-blue-700 text-sm font-semibold max-w-xs leading-relaxed">
+              On your real computer, try typing this address in your own browser and see what you find!
+            </p>
+            <button onClick={() => { setUnknownUrl(""); setTabs(prev => prev.map(t => t.id === activeId ? { ...t, pageId: "newtab" } : t)); }} className="mt-2 px-5 py-2 bg-gray-100 border-2 border-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-200">
+              ← Go back
+            </button>
+          </div>
+        ) : reloading ? (
           <div className="flex flex-col items-center justify-center h-full gap-3">
             <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
             <p className="text-gray-500 text-sm font-medium">Loading...</p>
@@ -718,6 +756,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
                 <p className="text-gray-400 text-sm max-w-xs">Try clicking the reload button in the toolbar.</p>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Ad click nudge */}
+        {adNudge && (
+          <div className="absolute top-2 left-2 right-2 z-20 bg-amber-50 border-2 border-amber-400 rounded-lg px-4 py-3 text-sm font-semibold text-amber-900 animate-slide-down">
+            That&apos;s an ad — they&apos;re designed to look like real buttons! Ignore them and keep going.
           </div>
         )}
 

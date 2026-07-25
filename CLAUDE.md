@@ -180,7 +180,27 @@ Actions: `open-file`, `open-folder`, `go-to` (sidebar), `new-folder` (`value`), 
 
 #### `guided-browser` schema
 
-A self-contained simulated browser. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. The set of fake websites (Shop, Google, Wikipedia, Weather, Daily News, Recipe Box, Free Games) lives hardcoded in `GuidedBrowserTask.tsx` — reference their `url` (e.g. `shop.example`, `google.com`, `weather.com`, `freegames.example`) in `navigate` steps.
+A self-contained simulated browser. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. The available websites live hardcoded in `GuidedBrowserTask.tsx` — reference their `url` in `navigate` steps:
+
+| id | url | Special flags | Purpose |
+|---|---|---|---|
+| `newtab` | (new tab page) | — | Default / new tab |
+| `shop` | `shop.example` | ads | Online shop |
+| `google` | `google.com` | — | Search engine |
+| `wiki` | `wikipedia.org` | — | Encyclopedia |
+| `weather` | `weather.com` | cookie, ads | Weather with cookie banner |
+| `news` | `dailynews.example` | — | News site with fine print |
+| `recipebox` | `recipebox.example` | download | Recipe site with PDF download |
+| `freegames` | `freegames.example` | popup, insecure | Scam site with popup |
+| `library` | `citylibrary.example` | — | Library catalog + hours |
+| `transit` | `citytransit.example` | — | Bus timetable — good for zoom/scroll |
+| `garden` | `gardeningtips.example` | — | Long article — reading list / scroll |
+| `petnews` | `petnews.example` | — | Pet news |
+| `bank` | `firstbank.example` | secure | Bank — secure-site lessons |
+| `bookshop` | `bookshop.example` | ads | Second shop — history lessons |
+| `pickacolor` | `pickacolor.example` | — | Tab/keyboard navigation activity |
+
+Entering an unknown URL shows a friendly "not in the practice browser" fallback page. Clicking an ad in `mode: "guided"` shows a nudge banner; in `mode: "assessment"` it reports failure.
 
 ```json
 "playgroundTask": {

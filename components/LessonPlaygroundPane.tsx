@@ -159,7 +159,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-browser" && (
             <DesktopLaunch app="browser">
-              <GuidedBrowserTask goal={task.goal} steps={task.steps} initialDownloads={task.initialDownloads} onResult={onResult} />
+              <GuidedBrowserTask goal={task.goal} steps={task.steps} initialDownloads={task.initialDownloads} mode={task.mode} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-messaging" && (

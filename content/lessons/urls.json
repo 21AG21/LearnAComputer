@@ -5,18 +5,18 @@
   "order": 420,
   "title": "URLs: Website Addresses",
   "videoUrl": "",
-  "drDigitalIntro": "Every website has an address called a URL.\n• It looks like www.google.com or www.wikipedia.org.\n• It tells your browser where to go.\n• Type it in the address bar and press Return to visit.",
+  "drDigitalIntro": "Every website has an address called a URL.\n• A URL looks like citylibrary.example or google.com.\n• It tells your browser exactly where to go on the internet.\n• Type it into the address bar and press Enter.\n• You don't need to type the www. part — the browser adds it for you.\n• The dot-com (or dot-org, dot-example) at the end is called the domain extension.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Type a web address to visit a site",
+    "goal": "Type a URL to visit the City Library website",
     "steps": [
       {
-        "say": "A URL is a website's address. Click the address bar, type google.com and press Enter to go there.",
+        "say": "Type citylibrary.example in the address bar and press Enter (or click Go).",
         "action": "navigate",
-        "url": "google.com"
+        "url": "citylibrary.example"
       }
     ]
   },
-  "drDigitalSuccess": "You typed a URL and the browser took you straight there. That's how you reach any website when you know its address.",
-  "drDigitalHint": "Click the address bar at the top, type google.com, and press Enter. No need for the http:// part."
+  "drDigitalSuccess": "You typed a URL and went straight there — no search needed. Any time you know a website's address, you can type it directly.",
+  "drDigitalHint": "Click the address bar at the top, type citylibrary.example, then press Enter or click the Go button."
 }

@@ -11,22 +11,22 @@
     "goal": "Revisit an earlier site using History",
     "steps": [
       {
-        "say": "First, visit a site so it's in your history. Type shop.example and press Enter.",
+        "say": "First, visit a site so it's in your history. Type bookshop.example and press Enter.",
         "action": "navigate",
-        "url": "shop.example"
+        "url": "bookshop.example"
       },
       {
-        "say": "Now visit another: type google.com and press Enter. the browser quietly remembers both.",
+        "say": "Now visit another: type gardeningtips.example and press Enter. Your browser quietly remembers both.",
         "action": "navigate",
-        "url": "google.com"
+        "url": "gardeningtips.example"
       },
       {
-        "say": "Want to go back to Shop without retyping? Click History, then click Shop in the list.",
+        "say": "Want to go back to Book Shop without retyping? Click History, then click Book Shop in the list.",
         "action": "history-visit",
-        "title": "Shop"
+        "title": "Book Shop"
       }
     ]
   },
-  "drDigitalSuccess": "You used History to jump back to a site you visited earlier — no need to remember the address. the browser kept the trail for you.",
-  "drDigitalHint": "Visit both sites first. Then open History and click the Shop entry to return to it."
+  "drDigitalSuccess": "You used History to jump back to a site you visited earlier — no need to remember the address. Your browser kept the trail for you.",
+  "drDigitalHint": "Visit both sites first. Then click History in the action bar and click the Book Shop entry to return to it."
 }
