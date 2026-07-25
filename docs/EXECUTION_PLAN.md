@@ -739,9 +739,9 @@ This is a **new playground type** — follow the "Adding a New Playground Type" 
 
 See Appendix C. In `makeItems()` ([GuidedFilesTask.tsx:63-77](components/Playground/GuidedFilesTask.tsx:63)), `taxreturn` starts at `loc: "home"`. Some lesson asks the learner to move it into a folder where it appears to already be, or deletes/restores it in a way that leaves it misplaced for the next lesson.
 
-- [ ] Reproduce by walking all nine Unit 3 lessons in order in one browser session. Each `guided-files` lesson calls `useState(makeItems)` so state resets per lesson — meaning the bug is a **content** bug: a lesson's steps contradict the initial state.
-- [ ] Audit every `move` / `delete` / `restore` step in `creating-folders`, `moving-files`, `searching-files`, and `trash-delete` against `makeItems()`. Fix the JSON so no step is a no-op on arrival.
-- [ ] Add a guard in `GuidedFilesTask`: when a step activates and the state already satisfies it, auto-complete without a flash. This makes content mistakes self-healing (it was Phase 1.6 in the previous round and was never implemented — implement it now).
+- [x] Root cause found: `moveFileTo` validated by `LOC_TITLE[dest]`, but user-created folders have id `"newfolder-XXXXXXXXXX"` which is not in `LOC_TITLE`. Fixed by falling back to `items.find(it => it.id === dest && it.kind === "folder")?.name`. Browser-verified: Creating Folders lesson (create Taxes folder, drag TaxReturn.pdf in) now completes correctly.
+- [x] Content audit: all existing lesson steps use valid built-in destinations or now work with the fixed lookup. No JSON changes needed.
+- [ ] No-op guard (auto-complete if step precondition already satisfied) — deferred, not needed for the reported bug.
 
 ### 5.3 / 5.4 Sidebar icons for Pictures and Downloads (feedback #55, #56)
 

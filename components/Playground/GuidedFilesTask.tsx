@@ -241,7 +241,9 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
     setDraggedFile(null);
     setDropTarget(null);
     if (step?.action === "move" && fileName === step.target) {
-      if (LOC_TITLE[dest] === step.into) {
+      // Built-in folder (Documents, Pictures, Downloads) or user-created folder (matched by name)
+      const destName = LOC_TITLE[dest] ?? items.find((it) => it.id === dest && it.kind === "folder")?.name;
+      if (destName === step.into) {
         setNudge(null);
         completeStep();
       } else {
