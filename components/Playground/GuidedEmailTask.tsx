@@ -179,7 +179,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     if (step?.action === "compose") completeStep();
   }
 
-  function handleFieldBlur(field: "to" | "cc" | "bcc" | "subject" | "body", val: string) {
+  function handleFieldChange(field: "to" | "cc" | "bcc" | "subject" | "body", val: string) {
     const actionMap: Record<string, string> = { to: "set-to", cc: "set-cc", bcc: "set-bcc", subject: "set-subject", body: "set-body" };
     if (step?.action === actionMap[field]) {
       const required = (step.value ?? "").toLowerCase();
@@ -372,16 +372,14 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
                 <input
                   key={field}
                   value={draft[field]}
-                  onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
-                  onBlur={(e) => handleFieldBlur(field, e.target.value)}
+                  onChange={(e) => { setDraft((d) => ({ ...d, [field]: e.target.value })); handleFieldChange(field, e.target.value); }}
                   placeholder={field === "to" ? "TO" : field === "cc" ? "CC" : field === "bcc" ? "BCC" : "SUBJECT"}
                   className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 ${hl(`field-${field}`) ? pulse : ""}`}
                 />
               ))}
               <textarea
                 value={draft.body}
-                onChange={(e) => setDraft((d) => ({ ...d, body: e.target.value }))}
-                onBlur={(e) => handleFieldBlur("body", e.target.value)}
+                onChange={(e) => { setDraft((d) => ({ ...d, body: e.target.value })); handleFieldChange("body", e.target.value); }}
                 placeholder="Write your message..."
                 rows={5}
                 className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 resize-none ${hl("field-body") ? pulse : ""}`}

@@ -92,8 +92,8 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                   done === total ? "complete" : done > 0 ? "in-progress" : "not-started";
 
                 return (
+                  <div key={route.moduleSlug} className="space-y-1">
                   <Link
-                    key={route.moduleSlug}
                     href={`/lessons/${route.moduleSlug}`}
                     className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-400 transition-colors"
                   >
@@ -125,6 +125,17 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                       <span className="text-xs text-gray-400 shrink-0">{done}/{total}</span>
                     </div>
                   </Link>
+                  {state === "complete" && (
+                    <div className="flex justify-end pr-1">
+                      <Link
+                        href={`/lessons/${route.moduleSlug}?restart=1`}
+                        className="text-xs text-gray-400 hover:text-gray-600 underline"
+                      >
+                        Redo
+                      </Link>
+                    </div>
+                  )}
+                  </div>
                 );
               })}
             </div>

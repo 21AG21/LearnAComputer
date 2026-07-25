@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DrDigital from "@/components/DrDigital";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
@@ -20,6 +20,7 @@ interface LessonModuleRunnerProps {
 
 export default function LessonModuleRunner({ route, nextModuleSlug, previousModuleSlug }: LessonModuleRunnerProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [index, setIndex] = useState(0);
   const [attemptState, setAttemptState] = useState<AttemptState>("unattempted");
   const [failInfo, setFailInfo] = useState<FailInfo>(null);
@@ -55,20 +56,25 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
     setIndexResolved(false);
     setAllModuleComplete(false);
     setReviewing(false);
+    const restart = searchParams.get("restart") === "1";
     const completed = getCompletedSlugs();
     const firstIncomplete = route.subLessons.findIndex((l) => !completed.includes(l.slug));
     if (firstIncomplete === -1) {
-      setAllModuleComplete(true);
+      if (restart) {
+        setReviewing(true);
+      } else {
+        setAllModuleComplete(true);
+      }
       setIndex(0);
     } else {
-      setIndex(firstIncomplete);
+      setIndex(restart ? 0 : firstIncomplete);
     }
     setIndexResolved(true);
   // route.subLessons is intentionally excluded: it's a new array reference every render
   // but only has new *content* when route.moduleSlug changes (same navigation event).
   // Including it would re-run the effect every render due to array-reference instability.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route.moduleSlug]);
+  }, [route.moduleSlug, searchParams]);
 
   function handleStart() {
     setStarted(true);
