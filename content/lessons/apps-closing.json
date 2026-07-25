@@ -5,10 +5,17 @@
   "order": 41,
   "title": "Closing apps",
   "videoUrl": "",
-  "drDigitalIntro": "Warning: Don't press Ctrl+Q right now \u2014 on a real computer that closes your whole browser!\n\u2022 In this lesson, click the red X in the playground to close an app safely.\n\u2022 To just move a window aside, click the yellow minus button instead.",
+  "drDigitalIntro": "To close an app window, click the red X button in the corner of the window.\n\u2022 This removes the window from your screen.\n\u2022 Warning: on a real computer, Ctrl+Q or Cmd+Q quits the app immediately. Do not press those keys right now.\n\u2022 The yellow minus button is different \u2014 it minimizes the window (hides it without closing it).\n\u2022 Let's practice: close the window below using the red X.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-desktop",
+    "goal": "Close an app window",
+    "steps": [
+      {
+        "say": "Click the red X button to close this window.",
+        "action": "close"
+      }
+    ]
   },
-  "drDigitalSuccess": "Red X to close, yellow minus to tuck it away \u2014 you've got it!",
-  "drDigitalHint": "Open an app in the playground and try the red X and the minus button, then click Continue."
+  "drDigitalSuccess": "Perfect \u2014 red X to close the window. You've got it!",
+  "drDigitalHint": "Look for the red X button in the top corner of the window and click it."
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import WindowControls from "./WindowControls";
 import { NoteIcon } from "./Icons";
@@ -11,12 +12,20 @@ import { CELEBRATION_MS } from "./SimulatorFrame";
  * each with a pulsing yellow highlight on exactly what to click or drag next.
  */
 
-type StepAction = "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close";
+type StepAction = "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app";
 
 export interface DesktopStep {
   say: string;
   action: StepAction;
+  target?: string;
 }
+
+const DOCK_APPS = [
+  { id: "notes",    label: "Notes",    icon: "/playgrounds/dock-notes.png" },
+  { id: "browser",  label: "Browser",  icon: "/playgrounds/dock-browser.png" },
+  { id: "files",    label: "Files",    icon: "/playgrounds/dock-files.png" },
+  { id: "messages", label: "Messages", icon: "/playgrounds/dock-messages.png" },
+] as const;
 
 interface GuidedDesktopTaskProps {
   goal: string;
@@ -36,8 +45,14 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const [pos, setPos] = useState({ x: INIT.x, y: INIT.y });
   const [size, setSize] = useState({ w: INIT.w, h: INIT.h });
+  // window starts hidden if first step is open-app, otherwise visible
   const [minimized, setMinimized] = useState(false);
   const [maximized, setMaximized] = useState(false);
+  const [windowVisible, setWindowVisible] = useState(() => steps[0]?.action !== "open-app");
+  const firstOpenStep = steps.find((s) => s.action === "open-app");
+  const defaultAppId = firstOpenStep?.target ?? (steps[0]?.action !== "open-app" ? "notes" : "notes");
+  const [openedAppId, setOpenedAppId] = useState(defaultAppId);
+  const openedAppLabel = DOCK_APPS.find((a) => a.id === openedAppId)?.label ?? "Notes";
 
   // Always-fresh refs so global event handlers can read current values
   const stepIdxRef = useRef(stepIdx);
@@ -165,14 +180,24 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   }
 
   function onClose() {
-    if (step?.action !== "close") return;
+    if (step?.action !== "close" && step?.action !== "close-app") return;
+    setWindowVisible(false);
+    advance();
+  }
+
+  function onDockClick(appId: string) {
+    if (step?.action !== "open-app") return;
+    const targetId = step.target ?? "notes";
+    if (appId !== targetId) return;
+    setOpenedAppId(appId);
+    setWindowVisible(true);
     advance();
   }
 
   const hlControl: "minimize" | "maximize" | "close" | null =
     step?.action === "minimize" ? "minimize" :
     step?.action === "maximize" || step?.action === "restore-max" ? "maximize" :
-    step?.action === "close" ? "close" :
+    step?.action === "close" || step?.action === "close-app" ? "close" :
     null;
 
   const pct = (Math.min(stepIdx, steps.length) / steps.length) * 100;
@@ -211,7 +236,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
         />
 
         {/* Window */}
-        {!minimized && !isClosed && (
+        {windowVisible && !minimized && !isClosed && (
           <div
             className="absolute shadow-2xl border-2 border-gray-700 rounded-lg overflow-hidden flex flex-col bg-white"
             style={maximized ? { inset: 4 } : { left: pos.x, top: pos.y, width: size.w, height: size.h }}
@@ -225,7 +250,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
               }`}
               onMouseDown={onTitleDown}
             >
-              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)] inline-flex items-center gap-1"><NoteIcon size={16} /> Notes</span>
+              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)] inline-flex items-center gap-1"><NoteIcon size={16} /> {openedAppLabel}</span>
               <div className="flex-1" />
               <WindowControls
                 onMinimize={onMinimize}
@@ -264,20 +289,31 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
         )}
       </div>
 
-      {/* Taskbar */}
-      <div className="shrink-0 h-11 bg-gray-900 border-t border-gray-700 flex items-center px-3 gap-2">
-        {minimized && (
-          <button
-            onClick={onRestore}
-            className={`flex items-center gap-2 px-3 py-1 rounded text-white text-sm transition-colors ${
-              step?.action === "restore"
-                ? "bg-blue-600 ring-4 ring-yellow-400 animate-pulse"
-                : "bg-gray-700 hover:bg-gray-600"
-            }`}
-          >
-            <NoteIcon size={16} /> Notes
-          </button>
-        )}
+      {/* Dock */}
+      <div className="shrink-0 bg-white/10 border-t border-white/20 flex items-center justify-center gap-3 py-2 px-4 backdrop-blur-sm" style={{ background: "rgba(30,40,55,0.85)" }}>
+        {DOCK_APPS.map((app) => {
+          const isTarget = step?.action === "open-app" && step.target === app.id;
+          const isMinimizedTarget = minimized && step?.action === "restore";
+          return (
+            <div key={app.id} className="flex flex-col items-center gap-0.5">
+              <button
+                onClick={() => {
+                  if (minimized && app.id === openedAppId && step?.action === "restore") { onRestore(); return; }
+                  onDockClick(app.id);
+                }}
+                className={`relative w-12 h-12 rounded-xl overflow-hidden transition-transform hover:scale-110 ${
+                  isTarget || (isMinimizedTarget && app.id === openedAppId) ? "ring-4 ring-yellow-400 animate-pulse" : ""
+                }`}
+              >
+                <Image src={app.icon} alt={app.label} fill sizes="48px" className="object-contain" />
+                {minimized && app.id === openedAppId && (
+                  <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-400" />
+                )}
+              </button>
+              <span className="text-[9px] font-medium text-gray-300 leading-none select-none">{app.label}</span>
+            </div>
+          );
+        })}
       </div>
 
       {/* Celebration overlay — brief */}

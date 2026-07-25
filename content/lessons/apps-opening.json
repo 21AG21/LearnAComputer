@@ -5,11 +5,12 @@
   "order": 40,
   "title": "Opening apps",
   "videoUrl": "",
-  "drDigitalIntro": "To open an app, click its icon in the dock.\n\u2022 If it's not in the dock, search your computer's files for it.\n\u2022 Let's practice: open all four apps in the dock.",
+  "drDigitalIntro": "To open an app, click its icon in the dock at the bottom of the screen.\n\u2022 Each icon represents a different app \u2014 click it once to open it.\n\u2022 A window will appear on the desktop.\n\u2022 If an app is not in the dock, you can search your computer's files for it.\n\u2022 Let's practice: open any four apps from the dock.",
   "playgroundTask": {
     "type": "open-all-apps",
-    "instructions": "Click each icon in the dock to open all four apps"
+    "instructions": "Open any 4 apps from the dock \u2014 pick whichever ones you like!",
+    "targetCount": 4
   },
-  "drDigitalSuccess": "That's how you open apps \u2014 click and go! You opened every one.",
-  "drDigitalHint": "Click an icon at the bottom of the desktop to open that app, then close it with the red X and open the next one, until you've opened all four."
+  "drDigitalSuccess": "That's how you open apps \u2014 click and go! You opened four of them.",
+  "drDigitalHint": "Click any icon at the bottom of the desktop to open that app. Try clicking four different icons."
 }

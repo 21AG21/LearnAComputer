@@ -5,12 +5,11 @@ import FakeDesktop, { DesktopAppId } from "./FakeDesktop";
 
 interface OpenAllAppsTaskProps {
   instructions: string;
+  targetCount?: number;
   onResult: (success: boolean) => void;
 }
 
-const ALL_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail"];
-
-export default function OpenAllAppsTask({ instructions, onResult }: OpenAllAppsTaskProps) {
+export default function OpenAllAppsTask({ instructions, targetCount = 4, onResult }: OpenAllAppsTaskProps) {
   const [opened, setOpened] = useState<Set<DesktopAppId>>(new Set());
   const finished = useRef(false);
 
@@ -19,7 +18,7 @@ export default function OpenAllAppsTask({ instructions, onResult }: OpenAllAppsT
     const next = new Set(opened);
     next.add(app);
     setOpened(next);
-    if (!finished.current && ALL_APPS.every((a) => next.has(a))) {
+    if (!finished.current && next.size >= targetCount) {
       finished.current = true;
       onResult(true);
     }
@@ -29,7 +28,9 @@ export default function OpenAllAppsTask({ instructions, onResult }: OpenAllAppsT
     <div className="h-full w-full flex flex-col">
       <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
         <span aria-live="polite">
-          {instructions} ({opened.size} / {ALL_APPS.length} opened)
+          {opened.size < targetCount
+            ? `Open any ${targetCount} apps — ${opened.size} of ${targetCount} opened`
+            : instructions}
         </span>
       </div>
       <div className="flex-1 min-h-0 relative">

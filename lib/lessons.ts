@@ -25,7 +25,7 @@ export type PlaygroundTask =
       avatarSrc?: string;
     }
   | { type: "match-parts"; instructions: string }
-  | { type: "open-all-apps"; instructions: string }
+  | { type: "open-all-apps"; instructions: string; targetCount?: number }
   | {
       type: "edit-text";
       instructions: string;
@@ -256,7 +256,8 @@ export type PlaygroundTask =
       goal: string;
       steps: Array<{
         say: string;
-        action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close";
+        action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app";
+        target?: string;
       }>;
     }
   | { type: "keyboard-nav-game" };

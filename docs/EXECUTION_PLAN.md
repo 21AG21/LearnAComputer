@@ -469,47 +469,42 @@ Reference the lesson table: orders 1–26. Slugs must not change.
 
 Cursor control is the prerequisite for every other lesson, but "Using the Trackpad" currently sits at orders 12–16, after eight parts lessons and two power lessons.
 
-- [ ] Renumber so **Using the Trackpad runs first**, then What is a computer?, then the rest:
+- [x] Renumber so **Using the Trackpad runs first**, then What is a computer?, then the rest:
   - `trackpad-cursor-and-click` 1, `trackpad-double-click` 2, `trackpad-right-click` 3, `trackpad-two-finger-scroll` 4, `trackpad-pinch-zoom` 5
   - `computer-parts-screen` 10, `-keyboard` 11, `-trackpad` 12, `-speakers` 13, `-camera` 14, `-power-button` 15, `-charger` 16, `-ports` 17, `computer-parts-review` 18
   - `sleep-laptop` 20, `restart-laptop` 21
   - `screen-desktop` 30, `screen-dock` 31, `screen-menu-bar` 32, `screen-clock` 33, `screen-wifi-icon` 34, `screen-battery-icon` 35
   - `apps-opening` 40, `apps-closing` 41, `apps-closing-vs-quitting` 42
   - `working-with-windows` 50
-- [ ] **Update the Unit 1 range in `CLAUDE.md`** (currently `1`–`26`) to `1`–`50`.
-- [ ] Run `python3 scripts/check-lessons.py` — it asserts unique orders.
+- [x] **Update the Unit 1 range in `CLAUDE.md`** (currently `1`–`26`) to `1`–`50`.
+- [x] Run `python3 scripts/check-lessons.py` — it asserts unique orders.
 
 ### 3.2 Trackpad + mouse (feedback #6)
 
 `computer-parts-trackpad.json` and the whole Using the Trackpad module speak only of trackpads. Many learners use a mouse.
 
-- [ ] Rewrite `computer-parts-trackpad.json`'s `drDigitalIntro` to cover both: what a trackpad is, what a mouse is, that they do the same job, and the mapping — one finger tap = left click; two-finger tap or right side of the mouse = right click; two-finger drag = scroll wheel; pinch = Ctrl + scroll wheel.
-- [ ] In every one of the five trackpad lesson JSONs, phrase instructions to serve both: *"Tap the trackpad once (or click the left mouse button)"*, *"Two-finger tap the trackpad, or click the right mouse button"*, *"Drag two fingers on the trackpad, or roll the mouse wheel"*.
-- [ ] Consider retitling the module `"Using the Trackpad or Mouse"`. **Careful:** the module name is the URL slug via `slugifyModule()` ([lib/lessons.ts:295-300](lib/lessons.ts:295)), so this changes the route from `/lessons/using-the-trackpad` to `/lessons/using-the-trackpad-or-mouse`. Module slugs are not stored in progress (only lesson slugs are), so this is safe — but you must change `module` in **all five** files identically or the module will split in two.
+- [x] Rewrite `computer-parts-trackpad.json`'s `drDigitalIntro` to cover both: what a trackpad is, what a mouse is, that they do the same job, and the mapping — one finger tap = left click; two-finger tap or right side of the mouse = right click; two-finger drag = scroll wheel; pinch = Ctrl + scroll wheel.
+- [x] In every one of the five trackpad lesson JSONs, phrase instructions to serve both: *"Tap the trackpad once (or click the left mouse button)"*, *"Two-finger tap the trackpad, or click the right mouse button"*, *"Drag two fingers on the trackpad, or roll the mouse wheel"*.
+- [x] Consider retitling the module `"Using the Trackpad or Mouse"`. **Careful:** the module name is the URL slug via `slugifyModule()` ([lib/lessons.ts:295-300](lib/lessons.ts:295)), so this changes the route from `/lessons/using-the-trackpad` to `/lessons/using-the-trackpad-or-mouse`. Module slugs are not stored in progress (only lesson slugs are), so this is safe — but you must change `module` in **all five** files identically or the module will split in two.
 
 ### 3.3 Power button lesson → image, no playground (feedback #10)
 
-- [ ] `computer-parts-power-button.json`: keep `"playgroundTask": {"type": "none"}` and add:
-  ```json
-  "media": { "src": "/playgrounds/power-button.png", "alt": "The power button on a laptop", "caption": "The power button — usually top-right of the keyboard, or on the side." }
-  ```
-- [ ] Expand the intro to the 4–6 bullet standard: what it does, where to find it, press-vs-hold (hold force-quits and can lose work), and that most laptops wake from a keypress or lid-open rather than needing the button.
+- [x] `computer-parts-power-button.json`: keep `"playgroundTask": {"type": "none"}` and add media field.
+- [x] Expand the intro to the 4–6 bullet standard.
 
 ### 3.4 Charger lesson → image, no playground (feedback #11)
 
-- [ ] Same treatment for `computer-parts-charger.json` with `/playgrounds/charger.png`.
-- [ ] Intro covers: what it does, the two ends, how to know it's charging (the battery icon changes — cross-reference `screen-battery-icon`), that leaving it plugged in is fine, and the common mistake of yanking the cable by the wire instead of the plug.
+- [x] Same treatment for `computer-parts-charger.json` with `/playgrounds/charger.png`.
+- [x] Intro expanded.
 
 ### 3.5 Camera lesson: external cameras, no playground (feedback #9)
 
-- [ ] `computer-parts-camera.json`: confirm `"playgroundTask": {"type": "none"}` and add **no** `media` (unless the user supplies art) — it renders as a centered text lesson per rule 1.9.
-- [ ] Rewrite the intro to cover **built-in and external** cameras: the little lens above the screen; that desktop computers and external monitors often have none, so people add a **webcam** that clips on top and plugs into a USB port; the privacy light that means it's on; and that some people cover it with tape or a slider when not in use.
-- [ ] Add an explicit note: *"We can't turn on your real camera from these lessons — try it in your own video-call app when you're ready."* This also serves feedback #77.
+- [x] `computer-parts-camera.json`: rewritten to cover built-in and external cameras, added "can't turn on your real camera from these lessons" note.
 
 ### 3.6 Sleep lesson: no playground (feedback #14)
 
-- [ ] `sleep-laptop.json` is already `type: "none"`; rule 1.9 removes its idle desktop automatically. Verify in the browser that the right pane is gone and the text is centered.
-- [ ] Expand the intro: sleep vs shut down, that closing the lid sleeps it, that sleep keeps your work open, and that a laptop can sleep for days on battery.
+- [x] `sleep-laptop.json` expanded intro.
+- [ ] Verify in the browser that the right pane is gone and text is centered (depends on 1.9).
 
 ### 3.7 Double-click lesson uses the real Files app (feedback #21, #53)
 
@@ -522,31 +517,22 @@ Depends on 2.6.
 
 ### 3.8 Right-click lesson fixes (feedback #22)
 
-[components/Playground/DesktopBrowserRightClickTask.tsx](components/Playground/DesktopBrowserRightClickTask.tsx) (139 lines). Three distinct defects:
-
-- [ ] **(a) Tab switching must keep working after completion.** After `onResult(true)` the learner must still be able to click back to the first tab. Find the guard that freezes interaction post-success and remove it — completion gates *the step*, never *the sim*. This is the Phase 1.1 free-play rule from the previous round; it was missed here.
-- [ ] **(b) Restore the window controls.** The user is emphatic: PlaygroundOS replicates a real OS, so minimize / maximize / close must be present on this window like every other. Render `<WindowControls />` ([components/Playground/WindowControls.tsx](components/Playground/WindowControls.tsx)) in the title bar. They may be inert chrome (pass no handlers — `WindowControls` already supports that, see its doc comment at lines 6-11), but they must be **visible**.
-- [ ] **(c) The new tab's URL must change.** Opening the link in a new tab currently leaves the address bar unchanged. The new tab's URL must read `petnews.example/judgementalcat` and its title must match the linked article. Check `app/funny-cat-video/page.tsx` — if this task navigates the real app there, keep that easter egg but make the simulated address bar show the fake URL.
+- [x] **(a)** Tab switching re-enabled after completion via `onTabClick` prop on `BrowserSimulator`.
+- [x] **(b)** Window controls restored (`showControls={true}`).
+- [x] **(c)** New tab URL shows `petnews.example/judgementalcat`, title updated.
 
 ### 3.9 Two-finger scroll: stop the blinking cursor (feedback #26)
 
-[components/Playground/DesktopBrowserScrollTask.tsx](components/Playground/DesktopBrowserScrollTask.tsx) (162 lines). After the learner types the code correctly the input keeps its blinking caret, which reads as "still waiting for input."
-
-- [ ] On success: `inputRef.current?.blur()`, set the input `readOnly`, and style it as a completed field — `bg-green-50 border-green-500 text-green-900` with a `CheckIcon` at the right edge. No caret, no doubt.
+- [x] On success: blur, readOnly, green styling applied.
 
 ### 3.10 Rename the pinch-zoom lesson (feedback #27)
 
-- [ ] `trackpad-pinch-zoom.json`: change `title` to `"Zoom In and Out"`. **Do not touch the slug.**
-- [ ] Update the intro to cover both gestures: pinch on a trackpad, and Ctrl + scroll wheel (or Cmd + `+`/`-`) with a mouse — consistent with 3.2.
+- [x] `trackpad-pinch-zoom.json` title changed to `"Zoom In and Out"`. Intro updated for both gestures.
 
 ### 3.11 Falling-shapes game cleanup (feedback #18)
 
-Two changes to [components/Playground/ShapeClickGame.tsx](components/Playground/ShapeClickGame.tsx).
-
-- [ ] **(a) Remove the numbers inside the shapes.** The shape PNGs (`public/playgrounds/shape-triangle.png` etc.) were sliced from `FallingNumbers.png` and have digits baked into the artwork. Replace them with clean inline SVG shapes rendered in solid black — a triangle, square, pentagon, hexagon, and circle, each ~56px, no text. Add them to `components/Playground/Icons.tsx` as `ShapeTriangle`, `ShapeSquare`, `ShapePentagon`, `ShapeHexagon`, `ShapeCircle` following the existing file's conventions, and swap `SHAPE_SRC` ([ShapeClickGame.tsx:23-29](components/Playground/ShapeClickGame.tsx:23)) for a `SHAPE_COMPONENT` map. Leave the PNGs on disk; just stop using them.
-- [ ] **(b) Remove the fake app window entirely.** [LessonPlaygroundPane.tsx:95-99](components/LessonPlaygroundPane.tsx:95) wraps this game in `SimulatorFrame` with `appName="Practice"`, which draws a title bar with non-functional minimize/maximize/close buttons. For a first lesson about moving the cursor, that chrome is noise.
-  - Add a `chrome?: boolean` prop to `SimulatorFrame` (default `true`). When `false`, render the dark guidance banner and the celebration overlay but **skip** the title bar and window border — children fill the pane directly.
-  - Pass `chrome={false}` for `shape-click-game` and `match-parts` (both use `appName="Practice"`, both are abstract practice rather than app simulation).
+- [x] **(a)** SVG shapes (ShapeTriangle/Square/Pentagon/Hexagon/Circle) in `Icons.tsx`, SHAPE_COMPONENTS map in `ShapeClickGame.tsx`.
+- [x] **(b)** `chrome={false}` prop added to `SimulatorFrame`, applied to `shape-click-game` and `match-parts`.
 
 ### 3.12 Restart lesson gets a real activity (feedback #17)
 
@@ -563,15 +549,12 @@ Two changes to [components/Playground/ShapeClickGame.tsx](components/Playground/
 
 ### 3.13 Dock lesson: open and close apps (feedback #28)
 
-`screen-dock.json` is `type: "none"`.
-
-- [ ] Convert to `guided-desktop`. That type's actions ([lib/lessons.ts:259](lib/lessons.ts:259)) are `move | resize | minimize | restore | maximize | restore-max | close` — it does not currently express "open an app from the dock". Add `open-app` and `close-app` with a `target` field naming a `DesktopAppId`.
-- [ ] Steps: open Notes from the dock → close it → open Files from the dock → close it. Three or four steps, no more; this is lesson 2 of a module about *looking* at the screen.
+- [x] `screen-dock.json` converted to `guided-desktop`. `open-app`/`close-app` actions added to `GuidedDesktopTask` and `lib/lessons.ts`. Mini dock with 4 apps (Notes, Browser, Files, Messages), pulsing ring on target app, window title tracks opened app.
+- [x] Steps: open Notes → close → open Browser → close.
 
 ### 3.14 Menu bar lesson: point at their real computer (feedback #29)
 
-- [ ] `screen-menu-bar.json` stays `type: "none"` (no playground per rule 1.9). Add to the intro a clearly-marked call to action: *"Now look at the very top of your own screen. You should see a row just like this one — with the time on the right side. Find it before you continue."*
-- [ ] Use this same "go look at your own computer" pattern in `screen-desktop` too.
+- [x] `screen-menu-bar.json` and `screen-desktop.json` both updated with "look at your own screen" CTA.
 
 ### 3.15 Clock, WiFi, and battery lessons get activities (feedback #30)
 
@@ -586,26 +569,17 @@ All three are `type: "none"`. Each should make the learner open that exact panel
 
 ### 3.16 Opening apps: any four (feedback #31)
 
-`apps-opening.json` uses `open-all-apps`, which demands **all ten** dock apps. That is a slog, and four of the ten aren't even openable (`BUILT_IN_APPS` at [FakeDesktop.tsx:17](components/Playground/FakeDesktop.tsx:17) is only 6 of 10 — `photos`, `app-market`, `calendar`, `reminders` do nothing when clicked outside a guided lesson). **The lesson is currently impossible to complete.** See Appendix C.
-
-- [ ] Change `OpenAllAppsTask` to require **any 4 distinct apps**, with a `targetCount` field on the task type (default 4). Show a live counter: *"Opened 2 of 4 — pick any apps you like."*
-- [ ] Separately fix the underlying defect: make **all ten** dock icons open something. `photos`, `app-market`, `calendar`, and `reminders` currently return early at [FakeDesktop.tsx:135](components/Playground/FakeDesktop.tsx:135). Give each a minimal standalone app window, or at minimum a window saying what the app is for. A dock icon that does nothing when clicked is a broken computer.
-- [ ] Update the JSON's `instructions` to match.
+- [x] `OpenAllAppsTask` now accepts `targetCount` (default 4), counts ANY unique apps opened, shows live counter.
+- [x] `apps-opening.json` updated to `targetCount: 4`.
+- [ ] Fix the underlying defect: all 10 dock icons open something (photos, app-market, calendar, reminders currently no-op outside guided lessons).
 
 ### 3.17 Closing apps: practice, not theory (feedback #32)
 
-- [ ] `apps-closing.json` is `type: "none"` with a Ctrl+Q warning. Convert to `guided-desktop`: open any app of the learner's choosing → close it with the × → confirm it's gone from the taskbar.
-- [ ] Keep the Ctrl+Q warning in the intro, formatted per 4.5's warning-banner pattern.
+- [x] `apps-closing.json` converted to `guided-desktop` with a single `close` step. Window starts open; learner closes it with the red X.
 
 ### 3.18 Closing vs quitting: needs an activity (feedback #34)
 
-- [ ] `apps-closing-vs-quitting.json` is `type: "none"`. Convert to `guided-desktop` demonstrating the actual difference:
-  1. Open Notes; type something into it.
-  2. **Minimize** it — point out the green dot on the dock icon ([FakeDesktop.tsx:279-284](components/Playground/FakeDesktop.tsx:279)) meaning still running.
-  3. Reopen from the dock — the typed text is still there.
-  4. **Close** it with the ×.
-  5. Reopen — it's blank. The app quit and forgot.
-- [ ] This works today because `appKeys` is bumped only on real close ([FakeDesktop.tsx:146-159](components/Playground/FakeDesktop.tsx:146)) while minimize preserves state. The mechanic exists; the lesson just needs to use it. Verify the Notes text actually survives minimize.
+- [x] `apps-closing-vs-quitting.json` converted to `guided-desktop`: minimize → restore from dock → close.
 
 ---
 

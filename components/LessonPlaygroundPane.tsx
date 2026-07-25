@@ -123,7 +123,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               <MatchPartsTask onResult={wrappedOnResult} />
             </SimulatorFrame>
           )}
-          {task.type === "open-all-apps" && <OpenAllAppsTask instructions={task.instructions} onResult={onResult} />}
+          {task.type === "open-all-apps" && <OpenAllAppsTask instructions={task.instructions} targetCount={task.targetCount} onResult={onResult} />}
           {task.type === "edit-text" && (
             <SimulatorFrame appName="Notes" appIcon={<NoteIcon size={18} />} instruction={task.instructions} done={completed} goal="Text editing complete">
               <TextEditorTask

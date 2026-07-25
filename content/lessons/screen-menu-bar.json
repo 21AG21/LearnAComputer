@@ -5,7 +5,7 @@
   "order": 32,
   "title": "Menu Bar",
   "videoUrl": "",
-  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n\u2022 It lists options and commands.\n\u2022 The choices change depending on the app you're using.",
+  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n\u2022 It always shows the time on the right side, plus icons for WiFi and battery.\n\u2022 On the left it shows the name of the app you are currently using.\n\u2022 Click any item in the menu bar to see its options.\n\u2022 The choices change depending on which app is open.\n\u2022 Now look at the very top of your own screen. You should see a row just like this one, with the time on the right side. Find it before you continue.",
   "playgroundTask": {
     "type": "none"
   },

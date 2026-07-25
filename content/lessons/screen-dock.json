@@ -5,10 +5,31 @@
   "order": 31,
   "title": "Dock",
   "videoUrl": "",
-  "drDigitalIntro": "The dock is the bar of icons, usually at the bottom of the screen.\n\u2022 It holds your favorite and open apps.\n\u2022 Click an icon to open that app quickly.",
+  "drDigitalIntro": "The dock is the row of icons at the bottom of the screen.\n\u2022 Each icon is a shortcut to open an app.\n\u2022 Click an icon once to open that app.\n\u2022 When an app is open, a small dot appears below its icon.\n\u2022 You can also minimize a window here to tuck it away without closing it.\n\u2022 Let's practice: open Notes from the dock, then close it.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-desktop",
+    "goal": "Open and close an app from the dock",
+    "steps": [
+      {
+        "say": "Click Notes in the dock to open it.",
+        "action": "open-app",
+        "target": "notes"
+      },
+      {
+        "say": "Close it with the red X button.",
+        "action": "close-app"
+      },
+      {
+        "say": "Now click Browser in the dock.",
+        "action": "open-app",
+        "target": "browser"
+      },
+      {
+        "say": "Close it with the red X button.",
+        "action": "close-app"
+      }
+    ]
   },
-  "drDigitalSuccess": "That's the dock \u2014 your app shortcut shelf!",
-  "drDigitalHint": "Look at the icons at the bottom of the playground desktop, then click Continue whenever you're ready."
+  "drDigitalSuccess": "You opened and closed apps from the dock \u2014 you're getting the hang of it!",
+  "drDigitalHint": "Find the dock at the bottom of the playground. Click a glowing icon to open the app, then close it with the X at the top of the window."
 }
