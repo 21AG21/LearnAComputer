@@ -147,7 +147,7 @@ Each file defines one sub-lesson:
 | `guided-security` | GuidedSecurityTask | Guided security: passwords, 2FA, phishing, passkeys, password reset |
 | `guided-troubleshooting` | GuidedTroubleshootingTask | Guided troubleshooting: frozen apps, WiFi, error codes, support |
 | `guided-calendar` | GuidedCalendarTask | Guided calendar + reminders: create events, set times, reminders |
-| `guided-desktop` | GuidedDesktopTask | Guided window management: move, resize, minimize, maximize, close |
+| `guided-desktop` | GuidedDesktopTask | Guided window management (move, resize, minimize, maximize, close) + dock app open/close + menu-bar clock/WiFi/battery panels |
 | `keyboard-nav-game` | KeyboardNavTask | Keyboard navigation game (Tab, Enter, arrow keys) |
 
 **Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). **NEVER use `multiple-choice`** — quizzes test recognition, not skill. All existing multiple-choice lessons have been converted to guided task types. `guided-files` is the reference pattern for a guided simulator.
@@ -377,7 +377,9 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
 }
 ```
 
-`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`.
+`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
+
+The `error-restart` scenario: on mount a system error dialog appears ("Something went wrong"); learner clicks OK to dismiss → clicks Settings in the dock → clicks Restart button → confirms in a dialog → 1.5s black-screen animation → success desktop. Steps use: `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
 
 #### `guided-calendar` schema
 
@@ -407,7 +409,7 @@ Calendar and reminders simulator. Use `launchApp` to control which view opens fi
 
 #### `guided-desktop` schema
 
-Window management: the learner practices moving, resizing, minimizing, and closing windows on the desktop.
+Window management and desktop exploration. The learner practices moving, resizing, minimizing, and closing windows, opening apps from the dock, and clicking menu-bar panels.
 
 ```json
 "playgroundTask": {
@@ -420,12 +422,20 @@ Window management: the learner practices moving, resizing, minimizing, and closi
     { "say": "Click the app in the dock to restore.", "action": "restore" },
     { "say": "Click the expand button to maximize.", "action": "maximize" },
     { "say": "Restore it from maximized.", "action": "restore-max" },
-    { "say": "Close the window.", "action": "close" }
+    { "say": "Close the window.", "action": "close" },
+    { "say": "Click Notes in the dock to open it.", "action": "open-app", "target": "notes" },
+    { "say": "Close it with the red X button.", "action": "close-app" },
+    { "say": "Click the time in the top-right corner of the menu bar.", "action": "open-clock" },
+    { "say": "Click the WiFi icon in the menu bar.", "action": "open-wifi-panel" },
+    { "say": "Click the battery icon in the menu bar.", "action": "open-battery-panel" },
+    { "say": "Read today's date, then close the panel.", "action": "close-panel" }
   ]
 }
 ```
 
-Actions: `move`, `resize`, `minimize`, `restore`, `maximize`, `restore-max`, `close`.
+Actions: `move`, `resize`, `minimize`, `restore`, `maximize`, `restore-max`, `close`, `open-app` (`target`: dock app id — notes/browser/files/mail/settings/photos/app-market/calendar/reminders/messages), `close-app` (closes the open window), `open-clock` (opens the clock/date panel), `open-wifi-panel` (opens the WiFi panel), `open-battery-panel` (opens the battery percentage panel), `close-panel` (closes whichever menu-bar panel is open).
+
+The menu bar shows a live clock (updates every 30s), battery percentage (Battery API with 72% fallback), and WiFi icon. Lessons using `open-app` or any `open-*` action start with no window visible (the learner opens everything themselves). Steps using `open-clock`/`open-wifi-panel`/`open-battery-panel` show a pulsing ring on the matching icon; `close-panel` shows a pulsing ring on the panel's close button.
 
 ### Progress
 
