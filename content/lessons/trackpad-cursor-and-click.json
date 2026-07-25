@@ -1,16 +1,16 @@
 {
   "slug": "trackpad-cursor-and-click",
   "unit": "Unit 1: Meet Your Laptop",
-  "module": "Using the Trackpad",
-  "order": 12,
+  "module": "Using the Trackpad or Mouse",
+  "order": 1,
   "title": "Moving the cursor and single click",
   "videoUrl": "",
-  "drDigitalIntro": "Let's practice two skills: moving the cursor and clicking.\n• Slide one fingertip on the trackpad to move the cursor.\n• Press down until you feel a soft click to select something.\n• In the game, move to a falling shape and click it before it lands!",
+  "drDigitalIntro": "Let's practice two skills: moving the cursor and clicking.\n\u2022 Slide one fingertip on the trackpad to move the cursor \u2014 or move your mouse.\n\u2022 Tap the trackpad once (or click the left mouse button) to select something.\n\u2022 Press down until you feel a soft click if you want a firmer click.\n\u2022 In the game, move the cursor to a falling shape and click it.",
   "playgroundTask": {
     "type": "shape-click-game",
     "instructions": "Click each falling shape before it reaches the bottom. New ones keep dropping!",
     "targetScore": 10
   },
   "drDigitalSuccess": "Fantastic clicking! You've got moving the cursor and single-clicking down.",
-  "drDigitalHint": "Move your cursor right over a falling shape and click once. Don't worry if you miss one — more keep coming."
+  "drDigitalHint": "Move your finger on the trackpad (or move your mouse) to steer the cursor, then tap (or left-click) to score. Keep clicking until you reach the target!"
 }

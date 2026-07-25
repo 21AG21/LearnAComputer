@@ -93,7 +93,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             </SimulatorFrame>
           )}
           {task.type === "shape-click-game" && (
-            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="Target score reached">
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="Target score reached" chrome={false}>
               <ShapeClickGame targetScore={task.targetScore} onResult={wrappedOnResult} />
             </SimulatorFrame>
           )}
@@ -119,7 +119,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             />
           )}
           {task.type === "match-parts" && (
-            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched">
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched" chrome={false}>
               <MatchPartsTask onResult={wrappedOnResult} />
             </SimulatorFrame>
           )}

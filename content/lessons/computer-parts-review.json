@@ -2,14 +2,14 @@
   "slug": "computer-parts-review",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "What is a computer?",
-  "order": 9,
+  "order": 18,
   "title": "Match the parts",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see how much you remember!\n• Match each part of the laptop to its name.",
+  "drDigitalIntro": "Let's see how much you remember!\n\u2022 Match each part of the laptop to its name.",
   "playgroundTask": {
     "type": "match-parts",
     "instructions": "Click a dot on the laptop, then click the name it belongs to."
   },
-  "drDigitalSuccess": "Wonderful — you know your laptop inside and out!",
+  "drDigitalSuccess": "Wonderful \u2014 you know your laptop inside and out!",
   "drDigitalHint": "Click a dot on the laptop first, then click the name you think it is. Green means you got it!"
 }

@@ -2,14 +2,14 @@
   "slug": "apps-opening",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Opening Apps",
-  "order": 23,
+  "order": 40,
   "title": "Opening apps",
   "videoUrl": "",
-  "drDigitalIntro": "To open an app, click its icon in the dock.\n• If it's not in the dock, search your computer's files for it.\n• Let's practice: open all four apps in the dock.",
+  "drDigitalIntro": "To open an app, click its icon in the dock.\n\u2022 If it's not in the dock, search your computer's files for it.\n\u2022 Let's practice: open all four apps in the dock.",
   "playgroundTask": {
     "type": "open-all-apps",
     "instructions": "Click each icon in the dock to open all four apps"
   },
-  "drDigitalSuccess": "That's how you open apps — click and go! You opened every one.",
+  "drDigitalSuccess": "That's how you open apps \u2014 click and go! You opened every one.",
   "drDigitalHint": "Click an icon at the bottom of the desktop to open that app, then close it with the red X and open the next one, until you've opened all four."
 }

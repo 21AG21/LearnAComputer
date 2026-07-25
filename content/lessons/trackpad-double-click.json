@@ -1,11 +1,11 @@
 {
   "slug": "trackpad-double-click",
   "unit": "Unit 1: Meet Your Laptop",
-  "module": "Using the Trackpad",
-  "order": 13,
+  "module": "Using the Trackpad or Mouse",
+  "order": 2,
   "title": "Double click",
   "videoUrl": "",
-  "drDigitalIntro": "A double click is two quick clicks in a row with one finger.\n• It's how you open files and folders.\n• Try it below: double-click GroceryList.txt and Budget.xlsx to open them.",
+  "drDigitalIntro": "A double click is two quick clicks in a row.\n\u2022 Tap the trackpad twice quickly with one finger \u2014 or click the left mouse button twice fast.\n\u2022 The two taps must happen fast, like a quick knock-knock.\n\u2022 It is how you open files and folders.\n\u2022 Try it: double-click the files below to open them.",
   "playgroundTask": {
     "type": "file-explorer-open",
     "instructions": "Double-click to open \"GroceryList.txt\" and \"Budget.xlsx\".",
@@ -15,5 +15,5 @@
     ]
   },
   "drDigitalSuccess": "Perfect double-clicking! You opened exactly the right files.",
-  "drDigitalHint": "Click twice quickly, right on top of the file name — that's a double click. Try it on GroceryList.txt and Budget.xlsx."
+  "drDigitalHint": "Tap twice quickly \u2014 or left-click twice fast. If a single file name gets highlighted but does not open, try again a little faster."
 }

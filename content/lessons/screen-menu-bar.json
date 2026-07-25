@@ -2,13 +2,13 @@
   "slug": "screen-menu-bar",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Understanding the Screen",
-  "order": 19,
+  "order": 32,
   "title": "Menu Bar",
   "videoUrl": "",
-  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n• It lists options and commands.\n• The choices change depending on the app you're using.",
+  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n\u2022 It lists options and commands.\n\u2022 The choices change depending on the app you're using.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's the menu bar — always up top when you need more options.",
+  "drDigitalSuccess": "That's the menu bar \u2014 always up top when you need more options.",
   "drDigitalHint": "Glance at the very top of your screen, then click Continue whenever you're ready."
 }

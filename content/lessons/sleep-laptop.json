@@ -2,10 +2,10 @@
   "slug": "sleep-laptop",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Starting and Stopping",
-  "order": 10,
+  "order": 20,
   "title": "Putting the laptop to sleep",
   "videoUrl": "",
-  "drDigitalIntro": "Most of the time, put your laptop to sleep instead of turning it off.\n• Just close the lid when you're done.\n• It's ready instantly the next time you open it.",
+  "drDigitalIntro": "Most of the time, put your laptop to sleep instead of turning it off.\n\u2022 Sleep saves everything you are doing, turns off the screen, and uses very little battery.\n\u2022 To sleep, just close the lid. To wake up, open the lid or press any key.\n\u2022 A sleeping laptop can last days or even weeks without running out of battery.\n\u2022 When you wake it up, everything is right where you left it \u2014 no waiting.\n\u2022 You only need to fully shut down when your laptop is running slow and needs a restart, or when installing a big update.",
   "playgroundTask": {
     "type": "none"
   },

@@ -2,13 +2,13 @@
   "slug": "screen-clock",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Understanding the Screen",
-  "order": 20,
+  "order": 33,
   "title": "Clock",
   "videoUrl": "",
-  "drDigitalIntro": "The clock shows the current time and date.\n• You'll usually find it in a corner of the screen.\n• Clicking it often opens a calendar.",
+  "drDigitalIntro": "The clock shows the current time and date.\n\u2022 You'll usually find it in a corner of the screen.\n\u2022 Clicking it often opens a calendar.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's the clock — time and date, always a glance away.",
+  "drDigitalSuccess": "That's the clock \u2014 time and date, always a glance away.",
   "drDigitalHint": "Find the time in the corner of the playground desktop, then click Continue whenever you're ready."
 }

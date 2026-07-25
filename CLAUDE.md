@@ -478,7 +478,7 @@ Decide the unit name, modules, and sub-lessons. A **unit** is a top-level groupi
 ### Step 2: Pick `order` numbers
 
 `order` controls the global sort order of all lessons. Existing ranges:
-- Unit 1: `1`–`26`
+- Unit 1: `1`–`50`
 - Unit 2: `200`–`290`
 - Unit 3 (Files & Folders): `300`–`390`
 - Unit 4 (Internet & Browsing): `400`–`499`

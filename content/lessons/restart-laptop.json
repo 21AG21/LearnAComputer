@@ -2,13 +2,13 @@
   "slug": "restart-laptop",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Starting and Stopping",
-  "order": 11,
+  "order": 21,
   "title": "Restarting",
   "videoUrl": "",
-  "drDigitalIntro": "Sometimes your laptop needs a restart.\n• Restarting turns it fully off and back on.\n• Do this if it gets slow or stuck.\n• It fixes most problems when closing an app doesn't.",
+  "drDigitalIntro": "Sometimes your laptop needs a restart.\n\u2022 Restarting turns it fully off and back on.\n\u2022 Do this if it gets slow or stuck.\n\u2022 It fixes most problems when closing an app doesn't.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "Great — now you know when a restart can help.",
+  "drDigitalSuccess": "Great \u2014 now you know when a restart can help.",
   "drDigitalHint": "Take your time reading through this, then click Continue whenever you're ready."
 }

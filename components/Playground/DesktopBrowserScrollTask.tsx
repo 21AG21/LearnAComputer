@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FakeDesktop from "./FakeDesktop";
 import BrowserSimulator from "./BrowserSimulator";
 import { checkTypeText } from "./TaskChecker";
@@ -24,19 +24,24 @@ export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScr
   const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
   const [scrolled, setScrolled] = useState(false);
   const [typed, setTyped] = useState("");
+  const [done, setDone] = useState(false);
   const finished = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function handleScroll(e: React.UIEvent<HTMLDivElement>) {
     if (!scrolled && e.currentTarget.scrollTop > 80) setScrolled(true);
   }
 
-  function handleType(value: string) {
+  const handleType = useCallback((value: string) => {
+    if (finished.current) return;
     setTyped(value);
-    if (!finished.current && checkTypeText(code, value, false)) {
+    if (checkTypeText(code, value, false)) {
       finished.current = true;
+      setDone(true);
+      inputRef.current?.blur();
       onResult(true);
     }
-  }
+  }, [code, onResult]);
 
   if (phase === "browser") {
     return (
@@ -131,10 +136,16 @@ export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScr
                 <p className="text-base text-gray-600">Type the secret code below to finish:</p>
                 <p className="font-mono text-xl font-bold tracking-widest">{code}</p>
                 <input
+                  ref={inputRef}
                   value={typed}
                   onChange={(e) => handleType(e.target.value)}
+                  readOnly={done}
                   aria-label="Enter the code"
-                  className="w-full border-2 border-black px-3 py-2 text-xl mt-1 outline-none"
+                  className={`w-full border-2 px-3 py-2 text-xl mt-1 outline-none transition-colors ${
+                    done
+                      ? "border-green-500 bg-green-50 text-green-700 cursor-default"
+                      : "border-black"
+                  }`}
                   placeholder="Type the code here…"
                 />
               </div>

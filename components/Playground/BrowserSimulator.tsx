@@ -22,6 +22,8 @@ interface BrowserSimulatorProps {
   onTabClose?: () => void;
   /** Whether the main tab is the active one. When extraTabs are present and one is active, set false. */
   tabActive?: boolean;
+  /** Called when the main tab is clicked (to switch back to it from an extra tab). */
+  onTabClick?: () => void;
   /** Set false when the browser runs inside the fake desktop (no gray laptop bezel). */
   bezel?: boolean;
   /** False when opened from the fake desktop's dock — its shared menu bar hosts close/minimize instead. */
@@ -51,6 +53,7 @@ export default function BrowserSimulator({
   bezel = true,
   showControls = true,
   tabActive = true,
+  onTabClick,
   extraTabs,
   onZoomIn,
   onZoomOut,
@@ -69,8 +72,10 @@ export default function BrowserSimulator({
           {/* Tab group */}
           <div className="flex items-stretch gap-1">
             <div
+              role={onTabClick ? "button" : undefined}
+              onClick={!tabActive && onTabClick ? onTabClick : undefined}
               className={`h-11 rounded-t-lg border-2 border-b-0 flex items-center gap-3 px-4 min-w-40 transition-colors duration-150 ${
-                tabActive ? "bg-white border-gray-400" : "bg-gray-100 border-gray-300"
+                tabActive ? "bg-white border-gray-400" : "bg-gray-100 border-gray-300 cursor-pointer"
               }`}
             >
               <span className="text-lg font-semibold flex-1 font-[var(--font-app-title)] truncate">{tabTitle}</span>

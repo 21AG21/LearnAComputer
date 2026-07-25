@@ -31,30 +31,35 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
     onResult(true);
   }
 
+  function handlePetNewsTabClick() {
+    if (browserPhase === "catPhoto") setBrowserPhase("newTabPrompt");
+  }
+
   if (phase === "browser") {
-    const extraTabs =
-      browserPhase === "newTabPrompt" || browserPhase === "catPhoto"
-        ? [
-            {
-              title: "Cat Photo",
-              active: browserPhase === "catPhoto",
-              onClick: handleCatTabClick,
-            },
-          ]
-        : undefined;
+    const catTabVisible = browserPhase === "newTabPrompt" || browserPhase === "catPhoto";
+    const extraTabs = catTabVisible
+      ? [
+          {
+            title: "Judgmental Cat — Pet News",
+            active: browserPhase === "catPhoto",
+            onClick: handleCatTabClick,
+          },
+        ]
+      : undefined;
 
     return (
       <BrowserSimulator
         tabTitle="Pet News"
         tabActive={browserPhase !== "catPhoto"}
+        onTabClick={handlePetNewsTabClick}
         url={
           browserPhase === "catPhoto"
-            ? "funny-cats.example"
+            ? "petnews.example/judgementalcat"
             : "petnews.example"
         }
         onExit={() => setPhase("desktop")}
         bezel={false}
-        showControls={false}
+        showControls={true}
         extraTabs={extraTabs}
       >
         {/* Dismiss context menu on page click */}

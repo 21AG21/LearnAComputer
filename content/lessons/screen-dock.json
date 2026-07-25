@@ -2,13 +2,13 @@
   "slug": "screen-dock",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Understanding the Screen",
-  "order": 18,
+  "order": 31,
   "title": "Dock",
   "videoUrl": "",
-  "drDigitalIntro": "The dock is the bar of icons, usually at the bottom of the screen.\n• It holds your favorite and open apps.\n• Click an icon to open that app quickly.",
+  "drDigitalIntro": "The dock is the bar of icons, usually at the bottom of the screen.\n\u2022 It holds your favorite and open apps.\n\u2022 Click an icon to open that app quickly.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's the dock — your app shortcut shelf!",
+  "drDigitalSuccess": "That's the dock \u2014 your app shortcut shelf!",
   "drDigitalHint": "Look at the icons at the bottom of the playground desktop, then click Continue whenever you're ready."
 }

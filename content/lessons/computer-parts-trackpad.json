@@ -2,10 +2,10 @@
   "slug": "computer-parts-trackpad",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "What is a computer?",
-  "order": 3,
+  "order": 12,
   "title": "Trackpad",
   "videoUrl": "",
-  "drDigitalIntro": "The trackpad is the flat rectangle below your keyboard.\n• It's your laptop's built-in mouse.\n• It moves the little arrow on screen, called the cursor.\n• You use it to point at things and click them.",
+  "drDigitalIntro": "The trackpad is the flat rectangle below your keyboard \u2014 it is your laptop's built-in pointing tool.\n\u2022 Moving your fingertip across it moves the arrow on screen, called the cursor.\n\u2022 Tapping it (or pressing it down) is a left click \u2014 use it to select things.\n\u2022 If you are using an external mouse instead, that is perfectly fine! A mouse does the same job.\n\u2022 On a mouse: the left button is the main click; the scroll wheel scrolls pages up and down; the right button opens an extra menu.\n\u2022 On a trackpad: one finger tap = left click; two-finger tap = right click; two-finger drag = scroll; pinch = zoom.",
   "playgroundTask": {
     "type": "none"
   },

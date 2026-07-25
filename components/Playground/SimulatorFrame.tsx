@@ -22,6 +22,8 @@ interface SimulatorFrameProps {
   titleBarRight?: ReactNode;
   objectives?: ObjectiveItem[];
   onHint?: () => void;
+  /** When false, skip the title bar and window border — children fill the pane directly. Default true. */
+  chrome?: boolean;
   children: ReactNode;
 }
 
@@ -37,6 +39,7 @@ export default function SimulatorFrame({
   titleBarRight,
   objectives,
   onHint,
+  chrome = true,
   children,
 }: SimulatorFrameProps) {
   const isAssessment = !!objectives;
@@ -134,22 +137,25 @@ export default function SimulatorFrame({
       )}
 
       {/* App window */}
-      <div className="flex-1 min-h-0 p-3">
-        <div className="h-full flex flex-col border-2 border-gray-800 rounded-lg overflow-hidden shadow-md bg-white">
-          {/* Title bar */}
-          <div className="shrink-0 bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
-            <span className="font-bold text-gray-700 flex items-center gap-1.5 font-[var(--font-app-title)]">
-              {appIcon && <span aria-hidden="true">{appIcon}</span>}
-              {appName}
-            </span>
-            <div className="flex-1 flex justify-end">{titleBarRight}</div>
-            <WindowControls />
+      {chrome ? (
+        <div className="flex-1 min-h-0 p-3">
+          <div className="h-full flex flex-col border-2 border-gray-800 rounded-lg overflow-hidden shadow-md bg-white">
+            {/* Title bar */}
+            <div className="shrink-0 bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
+              <span className="font-bold text-gray-700 flex items-center gap-1.5 font-[var(--font-app-title)]">
+                {appIcon && <span aria-hidden="true">{appIcon}</span>}
+                {appName}
+              </span>
+              <div className="flex-1 flex justify-end">{titleBarRight}</div>
+              <WindowControls />
+            </div>
+            {/* App body */}
+            <div className="flex-1 min-h-0 flex flex-col bg-white relative">{children}</div>
           </div>
-
-          {/* App body */}
-          <div className="flex-1 min-h-0 flex flex-col bg-white relative">{children}</div>
         </div>
-      </div>
+      ) : (
+        <div className="flex-1 min-h-0 relative bg-white">{children}</div>
+      )}
 
       {/* Celebration overlay — shows briefly then disappears */}
       {showCelebration && (

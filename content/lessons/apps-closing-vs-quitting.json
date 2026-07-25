@@ -2,13 +2,13 @@
   "slug": "apps-closing-vs-quitting",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Opening Apps",
-  "order": 25,
+  "order": 42,
   "title": "Closing a window vs. quitting",
   "videoUrl": "",
-  "drDigitalIntro": "Closing and quitting are not the same thing.\n• Closing a window moves it aside, but the app keeps running.\n• Quitting shuts the app down completely.\n• A minimized app shows a little green dot on its icon.",
+  "drDigitalIntro": "Closing and quitting are not the same thing.\n\u2022 Closing a window moves it aside, but the app keeps running.\n\u2022 Quitting shuts the app down completely.\n\u2022 A minimized app shows a little green dot on its icon.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "Exactly — out of the way isn't the same as off. You now know the difference!",
+  "drDigitalSuccess": "Exactly \u2014 out of the way isn't the same as off. You now know the difference!",
   "drDigitalHint": "In the playground, minimize an app with the minus button and notice it keeps everything for when you come back. Then click Continue."
 }

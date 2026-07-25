@@ -686,3 +686,50 @@ export function DraftIcon({ size = 20, ...props }: IconProps) {
     </svg>
   );
 }
+
+/* ── Solid game shapes for ShapeClickGame ── */
+
+export function ShapeTriangle({ size = 56, ...props }: IconProps) {
+  const { size: _, stroke: _s, strokeWidth: _sw, fill: _f, ...rest } = props as IconProps & { stroke?: string; strokeWidth?: number; fill?: string };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...rest}>
+      <polygon points="12,2 22,22 2,22" />
+    </svg>
+  );
+}
+
+export function ShapeSquare({ size = 56, ...props }: IconProps) {
+  const { size: _, stroke: _s, strokeWidth: _sw, fill: _f, ...rest } = props as IconProps & { stroke?: string; strokeWidth?: number; fill?: string };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...rest}>
+      <rect x="2" y="2" width="20" height="20" />
+    </svg>
+  );
+}
+
+export function ShapePentagon({ size = 56, ...props }: IconProps) {
+  const { size: _, stroke: _s, strokeWidth: _sw, fill: _f, ...rest } = props as IconProps & { stroke?: string; strokeWidth?: number; fill?: string };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...rest}>
+      <polygon points="12,2 21.5,8.9 17.9,20.1 6.1,20.1 2.5,8.9" />
+    </svg>
+  );
+}
+
+export function ShapeHexagon({ size = 56, ...props }: IconProps) {
+  const { size: _, stroke: _s, strokeWidth: _sw, fill: _f, ...rest } = props as IconProps & { stroke?: string; strokeWidth?: number; fill?: string };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...rest}>
+      <polygon points="22,12 17,20.7 7,20.7 2,12 7,3.3 17,3.3" />
+    </svg>
+  );
+}
+
+export function ShapeCircle({ size = 56, ...props }: IconProps) {
+  const { size: _, stroke: _s, strokeWidth: _sw, fill: _f, ...rest } = props as IconProps & { stroke?: string; strokeWidth?: number; fill?: string };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...rest}>
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}

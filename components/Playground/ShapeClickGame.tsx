@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { checkShapeScore } from "./TaskChecker";
+import { ShapeTriangle, ShapeSquare, ShapePentagon, ShapeHexagon, ShapeCircle } from "./Icons";
 
 interface ShapeClickGameProps {
   instructions?: string;
@@ -20,12 +20,19 @@ interface FallingShape {
 }
 
 const SHAPE_KINDS: ShapeKind[] = ["triangle", "square", "pentagon", "hexagon", "circle"];
-const SHAPE_SRC: Record<ShapeKind, string> = {
-  triangle: "/playgrounds/shape-triangle.png",
-  square: "/playgrounds/shape-square.png",
-  pentagon: "/playgrounds/shape-pentagon.png",
-  hexagon: "/playgrounds/shape-hexagon.png",
-  circle: "/playgrounds/shape-circle.png",
+const SHAPE_COLORS: Record<ShapeKind, string> = {
+  triangle: "text-red-500",
+  square: "text-blue-500",
+  pentagon: "text-green-600",
+  hexagon: "text-purple-500",
+  circle: "text-orange-500",
+};
+const SHAPE_COMPONENTS: Record<ShapeKind, React.FC<{ size?: number; className?: string }>> = {
+  triangle: ShapeTriangle,
+  square: ShapeSquare,
+  pentagon: ShapePentagon,
+  hexagon: ShapeHexagon,
+  circle: ShapeCircle,
 };
 // Brisk but beginner-friendly: shapes fall a bit faster and spawn about twice as
 // often as before, so the play area stays lively instead of feeling empty.
@@ -88,16 +95,10 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
             key={shape.id}
             onClick={() => handleShapeClick(shape.id)}
             aria-label={`Click the ${shape.kind}`}
-            className="absolute w-20 h-20"
+            className={`absolute w-20 h-20 flex items-center justify-center ${SHAPE_COLORS[shape.kind]}`}
             style={{ left: `${shape.left}%`, top: `${shape.top}%` }}
           >
-            <Image
-              src={SHAPE_SRC[shape.kind]}
-              alt={shape.kind}
-              fill
-              sizes="80px"
-              className="object-contain pointer-events-none"
-            />
+            {(() => { const Comp = SHAPE_COMPONENTS[shape.kind]; return <Comp size={72} />; })()}
           </button>
         ))}
       </div>

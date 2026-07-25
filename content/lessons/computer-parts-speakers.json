@@ -2,11 +2,15 @@
   "slug": "computer-parts-speakers",
   "unit": "Unit 1: Meet Your Laptop",
   "module": "What is a computer?",
-  "order": 4,
+  "order": 13,
   "title": "Speakers",
   "videoUrl": "",
-  "drDigitalIntro": "Your speakers let you hear sound.\n• They play music, videos, voice messages, and alerts.\n• Sound comes out loud — no headphones needed.",
-  "media": { "src": "/playgrounds/headphones.png", "alt": "A pair of over-ear headphones", "caption": "Headphones plug into your laptop when you need private audio." },
+  "drDigitalIntro": "Your speakers let you hear sound.\n\u2022 They play music, videos, voice messages, and alerts.\n\u2022 Sound comes out loud \u2014 no headphones needed.",
+  "media": {
+    "src": "/playgrounds/headphones.png",
+    "alt": "A pair of over-ear headphones",
+    "caption": "Headphones plug into your laptop when you need private audio."
+  },
   "playgroundTask": {
     "type": "none"
   },
