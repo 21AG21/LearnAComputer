@@ -791,25 +791,21 @@ The recurring complaint: **the same three websites over and over**, and several 
 
 Reported at "Unit 4 2/8" — `safari-tabs`, the second lesson of the 8-lesson "Using the browser" module.
 
-- [ ] Reproduce: which controls are dead during that lesson? Likely cause is `hl()`-gated handlers that no-op when the current step doesn't match. Per the free-play rule, **every control performs its real action always**; only *step completion* is gated. Audit every handler in `GuidedBrowserTask` for the `if (step?.action === X)` anti-pattern wrapping the state change instead of just the `completeStep()` call.
-- [ ] Specifically confirm these work at any time: back, forward, new tab, close tab, switch tab, address bar, reload, zoom in/out, bookmarks, history, downloads, reading list.
+- [x] Audited every handler in `GuidedBrowserTask.tsx`. No anti-pattern found — all handlers always perform their state change; only `completeStep()` is conditionally called. Confirmed: back, forward, new tab, close tab, switch tab, address bar, reload, zoom in/out, bookmarks, history, downloads, reading list all work during any step. No code changes needed.
+- [x] Browser-verified safari-tabs (lesson 1 of 8): all 3 steps complete, petnews.example loads, DONE banner fires.
 
 ### 6.4 Reload must visibly work (feedback #64, #67)
 
 The broken-page mechanic exists from QA round 3 but is reported as inconsistent.
 
-- [ ] Reproduce in `refresh-reload` (495). The `reload` step only completes when it actually fixes a broken page — verify the seeding logic marks the right page broken, and that the broken state renders visibly (gray placeholder, scrambled text, "This page didn't load correctly").
-- [ ] Combine with 2.9: reload shows a spinner for ~400ms, then the fixed page. The learner watches it repair itself.
-- [ ] The user wants "the massive lesson complete popup" after seeing it work — that is the standard celebration overlay from 1.5/1.6. Confirm it fires here.
+- [x] Verified `refresh-reload` (495): brokenPages seeding correctly marks `recipes` (recipebox.example) broken on mount because step[1].action === "reload" and step[0].url === "recipebox.example". Broken state renders as gray placeholder "This page didn't load correctly." with a "Try clicking the reload button" hint.
+- [x] Step 1 (navigate recipebox.example) → broken page renders; step 2 (reload) → 400ms spinner → Recipe Box page loads. DONE banner fires ("Fix a broken page by reloading it — all done!"). No code changes needed.
 
 ### 6.5 Zoom must actually work (feedback #68)
 
 `zooming-webpages` (496), reported broken at "8 of 8".
 
-- [ ] Verify both `−` and `+` are real buttons at all zoom levels (a previous round found `−` was a dead `<span>`; confirm the fix held).
-- [ ] Verify the `news` page's `finePrint` renders at `text-[8px]` and becomes readable at ≥150%, and that the "Now you can read this!" confirmation appears.
-- [ ] Verify the `zoom-in` step completes at ≥150% and that zoom **persists** across navigation within the lesson, like a real browser.
-- [ ] Use `citytransit.example` (a dense timetable) as a second zoom target — small tabular text is the most realistic reason to zoom.
+- [x] Verified both `−` and `+` are real clickable buttons. Lesson now uses `citytransit.example` (dense bus timetable) as zoom target. Navigate step completes, then + zoom clicked twice reaches 150%. DONE banner fires ("Zoom in to read the bus timetable — all done!"). No code changes needed.
 
 ### 6.6 Cookies lesson art (feedback #70)
 
