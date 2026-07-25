@@ -598,7 +598,7 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
   - `kb-tab` (order 211): updated to `keyboard-nav-game` (`KeyboardNavTask.tsx`) — Tab moves forward, Shift+Tab moves back, Enter clicks. 4-bullet drDigitalIntro explains the mechanic.
   - **New lesson** `kb-tab-practical` (order 212, same module): navigate to `pickacolor.example` and complete the color sequence. Browser-verified: DesktopLaunch → Browser opens → navigate to pickacolor.example → 3 circles + 10-item sequence → completes on final click → success banner.
 - [x] Renumber `kb-arrow-keys` to 213 and `kb-doggo` to 214 to make room.
-- [ ] **Document `tab-sequence` and `seedDraft` in `CLAUDE.md`.** (deferred to end of Phase 4)
+- [x] **Document `tab-sequence` and `seedDraft` in `CLAUDE.md`.** Added: `warning` field to Lesson schema + rules; `seedDraft` with example to `guided-email` section; `tab-sequence` example + explanation to `guided-browser` section.
 
 ### 4.5 Return key activity, and the warning-banner pattern (feedback #38, #40)
 

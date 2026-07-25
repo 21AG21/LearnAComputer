@@ -111,6 +111,8 @@ Each file defines one sub-lesson:
   playgroundTask: PlaygroundTask;  // see union type in lib/lessons.ts
   drDigitalSuccess: string;
   drDigitalHint: string;
+  /** Warning shown above the Dr. Digital bubble — for keys/actions the learner must NOT press during this lesson. */
+  warning?: string;
 }
 ```
 
@@ -203,12 +205,15 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
     { "say": "Decline the cookie banner.", "action": "cookie-decline" },
     { "say": "Close the scam popup.", "action": "close-popup" },
     { "say": "Reload the page.", "action": "reload" },
-    { "say": "Zoom in twice.", "action": "zoom-in" }
+    { "say": "Zoom in twice.", "action": "zoom-in" },
+    { "say": "Use Tab and Enter to complete the color sequence.", "action": "tab-sequence", "page": "pickacolor.example" }
   ]
 }
 ```
 
 `mode` defaults to `"guided"`. Set `"assessment"` for objectives-only (no step-by-step highlighting). `initialDownloads` seeds the Downloads list on mount. Pages with special behavior: `weather.com` shows a cookie banner and ads, `freegames.example` is "Not Secure" and throws a scam popup, `recipebox.example` has a download button, `news.example` has fine print for zoom lessons. Cookie/popup/download steps must be preceded by a `navigate` to the matching page. Clicking **CLEAN NOW** on the popup fails the lesson with a message (teaches consequences). The `reload` action only completes when it fixes a broken page (pages navigated before a reload step render broken).
+
+**`tab-sequence` action**: requires the learner to navigate to `pickacolor.example` first (preceding `navigate` step). The page shows three focusable color circles (red, green, blue) and a 10-item sequence tracker. The learner uses Tab/Shift+Tab to move focus and Enter (or click) to select. Wrong picks show a nudge; completing all 10 items in order completes the step. Only `pickacolor.example` supports this action.
 
 #### `guided-messaging` schema
 
@@ -237,6 +242,29 @@ Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/
 
 A simulated email client with Inbox, Sent, Spam, Archive folders. The JSON provides a `goal` and `steps`.
 
+**Optional `seedDraft`**: seed a pre-filled draft in the Drafts folder on mount. The learner navigates to Drafts, opens the draft (matched by subject), edits the body, and sends. Use this when the lesson scenario involves fixing or completing a draft rather than composing from scratch. The draft is removed from the list when opened (replaced by the compose view).
+
+```json
+"playgroundTask": {
+  "type": "guided-email",
+  "goal": "Fix the messy draft and send it",
+  "mode": "guided",
+  "seedDraft": {
+    "to": "sarah@example.com",
+    "subject": "Team meeting reminder",
+    "body": "hey sarah\n\nthe meeting meeting is is on thursday..."
+  },
+  "steps": [
+    { "say": "Click Drafts in the sidebar.", "action": "go-to-folder", "target": "Drafts" },
+    { "say": "Click the draft to open it for editing.", "action": "open-email", "target": "Team meeting reminder" },
+    { "say": "Fix the body and click outside when done.", "action": "set-body", "value": "meeting is on Thursday" },
+    { "say": "Send it.", "action": "send" }
+  ]
+}
+```
+
+Without `seedDraft`, the task starts at the Inbox as normal:
+
 ```json
 "playgroundTask": {
   "type": "guided-email",
@@ -256,7 +284,7 @@ A simulated email client with Inbox, Sent, Spam, Archive folders. The JSON provi
 }
 ```
 
-Actions: `open-email` (`target`: sender name), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive`, `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
+Actions: `open-email` (`target`: sender name for inbox emails; **subject** for draft emails in the Drafts folder), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive`, `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
 
 #### `guided-photos` schema
 
@@ -532,6 +560,7 @@ Every file must have this exact shape:
 - `drDigitalIntro` is the teaching content — Dr. Digital explains the concept in friendly, simple language for absolute beginners. Should be thorough enough that the learner could re-teach the concept (4–6 bullets: What is it? Why does it matter? How do I do it? What's the common mistake?).
 - `drDigitalSuccess` congratulates the learner after they complete the activity (or auto-advances if `type: "none"`)
 - `drDigitalHint` gives a nudge if they're stuck on the activity
+- `warning` (optional) — a short caution shown above the Dr. Digital bubble in an amber banner. Use it to warn about keys or actions the learner must NOT press during this lesson (e.g. "Do not press Escape during this activity — it will exit the simulator"). Leave it out when there is no such risk.
 - **First letter capitalized** in every learner-facing sentence (`drDigitalIntro`, `drDigitalSuccess`, `drDigitalHint`, `instructions`, step `say`)
 - **Never rename an existing `slug`** — progress is stored by slug in localStorage. Deleting a lesson is fine; new lessons get new slugs.
 - **No emoji in Dr. Digital copy** — use plain text descriptions instead
