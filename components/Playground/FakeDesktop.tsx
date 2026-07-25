@@ -8,13 +8,14 @@ import FilesApp from "./Desktop/FilesApp";
 import MailApp from "./Desktop/MailApp";
 import SettingsApp from "./Desktop/SettingsApp";
 import NotesApp from "./Desktop/NotesApp";
+import AppWindow from "./Desktop/AppWindow";
 import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
 import WindowControls from "./WindowControls";
 import { BellOffIcon } from "./Icons";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
 
-const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "notes"];
+const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "photos", "app-market", "calendar", "reminders", "notes"];
 
 interface SettingsCallbacks {
   highlightSection?: string;
@@ -38,17 +39,17 @@ interface FakeDesktopProps {
   autoOpenApp?: DesktopAppId;
 }
 
-const APPS: { id: DesktopAppId; label: string; icon?: string }[] = [
-  { id: "messages", label: "Messages", icon: "/playgrounds/icon-chat.png" },
-  { id: "browser", label: "Browser", icon: "/playgrounds/icon-globe.png" },
-  { id: "files", label: "Files", icon: "/playgrounds/icon-folder.png" },
-  { id: "mail", label: "Mail", icon: "/playgrounds/icon-mail.png" },
-  { id: "settings", label: "Settings" },
-  { id: "photos", label: "Photos" },
-  { id: "app-market", label: "App Market" },
-  { id: "calendar", label: "Calendar" },
-  { id: "reminders", label: "Reminders" },
-  { id: "notes", label: "Notes" },
+const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
+  { id: "messages",   label: "Messages",   icon: "/playgrounds/dock-messages.png" },
+  { id: "browser",    label: "Browser",    icon: "/playgrounds/dock-browser.png" },
+  { id: "files",      label: "Files",      icon: "/playgrounds/dock-files.png" },
+  { id: "mail",       label: "Mail",       icon: "/playgrounds/dock-mail.png" },
+  { id: "settings",   label: "Settings",   icon: "/playgrounds/dock-settings.png" },
+  { id: "photos",     label: "Photos",     icon: "/playgrounds/dock-photos.png" },
+  { id: "app-market", label: "App Market", icon: "/playgrounds/dock-app-market.png" },
+  { id: "calendar",   label: "Calendar",   icon: "/playgrounds/dock-calendar.png" },
+  { id: "reminders",  label: "Reminders",  icon: "/playgrounds/dock-reminders.png" },
+  { id: "notes",      label: "Notes",      icon: "/playgrounds/dock-notes.png" },
 ];
 
 export const APP_TITLES: Record<DesktopAppId, string> = {
@@ -195,13 +196,19 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
         </div>
         <div className="flex items-center gap-3">
           {theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
-          <button onClick={() => setOpenPanel((p) => (p === "wifi" ? null : "wifi"))} aria-label="Wi-Fi status">
+          <button
+            onClick={() => setOpenPanel((p) => (p === "wifi" ? null : "wifi"))}
+            aria-label="Wi-Fi status"
+            aria-expanded={openPanel === "wifi"}
+            className={`rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "wifi" ? "bg-black/10 dark:bg-white/15" : ""}`}
+          >
             <WifiIcon className="w-6 h-5" />
           </button>
           <button
             onClick={() => setOpenPanel((p) => (p === "battery" ? null : "battery"))}
             aria-label="Battery status"
-            className="flex items-center gap-1"
+            aria-expanded={openPanel === "battery"}
+            className={`flex items-center gap-1 rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "battery" ? "bg-black/10 dark:bg-white/15" : ""}`}
           >
             <BatteryIcon className="w-8 h-4" />
             {batteryPercent !== null && <span>{batteryPercent}%</span>}
@@ -209,8 +216,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
           <button
             onClick={() => setOpenPanel((p) => (p === "calendar" ? null : "calendar"))}
             aria-label="Open calendar"
+            aria-expanded={openPanel === "calendar"}
             suppressHydrationWarning
-            className="hover:underline"
+            className={`rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "calendar" ? "bg-black/10 dark:bg-white/15" : ""}`}
           >
             {time}
           </button>
@@ -267,15 +275,11 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
               <button
                 onClick={() => openApp(id)}
                 aria-label={label}
-                className={`relative w-14 h-14 transition-transform hover:scale-110 active:scale-95 rounded-2xl ${
-                  highlightApp === id ? "ring-4 ring-yellow-400 animate-pulse" : ""
+                className={`relative w-14 h-14 transition-transform hover:scale-110 active:scale-95 rounded-2xl overflow-hidden ${
+                  highlightApp === id ? "animate-ring-pulse" : ""
                 }`}
               >
-                {icon ? (
-                  <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
-                ) : (
-                  <DockIconSvg app={id} />
-                )}
+                <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
                 {minimized.has(id) && (
                   <span
                     aria-label={`${APP_TITLES[id]} is still open`}
@@ -358,6 +362,20 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
         >
           <NotesApp key={appKeys.notes} onClose={() => closeApp("notes")} onMinimize={minimizeApp} showHeader={false} />
         </div>
+        {(["photos", "app-market", "calendar", "reminders"] as DesktopAppId[]).map((id) => (
+          <div
+            key={id}
+            className={`absolute inset-0 ${
+              closingApp === id ? "animate-window-close" : minimizingApp === id ? "animate-window-minimize" : activeApp === id ? "animate-window-open" : "hidden"
+            }`}
+          >
+            <AppWindow title={APP_TITLES[id]} onClose={() => closeApp(id)} onMinimize={minimizeApp}>
+              <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
+                {APP_TITLES[id]} opens during lessons.
+              </div>
+            </AppWindow>
+          </div>
+        ))}
       </div>
 
       {/* Brightness overlay */}
@@ -372,65 +390,6 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
   );
 }
 
-const DOCK_ICON_STYLES: Partial<Record<DesktopAppId, { bg: string }>> = {
-  settings: { bg: "#6B7280" },
-  photos: { bg: "#10B981" },
-  "app-market": { bg: "#3B82F6" },
-  calendar: { bg: "#EF4444" },
-  reminders: { bg: "#F59E0B" },
-  notes: { bg: "#FBBF24" },
-};
-
-function DockIconSvg({ app }: { app: DesktopAppId }) {
-  const style = DOCK_ICON_STYLES[app];
-  if (!style) return null;
-  return (
-    <div className="w-full h-full rounded-2xl flex items-center justify-center shadow-md" style={{ backgroundColor: style.bg }}>
-      {app === "settings" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
-          <circle cx="12" cy="12" r="3" />
-          <path d="M12 1v4M12 19v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M1 12h4M19 12h4M4.2 19.8l2.8-2.8M17 7l2.8-2.8" />
-        </svg>
-      )}
-      {app === "photos" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="white" stroke="none">
-          <circle cx="17" cy="7" r="3" />
-          <path d="M2 20l7-10 4 5 3-4 6 9H2z" />
-        </svg>
-      )}
-      {app === "app-market" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 7h12l1.5 13H4.5z" />
-          <path d="M9 7V5a3 3 0 0 1 6 0v2" />
-        </svg>
-      )}
-      {app === "calendar" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
-          <rect x="3" y="5" width="18" height="17" rx="2" />
-          <path d="M3 10h18" />
-          <path d="M8 2v4M16 2v4" />
-          <text x="12" y="20" textAnchor="middle" fontSize="9" fill="white" stroke="none" fontWeight="bold">
-            {new Date().getDate()}
-          </text>
-        </svg>
-      )}
-      {app === "reminders" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
-          <path d="M4 7l2.5 2.5L11 5" />
-          <path d="M14 7h6" />
-          <path d="M4 15l2.5 2.5L11 13" />
-          <path d="M14 15h6" />
-        </svg>
-      )}
-      {app === "notes" && (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
-          <rect x="4" y="2" width="16" height="20" rx="2" />
-          <path d="M8 7h8M8 11h8M8 15h5" />
-        </svg>
-      )}
-    </div>
-  );
-}
 
 function StatusPanel({
   color,
@@ -512,10 +471,10 @@ function CalendarPanel({ onClose }: { onClose: () => void }) {
 function WifiIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 26" className={className} aria-hidden="true">
-      <path d="M2 9 A20 20 0 0 1 30 9" fill="none" stroke="#111" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M7 14.5 A13 13 0 0 1 25 14.5" fill="none" stroke="#111" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M12 20 A7 7 0 0 1 20 20" fill="none" stroke="#111" strokeWidth="3.5" strokeLinecap="round" />
-      <circle cx="16" cy="24" r="2.2" fill="#111" />
+      <path d="M2 9 A20 20 0 0 1 30 9" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M7 14.5 A13 13 0 0 1 25 14.5" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M12 20 A7 7 0 0 1 20 20" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="16" cy="24" r="2.2" fill="currentColor" />
     </svg>
   );
 }
@@ -523,8 +482,8 @@ function WifiIcon({ className }: { className?: string }) {
 function BatteryIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 20" className={className} aria-hidden="true">
-      <rect x="1" y="1.5" width="33" height="17" rx="6" fill="none" stroke="#111" strokeWidth="2.5" />
-      <rect x="35" y="6.5" width="4" height="7" rx="2" fill="#111" />
+      <rect x="1" y="1.5" width="33" height="17" rx="6" fill="none" stroke="currentColor" strokeWidth="2.5" />
+      <rect x="35" y="6.5" width="4" height="7" rx="2" fill="currentColor" />
     </svg>
   );
 }
