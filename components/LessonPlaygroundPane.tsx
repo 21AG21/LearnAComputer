@@ -169,7 +169,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-email" && (
             <DesktopLaunch app="mail">
-              <GuidedEmailTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedEmailTask goal={task.goal} steps={task.steps} seedDraft={task.seedDraft} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-photos" && (

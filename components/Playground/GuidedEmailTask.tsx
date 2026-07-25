@@ -23,6 +23,7 @@ export type GuidedEmailStep = {
 interface GuidedEmailTaskProps {
   goal: string;
   steps: GuidedEmailStep[];
+  seedDraft?: { to: string; subject: string; body: string };
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -54,8 +55,22 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
 
 const ATTACH_FILES = FILLER_FILES.map((f) => f.name);
 
-export default function GuidedEmailTask({ goal, steps, onResult }: GuidedEmailTaskProps) {
-  const [emails, setEmails] = useState<Email[]>(INITIAL_EMAILS);
+export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: GuidedEmailTaskProps) {
+  const [emails, setEmails] = useState<Email[]>(() => {
+    if (!seedDraft) return INITIAL_EMAILS;
+    return [
+      ...INITIAL_EMAILS,
+      {
+        id: "draft-seed",
+        from: "Me (unsent)",
+        subject: seedDraft.subject,
+        preview: seedDraft.body.slice(0, 50),
+        body: seedDraft.body,
+        date: "Now",
+        folder: "Drafts" as Folder,
+      },
+    ];
+  });
   const [sentEmails, setSentEmails] = useState<Email[]>([]);
   const [currentFolder, setCurrentFolder] = useState<Folder>("Inbox");
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
@@ -137,6 +152,17 @@ export default function GuidedEmailTask({ goal, steps, onResult }: GuidedEmailTa
   }
 
   function handleOpenEmail(email: Email) {
+    if (email.folder === "Drafts") {
+      setComposing(true);
+      setSelectedEmail(null);
+      setReplyTo(null);
+      setDraft({ to: seedDraft?.to ?? "", cc: "", bcc: "", subject: email.subject, body: email.body });
+      setAttachedFile(null);
+      setFilePicker(false);
+      setEmails((prev) => prev.filter((e) => e.id !== email.id));
+      if (step?.action === "open-email" && step.target === email.subject) completeStep();
+      return;
+    }
     setSelectedEmail(email);
     setComposing(false);
     setReplyTo(null);

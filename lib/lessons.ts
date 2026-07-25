@@ -143,6 +143,8 @@ export type PlaygroundTask =
       type: "guided-email";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Optional pre-filled draft — opens a Drafts folder entry on mount that the learner can open to edit and send. */
+      seedDraft?: { to: string; subject: string; body: string };
       steps: Array<{
         say: string;
         action:

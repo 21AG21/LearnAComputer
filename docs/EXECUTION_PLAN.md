@@ -722,9 +722,9 @@ This is a **new playground type** — follow the "Adding a New Playground Type" 
 
 `email-assessment.json` (290) is `type: "edit-text"` — editing an *email* inside a *Notes* frame, and never sending it.
 
-- [ ] Convert to `guided-email`. Learner opens Mail → opens a saved draft containing the messy text → fixes it → **sends it**. Sending is the point; an email you never send isn't an email lesson.
-- [ ] This requires `GuidedEmailTask` to support opening a **draft** with pre-filled body text. Add a `seedDraft?: { to: string; subject: string; body: string }` field to the `guided-email` task type, and a Drafts folder entry when present. **Document it in `CLAUDE.md`.**
-- [ ] Note the module is called "Real-Life Exercise" and this file is named `email-assessment` — it is *not* the Unit 2 assessment. See 15.2 for the actual Unit 2 assessment, which does not exist yet.
+- [x] Convert to `guided-email`. Learner opens Mail → opens a saved draft containing the messy text → fixes it → **sends it**. Sending is the point; an email you never send isn't an email lesson.
+- [x] This requires `GuidedEmailTask` to support opening a **draft** with pre-filled body text. Added `seedDraft?: { to: string; subject: string; body: string }` to the `guided-email` task type; seeds a Drafts folder entry on mount; clicking the draft reopens compose with the pre-filled content. CLAUDE.md update still pending (do at end of Phase 4).
+- [x] Note the module is called "Real-Life Exercise" and this file is named `email-assessment` — it is *not* the Unit 2 assessment. See 15.2 for the actual Unit 2 assessment, which does not exist yet.
 
 ---
 
