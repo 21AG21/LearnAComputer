@@ -101,6 +101,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
   // actually unmounting/hiding, since CSS can't animate a jump straight to display:none.
   const [closingApp, setClosingApp] = useState<DesktopAppId | null>(null);
   const [minimizingApp, setMinimizingApp] = useState<DesktopAppId | null>(null);
+  const [launchingApp, setLaunchingApp] = useState<DesktopAppId | null>(null);
+  const [closingPanel, setClosingPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
 
   useEffect(() => {
     if (autoOpenApp) setActiveApp(autoOpenApp);
@@ -130,12 +132,25 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
     return () => battery?.removeEventListener("levelchange", handleChange);
   }, []);
 
+  function dismissPanel() {
+    const current = openPanel;
+    if (!current) return;
+    setClosingPanel(current);
+    setTimeout(() => {
+      setOpenPanel(null);
+      setClosingPanel(null);
+    }, 160);
+  }
+
   function openApp(app: DesktopAppId) {
     onAppOpened?.(app);
     if (interceptApps?.includes(app)) return;
     if (!BUILT_IN_APPS.includes(app)) return;
+    setLaunchingApp(app);
+    setTimeout(() => setLaunchingApp(null), 550);
     setActiveApp(app);
     setOpenPanel(null);
+    setClosingPanel(null);
     setMinimized((prev) => {
       if (!prev.has(app)) return prev;
       const next = new Set(prev);
@@ -197,7 +212,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
         <div className="flex items-center gap-3">
           {theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
           <button
-            onClick={() => setOpenPanel((p) => (p === "wifi" ? null : "wifi"))}
+            onClick={() => openPanel === "wifi" ? dismissPanel() : setOpenPanel("wifi")}
             aria-label="Wi-Fi status"
             aria-expanded={openPanel === "wifi"}
             className={`rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "wifi" ? "bg-black/10 dark:bg-white/15" : ""}`}
@@ -205,7 +220,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
             <WifiIcon className="w-6 h-5" />
           </button>
           <button
-            onClick={() => setOpenPanel((p) => (p === "battery" ? null : "battery"))}
+            onClick={() => openPanel === "battery" ? dismissPanel() : setOpenPanel("battery")}
             aria-label="Battery status"
             aria-expanded={openPanel === "battery"}
             className={`flex items-center gap-1 rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "battery" ? "bg-black/10 dark:bg-white/15" : ""}`}
@@ -214,7 +229,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
             {batteryPercent !== null && <span>{batteryPercent}%</span>}
           </button>
           <button
-            onClick={() => setOpenPanel((p) => (p === "calendar" ? null : "calendar"))}
+            onClick={() => openPanel === "calendar" ? dismissPanel() : setOpenPanel("calendar")}
             aria-label="Open calendar"
             aria-expanded={openPanel === "calendar"}
             suppressHydrationWarning
@@ -224,8 +239,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
           </button>
         </div>
 
-        {openPanel === "wifi" && (
-          <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={() => setOpenPanel(null)} title="WiFi Networks">
+        {(openPanel === "wifi" || closingPanel === "wifi") && (
+          <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={dismissPanel} title="WiFi Networks" closing={closingPanel === "wifi"}>
             {!connectedNetwork && !searchingNetwork && (
               <p className="px-3 py-2 text-center text-red-600 font-semibold text-sm">No WiFi connection. Pick a network below.</p>
             )}
@@ -247,8 +262,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
             })}
           </StatusPanel>
         )}
-        {openPanel === "battery" && (
-          <StatusPanel color="#0f9b6c" tint="#c3f3dd" onClose={() => setOpenPanel(null)} title="Your Battery">
+        {(openPanel === "battery" || closingPanel === "battery") && (
+          <StatusPanel color="#0f9b6c" tint="#c3f3dd" onClose={dismissPanel} title="Your Battery" closing={closingPanel === "battery"}>
             <p className="border-2 border-green-400 p-3 text-center">
               {batteryPercent !== null
                 ? `You have ${batteryPercent}% battery left.`
@@ -256,11 +271,13 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
             </p>
           </StatusPanel>
         )}
-        {openPanel === "calendar" && <CalendarPanel onClose={() => setOpenPanel(null)} />}
+        {(openPanel === "calendar" || closingPanel === "calendar") && (
+          <CalendarPanel onClose={dismissPanel} closing={closingPanel === "calendar"} />
+        )}
       </div>
 
       {/* Desktop */}
-      <div className="relative flex-1" onClick={() => setOpenPanel(null)}>
+      <div className="relative flex-1" onClick={() => openPanel ? dismissPanel() : undefined}>
         <div
           className="absolute inset-0"
           style={{
@@ -275,9 +292,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
               <button
                 onClick={() => openApp(id)}
                 aria-label={label}
-                className={`relative w-14 h-14 transition-transform hover:scale-110 active:scale-95 rounded-2xl overflow-hidden ${
-                  highlightApp === id ? "animate-ring-pulse" : ""
-                }`}
+                className={`relative w-14 h-14 rounded-2xl overflow-hidden ${
+                  launchingApp === id ? "animate-dock-bounce" : "transition-transform hover:scale-110 active:scale-95"
+                } ${highlightApp === id ? "animate-ring-pulse" : ""}`}
               >
                 <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
                 {minimized.has(id) && (
@@ -396,18 +413,20 @@ function StatusPanel({
   tint,
   title,
   onClose,
+  closing,
   children,
 }: {
   color: string;
   tint: string;
   title: string;
   onClose: () => void;
+  closing?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden animate-slide-down"
+      className={`absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
     >
       <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: tint }}>
         <p className="text-lg font-bold">{title}</p>
@@ -446,13 +465,13 @@ function ordinal(n: number) {
   return `${n}th`;
 }
 
-function CalendarPanel({ onClose }: { onClose: () => void }) {
+function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: boolean }) {
   const now = new Date();
   const dayName = DAY_NAMES[now.getDay()];
   const monthName = MONTH_NAMES[now.getMonth()];
   const dateOrdinal = ordinal(now.getDate());
   return (
-    <StatusPanel color="#c0392b" tint="#fde8e6" onClose={onClose} title="Calendar">
+    <StatusPanel color="#c0392b" tint="#fde8e6" onClose={onClose} title="Calendar" closing={closing}>
       <p className="px-2 py-1 font-semibold text-sm text-gray-700">
         Today is {dayName}, {monthName} {dateOrdinal}
       </p>
