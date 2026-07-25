@@ -809,7 +809,7 @@ The broken-page mechanic exists from QA round 3 but is reported as inconsistent.
 
 ### 6.6 Cookies lesson art (feedback #70)
 
-- [ ] `cookies.json` (492): render `cookie.png` in the cookie-consent banner inside `GuidedBrowserTask`, replacing the `CookieIcon` SVG. Size it ~48px, left of the banner text.
+- [x] `cookies.json` (492): replaced `CookieIcon` SVG with `<Image src="/playgrounds/cookie.png" width={24} height={24}>` in the cookie-consent banner. Removed `CookieIcon` from the import list in `GuidedBrowserTask.tsx`. Browser-verified: cookie.png renders correctly left of the banner text.
 
 ### 6.7 Online Safety auto-fail bug (feedback #71) — bug
 

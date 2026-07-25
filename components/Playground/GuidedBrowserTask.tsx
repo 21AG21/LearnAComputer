@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
 import WindowControls from "./WindowControls";
 import {
   PlusIcon, SearchIcon, CartIcon, BookIcon, BookClosedIcon, ClockIcon,
   DownloadIcon, WindowIcon, LockIcon, WarningIcon, StarIcon,
-  StarFilledIcon, GlobeIcon, FileDocIcon, TrashIcon, CookieIcon,
+  StarFilledIcon, GlobeIcon, FileDocIcon, TrashIcon,
   ImageIcon, ReloadIcon, HeartIcon,
 } from "./Icons";
 
@@ -769,7 +770,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         {/* Cookie banner */}
         {cookieOpen && (
           <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white p-4 flex flex-wrap items-center gap-3 animate-slide-up">
-            <p className="flex-1 text-sm min-w-48 flex items-center gap-2"><CookieIcon size={18} className="shrink-0" /> This site uses cookies to remember your preferences. Do you accept?</p>
+            <p className="flex-1 text-sm min-w-48 flex items-center gap-2"><Image src="/playgrounds/cookie.png" alt="cookie" width={24} height={24} className="shrink-0 rounded" /> This site uses cookies to remember your preferences. Do you accept?</p>
             <button onClick={acceptCookies} className="px-4 py-2 bg-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-500">Accept</button>
             <button onClick={declineCookies} className={`px-4 py-2 bg-white text-gray-900 rounded-lg font-bold text-sm ${hl("cookie-decline") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>Decline</button>
           </div>
