@@ -8,7 +8,9 @@ import FilesApp from "./Desktop/FilesApp";
 import MailApp from "./Desktop/MailApp";
 import SettingsApp from "./Desktop/SettingsApp";
 import NotesApp from "./Desktop/NotesApp";
-import AppWindow from "./Desktop/AppWindow";
+import PhotosApp from "./Desktop/PhotosApp";
+import CalendarApp from "./Desktop/CalendarApp";
+import AppMarketApp from "./Desktop/AppMarketApp";
 import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
 import WindowControls from "./WindowControls";
 import { BellOffIcon } from "./Icons";
@@ -381,20 +383,34 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
         >
           <NotesApp key={appKeys.notes} onClose={() => closeApp("notes")} onMinimize={minimizeApp} showHeader={false} />
         </div>
-        {(["photos", "app-market", "calendar", "reminders"] as DesktopAppId[]).map((id) => (
-          <div
-            key={id}
-            className={`absolute inset-0 ${
-              closingApp === id ? "animate-window-close" : minimizingApp === id ? "animate-window-minimize" : activeApp === id ? "animate-window-open" : "hidden"
-            }`}
-          >
-            <AppWindow title={APP_TITLES[id]} onClose={() => closeApp(id)} onMinimize={minimizeApp}>
-              <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
-                {APP_TITLES[id]} opens during lessons.
-              </div>
-            </AppWindow>
-          </div>
-        ))}
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "photos" ? "animate-window-close" : minimizingApp === "photos" ? "animate-window-minimize" : activeApp === "photos" ? "animate-window-open" : "hidden"
+          }`}
+        >
+          <PhotosApp key={appKeys.photos} onClose={() => closeApp("photos")} onMinimize={minimizeApp} showHeader={false} />
+        </div>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "app-market" ? "animate-window-close" : minimizingApp === "app-market" ? "animate-window-minimize" : activeApp === "app-market" ? "animate-window-open" : "hidden"
+          }`}
+        >
+          <AppMarketApp key={appKeys["app-market"]} onClose={() => closeApp("app-market")} onMinimize={minimizeApp} showHeader={false} />
+        </div>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "calendar" ? "animate-window-close" : minimizingApp === "calendar" ? "animate-window-minimize" : activeApp === "calendar" ? "animate-window-open" : "hidden"
+          }`}
+        >
+          <CalendarApp key={appKeys.calendar} onClose={() => closeApp("calendar")} onMinimize={minimizeApp} showHeader={false} initialView="calendar" />
+        </div>
+        <div
+          className={`absolute inset-0 ${
+            closingApp === "reminders" ? "animate-window-close" : minimizingApp === "reminders" ? "animate-window-minimize" : activeApp === "reminders" ? "animate-window-open" : "hidden"
+          }`}
+        >
+          <CalendarApp key={appKeys.reminders} onClose={() => closeApp("reminders")} onMinimize={minimizeApp} showHeader={false} initialView="reminders" />
+        </div>
       </div>
 
       {/* Brightness overlay */}

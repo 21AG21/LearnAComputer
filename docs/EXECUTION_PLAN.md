@@ -313,20 +313,9 @@ Everything here is in `components/Playground/`. These changes are felt in every 
 
 The animation infrastructure exists — `animate-window-open` is defined in `tailwind.config.ts` and applied at [FakeDesktop.tsx:295-360](components/Playground/FakeDesktop.tsx:295).
 
-- [ ] Verify it actually plays. The wrapper's className switches from `hidden` to `animate-window-open` in the same render; because the element was `display: none`, the animation *should* run on reveal — but confirm in the browser for each of the six built-in apps. If any app doesn't animate, the fix is to force a remount by including the open-state in the wrapper's `key`.
-- [ ] **Add a dock-icon bounce on launch.** Real computers bounce the icon. Add:
-  ```ts
-  "dock-bounce": {
-    "0%":   { transform: "translateY(0)" },
-    "35%":  { transform: "translateY(-14px)" },
-    "60%":  { transform: "translateY(0)" },
-    "80%":  { transform: "translateY(-5px)" },
-    "100%": { transform: "translateY(0)" },
-  },
-  // animation: "dock-bounce": "dock-bounce 0.55s ease-out 1",
-  ```
-  Track `launchingApp` state in `FakeDesktopInner`; set it in `openApp` ([FakeDesktop.tsx:132-144](components/Playground/FakeDesktop.tsx:132)) and clear it on a 550ms timeout. Apply `animate-dock-bounce` to that app's dock button.
-- [ ] Slow `window-open` from `0.18s` to `0.24s` — at 180ms it currently reads as a flicker rather than a movement.
+- [x] Verify it actually plays. The wrapper's className switches from `hidden` to `animate-window-open` in the same render; because the element was `display: none`, the animation *should* run on reveal — but confirm in the browser for each of the six built-in apps. If any app doesn't animate, the fix is to force a remount by including the open-state in the wrapper's `key`.
+- [x] **Add a dock-icon bounce on launch.** `dock-bounce` keyframe defined in `tailwind.config.ts`, `launchingApp` state in `FakeDesktopInner`, set in `openApp` with 550ms timeout. `animate-dock-bounce` applied to the launching app's dock button. Browser-verified.
+- [x] Slow `window-open` from `0.18s` to `0.24s` — done, currently `0.24s ease-out both`.
 
 ### 2.4 Status-panel close animation (feedback #8)
 
@@ -566,7 +555,7 @@ All three are `type: "none"`. Each should make the learner open that exact panel
 
 - [x] `OpenAllAppsTask` now accepts `targetCount` (default 4), counts ANY unique apps opened, shows live counter.
 - [x] `apps-opening.json` updated to `targetCount: 4`.
-- [ ] Fix the underlying defect: all 10 dock icons open something (photos, app-market, calendar, reminders currently no-op outside guided lessons).
+- [x] Fix the underlying defect: all 10 dock icons open something. Built `PhotosApp.tsx` (photo grid, tab bar, detail panel), `AppMarketApp.tsx` (searchable app list, Get buttons), and `CalendarApp.tsx` (real month calendar + reminders list, shared for both Calendar and Reminders dock icons). Browser-verified: all 4 apps open and show real content.
 
 ### 3.17 Closing apps: practice, not theory (feedback #32)
 
