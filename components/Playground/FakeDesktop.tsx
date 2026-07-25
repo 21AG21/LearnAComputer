@@ -292,21 +292,23 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
               <button
                 onClick={() => openApp(id)}
                 aria-label={label}
-                className={`relative w-14 h-14 rounded-2xl overflow-hidden ${
+                className={`flex flex-col items-center gap-0.5 ${
                   launchingApp === id ? "animate-dock-bounce" : "transition-transform hover:scale-110 active:scale-95"
-                } ${highlightApp === id ? "animate-ring-pulse" : ""}`}
+                }`}
               >
-                <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
-                {minimized.has(id) && (
-                  <span
-                    aria-label={`${APP_TITLES[id]} is still open`}
-                    className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white"
-                  />
-                )}
+                <div className={`relative w-14 h-14 rounded-2xl overflow-hidden ${highlightApp === id ? "animate-ring-pulse" : ""}`}>
+                  <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
+                  {minimized.has(id) && (
+                    <span
+                      aria-label={`${APP_TITLES[id]} is still open`}
+                      className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white"
+                    />
+                  )}
+                </div>
+                <span className={`text-[9px] font-medium leading-none select-none ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  {APP_TITLES[id]}
+                </span>
               </button>
-              <span className={`text-[9px] font-medium leading-none select-none ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                {APP_TITLES[id]}
-              </span>
             </div>
           ))}
         </div>
