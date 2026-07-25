@@ -5,29 +5,34 @@
   "order": 410,
   "title": "Browser vs Search Engine",
   "videoUrl": "",
-  "drDigitalIntro": "A browser and a search engine do different jobs.\n• The browser is the app that shows you websites — like a car.\n• A search engine like Google helps you find websites — like a map.\n• You can use Google, Bing, or DuckDuckGo, all inside the browser.",
+  "drDigitalIntro": "A browser and a search engine do different jobs — they are easy to mix up.\n• The browser is the app you are using right now. It is the vehicle that carries you around the internet and shows you web pages.\n• A search engine is a website you visit inside the browser. It helps you find other websites when you do not know their exact address.\n• If you already know the address, skip the search engine — just type the address directly in the bar at the top and press Enter. You go straight there.\n• If you do not know the address, go to a search engine like google.com, type what you are looking for, and pick from the list of results.\n• Both methods use the same browser — the difference is knowing where you are going versus describing what you want to find.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Use a search engine inside your browser",
+    "goal": "Visit a site directly, then find one using a search engine",
     "steps": [
       {
-        "say": "This whole window is the browser — your browser. Google is a search engine you visit inside it. Type google.com in the address bar and press Enter.",
+        "say": "When you know the address, type it directly. Type gardeningtips.example and press Enter — you go straight there.",
+        "action": "navigate",
+        "url": "gardeningtips.example"
+      },
+      {
+        "say": "When you do not know the address, use a search engine. Type google.com in the address bar and press Enter.",
         "action": "navigate",
         "url": "google.com"
       },
       {
-        "say": "Now use the search engine to find something. Type apple pie recipe in the search box and press Enter.",
+        "say": "Now type what you are looking for in the search box: apple pie recipe — then press Enter.",
         "action": "search",
         "query": "apple pie recipe",
         "reveal": "Recipe Box"
       },
       {
-        "say": "Click the Recipe Box result to actually open the page — searching is just the first step.",
+        "say": "Google gives you a list of results. Click Recipe Box to open that page.",
         "action": "open-result",
         "title": "Recipe Box"
       }
     ]
   },
-  "drDigitalSuccess": "You used Google (a search engine) inside the browser to find a recipe, then clicked to visit the actual page. That's how searching works!",
-  "drDigitalHint": "Click the blue 'Recipe Box' link in the search results to open that page."
+  "drDigitalSuccess": "You visited a site directly (by address) and found one using a search engine. Both use the browser — the difference is whether you know where you are going.",
+  "drDigitalHint": "For the search step: click inside the search box on the google.com page, type apple pie recipe, and press Enter. Then click the Recipe Box result."
 }

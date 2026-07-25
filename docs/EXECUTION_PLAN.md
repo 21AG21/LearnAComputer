@@ -783,9 +783,9 @@ The recurring complaint: **the same three websites over and over**, and several 
 
 `internet-vs-website` (400) and `browser-vs-search` (410) teach nearly the same thing, and both have the learner type `google.com` and `wikipedia.org` yet again.
 
-- [ ] Rewrite `internet-vs-website` as concept-first with **one** short activity: visit a single site the learner has not seen (`citylibrary.example`). Intro covers: the internet is the network of connected computers; a website is one destination on it; the browser is the app that fetches it. Analogy: the internet is the road system, a website is a shop, the browser is your car.
-- [ ] Rewrite `browser-vs-search` to genuinely contrast the two: type an address directly (goes straight there) vs type words in a search box (gives a list to choose from). Use `search` → `open-result` so the learner must actually open a result — that mechanic was added in QA round 3 and should be exercised here.
-- [ ] `urls` (420) and `domain-names` (430): use new sites, and make `domain-names` actually about the domain — compare `.com` / `.org` / `.example`, and the difference between `citylibrary.example` and `citylibrary.example.evil-site.net`. That last point sets up Unit 10.
+- [x] Rewrote `internet-vs-website`: road/shop/car analogy (internet = roads, website = shop, browser = car), expanded to 5 bullets, single navigate step to `citylibrary.example`. Browser-verified.
+- [x] Rewrote `browser-vs-search`: 4-step flow that demonstrates the contrast — navigate `gardeningtips.example` directly (step 1), then navigate `google.com` → search "apple pie recipe" → open-result "Recipe Box" (steps 2-4). Intro contrasts address-bar navigation vs search. Browser-verified: all 4 steps complete, DONE banner fires.
+- [x] Rewrote `domain-names` intro: covers .com/.org/.gov/.edu/.example, unique-domain principle, and the evil-subdomain trick (`citylibrary.example` vs `citylibrary.example.evil-site.net`). Activity unchanged (google.com + wikipedia.org still best for .com vs .org).
 
 ### 6.3 The browser must be maneuverable (feedback #62)
 

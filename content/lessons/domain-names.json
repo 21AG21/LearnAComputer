@@ -5,23 +5,23 @@
   "order": 430,
   "title": "Domain Names",
   "videoUrl": "",
-  "drDigitalIntro": "A domain name is the core of a website's address.\n\u2022 In google.com, \"google\" is the domain and \".com\" is the extension.\n\u2022 .com means commercial, .org means organization, .edu means education.\n\u2022 Country codes like .uk and .ca show the country. Each domain is unique.",
+  "drDigitalIntro": "A domain name is the address of a website — and the ending tells you something about the site.\n• .com means a commercial (business) website. Most businesses use it: google.com, amazon.com.\n• .org means an organization, usually non-profit: wikipedia.org, redcross.org.\n• .gov means a government site: usa.gov. .edu means a school or university.\n• .example (in our practice browser) is a made-up domain, like a fake street in a training video.\n• Every domain is unique — there is only one google.com in the world, just like there is only one street address per building.\n• Watch out for tricks: citylibrary.example looks real, but citylibrary.example.evil-site.net is actually owned by evil-site.net — the real domain is always the last two parts before the first slash.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Notice the different endings on web addresses",
+    "goal": "Visit a .com and a .org and notice the different endings",
     "steps": [
       {
-        "say": "Google.com ends in .com \u2014 that means a company. Type google.com and press Enter.",
+        "say": "Google.com ends in .com — a commercial site. Type google.com in the address bar and press Enter.",
         "action": "navigate",
         "url": "google.com"
       },
       {
-        "say": "Wikipedia.org ends in .org \u2014 an organization, not a business. Type wikipedia.org and press Enter to see the different ending.",
+        "say": "Wikipedia.org ends in .org — a non-profit organization. Type wikipedia.org and press Enter to see the different ending.",
         "action": "navigate",
         "url": "wikipedia.org"
       }
     ]
   },
-  "drDigitalSuccess": "You visited a .com (company) and a .org (organization). The ending after the dot tells you what kind of site it is.",
-  "drDigitalHint": "Type each address in the bar and press Enter. Watch the ending: .com vs .org."
+  "drDigitalSuccess": "You visited a .com (business) and a .org (organization). The ending after the dot is called the TLD — top-level domain. It gives you a clue about who runs the site.",
+  "drDigitalHint": "Type each address in the bar and press Enter. Notice how the ending changes: .com then .org."
 }
