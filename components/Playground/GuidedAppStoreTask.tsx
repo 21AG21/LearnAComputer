@@ -200,22 +200,22 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
   useEffect(() => {
     if (initRef.current) return;
     initRef.current = true;
-    const saved = loadInstalledIds();
-    const needed = new Set<string>();
-    const installedDuringLesson = new Set<string>();
+    const saved = new Set(loadInstalledIds());
+    // Apps with an install step must be uninstalled so the lesson can teach installing.
+    // Apps with delete/update/open steps must be pre-installed so the action has something to act on.
+    const toUninstall = new Set<string>();
+    const toInstall = new Set<string>();
     for (const s of steps) {
-      if (s.action === "install" && s.target) {
-        const app = STORE_APPS.find((a) => a.name === s.target);
-        if (app) installedDuringLesson.add(app.id);
-      }
-      if (s.action === "delete-app" || s.action === "update-app" || s.action === "open-app") {
-        const app = STORE_APPS.find((a) => a.name === s.target);
-        if (app && !saved.includes(app.id) && !installedDuringLesson.has(app.id)) needed.add(app.id);
-      }
+      const app = STORE_APPS.find((a) => a.name === s.target);
+      if (!app) continue;
+      if (s.action === "install") toUninstall.add(app.id);
+      if (s.action === "delete-app" || s.action === "update-app" || s.action === "open-app") toInstall.add(app.id);
     }
-    const merged = [...new Set([...saved, ...needed])];
-    setInstalledIds(merged);
-    if (needed.size > 0) saveInstalledIds(merged);
+    for (const id of toUninstall) saved.delete(id);
+    for (const id of toInstall) { if (!toUninstall.has(id)) saved.add(id); }
+    const finalIds = [...saved];
+    setInstalledIds(finalIds);
+    saveInstalledIds(finalIds);
   }, [steps]);
 
   const step = steps[stepIndex];

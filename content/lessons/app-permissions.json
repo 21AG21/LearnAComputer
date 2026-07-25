@@ -5,13 +5,13 @@
   "order": 830,
   "title": "App Permissions",
   "videoUrl": "",
-  "drDigitalIntro": "Apps may ask for permissions when you install them.\n• They might want your camera, microphone, or other features.\n• You decide what to allow — and you can change your mind later in Settings.\n• If a permission seems unnecessary, deny it! A puzzle game shouldn't need your camera.",
+  "drDigitalIntro": "Apps ask for permissions when they need access to something on your device.\n• Common permissions: Camera, Microphone, Location.\n• Ask yourself: does this app actually need this?\n• A puzzle game asking for your camera is suspicious — a photo-sharing app is not.\n• You can always say no. You can change permissions later in Settings.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You learned to evaluate and respond to app permissions",
+    "goal": "You evaluated and responded to app permission requests",
     "steps": [
       {
-        "say": "Search for 'Puzzle Quest' — a puzzle game that asks for suspicious permissions.",
+        "say": "Search for 'Puzzle Quest'.",
         "action": "search",
         "value": "Puzzle"
       },
@@ -21,39 +21,35 @@
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click Install. Notice it asks for Camera access — a puzzle game doesn't need that!",
+        "say": "Click Install. It asks for Camera access — a puzzle game has no reason to need that!",
         "action": "install",
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click Don't Allow — a puzzle game shouldn't need your camera.",
+        "say": "Click Don't Allow — this permission is suspicious for a puzzle game.",
         "action": "deny-permission"
       },
       {
-        "say": "The installation was canceled. Now let's try ChatBuddy — it legitimately needs camera for video calls. Search for it.",
+        "say": "Good. Now search for 'PhotoFun' — a photo-sharing app that genuinely needs your camera.",
         "action": "search",
-        "value": "ChatBuddy"
+        "value": "PhotoFun"
       },
       {
-        "say": "Click on ChatBuddy.",
+        "say": "Click on PhotoFun.",
         "action": "select-app",
-        "target": "ChatBuddy"
+        "target": "PhotoFun"
       },
       {
-        "say": "Install ChatBuddy.",
+        "say": "Install PhotoFun.",
         "action": "install",
-        "target": "ChatBuddy"
+        "target": "PhotoFun"
       },
       {
-        "say": "ChatBuddy needs Camera for video calls — that makes sense. Click Allow.",
-        "action": "allow-permission"
-      },
-      {
-        "say": "It also needs your Microphone for voice calls. Click Allow.",
+        "say": "PhotoFun needs Camera access to take and share photos — that makes sense. Click Allow.",
         "action": "allow-permission"
       }
     ]
   },
-  "drDigitalSuccess": "You evaluated app permissions like a pro! Deny anything that seems unnecessary — a game doesn't need your camera.",
-  "drDigitalHint": "Read what the app is asking for. If a permission doesn't make sense for what the app does, click Don't Allow."
+  "drDigitalSuccess": "You evaluated permissions like a pro! Always ask: does this app actually need what it is asking for?",
+  "drDigitalHint": "Read what each app is asking for. Deny anything that does not make sense for what the app does."
 }

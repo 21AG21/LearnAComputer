@@ -5,7 +5,7 @@
   "order": 850,
   "title": "Deleting Apps",
   "videoUrl": "",
-  "drDigitalIntro": "Delete apps you don't use to free up space.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• The app is removed, but your data may be saved in the cloud.\n• You can reinstall any app later at no extra cost.",
+  "drDigitalIntro": "Delete apps you no longer use to keep your device tidy and free up space.\n• Find the app in My Apps and click Delete.\n• Your data is usually saved to the cloud, so you can reinstall for free later.\n• Deleting built-in apps (like Mail or Files) is generally not allowed — they are part of the system.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You deleted an app you no longer need",
@@ -15,9 +15,9 @@
         "action": "go-to-installed"
       },
       {
-        "say": "Find Puzzle Quest and click the Delete button to remove it.",
+        "say": "Find FlashLight and click the Delete button to remove it.",
         "action": "delete-app",
-        "target": "Puzzle Quest"
+        "target": "FlashLight"
       }
     ]
   },

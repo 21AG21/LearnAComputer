@@ -5,40 +5,32 @@
   "order": 720,
   "title": "Basic Photo Editing",
   "videoUrl": "",
-  "drDigitalIntro": "You can improve photos without being a pro.\n• This photo came out way too dark — let's fix it.\n• Drag the Brightness slider to make it lighter.\n• Drag the Contrast slider to sharpen the colors.\n• You can also Rotate, Crop, or Revert to undo all changes.",
+  "drDigitalIntro": "You can fix a bad photo without being a pro.\n• This photo of a bird came out dark and sideways — let's fix both problems.\n• Use Rotate to turn it upright.\n• Drag the Brightness slider to brighten it up.\n• Drag the Contrast slider to make the colors pop.\n• Your changes are saved as long as you do not click Revert.",
   "playgroundTask": {
     "type": "guided-photos",
-    "goal": "You fixed a dark photo",
+    "goal": "You fixed a dark, sideways photo",
     "steps": [
       {
-        "say": "Click the Bird in Garden photo to open it.",
+        "say": "Click the Bird in Garden photo — it is dark and sideways.",
         "action": "select-photo",
         "target": "Bird in Garden"
       },
       {
-        "say": "This photo is too dark! Drag the Brightness slider up to about 90-110%.",
-        "action": "adjust-brightness",
-        "value": "90-110"
-      },
-      {
-        "say": "Now drag the Contrast slider up to about 90-110% to sharpen the colors.",
-        "action": "adjust-contrast",
-        "value": "90-110"
-      },
-      {
-        "say": "Click Rotate to turn the photo 90 degrees.",
+        "say": "Click Rotate to turn the bird upright.",
         "action": "rotate"
       },
       {
-        "say": "Try a different crop — click Square to crop it square.",
-        "action": "crop"
+        "say": "The photo is still too dark — drag the Brightness slider above 85.",
+        "action": "adjust-brightness",
+        "value": "85-200"
       },
       {
-        "say": "Click Revert to undo all changes and restore the original.",
-        "action": "revert"
+        "say": "Now drag the Contrast slider above 85 to make the colors pop.",
+        "action": "adjust-contrast",
+        "value": "85-200"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed a dark photo and tried all the editing tools! The original is always preserved — you can always Revert.",
-  "drDigitalHint": "Open the photo first, then use the Brightness and Contrast sliders to fix it. Revert undoes all changes."
+  "drDigitalSuccess": "You fixed it! One Rotate and two slider adjustments turned a dark, sideways shot into a clear photo.",
+  "drDigitalHint": "Open the Bird in Garden photo, click Rotate once to fix the angle, then drag Brightness and Contrast up."
 }

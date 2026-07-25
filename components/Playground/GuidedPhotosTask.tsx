@@ -6,8 +6,9 @@ import SimulatorFrame from "./SimulatorFrame";
 import {
   ImageIcon, HeartIcon, HeartFilledIcon, TrashIcon, FolderIcon,
   ShareIcon, MailIcon, ChatIcon, RotateIcon, CropIcon, SquareIcon,
-  RectangleIcon, UndoIcon,
+  RectangleIcon, UndoIcon, SearchIcon,
 } from "./Icons";
+import { getThread, saveThread } from "@/lib/chat";
 
 export type GuidedPhotosStep = {
   say: string;
@@ -35,17 +36,17 @@ interface Photo {
   favorite: boolean;
   albums: string[];
   deleted: boolean;
+  initialEdits?: { brightness?: number; contrast?: number; rotation?: number };
 }
 
 const INITIAL_PHOTOS: Photo[] = [
   { id: "vacation", label: "Beach Vacation", src: "/playgrounds/VacationPhoto.png", favorite: false, albums: [], deleted: false },
   { id: "dog", label: "Dog at the Park", src: "/playgrounds/Dog.png", favorite: false, albums: [], deleted: false },
-  { id: "bird", label: "Bird in Garden", src: "/playgrounds/Bird.png", favorite: false, albums: [], deleted: false },
+  { id: "bird", label: "Bird in Garden", src: "/playgrounds/Bird.png", favorite: false, albums: [], deleted: false, initialEdits: { brightness: 55, contrast: 80, rotation: 270 } },
   { id: "cow", label: "Cow on the Farm", src: "/playgrounds/Cow.png", favorite: false, albums: [], deleted: false },
   { id: "snake", label: "Snake in the Sun", src: "/playgrounds/Snake.png", favorite: false, albums: [], deleted: false },
   { id: "orange-cat", label: "Orange Cat", src: "/playgrounds/Cat1.png", favorite: false, albums: [], deleted: false },
   { id: "grumpy-cat", label: "Grumpy Cat", src: "/playgrounds/Cat2.png", favorite: false, albums: [], deleted: false },
-  { id: "dog-walk", label: "Dog Walk", src: "/playgrounds/animal-dog.png", favorite: false, albums: [], deleted: false },
   { id: "bird-flight", label: "Bird in Flight", src: "/playgrounds/animal-bird.png", favorite: false, albums: [], deleted: false },
   { id: "cow-field", label: "Cow in Field", src: "/playgrounds/animal-cow.png", favorite: false, albums: [], deleted: false },
   { id: "snake-coil", label: "Coiled Snake", src: "/playgrounds/animal-snake.png", favorite: false, albums: [], deleted: false },
@@ -80,6 +81,10 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
   const [albumPickerShown, setAlbumPickerShown] = useState(false);
   const [newAlbumInput, setNewAlbumInput] = useState("");
   const [creatingAlbum, setCreatingAlbum] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [sharedToContact, setSharedToContact] = useState<string | null>(null);
+  const [showMeBanner, setShowMeBanner] = useState(false);
+  const [showMeConfirmed, setShowMeConfirmed] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
@@ -118,19 +123,19 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
         if (sharePhase === "contact") return kind === "share-contact" && name === step.to;
         if (sharePhase === "channel") return kind === "share-channel" && name === step.via;
         return kind === "share-btn";
-      case "search": return kind === "search-input";
+      case "search": return searchOpen ? kind === "search-input" : kind === "search-icon";
       default: return false;
     }
   }
 
   const pulse = "ring-4 ring-yellow-400 animate-pulse";
 
-  function resetEdits() {
+  function resetEdits(photo?: Photo | null) {
     setFilter(null);
-    setRotation(0);
+    setRotation(photo?.initialEdits?.rotation ?? 0);
     setCropPreset("Original");
-    setBrightness(100);
-    setContrast(100);
+    setBrightness(photo?.initialEdits?.brightness ?? 100);
+    setContrast(photo?.initialEdits?.contrast ?? 100);
   }
 
   function getVisiblePhotos(): Photo[] {
@@ -143,11 +148,13 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
 
   function handleSelectPhoto(photo: Photo) {
     setSelectedPhoto(photo);
-    resetEdits();
+    resetEdits(photo);
     setSharePhase(null);
     setShareVia(null);
     setShareToast(null);
     setAlbumPickerShown(false);
+    setSearchOpen(false);
+    setSearchQuery("");
     if (step?.action === "select-photo" && step.target === photo.label) completeStep();
   }
 
@@ -175,6 +182,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     setSection(name);
     setSelectedPhoto(null);
     setSearchQuery("");
+    setSearchOpen(false);
     if (step?.action === "go-to-album" && step.target === name) completeStep();
   }
 
@@ -235,7 +243,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
   }
 
   function handleRevert() {
-    resetEdits();
+    resetEdits(selectedPhoto);
     if (step?.action === "revert") completeStep();
   }
 
@@ -254,9 +262,21 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     const contact = CONTACTS.find((c) => c.id === contactId);
     const label = via === "messages" ? "Messages" : "Mail";
     setSharePhase(null);
+    setSharedToContact(contactId);
     setShareToast(`Sent to ${contact?.name ?? contactId} via ${label}`);
     setTimeout(() => setShareToast(null), 3000);
-    if (step?.action === "share" && step.to === contactId) completeStep();
+    if (step?.action === "share" && step.to === contactId) {
+      const isLastStep = stepIndex + 1 >= steps.length;
+      completeStep();
+      if (isLastStep && via === "messages") setShowMeBanner(true);
+    }
+  }
+
+  function handleShowMe() {
+    if (!sharedToContact || !selectedPhoto) return;
+    const existing = getThread(sharedToContact) ?? [];
+    saveThread(sharedToContact, [...existing, { from: "me", text: `Shared a photo with you: ${selectedPhoto.label}` }]);
+    setShowMeConfirmed(true);
   }
 
   const via = shareVia;
@@ -292,18 +312,31 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
         <div className="w-36 bg-gray-50 border-r flex flex-col flex-shrink-0 overflow-y-auto">
-          <div className="p-2 border-b">
-            <input
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setSelectedPhoto(null);
-                setSection("All Photos");
-                if (step?.action === "search" && e.target.value.toLowerCase().includes((step.value ?? "").toLowerCase())) completeStep();
-              }}
-              placeholder="Search..."
-              className={`w-full px-2 py-1.5 text-xs border rounded outline-none focus:border-blue-400 ${hl("search-input") ? pulse : ""}`}
-            />
+          <div className="p-2 border-b flex items-center gap-1">
+            {searchOpen ? (
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSelectedPhoto(null);
+                  setSection("All Photos");
+                  if (step?.action === "search" && step.value && e.target.value.toLowerCase().includes(step.value.toLowerCase())) completeStep();
+                }}
+                placeholder="Search..."
+                className={`flex-1 px-2 py-1.5 text-xs border rounded outline-none focus:border-blue-400 ${hl("search-input") ? pulse : ""}`}
+              />
+            ) : (
+              <button
+                onClick={() => {
+                  setSearchOpen(true);
+                  if (step?.action === "search" && !step.value) completeStep();
+                }}
+                className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 border rounded w-full hover:bg-gray-100 ${hl("search-icon") ? pulse : ""}`}
+              >
+                <SearchIcon size={12} /> Search
+              </button>
+            )}
           </div>
           {SIDEBAR_SECTIONS.map((s) => (
             <button
@@ -401,6 +434,19 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               {shareToast && (
                 <div className="mx-4 mt-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700 font-medium">
                   {shareToast}
+                </div>
+              )}
+              {showMeBanner && (
+                <div className="mx-4 mt-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 flex items-center gap-2">
+                  <span className="flex-1">{showMeConfirmed ? "Photo sent! Open Messages from the dock to see it." : "Want to see it arrive? Send the photo to Messages."}</span>
+                  {!showMeConfirmed && (
+                    <button
+                      onClick={handleShowMe}
+                      className="shrink-0 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
+                    >
+                      Show me
+                    </button>
+                  )}
                 </div>
               )}
 

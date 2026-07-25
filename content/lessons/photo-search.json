@@ -5,18 +5,22 @@
   "order": 702,
   "title": "Searching Your Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Photo apps can recognize what's in your pictures.\n\u2022 Search \"beach\" to see all your beach photos.\n\u2022 Search \"dog\", or type someone's name.\n\u2022 It saves huge time, and the search happens right on your device.",
+  "drDigitalIntro": "Photo apps can recognize what is in your pictures.\n• Search 'beach' to see all your beach photos.\n• Search 'dog', or type someone's name.\n• It saves huge time, and the search happens right on your device.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You searched your photo library",
     "steps": [
       {
-        "say": "Click the Search bar at the top.",
+        "say": "Click the search icon to open the search bar.",
+        "action": "search"
+      },
+      {
+        "say": "Type 'beach' to find matching photos.",
         "action": "search",
         "value": "beach"
       }
     ]
   },
-  "drDigitalSuccess": "You searched your photos! The photo app recognizes what's in your images so you can find them fast.",
-  "drDigitalHint": "Click the Search bar and type a word like 'beach' to find matching photos."
+  "drDigitalSuccess": "You searched your photos! The photo app finds images by what is in them so you can search by name, place, or subject.",
+  "drDigitalHint": "Click the search icon in the sidebar, then type a word like 'beach' to find matching photos."
 }

@@ -5,27 +5,27 @@
   "order": 810,
   "title": "The App Market",
   "videoUrl": "",
-  "drDigitalIntro": "Your computer has a built-in app market where you download new apps safely.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• Every app is reviewed before it's listed.\n• Browse by category, search by name, or read reviews from other users.",
+  "drDigitalIntro": "Your computer has a built-in app market where you download new apps safely.\n• Every app is reviewed before it is listed, so it is safer than random websites.\n• Browse by category, search by name, or read reviews from other users.\n• Check ratings and reviews before you install — other people's experiences help you decide.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You browsed the App Market",
     "steps": [
       {
-        "say": "You're in the App Market. Click 'Games' to browse games.",
+        "say": "Click 'Games' to browse the Games category.",
         "action": "go-to-category",
         "target": "Games"
       },
       {
-        "say": "Click on Puzzle Quest to see its details, reviews, and screenshots.",
+        "say": "Click Zen Garden to see its details, reviews, and screenshots.",
         "action": "select-app",
-        "target": "Puzzle Quest"
+        "target": "Zen Garden"
       },
       {
-        "say": "Nice! Now go back to the App Market tab.",
+        "say": "Notice the rating, reviews, and the 'No ads' tag. Now go back to the App Market.",
         "action": "go-to-store"
       }
     ]
   },
-  "drDigitalSuccess": "You browsed the App Market! Each app page shows ratings, reviews, and screenshots so you can decide before installing.",
+  "drDigitalSuccess": "You browsed the App Market! Ratings, reviews, and tags tell you a lot before you install. Always check them.",
   "drDigitalHint": "Click a category to browse, then click an app name to see its full listing."
 }

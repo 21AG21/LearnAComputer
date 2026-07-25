@@ -71,15 +71,15 @@ Not started: **9, 10, 11, 12, 13, 14, 15, 16, 17**.
 
 Work top to bottom. Each stage is a commit boundary; run the four checks (`check-lessons.py`, `tsc --noEmit`, `lint`, `build`) plus a browser walkthrough at the end of every stage.
 
-### Stage A — Close out what's in flight (small, unblocked)
+### Stage A — Close out what's in flight (small, unblocked) ✅ commit `ab7b743`
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 1 | 8.2 | Walk all 9 steps of `reply-forward` in the browser; fix any text-entry step that completes on blur instead of on typing | Last open item in the phase just committed |
-| 2 | 3.6 | Browser-verify the sleep lesson's right pane is gone and text is centered | 1.9 already shipped — this is a 2-minute confirmation |
-| 3 | 11.1, 11.2 | Browser-verify dark mode reaches WiFi/battery/panels/dock, and Settings against `MailApp` | Code landed in 2.7; these are verify-only |
-| 4 | — | Delete the orphaned `components/DashboardView.tsx` (zero importers since 1.1) | Dead file, one line of housekeeping |
-| 5 | 1.11 | Add the catalog `Redo` affordance: `?restart=1` read via `useSearchParams`, skips the resume-at-first-incomplete logic | Completes a partial item while `LessonCatalog` is fresh |
+| 1 | 8.2 | ✅ Walk all 9 steps of `reply-forward` in the browser; fix any text-entry step that completes on blur instead of on typing | Last open item in the phase just committed |
+| 2 | 3.6 | ✅ Browser-verify the sleep lesson's right pane is gone and text is centered | 1.9 already shipped — this is a 2-minute confirmation |
+| 3 | 11.1, 11.2 | ✅ Browser-verify dark mode reaches WiFi/battery/panels/dock, and Settings against `MailApp` | Code landed in 2.7; these are verify-only |
+| 4 | — | ✅ Delete the orphaned `components/DashboardView.tsx` (zero importers since 1.1) | Dead file, one line of housekeeping |
+| 5 | 1.11 | ✅ Add the catalog `Redo` affordance: `?restart=1` read via `useSearchParams`, skips the resume-at-first-incomplete logic | Completes a partial item while `LessonCatalog` is fresh |
 
 ### Stage B — Cheap, high-value bug fixes (Phases 9–11)
 

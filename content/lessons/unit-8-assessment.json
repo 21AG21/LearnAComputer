@@ -5,49 +5,46 @@
   "order": 870,
   "title": "Find and Install an App",
   "videoUrl": "",
-  "drDigitalIntro": "Let's put your app skills to the test!\n• Search for an app, install it, manage permissions, and update another.\n• Clean up an app you don't need anymore.\n• You know the drill — let's go!",
+  "drDigitalIntro": "Time to put your app skills together!\n• Browse the App Market, find an app, and install it.\n• Update an app that needs it.\n• Clean up an app you no longer use.\n• You know how to do all of this — let's go!",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You searched, installed, updated, and deleted apps",
     "steps": [
       {
-        "say": "Search for 'weather' in the App Market.",
-        "action": "search",
-        "value": "weather"
+        "say": "Browse the Creativity category.",
+        "action": "go-to-category",
+        "target": "Creativity"
       },
       {
-        "say": "Open WeatherNow from the results.",
+        "say": "Open NoteMaster to read its details.",
         "action": "select-app",
-        "target": "WeatherNow"
+        "target": "NoteMaster"
       },
       {
-        "say": "Install WeatherNow.",
-        "action": "install"
-      },
-      {
-        "say": "The app needs camera and microphone access. Allow the permissions.",
-        "action": "allow-permission"
+        "say": "Install NoteMaster.",
+        "action": "install",
+        "target": "NoteMaster"
       },
       {
         "say": "Go to My Apps to see your installed apps.",
         "action": "go-to-installed"
       },
       {
-        "say": "One of your apps has an update available. Update it.",
+        "say": "WeatherNow has an update available — update it.",
         "action": "update-app",
         "target": "WeatherNow"
       },
       {
-        "say": "You don't play Puzzle Quest anymore. Delete it.",
+        "say": "Delete SketchPad — you have a different drawing app you prefer.",
         "action": "delete-app",
-        "target": "Puzzle Quest"
+        "target": "SketchPad"
       },
       {
-        "say": "Go back to the store to browse.",
+        "say": "Go back to the store.",
         "action": "go-to-store"
       }
     ]
   },
-  "drDigitalSuccess": "You found, installed, updated, and deleted apps like a pro!\n\nNow for real: on your own computer, open its app store and install WhatsApp — or if it's already there, check whether it needs an update.",
-  "drDigitalHint": "Use the search bar to find apps, My Apps to manage them, and the trash icon to delete ones you don't need."
+  "drDigitalSuccess": "You browsed, installed, updated, and deleted apps like a pro!\n\nNow for real: open your device's app store and find an app that might be useful — maybe a recipe app, a weather app, or a notes app.",
+  "drDigitalHint": "Use the category tabs to browse, My Apps to manage installed apps, and the trash icon to delete ones you no longer need."
 }

@@ -5,33 +5,25 @@
   "order": 820,
   "title": "Installing an App",
   "videoUrl": "",
-  "drDigitalIntro": "Installing an app puts it on your device.\n• On some computers it's called App Store, on others Play Store or Microsoft Store — they all work the same way.\n• For free apps, just click Install.\n• Paid apps charge your payment method on file.\n• Once installed, it appears in My Apps.",
+  "drDigitalIntro": "Installing an app puts it on your device.\n• Search for it in the App Market, then click Install.\n• Free apps install straight away — paid apps charge your payment method.\n• Once installed, the app appears in My Apps.\n• Only install apps from the official App Market, never from random websites.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You installed a free app",
     "steps": [
       {
-        "say": "Search for 'Puzzle Quest' in the search bar.",
+        "say": "Search for 'recipe' in the search bar.",
         "action": "search",
-        "value": "Puzzle"
+        "value": "recipe"
       },
       {
-        "say": "Click on Puzzle Quest from the results.",
+        "say": "Click on RecipeBox from the results.",
         "action": "select-app",
-        "target": "Puzzle Quest"
+        "target": "RecipeBox"
       },
       {
         "say": "Click Install to download and install it.",
         "action": "install",
-        "target": "Puzzle Quest"
-      },
-      {
-        "say": "Puzzle Quest wants Camera access. This seems suspicious for a puzzle game, but allow it for now — we'll learn about permissions next.",
-        "action": "allow-permission"
-      },
-      {
-        "say": "Allow Microphone access too.",
-        "action": "allow-permission"
+        "target": "RecipeBox"
       },
       {
         "say": "Click 'My Apps' to see your installed apps.",
@@ -39,6 +31,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You installed an app! Check My Apps to see everything you've installed. Next we'll learn about those permission requests.",
-  "drDigitalHint": "Search for an app, click its name, then click the Install button. Allow the permissions when prompted."
+  "drDigitalSuccess": "You installed an app! It is now in My Apps. Next we will learn about permission requests.",
+  "drDigitalHint": "Search for the app, click its name, then click the Install button."
 }

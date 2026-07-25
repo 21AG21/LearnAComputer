@@ -5,7 +5,7 @@
   "order": 960,
   "title": "Customize Your Computer",
   "videoUrl": "",
-  "drDigitalIntro": "Now do it for real — on your own computer!\n\n1. Open Settings (or System Preferences on a Mac).\n2. Switch between light and dark mode — pick the one you like.\n3. Adjust the screen brightness to a comfortable level.\n4. Turn on Night Shift (or Night Light on Windows) for evening use.\n5. If the text feels small, look for a Display or Accessibility setting to make it larger.\n6. Check how much storage you have free.\n\nSkip trackpad sensitivity and notification settings — every computer does those differently. The important thing is that you know where Settings is and how to find things inside it.",
+  "drDigitalIntro": "Now do it for real — on your own computer!\n\n1. Open Settings.\n2. Switch between light and dark mode — pick the one you like.\n3. Adjust the screen brightness to a comfortable level.\n4. Turn on Night Shift (or Night Light on Windows) for evening use.\n5. If the text feels small, look for a Display or Accessibility setting to make it larger.\n6. Check how much storage you have free.",
   "playgroundTask": {
     "type": "none"
   },
