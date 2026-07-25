@@ -9,7 +9,6 @@ import DesktopFileExplorerTask from "@/components/Playground/DesktopFileExplorer
 import DesktopBrowserRightClickTask from "@/components/Playground/DesktopBrowserRightClickTask";
 import DesktopBrowserScrollTask from "@/components/Playground/DesktopBrowserScrollTask";
 import DesktopBrowserZoomTask from "@/components/Playground/DesktopBrowserZoomTask";
-import MessagingApp from "@/components/Playground/Desktop/MessagingApp";
 import MatchPartsTask from "@/components/Playground/MatchPartsTask";
 import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
 import TextEditorTask from "@/components/Playground/TextEditorTask";
@@ -107,17 +106,6 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <DesktopBrowserScrollTask code={task.code} onResult={onResult} />
           )}
           {task.type === "pinch-zoom" && <DesktopBrowserZoomTask onResult={onResult} />}
-          {task.type === "message-reply" && (
-            <MessagingApp
-              contactName={task.contactName}
-              avatarSrc={task.avatarSrc}
-              initialMessages={[{ from: "contact", text: task.incomingMessage }]}
-              instructionBanner={`Looks like my hands are tied. Can you type out this response for me? "${task.requiredResponse}"`}
-              onSendMessage={(text) => onResult(checkTypeText(task.requiredResponse, text, true))}
-              onClose={onExit}
-              onMinimize={onExit}
-            />
-          )}
           {task.type === "match-parts" && (
             <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched" chrome={false}>
               <MatchPartsTask onResult={wrappedOnResult} />

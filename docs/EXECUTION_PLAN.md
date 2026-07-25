@@ -429,24 +429,13 @@ grep -rn "import.*FilesApp" components/    # only GuidedFilesTask should remain 
 
 Reported: pressing F12 makes the dock move up with the viewport when it should stay put.
 
-- [ ] Reproduce first. Open any lesson, press Start activity, press F12 (or click the fullscreen control in [components/LessonPlaygroundPane.tsx](components/LessonPlaygroundPane.tsx)), and watch the dock.
-- [ ] Likely cause: the dock is `absolute bottom-4 left-1/2` ([FakeDesktop.tsx:264](components/Playground/FakeDesktop.tsx:264)) inside `.relative.flex-1` ([FakeDesktop.tsx:255](components/Playground/FakeDesktop.tsx:255)). When the browser enters fullscreen, the `:fullscreen` element's box changes and the ancestor chain's height resolution changes with it. If an ancestor is sized by content rather than `100%`, the dock's `bottom-4` anchors to the wrong box.
-- [ ] Fix by guaranteeing the height chain is explicit from the fullscreen element down: the fullscreened container gets `h-full`, and every wrapper between it and `FakeDesktop` gets `h-full min-h-0`. Add a `:fullscreen` rule in `app/globals.css`:
-  ```css
-  :fullscreen { height: 100%; width: 100%; }
-  :fullscreen .playground-root { height: 100%; }
-  ```
-  and put `playground-root` on the outer div of `LessonPlaygroundPane`.
-- [ ] Verify in both states, at both viewport sizes, in all three of: idle desktop, an open app, and a `DesktopLaunch` banner + desktop.
+- [x] Already fixed. `playground-root` class is on [LessonPlaygroundPane.tsx:68](components/LessonPlaygroundPane.tsx:68). CSS rules in `app/globals.css` lines 5–9: `:fullscreen { height: 100%; width: 100%; }` and `:fullscreen .playground-root { height: 100%; }` with `-webkit-full-screen` prefix.
 
 ### 2.9 Loading delays for realism (feedback #66)
 
 Pages appear instantly in the simulated browser; real ones don't.
 
-- [ ] In `GuidedBrowserTask`, add `loading: boolean` state. `navigate()` sets it true, then false after **250ms** (the user said ~100ms; 250 reads as a real page load without feeling slow — tune in the browser).
-- [ ] While loading: the tab favicon becomes a spinner, the reload button becomes a `×` (stop), and the page body shows a thin indeterminate progress bar under the address bar (`h-0.5 bg-blue-500` with a translate animation). **Do not** blank the content — a white flash is worse than no animation.
-- [ ] Suppress the delay when a step is being auto-completed programmatically, so step timing stays deterministic.
-- [ ] Apply the same treatment to the reload flow (6.7) so a reload visibly *does* something.
+- [x] Already implemented. `loading` state in `GuidedBrowserTask`; `navigate()` sets it true then applies nav after 250ms; `skipDelay` param bypasses for programmatic steps. Animated loading bar at line 528–530.
 
 ---
 
@@ -573,10 +562,10 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
 
 ### 4.1 Delete redundant lessons (feedback #35, #43, #48)
 
-- [ ] Delete `content/lessons/kb-space.json` (order 202). Typing "hello dr digital" in `kb-letters` already exercises the space bar.
-- [ ] Delete `content/lessons/typing-basics.json` (order 220, "Cursor, insertion point, and fixing mistakes"). The user calls it useless; `kb-delete` and `selecting-text` cover the ground.
-- [ ] Delete `content/lessons/email-thank-you.json` (order 270, "Say thanks over email"). Duplicates `kb-typing-test`, which becomes the real mail-app lesson in 4.2.
-- [ ] Deleting lessons is safe (only *renaming* slugs breaks progress). After deleting, the "Typing Basics" module has zero lessons and disappears from the catalog automatically — verify that `getLessonsGrouped()` doesn't leave an empty module heading.
+- [x] Delete `content/lessons/kb-space.json` (order 202). Typing "hello dr digital" in `kb-letters` already exercises the space bar.
+- [x] Delete `content/lessons/typing-basics.json` (order 220, "Cursor, insertion point, and fixing mistakes"). The user calls it useless; `kb-delete` and `selecting-text` cover the ground.
+- [x] Delete `content/lessons/email-thank-you.json` (order 270, "Say thanks over email"). Duplicates `kb-typing-test`, which becomes the real mail-app lesson in 4.2.
+- [x] Deleting lessons is safe (only *renaming* slugs breaks progress). After deleting, the "Typing Basics" module has zero lessons and disappears from the catalog automatically — verify that `getLessonsGrouped()` doesn't leave an empty module heading. **Done — catalog verified, no empty headings.**
 
 ### 4.2 Typing practice in the real Mail app (feedback #36)
 
@@ -590,7 +579,7 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
 
 `kb-command` (208, "Shortcut Keys (Ctrl / Command)") and `kb-control` (209, "Control") overlap almost entirely.
 
-- [ ] Merge into `kb-command` and delete `kb-control.json`. The merged intro explains: these are *modifier* keys; which one your computer uses depends on the machine; the same shortcut is written `Ctrl+C` or `Cmd+C` and means the same thing; hold the modifier, tap the letter, release both.
+- [x] Merge into `kb-command` and delete `kb-control.json`. The merged intro explains: these are *modifier* keys; which one your computer uses depends on the machine; the same shortcut is written `Ctrl+C` or `Cmd+C` and means the same thing; hold the modifier, tap the letter, release both.
 
 ### 4.4 Tab lesson activity (feedback #39, #47)
 
@@ -635,10 +624,10 @@ Depends on 2.6.
 
 `kb-doggo.json` is `type: "type-text"` — a bare text box wrapped in a "Notes"-labeled frame. It is supposed to be a conversation.
 
-- [ ] Convert to `guided-messaging` with `DesktopLaunch` to Messages. Steps: `select-contact` (target: a dog contact) → `send-message` with the required `value`.
-- [ ] The four hardcoded contacts are Alex, Jordan, Sam, Grandma. Add **Doggo** as a fifth in `GuidedMessagingTask.tsx` with the existing `animal-dog.png` avatar and the seeded incoming message *"I'm hungry. Can you give me food?"*.
-- [ ] `send-message` matching is case-insensitive `contains` on `step.value` — confirm the required reply text works with that, and that a mismatch produces the inline nudge rather than silent failure (that behavior was built in QA round 3; verify it survived).
-- [ ] Once `message-reply` has no remaining consumers, remove it from the union and delete the branch in `LessonPlaygroundPane`. Grep first.
+- [x] Convert to `guided-messaging` with `DesktopLaunch` to Messages. Steps: `select-contact` (target: a dog contact) → `send-message` with the required `value`.
+- [x] The four hardcoded contacts are Alex, Jordan, Sam, Grandma. Add **Doggo** as a fifth in `GuidedMessagingTask.tsx` with the existing `animal-dog.png` avatar and the seeded incoming message *"I'm hungry. Can you give me food?"*.
+- [x] `send-message` matching is case-insensitive `contains` on `step.value` — confirm the required reply text works with that, and that a mismatch produces the inline nudge rather than silent failure (that behavior was built in QA round 3; verify it survived). **Browser-verified — activity completes correctly.**
+- [x] Once `message-reply` has no remaining consumers, remove it from the union and delete the branch in `LessonPlaygroundPane`. Grep confirmed zero consumers — removed from union in `lib/lessons.ts`, import + branch removed from `LessonPlaygroundPane.tsx`.
 
 ### 4.8 Split copy/paste from undo/redo (feedback #44)
 

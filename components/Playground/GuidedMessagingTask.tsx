@@ -37,6 +37,7 @@ const CONTACTS: Contact[] = [
   { id: "jordan", name: "Jordan", avatar: "/playgrounds/Cat1.png", status: "Free to chat" },
   { id: "sam", name: "Sam", avatar: "/playgrounds/Bird.png", status: "At work" },
   { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png", status: "Miss you!" },
+  { id: "doggo", name: "Doggo", avatar: "/playgrounds/animal-dog.png", status: "Woof!" },
 ];
 
 const PHOTO_OPTIONS = [
@@ -60,6 +61,7 @@ const INITIAL_THREADS: Record<string, Message[]> = {
   jordan: [{ from: "contact", text: "Did you see that funny video I sent?" }],
   sam: [{ from: "contact", text: "Can you pick up milk on the way home?" }],
   grandma: [{ from: "contact", text: "Hi sweetheart! How are you doing? I miss you so much!" }],
+  doggo: [{ from: "contact", text: "I'm hungry. Can you give me food?" }],
 };
 
 function MicIcon({ className = "" }: { className?: string }) {

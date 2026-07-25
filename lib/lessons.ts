@@ -16,14 +16,6 @@ export type PlaygroundTask =
   | { type: "browser-right-click"; instructions: string }
   | { type: "browser-scroll-code"; instructions: string; code: string }
   | { type: "pinch-zoom"; instructions: string }
-  | {
-      type: "message-reply";
-      instructions: string;
-      contactName: string;
-      incomingMessage: string;
-      requiredResponse: string;
-      avatarSrc?: string;
-    }
   | { type: "match-parts"; instructions: string }
   | { type: "open-all-apps"; instructions: string; targetCount?: number }
   | {

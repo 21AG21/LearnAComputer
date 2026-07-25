@@ -5,10 +5,10 @@
   "order": 208,
   "title": "Shortcut Keys (Ctrl / Command)",
   "videoUrl": "",
-  "drDigitalIntro": "Every computer has a special key for shortcuts.\n• On Windows, Chromebook, and Linux it's Ctrl. On Mac it's Command.\n• Hold it and press a letter to do something fast — like Ctrl+C to copy.\n• These shortcuts work in almost every app.",
+  "drDigitalIntro": "Every computer has a special key that powers keyboard shortcuts.\n• On Windows, Chromebook, and Linux it's called Ctrl (Control). On a Mac it's called Command.\n• Both keys do the same job — you hold one down and tap a letter to trigger a shortcut.\n• For example: Ctrl+C (or Command+C) copies selected text. Ctrl+V (or Command+V) pastes it.\n• Shortcut instructions are often written with a plus sign: Ctrl+C means \"hold Ctrl and press C at the same time.\"\n• These shortcuts work in almost every app, on every kind of computer — learning them saves a lot of time.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's your shortcut key — Ctrl (or Command on Mac). It powers almost every handy shortcut!",
-  "drDigitalHint": "Look for Ctrl in the bottom-left corner of your keyboard (or Command next to the space bar on Mac), then click Continue."
+  "drDigitalSuccess": "That's your shortcut key. Whether it says Ctrl or Command, it works the same way!",
+  "drDigitalHint": "Find Ctrl in the bottom-left corner of your keyboard, or Command next to the space bar on Mac. Then click Continue."
 }
