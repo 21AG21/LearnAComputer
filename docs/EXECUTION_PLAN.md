@@ -571,9 +571,9 @@ The theme of this phase: **stop simulating apps we already built.** Typing lesso
 
 `kb-typing-test.json` uses `compose-email`, rendered by `ComposeEmailTask` — a bespoke component, not the real mail client.
 
-- [ ] Convert to `guided-email` with `launchApp: "mail"` so it goes through `DesktopLaunch` → learner opens Mail from the dock → composes in the same `GuidedEmailTask` UI as Unit 6.
-- [ ] Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`. The body text is the typing exercise.
-- [ ] Once `email-thank-you` is deleted (4.1) and this is converted, check whether `ComposeEmailTask.tsx` has any remaining consumers; if not, delete it and its `compose-email` union member. Grep first.
+- [x] Convert to `guided-email` with `launchApp: "mail"` so it goes through `DesktopLaunch` → learner opens Mail from the dock → composes in the same `GuidedEmailTask` UI as Unit 6.
+- [x] Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`. The body text is the typing exercise.
+- [x] Once `email-thank-you` is deleted (4.1) and this is converted, check whether `ComposeEmailTask.tsx` has any remaining consumers; if not, delete it and its `compose-email` union member. Grep first. **`composing-email.json` still uses `compose-email` — kept. Browser-verified: DesktopLaunch → glowing Mail icon → guided compose flow.**
 
 ### 4.3 Command / Control: one lesson, not two (feedback #37)
 
