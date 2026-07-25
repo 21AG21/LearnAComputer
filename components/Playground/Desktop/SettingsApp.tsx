@@ -97,7 +97,7 @@ export default function SettingsApp({
     <div className={`h-full flex ${bg} ${text} text-sm`} style={{ fontSize: `${theme.textScale / 100}em`, fontWeight: theme.boldText ? 600 : 400 }}>
       {/* Sidebar */}
       <div className={`w-44 shrink-0 border-r ${sidebar} overflow-y-auto`}>
-        <div className={`p-3 font-semibold text-base ${muted}`}>Settings</div>
+        <div className={`p-3 font-semibold text-base ${muted} select-none`} aria-hidden="true" />
         {SECTIONS.map((s) => {
           const isActive = active === s.id;
           const hl = highlightSection === s.id;
@@ -329,6 +329,7 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
   return (
     <div>
       <h2 className="text-lg font-semibold mb-3">Storage</h2>
+      <SimulatedDataBanner />
       <Card isDark={isDark}>
         <div className="mb-2 font-medium">{usedGb.toFixed(1)} GB of {totalGb} GB used</div>
         <div className={`h-5 rounded-full overflow-hidden flex ${isDark ? "bg-gray-600" : "bg-gray-200"}`}>
@@ -400,10 +401,20 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
   );
 }
 
+function SimulatedDataBanner() {
+  return (
+    <div className="bg-purple-100 border-2 border-purple-400 text-purple-900 rounded-lg px-4 py-3 text-xs font-medium mb-3">
+      These are made-up numbers for practice. Your real computer will show different information.
+    </div>
+  );
+}
+
 function AboutPanel({ panelClass, mutedClass, isDark }: { panelClass: string; mutedClass: string; isDark: boolean }) {
+  void panelClass;
   return (
     <div>
       <h2 className="text-lg font-semibold mb-3">About</h2>
+      <SimulatedDataBanner />
       <Card isDark={isDark}>
         <div className="space-y-2">
           <div className="flex justify-between"><span className={mutedClass}>Computer Name</span><span>My Computer</span></div>

@@ -60,6 +60,10 @@ const config: Config = {
           "0%":   { opacity: "0", transform: "translateX(16px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
         },
+        "loading-bar": {
+          "0%":   { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(300%)" },
+        },
         "dock-bounce": {
           "0%":   { transform: "translateY(0)" },
           "30%":  { transform: "translateY(-14px)" },
@@ -86,6 +90,7 @@ const config: Config = {
         "ring-pulse": "ring-pulse 1.4s ease-in-out infinite",
         "pop-attention": "pop-attention 0.35s ease-out 1",
         "lesson-in": "lesson-in 0.28s ease-out both",
+        "loading-bar": "loading-bar 0.9s ease-in-out infinite",
         "dock-bounce": "dock-bounce 0.5s cubic-bezier(0.36,0.07,0.19,0.97) 1",
       },
     },

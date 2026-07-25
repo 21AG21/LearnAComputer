@@ -129,6 +129,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
   });
   const [cookieNudge, setCookieNudge] = useState(false);
   const [reloading, setReloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const step = steps[stepIndex];
   const finished = stepIndex >= steps.length;
@@ -205,22 +206,28 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
     }
   }
 
-  function navigate(pageId: PageId) {
-    setTabs((prev) => prev.map((t) => (t.id === activeId ? { ...t, pageId, zoom: 100, back: [...t.back, t.pageId], fwd: [] } : t)));
-    setHistory((prev) => [...prev, pageId]);
-    setEditing(false);
-    setLockInfo(false);
-    setMenu(null);
-    setSearchResults(null);
-    setSearchInput("");
-    const pageIsBroken = brokenPages.has(pageId);
-    setCookieOpen(!pageIsBroken && !!PAGES[pageId].cookie);
-    setPopupOpen(!pageIsBroken && !!PAGES[pageId].popup);
-    if (step?.action === "navigate" && step.url && normUrl(PAGES[pageId].url) === normUrl(step.url)) {
-      completeStep();
-    } else if (step?.action === "history-visit" && phase === 1 && PAGES[pageId].title === step.title) {
-      completeStep();
-    }
+  function navigate(pageId: PageId, skipDelay?: boolean) {
+    setLoading(true);
+    const applyNav = () => {
+      setLoading(false);
+      setTabs((prev) => prev.map((t) => (t.id === activeId ? { ...t, pageId, zoom: 100, back: [...t.back, t.pageId], fwd: [] } : t)));
+      setHistory((prev) => [...prev, pageId]);
+      setEditing(false);
+      setLockInfo(false);
+      setMenu(null);
+      setSearchResults(null);
+      setSearchInput("");
+      const pageIsBroken = brokenPages.has(pageId);
+      setCookieOpen(!pageIsBroken && !!PAGES[pageId].cookie);
+      setPopupOpen(!pageIsBroken && !!PAGES[pageId].popup);
+      if (step?.action === "navigate" && step.url && normUrl(PAGES[pageId].url) === normUrl(step.url)) {
+        completeStep();
+      } else if (step?.action === "history-visit" && phase === 1 && PAGES[pageId].title === step.title) {
+        completeStep();
+      }
+    };
+    if (skipDelay) { applyNav(); return; }
+    setTimeout(applyNav, 250);
   }
 
   function submitAddress() {
@@ -516,6 +523,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, onRes
           <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 ${hl("zoomin-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
         </div>
       </div>
+
+      {/* Page-load progress bar */}
+      {loading && (
+        <div className="h-0.5 bg-gray-200 overflow-hidden shrink-0">
+          <div className="h-full w-2/5 bg-blue-500 animate-loading-bar" />
+        </div>
+      )}
 
       {/* Bookmarks bar */}
       {showBookmarksBar && (
