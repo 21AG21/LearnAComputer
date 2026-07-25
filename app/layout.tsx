@@ -26,9 +26,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Link href="/lessons" className="transition-colors hover:text-blue-600 active:scale-95 inline-block">
             Lessons
           </Link>
-          <Link href="/dashboard" className="transition-colors hover:text-blue-600 active:scale-95 inline-block">
-            Dashboard
-          </Link>
           <Link href="/playground" className="transition-colors hover:text-blue-600 active:scale-95 inline-block">
             Playground
           </Link>
