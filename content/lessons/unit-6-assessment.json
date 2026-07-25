@@ -35,9 +35,17 @@
         "target": "Dinner Sunday?"
       },
       {
-        "say": "Reply to Mom and say you'll be there.",
-        "action": "reply",
-        "value": "Yes, Sunday works! See you at 6."
+        "say": "Click Reply to respond to Mom.",
+        "action": "reply"
+      },
+      {
+        "say": "Type your reply: Yes, Sunday works! See you at 6.",
+        "action": "set-body",
+        "value": "Yes, Sunday works!"
+      },
+      {
+        "say": "Send your reply.",
+        "action": "send"
       },
       {
         "say": "Now compose a new email — click the compose button.",

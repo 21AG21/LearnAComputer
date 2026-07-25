@@ -5,14 +5,36 @@
   "order": 620,
   "title": "Writing an Email",
   "videoUrl": "",
-  "drDigitalIntro": "To write an email, click New Message.\n• Put the recipient's address in the To field.\n• Write a clear subject line that says what it's about.\n• Type your message, then click Send. Not ready? Save it as a Draft.\n• Tip: press Tab to jump between fields quickly, and Shift+Tab to go back.",
+  "drDigitalIntro": "To write an email, click the compose button and fill in three things.\n• To: the recipient's email address — spell it correctly or it won't arrive.\n• Subject: a short description of what the email is about. Keep it clear.\n• Body: the actual message. Write it like a short letter.\n• When you are ready, click Send. The email arrives in seconds.\n• Tip: press Tab to jump between fields, and Shift+Tab to go back.",
   "playgroundTask": {
-    "type": "compose-email",
-    "instructions": "Practice composing an email! Open Mail, click the pencil to compose, and type this message exactly.",
-    "to": "doctordigital@example.com",
-    "subject": "Hello from me!",
-    "requiredBody": "Hello Doctor Digital! I am learning how to write emails. This is so useful!"
+    "type": "guided-email",
+    "goal": "Compose and send your first email",
+    "steps": [
+      {
+        "say": "Click the Compose button (pencil icon) to start a new email.",
+        "action": "compose"
+      },
+      {
+        "say": "Type the recipient's address in the To field: friend@example.com",
+        "action": "set-to",
+        "value": "friend@example.com"
+      },
+      {
+        "say": "Click the Subject field and type: Greetings from me!",
+        "action": "set-subject",
+        "value": "Greetings from me!"
+      },
+      {
+        "say": "Click the body area and type your message: Hi there! I am learning to send emails.",
+        "action": "set-body",
+        "value": "Hi there"
+      },
+      {
+        "say": "Click Send to deliver the email.",
+        "action": "send"
+      }
+    ]
   },
-  "drDigitalSuccess": "A perfectly composed email! You nailed the To field, the subject, and the message body.",
-  "drDigitalHint": "Click the pencil icon in Mail to start a new email, fill in each field, then click Send."
+  "drDigitalSuccess": "Email sent! You filled in To, Subject, and the body — the three things every email needs. From now on you can write to anyone.",
+  "drDigitalHint": "Work through each field from top to bottom: To → Subject → body → Send."
 }

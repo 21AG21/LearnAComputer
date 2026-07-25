@@ -13,7 +13,6 @@ import MatchPartsTask from "@/components/Playground/MatchPartsTask";
 import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
 import TextEditorTask from "@/components/Playground/TextEditorTask";
 import EditFileTask from "@/components/Playground/EditFileTask";
-import ComposeEmailTask from "@/components/Playground/ComposeEmailTask";
 import MultipleChoiceTask from "@/components/Playground/MultipleChoiceTask";
 import DragSortTask from "@/components/Playground/DragSortTask";
 import SpotTheFakeTask from "@/components/Playground/SpotTheFakeTask";
@@ -133,9 +132,6 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               mustNotInclude={task.mustNotInclude}
               onResult={onResult}
             />
-          )}
-          {task.type === "compose-email" && (
-            <ComposeEmailTask to={task.to} subject={task.subject} requiredBody={task.requiredBody} onResult={onResult} onExit={onExit} />
           )}
           {task.type === "multiple-choice" && (
             <MultipleChoiceTask question={task.question} options={task.options} onResult={onResult} />

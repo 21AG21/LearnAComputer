@@ -43,6 +43,11 @@
         "value": "colleague@example.com"
       },
       {
+        "say": "Add a note at the top of the message: FYI — thought you should see this.",
+        "action": "set-body",
+        "value": "FYI"
+      },
+      {
         "say": "Send the forwarded email.",
         "action": "send"
       }

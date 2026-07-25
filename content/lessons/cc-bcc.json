@@ -35,6 +35,11 @@
         "value": "Family Dinner"
       },
       {
+        "say": "Type a short message in the body: Dinner is at 7pm on Saturday.",
+        "action": "set-body",
+        "value": "Dinner is at 7pm"
+      },
+      {
         "say": "Send the email.",
         "action": "send"
       }

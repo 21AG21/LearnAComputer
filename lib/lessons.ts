@@ -36,13 +36,6 @@ export type PlaygroundTask =
       mustNotInclude: string[];
     }
   | {
-      type: "compose-email";
-      instructions: string;
-      to: string;
-      subject: string;
-      requiredBody: string;
-    }
-  | {
       type: "multiple-choice";
       question: string;
       options: Array<{ text: string; correct: boolean }>;

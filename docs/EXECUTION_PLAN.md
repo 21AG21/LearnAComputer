@@ -866,14 +866,14 @@ Typing an address for a site that doesn't exist in `PAGES` currently does nothin
 
 `composing-email` (620) is the last `compose-email` lesson standing (4.2 converts the other one).
 
-- [ ] Convert to `guided-email` via `DesktopLaunch` → Mail. Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`.
-- [ ] After this, `compose-email` has zero consumers: delete `ComposeEmailTask.tsx`, remove the union member, remove the `LessonPlaygroundPane` branch, and remove it from the `CLAUDE.md` task-type table.
+- [x] Convert to `guided-email` via `DesktopLaunch` → Mail. Steps: `compose` → `set-to` → `set-subject` → `set-body` → `send`.
+- [x] After this, `compose-email` has zero consumers: deleted `ComposeEmailTask.tsx`, removed the union member, removed the `LessonPlaygroundPane` branch, and removed it from the `CLAUDE.md` task-type table.
 
 ### 8.2 Composing 2/3 is buggy; step 3 of 8 has no success signal (feedback #80)
 
-`reply-forward` (630, 8 steps).
+`reply-forward` (630, 8 steps) — now 9 steps after adding `set-body` before forward-path send.
 
-- [ ] Walk all 8 steps in the browser and record exactly which one stalls. Step 3 of 8 is called out as having no clear success indication.
+- [ ] Walk all 9 steps in the browser and record exactly which one stalls. Step 3 of 8 is called out as having no clear success indication.
 - [ ] Likely cause: a `set-body` / `set-subject` step that completes on blur or on send rather than on typing, so nothing happens as the learner types. Fix: complete text-entry steps **as soon as the required text is present in the field**, and flash the green per-step tick. Never require an extra click to "confirm" typing.
 - [ ] Verify every step in every Unit 6 lesson gives visible feedback within ~200ms of the correct action.
 
@@ -882,8 +882,8 @@ Typing an address for a site that doesn't exist in `PAGES` currently does nothin
 `cc-bcc` (640, 6 steps).
 
 - [ ] Steps complete the moment the correct address is typed in the correct field, and the yellow highlight moves immediately to the next field.
-- [ ] Add a `set-body` step — the current lesson sends an email with an empty body, which is exactly the bad habit feedback #26 flagged last round. Every `send` in the course must be preceded by a `set-body`.
-- [ ] Audit **all** Unit 6 lessons for `send` without a preceding `set-body`.
+- [x] Add a `set-body` step — the current lesson sends an email with an empty body. `cc-bcc.json` now has `set-body` before `send`.
+- [x] Audit **all** Unit 6 lessons for `send` without a preceding `set-body`. Fixed: `cc-bcc` (missing body), `reply-forward` forward path (no body before send), `unit-6-assessment` (reply flow was reply→compose with no body+send for the reply; added set-body + send before compose).
 
 ---
 
