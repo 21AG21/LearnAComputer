@@ -38,7 +38,7 @@ export default function SpotTheFakeTask({
 
   return (
     <div className="h-full flex flex-col p-6 bg-white gap-5">
-      <p className="text-2xl font-bold text-center">{instructions}</p>
+      {instructions && <p className="text-2xl font-bold text-center">{instructions}</p>}
 
       <div className="flex gap-4 flex-1 min-h-0">
         {items.map((item, i) => {

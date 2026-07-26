@@ -51,7 +51,7 @@ export default function UrlNavigatorTask({
     <div className="h-full flex flex-col bg-white overflow-hidden">
       {/* Instruction banner */}
       <div className="bg-blue-50 border-b-2 border-blue-200 px-6 py-3 shrink-0">
-        <p className="text-lg font-semibold text-blue-900">{instructions}</p>
+        {instructions && <p className="text-lg font-semibold text-blue-900">{instructions}</p>}
       </div>
 
       {/* Fake browser chrome */}

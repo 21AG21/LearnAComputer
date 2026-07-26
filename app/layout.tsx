@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`h-screen flex flex-col ${roboto.variable}`}>
-        <nav className="border-b p-4 flex gap-4 shrink-0">
+        <nav className="border-b p-4 flex gap-4 shrink-0 items-center">
           <Link href="/" className="transition-colors hover:text-blue-600 active:scale-95 inline-block">
             Home
           </Link>
@@ -28,6 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Link>
           <Link href="/playground" className="transition-colors hover:text-blue-600 active:scale-95 inline-block">
             Playground
+          </Link>
+          <Link href="/login" className="ml-auto transition-colors hover:text-blue-600 active:scale-95 inline-block text-sm text-gray-500">
+            Sign in
           </Link>
         </nav>
         <PageTransition>{children}</PageTransition>

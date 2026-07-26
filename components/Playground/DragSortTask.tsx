@@ -45,7 +45,7 @@ export default function DragSortTask({ instructions, categories, items, onResult
 
   return (
     <div className="h-full flex flex-col p-6 bg-white gap-4 overflow-hidden">
-      <p className="text-xl font-bold text-center">{instructions}</p>
+      {instructions && <p className="text-xl font-bold text-center">{instructions}</p>}
 
       {selected ? (
         <p className="text-lg text-blue-700 font-semibold text-center">

@@ -97,21 +97,21 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             </SimulatorFrame>
           )}
           {task.type === "file-explorer-open" && (
-            <DesktopFileExplorerTask filesToOpen={task.filesToOpen} onResult={onResult} />
+            <DesktopFileExplorerTask filesToOpen={task.filesToOpen} onResult={wrappedOnResult} />
           )}
           {task.type === "browser-right-click" && (
-            <DesktopBrowserRightClickTask onResult={onResult} />
+            <DesktopBrowserRightClickTask onResult={wrappedOnResult} />
           )}
           {task.type === "browser-scroll-code" && (
-            <DesktopBrowserScrollTask code={task.code} onResult={onResult} />
+            <DesktopBrowserScrollTask code={task.code} onResult={wrappedOnResult} />
           )}
-          {task.type === "pinch-zoom" && <DesktopBrowserZoomTask onResult={onResult} />}
+          {task.type === "pinch-zoom" && <DesktopBrowserZoomTask onResult={wrappedOnResult} />}
           {task.type === "match-parts" && (
             <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched" chrome={false}>
               <MatchPartsTask onResult={wrappedOnResult} />
             </SimulatorFrame>
           )}
-          {task.type === "open-all-apps" && <OpenAllAppsTask instructions={task.instructions} targetCount={task.targetCount} onResult={onResult} />}
+          {task.type === "open-all-apps" && <OpenAllAppsTask instructions={task.instructions} targetCount={task.targetCount} onResult={wrappedOnResult} />}
           {task.type === "edit-text" && (
             <SimulatorFrame appName="Notes" appIcon={<NoteIcon size={18} />} instruction={task.instructions} done={completed} goal="Text editing complete">
               <TextEditorTask
@@ -131,23 +131,29 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               correctText={task.correctText}
               mustInclude={task.mustInclude}
               mustNotInclude={task.mustNotInclude}
-              onResult={onResult}
+              onResult={wrappedOnResult}
             />
           )}
           {task.type === "multiple-choice" && (
             <MultipleChoiceTask question={task.question} options={task.options} onResult={onResult} />
           )}
           {task.type === "drag-sort-files" && (
-            <DragSortTask instructions={task.instructions} categories={task.categories} items={task.items} onResult={onResult} />
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All sorted" chrome={false}>
+              <DragSortTask instructions="" categories={task.categories} items={task.items} onResult={wrappedOnResult} />
+            </SimulatorFrame>
           )}
           {task.type === "spot-the-fake" && (
-            <SpotTheFakeTask instructions={task.instructions} items={task.items} fakeExplanation={task.fakeExplanation} onResult={onResult} />
+            <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="Fake spotted" chrome={false}>
+              <SpotTheFakeTask instructions="" items={task.items} fakeExplanation={task.fakeExplanation} onResult={wrappedOnResult} />
+            </SimulatorFrame>
           )}
           {task.type === "guided-settings" && (
             <GuidedSettingsTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
           {task.type === "url-navigator" && (
-            <UrlNavigatorTask instructions={task.instructions} prompt={task.prompt} targetUrl={task.targetUrl} successTitle={task.successTitle} onResult={onResult} />
+            <SimulatorFrame appName="Browser" instruction={task.instructions} done={completed} goal="Correct address entered" chrome={false}>
+              <UrlNavigatorTask instructions="" prompt={task.prompt} targetUrl={task.targetUrl} successTitle={task.successTitle} onResult={wrappedOnResult} />
+            </SimulatorFrame>
           )}
           {task.type === "guided-files" && (
             <DesktopLaunch app="files">
