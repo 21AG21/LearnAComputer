@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import FakeDesktop from "./FakeDesktop";
 import BrowserSimulator from "./BrowserSimulator";
 import { checkTypeText } from "./TaskChecker";
 
 interface DesktopBrowserZoomTaskProps {
+  /** Returns the learner to the desktop when they close the browser window. */
+  onExit: () => void;
   onResult: (success: boolean) => void;
 }
 
@@ -25,8 +26,7 @@ function clamp(z: number) {
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(z * 100) / 100));
 }
 
-export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomTaskProps) {
-  const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
+export default function DesktopBrowserZoomTask({ onExit, onResult }: DesktopBrowserZoomTaskProps) {
   const [code] = useState(randomCode);
   const [zoom, setZoom] = useState(1);
   const [typed, setTyped] = useState("");
@@ -38,7 +38,7 @@ export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomT
   // instead of letting the whole page zoom underneath the lesson.
   useEffect(() => {
     const el = areaRef.current;
-    if (!el || phase !== "browser") return;
+    if (!el) return;
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
@@ -47,7 +47,7 @@ export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomT
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [phase]);
+  }, []);
 
   function changeZoom(delta: number) {
     setZoom((z) => clamp(z + delta));
@@ -63,12 +63,11 @@ export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomT
 
   const readable = zoom >= 2;
 
-  if (phase === "browser") {
-    return (
+  return (
       <BrowserSimulator
         tabTitle="Concert Tickets"
         url="tickets.example"
-        onExit={() => setPhase("desktop")}
+        onExit={onExit}
         bezel={false}
         showControls={false}
       >
@@ -130,16 +129,5 @@ export default function DesktopBrowserZoomTask({ onResult }: DesktopBrowserZoomT
         </div>
       </BrowserSimulator>
     );
-  }
 
-  return (
-    <div className="h-full flex flex-col">
-      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
-        Open <span className="text-yellow-300">Browser</span> — click the glowing icon in the dock
-      </div>
-      <div className="flex-1 min-h-0 relative">
-        <FakeDesktop highlightApp="browser" onAppOpened={(app) => { if (app === "browser") setPhase("browser"); }} />
-      </div>
-    </div>
-  );
 }

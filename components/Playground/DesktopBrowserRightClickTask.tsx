@@ -2,17 +2,17 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import FakeDesktop from "./FakeDesktop";
 import BrowserSimulator from "./BrowserSimulator";
 
 interface DesktopBrowserRightClickTaskProps {
+  /** Returns the learner to the desktop when they close the browser window. */
+  onExit: () => void;
   onResult: (success: boolean) => void;
 }
 
 type BrowserPhase = "article" | "newTabPrompt" | "catPhoto";
 
-export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowserRightClickTaskProps) {
-  const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
+export default function DesktopBrowserRightClickTask({ onExit, onResult }: DesktopBrowserRightClickTaskProps) {
   const [browserPhase, setBrowserPhase] = useState<BrowserPhase>("article");
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
 
@@ -35,7 +35,6 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
     if (browserPhase === "catPhoto") setBrowserPhase("newTabPrompt");
   }
 
-  if (phase === "browser") {
     const catTabVisible = browserPhase === "newTabPrompt" || browserPhase === "catPhoto";
     const extraTabs = catTabVisible
       ? [
@@ -57,7 +56,7 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
             ? "petnews.example/judgementalcat"
             : "petnews.example"
         }
-        onExit={() => setPhase("desktop")}
+        onExit={onExit}
         bezel={false}
         showControls={true}
         extraTabs={extraTabs}
@@ -129,16 +128,5 @@ export default function DesktopBrowserRightClickTask({ onResult }: DesktopBrowse
         </div>
       </BrowserSimulator>
     );
-  }
 
-  return (
-    <div className="h-full flex flex-col">
-      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
-        Open <span className="text-yellow-300">Browser</span> — click the glowing icon in the dock
-      </div>
-      <div className="flex-1 min-h-0 relative">
-        <FakeDesktop highlightApp="browser" onAppOpened={(app) => { if (app === "browser") setPhase("browser"); }} />
-      </div>
-    </div>
-  );
 }

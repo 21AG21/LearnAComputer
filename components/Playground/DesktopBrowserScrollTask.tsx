@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import FakeDesktop from "./FakeDesktop";
 import BrowserSimulator from "./BrowserSimulator";
 import { checkTypeText } from "./TaskChecker";
 
 interface DesktopBrowserScrollTaskProps {
   /** Kept for lesson-schema compatibility; the code is now randomized each attempt. */
   code?: string;
+  /** Returns the learner to the desktop when they close the browser window. */
+  onExit: () => void;
   onResult: (success: boolean) => void;
 }
 
@@ -19,9 +20,8 @@ function randomCode() {
   return s;
 }
 
-export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScrollTaskProps) {
+export default function DesktopBrowserScrollTask({ onExit, onResult }: DesktopBrowserScrollTaskProps) {
   const [code] = useState(randomCode);
-  const [phase, setPhase] = useState<"desktop" | "browser">("desktop");
   const [scrolled, setScrolled] = useState(false);
   const [typed, setTyped] = useState("");
   const [done, setDone] = useState(false);
@@ -43,13 +43,12 @@ export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScr
     }
   }, [code, onResult]);
 
-  if (phase === "browser") {
-    return (
+  return (
       <BrowserSimulator
         tabTitle="Fun Computer Facts"
         url="facts.example"
         onExit={() => {
-          setPhase("desktop");
+          onExit();
           setScrolled(false);
         }}
         bezel={false}
@@ -158,16 +157,5 @@ export default function DesktopBrowserScrollTask({ onResult }: DesktopBrowserScr
         </div>
       </BrowserSimulator>
     );
-  }
 
-  return (
-    <div className="h-full flex flex-col">
-      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
-        Open <span className="text-yellow-300">Browser</span> — click the glowing icon in the dock
-      </div>
-      <div className="flex-1 min-h-0 relative">
-        <FakeDesktop highlightApp="browser" onAppOpened={(app) => { if (app === "browser") setPhase("browser"); }} />
-      </div>
-    </div>
-  );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
-import { FILLER_FILES } from "./Desktop/filesData";
+import { ATTACHABLE_FILES } from "./Desktop/filesData";
 import {
   InboxIcon, SendIcon, DraftIcon, SpamIcon, ArchiveIcon,
   MailIcon, ImageIcon, SpreadsheetIcon, MusicIcon, FileDocIcon,
@@ -60,7 +60,7 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
   Inbox: <InboxIcon size={14} />, Sent: <SendIcon size={14} />, Drafts: <DraftIcon size={14} />, Spam: <SpamIcon size={14} />, Archive: <ArchiveIcon size={14} />,
 };
 
-const ATTACH_FILES = FILLER_FILES.map((f) => f.name);
+const ATTACH_FILES = ATTACHABLE_FILES.map((f) => f.name);
 
 export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, onResult }: GuidedEmailTaskProps) {
   const [emails, setEmails] = useState<Email[]>(() => {

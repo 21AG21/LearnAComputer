@@ -13,7 +13,6 @@ import MatchPartsTask from "@/components/Playground/MatchPartsTask";
 import OpenAllAppsTask from "@/components/Playground/OpenAllAppsTask";
 import TextEditorTask from "@/components/Playground/TextEditorTask";
 import EditFileTask from "@/components/Playground/EditFileTask";
-import MultipleChoiceTask from "@/components/Playground/MultipleChoiceTask";
 import DragSortTask from "@/components/Playground/DragSortTask";
 import SpotTheFakeTask from "@/components/Playground/SpotTheFakeTask";
 import UrlNavigatorTask from "@/components/Playground/UrlNavigatorTask";
@@ -33,7 +32,7 @@ import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
 import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
 import DesktopLaunch from "@/components/Playground/DesktopLaunch";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
-import { NoteIcon } from "@/components/Playground/Icons";
+import { NoteIcon, GlobeIcon } from "@/components/Playground/Icons";
 import type { PlaygroundTask } from "@/lib/lessons";
 
 interface LessonPlaygroundPaneProps {
@@ -100,12 +99,32 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <DesktopFileExplorerTask filesToOpen={task.filesToOpen} onResult={wrappedOnResult} />
           )}
           {task.type === "browser-right-click" && (
-            <DesktopBrowserRightClickTask onResult={wrappedOnResult} />
+            <DesktopLaunch app="browser">
+              {(exit) => (
+                <SimulatorFrame appName="Browser" appIcon={<GlobeIcon size={18} />} instruction={task.instructions} done={completed} goal="Link opened in a new tab" chrome={false}>
+                  <DesktopBrowserRightClickTask onExit={exit} onResult={wrappedOnResult} />
+                </SimulatorFrame>
+              )}
+            </DesktopLaunch>
           )}
           {task.type === "browser-scroll-code" && (
-            <DesktopBrowserScrollTask code={task.code} onResult={wrappedOnResult} />
+            <DesktopLaunch app="browser">
+              {(exit) => (
+                <SimulatorFrame appName="Browser" appIcon={<GlobeIcon size={18} />} instruction={task.instructions} done={completed} goal="Hidden code found" chrome={false}>
+                  <DesktopBrowserScrollTask onExit={exit} code={task.code} onResult={wrappedOnResult} />
+                </SimulatorFrame>
+              )}
+            </DesktopLaunch>
           )}
-          {task.type === "pinch-zoom" && <DesktopBrowserZoomTask onResult={wrappedOnResult} />}
+          {task.type === "pinch-zoom" && (
+            <DesktopLaunch app="browser">
+              {(exit) => (
+                <SimulatorFrame appName="Browser" appIcon={<GlobeIcon size={18} />} instruction={task.instructions} done={completed} goal="Tiny print read" chrome={false}>
+                  <DesktopBrowserZoomTask onExit={exit} onResult={wrappedOnResult} />
+                </SimulatorFrame>
+              )}
+            </DesktopLaunch>
+          )}
           {task.type === "match-parts" && (
             <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All parts matched" chrome={false}>
               <MatchPartsTask onResult={wrappedOnResult} />
@@ -133,9 +152,6 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
               mustNotInclude={task.mustNotInclude}
               onResult={wrappedOnResult}
             />
-          )}
-          {task.type === "multiple-choice" && (
-            <MultipleChoiceTask question={task.question} options={task.options} onResult={onResult} />
           )}
           {task.type === "drag-sort-files" && (
             <SimulatorFrame appName="Practice" instruction={task.instructions} done={completed} goal="All sorted" chrome={false}>

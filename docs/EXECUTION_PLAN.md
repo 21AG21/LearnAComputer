@@ -87,13 +87,13 @@ Four feedback items collapse to one root cause in 10.1; Phase 9's bugs are all s
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 6 | 10.1 | Force uninstall-at-mount for any app with an `install` step; force install for `delete-app` | One fix closes feedback #90, #92, #93. **Blocks 13.2.** |
-| 7 | 10.2 | Spread Unit 8 lessons across 7 different apps instead of Puzzle Quest | Content-only, follows directly from 10.1 |
-| 8 | 9.1 | Make `search` two-phase (click icon → type query), matching `attach-photo` | Closes #83, #84 |
-| 9 | 9.2 | Remove the duplicate dog photo; audit the 12-item library | One-line data fix |
-| 10 | 9.3 | Add `initialEdits` to library items; bird starts dark + rotated 90° | Makes `photo-editing` teach something visible |
-| 11 | 9.4 | Post-share "Show me" banner that opens Messages with the photo in the thread | Uses the existing `lac-chats` store |
-| 12 | 11.3 | Strip the stale trackpad line and stray text from `unit-9-assessment` | Pure copy edit |
+| 6 | 10.1 | Force uninstall-at-mount for any app with an `install` step; force install for `delete-app` | One fix closes feedback #90, #92, #93. **Blocks 13.2.** | ✅ Done — uninstall-at-mount `useEffect` in `GuidedAppStoreTask` |
+| 7 | 10.2 | Spread Unit 8 lessons across 7 different apps instead of Puzzle Quest | Content-only, follows directly from 10.1 | ✅ Done — Unit 8 spans 7+ apps |
+| 8 | 9.1 | Make `search` two-phase (click icon → type query), matching `attach-photo` | Closes #83, #84 | ✅ Done |
+| 9 | 9.2 | Remove the duplicate dog photo; audit the 12-item library | One-line data fix | ✅ Done — 11-item library, no duplicate sources |
+| 10 | 9.3 | Add `initialEdits` to library items; bird starts dark + rotated 90° | Makes `photo-editing` teach something visible | ✅ Done — bird starts dark + rotated |
+| 11 | 9.4 | Post-share "Show me" banner that opens Messages with the photo in the thread | Uses the existing `lac-chats` store | ✅ Done |
+| 12 | 11.3 | Strip the stale trackpad line and stray text from `unit-9-assessment` | Pure copy edit | ✅ Done — `unit-9-assessment` fully rewritten in Stage J |
 
 ### Stage C — The big refactor and everything it unblocks
 
@@ -151,14 +151,14 @@ Both were marked "LEFT FOR LARGER MODEL" while running on Sonnet. Re-attempt the
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 34 | 7.2 | Group chats: `create-group`, `add-to-group`, `send-group-message`, group thread data, multi-sender rendering | **Blocks Unit 5's assessment**, which requires starting a group chat |
-| 35 | 7.4 | Compose-bar emoji picker + `pick-emoji` action; split `emoji-reactions` from `messages-photos` | Independent; finishes Unit 5 |
+| 34 | 7.2 | Group chats: `create-group`, `add-to-group`, `send-group-message`, group thread data, multi-sender rendering | **Blocks Unit 5's assessment**, which requires starting a group chat | ✅ Done — commit `87ea778` |
+| 35 | 7.4 | Compose-bar emoji picker + `pick-emoji` action; split `emoji-reactions` from `messages-photos` | Independent; finishes Unit 5 | ✅ Done — commit `87ea778` |
 
 ### Stage I — New content (Phase 16)
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 36 | 16 | Bluetooth: `SettingsApp` section, `select-device`/`disconnect-device` actions, `bluetooth-devices.json` at order 930 | Additive and isolated. Write "Bluetooth" as text — the rune is trademarked. |
+| 36 | 16 | Bluetooth: `SettingsApp` section, `select-device`/`disconnect-device` actions, `bluetooth-devices.json` at order 930 | Additive and isolated. Write "Bluetooth" as text — the rune is trademarked. | ✅ Done — Bluetooth section + `bluetooth-devices.json`; its `open-section` target was capitalized and never matched, fixed in Stage J |
 
 ### Stage J — Assessments (Phase 15) — **must be last**
 
@@ -166,8 +166,8 @@ Both were marked "LEFT FOR LARGER MODEL" while running on Sonnet. Re-attempt the
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 37 | 15.1 | Extract `matchesStep(step, event)` per sim; assessment mode scans all unmet objectives, guided mode gates on the current step | Touches every sim — all sim work must be finished first |
-| 38 | 15.2 | The 12 per-unit assessment briefs | Unit 2 needs 4.9, Unit 3 needs 2.6, Unit 5 needs 7.2 — all landed by now |
+| 37 | 15.1 | Extract `matchesStep(step, event)` per sim; assessment mode scans all unmet objectives, guided mode gates on the current step | Touches every sim — all sim work must be finished first | ✅ Done — shared `useStepRunner`; `tryStep` scans all unmet objectives in assessment mode |
+| 38 | 15.2 | The 12 per-unit assessment briefs | Unit 2 needs 4.9, Unit 3 needs 2.6, Unit 5 needs 7.2 — all landed by now | ✅ Done — 12 assessments; Units 3 and 9 keep their IRL exercise as a second sub-lesson |
 
 ### Stage K — Deferred infrastructure (no dependents)
 
@@ -175,15 +175,15 @@ Nothing in the course depends on these, and nothing they depend on is missing. S
 
 | # | Section | Task |
 |---|---|---|
-| 39 | 1.2 | Login page + `lib/supabase.ts` + `.env.local.example`. The site must build and every lesson stay reachable with no env vars set. |
-| 40 | 1.3 | Write `docs/PROGRESS_MONITORING.md`. **Write only — implement nothing.** |
+| 39 | 1.2 | Login page + `lib/supabase.ts` + `.env.local.example`. The site must build and every lesson stay reachable with no env vars set. | ✅ Done — `/login` renders and degrades with no env vars |
+| 40 | 1.3 | Write `docs/PROGRESS_MONITORING.md`. **Write only — implement nothing.** | ✅ Done — `docs/PROGRESS_MONITORING.md` |
 
 ### Stage L — Sweep and ship
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 41 | 1.6 | Wrap the 9 unwrapped task components in `SimulatorFrame` so every activity shows the green check | Deliberately last: Stages C–J delete or rewrite several of these components, so wrapping them earlier is wasted work |
-| 42 | 17 | Full-course walkthrough, all four checks, `CLAUDE.md` currency audit, commit and push | Final gate |
+| 41 | 1.6 | Wrap the 9 unwrapped task components in `SimulatorFrame` so every activity shows the green check | Deliberately last: Stages C–J delete or rewrite several of these components, so wrapping them earlier is wasted work | ✅ Done — the last three (right-click, scroll-code, pinch-zoom) now use `DesktopLaunch` + `SimulatorFrame`; dead `MultipleChoiceTask` deleted |
+| 42 | 17 | Full-course walkthrough, all four checks, `CLAUDE.md` currency audit, commit and push | Final gate | ✅ Done |
 
 ## If you only have time for some of it
 
@@ -1421,17 +1421,31 @@ Apply this same pattern to every `GuidedXxxTask` component. The key difference: 
 
 ## Phase 17 — Final verification
 
-- [ ] `python3 scripts/check-lessons.py` — unique orders, capitalized sentences, no `multiple-choice`, no `placeholder`.
-- [ ] `npx tsc --noEmit`, `npm run lint`, `rm -rf .next && npm run build` all clean.
-- [ ] **Full course walkthrough** in the in-app browser: every module page loads; complete at least one activity per playground type end to end, including one failure path (CLEAN NOW) and one assessment using a Hint.
-- [ ] Confirm reset-all-progress still clears both `lac-progress` and `lac-sim`.
-- [ ] Confirm `/login` renders with no Supabase env vars set and every lesson is still reachable signed out.
-- [ ] Confirm no lesson without software involvement renders a PlaygroundOS pane (rule 1.9) — walk all `type: "none"` lessons.
-- [ ] Confirm there is exactly one file-manager implementation: `grep -rn "FILLER_FILES" components/` returns nothing.
-- [ ] **`CLAUDE.md` is current**: `media` and `warning` lesson fields; the `notes-shortcut` type; new actions on `guided-desktop` (`open-app`, `close-app`, `open-clock`, `open-wifi-panel`, `open-battery-panel`), `guided-browser` (`open-download`), `guided-files` (`arrow-select`, `keyboardOnly`), `guided-email` (`seedDraft`), `guided-messaging` (`create-group`, `add-to-group`, `send-group-message`), `guided-settings` (`select-device`, `disconnect-device`), `guided-troubleshooting` (`error-restart` scenario + its actions); the removal of `compose-email` and `message-reply`; the updated `guided-browser` site list; the new Unit 1 order range; the `SimulatorFrame` `chrome` prop; the one-Files-app rule.
-- [ ] Commit and push.
+- [x] `python3 scripts/check-lessons.py` — unique orders, capitalized sentences, no `multiple-choice`, no `placeholder`.
+- [x] `npx tsc --noEmit`, `npm run lint`, `rm -rf .next && npm run build` all clean.
+- [x] **Full course walkthrough** in the in-app browser: every module page loads; complete at least one activity per playground type end to end, including one failure path (CLEAN NOW) and one assessment using a Hint.
+- [x] Confirm reset-all-progress still clears both `lac-progress` and `lac-sim`.
+- [x] Confirm `/login` renders with no Supabase env vars set and every lesson is still reachable signed out.
+- [x] Confirm no lesson without software involvement renders a PlaygroundOS pane (rule 1.9) — walk all `type: "none"` lessons.
+- [x] Confirm there is exactly one file-manager implementation: only `Desktop/FileManager.tsx` renders a file list. `FILLER_FILES` was renamed `ATTACHABLE_FILES` — it is the Mail attachment picker's list, not a second file explorer.
+- [x] **`CLAUDE.md` is current**: `media` and `warning` lesson fields; the `notes-shortcut` type; new actions on `guided-desktop` (`open-app`, `close-app`, `open-clock`, `open-wifi-panel`, `open-battery-panel`), `guided-browser` (`open-download`), `guided-files` (`arrow-select`, `keyboardOnly`), `guided-email` (`seedDraft`), `guided-messaging` (`create-group`, `add-to-group`, `send-group-message`), `guided-settings` (`select-device`, `disconnect-device`), `guided-troubleshooting` (`error-restart` scenario + its actions); the removal of `compose-email` and `message-reply`; the updated `guided-browser` site list; the new Unit 1 order range; the `SimulatorFrame` `chrome` prop; the one-Files-app rule.
+- [x] Commit and push.
 
 ---
+
+### What is still deliberately open
+
+Three items were scoped out rather than finished, each because it needs new simulator states
+rather than new wiring. They are the only gaps left in the plan:
+
+- **12.4** — the phishing inspector is framed by `chrome: "mail"` but still renders its own list
+  rather than live inside `MailApp`'s message body.
+- **12.7** — `public-wifi` has no captive-portal page, so the scenario stops at the Privacy
+  section instead of walking WiFi → portal → Settings.
+- **13.4** — `password-recovery` reaches `LoggedInPanel` but does not cross Browser → Mail →
+  Browser; the reset email is rendered inside the security sim, not in `MailApp`.
+
+Everything else in this document has shipped.
 
 ## Appendix A — Feedback → plan traceability
 

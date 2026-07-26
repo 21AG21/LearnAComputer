@@ -75,7 +75,7 @@ export interface FileEntry {
   contents?: string;
 }
 
-export const FILLER_FILES: FileEntry[] = [
+export const ATTACHABLE_FILES: FileEntry[] = [
   { name: "VacationPhoto.png", image: "/playgrounds/VacationPhoto.png" },
   { name: "GroceryList.txt",   contents: "Milk\nEggs\nBread\nApples" },
   { name: "Budget.xlsx",       image: "/playgrounds/Budget.png" },

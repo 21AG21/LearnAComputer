@@ -5,13 +5,16 @@ import FakeDesktop, { type DesktopAppId, APP_TITLES } from "./FakeDesktop";
 
 interface DesktopLaunchProps {
   app: DesktopAppId;
-  children: React.ReactNode;
+  /** Receives a callback that returns the learner to the desktop, for sims with a closable window. */
+  children: React.ReactNode | ((exit: () => void) => React.ReactNode);
 }
 
 export default function DesktopLaunch({ app, children }: DesktopLaunchProps) {
   const [launched, setLaunched] = useState(false);
 
-  if (launched) return <>{children}</>;
+  if (launched) {
+    return <>{typeof children === "function" ? children(() => setLaunched(false)) : children}</>;
+  }
 
   return (
     <div className="h-full w-full flex flex-col">

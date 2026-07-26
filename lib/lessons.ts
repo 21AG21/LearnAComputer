@@ -36,11 +36,6 @@ export type PlaygroundTask =
       mustNotInclude: string[];
     }
   | {
-      type: "multiple-choice";
-      question: string;
-      options: Array<{ text: string; correct: boolean }>;
-    }
-  | {
       type: "drag-sort-files";
       instructions: string;
       categories: string[];

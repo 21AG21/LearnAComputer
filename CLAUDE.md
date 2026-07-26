@@ -40,6 +40,7 @@ components/
 
   Playground/
     TaskChecker.ts         # Pure validation functions for every task type
+    useStepRunner.ts       # Step/objective state shared by every guided sim (guided + assessment modes)
     Icons.tsx              # Central SVG icon library (~70 icons, stroke style, currentColor)
     SimulatorFrame.tsx     # Shared frame: dark banner, progress bar, celebration overlay
     SimThemeContext.tsx     # Sim-wide theme state (dark mode, brightness, text scale, etc.)
@@ -135,7 +136,6 @@ Each file defines one sub-lesson:
 | `match-parts` | MatchPartsTask | Drag laptop part labels to correct spots |
 | `open-all-apps` | OpenAllAppsTask | Open every dock app |
 | `compose-email` | ComposeEmailTask | Write an email with required to/subject/body |
-| `multiple-choice` | MultipleChoiceTask | **NEVER use — all remaining instances have been converted** |
 | `drag-sort-files` | DragSortTask | Click-to-place items into category buckets |
 | `spot-the-fake` | SpotTheFakeTask | Click the scam/fake among 2–3 item cards |
 | `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
@@ -153,7 +153,7 @@ Each file defines one sub-lesson:
 | `keyboard-nav-game` | KeyboardNavTask | Keyboard navigation game (Tab, Enter, arrow keys) |
 | `notes-shortcut` | GuidedNotesTask | Notes editor with shortcut detection (bold, italic, underline, select-all, copy, cut, paste, undo, redo) |
 
-**Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). **NEVER use `multiple-choice`** — quizzes test recognition, not skill. All existing multiple-choice lessons have been converted to guided task types. `guided-files` is the reference pattern for a guided simulator.
+**Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). **Never add a quiz type** — quizzes test recognition, not skill. The old `multiple-choice` type has been deleted along with its component. `guided-files` is the reference pattern for a guided simulator.
 
 #### `guided-files` schema
 
@@ -314,7 +314,7 @@ Without `seedDraft`, the task starts at the Inbox as normal:
 }
 ```
 
-Actions: `open-email` (`target`: sender name for inbox emails; **subject** for draft emails in the Drafts folder), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive`, `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
+Actions: `open-email` (`target`: the email's **subject**, in every folder), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive` (each takes an optional `target` subject — without one, any open email satisfies the step), `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
 
 #### `guided-photos` schema
 
@@ -386,7 +386,7 @@ Wraps `SettingsApp` inside `FakeDesktop`. Settings changes are live — dark mod
 }
 ```
 
-Actions: `open-section` (`target`: Appearance/Display/Accessibility/WiFi/Bluetooth/Notifications/Storage/About), `toggle` (`target`: setting name), `slider` (`target`, `min`/`max` range), `delete-item` (`target`), `empty-trash`, `select-device` (`target`: device name — connects the device), `disconnect-device` (`target`: device name — disconnects the device).
+Actions: `open-section` (`target`: the **lowercase** section id — `appearance`, `display`, `accessibility`, `wifi`, `bluetooth`, `notifications`, `storage`, `privacy`, `about`), `toggle` (`target`: kebab-case setting id such as `dark-mode`, `night-shift`, `bold-text`, `do-not-disturb`), `slider` (`target`: `brightness` or `text-size`, plus a `min`/`max` range), `delete-item` (`target`), `empty-trash`, `select-device` (`target`: device name — connects the device), `disconnect-device` (`target`: device name — disconnects the device).
 
 #### `guided-security` schema
 
@@ -438,7 +438,6 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
   "type": "guided-troubleshooting",
   "goal": "Force quit the frozen app and restart it",
   "scenario": "frozen-notes",
-  "launchApp": "notes",
   "steps": [
     { "say": "Click the frozen Notes window.", "action": "click-frozen" },
     { "say": "Open the system menu.", "action": "open-force-quit" },
@@ -448,7 +447,7 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
 }
 ```
 
-`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. The mode is **inferred** from the step actions — the `scenario` field is a free-text description for the lesson author only. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`, `type-in-app`, `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`), `go-to-store-tab`, `reinstall-app` (`target`).
+`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. The mode is **inferred** from the step actions — the `scenario` field is a free-text description for the lesson author only. The frozen app's name comes from the `force-quit` step's `target`. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`, `type-in-app`, `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`), `go-to-store-tab`, `reinstall-app` (`target`).
 
 The `error-restart` scenario: on mount a system error dialog appears ("Something went wrong"); learner clicks OK to dismiss → clicks Settings in the dock → clicks Restart button → confirms in a dialog → 1.5s black-screen animation → success desktop. Steps use: `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
 
@@ -533,7 +532,7 @@ A Notes editor (contentEditable div + formatting toolbar) that detects keyboard 
 }
 ```
 
-Actions: `type` (`value`: any non-empty string typed in the editor), `select-all`, `bold`, `italic`, `underline`, `copy`, `cut`, `paste`, `undo`, `redo`. All shortcut detection uses `checkNotesShortcut` in `TaskChecker.ts` (Cmd/Ctrl + key). For `type`, the step completes when the editor contains `value` anywhere in its text content; set `value` to `"any"` when any non-empty input is acceptable.
+Actions: `type` (`value`: any non-empty string typed in the editor), `select-all`, `bold`, `italic`, `underline`, `copy`, `cut`, `paste`, `undo`, `redo`. All shortcut detection uses `checkNotesShortcut` in `TaskChecker.ts` (Cmd/Ctrl + key). For `type`, the step completes when the editor contains `value` anywhere in its text content; the literal `"any"` accepts any non-empty input.
 
 ### Progress
 
@@ -567,10 +566,11 @@ After completing a module, the user can navigate to the next module or back to `
 - **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
 - **FakeDesktop**: A self-contained desktop environment with a **10-app dock**: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes. The menu bar has a working clock, battery indicator (real Battery API), WiFi panel, and optional Do Not Disturb indicator. The taskbar shows open-app indicators (green dots). Settings changes (dark mode, brightness, Night Shift, text scale) are live via `SimThemeContext`.
 - **Desktop-first launching**: Every guided lesson starts on the desktop — the learner opens the app from the dock themselves. `DesktopLaunch` wraps guided sims: it renders FakeDesktop with a highlighted dock icon and a dark banner ("Open Mail — click the glowing icon"), then swaps to the guided sim once the app is opened. No guided lesson should auto-open its app.
-- **SimulatorFrame**: All playground activities share `SimulatorFrame` for visual consistency — a dark `#1d2733` banner with instructions, optional step progress bar, and a two-stage completion (0.8s celebration overlay, then a slim persistent "lesson complete" banner that doesn't block interaction). Older Unit 1–2 tasks are wrapped in SimulatorFrame in single-activity mode (no step counter). The duration constant `CELEBRATION_MS = 800` is exported from `SimulatorFrame.tsx` and imported by `GuidedDesktopTask` and `KeyboardNavTask`.
+- **SimulatorFrame**: Every playground activity is wrapped in `SimulatorFrame` — a dark `#1d2733` banner with instructions, optional step progress bar, and a two-stage completion (0.8s celebration overlay, then a slim persistent "lesson complete" banner that doesn't block interaction). Older Unit 1–2 tasks use single-activity mode (no step counter). Pass `chrome={false}` for sims that own a full-bleed desktop or browser. The duration constant `CELEBRATION_MS = 800` is exported from `SimulatorFrame.tsx` and imported by `KeyboardNavTask`.
 - **Non-blocking completion**: After finishing an activity, the sim remains interactive for free play. The celebration overlay clears after 0.8 seconds; a slim green banner stays. All read interactions (opening panels, switching folders, viewing popovers) continue working.
 - **Failure channel**: `onResult(success, failMessage?)` — when a sim reports failure, the left panel shows a red "Activity failed" card with the message and a "Try again" button. The playground stays mounted so the learner can see what happened. Dr. Digital switches to hint mood. Used by: CLEAN NOW click (browser popup), wrong ad click (assessment), wrong phishing verdict (with retry).
-- **Assessment mode**: Guided tasks with `mode: "assessment"` show objectives instead of step-by-step instructions. The `SimulatorFrame` banner displays "Objectives: N of M done" with an expandable checklist and a Hint button. **Assessment-authoring rules**: list objectives only, never write step-by-step walkthroughs. Hints give a nudge, not the answer.
+- **Step running**: Every `GuidedXxxTask` drives its steps through `useStepRunner`, which owns `stepIndex`, `completedSteps`, `phase`, `flash`, and `done`. A handler reports what the learner did with `tryStep((s) => s.action === "…" && …)` rather than reading the current step directly. The optional second argument is a guided-only gate for multi-phase steps (`tryStep(pred, phase === 1)`). Use `wanted(pred)` / `wants(pred)` when a *render* decision depends on what is still outstanding — "is a save dialog still needed?", "which page reveals this search result?".
+- **Assessment mode**: Guided tasks accept `mode: "assessment"` and an optional `hint`. `tryStep` then scans **every unmet objective** instead of only the current step, so skills can be demonstrated in any order. `step` is `undefined` in this mode, which is what silences all the yellow highlight rings — `hl()` and every inline `step?.action === …` ring goes false on its own, so no highlight code needs a mode check. `SimulatorFrame` swaps the step counter for "Objectives: N of M done" with an expandable checklist and a Hint button that reveals the `hint` string. **Authoring rules**: state outcomes, never clicks; use targets the unit's lessons did not use; hints point at where to look and never name the control.
 - **Validation**: All task validation lives in `TaskChecker.ts` as pure functions. Components call the appropriate checker and pass `onResult(boolean, failMessage?)` up to `LessonModuleRunner`.
 - **Icons**: All UI glyphs use SVG components from `components/Playground/Icons.tsx` — stroke style, `currentColor`, configurable `size` prop (default 20). Never use emoji for UI glyphs (buttons, indicators, sidebar items). **Allowed emoji**: reaction-picker emojis (they are the feature being taught) and app-identity emoji in content (e.g., app store catalog icons). Text characters (`✓`, `✗`, `✕`, `★`, `☆`, `&times;`) are not emoji and are kept as-is.
 - **No OS branding**: No Apple, macOS, Finder, Safari, FaceTime, iCloud, Siri, or "App Store" (as the app's own name) in the simulated OS. Real websites (Google, Wikipedia) inside the browser are fine. The settings app is "Settings" (never "System Settings"). The app store is "App Market".
