@@ -5,33 +5,31 @@
   "order": 1060,
   "title": "Shopping Safely Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online shopping is convenient, but some sites are fake.\n• Check for https:// and a padlock before buying.\n• Look for reviews, and beware deals that seem too good to be true.\n• Use a credit card for better fraud protection.",
+  "drDigitalIntro": "Before you enter any payment details on a shopping site, take 5 seconds to check two things.\n• Look at the address bar: a padlock icon means the connection is encrypted. No padlock, or a warning icon, means your data could be intercepted.\n• Check the URL itself: the domain should be a name you recognise (like shop.example), not a jumbled mix of letters and numbers.\n• Never type your card number into a site without a padlock — move on and find the official shop instead.\n• A deal that seems too good to be true usually is — search the shop name plus the word 'reviews' before buying.\n• For extra protection, use a credit card rather than a debit card: most banks offer fraud protection on purchases.",
   "playgroundTask": {
-    "type": "guided-security",
-    "goal": "You learned to identify safe online shopping links",
+    "type": "guided-browser",
+    "goal": "Check the padlock before buying",
     "steps": [
       {
-        "say": "Click 'Reveal URL' on 'Complete Your Purchase' to see where the link goes.",
-        "action": "inspect-link",
-        "target": "Complete Your Purchase"
+        "say": "Navigate to shop.example — a legitimate online store.",
+        "action": "navigate",
+        "url": "shop.example"
       },
       {
-        "say": "That's shop.example with https — mark it Safe.",
-        "action": "mark-safe",
-        "target": "Complete Your Purchase"
+        "say": "Click the padlock icon in the address bar to check this site's security.",
+        "action": "lock-click"
       },
       {
-        "say": "Now reveal the URL for 'Enter Card Details'.",
-        "action": "inspect-link",
-        "target": "Enter Card Details"
+        "say": "Now navigate to freegames.example.",
+        "action": "navigate",
+        "url": "freegames.example"
       },
       {
-        "say": "That URL uses a zero instead of 'o' in the domain — mark it Dangerous.",
-        "action": "mark-dangerous",
-        "target": "Enter Card Details"
+        "say": "Click the lock icon again — notice it says Not Secure.",
+        "action": "lock-click"
       }
     ]
   },
-  "drDigitalSuccess": "You know how to spot safe vs. dangerous shopping links! HTTPS + a known domain = safe to buy.",
-  "drDigitalHint": "Click 'Reveal URL' to see a link's real URL, then decide if it's from a trustworthy site."
+  "drDigitalSuccess": "You know how to check before buying! A padlock and a recognised domain means it is safe to shop. No padlock — close the tab.",
+  "drDigitalHint": "Navigate to each site, then click the padlock (or warning icon) in the address bar to see its security status."
 }

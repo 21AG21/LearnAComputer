@@ -121,13 +121,13 @@ Internally ordered: the `chrome` prop and `LoggedInPanel` are shared infrastruct
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 21 | 12.1 | Add the `chrome` prop to `guided-security`; set per-lesson values | Infrastructure — **blocks 12.4, 12.6** |
-| 22 | 12.2 | Build `<LoggedInPanel />`; use it in `password-managers`, `two-factor`, `passkeys` | Shared component — **blocks 13.4** |
-| 23 | 12.3 | Rebuild the phone illustration | Self-contained visual work |
-| 24 | 12.4 | Move the phishing inspector into `MailApp` / `MessagingApp` chrome | Needs 12.1's `chrome` prop |
-| 25 | 12.5 | Add a **Privacy** section to `SettingsApp`; move ad-tracking there | **Blocks 12.7** |
-| 26 | 12.6 | `safe-shopping` becomes inspection-only — never simulate entering card data | Needs 12.1 |
-| 27 | 12.7 | `public-wifi` scenario: no WiFi → join network → captive portal → Settings → Privacy | Needs 12.5's Privacy section |
+| 21 | 12.1 | Add the `chrome` prop to `guided-security`; set per-lesson values | Infrastructure — **blocks 12.4, 12.6** | ✅ Done |
+| 22 | 12.2 | Build `<LoggedInPanel />`; use it in `password-managers`, `two-factor`, `passkeys` | Shared component — **blocks 13.4** | ✅ Done |
+| 23 | 12.3 | Rebuild the phone illustration | Self-contained visual work | ✅ Done |
+| 24 | 12.4 | Move the phishing inspector into `MailApp` / `MessagingApp` chrome | Needs 12.1's `chrome` prop | ⚠️ Partial — `chrome: "mail"` framing done; deep MailApp rendering LEFT FOR LARGER MODEL |
+| 25 | 12.5 | Add a **Privacy** section to `SettingsApp`; move ad-tracking there | **Blocks 12.7** | ✅ Done — `identity-theft` converted to `guided-settings` using Privacy section |
+| 26 | 12.6 | `safe-shopping` becomes inspection-only — never simulate entering card data | Needs 12.1 | ✅ Done — converted to `guided-browser` with `lock-click` on shop.example + freegames.example |
+| 27 | 12.7 | `public-wifi` scenario: no WiFi → join network → captive portal → Settings → Privacy | Needs 12.5's Privacy section | LEFT FOR LARGER MODEL — requires new WiFi states + captive portal page |
 
 ### Stage F — Unit 11 troubleshooting (Phase 13)
 

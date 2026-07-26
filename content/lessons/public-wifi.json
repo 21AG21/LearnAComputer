@@ -8,6 +8,7 @@
   "drDigitalIntro": "Public WiFi is convenient but less secure than home.\n\u2022 Others on the network could see your data.\n\u2022 Avoid banking or email on it; stick to https sites.\n\u2022 A VPN adds protection. Reading the news is fine \u2014 just skip anything private.",
   "playgroundTask": {
     "type": "guided-security",
+    "chrome": "bare",
     "goal": "You identified risks on public WiFi",
     "steps": [
       {

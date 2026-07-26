@@ -386,9 +386,22 @@ Actions: `open-section` (`target`: Appearance/Display/Accessibility/WiFi/Notific
 
 Multi-section security simulator: passwords (live strength meter), login, 2FA, phishing verdict, passkeys.
 
+**`chrome` field** — controls which desktop app wraps the task (default: `"browser"`):
+
+| `chrome` | Wrapper | Use when |
+|---|---|---|
+| `"browser"` | `DesktopLaunch app="browser"` | Login flows, phishing in browser context |
+| `"mail"` | `DesktopLaunch app="mail"` | Phishing links arriving via email |
+| `"messages"` | `DesktopLaunch app="messages"` | Smishing links arriving via text |
+| `"settings"` | `DesktopLaunch app="settings"` | Privacy / account settings |
+| `"bare"` | No DesktopLaunch | Password tester, standalone tools |
+
+After a successful `login`, `verify-2fa`, or `use-passkey`, the sim transitions to a `LoggedInPanel` showing the account name, plan, and security status. A Sign Out button returns to the login form.
+
 ```json
 "playgroundTask": {
   "type": "guided-security",
+  "chrome": "bare",
   "goal": "Create a strong password and log in securely",
   "mode": "guided",
   "steps": [

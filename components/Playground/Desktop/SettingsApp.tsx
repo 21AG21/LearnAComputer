@@ -4,10 +4,10 @@ import { useState, type ReactNode } from "react";
 import { useSimTheme } from "./SimThemeContext";
 import {
   PaletteIcon, DisplayIcon, AccessibilityIcon, WifiIcon,
-  BellIcon, SaveIcon, InfoIcon,
+  BellIcon, SaveIcon, InfoIcon, ShieldIcon,
 } from "../Icons";
 
-type Section = "appearance" | "display" | "accessibility" | "wifi" | "notifications" | "storage" | "about";
+type Section = "appearance" | "display" | "accessibility" | "wifi" | "notifications" | "storage" | "privacy" | "about";
 
 const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
   { id: "appearance", label: "Appearance", icon: <PaletteIcon size={16} /> },
@@ -16,6 +16,7 @@ const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
   { id: "wifi", label: "WiFi", icon: <WifiIcon size={16} /> },
   { id: "notifications", label: "Notifications", icon: <BellIcon size={16} /> },
   { id: "storage", label: "Storage", icon: <SaveIcon size={16} /> },
+  { id: "privacy", label: "Privacy", icon: <ShieldIcon size={16} /> },
   { id: "about", label: "About", icon: <InfoIcon size={16} /> },
 ];
 
@@ -175,6 +176,15 @@ export default function SettingsApp({
             onDelete={deleteStorageItem}
             onEmptyTrash={emptyTrash}
             highlightItem={highlightItem}
+            highlightToggle={highlightToggle}
+            onToggle={onToggle}
+            panelClass={panel}
+            mutedClass={muted}
+            isDark={dark}
+          />
+        )}
+        {active === "privacy" && (
+          <PrivacyPanel
             highlightToggle={highlightToggle}
             onToggle={onToggle}
             panelClass={panel}
@@ -395,6 +405,43 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
         />
         {autoBackup && backupTime && (
           <p className={`text-xs mt-1 ${mutedClass}`}>Last backup: {backupTime}</p>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function PrivacyPanel({ highlightToggle, onToggle, panelClass, mutedClass, isDark }: {
+  highlightToggle?: string; onToggle?: (target: string, value: boolean) => void; panelClass: string; mutedClass: string; isDark: boolean;
+}) {
+  void panelClass;
+  const [crossSite, setCrossSite] = useState(true);
+  const [location, setLocation] = useState(true);
+  const [popups, setPopups] = useState(false);
+  const [cleared, setCleared] = useState(false);
+  return (
+    <div>
+      <h2 className="text-lg font-semibold mb-3">Privacy</h2>
+      <Card isDark={isDark}>
+        <Toggle on={crossSite} onToggle={(v) => { setCrossSite(v); onToggle?.("cross-site-tracking", v); }} label="Cross-Site Tracking" highlight={highlightToggle === "cross-site-tracking"} isDark={isDark} />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Allow websites to follow you across different sites</div>
+        <Toggle on={location} onToggle={(v) => { setLocation(v); onToggle?.("location-sharing", v); }} label="Location Sharing" highlight={highlightToggle === "location-sharing"} isDark={isDark} />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Allow websites and apps to see where you are</div>
+        <Toggle on={popups} onToggle={(v) => { setPopups(v); onToggle?.("block-popups", v); }} label="Block Pop-ups" highlight={highlightToggle === "block-popups"} isDark={isDark} />
+        <div className={`text-xs ${mutedClass} mt-1`}>Stop new windows opening without your permission</div>
+      </Card>
+      <Card isDark={isDark}>
+        <div className="font-medium mb-2">Browsing Data</div>
+        <p className={`text-xs ${mutedClass} mb-3`}>Clears your history, cookies, and cached files.</p>
+        {cleared ? (
+          <div className={`text-xs font-medium py-2 text-center ${isDark ? "text-green-400" : "text-green-700"}`}>Browsing data cleared.</div>
+        ) : (
+          <button
+            onClick={() => { setCleared(true); onToggle?.("clear-browsing-data", true); }}
+            className={`w-full py-2 rounded-lg text-sm font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-600 hover:bg-red-100"} ${highlightToggle === "clear-browsing-data" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+          >
+            Clear Browsing Data
+          </button>
         )}
       </Card>
     </div>

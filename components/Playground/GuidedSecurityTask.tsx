@@ -50,11 +50,44 @@ function passwordStrength(pw: string): { label: string; level: number; color: st
   return { label: "Very Strong", level: 5, color: "bg-green-600" };
 }
 
+function LoggedInPanel({ username, method, onSignOut }: { username: string; method: string; onSignOut: () => void }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-6">
+      <div className="w-full max-w-xs text-center">
+        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-600 mx-auto mb-4">
+          <CheckCircleIcon size={36} />
+        </div>
+        <h3 className="font-bold text-xl mb-1">Signed In</h3>
+        <p className="text-sm text-gray-500 mb-1">{username || "drdigital@example.com"}</p>
+        <p className="text-xs text-gray-400 mb-6">Signed in with {method}</p>
+        <div className="bg-gray-50 border rounded-xl p-4 text-left mb-6 text-sm">
+          <div className="flex justify-between py-1 border-b border-gray-100">
+            <span className="text-gray-500">Account</span>
+            <span className="font-medium">Dr. Digital</span>
+          </div>
+          <div className="flex justify-between py-1 border-b border-gray-100">
+            <span className="text-gray-500">Plan</span>
+            <span className="font-medium">Free</span>
+          </div>
+          <div className="flex justify-between py-1">
+            <span className="text-gray-500">Security</span>
+            <span className="text-green-600 font-medium">Protected</span>
+          </div>
+        </div>
+        <button onClick={onSignOut} className="w-full py-2.5 border-2 border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecurityTaskProps) {
   const [stepIndex, setStepIndex] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
   const completedRef = useRef(false);
+  const [loggedIn, setLoggedIn] = useState<{ username: string; method: string } | null>(null);
 
   function inferSection(s: GuidedSecurityStep | undefined): Section {
     if (!s) return "password-tester";
@@ -157,6 +190,8 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
     const nextStep = steps[stepIndex + 1];
     if (nextStep?.action === "enter-2fa-code") {
       setSection("2fa");
+    } else {
+      setLoggedIn({ username, method: "password" });
     }
     if (step?.action === "login") completeStep();
   }
@@ -167,6 +202,7 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
     setTimeout(() => {
       setPasskeyScanning(false);
       setPasskeyDone(true);
+      setLoggedIn({ username, method: "passkey" });
       completeStep();
     }, 1800);
   }
@@ -191,7 +227,10 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
   }
 
   function handleVerify2fa() {
-    if (step?.action === "verify-2fa") completeStep();
+    if (step?.action === "verify-2fa") {
+      setLoggedIn({ username, method: "password + verification code" });
+      completeStep();
+    }
   }
 
   function handleInspectLink(linkText: string) {
@@ -244,18 +283,38 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
         flash={flash}
       >
         <div className="flex-1 flex items-center justify-center p-4 gap-6">
-          {/* Phone illustration */}
-          <div className="w-40 flex-shrink-0">
-            <div className="bg-gray-900 rounded-3xl p-1.5 shadow-lg">
-              <div className="bg-gray-900 rounded-t-2xl pt-3 pb-1 flex justify-center">
-                <div className="w-16 h-1.5 bg-gray-700 rounded-full" />
+          {/* Phone illustration (12.3 rebuild) */}
+          <div className="w-44 flex-shrink-0">
+            <div className="bg-gray-900 rounded-[2rem] shadow-xl overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+              {/* Status bar */}
+              <div className="flex items-center justify-between px-4 pt-2 pb-1 bg-gray-900">
+                <span className="text-[9px] text-gray-300 font-semibold">9:41</span>
+                <div className="w-12 h-3 bg-gray-800 rounded-full" />
+                <div className="flex items-center gap-0.5">
+                  <div className="w-0.5 h-1.5 bg-gray-300 rounded-sm" />
+                  <div className="w-0.5 h-2 bg-gray-300 rounded-sm" />
+                  <div className="w-0.5 h-2.5 bg-gray-300 rounded-sm" />
+                  <div className="w-0.5 h-3 bg-gray-300 rounded-sm" />
+                  <div className="ml-1 flex items-center gap-px">
+                    <div className="w-3.5 h-2 rounded-sm border border-gray-300 p-px flex items-center">
+                      <div className="h-full w-3/4 bg-green-400 rounded-sm" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="bg-white rounded-b-2xl p-3 min-h-[140px]">
-                <p className="text-[10px] text-gray-400 mb-2">Text Message</p>
-                <div className="bg-blue-50 rounded-lg p-2 border border-blue-100">
-                  <p className="text-[10px] text-gray-600 mb-1">ExampleBank:</p>
-                  <p className="text-[10px] text-gray-700">Your verification code is:</p>
-                  <p className="text-xl font-bold text-blue-600 tracking-widest mt-1">{twoFaExpectedCode}</p>
+              {/* App header */}
+              <div className="bg-gray-100 px-3 pt-2 pb-1.5">
+                <p className="text-[9px] font-semibold text-gray-600 uppercase tracking-wider">Messages</p>
+              </div>
+              {/* Message thread */}
+              <div className="bg-white flex-1 p-3 space-y-2">
+                <div className="flex flex-col items-start">
+                  <span className="text-[8px] text-gray-400 mb-0.5 ml-1">ExampleBank</span>
+                  <div className="bg-gray-200 rounded-2xl rounded-tl-sm px-3 py-2 max-w-[85%]">
+                    <p className="text-[10px] text-gray-700 leading-tight">Your verification code is:</p>
+                    <p className="text-[22px] font-black text-blue-700 tracking-widest leading-tight mt-0.5 font-mono">{twoFaExpectedCode}</p>
+                    <p className="text-[8px] text-gray-400 leading-tight mt-1">Valid for 10 minutes. Never share this code.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -348,8 +407,15 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
         </div>
       )}
 
-      {/* Login — includes forgot-password and passkey flows */}
-      {section === "login" && (
+      {/* Login — includes forgot-password, passkey, and logged-in flows */}
+      {section === "login" && loggedIn && (
+        <LoggedInPanel
+          username={loggedIn.username}
+          method={loggedIn.method}
+          onSignOut={() => { setLoggedIn(null); setUsername(""); setLoginPassword(""); setPasskeyDone(false); setResetView("none"); }}
+        />
+      )}
+      {section === "login" && !loggedIn && (
         <div className="flex-1 overflow-y-auto flex items-center justify-center p-5">
           {resetView === "none" && (
             <div className="w-full max-w-xs">

@@ -5,23 +5,28 @@
   "order": 1050,
   "title": "Protecting Your Identity",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft is when someone uses your personal information for fraud.\n\u2022 Never share your full social security number online.\n\u2022 Use strong passwords, turn on 2FA, and watch your bank statements.\n\u2022 If it happens, contact your bank and credit bureaus right away.",
+  "drDigitalIntro": "Identity theft is when someone uses your personal information to pretend to be you \u2014 to open bank accounts, make purchases, or access your accounts.\n\u2022 Never share your national ID, passport number, or full bank details online unless required by a trusted official site.\n\u2022 Use strong passwords (see Unit 10, Passwords) and two-factor authentication for banking and email.\n\u2022 Watch your bank statements for unfamiliar charges \u2014 that is often the first warning sign.\n\u2022 You can limit how much websites track you by adjusting your browser privacy settings.\n\u2022 If identity theft happens: contact your bank immediately, change your passwords, and report it to your consumer protection agency.",
   "playgroundTask": {
-    "type": "guided-security",
-    "goal": "You reviewed your privacy settings to protect your identity",
+    "type": "guided-settings",
+    "goal": "Tighten your privacy settings to reduce tracking",
     "steps": [
       {
-        "say": "Ad Tracking is on \u2014 turn it off to protect your privacy.",
-        "action": "toggle-setting",
-        "target": "Ad Tracking"
+        "say": "Click Privacy in the Settings sidebar.",
+        "action": "open-section",
+        "target": "privacy"
       },
       {
-        "say": "Turn off Cookies to reduce tracking.",
-        "action": "toggle-setting",
-        "target": "Cookies"
+        "say": "Turn off Cross-Site Tracking \u2014 this stops websites following you across the web.",
+        "action": "toggle",
+        "target": "cross-site-tracking"
+      },
+      {
+        "say": "Turn off Location Sharing so websites cannot see where you are.",
+        "action": "toggle",
+        "target": "location-sharing"
       }
     ]
   },
-  "drDigitalSuccess": "You adjusted your privacy settings! Limiting tracking is an easy way to protect your identity.",
-  "drDigitalHint": "Click the toggles to turn off tracking settings that you don't need."
+  "drDigitalSuccess": "Your privacy settings are tighter! Turning off tracking makes it harder for data collectors to build a profile about you.",
+  "drDigitalHint": "Open Privacy in the Settings sidebar, then click the toggles to turn off Cross-Site Tracking and Location Sharing."
 }

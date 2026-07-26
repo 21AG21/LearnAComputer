@@ -210,6 +210,8 @@ export type PlaygroundTask =
       type: "guided-security";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Which desktop chrome wraps the task. Defaults to "browser" for backward compatibility. */
+      chrome?: "browser" | "settings" | "mail" | "messages" | "bare";
       steps: Array<{
         say: string;
         action:

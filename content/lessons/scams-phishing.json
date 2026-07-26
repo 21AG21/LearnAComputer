@@ -8,6 +8,7 @@
   "drDigitalIntro": "Phishing uses fake messages to steal your information.\n• They pretend to be your bank, a delivery service, or a trusted company.\n• Warning signs: urgency, misspelled addresses, and mismatched links.\n• Hover over a link to see where it really goes — when in doubt, don't click.",
   "playgroundTask": {
     "type": "guided-security",
+    "chrome": "mail",
     "goal": "You identified safe and dangerous links",
     "steps": [
       {
