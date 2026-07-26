@@ -25,11 +25,15 @@ interface SettingsCallbacks {
   highlightToggle?: string;
   highlightSlider?: string;
   highlightItem?: string;
+  highlightDeviceConnect?: string;
+  highlightDeviceDisconnect?: string;
   onSectionOpen?: (section: string) => void;
   onToggle?: (target: string, value: boolean) => void;
   onSlider?: (target: string, value: number) => void;
   onDeleteItem?: (target: string) => void;
   onEmptyTrash?: () => void;
+  onDeviceSelect?: (device: string) => void;
+  onDeviceDisconnect?: (device: string) => void;
 }
 
 interface FakeDesktopProps {

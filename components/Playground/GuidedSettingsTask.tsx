@@ -7,7 +7,7 @@ import type { DesktopAppId } from "./FakeDesktop";
 
 export type SettingsStep = {
   say: string;
-  action: "open-section" | "toggle" | "slider" | "delete-item" | "empty-trash";
+  action: "open-section" | "toggle" | "slider" | "delete-item" | "empty-trash" | "select-device" | "disconnect-device";
   target?: string;
   min?: number;
   max?: number;
@@ -60,6 +60,28 @@ export default function GuidedSettingsTask({ goal, steps, onResult }: GuidedSett
     return undefined;
   }
 
+  function highlightDeviceConnect(): string | undefined {
+    if (!step || step.action !== "select-device") return undefined;
+    return step.target;
+  }
+
+  function highlightDeviceDisconnect(): string | undefined {
+    if (!step || step.action !== "disconnect-device") return undefined;
+    return step.target;
+  }
+
+  function handleDeviceSelect(device: string) {
+    if (step?.action === "select-device" && device === step.target) {
+      completeStep();
+    }
+  }
+
+  function handleDeviceDisconnect(device: string) {
+    if (step?.action === "disconnect-device" && device === step.target) {
+      completeStep();
+    }
+  }
+
   function handleSectionOpen(section: string) {
     if (step?.action === "open-section" && section === step.target) {
       completeStep();
@@ -110,11 +132,15 @@ export default function GuidedSettingsTask({ goal, steps, onResult }: GuidedSett
           highlightToggle: highlightToggle(),
           highlightSlider: highlightSlider(),
           highlightItem: highlightItem(),
+          highlightDeviceConnect: highlightDeviceConnect(),
+          highlightDeviceDisconnect: highlightDeviceDisconnect(),
           onSectionOpen: handleSectionOpen,
           onToggle: handleToggle,
           onSlider: handleSlider,
           onDeleteItem: handleDeleteItem,
           onEmptyTrash: handleEmptyTrash,
+          onDeviceSelect: handleDeviceSelect,
+          onDeviceDisconnect: handleDeviceDisconnect,
         }}
       />
     </SimulatorFrame>

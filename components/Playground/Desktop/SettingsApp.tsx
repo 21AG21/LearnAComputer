@@ -4,16 +4,17 @@ import { useState, type ReactNode } from "react";
 import { useSimTheme } from "./SimThemeContext";
 import {
   PaletteIcon, DisplayIcon, AccessibilityIcon, WifiIcon,
-  BellIcon, SaveIcon, InfoIcon, ShieldIcon,
+  BellIcon, SaveIcon, InfoIcon, ShieldIcon, SmartphoneIcon,
 } from "../Icons";
 
-type Section = "appearance" | "display" | "accessibility" | "wifi" | "notifications" | "storage" | "privacy" | "about";
+type Section = "appearance" | "display" | "accessibility" | "wifi" | "bluetooth" | "notifications" | "storage" | "privacy" | "about";
 
 const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
   { id: "appearance", label: "Appearance", icon: <PaletteIcon size={16} /> },
   { id: "display", label: "Display", icon: <DisplayIcon size={16} /> },
   { id: "accessibility", label: "Accessibility", icon: <AccessibilityIcon size={16} /> },
   { id: "wifi", label: "WiFi", icon: <WifiIcon size={16} /> },
+  { id: "bluetooth", label: "Bluetooth", icon: <SmartphoneIcon size={16} /> },
   { id: "notifications", label: "Notifications", icon: <BellIcon size={16} /> },
   { id: "storage", label: "Storage", icon: <SaveIcon size={16} /> },
   { id: "privacy", label: "Privacy", icon: <ShieldIcon size={16} /> },
@@ -25,11 +26,15 @@ interface SettingsAppProps {
   highlightToggle?: string;
   highlightSlider?: string;
   highlightItem?: string;
+  highlightDeviceConnect?: string;
+  highlightDeviceDisconnect?: string;
   onSectionOpen?: (section: string) => void;
   onToggle?: (target: string, value: boolean) => void;
   onSlider?: (target: string, value: number) => void;
   onDeleteItem?: (target: string) => void;
   onEmptyTrash?: () => void;
+  onDeviceSelect?: (device: string) => void;
+  onDeviceDisconnect?: (device: string) => void;
 }
 
 interface StorageItem {
@@ -53,11 +58,15 @@ export default function SettingsApp({
   highlightToggle,
   highlightSlider,
   highlightItem,
+  highlightDeviceConnect,
+  highlightDeviceDisconnect,
   onSectionOpen,
   onToggle,
   onSlider,
   onDeleteItem,
   onEmptyTrash,
+  onDeviceSelect,
+  onDeviceDisconnect,
 }: SettingsAppProps) {
   const theme = useSimTheme();
   const [active, setActive] = useState<Section>("appearance");
@@ -156,6 +165,17 @@ export default function SettingsApp({
         )}
         {active === "wifi" && (
           <WifiPanel panelClass={panel} mutedClass={muted} isDark={dark} highlightToggle={highlightToggle} onToggle={onToggle} />
+        )}
+        {active === "bluetooth" && (
+          <BluetoothPanel
+            highlightDeviceConnect={highlightDeviceConnect}
+            highlightDeviceDisconnect={highlightDeviceDisconnect}
+            onDeviceSelect={onDeviceSelect}
+            onDeviceDisconnect={onDeviceDisconnect}
+            panelClass={panel}
+            mutedClass={muted}
+            isDark={dark}
+          />
         )}
         {active === "notifications" && (
           <NotificationsPanel
@@ -302,6 +322,76 @@ function WifiPanel({ panelClass, mutedClass, isDark, highlightToggle, onToggle }
             </div>
             <div className={`py-1.5 px-2 ${mutedClass}`}>Neighbor&apos;s WiFi</div>
             <div className={`py-1.5 px-2 ${mutedClass}`}>Coffee shop</div>
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onDeviceSelect, onDeviceDisconnect, panelClass, mutedClass, isDark }: {
+  highlightDeviceConnect?: string;
+  highlightDeviceDisconnect?: string;
+  onDeviceSelect?: (device: string) => void;
+  onDeviceDisconnect?: (device: string) => void;
+  panelClass: string;
+  mutedClass: string;
+  isDark: boolean;
+}) {
+  const [btOn, setBtOn] = useState(true);
+  const [connected, setConnected] = useState<string[]>(["My Phone"]);
+
+  const DEVICES = [
+    { name: "Wireless Headphones" },
+    { name: "My Phone" },
+    { name: "Keyboard" },
+  ];
+
+  function connectDevice(name: string) {
+    setConnected((prev) => [...prev, name]);
+    onDeviceSelect?.(name);
+  }
+
+  function disconnectDevice(name: string) {
+    setConnected((prev) => prev.filter((d) => d !== name));
+    onDeviceDisconnect?.(name);
+  }
+
+  return (
+    <div>
+      <h2 className="text-lg font-semibold mb-3">Bluetooth</h2>
+      <Card isDark={isDark}>
+        <Toggle on={btOn} onToggle={setBtOn} label="Bluetooth" highlight={false} isDark={isDark} />
+        {btOn && (
+          <div className="mt-3 space-y-1">
+            {DEVICES.map((d) => {
+              const isConnected = connected.includes(d.name);
+              const hlConnect = highlightDeviceConnect === d.name;
+              const hlDisconnect = highlightDeviceDisconnect === d.name;
+              return (
+                <div key={d.name} className={`flex items-center justify-between py-1.5 px-2 rounded ${isConnected ? (isDark ? "bg-blue-900/40" : "bg-blue-50") : ""}`}>
+                  <div>
+                    <div>{d.name}</div>
+                    <div className={`text-xs ${mutedClass}`}>{isConnected ? "Connected" : "Available"}</div>
+                  </div>
+                  {isConnected ? (
+                    <button
+                      onClick={() => disconnectDevice(d.name)}
+                      className={`text-xs px-2 py-1 rounded ${isDark ? "bg-gray-600 hover:bg-gray-500" : "bg-gray-200 hover:bg-gray-300"} ${hlDisconnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                    >
+                      Disconnect
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => connectDevice(d.name)}
+                      className={`text-xs px-2 py-1 rounded bg-blue-500 hover:bg-blue-600 text-white ${hlConnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                    >
+                      Connect
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </Card>

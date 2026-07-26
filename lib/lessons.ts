@@ -200,7 +200,8 @@ export type PlaygroundTask =
       steps: Array<{
         say: string;
         action:
-          | "open-section" | "toggle" | "slider" | "delete-item" | "empty-trash";
+          | "open-section" | "toggle" | "slider" | "delete-item" | "empty-trash"
+          | "select-device" | "disconnect-device";
         target?: string;
         min?: number;
         max?: number;

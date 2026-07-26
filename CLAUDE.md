@@ -380,7 +380,7 @@ Wraps `SettingsApp` inside `FakeDesktop`. Settings changes are live — dark mod
 }
 ```
 
-Actions: `open-section` (`target`: Appearance/Display/Accessibility/WiFi/Notifications/Storage/About), `toggle` (`target`: setting name), `slider` (`target`, `min`/`max` range), `delete-item` (`target`), `empty-trash`.
+Actions: `open-section` (`target`: Appearance/Display/Accessibility/WiFi/Bluetooth/Notifications/Storage/About), `toggle` (`target`: setting name), `slider` (`target`, `min`/`max` range), `delete-item` (`target`), `empty-trash`, `select-device` (`target`: device name — connects the device), `disconnect-device` (`target`: device name — disconnects the device).
 
 #### `guided-security` schema
 
