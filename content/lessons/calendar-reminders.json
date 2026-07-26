@@ -5,54 +5,10 @@
   "order": 1220,
   "title": "Calendar and Reminders",
   "videoUrl": "",
-  "drDigitalIntro": "A digital calendar keeps your schedule organized.\n• Add events with a time and date — they sync across your devices.\n• Reminders are like sticky notes for to-dos.\n• Color-code by calendar: Work in green, Personal in blue.",
+  "drDigitalIntro": "A digital calendar keeps your schedule organized and syncs across all your devices automatically.\n\n1. Open the Calendar app on your computer or phone.\n2. Tap or click a day — for example, a day next week.\n3. Tap the + button (or double-click the day) to create a new event.\n4. Type a name for your event, such as 'Doctor appointment'.\n5. Set the start time and end time using the time pickers.\n6. Tap Save — the event will appear on all your devices.\n\nFor reminders:\n1. Open the Reminders (or Clock) app.\n2. Tap + to add a new reminder.\n3. Type what you need to remember, such as 'Buy milk'.\n4. Optionally set a date and time so your device alerts you.\n5. Tap Save, then tick the circle when the task is done.\n\nTip: Color-code your calendars — use one color for personal events and another for appointments. It makes your week easier to read at a glance.",
   "playgroundTask": {
-    "type": "guided-calendar",
-    "goal": "You added a calendar event and a reminder",
-    "steps": [
-      {
-        "say": "Click on day 18 in the calendar to select it.",
-        "action": "select-day",
-        "target": "18"
-      },
-      {
-        "say": "Click '+' to create a new event on the 18th.",
-        "action": "create-event"
-      },
-      {
-        "say": "Type 'Dentist Appointment' as the event title.",
-        "action": "set-title",
-        "value": "Dentist Appointment"
-      },
-      {
-        "say": "Set the time to '9:00 AM'.",
-        "action": "set-time",
-        "value": "9:00 AM"
-      },
-      {
-        "say": "Save the event.",
-        "action": "save-event"
-      },
-      {
-        "say": "Switch to the Reminders view.",
-        "action": "switch-view",
-        "target": "reminders"
-      },
-      {
-        "say": "Click + to add a new reminder.",
-        "action": "create-reminder"
-      },
-      {
-        "say": "Type 'Buy vitamins' as your reminder.",
-        "action": "set-reminder-text",
-        "value": "Buy vitamins"
-      },
-      {
-        "say": "Save the reminder.",
-        "action": "save-reminder"
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "Your event and reminder are saved! Your calendar now keeps track of your appointment automatically.",
-  "drDigitalHint": "Click a day to select it, click + to create an event, fill in the details, then save."
+  "drDigitalSuccess": "Your schedule is now in your computer, not just in your head! Calendars and reminders mean nothing important gets forgotten.",
+  "drDigitalHint": "Open the Calendar app, tap a day, then tap + to add an event. Give it a name and a time, then save it."
 }

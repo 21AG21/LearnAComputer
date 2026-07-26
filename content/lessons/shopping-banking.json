@@ -5,33 +5,10 @@
   "order": 1250,
   "title": "Online Shopping and Banking",
   "videoUrl": "",
-  "drDigitalIntro": "Online banking and shopping are safe on trusted sites.\n\u2022 Only use official bank websites \u2014 type the address yourself.\n\u2022 Look for the padlock and https://.\n\u2022 Never bank on public WiFi without a VPN. Let's check some links.",
+  "drDigitalIntro": "In Unit 10 you learned how to spot safe websites — now put those skills to use for real shopping and banking.\n\nFor online banking:\n1. Open your browser and type your bank's address yourself — never click a link in an email or text.\n2. Look for the padlock icon and 'https://' at the start of the address before you log in.\n3. Sign in with your username and password. If your bank offers two-step verification, turn it on.\n4. When you are done, click Log Out — do not just close the tab.\n5. Avoid banking on public WiFi (coffee shops, airports) unless you are using a trusted VPN.\n\nFor online shopping:\n1. Search for the shop you want and look for the padlock before entering card details.\n2. Prefer paying by card or through a payment service rather than bank transfer.\n3. Keep your order confirmation email — it is proof of purchase if anything goes wrong.\n4. If a deal looks too good to be true, search the shop's name plus the word 'reviews' before buying.\n\nGolden rule: when in doubt, type the address yourself — never follow a link you did not ask for.",
   "playgroundTask": {
-    "type": "guided-security",
-    "goal": "You verified safe banking and shopping links",
-    "steps": [
-      {
-        "say": "Inspect 'Bank of America Login' to check the URL.",
-        "action": "inspect-link",
-        "target": "Bank of America Login"
-      },
-      {
-        "say": "Bankofamerica.com with https \u2014 that's safe. Mark it Safe.",
-        "action": "mark-safe",
-        "target": "Bank of America Login"
-      },
-      {
-        "say": "Now inspect 'Enter Card Details'.",
-        "action": "inspect-link",
-        "target": "Enter Card Details"
-      },
-      {
-        "say": "That URL is suspicious \u2014 mark it Dangerous.",
-        "action": "mark-dangerous",
-        "target": "Enter Card Details"
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "You checked banking links for safety! Always verify the URL before entering card details.",
-  "drDigitalHint": "Click Inspect on each link to see the real URL, then judge whether it's safe."
+  "drDigitalSuccess": "You know how to shop and bank safely online! The padlock, https, and typing the address yourself are your three best defences.",
+  "drDigitalHint": "The key checks are: type the address yourself, look for the padlock, and log out when done. You covered how to spot fake sites in Unit 10."
 }

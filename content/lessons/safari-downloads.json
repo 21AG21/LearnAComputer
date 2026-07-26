@@ -5,26 +5,31 @@
   "order": 460,
   "title": "Downloads: Saving from the Internet",
   "videoUrl": "",
-  "drDigitalIntro": "Downloading brings a file from the internet to your computer.\n• Click a download link and the browser saves the file.\n• It goes to your Downloads folder.\n• Find recent files in the browser's Downloads panel.",
+  "drDigitalIntro": "Downloading brings a file from the internet to your computer.\n• Click a download link and the browser saves the file to your Downloads folder.\n• The browser's Downloads panel shows your recent files — look for an arrow icon or the word Downloads in the toolbar.\n• PDF files can be opened right inside the browser — no extra app needed.\n• Avoid downloading files from sites you don't recognise: stick to well-known sources.\n• Your Downloads folder can fill up over time — clear it out every few months.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "Download a file and find it",
+    "goal": "Download a PDF and open it in the browser viewer",
     "steps": [
       {
-        "say": "Let's download a recipe. First go to the recipe site — type recipebox.example and press Enter.",
+        "say": "Navigate to recipebox.example to find a recipe PDF.",
         "action": "navigate",
         "url": "recipebox.example"
       },
       {
-        "say": "Click the blue Download button to save the recipe PDF to your computer.",
+        "say": "Click the blue Download button to save the recipe PDF.",
         "action": "download"
       },
       {
-        "say": "Where did it go? Click ⬇️ Downloads to see the file you just saved.",
+        "say": "Click the Downloads panel to see your saved file.",
         "action": "open-downloads"
+      },
+      {
+        "say": "Click Open next to ApplePieRecipe.pdf to read it in the browser.",
+        "action": "open-download",
+        "file": "ApplePieRecipe.pdf"
       }
     ]
   },
-  "drDigitalSuccess": "You downloaded a file and found it in the Downloads panel. That's always where the browser puts things you save.",
-  "drDigitalHint": "Go to the site, click its Download button, then open the ⬇️ Downloads panel in the action bar."
+  "drDigitalSuccess": "You downloaded a PDF and opened it right in your browser! The file stays in your Downloads folder whenever you need it again.",
+  "drDigitalHint": "Go to recipebox.example, click Download, open the Downloads panel, then click the Open button next to the PDF file."
 }

@@ -143,7 +143,7 @@ Internally ordered: the `chrome` prop and `LoggedInPanel` are shared infrastruct
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 33 | 14.1 | Convert all 4 remaining Unit 12 lessons to `type: "none"`; rewrite every intro as a numbered real-computer walkthrough | No dependencies at all. Good filler work between risky stages, or hand to a second worker. Note the 5.5 tension: move the `open-download` exercise to `safari-downloads` (460). |
+| 33 | 14.1 | Convert all 4 remaining Unit 12 lessons to `type: "none"`; rewrite every intro as a numbered real-computer walkthrough | No dependencies at all. Good filler work between risky stages, or hand to a second worker. Note the 5.5 tension: move the `open-download` exercise to `safari-downloads` (460). | ✅ Done |
 
 ### Stage H — Previously deferred as too complex
 

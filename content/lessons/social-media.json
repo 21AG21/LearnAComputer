@@ -5,35 +5,10 @@
   "order": 1210,
   "title": "Staying Connected Online",
   "videoUrl": "",
-  "drDigitalIntro": "Staying in touch is one of the best things a computer can do.\n• Send messages, video call, and share photos.\n• Be kind, and ask before sharing others' photos.\n• Remember: anything you post online can be shared further.",
+  "drDigitalIntro": "You practiced messaging and video calls in Unit 5 — now try it on your real device!\n\n1. Open your messaging app (Messages, WhatsApp, or whatever you use).\n2. Find a friend or family member in your contacts list and tap their name.\n3. Type a short message — even just 'Hi!' — and press Send.\n4. If they reply, press and hold their message to send a reaction.\n5. Tap the camera or phone icon at the top to start a video call.\n6. During the call, find the microphone icon and tap it to mute yourself, then tap again to unmute.\n7. When you are done, tap the red button to end the call.\n\nTip: if you do not know anyone to message, send yourself a note — most apps let you message your own number.",
   "playgroundTask": {
-    "type": "guided-messaging",
-    "goal": "You sent a message and made a video call",
-    "steps": [
-      {
-        "say": "Click on Sam to open their conversation.",
-        "action": "select-contact",
-        "target": "sam"
-      },
-      {
-        "say": "Type a message: 'Hi Sam! How are you?' and send it.",
-        "action": "send-message",
-        "value": "Hi Sam"
-      },
-      {
-        "say": "React to Sam's message with an emoji.",
-        "action": "add-reaction"
-      },
-      {
-        "say": "Start a video call with Sam.",
-        "action": "start-call"
-      },
-      {
-        "say": "End the call.",
-        "action": "end-call"
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "You sent a message to Sam and made a video call! Staying in touch is just a tap away.",
-  "drDigitalHint": "Click on Sam, type your message, click Send, then react to their message and use the camera icon for a video call."
+  "drDigitalSuccess": "Staying in touch is just a few taps away. The more you practice, the more natural it feels!",
+  "drDigitalHint": "Go to your Messages app, find a contact, type a short message, and press Send. You covered all of this in Unit 5."
 }

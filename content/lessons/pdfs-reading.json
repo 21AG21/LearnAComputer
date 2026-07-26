@@ -5,31 +5,10 @@
   "order": 1280,
   "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDFs look the same on any device — phone, tablet, or computer.\n• They are used for forms, receipts, invoices, and instruction manuals.\n• Open a PDF directly in your browser — no extra app needed.\n• Download it to save a copy in your Downloads folder.\n• Use the zoom controls at the top of the viewer to read the fine print.\n• To create a PDF from anything you can print, choose Print, then Save as PDF.",
+  "drDigitalIntro": "In Unit 4 you learned how to download files — PDFs are one of the most common things you will download.\n\nPDFs look identical on every device, which makes them perfect for forms, receipts, invoices, and instruction manuals.\n\nTo open a PDF from the internet:\n1. Click a PDF link and your browser will usually open it straight away in a built-in viewer.\n2. Use the zoom controls (usually a + and - button at the top) to enlarge small print.\n3. Scroll through the pages just as you would a web page.\n\nTo save a PDF to your computer:\n1. Click the download arrow in the browser viewer's toolbar.\n2. The file goes to your Downloads folder automatically.\n3. Open your Files or Finder app, go to Downloads, and double-click the PDF to open it later.\n\nTo create a PDF from anything you can print:\n1. Press Ctrl+P (or Command+P on a Mac) to open the Print window.\n2. In the Printer dropdown, choose 'Save as PDF' or 'Microsoft Print to PDF'.\n3. Click Save and choose where to put the file.\n\nTip: PDFs from your bank, insurance company, or doctor are important — save them in a named folder so you can find them again.",
   "playgroundTask": {
-    "type": "guided-browser",
-    "goal": "Download a PDF recipe and open it in the viewer",
-    "steps": [
-      {
-        "say": "Navigate to recipebox.example to find a recipe PDF.",
-        "action": "navigate",
-        "url": "recipebox.example"
-      },
-      {
-        "say": "Click the Download button to save the recipe PDF.",
-        "action": "download"
-      },
-      {
-        "say": "Open the Downloads panel to see your saved file.",
-        "action": "open-downloads"
-      },
-      {
-        "say": "Click Open next to ApplePieRecipe.pdf to read it.",
-        "action": "open-download",
-        "file": "ApplePieRecipe.pdf"
-      }
-    ]
+    "type": "none"
   },
-  "drDigitalSuccess": "You downloaded a PDF and opened it right in your browser! The file stays in your Downloads folder whenever you need it again.",
-  "drDigitalHint": "Navigate to recipebox.example, click Download, open the Downloads panel, then click the Open button next to the PDF file."
+  "drDigitalSuccess": "You know how to open, read, and save PDFs! They are one of the most useful file types you will come across every day.",
+  "drDigitalHint": "Find a PDF link online and click it — your browser will open it. Look for the download arrow in the viewer to save a copy."
 }
