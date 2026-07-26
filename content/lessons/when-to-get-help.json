@@ -3,33 +3,33 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Getting Support",
   "order": 1180,
-  "title": "When to Ask for Help",
+  "title": "Finding Help Online",
   "videoUrl": "",
-  "drDigitalIntro": "Some problems need a professional or a search.\n• If you see an error code, copy it and search for it — that's often the fastest fix.\n• Get help for strange sounds, a stuck screen, or a suspected virus.\n• Also if you've tried the basics (force quit, restart, check WiFi) and nothing works.\n• Tip: paste the error message into a search engine or support page to find solutions.",
+  "drDigitalIntro": "When a problem persists after force-quitting and restarting, the internet is your best next step.\n• Error codes are your friend: an error like 'PX-4402' or 'Error 0x80070005' looks scary but is specific — copy it exactly and paste it into a support site or search engine.\n• Official support sites (the company's own website) give the most reliable answers. Search '[app name] support [error code]' to find them.\n• When to ask a person: strange sounds or smells, a screen that stays black, a suspected virus, or when you have tried everything and nothing works.\n• Before calling support, write down: the error message, what you were doing when it happened, and what you have already tried. This saves time.\n• You are not alone — millions of people see the same error messages. Someone has already written the fix.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You found help for an error by copying the error code",
+    "goal": "You found a solution by copying the error code and searching for it",
     "scenario": "Photos shows an error with code PX-4402",
     "steps": [
       {
-        "say": "Photos crashed with an error. Click Copy to save the error code.",
+        "say": "Photos crashed with error PX-4402. Copy the error code — you will need it.",
         "action": "copy-code",
         "value": "PX-4402"
       },
       {
-        "say": "Good — you copied PX-4402. Now click OK to close this dialog.",
+        "say": "Click OK to close the error dialog.",
         "action": "read-error"
       },
       {
-        "say": "Open Browser in the dock to search for help.",
+        "say": "Open Browser from the dock to search for help.",
         "action": "open-browser"
       },
       {
-        "say": "Click Paste to put the error code into the support page.",
+        "say": "Click Paste to put the error code into the support search box.",
         "action": "paste-code"
       },
       {
-        "say": "Click Submit to search for a solution.",
+        "say": "Click Submit to find a solution.",
         "action": "submit-support"
       },
       {
@@ -39,6 +39,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You found help by copying the error code and searching for it! That's a real skill — tech support and search engines both work best when you give them the exact error.",
-  "drDigitalHint": "Copy the error code, open the browser, paste it into the support page, and submit."
+  "drDigitalSuccess": "You found help by copying the error code and searching for it! That is a real-world skill — tech support works best when you give the exact error.",
+  "drDigitalHint": "Copy the error code, close the dialog, open Browser, paste the code, submit, then reopen Photos."
 }

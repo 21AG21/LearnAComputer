@@ -5,10 +5,10 @@
   "order": 1110,
   "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Computers act up sometimes — don't panic.\n• Most problems have simple fixes.\n• If an app freezes (stops responding), you can force-quit it.\n• Then reopen it fresh — that usually fixes the problem.\n• Let's practice fixing a frozen app!",
+  "drDigitalIntro": "Computers act up sometimes — and that is completely normal. Here is how to stay calm and fix it.\n• If an app freezes (stops responding), do not keep clicking — that makes things worse. The spinning indicator means the computer is struggling.\n• Force-quit the frozen app: click the system menu and choose Force Quit. This closes the stuck app without affecting the rest of your computer.\n• Reopen it fresh from the dock. Most freezes are temporary — the app starts normally again.\n• Once the app is back, test that it really works by typing or clicking inside it before moving on.\n• If force-quitting does not help, the next step is a full restart (covered in the next lesson).",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You fixed a frozen app by force-quitting and reopening it",
+    "goal": "You fixed a frozen app and confirmed it is working",
     "scenario": "Notes is frozen and not responding",
     "launchApp": "notes",
     "steps": [
@@ -29,9 +29,13 @@
         "say": "Notes is closed. Click Notes in the dock to reopen it fresh.",
         "action": "restart-app",
         "target": "Notes"
+      },
+      {
+        "say": "Notes is back! Type something in it to confirm it is working.",
+        "action": "type-in-app"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the frozen app! When an app stops responding: Force Quit it, then reopen it from the dock. Most freezes are temporary.",
-  "drDigitalHint": "Click the frozen window first, then use the system menu to Force Quit, and reopen from the dock."
+  "drDigitalSuccess": "You fixed the frozen app and confirmed it works! Force Quit + reopen solves most temporary freezes.",
+  "drDigitalHint": "Click the frozen window, then use the system menu to Force Quit, reopen from the dock, and type something in Notes."
 }

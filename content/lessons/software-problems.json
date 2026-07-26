@@ -5,33 +5,41 @@
   "order": 1115,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Software problems are issues with programs, not hardware.\n• Signs: an app crashes, freezes, or shows an error message.\n• Step 1: Force-quit the app and reopen it.\n• Step 2: If it still doesn't work, restart the whole computer.\n• Step 3: Uninstall and reinstall the app as a last resort.",
+  "drDigitalIntro": "If force-quitting and restarting do not fix an app, the next step is to delete it and reinstall it.\n• Deleting an app removes it completely — any bugs or corrupted files go with it.\n• Reinstalling downloads a clean, fresh copy. Your documents and photos are not affected.\n• Where to reinstall: open App Market and search for the app, then tap Install.\n• When to do this: after the app crashes repeatedly, shows unexpected errors after an update, or refuses to open even after a restart.\n• After reinstalling, open the app and test it to confirm the problem is gone.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You fixed a frozen app by force-quitting and reopening it",
-    "scenario": "Browser is frozen and not responding",
-    "launchApp": "browser",
+    "goal": "You deleted and reinstalled a broken app to fix it",
+    "scenario": "Browser keeps crashing and needs a fresh install",
     "steps": [
       {
-        "say": "Browser is frozen — it shows 'Not Responding.' Try clicking on it.",
-        "action": "click-frozen"
+        "say": "Browser keeps crashing. Open App Market from the dock to manage your apps.",
+        "action": "open-app-market"
       },
       {
-        "say": "It won't respond. Open the system menu (three dots) to access Force Quit.",
-        "action": "open-force-quit"
+        "say": "Click My Apps to see your installed apps.",
+        "action": "go-to-my-apps"
       },
       {
-        "say": "Browser shows 'Not Responding.' Click Force Quit to close it.",
-        "action": "force-quit",
+        "say": "Browser has a problem — click Delete to remove it completely.",
+        "action": "delete-broken-app",
         "target": "Browser"
       },
       {
-        "say": "Now click Browser in the dock to reopen it.",
+        "say": "Browser is removed. Click Store to find it again.",
+        "action": "go-to-store-tab"
+      },
+      {
+        "say": "Find Browser and click Install to reinstall a fresh copy.",
+        "action": "reinstall-app",
+        "target": "Browser"
+      },
+      {
+        "say": "All done! Click Browser in the dock to open the fresh install.",
         "action": "restart-app",
         "target": "Browser"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the software problem! The order to try: Force Quit and reopen > Restart the computer > Reinstall the app.",
-  "drDigitalHint": "Click the frozen window, then use the system menu to Force Quit, and reopen from the dock."
+  "drDigitalSuccess": "You deleted and reinstalled Browser to fix it! This is the right move when force-quitting does not solve the problem.",
+  "drDigitalHint": "Open App Market, go to My Apps, delete Browser, switch to Store, install it again, then open it from the dock."
 }

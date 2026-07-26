@@ -10,7 +10,9 @@ export type GuidedTroubleshootingStep = {
     | "read-error" | "click-frozen" | "open-force-quit" | "force-quit" | "restart-app"
     | "open-wifi-panel" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
     | "copy-code" | "open-browser" | "paste-code" | "submit-support"
-    | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart";
+    | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart"
+    | "type-in-app"
+    | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app";
   target?: string;
   value?: string;
 };
@@ -22,7 +24,7 @@ interface Props {
   onResult: (success: boolean) => void;
 }
 
-type View = "desktop" | "force-quit" | "browser-support";
+type View = "desktop" | "force-quit" | "browser-support" | "app-market";
 
 interface FrozenApp {
   name: string;
@@ -30,10 +32,11 @@ interface FrozenApp {
   closed: boolean;
 }
 
-function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" {
+function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" | "app-reinstall" {
   if (steps.some((s) => s.action === "force-quit" || s.action === "click-frozen")) return "frozen";
   if (steps.some((s) => s.action === "copy-code" || s.action === "paste-code")) return "error-code";
   if (steps.some((s) => s.action === "dismiss-error" || s.action === "click-restart")) return "error-restart";
+  if (steps.some((s) => s.action === "open-app-market" || s.action === "reinstall-app")) return "app-reinstall";
   return "wifi";
 }
 
@@ -80,6 +83,18 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
   const [erRestarting, setErRestarting] = useState(false);
   const [erRestarted, setErRestarted] = useState(false);
 
+  // frozen + type-in-app state
+  const [frozenAppReopened, setFrozenAppReopened] = useState(false);
+  const [typedInApp, setTypedInApp] = useState("");
+  const [appTyped, setAppTyped] = useState(false);
+
+  // app-reinstall state
+  const [arMarketTab, setArMarketTab] = useState<"my-apps" | "store">("my-apps");
+  const [arAppDeleted, setArAppDeleted] = useState(false);
+  const [arAppInstalled, setArAppInstalled] = useState(false);
+  const [arBrowserFresh, setArBrowserFresh] = useState(false);
+  const arBrokenTarget = steps.find((s) => s.action === "delete-broken-app")?.target ?? "Browser";
+
   const [time, setTime] = useState("11:15 am");
   useEffect(() => {
     const update = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase());
@@ -120,6 +135,12 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
       case "open-settings": return kind === "dock-app" && name === "Settings";
       case "click-restart": return kind === "restart-btn";
       case "confirm-restart": return kind === "confirm-btn";
+      case "type-in-app": return kind === "notes-input";
+      case "open-app-market": return kind === "dock-app" && name === "App Market";
+      case "go-to-my-apps": return kind === "my-apps-tab";
+      case "delete-broken-app": return kind === "delete-app-btn";
+      case "go-to-store-tab": return kind === "store-tab";
+      case "reinstall-app": return kind === "install-btn";
       default: return false;
     }
   }
@@ -146,10 +167,36 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
   function handleRestartApp(name: string) {
     if (mode === "error-code") {
       setAppReopened(true);
+    } else if (mode === "app-reinstall") {
+      setArBrowserFresh(true);
+      setView("desktop");
     } else {
       setFrozenApps((prev) => prev.map((a) => a.name === name ? { ...a, closed: false, frozen: false } : a));
+      setFrozenAppReopened(true);
     }
     if (step?.action === "restart-app" && step.target === name) completeStep();
+  }
+
+  function handleOpenAppMarket() {
+    setView("app-market");
+    setArMarketTab("my-apps");
+    if (step?.action === "open-app-market") completeStep();
+  }
+  function handleGoToMyApps() {
+    setArMarketTab("my-apps");
+    if (step?.action === "go-to-my-apps") completeStep();
+  }
+  function handleDeleteBrokenApp() {
+    setArAppDeleted(true);
+    if (step?.action === "delete-broken-app") completeStep();
+  }
+  function handleGoToStoreTab() {
+    setArMarketTab("store");
+    if (step?.action === "go-to-store-tab") completeStep();
+  }
+  function handleReinstallApp() {
+    setArAppInstalled(true);
+    if (step?.action === "reinstall-app") completeStep();
   }
 
   function handleOpenWifiPanel() {
@@ -234,6 +281,11 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
     if (mode === "error-restart") return [{ id: "Settings", label: "Settings" }];
     if (mode === "error-code") return [{ id: "Photos", label: "Photos" }, { id: "Browser", label: "Browser" }, { id: "Notes", label: "Notes" }];
     if (mode === "wifi") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }, { id: "Settings", label: "Settings" }];
+    if (mode === "app-reinstall") {
+      const market = { id: "App Market", label: "App Market" };
+      if (arAppDeleted && !arAppInstalled) return [market];
+      return [{ id: arBrokenTarget, label: arBrokenTarget }, market];
+    }
     const frozen = frozenTarget?.name ?? "Notes";
     const base = [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }];
     if (base.some((a) => a.id === frozen)) return base;
@@ -263,7 +315,7 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
               <svg viewBox="0 0 16 16" className="w-4 h-4 inline" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
             </button>
             <span className="text-gray-500 font-medium text-xs">
-              {view === "browser-support" ? "Browser" : view === "force-quit" ? "Force Quit" : "Desktop"}
+              {view === "browser-support" ? "Browser" : view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
             </span>
           </div>
           <div className="flex items-center gap-3 text-xs text-gray-500">
@@ -528,6 +580,118 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
             </div>
           )}
 
+          {/* Frozen mode — app reopened, type-in-app step */}
+          {view === "desktop" && mode === "frozen" && frozenAppReopened && (
+            <div className="p-4">
+              <div className="bg-white rounded-xl shadow-lg border overflow-hidden max-w-sm mx-auto">
+                <div className="bg-gray-100 border-b px-3 py-2">
+                  <span className="text-sm font-medium">{frozenApps[0]?.name ?? "Notes"}</span>
+                </div>
+                <div className="p-3">
+                  <p className="text-xs text-green-600 mb-2">{frozenApps[0]?.name ?? "Notes"} is working normally again.</p>
+                  <textarea
+                    value={typedInApp}
+                    onChange={(e) => {
+                      setTypedInApp(e.target.value);
+                      if (!appTyped && e.target.value.length > 0 && step?.action === "type-in-app") {
+                        setAppTyped(true);
+                        completeStep();
+                      }
+                    }}
+                    placeholder="Type something here..."
+                    className={`w-full h-24 p-2 text-sm border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 ${hl("notes-input") ? pulse : ""}`}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* App-Reinstall mode — broken app desktop */}
+          {view === "desktop" && mode === "app-reinstall" && (
+            <div className="p-4 text-center py-6">
+              {!arBrowserFresh ? (
+                <>
+                  <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-red-400 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
+                  <p className="text-sm font-medium text-gray-600">{arBrokenTarget} keeps crashing.</p>
+                  <p className="text-xs text-gray-400 mt-1">Open App Market from the dock to fix it.</p>
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
+                  <p className="text-sm font-medium text-green-700">{arBrokenTarget} is working again!</p>
+                  <p className="text-xs text-gray-400 mt-1">The fresh install fixed the problem.</p>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* App-Reinstall mode — App Market panel */}
+          {view === "app-market" && mode === "app-reinstall" && (
+            <div className="h-full flex flex-col bg-white">
+              <div className="bg-gray-100 border-b px-4 py-2.5 flex items-center">
+                <button onClick={() => setView("desktop")} className="text-gray-400 hover:text-gray-600 mr-2 text-lg">&larr;</button>
+                <span className="text-sm font-semibold text-gray-700">App Market</span>
+              </div>
+              <div className="flex border-b">
+                <button
+                  onClick={handleGoToMyApps}
+                  className={`flex-1 py-2 text-xs font-medium transition-colors ${arMarketTab === "my-apps" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("my-apps-tab") ? pulse + " rounded" : ""}`}
+                >
+                  My Apps
+                </button>
+                <button
+                  onClick={handleGoToStoreTab}
+                  className={`flex-1 py-2 text-xs font-medium transition-colors ${arMarketTab === "store" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("store-tab") ? pulse + " rounded" : ""}`}
+                >
+                  Store
+                </button>
+              </div>
+              {arMarketTab === "my-apps" && (
+                <div className="p-3 flex-1">
+                  {!arAppDeleted ? (
+                    <div className="flex items-center justify-between p-2.5 rounded-xl bg-red-50 border border-red-200">
+                      <div className="flex items-center gap-2">
+                        <GlobeIcon size={20} />
+                        <div>
+                          <span className="text-sm font-medium">{arBrokenTarget}</span>
+                          <span className="text-xs text-red-500 block">Not working</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleDeleteBrokenApp}
+                        className={`px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium ${hl("delete-app-btn") ? pulse : ""}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-gray-400 text-center py-6">No apps installed. Go to Store to reinstall.</p>
+                  )}
+                </div>
+              )}
+              {arMarketTab === "store" && (
+                <div className="p-3 flex-1">
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+                    <div className="flex items-center gap-2">
+                      <GlobeIcon size={20} />
+                      <span className="text-sm font-medium">{arBrokenTarget}</span>
+                    </div>
+                    {!arAppInstalled ? (
+                      <button
+                        onClick={handleReinstallApp}
+                        className={`px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium ${hl("install-btn") ? pulse : ""}`}
+                      >
+                        Install
+                      </button>
+                    ) : (
+                      <span className="text-xs text-green-600 font-semibold">Installed ✓</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Error-Restart: system error dialog */}
           {mode === "error-restart" && erSystemError && (
             <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
@@ -630,7 +794,9 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
               <button
                 key={app.id}
                 onClick={() => {
-                  if (step?.action === "open-browser" && app.id === "Browser") {
+                  if (mode === "app-reinstall" && app.id === "App Market") {
+                    handleOpenAppMarket();
+                  } else if (step?.action === "open-browser" && app.id === "Browser") {
                     handleOpenBrowser();
                   } else if (mode === "error-restart" && app.id === "Settings") {
                     handleErOpenSettings();

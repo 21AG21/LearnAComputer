@@ -236,7 +236,9 @@ export type PlaygroundTask =
           | "read-error" | "click-frozen" | "open-force-quit" | "force-quit" | "restart-app"
           | "open-wifi-panel" | "toggle-wifi" | "reconnect-wifi" | "forget-network"
           | "copy-code" | "open-browser" | "paste-code" | "submit-support"
-          | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart";
+          | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart"
+          | "type-in-app"
+          | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app";
         target?: string;
         value?: string;
       }>;

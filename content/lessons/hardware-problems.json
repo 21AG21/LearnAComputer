@@ -5,25 +5,8 @@
   "order": 1120,
   "title": "Hardware Problems",
   "videoUrl": "",
-  "drDigitalIntro": "Hardware problems involve the physical parts of your computer.\n• A dim screen is one of the most common — the brightness might be turned down.\n• A dead mouse or keyboard? Check the plug or battery.\n• Start with the obvious: check your settings, cables, power, and connections.",
-  "playgroundTask": {
-    "type": "guided-settings",
-    "goal": "You fixed a dim screen by adjusting the brightness",
-    "steps": [
-      {
-        "say": "The screen looks dim. Click Display in the sidebar to check the brightness.",
-        "action": "open-section",
-        "target": "display"
-      },
-      {
-        "say": "Drag the Brightness slider up past 80% to brighten the screen.",
-        "action": "slider",
-        "target": "brightness",
-        "min": 80,
-        "max": 100
-      }
-    ]
-  },
-  "drDigitalSuccess": "You fixed the dim screen! Adjusting brightness is a common hardware fix you can do in Settings. For other hardware issues — check cables and connections first.",
-  "drDigitalHint": "Click Display in the sidebar, then drag the Brightness slider up to brighten the screen."
+  "drDigitalIntro": "Hardware problems are issues with the physical parts of your computer — the screen, keyboard, ports, or speakers.\n• A dim or completely black screen: first check the brightness in Settings; if the screen still won't turn on, check that the charger is connected and the battery isn't empty.\n• A keyboard or mouse that isn't responding: check the cable is firmly plugged in, or replace the batteries if it is wireless.\n• No sound: check that the volume is turned up and not muted in Settings; try a different speaker or pair of headphones to rule out a broken device.\n• Strange smells, smoke, sparks, or a cracked screen: stop using the computer immediately and take it to a repair shop. Do not attempt to fix physical damage yourself.\n• The safe rule: try Settings and cables first. If the problem persists after a restart, get professional help.",
+  "playgroundTask": { "type": "none" },
+  "drDigitalSuccess": "You know how to spot hardware problems and what to try first!",
+  "drDigitalHint": "Read through the checklist and click Continue when you are ready."
 }

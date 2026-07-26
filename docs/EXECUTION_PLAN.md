@@ -133,11 +133,11 @@ Internally ordered: the `chrome` prop and `LoggedInPanel` are shared infrastruct
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 28 | 13.3 | `hardware-problems` → `type: "none"` + proper explainer | Deletion is the cheapest item; do it first |
-| 29 | 13.1 | Restored Notes must be typeable — add a final type step | Small scenario extension |
-| 30 | 13.2 | Rewrite `software-problems` as delete-and-reinstall | **Needs 10.1** (Stage B) so the app-store state is trustworthy |
-| 31 | 13.4 | `password-reset` scenario spanning Browser → Mail → Browser | **Needs 12.2's `LoggedInPanel`** |
-| 32 | 13.5 | `error-restart` support scenario; add `support.example` to `PAGES` | Largest of the five; benefits from the patterns 13.4 establishes |
+| 28 | 13.3 | `hardware-problems` → `type: "none"` + proper explainer | Deletion is the cheapest item; do it first | ✅ Done |
+| 29 | 13.1 | Restored Notes must be typeable — add a final type step | Small scenario extension | ✅ Done — `type-in-app` action added to GuidedTroubleshootingTask; textarea in reopened Notes |
+| 30 | 13.2 | Rewrite `software-problems` as delete-and-reinstall | **Needs 10.1** (Stage B) so the app-store state is trustworthy | ✅ Done — new `app-reinstall` mode in GuidedTroubleshootingTask; inline App Market (My Apps + Store tabs) |
+| 31 | 13.4 | `password-reset` scenario spanning Browser → Mail → Browser | **Needs 12.2's `LoggedInPanel`** | ⚠️ Partial — `password-recovery.json` now shows LoggedInPanel after login (Stage E). Full Browser→MailApp→Browser cross-app redesign LEFT FOR LARGER MODEL |
+| 32 | 13.5 | `error-restart` support scenario; add `support.example` to `PAGES` | Largest of the five; benefits from the patterns 13.4 establishes | ✅ Done — `when-to-get-help.json` improved; `support.example` added to GuidedBrowserTask PAGES |
 
 ### Stage G — Content-only, zero code (Phase 14)
 

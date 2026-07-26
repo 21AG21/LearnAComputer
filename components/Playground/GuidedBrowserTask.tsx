@@ -50,7 +50,7 @@ interface GuidedBrowserTaskProps {
 }
 
 type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames" | "pickacolor"
-  | "library" | "transit" | "garden" | "petnews" | "bank" | "bookshop";
+  | "library" | "transit" | "garden" | "petnews" | "bank" | "bookshop" | "support";
 
 interface Page {
   title: string;
@@ -81,6 +81,7 @@ const PAGES: Record<PageId, Page> = {
   petnews: { title: "Pet News Daily", url: "petnews.example", secure: true, icon: <HeartIcon size={16} />, kind: "site", body: "Dog Wins National Frisbee Championship · Scientists Confirm Cats Nap 16 Hours a Day · Local Shelter Adopts Out 200 Animals This Month. Subscribe for daily updates." },
   bank: { title: "First National Bank", url: "firstbank.example", secure: true, icon: <LockIcon size={16} />, kind: "site", body: "Online banking — check your balance, pay bills, and transfer funds securely. Your data is protected with 256-bit encryption. Never share your password." },
   bookshop: { title: "Book Shop", url: "bookshop.example", secure: true, icon: <BookClosedIcon size={16} />, kind: "site", body: "Best-selling novels, cookbooks, children's books and more. New arrivals every week. Free shipping on orders over $35.", ads: true },
+  support: { title: "Computer Support", url: "support.example", secure: true, icon: <GlobeIcon size={16} />, kind: "site", body: "Search for your error code below to find a solution. Common fixes: restart the app, check for updates, or reinstall. For hardware issues, contact your manufacturer." },
 };
 
 const URL_TO_PAGE: Record<string, PageId> = Object.fromEntries(

@@ -442,9 +442,13 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
 }
 ```
 
-`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
+`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. The mode is **inferred** from the step actions — the `scenario` field is a free-text description for the lesson author only. `launchApp` names the dock app that starts frozen/problematic. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`, `type-in-app`, `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`), `go-to-store-tab`, `reinstall-app` (`target`).
 
 The `error-restart` scenario: on mount a system error dialog appears ("Something went wrong"); learner clicks OK to dismiss → clicks Settings in the dock → clicks Restart button → confirms in a dialog → 1.5s black-screen animation → success desktop. Steps use: `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
+
+The **`app-reinstall` scenario** (inferred when steps include `open-app-market` or `reinstall-app`): shows a broken app in the dock → learner opens App Market → goes to My Apps → deletes the broken app → switches to Store → reinstalls → opens fresh from dock. Inline App Market shows My Apps and Store tabs. Steps use: `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`: app name), `go-to-store-tab`, `reinstall-app` (`target`), `restart-app` (`target`).
+
+The **`type-in-app`** action: used after `restart-app` in a frozen-mode lesson. Shows a text area inside the reopened app window; completes when the learner types anything. Confirms the app is alive after force-quit and reopen.
 
 #### `guided-calendar` schema
 
