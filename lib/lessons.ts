@@ -85,6 +85,15 @@ export type PlaygroundTask =
       }>;
     }
   | {
+      type: "notes-shortcut";
+      goal: string;
+      steps: Array<{
+        say: string;
+        action: "type" | "select-all" | "bold" | "italic" | "underline" | "copy" | "cut" | "paste" | "undo" | "redo";
+        value?: string;
+      }>;
+    }
+  | {
       type: "guided-browser";
       goal: string;
       mode?: "guided" | "assessment";

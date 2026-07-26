@@ -5,10 +5,30 @@
   "order": 250,
   "title": "The shortcut pattern",
   "videoUrl": "",
-  "drDigitalIntro": "Here's the secret: shortcuts follow one simple pattern.\n• Hold Ctrl (or Command) and press a letter.\n• C copies, V pastes, X cuts, Z undoes, S saves.\n• A selects all, F finds, P prints, N is new, W closes, T is a new tab.",
+  "drDigitalIntro": "Here is the secret: shortcuts follow one simple pattern.\n• Hold Ctrl (or Command on a Mac) and press a letter.\n• C copies, V pastes, X cuts, Z undoes, S saves.\n• A selects all, B bolds, I italicizes, U underlines.\n• The letter is always a clue: C = Copy, V = paste (the V points down like a pour), Z = undo (the last letter — last chance!).\n• Once you know the pattern, you can guess most shortcuts without looking them up.",
   "playgroundTask": {
-    "type": "none"
+    "type": "notes-shortcut",
+    "goal": "Practice the three most useful keyboard shortcuts",
+    "steps": [
+      {
+        "say": "Type a short sentence in the notes editor below.",
+        "action": "type",
+        "value": "any"
+      },
+      {
+        "say": "Press Ctrl+A (or Command+A) to select everything you typed.",
+        "action": "select-all"
+      },
+      {
+        "say": "Press Ctrl+C (or Command+C) to copy the selected text.",
+        "action": "copy"
+      },
+      {
+        "say": "Press Ctrl+Z (or Command+Z) to undo and bring back your text.",
+        "action": "undo"
+      }
+    ]
   },
-  "drDigitalSuccess": "You've got the pattern — Command plus a letter. That unlocks almost every shortcut!",
-  "drDigitalHint": "Take your time with the pattern, then click Continue whenever you're ready."
+  "drDigitalSuccess": "You have got the pattern — Ctrl (or Command) plus a letter. That unlocks almost every shortcut!",
+  "drDigitalHint": "Try each shortcut in order. The glowing button in the toolbar shows you what to do next. Hold Ctrl and press the matching letter."
 }

@@ -69,3 +69,21 @@ export function checkTextEditDetailed(current: string, mustInclude: string[], mu
   const presentBadWords = mustNotInclude.filter((s) => norm.includes(normalize(s)));
   return { pass: missingRules.length === 0 && presentBadWords.length === 0, missingRules, presentBadWords };
 }
+
+type KbEvent = { metaKey: boolean; ctrlKey: boolean; shiftKey: boolean; key: string };
+
+export function checkNotesShortcut(action: string, e: KbEvent): boolean {
+  const mod = e.metaKey || e.ctrlKey;
+  switch (action) {
+    case "bold":       return mod && e.key === "b";
+    case "italic":     return mod && e.key === "i";
+    case "underline":  return mod && e.key === "u";
+    case "select-all": return mod && e.key === "a";
+    case "copy":       return mod && e.key === "c";
+    case "cut":        return mod && e.key === "x";
+    case "paste":      return mod && e.key === "v";
+    case "undo":       return mod && !e.shiftKey && e.key === "z";
+    case "redo":       return mod && e.shiftKey && e.key === "z";
+    default:           return false;
+  }
+}

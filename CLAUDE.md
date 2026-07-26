@@ -151,6 +151,7 @@ Each file defines one sub-lesson:
 | `guided-calendar` | GuidedCalendarTask | Guided calendar + reminders: create events, set times, reminders |
 | `guided-desktop` | GuidedDesktopTask | Guided window management (move, resize, minimize, maximize, close) + dock app open/close + menu-bar clock/WiFi/battery panels |
 | `keyboard-nav-game` | KeyboardNavTask | Keyboard navigation game (Tab, Enter, arrow keys) |
+| `notes-shortcut` | GuidedNotesTask | Notes editor with shortcut detection (bold, italic, underline, select-all, copy, cut, paste, undo, redo) |
 
 **Playground philosophy:** activities should be *hands-on and guided* — the learner clicks, types, and manipulates a realistic simulation with each step highlighted (pulsing yellow). **NEVER use `multiple-choice`** — quizzes test recognition, not skill. All existing multiple-choice lessons have been converted to guided task types. `guided-files` is the reference pattern for a guided simulator.
 
@@ -487,6 +488,29 @@ Window management and desktop exploration. The learner practices moving, resizin
 Actions: `move`, `resize`, `minimize`, `restore`, `maximize`, `restore-max`, `close`, `open-app` (`target`: dock app id — notes/browser/files/mail/settings/photos/app-market/calendar/reminders/messages), `close-app` (closes the open window), `open-clock` (opens the clock/date panel), `open-wifi-panel` (opens the WiFi panel), `open-battery-panel` (opens the battery percentage panel), `close-panel` (closes whichever menu-bar panel is open).
 
 The menu bar shows a live clock (updates every 30s), battery percentage (Battery API with 72% fallback), and WiFi icon. Lessons using `open-app` or any `open-*` action start with no window visible (the learner opens everything themselves). Steps using `open-clock`/`open-wifi-panel`/`open-battery-panel` show a pulsing ring on the matching icon; `close-panel` shows a pulsing ring on the panel's close button.
+
+#### `notes-shortcut` schema
+
+A Notes editor (contentEditable div + formatting toolbar) that detects keyboard shortcuts. Each step waits for the exact shortcut before advancing. For formatting steps (`bold`/`italic`/`underline`), the matching toolbar button pulses yellow as a hint; clicking it shows a nudge to use the keyboard instead. The learner opens Notes from the dock first (via `DesktopLaunch app="notes"`).
+
+```json
+"playgroundTask": {
+  "type": "notes-shortcut",
+  "goal": "Use keyboard shortcuts to format text",
+  "steps": [
+    { "say": "Type a few words in the editor.", "action": "type", "value": "any" },
+    { "say": "Press Ctrl+A (or Command+A) to select all.", "action": "select-all" },
+    { "say": "Press Ctrl+B (or Command+B) to bold the text.", "action": "bold" },
+    { "say": "Press Ctrl+I (or Command+I) to italicize.", "action": "italic" },
+    { "say": "Press Ctrl+U (or Command+U) to underline.", "action": "underline" },
+    { "say": "Press Ctrl+C (or Command+C) to copy.", "action": "copy" },
+    { "say": "Press Ctrl+Z (or Command+Z) to undo.", "action": "undo" },
+    { "say": "Press Ctrl+Shift+Z (or Command+Shift+Z) to redo.", "action": "redo" }
+  ]
+}
+```
+
+Actions: `type` (`value`: any non-empty string typed in the editor), `select-all`, `bold`, `italic`, `underline`, `copy`, `cut`, `paste`, `undo`, `redo`. All shortcut detection uses `checkNotesShortcut` in `TaskChecker.ts` (Cmd/Ctrl + key). For `type`, the step completes when the editor contains `value` anywhere in its text content; set `value` to `"any"` when any non-empty input is acceptable.
 
 ### Progress
 

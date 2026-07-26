@@ -101,19 +101,19 @@ Four feedback items collapse to one root cause in 10.1; Phase 9's bugs are all s
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 13 | **2.6** | ONE Files app: extract `FileManager.tsx`, move the filesystem into `filesData.ts`, thin out `GuidedFilesTask`, migrate `FilesApp` / `EditFileTask` / `DesktopFileExplorerTask` | **Blocks 3.7, 4.6, 4.10, 5.1, 5.3/5.4, and Unit 3's assessment.** Regression-test all nine Unit 3 lessons before continuing. |
-| 14 | 5.1 | Opening an item raises a real closable window; update `file-what-is` steps and intro | The `FileManager` change that 3.7 also needs — build it once |
-| 15 | 3.7 | Double-click lesson renders `FileManager` with `enabled={{open: true}}` + per-file highlight | Direct consumer of 2.6 |
-| 16 | 5.3 / 5.4 | `files-pictures.png` and `files-downloads.png` in the sidebar, in bordered rounded boxes | Trivial once the sidebar has one owner |
-| 17 | 5.2 | No-op guard: auto-complete a step whose precondition is already satisfied | Deferred in QA3; cheap inside the new `FileManager` |
-| 18 | 4.10 | Birthday invitation opens in the real Files app; fix the editor-window ugliness | Consumer of 2.6 |
-| 19 | 4.6 | Arrow-key navigation: `keyboardNav` mode, click nudge, new `arrow-select` action + `keyboardOnly` flag | Last consumer of 2.6 |
+| 13 | **2.6** | ONE Files app: extract `FileManager.tsx`, move the filesystem into `filesData.ts`, thin out `GuidedFilesTask`, migrate `FilesApp` / `EditFileTask` / `DesktopFileExplorerTask` | **Blocks 3.7, 4.6, 4.10, 5.1, 5.3/5.4, and Unit 3's assessment.** Regression-test all nine Unit 3 lessons before continuing. | ✅ Done |
+| 14 | 5.1 | Opening an item raises a real closable window; update `file-what-is` steps and intro | The `FileManager` change that 3.7 also needs — build it once | ✅ Done |
+| 15 | 3.7 | Double-click lesson renders `FileManager` with `enabled={{open: true}}` + per-file highlight | Direct consumer of 2.6 | ✅ Done |
+| 16 | 5.3 / 5.4 | `files-pictures.png` and `files-downloads.png` in the sidebar, in bordered rounded boxes | Trivial once the sidebar has one owner | ✅ Done |
+| 17 | 5.2 | No-op guard: auto-complete a step whose precondition is already satisfied | Deferred in QA3; cheap inside the new `FileManager` | ✅ Done |
+| 18 | 4.10 | Birthday invitation opens in the real Files app; fix the editor-window ugliness | Consumer of 2.6 | ✅ Done |
+| 19 | 4.6 | Arrow-key navigation: `keyboardNav` mode, click nudge, new `arrow-select` action + `keyboardOnly` flag | Last consumer of 2.6 | ✅ Done |
 
 ### Stage D — The one new playground type
 
 | # | Section | Task | Why here |
 |---|---|---|---|
-| 20 | **4.9** | `notes-shortcut` type: union member → `contentEditable` `NotesApp` → `GuidedNotesTask.tsx` → `checkNotesShortcut` → wire in `LessonPlaygroundPane`. Convert `text-formatting`, `keyboard-shortcuts-pattern`, `editing-undo-redo` | **Blocks Unit 2's assessment (15.2).** Isolated from Stage C, so it can run in parallel if two people are working. |
+| 20 | **4.9** | `notes-shortcut` type: union member → `contentEditable` `NotesApp` → `GuidedNotesTask.tsx` → `checkNotesShortcut` → wire in `LessonPlaygroundPane`. Convert `text-formatting`, `keyboard-shortcuts-pattern`, `editing-undo-redo` | **Blocks Unit 2's assessment (15.2).** Isolated from Stage C, so it can run in parallel if two people are working. | ✅ Done |
 
 ### Stage E — Unit 10 security restructure (Phase 12)
 

@@ -5,10 +5,34 @@
   "order": 245,
   "title": "Bold, italics, and underline",
   "videoUrl": "",
-  "drDigitalIntro": "You can change how your words look to add emphasis.\n• Select some text first.\n• Ctrl+B makes it bold; Ctrl+I makes it italic; Ctrl+U underlines it.\n• Same pattern: Ctrl plus the first letter of what you want.",
+  "drDigitalIntro": "You can change how your words look to add emphasis.\n• Bold makes text stand out and look stronger.\n• Italics tilt the text to show titles, quotes, or gentle emphasis.\n• Underline draws a line under the text.\n• First select your text, then use Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline.\n• Same pattern: Ctrl (or Command on a Mac) plus the first letter of what you want.",
   "playgroundTask": {
-    "type": "none"
+    "type": "notes-shortcut",
+    "goal": "Use Bold, Italic, and Underline keyboard shortcuts",
+    "steps": [
+      {
+        "say": "Type a few words in the editor below — anything you like.",
+        "action": "type",
+        "value": "any"
+      },
+      {
+        "say": "Now press Ctrl+A (or Command+A) to select all the text.",
+        "action": "select-all"
+      },
+      {
+        "say": "Press Ctrl+B (or Command+B) to make the selected text bold.",
+        "action": "bold"
+      },
+      {
+        "say": "Press Ctrl+I (or Command+I) to add italics.",
+        "action": "italic"
+      },
+      {
+        "say": "Press Ctrl+U (or Command+U) to underline the text.",
+        "action": "underline"
+      }
+    ]
   },
-  "drDigitalSuccess": "Bold, italic, underline — now your writing can stand out!",
-  "drDigitalHint": "Read through the three formatting shortcuts, then click Continue whenever you're ready."
+  "drDigitalSuccess": "Bold, italic, underline — now your writing can stand out with just a keyboard shortcut!",
+  "drDigitalHint": "Select all your text first with Ctrl+A, then use Ctrl+B, Ctrl+I, or Ctrl+U to format it. Look for the glowing button in the toolbar — that is the one to use next."
 }

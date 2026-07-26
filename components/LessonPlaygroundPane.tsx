@@ -30,6 +30,7 @@ import GuidedTroubleshootingTask from "@/components/Playground/GuidedTroubleshoo
 import GuidedCalendarTask from "@/components/Playground/GuidedCalendarTask";
 import GuidedDesktopTask from "@/components/Playground/GuidedDesktopTask";
 import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
+import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
 import DesktopLaunch from "@/components/Playground/DesktopLaunch";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import { NoteIcon } from "@/components/Playground/Icons";
@@ -195,6 +196,11 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <GuidedDesktopTask goal={task.goal} steps={task.steps} onResult={onResult} />
           )}
           {task.type === "keyboard-nav-game" && <KeyboardNavTask onResult={onResult} />}
+          {task.type === "notes-shortcut" && (
+            <DesktopLaunch app="notes">
+              <GuidedNotesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            </DesktopLaunch>
+          )}
         </div>
       )}
     </div>
