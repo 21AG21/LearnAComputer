@@ -3,12 +3,41 @@
   "unit": "Unit 9: System Settings",
   "module": "Unit 9 Assessment",
   "order": 960,
-  "title": "Customize Your Computer",
+  "title": "Set the screen up for tired eyes",
   "videoUrl": "",
-  "drDigitalIntro": "Now do it for real — on your own computer!\n\n1. Open Settings.\n2. Switch between light and dark mode — pick the one you like.\n3. Adjust the screen brightness to a comfortable level.\n4. Turn on Night Shift (or Night Light on Windows) for evening use.\n5. If the text feels small, look for a Display or Accessibility setting to make it larger.\n6. Check how much storage you have free.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nIt is late in the evening and the screen is hard to look at. Fix that, then find out how much room is left on the computer.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-settings",
+    "mode": "assessment",
+    "goal": "You set up the screen and checked your storage",
+    "hint": "Settings is split into sections down the left-hand side. The name of each section tells you what lives inside it — the one about text size is not the one about colour.",
+    "steps": [
+      {
+        "say": "Make the text noticeably bigger.",
+        "action": "slider",
+        "target": "text-size",
+        "min": 125,
+        "max": 200
+      },
+      {
+        "say": "Switch the screen to its dark colours.",
+        "action": "toggle",
+        "target": "dark-mode"
+      },
+      {
+        "say": "Dim the screen for a dark room.",
+        "action": "slider",
+        "target": "brightness",
+        "min": 10,
+        "max": 45
+      },
+      {
+        "say": "Find out how much space is left on this computer.",
+        "action": "open-section",
+        "target": "storage"
+      }
+    ]
   },
-  "drDigitalSuccess": "You know your way around Settings! The more you explore, the more comfortable your computer will feel.",
-  "drDigitalHint": "Open your computer's Settings app and try each step on the list above."
+  "drDigitalSuccess": "Bigger text, dark colours, a dimmer screen — and you know where to check your free space. Those four settings make a computer usable for hours instead of minutes.",
+  "drDigitalHint": "Text size lives under Accessibility. Dark mode is under Appearance. Brightness is under Display. Free space has a section of its own."
 }

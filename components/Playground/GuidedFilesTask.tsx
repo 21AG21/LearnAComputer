@@ -6,6 +6,7 @@ import { FolderIcon } from "./Icons";
 import FileManager, { SaveDialog } from "./Desktop/FileManager";
 import type { Item, Loc } from "./Desktop/FileManager";
 import { LOC_TITLE } from "./Desktop/filesData";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 
 export type GuidedStep = {
   say: string;
@@ -21,6 +22,8 @@ export type GuidedStep = {
 interface GuidedFilesTaskProps {
   goal: string;
   steps: GuidedStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
   /** When true, FileManager blocks mouse clicks and only accepts keyboard/arrow input. */
   keyboardOnly?: boolean;
@@ -65,50 +68,45 @@ function computeHighlight(
   }
 }
 
-export default function GuidedFilesTask({ goal, steps, onResult, keyboardOnly }: GuidedFilesTaskProps) {
-  const [stepIndex, setStepIndex]             = useState(0);
-  const [phase, setPhase]                     = useState(0);
-  const [pendingComplete, setPendingComplete] = useState(false);
+export default function GuidedFilesTask({ goal, steps, mode, hint, onResult, keyboardOnly }: GuidedFilesTaskProps) {
+  /** Name of a file opened for an `open-file` step, held until its preview is closed. */
+  const [pendingOpen, setPendingOpen]         = useState<string | null>(null);
   const [saveStage, setSaveStage]             = useState<"dialog" | null>(null);
   const [saveName, setSaveName]               = useState("");
   const [saveFolder, setSaveFolder]           = useState<Loc | null>(null);
-  const [flash, setFlash]                     = useState(false);
-  const [done, setDone]                       = useState(false);
   const [nudge, setNudge]                     = useState<string | null>(null);
   const [resetKey, setResetKey]               = useState(0);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
+  const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, wants, objectives } =
+    useStepRunner({
+      steps,
+      mode,
+      onResult,
+      flashMs: 900,
+      finishDelayMs: 1400,
+      onStepComplete: () => {
+        setNudge(null);
+        setSaveStage(null);
+        setSaveFolder(null);
+        setSaveName("");
+        setResetKey((k) => k + 1);
+      },
+    });
 
   // Track current file positions so we can auto-complete a move step when already satisfied.
   const itemsRef = useRef<Item[]>([]);
 
+  // A move step whose file already sits in the destination is satisfied on arrival.
   useEffect(() => {
-    if (!step || step.action !== "move" || !step.target || !step.into) return;
-    const fileItem = itemsRef.current.find((x) => x.name === step.target);
+    const move = wanted((s) => s.action === "move" && !!s.target && !!s.into);
+    if (!move) return;
+    const fileItem = itemsRef.current.find((x) => x.name === move.target);
     if (!fileItem) return;
-    const locTitle = LOC_TITLE[fileItem.loc as Loc];
-    if (locTitle === step.into) { completeStep(); return; }
-    const destFolder = itemsRef.current.find((x) => x.kind === "folder" && x.name === step.into);
-    if (destFolder && fileItem.loc === destFolder.id) completeStep();
+    const destFolder = itemsRef.current.find((x) => x.kind === "folder" && x.name === move.into);
+    const settled = LOC_TITLE[fileItem.loc as Loc] === move.into || (destFolder && fileItem.loc === destFolder.id);
+    if (settled) tryStep((s) => s.action === "move" && s.target === move.target && s.into === move.into);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepIndex]);
-
-  function completeStep() {
-    setFlash(true);
-    setNudge(null);
-    setSaveStage(null);
-    setSaveFolder(null);
-    setSaveName("");
-    setResetKey((k) => k + 1);
-    setTimeout(() => setFlash(false), 900);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1400);
-    }
-    setStepIndex((i) => i + 1);
-    setPhase(0);
-  }
+  }, [stepIndex, done]);
 
   // hl() is used by SaveDialog for its internal highlights
   function hl(kind: string, target?: string): boolean {
@@ -119,7 +117,8 @@ export default function GuidedFilesTask({ goal, steps, onResult, keyboardOnly }:
     return kind === "save-confirm";
   }
 
-  const showSave = step?.action === "save" && !done;
+  const saveStep = wanted((s) => s.action === "save");
+  const showSave = !!saveStep && !done;
 
   return (
     <SimulatorFrame
@@ -131,62 +130,64 @@ export default function GuidedFilesTask({ goal, steps, onResult, keyboardOnly }:
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="h-full relative">
         <FileManager
           highlight={computeHighlight(step, phase, saveStage, finished)}
           nudge={nudge}
           resetKey={resetKey}
-          pendingPreviewClose={pendingComplete}
+          pendingPreviewClose={!!pendingOpen}
           onSidebarClick={(loc, label) => {
-            if (!step) return;
-            if (step.action === "go-to" && label === step.target) { completeStep(); return; }
-            if (step.action === "restore" && phase === 0 && loc === "trash") setPhase(1);
+            tryStep((s) => s.action === "go-to" && label === s.target);
+            if (step?.action === "restore" && phase === 0 && loc === "trash") setPhase(1);
           }}
           onItemClick={(item) => {
+            tryStep((s) => s.action === "arrow-select" && item.name === s.target);
             if (!step) return;
-            if (step.action === "arrow-select" && item.name === step.target) { completeStep(); return; }
             if (step.action === "rename"  && phase === 0 && item.name === step.target) setPhase(1);
             if (step.action === "delete"  && phase === 0 && item.name === step.target) setPhase(1);
             if (step.action === "restore" && phase === 1 && item.name === step.target) setPhase(2);
           }}
           onItemDoubleClick={(item) => {
-            if (!step) return;
-            if (step.action === "open-file"   && item.name === step.target) setPendingComplete(true);
-            if (step.action === "open-folder" && item.name === step.target) completeStep();
+            // Opening a file only counts once the learner has read it and closed the preview.
+            if (wants((s) => s.action === "open-file" && item.name === s.target)) setPendingOpen(item.name);
+            tryStep((s) => s.action === "open-folder" && item.name === s.target);
           }}
           onPreviewClose={() => {
-            if (pendingComplete) { setPendingComplete(false); completeStep(); }
+            const opened = pendingOpen;
+            if (!opened) return;
+            setPendingOpen(null);
+            tryStep((s) => s.action === "open-file" && s.target === opened);
           }}
           onRenameButtonClick={() => {
             if (step?.action === "rename" && phase === 1) setPhase(2);
           }}
           onFolderCreated={(name) => {
-            if (step?.action === "new-folder" && step.value && name.toLowerCase() === step.value.toLowerCase())
-              completeStep();
+            tryStep((s) => s.action === "new-folder" && !!s.value && name.toLowerCase() === s.value.toLowerCase());
           }}
           onRenamed={(_item, newName) => {
-            if (step?.action === "rename" && step.value && newName.toLowerCase() === step.value.toLowerCase())
-              completeStep();
+            tryStep((s) => s.action === "rename" && !!s.value && newName.toLowerCase() === s.value.toLowerCase());
           }}
           onDeleteButtonClick={(item) => {
-            if (step?.action === "delete" && phase === 1 && item.name === step.target) completeStep();
+            tryStep((s) => s.action === "delete" && item.name === s.target, phase === 1);
           }}
           onRestoreButtonClick={(item) => {
-            if (step?.action === "restore" && phase === 2 && item.name === step.target) completeStep();
+            tryStep((s) => s.action === "restore" && item.name === s.target, phase === 2);
           }}
           onMoved={(item, destName) => {
-            if (step?.action !== "move" || item.name !== step.target) return;
-            if (destName === step.into) { setNudge(null); completeStep(); }
-            else setNudge(`Oops — drag it into ${step.into} instead`);
+            const move = wanted((s) => s.action === "move" && item.name === s.target);
+            if (!move) return;
+            if (destName === move.into) tryStep((s) => s.action === "move" && s.target === move.target && s.into === move.into);
+            else setNudge(`Oops — drag it into ${move.into} instead`);
           }}
           keyboardNav={keyboardOnly}
           onItemsChange={(items) => { itemsRef.current = items; }}
           onSearchChange={(q) => {
-            if (step?.action === "search" && step.reveal) {
-              const trimmed = q.trim().toLowerCase();
-              if (trimmed.length >= 3 && step.reveal.toLowerCase().includes(trimmed)) completeStep();
-            }
+            const trimmed = q.trim().toLowerCase();
+            if (trimmed.length < 3) return;
+            tryStep((s) => s.action === "search" && !!s.reveal && s.reveal.toLowerCase().includes(trimmed));
           }}
         />
 
@@ -206,10 +207,9 @@ export default function GuidedFilesTask({ goal, steps, onResult, keyboardOnly }:
               if (step?.into === LOC_TITLE[loc] && phase === 1) setPhase(2);
             }}
             onConfirm={() => {
-              if (!step) return;
-              if (saveName.trim().toLowerCase() !== (step.value ?? "").toLowerCase()) return;
-              if (!saveFolder || LOC_TITLE[saveFolder] !== step.into) return;
-              completeStep();
+              if (!saveFolder) return;
+              const name = saveName.trim().toLowerCase();
+              tryStep((s) => s.action === "save" && name === (s.value ?? "").toLowerCase() && LOC_TITLE[saveFolder] === s.into);
             }}
           />
         )}

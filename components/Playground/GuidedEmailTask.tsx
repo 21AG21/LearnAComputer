@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import { FILLER_FILES } from "./Desktop/filesData";
 import {
   InboxIcon, SendIcon, DraftIcon, SpamIcon, ArchiveIcon,
@@ -24,8 +25,14 @@ interface GuidedEmailTaskProps {
   goal: string;
   steps: GuidedEmailStep[];
   seedDraft?: { to: string; subject: string; body: string };
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean, failMessage?: string) => void;
 }
+
+const FIELD_ACTION = {
+  to: "set-to", cc: "set-cc", bcc: "set-bcc", subject: "set-subject", body: "set-body",
+} as const;
 
 interface Email {
   id: string;
@@ -55,7 +62,7 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
 
 const ATTACH_FILES = FILLER_FILES.map((f) => f.name);
 
-export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: GuidedEmailTaskProps) {
+export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, onResult }: GuidedEmailTaskProps) {
   const [emails, setEmails] = useState<Email[]>(() => {
     if (!seedDraft) return INITIAL_EMAILS;
     return [
@@ -79,15 +86,15 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
   const [draft, setDraft] = useState({ to: "", cc: "", bcc: "", subject: "", body: "" });
   const [attachedFile, setAttachedFile] = useState<string | null>(null);
   const [filePicker, setFilePicker] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
-
   const [undoPill, setUndoPill] = useState<{ emailId: string; countdown: number; body: string } | null>(null);
   const undoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
+  const { step, stepIndex, finished, done, flash, tryStep, objectives } = useStepRunner({
+    steps,
+    mode,
+    onResult,
+    onStepComplete: () => setFilePicker(false),
+  });
 
   useEffect(() => {
     if (!undoPill) return;
@@ -103,16 +110,6 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     }, 1000);
     return () => { if (undoTimer.current) clearInterval(undoTimer.current); };
   }, [undoPill?.emailId]);
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -160,13 +157,13 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
       setAttachedFile(null);
       setFilePicker(false);
       setEmails((prev) => prev.filter((e) => e.id !== email.id));
-      if (step?.action === "open-email" && step.target === email.subject) completeStep();
+      tryStep((s) => s.action === "open-email" && s.target === email.subject);
       return;
     }
     setSelectedEmail(email);
     setComposing(false);
     setReplyTo(null);
-    if (step?.action === "open-email" && step.target === email.subject) completeStep();
+    tryStep((s) => s.action === "open-email" && s.target === email.subject);
   }
 
   function handleCompose() {
@@ -176,26 +173,27 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     setDraft({ to: "", cc: "", bcc: "", subject: "", body: "" });
     setAttachedFile(null);
     setFilePicker(false);
-    if (step?.action === "compose") completeStep();
+    tryStep((s) => s.action === "compose");
   }
 
   function handleFieldChange(field: "to" | "cc" | "bcc" | "subject" | "body", val: string) {
-    const actionMap: Record<string, string> = { to: "set-to", cc: "set-cc", bcc: "set-bcc", subject: "set-subject", body: "set-body" };
-    if (step?.action === actionMap[field]) {
-      const required = (step.value ?? "").toLowerCase();
-      if (!required || val.toLowerCase().includes(required)) completeStep();
-    }
+    const wantedAction = FIELD_ACTION[field];
+    tryStep((s) => {
+      if (s.action !== wantedAction) return false;
+      const required = (s.value ?? "").toLowerCase();
+      return !required || val.toLowerCase().includes(required);
+    });
   }
 
   function handleAttachClick() {
     setFilePicker(true);
-    if (step?.action === "attach" && !step.target) completeStep();
+    tryStep((s) => s.action === "attach" && !s.target);
   }
 
   function handlePickFile(fileName: string) {
     setAttachedFile(fileName);
     setFilePicker(false);
-    if (step?.action === "attach" && step.target === fileName) completeStep();
+    tryStep((s) => s.action === "attach" && s.target === fileName);
   }
 
   function handleSend() {
@@ -232,7 +230,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
       setDraft({ to: "", cc: "", bcc: "", subject: "", body: "" });
       setAttachedFile(null);
     }
-    if (step?.action === "send") completeStep();
+    tryStep((s) => s.action === "send");
   }
 
   function handleUndo() {
@@ -260,7 +258,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     setComposing(true);
     setReplyTo(selectedEmail);
     setDraft({ to: selectedEmail.from, cc: "", bcc: "", subject: `Re: ${selectedEmail.subject}`, body: "" });
-    if (step?.action === "reply") completeStep();
+    tryStep((s) => s.action === "reply");
   }
 
   function handleForward() {
@@ -268,42 +266,42 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     setComposing(true);
     setReplyTo(null);
     setDraft({ to: "", cc: "", bcc: "", subject: `Fwd: ${selectedEmail.subject}`, body: `\n\n--- Original Message ---\n${selectedEmail.body}` });
-    if (step?.action === "forward") completeStep();
+    tryStep((s) => s.action === "forward");
   }
 
   function handleDelete() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.filter((e) => e.id !== selectedEmail.id));
     setSelectedEmail(null);
-    if (step?.action === "delete") completeStep();
+    tryStep((s) => s.action === "delete" && (!s.target || s.target === selectedEmail.subject));
   }
 
   function handleMarkSpam() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.map((e) => e.id === selectedEmail.id ? { ...e, folder: "Spam" as Folder } : e));
     setSelectedEmail(null);
-    if (step?.action === "mark-spam") completeStep();
+    tryStep((s) => s.action === "mark-spam" && (!s.target || s.target === selectedEmail.subject));
   }
 
   function handleArchive() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.map((e) => e.id === selectedEmail.id ? { ...e, folder: "Archive" as Folder } : e));
     setSelectedEmail(null);
-    if (step?.action === "archive") completeStep();
+    tryStep((s) => s.action === "archive" && (!s.target || s.target === selectedEmail.subject));
   }
 
   function handleUnspam() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.map((e) => e.id === selectedEmail.id ? { ...e, folder: "Inbox" as Folder } : e));
     setSelectedEmail(null);
-    if (step?.action === "unspam") completeStep();
+    tryStep((s) => s.action === "unspam");
   }
 
   function handleMoveToInbox() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.map((e) => e.id === selectedEmail.id ? { ...e, folder: "Inbox" as Folder } : e));
     setSelectedEmail(null);
-    if (step?.action === "move-to-inbox") completeStep();
+    tryStep((s) => s.action === "move-to-inbox");
   }
 
   function handleGoToFolder(f: Folder) {
@@ -311,7 +309,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
     setSelectedEmail(null);
     setComposing(false);
     setReplyTo(null);
-    if (step?.action === "go-to-folder" && step.target === f) completeStep();
+    tryStep((s) => s.action === "go-to-folder" && s.target === f);
   }
 
   const extIcon = (name: string): ReactNode => {
@@ -332,6 +330,8 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, onResult }: Gu
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}

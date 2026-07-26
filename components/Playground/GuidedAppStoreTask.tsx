@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import { CartIcon, SmartphoneIcon, CameraIcon, MicIcon, LockIcon } from "./Icons";
 
 export type GuidedAppStoreStep = {
@@ -17,6 +18,8 @@ export type GuidedAppStoreStep = {
 interface GuidedAppStoreTaskProps {
   goal: string;
   steps: GuidedAppStoreStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -182,7 +185,7 @@ function saveInstalledIds(ids: string[]) {
   try { localStorage.setItem(SIM_KEY, JSON.stringify(ids)); } catch {}
 }
 
-export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppStoreTaskProps) {
+export default function GuidedAppStoreTask({ goal, steps, mode, hint, onResult }: GuidedAppStoreTaskProps) {
   const [tab, setTab] = useState<"store" | "installed">("store");
   const [category, setCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -192,9 +195,6 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [permDialog, setPermDialog] = useState<{ app: App; permIdx: number } | null>(null);
   const [denied, setDenied] = useState<{ app: App } | null>(null);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
   const initRef = useRef(false);
 
   useEffect(() => {
@@ -218,18 +218,8 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
     saveInstalledIds(finalIds);
   }, [steps]);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+  const { step, stepIndex, finished, done, flash, tryStep, objectives } =
+    useStepRunner({ steps, mode, onResult });
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -266,14 +256,17 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
     setSearchQuery(val);
     setCategory("All");
     setSelectedApp(null);
-    if (step?.action === "search" && val.toLowerCase().includes((step.value ?? step.target ?? "").toLowerCase()) && val.length >= (step.value ?? step.target ?? "").length) {
-      completeStep();
-    }
+    const typed = val.toLowerCase();
+    tryStep((s) => {
+      if (s.action !== "search") return false;
+      const want = (s.value ?? s.target ?? "").toLowerCase();
+      return typed.includes(want) && val.length >= want.length;
+    });
   }
 
   function handleSelectApp(app: App) {
     setSelectedApp(app);
-    if (step?.action === "select-app" && step.target === app.name) completeStep();
+    tryStep((s) => s.action === "select-app" && s.target === app.name);
   }
 
   function handleInstall() {
@@ -286,13 +279,13 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
       saveInstalledIds(next);
       setSelectedApp(null);
     }
-    if (step?.action === "install") completeStep();
+    tryStep((s) => s.action === "install");
   }
 
   function handleAllowPermission() {
     if (!permDialog) return;
     const { app, permIdx } = permDialog;
-    if (step?.action === "allow-permission") completeStep();
+    tryStep((s) => s.action === "allow-permission");
     const nextIdx = permIdx + 1;
     if (nextIdx >= app.permissions.length) {
       const next = [...new Set([...installedIds, app.id])];
@@ -307,7 +300,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
 
   function handleDenyPermission() {
     if (!permDialog) return;
-    if (step?.action === "deny-permission") completeStep();
+    tryStep((s) => s.action === "deny-permission");
     setDenied({ app: permDialog.app });
     setPermDialog(null);
   }
@@ -319,7 +312,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
   function handleUpdate(appName: string) {
     const app = STORE_APPS.find((a) => a.name === appName);
     if (app) setUpdatedIds((prev) => [...prev, app.id]);
-    if (step?.action === "update-app" && step.target === appName) completeStep();
+    tryStep((s) => s.action === "update-app" && s.target === appName);
   }
 
   function handleDelete(appName: string) {
@@ -330,7 +323,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
       setInstalledIds(next);
       saveInstalledIds(next);
     }
-    if (step?.action === "delete-app" && step.target === appName) completeStep();
+    tryStep((s) => s.action === "delete-app" && s.target === appName);
   }
 
   function starDisplay(rating: number) {
@@ -347,7 +340,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
 
   if (denied) {
     return (
-      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash}>
+      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint}>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="bg-white border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-16 h-16 ${denied.app.color} rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3`}>{denied.app.icon}</div>
@@ -366,7 +359,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
   if (permDialog) {
     const perm = permDialog.app.permissions[permDialog.permIdx];
     return (
-      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash}>
+      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint}>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="bg-white border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-14 h-14 ${permDialog.app.color} rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3`}>{permDialog.app.icon}</div>
@@ -397,17 +390,17 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
   }
 
   return (
-    <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash}>
+    <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint}>
       {/* Tab bar */}
       <div className="flex border-b flex-shrink-0">
         <button
-          onClick={() => { setTab("store"); setSelectedApp(null); if (step?.action === "go-to-store") completeStep(); }}
+          onClick={() => { setTab("store"); setSelectedApp(null); tryStep((s) => s.action === "go-to-store"); }}
           className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "store" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("tab-store") ? pulse : ""}`}
         >
           <span className="inline-flex items-center gap-1"><CartIcon size={14} /> App Market</span>
         </button>
         <button
-          onClick={() => { setTab("installed"); setSelectedApp(null); if (step?.action === "go-to-installed") completeStep(); }}
+          onClick={() => { setTab("installed"); setSelectedApp(null); tryStep((s) => s.action === "go-to-installed"); }}
           className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "installed" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("tab-installed") ? pulse : ""}`}
         >
           <span className="inline-flex items-center gap-1"><SmartphoneIcon size={14} /> My Apps</span>
@@ -428,7 +421,7 @@ export default function GuidedAppStoreTask({ goal, steps, onResult }: GuidedAppS
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                onClick={() => { setCategory(cat); setSearchQuery(""); if (step?.action === "go-to-category" && step.target === cat) completeStep(); }}
+                onClick={() => { setCategory(cat); setSearchQuery(""); tryStep((s) => s.action === "go-to-category" && s.target === cat); }}
                 className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all ${category === cat ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"} ${hl("category-btn", cat) ? pulse : ""}`}
               >
                 {cat}

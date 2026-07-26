@@ -3,65 +3,39 @@
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Unit 4 Assessment",
   "order": 499,
-  "title": "Research a Recipe Safely",
+  "title": "Find your way around the web",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see how much you've learned!\n• You'll search for a recipe, handle a cookie banner, dodge a scam popup, and download a file.\n• No hints this time — you know what to do.\n• Take your time and remember everything we've practiced.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nThese are sites you have not visited in the lessons. You will need to type addresses yourself.",
   "playgroundTask": {
     "type": "guided-browser",
-    "goal": "You safely navigated the web to find and download a recipe",
+    "mode": "assessment",
+    "goal": "You navigated the web on your own",
+    "hint": "The strip at the top of the browser is where addresses go. The small icon to the left of the address tells you whether a site is safe. Pop-ups always have a way to dismiss them that is not the big button.",
     "steps": [
       {
-        "say": "Start by going to google.com to search for a recipe.",
+        "say": "Look up citylibrary.example and read when the library opens.",
         "action": "navigate",
-        "url": "google.com"
+        "url": "citylibrary.example"
       },
       {
-        "say": "Search for apple pie recipe.",
-        "action": "search",
-        "query": "apple pie recipe",
-        "reveal": "Recipe Box"
+        "say": "Save that page so you can come back to it later.",
+        "action": "reading-list-add"
       },
       {
-        "say": "Open the Recipe Box result to see the recipe.",
-        "action": "open-result",
-        "title": "Recipe Box"
+        "say": "Check whether the page you are on is a secure connection.",
+        "action": "lock-click"
       },
       {
-        "say": "Download the recipe so you can use it later.",
-        "action": "download"
-      },
-      {
-        "say": "Now open a new tab — you want to check the weather too.",
-        "action": "new-tab"
-      },
-      {
-        "say": "Go to weather.com to check the forecast.",
-        "action": "navigate",
-        "url": "weather.com"
-      },
-      {
-        "say": "A cookie banner appeared. Make the safe choice.",
+        "say": "Go to weather.com and turn down its optional cookies.",
         "action": "cookie-decline"
       },
       {
-        "say": "Open another new tab — your friend mentioned a games site.",
-        "action": "new-tab"
-      },
-      {
-        "say": "Go to freegames.example to check it out.",
-        "action": "navigate",
-        "url": "freegames.example"
-      },
-      {
-        "say": "A popup appeared! Handle it safely.",
+        "say": "Go to freegames.example and get rid of the pop-up without clicking anything inside it.",
         "action": "close-popup"
-      },
-      {
-        "say": "Open the Downloads panel to see your downloaded recipe.",
-        "action": "open-downloads"
       }
     ]
   },
-  "drDigitalSuccess": "You did it all — searched safely, declined tracking cookies, closed a scam popup, and downloaded a recipe!\n\nNow for real: on your own computer, go to a trusted recipe site (like the BBC or a newspaper's food section), find a recipe you like, and download or print it. Look for the lock, and skip anything that flashes at you.",
-  "drDigitalHint": "Think about what you learned: search on Google, open the result, download the recipe, decline cookies, and close popups with the X."
+  "drDigitalSuccess": "You found a site, saved it, checked it was secure, refused tracking, and shut down a scam pop-up — without a single instruction telling you where to click.",
+  "drDigitalHint": "To visit a site, click the wide bar at the top, type the address, and press Enter. The padlock beside the address tells you about security. A pop-up's small ✕ closes it; its big button does not.",
+  "warning": "One of these sites throws a pop-up with a big CLEAN NOW button. Do not click it — that is the trap."
 }

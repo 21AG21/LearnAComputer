@@ -1,35 +1,42 @@
 {
   "slug": "unit-11-assessment",
-  "unit": "Unit 11: Troubleshooting",
+  "unit": "Unit 11: When Things Go Wrong",
   "module": "Unit 11 Assessment",
   "order": 1190,
-  "title": "Diagnose and Fix Problems",
+  "title": "Fix it without being told how",
   "videoUrl": "",
-  "drDigitalIntro": "Something's wrong with the computer — figure out what and fix it!\n• Look for clues: is an app frozen? Is the WiFi off? Is there an error?\n• Apply what you've learned to get things working again.\n• No hints this time — you're the expert now.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nAn app on this desktop has stopped responding. Work out what is wrong, force it to quit, and then prove the computer is healthy again by using the app.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
-    "goal": "You diagnosed and fixed the problem",
-    "scenario": "frozen-app",
+    "scenario": "An unresponsive app the learner must diagnose, force quit, reopen, and verify",
+    "mode": "assessment",
+    "goal": "You diagnosed and fixed the problem yourself",
+    "hint": "A frozen app ignores clicks — try clicking it and watch what does not happen. When an app will not close normally, the system menu at the top has a stronger option.",
     "steps": [
       {
-        "say": "Something's wrong. Look at the desktop — what's going on?",
+        "say": "Something on this desktop is not responding. Work out which app it is.",
         "action": "click-frozen"
       },
       {
-        "say": "The app is frozen. Open the system menu to force quit it.",
+        "say": "Normal closing will not work on it. Find the system menu that can.",
         "action": "open-force-quit"
       },
       {
-        "say": "Force quit the frozen app.",
-        "action": "force-quit"
+        "say": "Shut the frozen app down.",
+        "action": "force-quit",
+        "target": "Notes"
       },
       {
-        "say": "Good — the app is closed. Reopen it from the dock to make sure it works now.",
+        "say": "Open it again.",
         "action": "restart-app",
         "target": "Notes"
+      },
+      {
+        "say": "Prove it is working by typing something into it.",
+        "action": "type-in-app"
       }
     ]
   },
-  "drDigitalSuccess": "You identified a frozen app and fixed it with Force Quit! Remember: when an app stops responding, don't panic — open the system menu, force quit it, and reopen it from the dock.",
-  "drDigitalHint": "Click the frozen window to confirm it's not responding, then use the three-dot menu in the menu bar to find Force Quit."
+  "drDigitalSuccess": "You noticed the symptom, forced the app to quit, restarted it, and confirmed it works — the exact sequence to run on a real computer before you call anyone for help.",
+  "drDigitalHint": "Click the app window and see whether anything responds. The menu bar at the top of the screen has an option for shutting down an app that has stopped answering."
 }

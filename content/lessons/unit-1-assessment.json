@@ -1,0 +1,57 @@
+{
+  "slug": "unit-1-assessment",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Unit 1 Assessment",
+  "order": 60,
+  "title": "Run the desktop yourself",
+  "videoUrl": "",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nEverything here comes from Unit 1: the dock, window buttons, and the menu bar along the top.",
+  "playgroundTask": {
+    "type": "guided-desktop",
+    "mode": "assessment",
+    "goal": "You ran the desktop on your own",
+    "hint": "Apps live in the strip along the bottom. Window buttons sit in the window's own title bar. The little icons at the top-right of the screen each open a panel.",
+    "steps": [
+      {
+        "say": "Open the Files app.",
+        "action": "open-app",
+        "target": "files"
+      },
+      {
+        "say": "Get its window out of the way without closing it.",
+        "action": "minimize"
+      },
+      {
+        "say": "Bring that same window back.",
+        "action": "restore"
+      },
+      {
+        "say": "Make a window fill the whole screen.",
+        "action": "maximize"
+      },
+      {
+        "say": "Put it back to its smaller size.",
+        "action": "restore-max"
+      },
+      {
+        "say": "Open the Messages app instead.",
+        "action": "open-app",
+        "target": "messages"
+      },
+      {
+        "say": "Find today's date.",
+        "action": "open-clock"
+      },
+      {
+        "say": "Check how much battery is left.",
+        "action": "open-battery-panel"
+      },
+      {
+        "say": "Close the window you have open.",
+        "action": "close-app"
+      }
+    ]
+  },
+  "drDigitalSuccess": "That is the whole desktop: opening apps, managing their windows, and reading the status icons. Nothing on a real computer works differently.",
+  "drDigitalHint": "The dock is the row of icons at the bottom. Every window has three small buttons in its top bar — try each one. The clock and battery are at the top-right."
+}

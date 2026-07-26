@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import WindowControls from "./WindowControls";
 import { NoteIcon } from "./Icons";
-import { CELEBRATION_MS } from "./SimulatorFrame";
+import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 
 type MenuPanel = "clock" | "wifi" | "battery" | null;
 
@@ -34,6 +35,8 @@ const DOCK_APPS = [
 interface GuidedDesktopTaskProps {
   goal: string;
   steps: DesktopStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
@@ -41,12 +44,7 @@ const INIT = { x: 55, y: 55, w: 280, h: 180 };
 const MOVE_THRESH = 25; // px
 const RESIZE_THRESH = 20; // px
 
-export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDesktopTaskProps) {
-  const [stepIdx, setStepIdx] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [showCompleteBanner, setShowCompleteBanner] = useState(false);
+export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }: GuidedDesktopTaskProps) {
   const [pos, setPos] = useState({ x: INIT.x, y: INIT.y });
   const [size, setSize] = useState({ w: INIT.w, h: INIT.h });
   const [minimized, setMinimized] = useState(false);
@@ -60,11 +58,6 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   const [openedAppId, setOpenedAppId] = useState(defaultAppId);
   const openedAppLabel = DOCK_APPS.find((a) => a.id === openedAppId)?.label ?? "Notes";
 
-  // Always-fresh refs so global event handlers can read current values
-  const stepIdxRef = useRef(stepIdx);
-  stepIdxRef.current = stepIdx;
-  const onResultRef = useRef(onResult);
-  onResultRef.current = onResult;
 
   // Drag ref: tracks the in-flight drag with the latest computed position so
   // the mouseup handler doesn't race against React rendering the last setPos.
@@ -80,23 +73,19 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   const resizeStartRef = useRef({ w: INIT.w, h: INIT.h });
   const savedRef = useRef({ x: INIT.x, y: INIT.y, w: INIT.w, h: INIT.h });
 
-  const step = done ? null : steps[stepIdx];
+  const { step, stepIndex: stepIdx, done, flash, isAssessment, tryStep, wants, objectives } =
+    useStepRunner({ steps, mode, onResult, flashMs: 600, finishDelayMs: 0 });
 
-  function advance() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 600);
-    const next = stepIdxRef.current + 1;
-    setStepIdx(next);
-    if (next >= steps.length) {
-      setDone(true);
-      setShowCelebration(true);
-      setTimeout(() => {
-        setShowCelebration(false);
-        setShowCompleteBanner(true);
-      }, CELEBRATION_MS);
-      onResultRef.current(true);
-    }
-  }
+  /** Always-fresh ref so the global mouseup handlers can complete a drag or resize. */
+  const tryStepRef = useRef(tryStep);
+  tryStepRef.current = tryStep;
+
+  /**
+   * Whether a control is live. Guided mode only unlocks the control the current step calls for,
+   * so the learner cannot wander off-script; an assessment leaves the whole desktop usable and
+   * simply ticks objectives off as they happen.
+   */
+  const allow = (pred: (s: DesktopStep) => boolean) => isAssessment || wants(pred);
 
   // One-time global listeners for drag/resize (reads only from refs, no stale closure)
   useEffect(() => {
@@ -125,14 +114,14 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
           Math.abs(dragRef.current.lastX - dragStartRef.current.x) >= MOVE_THRESH ||
           Math.abs(dragRef.current.lastY - dragStartRef.current.y) >= MOVE_THRESH;
         dragRef.current = null;
-        if (moved && steps[stepIdxRef.current]?.action === "move") advance();
+        if (moved) tryStepRef.current((s) => s.action === "move");
       }
       if (resizeRef.current) {
         const resized =
           Math.abs(resizeRef.current.lastW - resizeStartRef.current.w) >= RESIZE_THRESH ||
           Math.abs(resizeRef.current.lastH - resizeStartRef.current.h) >= RESIZE_THRESH;
         resizeRef.current = null;
-        if (resized && steps[stepIdxRef.current]?.action === "resize") advance();
+        if (resized) tryStepRef.current((s) => s.action === "resize");
       }
     }
 
@@ -142,7 +131,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const fmt = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -165,23 +154,23 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
       return;
     }
     setMenuPanel(panel);
-    if (step?.action === actionMap[panel]) advance();
+    tryStep((s) => s.action === actionMap[panel]);
   }
 
   function handleClosePanel() {
     setMenuPanel(null);
-    if (step?.action === "close-panel") advance();
+    tryStep((s) => s.action === "close-panel");
   }
 
   function onTitleDown(e: React.MouseEvent) {
-    if (maximized || step?.action !== "move") return;
+    if (maximized || !allow((s) => s.action === "move")) return;
     e.preventDefault();
     dragStartRef.current = { ...pos };
     dragRef.current = { cx: e.clientX, cy: e.clientY, ix: pos.x, iy: pos.y, lastX: pos.x, lastY: pos.y };
   }
 
   function onResizeDown(e: React.MouseEvent) {
-    if (maximized || step?.action !== "resize") return;
+    if (maximized || !allow((s) => s.action === "resize")) return;
     e.preventDefault();
     e.stopPropagation();
     resizeStartRef.current = { ...size };
@@ -189,44 +178,43 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
   }
 
   function onMinimize() {
-    if (step?.action !== "minimize") return;
+    if (!allow((s) => s.action === "minimize")) return;
     setMinimized(true);
-    advance();
+    tryStep((s) => s.action === "minimize");
   }
 
   function onRestore() {
-    if (step?.action !== "restore") return;
+    if (!allow((s) => s.action === "restore")) return;
     setMinimized(false);
-    advance();
+    tryStep((s) => s.action === "restore");
   }
 
   function onMaximize() {
-    if (step?.action === "maximize" && !maximized) {
+    if (!maximized && allow((s) => s.action === "maximize")) {
       savedRef.current = { x: pos.x, y: pos.y, w: size.w, h: size.h };
       setMaximized(true);
-      advance();
-    } else if (step?.action === "restore-max" && maximized) {
+      tryStep((s) => s.action === "maximize");
+    } else if (maximized && allow((s) => s.action === "restore-max")) {
       setMaximized(false);
-      const s = savedRef.current;
-      setPos({ x: s.x, y: s.y });
-      setSize({ w: s.w, h: s.h });
-      advance();
+      const saved = savedRef.current;
+      setPos({ x: saved.x, y: saved.y });
+      setSize({ w: saved.w, h: saved.h });
+      tryStep((s) => s.action === "restore-max");
     }
   }
 
   function onClose() {
-    if (step?.action !== "close" && step?.action !== "close-app") return;
+    if (!allow((s) => s.action === "close" || s.action === "close-app")) return;
     setWindowVisible(false);
-    advance();
+    tryStep((s) => s.action === "close" || s.action === "close-app");
   }
 
   function onDockClick(appId: string) {
-    if (step?.action !== "open-app") return;
-    const targetId = step.target ?? "notes";
-    if (appId !== targetId) return;
+    if (!allow((s) => s.action === "open-app" && (s.target ?? "notes") === appId)) return;
     setOpenedAppId(appId);
     setWindowVisible(true);
-    advance();
+    setMinimized(false);
+    tryStep((s) => s.action === "open-app" && (s.target ?? "notes") === appId);
   }
 
   const hlControl: "minimize" | "maximize" | "close" | null =
@@ -235,33 +223,22 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
     step?.action === "close" || step?.action === "close-app" ? "close" :
     null;
 
-  const pct = (Math.min(stepIdx, steps.length) / steps.length) * 100;
   const isClosed = done;
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden select-none relative">
-      {/* Guidance banner */}
-      <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
-            {done ? "Done" : `Step ${stepIdx + 1} of ${steps.length}`}
-          </span>
-          <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
-            <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${pct}%` }} />
-          </div>
-        </div>
-        <p className="mt-1.5 text-lg font-semibold leading-snug">
-          {done ? `${goal} — all done!` : step?.say}
-        </p>
-      </div>
-
-      {showCompleteBanner && (
-        <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
-          <span className="text-green-600">&#10003;</span>
-          Lesson complete! You can keep practicing here.
-        </div>
-      )}
-
+    <SimulatorFrame
+      appName="Desktop"
+      instruction={step?.say}
+      stepIndex={stepIdx}
+      totalSteps={steps.length}
+      done={done}
+      goal={goal}
+      flash={flash}
+      objectives={objectives}
+      hint={hint}
+      chrome={false}
+    >
+      <div className="h-full flex flex-col select-none">
       {/* Desktop area */}
       <div className="flex-1 min-h-0 relative bg-[#3b6ea5] overflow-hidden">
         {/* Subtle dot grid */}
@@ -412,7 +389,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
             <div key={app.id} className="flex flex-col items-center gap-0.5">
               <button
                 onClick={() => {
-                  if (minimized && app.id === openedAppId && step?.action === "restore") { onRestore(); return; }
+                  if (minimized && app.id === openedAppId && allow((s) => s.action === "restore")) { onRestore(); return; }
                   onDockClick(app.id);
                 }}
                 className={`relative w-12 h-12 rounded-xl overflow-hidden transition-transform hover:scale-110 ${
@@ -429,23 +406,7 @@ export default function GuidedDesktopTask({ goal, steps, onResult }: GuidedDeskt
           );
         })}
       </div>
-
-      {/* Celebration overlay — brief */}
-      {showCelebration && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
-          <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
-            &#10003;
-          </div>
-          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{goal}</p>
-        </div>
-      )}
-
-      {/* Per-step flash */}
-      {flash && !done && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
-          <span className="text-green-400 text-6xl animate-ping-once drop-shadow-lg">&#10003;</span>
-        </div>
-      )}
-    </div>
+      </div>
+    </SimulatorFrame>
   );
 }

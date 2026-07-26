@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import FakeDesktop from "./FakeDesktop";
-import type { DesktopAppId } from "./FakeDesktop";
 
 export type SettingsStep = {
   say: string;
@@ -16,27 +15,13 @@ export type SettingsStep = {
 interface GuidedSettingsTaskProps {
   goal: string;
   steps: SettingsStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
-export default function GuidedSettingsTask({ goal, steps, onResult }: GuidedSettingsTaskProps) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
-  const initRef = useRef(false);
-
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+export default function GuidedSettingsTask({ goal, steps, mode, hint, onResult }: GuidedSettingsTaskProps) {
+  const { step, stepIndex, flash, done, tryStep, objectives } = useStepRunner({ steps, mode, onResult });
 
   function highlightSection(): string | undefined {
     if (!step || step.action !== "open-section") return undefined;
@@ -71,48 +56,31 @@ export default function GuidedSettingsTask({ goal, steps, onResult }: GuidedSett
   }
 
   function handleDeviceSelect(device: string) {
-    if (step?.action === "select-device" && device === step.target) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "select-device" && device === s.target);
   }
 
   function handleDeviceDisconnect(device: string) {
-    if (step?.action === "disconnect-device" && device === step.target) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "disconnect-device" && device === s.target);
   }
 
   function handleSectionOpen(section: string) {
-    if (step?.action === "open-section" && section === step.target) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "open-section" && section === s.target);
   }
 
-  function handleToggle(target: string, value: boolean) {
-    if (step?.action === "toggle" && target === step.target) {
-      completeStep();
-    }
+  function handleToggle(target: string) {
+    tryStep((s) => s.action === "toggle" && target === s.target);
   }
 
   function handleSlider(target: string, value: number) {
-    if (step?.action !== "slider" || target !== step.target) return;
-    const min = step.min ?? 0;
-    const max = step.max ?? 200;
-    if (value >= min && value <= max) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "slider" && target === s.target && value >= (s.min ?? 0) && value <= (s.max ?? 200));
   }
 
   function handleDeleteItem(target: string) {
-    if (step?.action === "delete-item" && target === step.target) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "delete-item" && target === s.target);
   }
 
   function handleEmptyTrash() {
-    if (step?.action === "empty-trash") {
-      completeStep();
-    }
+    tryStep((s) => s.action === "empty-trash");
   }
 
   return (
@@ -120,10 +88,12 @@ export default function GuidedSettingsTask({ goal, steps, onResult }: GuidedSett
       appName="Settings"
       stepIndex={stepIndex}
       totalSteps={steps.length}
-      instruction={step?.say ?? ""}
+      instruction={step?.say}
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <FakeDesktop
         autoOpenApp="settings"

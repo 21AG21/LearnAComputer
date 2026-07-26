@@ -148,7 +148,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             </SimulatorFrame>
           )}
           {task.type === "guided-settings" && (
-            <GuidedSettingsTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <GuidedSettingsTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
           )}
           {task.type === "url-navigator" && (
             <SimulatorFrame appName="Browser" instruction={task.instructions} done={completed} goal="Correct address entered" chrome={false}>
@@ -157,37 +157,37 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-files" && (
             <DesktopLaunch app="files">
-              <GuidedFilesTask goal={task.goal} steps={task.steps} keyboardOnly={task.keyboardOnly} onResult={onResult} />
+              <GuidedFilesTask goal={task.goal} steps={task.steps} keyboardOnly={task.keyboardOnly} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-browser" && (
             <DesktopLaunch app="browser">
-              <GuidedBrowserTask goal={task.goal} steps={task.steps} initialDownloads={task.initialDownloads} mode={task.mode} onResult={onResult} />
+              <GuidedBrowserTask goal={task.goal} steps={task.steps} initialDownloads={task.initialDownloads} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-messaging" && (
             <DesktopLaunch app="messages">
-              <GuidedMessagingTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedMessagingTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-email" && (
             <DesktopLaunch app="mail">
-              <GuidedEmailTask goal={task.goal} steps={task.steps} seedDraft={task.seedDraft} onResult={onResult} />
+              <GuidedEmailTask goal={task.goal} steps={task.steps} seedDraft={task.seedDraft} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-photos" && (
             <DesktopLaunch app="photos">
-              <GuidedPhotosTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedPhotosTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-app-store" && (
             <DesktopLaunch app="app-market">
-              <GuidedAppStoreTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedAppStoreTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-security" && (() => {
             const chrome = task.chrome ?? "browser";
-            const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />;
+            const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />;
             if (chrome === "settings") return <DesktopLaunch app="settings">{inner}</DesktopLaunch>;
             if (chrome === "mail")     return <DesktopLaunch app="mail">{inner}</DesktopLaunch>;
             if (chrome === "messages") return <DesktopLaunch app="messages">{inner}</DesktopLaunch>;
@@ -195,20 +195,20 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             return <DesktopLaunch app="browser">{inner}</DesktopLaunch>;
           })()}
           {task.type === "guided-troubleshooting" && (
-            <GuidedTroubleshootingTask goal={task.goal} scenario={task.scenario} steps={task.steps} onResult={onResult} />
+            <GuidedTroubleshootingTask goal={task.goal} scenario={task.scenario} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
           )}
           {task.type === "guided-calendar" && (
             <DesktopLaunch app={task.launchApp ?? "calendar"}>
-              <GuidedCalendarTask goal={task.goal} steps={task.steps} initialView={task.launchApp === "reminders" ? "reminders" : undefined} onResult={onResult} />
+              <GuidedCalendarTask goal={task.goal} steps={task.steps} initialView={task.launchApp === "reminders" ? "reminders" : undefined} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-desktop" && (
-            <GuidedDesktopTask goal={task.goal} steps={task.steps} onResult={onResult} />
+            <GuidedDesktopTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
           )}
           {task.type === "keyboard-nav-game" && <KeyboardNavTask onResult={onResult} />}
           {task.type === "notes-shortcut" && (
             <DesktopLaunch app="notes">
-              <GuidedNotesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedNotesTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
             </DesktopLaunch>
           )}
         </div>

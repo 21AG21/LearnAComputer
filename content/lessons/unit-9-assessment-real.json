@@ -1,0 +1,14 @@
+{
+  "slug": "unit-9-assessment-real",
+  "unit": "Unit 9: System Settings",
+  "module": "Unit 9 Assessment",
+  "order": 961,
+  "title": "Now set up your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "Do the same on the machine in front of you. These are the settings worth knowing where to find.\n\n1. Open Settings — the gear icon, or search your computer for 'Settings'.\n2. Try dark mode and light mode. Keep whichever is easier on your eyes.\n3. Move the brightness to a level that is comfortable in the room you are in right now.\n4. Turn on Night Shift (Mac) or Night Light (Windows) so evenings are warmer and easier to read.\n5. If text feels small, look under Display or Accessibility for a text size or scaling setting.\n6. Find the Storage page and note how much free space you have.\n\nNone of this is permanent. Every one of these can be changed back in seconds.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "",
+  "drDigitalHint": "If you cannot find a setting, use the search box at the top of the Settings window and type what you want, like 'brightness'."
+}

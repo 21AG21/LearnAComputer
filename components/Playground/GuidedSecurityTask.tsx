@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import { KeyIcon, FishingIcon, ShieldIcon, CheckCircleIcon, XCircleIcon, LinkIcon, MailIcon, FingerprintIcon } from "./Icons";
 
 export type GuidedSecurityStep = {
@@ -19,6 +20,8 @@ export type GuidedSecurityStep = {
 interface GuidedSecurityTaskProps {
   goal: string;
   steps: GuidedSecurityStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
@@ -82,11 +85,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
   );
 }
 
-export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecurityTaskProps) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
-  const completedRef = useRef(false);
+export default function GuidedSecurityTask({ goal, steps, mode, hint, onResult }: GuidedSecurityTaskProps) {
   const [loggedIn, setLoggedIn] = useState<{ username: string; method: string } | null>(null);
 
   function inferSection(s: GuidedSecurityStep | undefined): Section {
@@ -108,7 +107,14 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
   const [passkeyDone, setPasskeyDone] = useState(false);
   const [resetView, setResetView] = useState<"none" | "sent" | "email" | "new-password">("none");
 
-  const phishingLinks = steps.filter((s) => s.action === "inspect-link" && s.target).map((s) => s.target as string);
+  // Any link the lesson asks about — whether to inspect it or to judge it — belongs on the list.
+  const phishingLinks = [
+    ...new Set(
+      steps
+        .filter((s) => ["inspect-link", "mark-safe", "mark-dangerous"].includes(s.action) && s.target)
+        .map((s) => s.target as string),
+    ),
+  ];
   const [inspectedLink, setInspectedLink] = useState<string | null>(null);
   const [linkVerdicts, setLinkVerdicts] = useState<Record<string, "safe" | "dangerous">>({});
   const [wrongAnswer, setWrongAnswer] = useState<{ link: string; picked: string; reason: string } | null>(null);
@@ -121,23 +127,8 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
     "Cookies": true,
   });
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
-
-  function completeStep() {
-    if (completedRef.current) return;
-    completedRef.current = true;
-    setFlash(true);
-    setTimeout(() => {
-      setFlash(false);
-      completedRef.current = false;
-    }, 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives } =
+    useStepRunner({ steps, mode, onResult });
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -170,73 +161,72 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
     { id: "privacy", label: "Privacy", icon: <ShieldIcon size={14} /> },
   ];
 
-  function handleGoToSection(s: Section) {
-    setSection(s);
-    if (s === "2fa") return;
-    if (step?.action === "go-to-section" && step.target === s) completeStep();
+  function handleGoToSection(target: Section) {
+    setSection(target);
+    if (target === "2fa") return;
+    tryStep((s) => s.action === "go-to-section" && s.target === target);
   }
 
   function handleTypePassword(val: string) {
     setPasswordInput(val);
-    if (step?.action !== "type-password") return;
-    if (step.minStrength !== undefined) {
-      if (passwordStrength(val).level >= step.minStrength) completeStep();
-    } else if (step.value) {
-      if (val === step.value) completeStep();
-    }
+    tryStep((s) => {
+      if (s.action !== "type-password") return false;
+      if (s.minStrength !== undefined) return passwordStrength(val).level >= s.minStrength;
+      return !!s.value && val === s.value;
+    });
   }
 
   function handleLogin() {
-    const nextStep = steps[stepIndex + 1];
-    if (nextStep?.action === "enter-2fa-code") {
+    // 2FA is not reachable from the section tabs — signing in is what routes you there.
+    if (steps.some((s) => s.action === "enter-2fa-code" || s.action === "verify-2fa")) {
       setSection("2fa");
     } else {
       setLoggedIn({ username, method: "password" });
     }
-    if (step?.action === "login") completeStep();
+    tryStep((s) => s.action === "login");
   }
 
   function handlePasskey() {
-    if (step?.action !== "use-passkey" || passkeyScanning) return;
+    if (passkeyScanning || !wants((s) => s.action === "use-passkey")) return;
     setPasskeyScanning(true);
     setTimeout(() => {
       setPasskeyScanning(false);
       setPasskeyDone(true);
       setLoggedIn({ username, method: "passkey" });
-      completeStep();
+      tryStep((s) => s.action === "use-passkey");
     }, 1800);
   }
 
   function handleForgotLink() {
-    if (step?.action !== "forgot-link") return;
+    if (!wants((s) => s.action === "forgot-link")) return;
     setResetView("sent");
-    completeStep();
+    tryStep((s) => s.action === "forgot-link");
   }
 
   function handleOpenResetEmail() {
-    if (step?.action !== "open-reset-email") return;
+    if (!wants((s) => s.action === "open-reset-email")) return;
     setResetView("email");
-    completeStep();
+    tryStep((s) => s.action === "open-reset-email");
   }
 
   function handleClickResetLink() {
-    if (step?.action !== "click-reset-link") return;
+    if (!wants((s) => s.action === "click-reset-link")) return;
     setResetView("new-password");
     setLoginPassword("");
-    completeStep();
+    tryStep((s) => s.action === "click-reset-link");
   }
 
   function handleVerify2fa() {
-    if (step?.action === "verify-2fa") {
+    if (wants((s) => s.action === "verify-2fa")) {
       setLoggedIn({ username, method: "password + verification code" });
-      completeStep();
+      tryStep((s) => s.action === "verify-2fa");
     }
   }
 
   function handleInspectLink(linkText: string) {
     setInspectedLink(linkText);
     setWrongAnswer(null);
-    if (step?.action === "inspect-link" && step.target === linkText) completeStep();
+    tryStep((s) => s.action === "inspect-link" && s.target === linkText);
   }
 
   function handleVerdict(verdict: "safe" | "dangerous") {
@@ -248,8 +238,8 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
       setLinkVerdicts((prev) => ({ ...prev, [inspectedLink]: verdict }));
       setWrongAnswer(null);
       setInspectedLink(null);
-      if (verdict === "safe" && step?.action === "mark-safe") completeStep();
-      if (verdict === "dangerous" && step?.action === "mark-dangerous") completeStep();
+      const action = verdict === "safe" ? "mark-safe" : "mark-dangerous";
+      tryStep((s) => s.action === action && s.target === inspectedLink);
     } else {
       setWrongAnswer({ link: inspectedLink, picked: verdict, reason: data?.reason ?? "Look at the URL carefully." });
     }
@@ -257,12 +247,8 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
 
   function handleToggleSetting(name: string) {
     setPrivacySettings((prev) => ({ ...prev, [name]: !prev[name] }));
-    if (step?.action === "toggle-setting" && step.target === name) {
-      const targetVal = step.value === "on";
-      const newVal = !privacySettings[name];
-      if (newVal === targetVal) completeStep();
-      else if (step.value === undefined) completeStep();
-    }
+    const newVal = !privacySettings[name];
+    tryStep((s) => s.action === "toggle-setting" && s.target === name && (s.value === undefined || newVal === (s.value === "on")));
   }
 
   const strength = passwordStrength(passwordInput);
@@ -277,10 +263,12 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
         appName="Security"
         stepIndex={stepIndex}
         totalSteps={steps.length}
-        instruction={step?.say ?? ""}
+        instruction={step?.say}
         done={done}
         goal={goal}
         flash={flash}
+        objectives={objectives}
+        hint={hint}
       >
         <div className="flex-1 flex items-center justify-center p-4 gap-6">
           {/* Phone illustration (12.3 rebuild) */}
@@ -328,7 +316,7 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
               onChange={(e) => {
                 const val = e.target.value.replace(/\D/g, "").slice(0, 6);
                 setTwoFaCode(val);
-                if (step?.action === "enter-2fa-code" && val === twoFaExpectedCode) completeStep();
+                tryStep((s) => s.action === "enter-2fa-code" && val === twoFaExpectedCode);
               }}
               placeholder="000000"
               maxLength={6}
@@ -351,10 +339,12 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
       appName="Security"
       stepIndex={stepIndex}
       totalSteps={steps.length}
-      instruction={step?.say ?? ""}
+      instruction={step?.say}
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       {/* Section tabs */}
       <div className="flex border-b flex-shrink-0 overflow-x-auto">
@@ -425,7 +415,7 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
-                  if (step?.action === "type-username" && e.target.value.toLowerCase().includes((step.value ?? "").toLowerCase())) completeStep();
+                  { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "type-username" && v.includes((s.value ?? "").toLowerCase())); }
                 }}
                 placeholder="Email address"
                 className={`w-full px-4 py-3 border rounded-xl text-sm outline-none focus:border-blue-400 mb-3 ${hl("username-input") ? pulse : ""}`}
@@ -434,7 +424,7 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
                 value={loginPassword}
                 onChange={(e) => {
                   setLoginPassword(e.target.value);
-                  if (step?.action === "type-login-password" && e.target.value === step.value) completeStep();
+                  tryStep((s) => s.action === "type-login-password" && e.target.value === s.value);
                 }}
                 type="password"
                 placeholder="Password"
@@ -521,7 +511,7 @@ export default function GuidedSecurityTask({ goal, steps, onResult }: GuidedSecu
                 value={loginPassword}
                 onChange={(e) => {
                   setLoginPassword(e.target.value);
-                  if (step?.action === "type-login-password" && e.target.value === step.value) completeStep();
+                  tryStep((s) => s.action === "type-login-password" && e.target.value === s.value);
                 }}
                 type="password"
                 placeholder="New password"

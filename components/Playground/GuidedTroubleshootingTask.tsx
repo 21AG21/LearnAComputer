@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import { GlobeIcon, MailIcon, GearIcon, CameraIcon, NoteIcon, SmartphoneIcon } from "./Icons";
 
 export type GuidedTroubleshootingStep = {
@@ -21,6 +22,8 @@ interface Props {
   goal: string;
   scenario: string;
   steps: GuidedTroubleshootingStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
@@ -32,7 +35,7 @@ interface FrozenApp {
   closed: boolean;
 }
 
-function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" | "app-reinstall" {
+function inferScenarioMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" | "app-reinstall" {
   if (steps.some((s) => s.action === "force-quit" || s.action === "click-frozen")) return "frozen";
   if (steps.some((s) => s.action === "copy-code" || s.action === "paste-code")) return "error-code";
   if (steps.some((s) => s.action === "dismiss-error" || s.action === "click-restart")) return "error-restart";
@@ -42,12 +45,9 @@ function inferMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "err
 
 const NETWORKS = ["CoolKids Network", "Neighbor's WiFi", "Coffee Shop"];
 
-export default function GuidedTroubleshootingTask({ goal, scenario, steps, onResult }: Props) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
+export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode: simMode, hint, onResult }: Props) {
 
-  const mode = inferMode(steps);
+  const mode = inferScenarioMode(steps);
 
   const [view, setView] = useState<View>("desktop");
   const [frozenApps, setFrozenApps] = useState<FrozenApp[]>(() => {
@@ -103,17 +103,8 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
     return () => clearInterval(id);
   }, []);
 
-  const step = steps[stepIndex];
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+  const { step, stepIndex, done, flash, tryStep, objectives } =
+    useStepRunner({ steps, mode: simMode, onResult });
 
   function hl(kind: string, name?: string): boolean {
     if (done || !step) return false;
@@ -150,18 +141,18 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
 
   function handleClickFrozen() {
     setClickedFrozen(true);
-    if (step?.action === "click-frozen") completeStep();
+    tryStep((s) => s.action === "click-frozen");
   }
 
   function handleOpenForceQuit() {
     setView("force-quit");
-    if (step?.action === "open-force-quit") completeStep();
+    tryStep((s) => s.action === "open-force-quit");
   }
 
   function handleForceQuit(name: string) {
     setFrozenApps((prev) => prev.map((a) => a.name === name ? { ...a, closed: true, frozen: false } : a));
     setView("desktop");
-    if (step?.action === "force-quit" && step.target === name) completeStep();
+    tryStep((s) => s.action === "force-quit" && s.target === name);
   }
 
   function handleRestartApp(name: string) {
@@ -174,41 +165,41 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
       setFrozenApps((prev) => prev.map((a) => a.name === name ? { ...a, closed: false, frozen: false } : a));
       setFrozenAppReopened(true);
     }
-    if (step?.action === "restart-app" && step.target === name) completeStep();
+    tryStep((s) => s.action === "restart-app" && s.target === name);
   }
 
   function handleOpenAppMarket() {
     setView("app-market");
     setArMarketTab("my-apps");
-    if (step?.action === "open-app-market") completeStep();
+    tryStep((s) => s.action === "open-app-market");
   }
   function handleGoToMyApps() {
     setArMarketTab("my-apps");
-    if (step?.action === "go-to-my-apps") completeStep();
+    tryStep((s) => s.action === "go-to-my-apps");
   }
   function handleDeleteBrokenApp() {
     setArAppDeleted(true);
-    if (step?.action === "delete-broken-app") completeStep();
+    tryStep((s) => s.action === "delete-broken-app");
   }
   function handleGoToStoreTab() {
     setArMarketTab("store");
-    if (step?.action === "go-to-store-tab") completeStep();
+    tryStep((s) => s.action === "go-to-store-tab");
   }
   function handleReinstallApp() {
     setArAppInstalled(true);
-    if (step?.action === "reinstall-app") completeStep();
+    tryStep((s) => s.action === "reinstall-app");
   }
 
   function handleOpenWifiPanel() {
     setWifiPanelOpen(true);
-    if (step?.action === "open-wifi-panel") completeStep();
+    tryStep((s) => s.action === "open-wifi-panel");
   }
 
   function handleToggleWifi() {
     const newVal = !wifiOn;
     setWifiOn(newVal);
     if (!newVal) setConnectedNetwork(null);
-    if (step?.action === "toggle-wifi") completeStep();
+    tryStep((s) => s.action === "toggle-wifi");
   }
 
   function handleReconnect(network: string) {
@@ -217,60 +208,60 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
     setTimeout(() => {
       setConnectedNetwork(network === "CoolKids Network" ? network : null);
       setSearchingNetwork(null);
-      if (step?.action === "reconnect-wifi" && network === "CoolKids Network") completeStep();
+      tryStep((s) => s.action === "reconnect-wifi" && network === "CoolKids Network");
     }, 1500);
   }
 
   function handleForgetNetwork(name: string) {
     setForgottenNetworks((prev) => [...prev, name]);
     if (connectedNetwork === name) setConnectedNetwork(null);
-    if (step?.action === "forget-network" && step.target === name) completeStep();
+    tryStep((s) => s.action === "forget-network" && s.target === name);
   }
 
   function handleDismissError() {
     setErrorDismissed(true);
-    if (step?.action === "read-error") completeStep();
+    tryStep((s) => s.action === "read-error");
   }
 
   function handleCopyCode() {
     setCodeCopied(true);
-    if (step?.action === "copy-code") completeStep();
+    tryStep((s) => s.action === "copy-code");
   }
 
   function handleOpenBrowser() {
     setView("browser-support");
-    if (step?.action === "open-browser") completeStep();
+    tryStep((s) => s.action === "open-browser");
   }
 
   function handlePasteCode() {
     setPastedCode(errorCode);
-    if (step?.action === "paste-code") completeStep();
+    tryStep((s) => s.action === "paste-code");
   }
 
   function handleSubmitSupport() {
     setSupportSubmitted(true);
-    if (step?.action === "submit-support") completeStep();
+    tryStep((s) => s.action === "submit-support");
   }
 
   function handleErDismiss() {
     setErSystemError(false);
-    if (step?.action === "dismiss-error") completeStep();
+    tryStep((s) => s.action === "dismiss-error");
   }
 
   function handleErOpenSettings() {
     setErSettingsOpen(true);
-    if (step?.action === "open-settings") completeStep();
+    tryStep((s) => s.action === "open-settings");
   }
 
   function handleErClickRestart() {
     setErRestartConfirm(true);
-    if (step?.action === "click-restart") completeStep();
+    tryStep((s) => s.action === "click-restart");
   }
 
   function handleErConfirmRestart() {
     setErRestartConfirm(false);
     setErRestarting(true);
-    if (step?.action === "confirm-restart") completeStep();
+    tryStep((s) => s.action === "confirm-restart");
     setTimeout(() => {
       setErRestarting(false);
       setErRestarted(true);
@@ -302,6 +293,8 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 relative">
         {/* Menu Bar */}
@@ -593,9 +586,9 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, onRes
                     value={typedInApp}
                     onChange={(e) => {
                       setTypedInApp(e.target.value);
-                      if (!appTyped && e.target.value.length > 0 && step?.action === "type-in-app") {
+                      if (!appTyped && e.target.value.length > 0) {
                         setAppTyped(true);
-                        completeStep();
+                        tryStep((s) => s.action === "type-in-app");
                       }
                     }}
                     placeholder="Type something here..."

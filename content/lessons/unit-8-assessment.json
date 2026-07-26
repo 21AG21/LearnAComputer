@@ -1,50 +1,46 @@
 {
   "slug": "unit-8-assessment",
-  "unit": "Unit 8: Apps",
+  "unit": "Unit 8: Apps and the App Store",
   "module": "Unit 8 Assessment",
   "order": 870,
-  "title": "Find and Install an App",
+  "title": "Install an app the careful way",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put your app skills together!\n• Browse the App Market, find an app, and install it.\n• Update an app that needs it.\n• Clean up an app you no longer use.\n• You know how to do all of this — let's go!",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nRead before you install. An app that wants more than its job needs is the one to walk away from.",
   "playgroundTask": {
     "type": "guided-app-store",
-    "goal": "You searched, installed, updated, and deleted apps",
+    "mode": "assessment",
+    "goal": "You installed an app and cleaned up another",
+    "hint": "Search by what an app does, not by its name. An app's page shows its rating, its reviews, and the permissions it will ask for — all before you commit to installing.",
     "steps": [
       {
-        "say": "Browse the Creativity category.",
-        "action": "go-to-category",
-        "target": "Creativity"
+        "say": "You want to send messages and make video calls. Find an app that does that.",
+        "action": "search",
+        "value": "chat"
       },
       {
-        "say": "Open NoteMaster to read its details.",
+        "say": "Open its page and read what other people say about it.",
         "action": "select-app",
-        "target": "NoteMaster"
+        "target": "ChatBuddy"
       },
       {
-        "say": "Install NoteMaster.",
-        "action": "install",
-        "target": "NoteMaster"
+        "say": "Install it.",
+        "action": "install"
       },
       {
-        "say": "Go to My Apps to see your installed apps.",
+        "say": "Give it the access it genuinely needs to make video calls.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "Go and look at everything installed on this computer.",
         "action": "go-to-installed"
       },
       {
-        "say": "WeatherNow has an update available — update it.",
-        "action": "update-app",
-        "target": "WeatherNow"
-      },
-      {
-        "say": "Delete SketchPad — you have a different drawing app you prefer.",
+        "say": "MusicMaker is taking up space and you never use it. Get rid of it.",
         "action": "delete-app",
-        "target": "SketchPad"
-      },
-      {
-        "say": "Go back to the store.",
-        "action": "go-to-store"
+        "target": "MusicMaker"
       }
     ]
   },
-  "drDigitalSuccess": "You browsed, installed, updated, and deleted apps like a pro!\n\nNow for real: open your device's app store and find an app that might be useful — maybe a recipe app, a weather app, or a notes app.",
-  "drDigitalHint": "Use the category tabs to browse, My Apps to manage installed apps, and the trash icon to delete ones you no longer need."
+  "drDigitalSuccess": "You searched by purpose, checked the reviews, granted only what the app needed, and cleared out something you were not using. That is how to keep a computer healthy.",
+  "drDigitalHint": "Type what you want the app to do into the search box. The app's own page lists its reviews and its permissions. Your installed apps live under the second tab at the top."
 }

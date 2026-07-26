@@ -3,12 +3,45 @@
   "unit": "Unit 3: Files and Folders",
   "module": "Unit 3 Assessment",
   "order": 390,
-  "title": "Organize a Real Folder",
+  "title": "Tidy up the computer",
   "videoUrl": "",
-  "drDigitalIntro": "Time to practice on your real computer!\n• Download the practice folder from the link below.\n• Sort the messy files into folders that make sense — like \"Photos\" and \"Documents\".\n• Delete any junk. There's no single right answer, and we won't check your work.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nThe files are scattered around Home, Documents, and Pictures. Look in each place.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-files",
+    "mode": "assessment",
+    "goal": "You tidied the files on your own",
+    "hint": "The left-hand list moves you between places. The buttons along the top act on whichever file you have selected — so select first, then click.",
+    "steps": [
+      {
+        "say": "Make a folder called Receipts.",
+        "action": "new-folder",
+        "value": "Receipts"
+      },
+      {
+        "say": "VacationPhoto.png belongs with the other pictures. Put it there.",
+        "action": "move",
+        "target": "VacationPhoto.png",
+        "into": "Pictures"
+      },
+      {
+        "say": "Sunset.png has a vague name. Rename it Sunset-Over-Water.png.",
+        "action": "rename",
+        "target": "Sunset.png",
+        "value": "Sunset-Over-Water.png"
+      },
+      {
+        "say": "Letter.docx is junk. Throw it away.",
+        "action": "delete",
+        "target": "Letter.docx"
+      },
+      {
+        "say": "Find FavoriteSong.mp3 without browsing for it.",
+        "action": "search",
+        "value": "song",
+        "reveal": "FavoriteSong.mp3"
+      }
+    ]
   },
-  "drDigitalSuccess": "Great job organizing those files! You now have real experience managing folders on your own computer. The more you practice, the easier it gets.",
-  "drDigitalHint": "Download the .zip file, unzip it, then create folders and drag files into them. There's no wrong answer — just organize it in a way that makes sense to you."
+  "drDigitalSuccess": "You created, moved, renamed, deleted, and searched — that is every file skill in the unit, sequenced by you rather than by me.",
+  "drDigitalHint": "Sunset.png is in Pictures and Letter.docx is in Documents. To rename or delete, click the file once to select it, then use the buttons at the top."
 }

@@ -3,94 +3,45 @@
   "unit": "Unit 6: Email",
   "module": "Unit 6 Assessment",
   "order": 680,
-  "title": "Manage a Busy Inbox",
+  "title": "Clear out the inbox",
   "videoUrl": "",
-  "drDigitalIntro": "Your inbox is full — time to clean it up!\n• Spot the scam and get rid of it.\n• Reply to an email, compose a new one with CC and an attachment.\n• Archive what you don't need anymore.\n• You know how to do all of this — let's go!",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nOne email in this inbox is a scam. Find it yourself — I am not going to point at it.",
   "playgroundTask": {
     "type": "guided-email",
-    "goal": "You cleaned up a messy inbox like a pro",
+    "mode": "assessment",
+    "goal": "You sorted the inbox on your own",
+    "hint": "Scam email leans on urgency and asks for something no real company asks for by email. Reply and Forward sit above an opened message. Attaching uses the paperclip.",
     "steps": [
       {
-        "say": "That email from URGENT WIN looks suspicious. Open it to check.",
-        "action": "open-email",
+        "say": "One of these emails is a scam. Move it to Spam.",
+        "action": "mark-spam",
         "target": "You won $1,000,000!!!"
       },
       {
-        "say": "Definitely a scam. Mark it as spam.",
-        "action": "mark-spam"
-      },
-      {
-        "say": "Go to the Spam folder to confirm it landed there.",
-        "action": "go-to-folder",
-        "target": "Spam"
-      },
-      {
-        "say": "Good — the scam is in Spam where it belongs. Go back to your Inbox.",
-        "action": "go-to-folder",
-        "target": "Inbox"
-      },
-      {
-        "say": "Mom asked about dinner. Open her email.",
-        "action": "open-email",
-        "target": "Dinner Sunday?"
-      },
-      {
-        "say": "Click Reply to respond to Mom.",
+        "say": "Write back to Mom.",
         "action": "reply"
       },
       {
-        "say": "Type your reply: Yes, Sunday works! See you at 6.",
+        "say": "Say something in your reply.",
         "action": "set-body",
-        "value": "Yes, Sunday works!"
+        "value": ""
       },
       {
-        "say": "Send your reply.",
-        "action": "send"
-      },
-      {
-        "say": "Now compose a new email — click the compose button.",
-        "action": "compose"
-      },
-      {
-        "say": "Address it to your friend Jordan.",
-        "action": "set-to",
-        "value": "jordan@example.com"
-      },
-      {
-        "say": "CC your friend Alex so they're in the loop.",
-        "action": "set-cc",
-        "value": "alex@example.com"
-      },
-      {
-        "say": "Set the subject: Weekend plans",
-        "action": "set-subject",
-        "value": "Weekend plans"
-      },
-      {
-        "say": "Write: 'Hey! Want to get together this weekend? I attached the schedule.'",
-        "action": "set-body",
-        "value": "Hey! Want to get together this weekend? I attached the schedule."
-      },
-      {
-        "say": "Attach a file to the email.",
+        "say": "Put a photo in it before you send.",
         "action": "attach",
-        "target": "Budget.xlsx"
+        "target": "VacationPhoto.png"
       },
       {
-        "say": "Send the email.",
+        "say": "Send it.",
         "action": "send"
       },
       {
-        "say": "The Amazon shipping email is done — archive it to keep your inbox clean.",
-        "action": "open-email",
+        "say": "You are finished with the Amazon shipping email but do not want to lose it. File it away.",
+        "action": "archive",
         "target": "Your order shipped"
-      },
-      {
-        "say": "Archive it.",
-        "action": "archive"
       }
     ]
   },
-  "drDigitalSuccess": "Inbox zero! You spotted the scam, replied to Mom, composed a professional email with CC and an attachment, and archived what you didn't need.",
-  "drDigitalHint": "Use the folder sidebar to navigate, the compose button to write new emails, and the action buttons when viewing an email."
+  "drDigitalSuccess": "You spotted the scam, answered a real message with an attachment, and filed what you were done with. That is inbox management.",
+  "drDigitalHint": "Read the subject lines — one of them promises money. Open an email first; the buttons for replying, filing, and reporting appear once it is on screen."
 }

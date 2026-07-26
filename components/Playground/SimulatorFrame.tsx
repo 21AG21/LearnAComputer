@@ -21,6 +21,8 @@ interface SimulatorFrameProps {
   flash?: boolean;
   titleBarRight?: ReactNode;
   objectives?: ObjectiveItem[];
+  /** Assessment nudge revealed by the Hint button. Should point at where to look, never give the answer. */
+  hint?: string;
   onHint?: () => void;
   /** When false, skip the title bar and window border — children fill the pane directly. Default true. */
   chrome?: boolean;
@@ -38,6 +40,7 @@ export default function SimulatorFrame({
   flash,
   titleBarRight,
   objectives,
+  hint,
   onHint,
   chrome = true,
   children,
@@ -50,6 +53,7 @@ export default function SimulatorFrame({
     : totalSteps ? (Math.min(stepIndex ?? 0, totalSteps) / totalSteps) * 100 : 0;
 
   const [expanded, setExpanded] = useState(false);
+  const [hintOpen, setHintOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showCompleteBanner, setShowCompleteBanner] = useState(false);
   const celebrationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,9 +99,10 @@ export default function SimulatorFrame({
           </p>
           {isAssessment && !done && (
             <div className="flex items-center gap-2 shrink-0">
-              {onHint && (
+              {(hint || onHint) && (
                 <button
-                  onClick={onHint}
+                  onClick={() => { setHintOpen((v) => !v); onHint?.(); }}
+                  aria-expanded={hint ? hintOpen : undefined}
                   className="px-3 py-1 bg-yellow-500 text-black font-bold rounded text-sm hover:bg-yellow-400 transition-colors"
                 >
                   Hint
@@ -113,6 +118,11 @@ export default function SimulatorFrame({
             </div>
           )}
         </div>
+        {isAssessment && hintOpen && hint && !done && (
+          <div className="mt-2 rounded border border-yellow-400/50 bg-yellow-400/10 px-3 py-2 text-sm text-yellow-100">
+            {hint}
+          </div>
+        )}
         {isAssessment && expanded && objectives && (
           <div className="mt-2 border-t border-white/20 pt-2 space-y-1">
             {objectives.map((obj, i) => (

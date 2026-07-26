@@ -62,6 +62,9 @@ export type PlaygroundTask =
   | {
       type: "guided-files";
       goal: string;
+      mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       /** When true, FileManager blocks mouse clicks and only accepts keyboard input. */
       keyboardOnly?: boolean;
       steps: Array<{
@@ -87,6 +90,9 @@ export type PlaygroundTask =
   | {
       type: "notes-shortcut";
       goal: string;
+      mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action: "type" | "select-all" | "bold" | "italic" | "underline" | "copy" | "cut" | "paste" | "undo" | "redo";
@@ -97,6 +103,8 @@ export type PlaygroundTask =
       type: "guided-browser";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       initialDownloads?: string[];
       steps: Array<{
         say: string;
@@ -132,6 +140,8 @@ export type PlaygroundTask =
       type: "guided-messaging";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action:
@@ -155,6 +165,8 @@ export type PlaygroundTask =
       type: "guided-email";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       /** Optional pre-filled draft — opens a Drafts folder entry on mount that the learner can open to edit and send. */
       seedDraft?: { to: string; subject: string; body: string };
       steps: Array<{
@@ -171,6 +183,9 @@ export type PlaygroundTask =
   | {
       type: "guided-photos";
       goal: string;
+      mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action:
@@ -188,6 +203,8 @@ export type PlaygroundTask =
       type: "guided-app-store";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action:
@@ -201,6 +218,9 @@ export type PlaygroundTask =
   | {
       type: "guided-settings";
       goal: string;
+      mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action:
@@ -215,6 +235,8 @@ export type PlaygroundTask =
       type: "guided-security";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       /** Which desktop chrome wraps the task. Defaults to "browser" for backward compatibility. */
       chrome?: "browser" | "settings" | "mail" | "messages" | "bare";
       steps: Array<{
@@ -234,7 +256,8 @@ export type PlaygroundTask =
       goal: string;
       scenario: string;
       mode?: "guided" | "assessment";
-      launchApp?: "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action:
@@ -252,6 +275,8 @@ export type PlaygroundTask =
       type: "guided-calendar";
       goal: string;
       mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       launchApp?: "calendar" | "reminders";
       steps: Array<{
         say: string;
@@ -266,6 +291,9 @@ export type PlaygroundTask =
   | {
       type: "guided-desktop";
       goal: string;
+      mode?: "guided" | "assessment";
+      /** Assessment nudge revealed by the Hint button. Points at where to look, never gives the answer. */
+      hint?: string;
       steps: Array<{
         say: string;
         action: "move" | "resize" | "minimize" | "restore" | "maximize" | "restore-max" | "close" | "open-app" | "close-app" | "open-clock" | "open-wifi-panel" | "open-battery-panel" | "close-panel";

@@ -10,7 +10,6 @@
     "type": "guided-troubleshooting",
     "goal": "You fixed a frozen app and confirmed it is working",
     "scenario": "Notes is frozen and not responding",
-    "launchApp": "notes",
     "steps": [
       {
         "say": "Notes is frozen — it shows 'Not Responding.' Try clicking on it to see what happens.",

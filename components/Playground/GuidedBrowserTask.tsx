@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import WindowControls from "./WindowControls";
 import {
   PlusIcon, SearchIcon, CartIcon, BookIcon, BookClosedIcon, ClockIcon,
@@ -45,7 +46,8 @@ interface GuidedBrowserTaskProps {
   goal: string;
   steps: GuidedBrowserStep[];
   initialDownloads?: string[];
-  mode?: "guided" | "assessment";
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -110,7 +112,7 @@ interface Tab {
   fwd: PageId[];
 }
 
-export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", onResult }: GuidedBrowserTaskProps) {
+export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", hint, onResult }: GuidedBrowserTaskProps) {
   const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
   const [activeId, setActiveId] = useState("t1");
   const [editing, setEditing] = useState(false);
@@ -127,10 +129,6 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const [popupOpen, setPopupOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState<Array<{ title: string; snippet: string }> | null>(null);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [phase, setPhase] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
   const [brokenPages, setBrokenPages] = useState<Set<PageId>>(() => {
     const broken = new Set<PageId>();
     for (let i = 0; i < steps.length; i++) {
@@ -155,8 +153,19 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const [adNudge, setAdNudge] = useState(false);
   const [unknownUrl, setUnknownUrl] = useState("");
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
+  const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, objectives } =
+    useStepRunner({
+      steps,
+      mode,
+      onResult,
+      onStepComplete: () => {
+        setEditing(false);
+        setBookmarkSheet(false);
+        setSearchInput("");
+        setCookieNudge(false);
+      },
+    });
+
   const activeTab = tabs.find((t) => t.id === activeId)!;
   const activePage = PAGES[activeTab.pageId];
 
@@ -171,21 +180,6 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
     }
     return out;
   }, [history]);
-
-  function completeStep() {
-    setFlash(true);
-    setEditing(false);
-    setBookmarkSheet(false);
-    setSearchInput("");
-    setCookieNudge(false);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-    setPhase(0);
-  }
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -247,11 +241,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       const pageIsBroken = brokenPages.has(pageId);
       setCookieOpen(!pageIsBroken && !!PAGES[pageId].cookie);
       setPopupOpen(!pageIsBroken && !!PAGES[pageId].popup);
-      if (step?.action === "navigate" && step.url && normUrl(PAGES[pageId].url) === normUrl(step.url)) {
-        completeStep();
-      } else if (step?.action === "history-visit" && phase === 1 && PAGES[pageId].title === step.title) {
-        completeStep();
-      }
+      tryStep((s) => s.action === "navigate" && !!s.url && normUrl(PAGES[pageId].url) === normUrl(s.url));
+      tryStep((s) => s.action === "history-visit" && PAGES[pageId].title === s.title, phase === 1);
     };
     if (skipDelay) { applyNav(); return; }
     setTimeout(applyNav, 250);
@@ -276,7 +267,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
     setTabs((prev) => [...prev, { id, pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
     setActiveId(id);
     setMenu(null);
-    if (step?.action === "new-tab") completeStep();
+    tryStep((s) => s.action === "new-tab");
   }
 
   function closeTab(id: string) {
@@ -288,7 +279,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       if (id === activeId) setActiveId(next[next.length - 1].id);
       return next;
     });
-    if (step?.action === "close-tab" && title === step.title) completeStep();
+    tryStep((s) => s.action === "close-tab" && title === s.title);
   }
 
   function reload() {
@@ -304,11 +295,11 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         setReloading(false);
         setCookieOpen(!!PAGES[currentPageId].cookie);
         setPopupOpen(!!PAGES[currentPageId].popup);
-        if (step?.action === "reload") completeStep();
+        tryStep((s) => s.action === "reload");
       }, 400);
       return;
     }
-    if (step?.action === "reload") completeStep();
+    tryStep((s) => s.action === "reload");
   }
 
   function goBack() {
@@ -346,13 +337,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   function confirmBookmark() {
     setBookmarks((prev) => (prev.includes(activeTab.pageId) ? prev : [...prev, activeTab.pageId]));
     setBookmarkSheet(false);
-    if (step?.action === "bookmark" && phase === 1) completeStep();
+    tryStep((s) => s.action === "bookmark", phase === 1);
   }
 
   function addReadingList() {
     setReadingList((prev) => (prev.includes(activeTab.pageId) ? prev : [...prev, activeTab.pageId]));
     setMenu("readinglist");
-    if (step?.action === "reading-list-add") completeStep();
+    tryStep((s) => s.action === "reading-list-add");
   }
 
   function clickHistoryBtn() {
@@ -362,13 +353,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
 
   function clickDownloadsBtn() {
     setMenu(menu === "downloads" ? null : "downloads");
-    if (step?.action === "open-downloads") completeStep();
+    tryStep((s) => s.action === "open-downloads");
   }
 
   function clickDownloadLink() {
     if (!activePage.download) return;
     setDownloads((prev) => (prev.includes(activePage.download!) ? prev : [...prev, activePage.download!]));
-    if (step?.action === "download") completeStep();
+    tryStep((s) => s.action === "download");
   }
 
   function clickLock() {
@@ -377,7 +368,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
 
   function closeLockGotIt() {
     setLockInfo(false);
-    if (step?.action === "lock-click") completeStep();
+    tryStep((s) => s.action === "lock-click");
   }
 
   function acceptCookies() {
@@ -394,12 +385,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   function declineCookies() {
     setCookieOpen(false);
     setCookieNudge(false);
-    if (step?.action === "cookie-decline") completeStep();
+    tryStep((s) => s.action === "cookie-decline");
   }
 
   function closePopup() {
     setPopupOpen(false);
-    if (step?.action === "close-popup") completeStep();
+    tryStep((s) => s.action === "close-popup");
   }
 
   function clickCleanNow() {
@@ -410,20 +401,20 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
 
   function deleteDownload(file: string) {
     setDownloads((prev) => prev.filter((d) => d !== file));
-    if (step?.action === "delete-download" && step.file === file) completeStep();
+    tryStep((s) => s.action === "delete-download" && s.file === file);
   }
 
   function openDownload(file: string) {
     setPdfViewer(file);
     setPdfZoom(100);
     setMenu(null);
-    if (step?.action === "open-download" && step.file === file) completeStep();
+    tryStep((s) => s.action === "open-download" && s.file === file);
   }
 
   function zoomIn() {
     const z = Math.min(activeTab.zoom + 25, 200);
     setTabs((prev) => prev.map((t) => (t.id === activeId ? { ...t, zoom: z } : t)));
-    if (z >= 150 && step?.action === "zoom-in") completeStep();
+    if (z >= 150) tryStep((s) => s.action === "zoom-in");
   }
 
   function zoomOut() {
@@ -434,12 +425,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   function submitSearch() {
     if (!searchInput.trim()) return;
     const q = searchInput.trim();
-    const revealTitle = step?.reveal ?? "Recipe Box";
+    const revealTitle = wanted((s) => s.action === "search" && !!s.reveal)?.reveal ?? "Recipe Box";
     setSearchResults([
       { title: revealTitle, snippet: `Top result for “${q}”` },
       { title: "Wikipedia", snippet: `${q} — encyclopedia article` },
     ]);
-    if (step?.action === "search") completeStep();
+    tryStep((s) => s.action === "search");
   }
 
   function openSearchResult(title: string) {
@@ -448,7 +439,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       navigate(pageId);
       setSearchResults(null);
     }
-    if (step?.action === "open-result" && step.title === title) completeStep();
+    tryStep((s) => s.action === "open-result" && s.title === title);
   }
 
   function clickAd() {
@@ -466,7 +457,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       const next = tabSeqPos + 1;
       setTabSeqPos(next);
       setTabSeqWrong(false);
-      if (next >= PICK_SEQ.length && step?.action === "tab-sequence") completeStep();
+      if (next >= PICK_SEQ.length) tryStep((s) => s.action === "tab-sequence");
     } else {
       setTabSeqWrong(true);
       setTimeout(() => setTabSeqWrong(false), 2000);
@@ -486,6 +477,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       {/* Tab strip */}
       <div className="shrink-0 bg-gray-200 border-b-2 border-gray-300 flex items-stretch gap-1 px-2 pt-2">
@@ -575,7 +568,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         <ActionBtn label="Reading List" icon={<BookIcon size={14} />} onClick={addReadingList} highlight={hl("readinglist-btn")} />
         <ActionBtn label="History" icon={<ClockIcon size={14} />} onClick={clickHistoryBtn} highlight={hl("history-btn")} />
         <ActionBtn label="Downloads" icon={<DownloadIcon size={14} />} onClick={clickDownloadsBtn} highlight={hl("downloads-btn")} />
-        <ActionBtn label="New Window" icon={<WindowIcon size={14} />} onClick={() => { setNewWindow(true); if (step?.action === "new-window") completeStep(); }} highlight={hl("newwindow-btn")} />
+        <ActionBtn label="New Window" icon={<WindowIcon size={14} />} onClick={() => { setNewWindow(true); tryStep((s) => s.action === "new-window"); }} highlight={hl("newwindow-btn")} />
         <div className="flex-1" />
         <div className="flex items-center border-2 border-gray-400 rounded-lg overflow-hidden">
           <button onClick={zoomOut} aria-label="Zoom out" className="px-2 text-gray-600 hover:bg-gray-200">−</button>

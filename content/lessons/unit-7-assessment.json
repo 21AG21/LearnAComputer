@@ -3,83 +3,52 @@
   "unit": "Unit 7: Photos",
   "module": "Unit 7 Assessment",
   "order": 780,
-  "title": "Organize Vacation Photos",
+  "title": "Rescue a bad photo",
   "videoUrl": "",
-  "drDigitalIntro": "Time to use everything you've learned about Photos!\n• Favorite photos, create albums, edit, share, and clean up.\n• You've done all of this before — now do it in one go.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nOne photo in the library came out sideways and far too dark. Find it, fix it, and share it.",
   "playgroundTask": {
     "type": "guided-photos",
-    "goal": "You organized, edited, shared, and cleaned up your photo library",
+    "mode": "assessment",
+    "goal": "You fixed and shared a photo unaided",
+    "hint": "Search rather than scrolling — the photo has a bird in it. Editing tools appear once a photo is selected. Albums are created from the sidebar.",
     "steps": [
       {
-        "say": "Click the Beach Vacation photo to open it.",
-        "action": "select-photo",
-        "target": "Beach Vacation"
+        "say": "Find the bird photo by searching for it.",
+        "action": "search",
+        "value": "bird"
       },
       {
-        "say": "Favorite this vacation photo.",
-        "action": "favorite"
+        "say": "It is lying on its side. Turn it the right way up.",
+        "action": "rotate"
       },
       {
-        "say": "Now find the Orange Cat photo and open it.",
-        "action": "select-photo",
-        "target": "Orange Cat"
-      },
-      {
-        "say": "Favorite this one too.",
-        "action": "favorite"
-      },
-      {
-        "say": "Create a new album called Favorites Trip.",
-        "action": "create-album",
-        "value": "Favorites Trip"
-      },
-      {
-        "say": "Add the Beach Vacation to your new album.",
-        "action": "add-to-album",
-        "target": "Beach Vacation",
-        "value": "Favorites Trip"
-      },
-      {
-        "say": "Open the Bird in Garden photo — it's too dark.",
-        "action": "select-photo",
-        "target": "Bird in Garden"
-      },
-      {
-        "say": "Crop it to a square.",
-        "action": "crop"
-      },
-      {
-        "say": "The photo is too dark. Drag the Brightness slider up.",
+        "say": "It is far too dark. Brighten it.",
         "action": "adjust-brightness",
-        "value": "90-110"
+        "value": "95-140"
       },
       {
-        "say": "Share a photo with Grandma. Open the Beach Vacation photo.",
-        "action": "select-photo",
-        "target": "Beach Vacation"
+        "say": "It looks flat. Give it more contrast.",
+        "action": "adjust-contrast",
+        "value": "95-140"
       },
       {
-        "say": "Share it with Grandma via Messages.",
+        "say": "Make a new album called Garden.",
+        "action": "create-album",
+        "value": "Garden"
+      },
+      {
+        "say": "Put the photo in that album.",
+        "action": "add-to-album",
+        "value": "Garden"
+      },
+      {
+        "say": "Send the fixed photo to Grandma.",
         "action": "share",
         "via": "messages",
         "to": "grandma"
-      },
-      {
-        "say": "Delete the Budget Screenshot — it doesn't belong in your photos.",
-        "action": "select-photo",
-        "target": "Budget Screenshot"
-      },
-      {
-        "say": "Delete it.",
-        "action": "delete"
-      },
-      {
-        "say": "Oops — you need that! Go to Recently Deleted and recover it.",
-        "action": "recover",
-        "target": "Budget Screenshot"
       }
     ]
   },
-  "drDigitalSuccess": "You did it all — favorited, organized into albums, edited, shared, deleted, and recovered. You're a Photos pro!",
-  "drDigitalHint": "Follow each step — favorite photos, create an album, edit with the brightness slider, share via Messages, and use Recently Deleted to recover."
+  "drDigitalSuccess": "You found it, straightened it, lit it, filed it, and sent it. That is the whole photo workflow, start to finish.",
+  "drDigitalHint": "The magnifying glass searches by what is in the photo. Once a photo is open, the edit controls are along the side. Sharing asks you how first, then who."
 }

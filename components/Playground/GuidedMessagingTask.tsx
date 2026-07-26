@@ -1,8 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
+
+/** A step's `value` is the text the message must contain; empty or absent accepts anything. */
+function matchesText(value: string | undefined, text: string): boolean {
+  const want = (value ?? "").toLowerCase();
+  return !want || text.toLowerCase().includes(want);
+}
 
 export type GuidedMessagingStep = {
   say: string;
@@ -26,6 +33,8 @@ export type GuidedMessagingStep = {
 interface GuidedMessagingTaskProps {
   goal: string;
   steps: GuidedMessagingStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -126,16 +135,13 @@ function PhoneEndIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMessagingTaskProps) {
+export default function GuidedMessagingTask({ goal, steps, mode, hint, onResult }: GuidedMessagingTaskProps) {
   const [activeContact, setActiveContact] = useState<string | null>(null);
   const [threads, setThreads] = useState<Record<string, Message[]>>(INITIAL_THREADS);
   const [draft, setDraft] = useState("");
   const [inCall, setInCall] = useState(false);
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
   const [sendNudge, setSendNudge] = useState<string | null>(null);
   const [attachMenu, setAttachMenu] = useState(false);
   const [photoPicker, setPhotoPicker] = useState(false);
@@ -153,8 +159,19 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
+  const { step, stepIndex, finished, done, flash, tryStep, wanted, objectives } = useStepRunner({
+    steps,
+    mode,
+    onResult,
+    onStepComplete: () => {
+      setSendNudge(null);
+      setAttachMenu(false);
+      setPhotoPicker(false);
+      setReactionTarget(null);
+      setEmojiPickerOpen(false);
+    },
+  });
+
   const currentMessages = activeContact ? threads[activeContact] ?? [] : [];
   const currentContactObj = CONTACTS.find((c) => c.id === activeContact);
   const lastContactIdx = currentMessages.reduce((acc, m, i) => (m.from === "contact" ? i : acc), -1);
@@ -164,21 +181,6 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentMessages.length, currentGroupMessages.length]);
-
-  const completeStep = useCallback(() => {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    setSendNudge(null);
-    setAttachMenu(false);
-    setPhotoPicker(false);
-    setReactionTarget(null);
-    setEmojiPickerOpen(false);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }, [stepIndex, steps.length, onResult]);
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -231,9 +233,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setPhotoPicker(false);
     setReactionTarget(null);
     setEmojiPickerOpen(false);
-    if (step?.action === "select-contact" && step.target === id) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "select-contact" && s.target === id);
   }
 
   function handleSend() {
@@ -243,14 +243,10 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setThreads((prev) => ({ ...prev, [activeContact]: next }));
     setDraft("");
     setEmojiPickerOpen(false);
-    if (step?.action === "send-message") {
-      const target = (step.value ?? "").toLowerCase();
-      if (!target || text.toLowerCase().includes(target)) {
-        completeStep();
-      } else {
-        setSendNudge(`Include the words "${step.value}" in your message.`);
-      }
-    }
+    const wantSend = wanted((s) => s.action === "send-message");
+    if (!wantSend) return;
+    if (matchesText(wantSend.value, text)) tryStep((s) => s.action === "send-message" && matchesText(s.value, text));
+    else setSendNudge(`Include the words "${wantSend.value}" in your message.`);
   }
 
   function handleReactionPointerDown(msgIdx: number) {
@@ -279,9 +275,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     msgs[msgIdx] = msg;
     setThreads((prev) => ({ ...prev, [activeContact]: msgs }));
     setReactionTarget(null);
-    if (step?.action === "add-reaction") {
-      completeStep();
-    }
+    tryStep((s) => s.action === "add-reaction");
   }
 
   function handleAttachBtn() {
@@ -304,9 +298,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     const next = [...currentMessages, { from: "me" as const, text: "Photo", photoSrc: src }];
     setThreads((prev) => ({ ...prev, [activeContact]: next }));
     setPhotoPicker(false);
-    if (step?.action === "attach-photo") {
-      completeStep();
-    }
+    tryStep((s) => s.action === "attach-photo");
   }
 
   function handleStartCall() {
@@ -316,22 +308,22 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setAttachMenu(false);
     setPhotoPicker(false);
     setEmojiPickerOpen(false);
-    if (step?.action === "start-call") completeStep();
+    tryStep((s) => s.action === "start-call");
   }
 
   function handleMute() {
     setMuted(!muted);
-    if (step?.action === "mute") completeStep();
+    tryStep((s) => s.action === "mute");
   }
 
   function handleCameraOff() {
     setCameraOff(!cameraOff);
-    if (step?.action === "camera-off") completeStep();
+    tryStep((s) => s.action === "camera-off");
   }
 
   function handleEndCall() {
     setInCall(false);
-    if (step?.action === "end-call") completeStep();
+    tryStep((s) => s.action === "end-call");
   }
 
   // --- Group handlers ---
@@ -341,16 +333,14 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setActiveContact(null);
     setActiveGroupId(null);
     setEmojiPickerOpen(false);
-    if (step?.action === "create-group") completeStep();
+    tryStep((s) => s.action === "create-group");
   }
 
   function handleGroupPickContact(contactId: string) {
     if (!groupPicks.includes(contactId)) {
       setGroupPicks((prev) => [...prev, contactId]);
     }
-    if (step?.action === "add-to-group" && step.target === contactId) {
-      completeStep();
-    }
+    tryStep((s) => s.action === "add-to-group" && s.target === contactId);
   }
 
   function handleStartChat() {
@@ -380,12 +370,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setGroupThreads((prev) => ({ ...prev, [activeGroupId]: next }));
     setGroupDraft("");
     setEmojiPickerOpen(false);
-    if (step?.action === "send-group-message") {
-      const target = (step.value ?? "").toLowerCase();
-      if (!target || text.toLowerCase().includes(target)) {
-        completeStep();
-      }
-    }
+    tryStep((s) => s.action === "send-group-message" && matchesText(s.value, text));
   }
 
   function handleSelectGroup(groupId: string) {
@@ -409,7 +394,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
       setDraft((prev) => prev + emoji);
     }
     setEmojiPickerOpen(false);
-    if (step?.action === "pick-emoji") completeStep();
+    tryStep((s) => s.action === "pick-emoji");
   }
 
   if (inCall) {
@@ -423,6 +408,8 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
         done={done}
         goal={goal}
         flash={flash}
+        objectives={objectives}
+        hint={hint}
       >
         <div className="flex-1 min-h-0 flex flex-col bg-gray-900 text-white">
           <div className="flex-1 flex items-center justify-center relative p-4">
@@ -495,6 +482,8 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Contacts / group picker sidebar */}

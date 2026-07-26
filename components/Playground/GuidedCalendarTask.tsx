@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import { CalendarIcon, CheckIcon } from "./Icons";
 
 export type GuidedCalendarStep = {
@@ -18,6 +19,8 @@ interface GuidedCalendarTaskProps {
   goal: string;
   steps: GuidedCalendarStep[];
   initialView?: "month" | "reminders";
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
@@ -53,10 +56,7 @@ const MONTH_START_DOW = 3; // Wednesday (0=Sun)
 const REPEAT_OPTIONS = ["None", "Daily", "Weekly", "Monthly", "Yearly"];
 const CALENDARS = ["Personal", "Work"];
 
-export default function GuidedCalendarTask({ goal, steps, initialView, onResult }: GuidedCalendarTaskProps) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
+export default function GuidedCalendarTask({ goal, steps, initialView, mode, hint, onResult }: GuidedCalendarTaskProps) {
   const [view, setView] = useState<"month" | "day" | "reminders">(initialView ?? "month");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(PRESET_EVENTS);
@@ -67,18 +67,8 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
   const [draftEvent, setDraftEvent] = useState({ title: "", time: "", repeat: "None" });
   const [draftReminder, setDraftReminder] = useState("");
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+  const { step, stepIndex, finished, done, flash, tryStep, objectives } =
+    useStepRunner({ steps, mode, onResult });
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -104,13 +94,13 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
   function handleSelectDay(day: number) {
     setSelectedDay(day);
     setCreatingEvent(false);
-    if (step?.action === "select-day" && (step.target === String(day) || step.target === undefined)) completeStep();
+    tryStep((s) => s.action === "select-day" && (s.target === String(day) || s.target === undefined));
   }
 
   function handleCreateEvent() {
     setCreatingEvent(true);
     setDraftEvent({ title: "", time: "", repeat: "None" });
-    if (step?.action === "create-event") completeStep();
+    tryStep((s) => s.action === "create-event");
   }
 
   function handleSaveEvent() {
@@ -125,13 +115,13 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
     setEvents((prev) => [...prev, newEvent]);
     setCreatingEvent(false);
     setDraftEvent({ title: "", time: "", repeat: "None" });
-    if (step?.action === "save-event") completeStep();
+    tryStep((s) => s.action === "save-event");
   }
 
   function handleCreateReminder() {
     setCreatingReminder(true);
     setDraftReminder("");
-    if (step?.action === "create-reminder") completeStep();
+    tryStep((s) => s.action === "create-reminder");
   }
 
   function handleSaveReminder() {
@@ -140,24 +130,24 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
     setReminders((prev) => [...prev, newReminder]);
     setCreatingReminder(false);
     setDraftReminder("");
-    if (step?.action === "save-reminder") completeStep();
+    tryStep((s) => s.action === "save-reminder");
   }
 
   function handleCompleteReminder(id: string, text: string) {
     setReminders((prev) => prev.map((r) => r.id === id ? { ...r, done: true } : r));
-    if (step?.action === "complete-reminder" && step.target === text) completeStep();
+    tryStep((s) => s.action === "complete-reminder" && s.target === text);
   }
 
   function handleSwitchView(v: "month" | "day" | "reminders") {
     setView(v);
     setCreatingEvent(false);
     setCreatingReminder(false);
-    if (step?.action === "switch-view" && step.target === v) completeStep();
+    tryStep((s) => s.action === "switch-view" && s.target === v);
   }
 
   function handleToggleCalendar(cal: string) {
     setActiveCalendars((prev) => prev.includes(cal) ? prev.filter((c) => c !== cal) : [...prev, cal]);
-    if (step?.action === "select-calendar" && step.target === cal) completeStep();
+    tryStep((s) => s.action === "select-calendar" && s.target === cal);
   }
 
   const dayEvents = (day: number) => events.filter((e) => e.day === day && activeCalendars.includes(e.calendar));
@@ -176,6 +166,8 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar */}
@@ -236,7 +228,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
                   value={draftEvent.title}
                   onChange={(e) => {
                     setDraftEvent((d) => ({ ...d, title: e.target.value }));
-                    if (step?.action === "set-title" && e.target.value.toLowerCase().includes((step.value ?? "").toLowerCase())) completeStep();
+                    { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-title" && v.includes((s.value ?? "").toLowerCase())); }
                   }}
                   placeholder="Event title"
                   className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-title") ? pulse : ""}`}
@@ -245,7 +237,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
                   value={draftEvent.time}
                   onChange={(e) => {
                     setDraftEvent((d) => ({ ...d, time: e.target.value }));
-                    if (step?.action === "set-time" && e.target.value.toLowerCase().includes((step.value ?? "").toLowerCase())) completeStep();
+                    { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-time" && v.includes((s.value ?? "").toLowerCase())); }
                   }}
                   placeholder="Time (e.g. 2:00 PM)"
                   className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-time") ? pulse : ""}`}
@@ -254,7 +246,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
                   value={draftEvent.repeat}
                   onChange={(e) => {
                     setDraftEvent((d) => ({ ...d, repeat: e.target.value }));
-                    if (step?.action === "set-repeat") completeStep();
+                    tryStep((s) => s.action === "set-repeat");
                   }}
                   className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-repeat") ? pulse : ""}`}
                 >
@@ -281,7 +273,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, onResult 
                 value={draftReminder}
                 onChange={(e) => {
                   setDraftReminder(e.target.value);
-                  if (step?.action === "set-reminder-text" && e.target.value.toLowerCase().includes((step.value ?? "").toLowerCase())) completeStep();
+                  { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-reminder-text" && v.includes((s.value ?? "").toLowerCase())); }
                 }}
                 placeholder="Reminder text"
                 className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-green-400 mb-2 ${hl("reminder-text") ? pulse : ""}`}

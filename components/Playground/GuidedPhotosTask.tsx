@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 import {
   ImageIcon, HeartIcon, HeartFilledIcon, TrashIcon, FolderIcon,
   ShareIcon, MailIcon, ChatIcon, RotateIcon, CropIcon, SquareIcon,
@@ -26,6 +27,8 @@ export type GuidedPhotosStep = {
 interface GuidedPhotosTaskProps {
   goal: string;
   steps: GuidedPhotosStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -64,7 +67,7 @@ const CONTACTS = [
   { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png" },
 ];
 
-export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotosTaskProps) {
+export default function GuidedPhotosTask({ goal, steps, mode, hint, onResult }: GuidedPhotosTaskProps) {
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [albums, setAlbums] = useState<string[]>(["Vacation", "Family", "Pets"]);
   const [section, setSection] = useState("All Photos");
@@ -85,22 +88,9 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
   const [sharedToContact, setSharedToContact] = useState<string | null>(null);
   const [showMeBanner, setShowMeBanner] = useState(false);
   const [showMeConfirmed, setShowMeConfirmed] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [flash, setFlash] = useState(false);
-  const [done, setDone] = useState(false);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
-
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 850);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1500);
-    }
-    setStepIndex((i) => i + 1);
-  }
+  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives, completed } =
+    useStepRunner({ steps, mode, onResult });
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -155,7 +145,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     setAlbumPickerShown(false);
     setSearchOpen(false);
     setSearchQuery("");
-    if (step?.action === "select-photo" && step.target === photo.label) completeStep();
+    tryStep((s) => s.action === "select-photo" && s.target === photo.label);
   }
 
   function handleFavorite() {
@@ -163,19 +153,19 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     const newVal = !selectedPhoto.favorite;
     setPhotos((prev) => prev.map((p) => p.id === selectedPhoto.id ? { ...p, favorite: newVal } : p));
     setSelectedPhoto((p) => p ? { ...p, favorite: newVal } : p);
-    if (step?.action === "favorite" || step?.action === "unfavorite") completeStep();
+    tryStep((s) => s.action === "favorite" || s.action === "unfavorite");
   }
 
   function handleDelete() {
     if (!selectedPhoto) return;
     setPhotos((prev) => prev.map((p) => p.id === selectedPhoto.id ? { ...p, deleted: true } : p));
     setSelectedPhoto(null);
-    if (step?.action === "delete") completeStep();
+    tryStep((s) => s.action === "delete");
   }
 
   function handleRecover(photo: Photo) {
     setPhotos((prev) => prev.map((p) => p.id === photo.id ? { ...p, deleted: false } : p));
-    if (step?.action === "recover" && step.target === photo.label) completeStep();
+    tryStep((s) => s.action === "recover" && s.target === photo.label);
   }
 
   function handleGoToAlbum(name: string) {
@@ -183,7 +173,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     setSelectedPhoto(null);
     setSearchQuery("");
     setSearchOpen(false);
-    if (step?.action === "go-to-album" && step.target === name) completeStep();
+    tryStep((s) => s.action === "go-to-album" && s.target === name);
   }
 
   function handleCreateAlbum() {
@@ -195,7 +185,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     if (!albums.includes(name)) setAlbums((prev) => [...prev, name]);
     setNewAlbumInput("");
     setCreatingAlbum(false);
-    if (step?.action === "create-album") completeStep();
+    tryStep((s) => s.action === "create-album" && (!s.value || s.value.toLowerCase() === name.toLowerCase()));
   }
 
   function handleAddToAlbum() {
@@ -206,56 +196,55 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     if (!selectedPhoto) return;
     setPhotos((prev) => prev.map((p) => p.id === selectedPhoto.id && !p.albums.includes(albumName) ? { ...p, albums: [...p.albums, albumName] } : p));
     setAlbumPickerShown(false);
-    if (step?.action === "add-to-album" && step.value === albumName) completeStep();
+    tryStep((s) => s.action === "add-to-album" && s.value === albumName);
   }
 
   function handleCropPreset(preset: CropPreset) {
     setCropPreset(preset);
-    if (step?.action === "crop" && preset !== "Original") completeStep();
+    tryStep((s) => s.action === "crop" && preset !== "Original");
   }
 
   function handleRotate() {
     setRotation((r) => (r + 90) % 360);
-    if (step?.action === "rotate") completeStep();
+    tryStep((s) => s.action === "rotate");
+  }
+
+  /** A step's `value` is a "min-max" range the slider must land inside; absent means anywhere. */
+  function inRange(value: string | undefined, val: number): boolean {
+    const min = value ? Number(value.split("-")[0]) : 0;
+    const max = value ? Number(value.split("-")[1]) : 200;
+    return val >= min && val <= max;
   }
 
   function handleBrightnessChange(val: number) {
     setBrightness(val);
-    if (step?.action === "adjust-brightness") {
-      const min = step.value ? Number(step.value.split("-")[0]) : 0;
-      const max = step.value ? Number(step.value.split("-")[1]) : 200;
-      if (val >= min && val <= max) completeStep();
-    }
+    tryStep((s) => s.action === "adjust-brightness" && inRange(s.value, val));
   }
 
   function handleContrastChange(val: number) {
     setContrast(val);
-    if (step?.action === "adjust-contrast") {
-      const min = step.value ? Number(step.value.split("-")[0]) : 0;
-      const max = step.value ? Number(step.value.split("-")[1]) : 200;
-      if (val >= min && val <= max) completeStep();
-    }
+    tryStep((s) => s.action === "adjust-contrast" && inRange(s.value, val));
   }
 
   function handleApplyFilter(name: string) {
     setFilter(name);
-    if (step?.action === "apply-filter" && step.value === name) completeStep();
+    tryStep((s) => s.action === "apply-filter" && s.value === name);
   }
 
   function handleRevert() {
     resetEdits(selectedPhoto);
-    if (step?.action === "revert") completeStep();
+    tryStep((s) => s.action === "revert");
   }
 
   function handleShareClick() {
     setSharePhase("channel");
-    if (step?.action === "share" && !step.via) completeStep();
+    tryStep((s) => s.action === "share" && !s.via);
   }
 
   function handleShareChannel(via: "mail" | "messages") {
     setShareVia(via);
     setSharePhase("contact");
-    if (step?.action === "share" && step.via === via && !step.to) completeStep();
+    tryStep((s) => s.action === "share" && s.via === via && !s.to);
   }
 
   function handleShareContact(contactId: string) {
@@ -265,10 +254,10 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
     setSharedToContact(contactId);
     setShareToast(`Sent to ${contact?.name ?? contactId} via ${label}`);
     setTimeout(() => setShareToast(null), 3000);
-    if (step?.action === "share" && step.to === contactId) {
-      const isLastStep = stepIndex + 1 >= steps.length;
-      completeStep();
-      if (isLastStep && via === "messages") setShowMeBanner(true);
+    const wasLast = completed.size + 1 >= steps.length;
+    tryStep((s) => s.action === "share" && s.to === contactId);
+    if (wasLast && via === "messages" && wants((s) => s.action === "share" && s.to === contactId)) {
+      setShowMeBanner(true);
     }
   }
 
@@ -308,6 +297,8 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
@@ -321,7 +312,8 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
                   setSearchQuery(e.target.value);
                   setSelectedPhoto(null);
                   setSection("All Photos");
-                  if (step?.action === "search" && step.value && e.target.value.toLowerCase().includes(step.value.toLowerCase())) completeStep();
+                  const q = e.target.value.toLowerCase();
+                  tryStep((s) => s.action === "search" && !!s.value && q.includes(s.value.toLowerCase()));
                 }}
                 placeholder="Search..."
                 className={`flex-1 px-2 py-1.5 text-xs border rounded outline-none focus:border-blue-400 ${hl("search-input") ? pulse : ""}`}
@@ -330,7 +322,7 @@ export default function GuidedPhotosTask({ goal, steps, onResult }: GuidedPhotos
               <button
                 onClick={() => {
                   setSearchOpen(true);
-                  if (step?.action === "search" && !step.value) completeStep();
+                  tryStep((s) => s.action === "search" && !s.value);
                 }}
                 className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 border rounded w-full hover:bg-gray-100 ${hl("search-icon") ? pulse : ""}`}
               >

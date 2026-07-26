@@ -1,0 +1,45 @@
+{
+  "slug": "unit-2-assessment",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Unit 2 Assessment",
+  "order": 295,
+  "title": "Edit with the keyboard alone",
+  "videoUrl": "",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nDo all of it with keyboard shortcuts. The toolbar buttons work, but they will not count.",
+  "playgroundTask": {
+    "type": "notes-shortcut",
+    "mode": "assessment",
+    "goal": "You edited a note using only the keyboard",
+    "hint": "Every shortcut is the Command key (or Control on Windows) held down with one letter. The letter is usually the first letter of the word: Bold, Copy, Paste.",
+    "steps": [
+      {
+        "say": "Write a short note — anything you like.",
+        "action": "type",
+        "value": "any"
+      },
+      {
+        "say": "Select everything you wrote.",
+        "action": "select-all"
+      },
+      {
+        "say": "Make it bold.",
+        "action": "bold"
+      },
+      {
+        "say": "Copy it.",
+        "action": "copy"
+      },
+      {
+        "say": "Paste it back in.",
+        "action": "paste"
+      },
+      {
+        "say": "Undo the paste.",
+        "action": "undo"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You edited a document without touching the mouse once. Those same shortcuts work in email, in a browser, and in every writing app you will ever use.",
+  "drDigitalHint": "Hold Command (or Control) and press a letter. A for All, B for Bold, C for Copy, V for paste, Z for undo.",
+  "warning": "Do not press Escape during this activity — it will exit the simulator."
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "unit-3-assessment-real",
+  "unit": "Unit 3: Files and Folders",
+  "module": "Unit 3 Assessment",
+  "order": 391,
+  "title": "Now organize a real folder",
+  "videoUrl": "",
+  "drDigitalIntro": "You have proved it in the simulator. Do it once on your own computer and it will stick.\n\n1. Open your real Downloads folder — it is in the sidebar of your file manager.\n2. Make one new folder inside it and give it a name that means something to you.\n3. Drag two or three related files into that folder.\n4. Rename one file that has a confusing name, like a photo called IMG_4471.\n5. Delete something you know you do not need. It goes to the Trash, so it is not gone forever.\n\nThere is no single right answer and nothing here is checked. The point is that your Downloads folder ends the day tidier than it started.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "",
+  "drDigitalHint": "Take your time — this one is on your own machine, not in the simulator."
+}

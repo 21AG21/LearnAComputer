@@ -3,68 +3,52 @@
   "unit": "Unit 5: Messages and Video Calls",
   "module": "Unit 5 Assessment",
   "order": 570,
-  "title": "Family Group Chat",
+  "title": "Message and call on your own",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put your messaging skills to the test!\n• You'll send messages, share a photo, react to a message, and handle a video call.\n• No hand-holding this time — you've got this!",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nDifferent people from the ones in the lessons — read each objective for who it means.",
   "playgroundTask": {
     "type": "guided-messaging",
-    "goal": "You handled messages, photos, reactions, and a video call",
+    "mode": "assessment",
+    "goal": "You messaged and called without instructions",
+    "hint": "The + beside Contacts starts something new. A reaction needs a double-click or a press-and-hold on the other person's message, never a single click. Call controls appear once a call is running.",
     "steps": [
       {
-        "say": "Open Alex's conversation and send them a message: 'See you Saturday!'",
-        "action": "select-contact",
-        "target": "alex"
+        "say": "Start a new group chat.",
+        "action": "create-group"
       },
       {
-        "say": "Type 'See you Saturday!' and send it.",
-        "action": "send-message",
-        "value": "See you Saturday!"
-      },
-      {
-        "say": "Switch to Grandma's conversation and send her a photo.",
-        "action": "select-contact",
-        "target": "grandma"
-      },
-      {
-        "say": "Send Grandma a photo using the + button.",
-        "action": "attach-photo"
-      },
-      {
-        "say": "Now open Sam's conversation.",
-        "action": "select-contact",
+        "say": "Put Sam in the group.",
+        "action": "add-to-group",
         "target": "sam"
       },
       {
-        "say": "React to Sam's latest message.",
+        "say": "Put Grandma in the group too.",
+        "action": "add-to-group",
+        "target": "grandma"
+      },
+      {
+        "say": "Say something to the group.",
+        "action": "send-group-message",
+        "value": ""
+      },
+      {
+        "say": "Send a photo to someone.",
+        "action": "attach-photo"
+      },
+      {
+        "say": "React to a message somebody sent you.",
         "action": "add-reaction"
       },
       {
-        "say": "Switch to Jordan's conversation to video call them.",
-        "action": "select-contact",
-        "target": "jordan"
-      },
-      {
-        "say": "Start a video call with Jordan.",
+        "say": "Start a video call.",
         "action": "start-call"
       },
       {
-        "say": "Mute your microphone — there's background noise.",
+        "say": "Mute your microphone during the call.",
         "action": "mute"
-      },
-      {
-        "say": "Turn off your camera for a moment.",
-        "action": "camera-off"
-      },
-      {
-        "say": "Turn your camera back on.",
-        "action": "camera-off"
-      },
-      {
-        "say": "End the call.",
-        "action": "end-call"
       }
     ]
   },
-  "drDigitalSuccess": "You aced it! You sent messages, shared a photo, reacted with an emoji, and managed a full video call with all the controls.",
-  "drDigitalHint": "Select contacts from the sidebar, use the + button for photos, double-click messages to react, and use the call controls at the bottom."
+  "drDigitalSuccess": "Group chats, photos, reactions, and a video call — all of it sequenced by you. That is everything this unit taught.",
+  "drDigitalHint": "The + at the top of the contact list starts a group. To react, press and hold on the other person's bubble. To send a photo, use the + next to the message box."
 }

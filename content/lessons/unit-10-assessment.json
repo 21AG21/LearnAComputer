@@ -1,65 +1,50 @@
 {
   "slug": "unit-10-assessment",
-  "unit": "Unit 10: Online Safety and Security",
+  "unit": "Unit 10: Staying Safe Online",
   "module": "Unit 10 Assessment",
   "order": 1100,
-  "title": "Security Scenarios",
+  "title": "Judge it for yourself",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see if you can handle real security situations!\n• Create a strong password, handle two-factor authentication, and spot dangerous messages.\n• Take your time and think before you click.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nFive links are waiting. Two of them are fakes. Click a link to see where it really goes before you decide.",
   "playgroundTask": {
     "type": "guided-security",
-    "goal": "You handled passwords, 2FA, and identified scams",
+    "chrome": "mail",
+    "mode": "assessment",
+    "goal": "You built a strong password and caught both fakes",
+    "hint": "The wording of a link means nothing — only the address underneath it counts. Look at what comes right before the first single slash. That is the real site.",
     "steps": [
       {
-        "say": "Create a strong password. Type one that's at least 12 characters with uppercase, lowercase, numbers, and symbols.",
+        "say": "Build a password strong enough to reach the top rating.",
         "action": "type-password",
         "minStrength": 4
       },
       {
-        "say": "Now sign in to a website. Type your username: digitallearner",
-        "action": "type-username",
-        "value": "digitallearner"
+        "say": "Decide about 'Bank of America Login'.",
+        "action": "mark-safe",
+        "target": "Bank of America Login"
       },
       {
-        "say": "Type the password you just created to log in.",
-        "action": "type-login-password"
+        "say": "Decide about 'Enter Card Details'.",
+        "action": "mark-dangerous",
+        "target": "Enter Card Details"
       },
       {
-        "say": "Click Sign In.",
-        "action": "login"
+        "say": "Decide about 'Complete Your Purchase'.",
+        "action": "mark-safe",
+        "target": "Complete Your Purchase"
       },
       {
-        "say": "A 2FA code was sent to your phone. Enter the code shown.",
-        "action": "enter-2fa-code"
+        "say": "Decide about 'Free WiFi Login'.",
+        "action": "mark-dangerous",
+        "target": "Free WiFi Login"
       },
       {
-        "say": "Click Verify to confirm your code.",
-        "action": "verify-2fa"
-      },
-      {
-        "say": "Look at this message — is it safe or dangerous?",
-        "action": "inspect-link",
-        "target": "Your account has been compromised! Click here NOW: http://amaz0n-security.tk/verify"
-      },
-      {
-        "say": "That link looks suspicious. Mark it as dangerous.",
-        "action": "mark-dangerous"
-      },
-      {
-        "say": "What about this one?",
-        "action": "inspect-link",
-        "target": "Hi! Here's the shared Google Doc you asked for: https://docs.google.com/d/abc123"
-      },
-      {
-        "say": "This one's from someone you know, with a real Google link. Mark it as safe.",
-        "action": "mark-safe"
-      },
-      {
-        "say": "Try the passkey option for a faster, safer login.",
-        "action": "use-passkey"
+        "say": "Decide about 'View your order'.",
+        "action": "mark-safe",
+        "target": "View your order"
       }
     ]
   },
-  "drDigitalSuccess": "You passed every security test! Strong passwords, 2FA, spotting scams, and using passkeys — you're ready to stay safe online.",
-  "drDigitalHint": "Make passwords long and complex, always verify 2FA codes, and check URLs carefully before clicking."
+  "drDigitalSuccess": "You built a password no one is guessing and you read the real address behind five links. Those two habits stop most of what is out there.",
+  "drDigitalHint": "A strong password is long and mixes letters, numbers, and symbols. For the links: read the address, not the words. Watch for odd endings and for zeros standing in for the letter o."
 }

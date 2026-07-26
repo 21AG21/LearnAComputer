@@ -13,7 +13,7 @@
       {
         "say": "Open the Bluetooth section in Settings.",
         "action": "open-section",
-        "target": "Bluetooth"
+        "target": "bluetooth"
       },
       {
         "say": "Click Connect next to Wireless Headphones.",

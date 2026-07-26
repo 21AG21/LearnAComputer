@@ -5,6 +5,7 @@ import SimulatorFrame from "./SimulatorFrame";
 import AppWindow from "./Desktop/AppWindow";
 import { NoteIcon } from "./Icons";
 import { checkNotesShortcut } from "./TaskChecker";
+import { useStepRunner, type SimMode } from "./useStepRunner";
 
 type StepAction = "type" | "select-all" | "bold" | "italic" | "underline" | "copy" | "cut" | "paste" | "undo" | "redo";
 
@@ -17,18 +18,17 @@ interface NotesStep {
 interface GuidedNotesTaskProps {
   goal: string;
   steps: NotesStep[];
+  mode?: SimMode;
+  hint?: string;
   onResult: (success: boolean) => void;
 }
 
-export default function GuidedNotesTask({ goal, steps, onResult }: GuidedNotesTaskProps) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [done, setDone] = useState(false);
-  const [flash, setFlash] = useState(false);
+export default function GuidedNotesTask({ goal, steps, mode, hint, onResult }: GuidedNotesTaskProps) {
   const [toolbarNudge, setToolbarNudge] = useState<string | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
-  const step = steps[stepIndex];
-  const finished = stepIndex >= steps.length;
+  const { step, stepIndex, finished, done, flash, tryStep, wanted, wants, objectives } =
+    useStepRunner({ steps, mode, onResult, flashMs: 900, finishDelayMs: 1400 });
 
   // Auto-focus editor on step change
   useEffect(() => {
@@ -42,38 +42,26 @@ export default function GuidedNotesTask({ goal, steps, onResult }: GuidedNotesTa
     return () => clearTimeout(t);
   }, [toolbarNudge]);
 
-  function completeStep() {
-    setFlash(true);
-    setTimeout(() => setFlash(false), 900);
-    if (stepIndex + 1 >= steps.length) {
-      setDone(true);
-      setTimeout(() => onResult(true), 1400);
-    }
-    setStepIndex((i) => i + 1);
-  }
-
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (!step || step.action === "type") return;
-    if (checkNotesShortcut(step.action, e)) {
-      // For formatting commands: call execCommand so the effect is visible
-      if (step.action === "bold")      { e.preventDefault(); document.execCommand("bold"); }
-      else if (step.action === "italic")    { e.preventDefault(); document.execCommand("italic"); }
-      else if (step.action === "underline") { e.preventDefault(); document.execCommand("underline"); }
-      // For undo/redo: let execCommand handle it naturally (or let browser do it)
-      else if (step.action === "undo") { e.preventDefault(); document.execCommand("undo"); }
-      else if (step.action === "redo") { e.preventDefault(); document.execCommand("redo"); }
-      // For select-all/copy/cut/paste: let browser handle, just detect
-      completeStep();
-    }
+    // Guided mode only recognizes the current shortcut; assessment mode accepts any one still open.
+    const hit = wanted((s) => s.action !== "type" && checkNotesShortcut(s.action, e));
+    if (!hit) return;
+    // Formatting commands need execCommand so the effect is visible; select-all/copy/cut/paste
+    // and undo/redo are left to the browser and merely detected.
+    if (hit.action === "bold")           { e.preventDefault(); document.execCommand("bold"); }
+    else if (hit.action === "italic")    { e.preventDefault(); document.execCommand("italic"); }
+    else if (hit.action === "underline") { e.preventDefault(); document.execCommand("underline"); }
+    else if (hit.action === "undo")      { e.preventDefault(); document.execCommand("undo"); }
+    else if (hit.action === "redo")      { e.preventDefault(); document.execCommand("redo"); }
+    tryStep((s) => s.action === hit.action);
   }
 
   function handleInput() {
-    if (!step || step.action !== "type" || !step.value) return;
     const text = editorRef.current?.textContent ?? "";
-    if (text.includes(step.value)) completeStep();
+    tryStep((s) => s.action === "type" && !!s.value && (s.value === "any" ? text.trim().length > 0 : text.includes(s.value)));
   }
 
-  const isFormatStep = step && (step.action === "bold" || step.action === "italic" || step.action === "underline");
+  const formatNudge = (fmt: "bold" | "italic" | "underline") => wants((s) => s.action === fmt);
 
   return (
     <SimulatorFrame
@@ -85,6 +73,8 @@ export default function GuidedNotesTask({ goal, steps, onResult }: GuidedNotesTa
       done={done}
       goal={goal}
       flash={flash}
+      objectives={objectives}
+      hint={hint}
     >
       <AppWindow
         title="Notes"
@@ -100,7 +90,7 @@ export default function GuidedNotesTask({ goal, steps, onResult }: GuidedNotesTa
                 key={fmt}
                 onMouseDown={(e) => {
                   e.preventDefault(); // don't steal focus from editor
-                  if (isFormatStep && step?.action === fmt) {
+                  if (formatNudge(fmt)) {
                     setToolbarNudge("Nice — that works! For this lesson, try the keyboard shortcut.");
                   } else {
                     document.execCommand(fmt);
@@ -109,7 +99,7 @@ export default function GuidedNotesTask({ goal, steps, onResult }: GuidedNotesTa
                 }}
                 className={`w-8 h-8 rounded border-2 border-gray-300 font-semibold text-sm hover:bg-gray-200 ${
                   fmt === "bold" ? "font-black" : fmt === "italic" ? "italic" : "underline"
-                } ${isFormatStep && step?.action === fmt ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
+                } ${step?.action === fmt ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
                 aria-label={fmt}
               >
                 {fmt === "bold" ? "B" : fmt === "italic" ? "I" : "U"}
