@@ -5,10 +5,24 @@
   "order": 213,
   "title": "Arrow keys",
   "videoUrl": "",
-  "drDigitalIntro": "The four arrow keys move you around.\n• Go up, down, left, and right.\n• Move through text, documents, or games — no mouse needed.",
+  "drDigitalIntro": "The four arrow keys move you around — no mouse needed.\n• Press the right or down arrow to move to the next item.\n• Press the left or up arrow to move back.\n• Press Enter to open whichever item is highlighted.\n• Arrow keys work in file lists, menus, web pages, and many other places.",
   "playgroundTask": {
-    "type": "none"
+    "type": "guided-files",
+    "goal": "Navigate a file list using only the arrow keys",
+    "keyboardOnly": true,
+    "steps": [
+      {
+        "say": "Press the right or down arrow key until GroceryList.txt is highlighted.",
+        "action": "arrow-select",
+        "target": "GroceryList.txt"
+      },
+      {
+        "say": "Now press Enter to open it.",
+        "action": "open-file",
+        "target": "GroceryList.txt"
+      }
+    ]
   },
-  "drDigitalSuccess": "Those are your arrow keys — precise movement in every direction!",
-  "drDigitalHint": "Find the four arrow keys in the bottom-right area, then click Continue."
+  "drDigitalSuccess": "You used the arrow keys to navigate and Enter to open a file — no mouse needed!",
+  "drDigitalHint": "Click inside the file list first so it can receive key presses, then press the right or down arrow key to move the highlight. Keep pressing until GroceryList.txt is highlighted, then press Enter."
 }

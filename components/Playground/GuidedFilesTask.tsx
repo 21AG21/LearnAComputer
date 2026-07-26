@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { FolderIcon } from "./Icons";
 import FileManager, { SaveDialog } from "./Desktop/FileManager";
-import type { Loc } from "./Desktop/FileManager";
+import type { Item, Loc } from "./Desktop/FileManager";
 import { LOC_TITLE } from "./Desktop/filesData";
 
 export type GuidedStep = {
   say: string;
   action:
     | "open-file" | "open-folder" | "go-to" | "new-folder" | "rename"
-    | "move" | "search" | "delete" | "restore" | "save";
+    | "move" | "search" | "delete" | "restore" | "save" | "arrow-select";
   target?: string;
   value?: string;
   into?: string;
@@ -22,6 +22,8 @@ interface GuidedFilesTaskProps {
   goal: string;
   steps: GuidedStep[];
   onResult: (success: boolean) => void;
+  /** When true, FileManager blocks mouse clicks and only accepts keyboard/arrow input. */
+  keyboardOnly?: boolean;
 }
 
 function computeHighlight(
@@ -35,6 +37,7 @@ function computeHighlight(
     case "open-file":
     case "open-folder":
     case "move":
+    case "arrow-select":
       return { kind: "item", target: step.target };
     case "go-to":
       return { kind: "sidebar", target: step.target };
@@ -62,7 +65,7 @@ function computeHighlight(
   }
 }
 
-export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTaskProps) {
+export default function GuidedFilesTask({ goal, steps, onResult, keyboardOnly }: GuidedFilesTaskProps) {
   const [stepIndex, setStepIndex]             = useState(0);
   const [phase, setPhase]                     = useState(0);
   const [pendingComplete, setPendingComplete] = useState(false);
@@ -76,6 +79,20 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
 
   const step = steps[stepIndex];
   const finished = stepIndex >= steps.length;
+
+  // Track current file positions so we can auto-complete a move step when already satisfied.
+  const itemsRef = useRef<Item[]>([]);
+
+  useEffect(() => {
+    if (!step || step.action !== "move" || !step.target || !step.into) return;
+    const fileItem = itemsRef.current.find((x) => x.name === step.target);
+    if (!fileItem) return;
+    const locTitle = LOC_TITLE[fileItem.loc as Loc];
+    if (locTitle === step.into) { completeStep(); return; }
+    const destFolder = itemsRef.current.find((x) => x.kind === "folder" && x.name === step.into);
+    if (destFolder && fileItem.loc === destFolder.id) completeStep();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepIndex]);
 
   function completeStep() {
     setFlash(true);
@@ -128,6 +145,7 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
           }}
           onItemClick={(item) => {
             if (!step) return;
+            if (step.action === "arrow-select" && item.name === step.target) { completeStep(); return; }
             if (step.action === "rename"  && phase === 0 && item.name === step.target) setPhase(1);
             if (step.action === "delete"  && phase === 0 && item.name === step.target) setPhase(1);
             if (step.action === "restore" && phase === 1 && item.name === step.target) setPhase(2);
@@ -162,6 +180,8 @@ export default function GuidedFilesTask({ goal, steps, onResult }: GuidedFilesTa
             if (destName === step.into) { setNudge(null); completeStep(); }
             else setNudge(`Oops — drag it into ${step.into} instead`);
           }}
+          keyboardNav={keyboardOnly}
+          onItemsChange={(items) => { itemsRef.current = items; }}
           onSearchChange={(q) => {
             if (step?.action === "search" && step.reveal) {
               const trimmed = q.trim().toLowerCase();

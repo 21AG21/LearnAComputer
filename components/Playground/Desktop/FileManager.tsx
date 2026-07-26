@@ -44,6 +44,10 @@ export interface FileManagerProps {
   /** destName is the folder display name (e.g. "Documents"), not the Loc id */
   onMoved?: (item: Item, destName: string) => void;
   onSearchChange?: (query: string) => void;
+  /** Fires whenever items change — lets parents check preconditions for auto-complete. */
+  onItemsChange?: (items: Item[]) => void;
+  /** When true: arrow keys navigate, Enter opens, mouse clicks are blocked with a nudge. */
+  keyboardNav?: boolean;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -70,6 +74,8 @@ export default function FileManager({
   onRestoreButtonClick,
   onMoved,
   onSearchChange,
+  onItemsChange,
+  keyboardNav = false,
 }: FileManagerProps) {
   const enabled: FileManagerEnabled = enabledProp ?? ALL_ENABLED;
 
@@ -81,6 +87,16 @@ export default function FileManager({
   const [naming, setNaming]     = useState<{ id: string; draft: string } | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [draggedFile, setDraggedFile] = useState<string | null>(null);
+  const [kbNudge, setKbNudge]       = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!kbNudge) return;
+    const t = setTimeout(() => setKbNudge(null), 2000);
+    return () => clearTimeout(t);
+  }, [kbNudge]);
+
+  // Notify parent whenever items change so it can auto-complete precondition-already-met steps.
+  useEffect(() => { onItemsChange?.(items); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reset ephemeral state when the parent increments resetKey
   useEffect(() => {
@@ -129,11 +145,34 @@ export default function FileManager({
   }
 
   function handleItemClick(item: Item) {
+    if (keyboardNav) { setKbNudge("Use the arrow keys for this one — no clicking!"); return; }
     setSelected(item.id);
     onItemClick?.(item);
   }
 
-  function handleItemDoubleClick(item: Item) {
+  function handleGridKeyDown(e: React.KeyboardEvent) {
+    if (!keyboardNav || visible.length === 0) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault();
+      const idx = visible.findIndex((i) => i.id === selected);
+      const next = visible[idx < visible.length - 1 ? idx + 1 : 0];
+      setSelected(next.id);
+      onItemClick?.(next);
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      const idx = visible.findIndex((i) => i.id === selected);
+      const prev = visible[idx > 0 ? idx - 1 : visible.length - 1];
+      setSelected(prev.id);
+      onItemClick?.(prev);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const sel = visible.find((i) => i.id === selected);
+      if (sel) handleItemDoubleClick(sel, true);
+    }
+  }
+
+  function handleItemDoubleClick(item: Item, fromKeyboard = false) {
+    if (keyboardNav && !fromKeyboard) { setKbNudge("Use the arrow keys for this one — no clicking!"); return; }
     if (item.kind === "folder") {
       setLocation(item.id as Loc);
       setSelected(null);
@@ -314,7 +353,11 @@ export default function FileManager({
         </div>
 
         {/* File grid */}
-        <div className="flex-1 min-h-0 overflow-auto p-4 bg-white relative">
+        <div
+          className="flex-1 min-h-0 overflow-auto p-4 bg-white relative"
+          tabIndex={keyboardNav ? 0 : undefined}
+          onKeyDown={keyboardNav ? handleGridKeyDown : undefined}
+        >
           {visible.length === 0 && (
             <p className="text-gray-400 text-center mt-10 text-lg">
               {inTrash ? "The Trash is empty." : search ? "No files match your search." : "This folder is empty."}
@@ -365,9 +408,9 @@ export default function FileManager({
             })}
           </div>
 
-          {nudge && (
+          {(nudge || kbNudge) && (
             <div className="sticky bottom-0 left-0 right-0 bg-orange-100 border-2 border-orange-400 text-orange-800 px-4 py-2 rounded-lg font-semibold text-sm text-center mt-4">
-              {nudge}
+              {kbNudge ?? nudge}
             </div>
           )}
         </div>

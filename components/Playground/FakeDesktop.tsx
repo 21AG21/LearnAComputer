@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
 import FilesApp from "./Desktop/FilesApp";
+import type { FileManagerHighlight, FileManagerEnabled } from "./Desktop/FileManager";
 import MailApp from "./Desktop/MailApp";
 import SettingsApp from "./Desktop/SettingsApp";
 import NotesApp from "./Desktop/NotesApp";
@@ -34,6 +35,8 @@ interface SettingsCallbacks {
 interface FakeDesktopProps {
   onAppOpened?: (app: DesktopAppId) => void;
   filesHint?: string;
+  filesHighlight?: FileManagerHighlight | null;
+  filesEnabled?: FileManagerEnabled;
   onFileOpened?: (name: string) => void;
   highlightApp?: DesktopAppId;
   interceptApps?: DesktopAppId[];
@@ -84,7 +87,7 @@ export default function FakeDesktop(props: FakeDesktopProps) {
   );
 }
 
-function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
+function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
   const theme = useSimTheme();
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
   // Apps that are open-but-minimized (still running, not quit) — these show a green dot on the desktop.
@@ -352,6 +355,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, onFileOpened, highlightApp, 
             onClose={() => closeApp("files")}
             onMinimize={minimizeApp}
             hint={filesHint}
+            highlight={filesHighlight}
+            enabled={filesEnabled}
             showHeader={false}
             onFileOpened={onFileOpened}
           />

@@ -43,6 +43,7 @@ export function makeItems(): Item[] {
     { id: "vacation",  name: "VacationPhoto.png",         kind: "file", loc: "home",      ext: "png",  body: "A photo from the beach" },
     { id: "song",      name: "FavoriteSong.mp3",          kind: "file", loc: "home",      ext: "mp3",  body: "3 minutes 24 seconds of music" },
     { id: "taxreturn", name: "TaxReturn.pdf",             kind: "file", loc: "home",      ext: "pdf",  body: "Your 2025 tax return document." },
+    { id: "invitation", name: "BirthdayInvitation.txt",    kind: "file", loc: "documents", ext: "txt",  body: "A birthday invitation — double-click to edit it." },
     { id: "resume",    name: "Resume.pdf",                kind: "file", loc: "documents", ext: "pdf",  body: "Your work history and skills." },
     { id: "letter",    name: "Letter.docx",               kind: "file", loc: "documents", ext: "docx", body: "Dear Sir or Madam..." },
     { id: "sunset",    name: "Sunset.png",                kind: "file", loc: "pictures",  ext: "png",  body: "An orange sunset" },

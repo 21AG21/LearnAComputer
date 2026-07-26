@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import TextEditorTask from "./TextEditorTask";
-import MusicNoteIcon from "./MusicNoteIcon";
-import { FILLER_FILES, FileEntry } from "./Desktop/filesData";
+import SimulatorFrame from "./SimulatorFrame";
+import FakeDesktop from "./FakeDesktop";
+import AppWindow from "./Desktop/AppWindow";
+import { FileDocIcon } from "./Icons";
+import { checkTextEditDetailed, type TextEditFeedback } from "./TaskChecker";
 
 interface EditFileTaskProps {
   instructions: string;
@@ -25,80 +26,113 @@ export default function EditFileTask({
   mustNotInclude,
   onResult,
 }: EditFileTaskProps) {
-  const [editing, setEditing] = useState(false);
-  const targetFile: FileEntry = { name: fileName, contents: startingText };
-  const allFiles = [...FILLER_FILES, targetFile];
-  const [selected, setSelected] = useState<FileEntry>(targetFile);
+  const [phase, setPhase] = useState<"desktop" | "files" | "editing">("desktop");
+  const [text, setText] = useState(startingText);
+  const [feedback, setFeedback] = useState<TextEditFeedback | null>(null);
+  const [showExample, setShowExample] = useState(false);
+  const [done, setDone] = useState(false);
 
-  if (editing) {
+  function handleSave() {
+    const result = checkTextEditDetailed(text, mustInclude, mustNotInclude);
+    if (result.pass) {
+      setFeedback(null);
+      setDone(true);
+      setTimeout(() => onResult(true), 1400);
+    } else {
+      setFeedback(result);
+    }
+  }
+
+  const instruction =
+    phase === "desktop" ? "Open Files — click the glowing icon in the dock." :
+    phase === "files"   ? `Go to Documents in the sidebar, then double-click ${fileName} to open it.` :
+                          instructions;
+
+  if (phase === "editing" || done) {
     return (
-      <TextEditorTask
-        instructions={instructions}
-        startingText={startingText}
-        correctText={correctText}
-        mustInclude={mustInclude}
-        mustNotInclude={mustNotInclude}
-        onResult={onResult}
-      />
+      <SimulatorFrame
+        appName={fileName}
+        appIcon={<FileDocIcon size={20} />}
+        instruction={instruction}
+        done={done}
+        goal="Fix the invitation and save it"
+      >
+        <AppWindow
+          title={fileName}
+          icon={<FileDocIcon size={18} />}
+          onClose={() => setPhase("files")}
+          onMinimize={() => {}}
+        >
+          <div className="h-full flex flex-col overflow-hidden">
+            <div className="flex-1 flex min-h-0 gap-0">
+              <textarea
+                value={text}
+                onChange={(e) => { setText(e.target.value); setFeedback(null); }}
+                aria-label="File contents"
+                className={`flex-1 resize-none p-6 text-base leading-relaxed border-0 focus:outline-none font-sans ${
+                  showExample ? "border-r-2 border-gray-200" : ""
+                }`}
+              />
+              {showExample && correctText && (
+                <div className="w-1/2 border-l-2 border-green-400 bg-green-50 p-6 overflow-y-auto">
+                  <p className="text-xs font-bold uppercase tracking-wide text-green-700 mb-3">Correct version</p>
+                  <p className="whitespace-pre-wrap text-base leading-relaxed text-gray-800">{correctText}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="shrink-0 border-t-2 border-gray-200 px-6 py-3 flex items-center gap-4 bg-gray-50">
+              <button
+                onClick={handleSave}
+                className="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg border-2 border-black hover:bg-blue-700"
+              >
+                Save
+              </button>
+              {correctText && (
+                <button
+                  onClick={() => setShowExample((s) => !s)}
+                  className="text-sm text-gray-600 underline"
+                >
+                  {showExample ? "Hide example" : "Show me an example"}
+                </button>
+              )}
+              {feedback && (
+                <div className="text-red-600 text-sm font-medium space-y-0.5">
+                  {feedback.presentBadWords.length > 0 && (
+                    <p>Misspellings to fix: {feedback.presentBadWords.map((w) => `"${w}"`).join(", ")}</p>
+                  )}
+                  {feedback.missingRules.length > 0 && (
+                    <p>
+                      {feedback.missingRules.length === 1 ? "1 required line" : `${feedback.missingRules.length} required lines`} still{" "}
+                      {feedback.missingRules.length === 1 ? "needs" : "need"} work — try Show&nbsp;me&nbsp;an&nbsp;example.
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </AppWindow>
+      </SimulatorFrame>
     );
   }
 
   return (
-    <div className="h-full bg-[#c9e4f7] flex flex-col gap-3 p-4">
-      <p className="text-lg border-2 border-yellow-400 bg-yellow-100 rounded px-4 py-2">
-        A new file showed up in your Files app: <span className="font-bold">{fileName}</span>. Open it below to take a
-        look.
-      </p>
-      <div className="flex-1 flex gap-6 min-h-0">
-        {/* File list — identical markup to the standalone Files app, plus this one file */}
-        <div className="w-1/2">
-          <ul className="border-2 border-black divide-y-2 divide-black bg-white">
-            {allFiles.map((file) => (
-              <li
-                key={file.name}
-                onDoubleClick={() => setSelected(file)}
-                className={`px-3 py-3 text-3xl font-bold cursor-pointer select-none ${
-                  selected.name === file.name ? "bg-blue-900 text-white" : ""
-                }`}
-              >
-                {file.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Preview pane */}
-        <div className="relative flex-1 bg-[#8fb4cb] border-2 border-black p-4">
-          {selected.name === fileName && (
-            <button
-              onClick={() => setEditing(true)}
-              className="sticky top-0 z-10 flex items-center gap-2 border-2 border-black bg-yellow-100 px-3 py-1.5 rounded font-bold mb-3"
-            >
-              <ExpandIcon className="w-5 h-5" />
-              Click here to edit
-            </button>
-          )}
-          {selected.image && (
-            <Image src={selected.image} alt={selected.name} fill sizes="50vw" className="object-contain p-2" />
-          )}
-          {selected.icon === "music" && (
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-              <MusicNoteIcon className="h-full" />
-            </div>
-          )}
-          {selected.contents && (
-            <p className="whitespace-pre-wrap text-2xl font-semibold text-white">{selected.contents}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ExpandIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-      <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <SimulatorFrame
+      appName="Files"
+      appIcon={<FileDocIcon size={20} />}
+      instruction={instruction}
+      stepIndex={phase === "desktop" ? 0 : 1}
+      totalSteps={2}
+      done={false}
+      goal={`Open and fix ${fileName}`}
+    >
+      <FakeDesktop
+        highlightApp={phase === "desktop" ? "files" : undefined}
+        onAppOpened={(app) => { if (app === "files") setPhase("files"); }}
+        filesHighlight={phase === "files" ? { kind: "item", target: fileName } : null}
+        filesEnabled={{ open: true }}
+        onFileOpened={(name) => { if (name === fileName) setPhase("editing"); }}
+      />
+    </SimulatorFrame>
   );
 }

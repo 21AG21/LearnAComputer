@@ -62,6 +62,8 @@ export type PlaygroundTask =
   | {
       type: "guided-files";
       goal: string;
+      /** When true, FileManager blocks mouse clicks and only accepts keyboard input. */
+      keyboardOnly?: boolean;
       steps: Array<{
         say: string;
         action:
@@ -74,7 +76,8 @@ export type PlaygroundTask =
           | "search"
           | "delete"
           | "restore"
-          | "save";
+          | "save"
+          | "arrow-select";
         target?: string;
         value?: string;
         into?: string;

@@ -150,7 +150,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-files" && (
             <DesktopLaunch app="files">
-              <GuidedFilesTask goal={task.goal} steps={task.steps} onResult={onResult} />
+              <GuidedFilesTask goal={task.goal} steps={task.steps} keyboardOnly={task.keyboardOnly} onResult={onResult} />
             </DesktopLaunch>
           )}
           {task.type === "guided-browser" && (
