@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import {
   HomeIcon, FolderIcon, TrashIcon,
   ImageIcon, FileDocIcon, NoteIcon, SpreadsheetIcon, BookClosedIcon, MusicIcon,
+  DownloadIcon,
 } from "../Icons";
 
 // ── Shared types ────────────────────────────────────────────────────────────
@@ -28,8 +29,8 @@ export const LOC_TITLE: Record<Loc, string> = {
 export const SIDEBAR: { id: Loc; label: string; icon: ReactNode }[] = [
   { id: "home",      label: "Home",      icon: <HomeIcon size={16} /> },
   { id: "documents", label: "Documents", icon: <FolderIcon size={16} /> },
-  { id: "pictures",  label: "Pictures",  icon: <FolderIcon size={16} /> },
-  { id: "downloads", label: "Downloads", icon: <FolderIcon size={16} /> },
+  { id: "pictures",  label: "Pictures",  icon: <ImageIcon size={16} /> },
+  { id: "downloads", label: "Downloads", icon: <DownloadIcon size={16} /> },
   { id: "trash",     label: "Trash",     icon: <TrashIcon size={16} /> },
 ];
 
