@@ -142,7 +142,11 @@ export type PlaygroundTask =
           | "start-call"
           | "mute"
           | "camera-off"
-          | "end-call";
+          | "end-call"
+          | "create-group"
+          | "add-to-group"
+          | "send-group-message"
+          | "pick-emoji";
         target?: string;
         value?: string;
       }>;

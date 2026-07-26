@@ -141,7 +141,7 @@ Each file defines one sub-lesson:
 | `url-navigator` | UrlNavigatorTask | Type a URL into a fake browser address bar |
 | `guided-files` | GuidedFilesTask | Guided file manager: open/create/rename/move/search/delete/restore/save |
 | `guided-browser` | GuidedBrowserTask | Guided browser: navigate/search/tabs/cookies/popups/reload/zoom/downloads |
-| `guided-messaging` | GuidedMessagingTask | Guided messaging + video calls: contacts, messages, reactions, photos, calls |
+| `guided-messaging` | GuidedMessagingTask | Guided messaging + video calls: contacts, messages, reactions, emoji picker, photos, calls, group chats |
 | `guided-email` | GuidedEmailTask | Guided email: compose/reply/forward, spam, attach files, CC/BCC, unsend |
 | `guided-photos` | GuidedPhotosTask | Guided photos: edit (crop/rotate/brightness/contrast/filters), share, albums |
 | `guided-app-store` | GuidedAppStoreTask | Guided app store: search, install, permissions, update, delete |
@@ -241,7 +241,7 @@ Entering an unknown URL shows a friendly "not in the practice browser" fallback 
 
 #### `guided-messaging` schema
 
-A self-contained simulated messaging and video calling app. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. Four contacts are hardcoded: Alex, Jordan, Sam, Grandma — each with preset conversation threads.
+A self-contained simulated messaging and video calling app. The JSON provides a `goal` and `steps`; each step highlights the exact control and only advances when the correct action is done. Five contacts are hardcoded: Alex, Jordan, Sam, Grandma, Doggo — each with preset conversation threads.
 
 ```json
 "playgroundTask": {
@@ -251,16 +251,22 @@ A self-contained simulated messaging and video calling app. The JSON provides a 
     { "say": "Click on Alex to open their conversation.", "action": "select-contact", "target": "alex" },
     { "say": "Type a message and send it.", "action": "send-message", "value": "Hello!" },
     { "say": "React to their message.", "action": "add-reaction" },
+    { "say": "Click the smiley button to open the emoji picker.", "action": "pick-emoji" },
     { "say": "Send a photo.", "action": "attach-photo" },
     { "say": "Start a video call.", "action": "start-call" },
     { "say": "Mute your microphone.", "action": "mute" },
     { "say": "Turn off your camera.", "action": "camera-off" },
-    { "say": "End the call.", "action": "end-call" }
+    { "say": "End the call.", "action": "end-call" },
+    { "say": "Click the + button next to Contacts to start a group.", "action": "create-group" },
+    { "say": "Check the box next to Alex.", "action": "add-to-group", "target": "alex" },
+    { "say": "Click Start Chat then send a message.", "action": "send-group-message", "value": "Hey everyone" }
   ]
 }
 ```
 
-Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/grandma), `send-message` (2-phase: focus input then send; `value` is the required text), `add-reaction` (2-phase: double-click/long-press message then pick emoji), `attach-photo` (2-phase: click + button then pick photo from grid), `start-call`, `mute`, `camera-off`, `end-call`. Video call actions require an active call. Reactions require double-click or press-and-hold (never single click).
+Actions: `select-contact` (`target`: lowercase contact name — alex/jordan/sam/grandma/doggo), `send-message` (2-phase: focus input then send; `value` is the required text), `add-reaction` (2-phase: double-click/long-press message then pick emoji), `pick-emoji` (2-phase: click smiley button then pick emoji from picker; inserts emoji into the draft), `attach-photo` (2-phase: click + button then pick photo from grid), `start-call`, `mute`, `camera-off`, `end-call`. Video call actions require an active call. Reactions require double-click or press-and-hold (never single click).
+
+**Group chat actions**: `create-group` (click the + button in the contacts header → contact picker opens), `add-to-group` (`target`: lowercase contact id — checks that contact in the picker; can be used multiple times to add multiple people), `send-group-message` (2-phase: if group picker is still open, highlight "Start Chat" button first; after group is created, type + send; `value` is the required message text, empty string accepts anything). Group messages show each sender's avatar and name.
 
 #### `guided-email` schema
 

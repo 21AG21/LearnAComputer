@@ -14,7 +14,11 @@ export type GuidedMessagingStep = {
     | "start-call"
     | "mute"
     | "camera-off"
-    | "end-call";
+    | "end-call"
+    | "create-group"
+    | "add-to-group"
+    | "send-group-message"
+    | "pick-emoji";
   target?: string;
   value?: string;
 };
@@ -30,6 +34,12 @@ interface Contact {
   name: string;
   avatar: string;
   status: string;
+}
+
+interface GroupInfo {
+  id: string;
+  name: string;
+  memberIds: string[];
 }
 
 const CONTACTS: Contact[] = [
@@ -49,11 +59,14 @@ const PHOTO_OPTIONS = [
   { src: "/playgrounds/Snake.png", label: "Snake" },
 ];
 
+const EMOJI_OPTIONS = ["😀", "😂", "❤️", "👍", "🎉", "😎", "🤔", "😢", "🔥", "✨", "🙏", "💯"];
+
 interface Message {
   from: "me" | "contact";
   text: string;
   photoSrc?: string;
   reactions?: string[];
+  senderId?: string; // for group messages: the contact id who sent it
 }
 
 const INITIAL_THREADS: Record<string, Message[]> = {
@@ -127,6 +140,16 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   const [attachMenu, setAttachMenu] = useState(false);
   const [photoPicker, setPhotoPicker] = useState(false);
   const [reactionTarget, setReactionTarget] = useState<number | null>(null);
+  // Group chat state
+  const [creatingGroup, setCreatingGroup] = useState(false);
+  const [groupPicks, setGroupPicks] = useState<string[]>([]);
+  const [groups, setGroups] = useState<GroupInfo[]>([]);
+  const [groupThreads, setGroupThreads] = useState<Record<string, Message[]>>({});
+  const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
+  const [groupDraft, setGroupDraft] = useState("");
+  // Emoji picker state
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -135,10 +158,12 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   const currentMessages = activeContact ? threads[activeContact] ?? [] : [];
   const currentContactObj = CONTACTS.find((c) => c.id === activeContact);
   const lastContactIdx = currentMessages.reduce((acc, m, i) => (m.from === "contact" ? i : acc), -1);
+  const currentGroupObj = groups.find((g) => g.id === activeGroupId);
+  const currentGroupMessages = activeGroupId ? groupThreads[activeGroupId] ?? [] : [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [currentMessages.length]);
+  }, [currentMessages.length, currentGroupMessages.length]);
 
   const completeStep = useCallback(() => {
     setFlash(true);
@@ -147,6 +172,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setAttachMenu(false);
     setPhotoPicker(false);
     setReactionTarget(null);
+    setEmojiPickerOpen(false);
     if (stepIndex + 1 >= steps.length) {
       setDone(true);
       setTimeout(() => onResult(true), 1500);
@@ -178,6 +204,18 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
         return kind === "camera-btn";
       case "end-call":
         return kind === "endcall-btn";
+      case "create-group":
+        return kind === "new-group-btn";
+      case "add-to-group":
+        return kind === "group-pick-contact" && name === step.target;
+      case "send-group-message":
+        if (creatingGroup) return kind === "start-chat-btn";
+        if (kind === "group-message-input" && groupDraft.trim() === "") return true;
+        if (kind === "group-send-btn" && groupDraft.trim() !== "") return true;
+        return false;
+      case "pick-emoji":
+        if (emojiPickerOpen) return kind === "emoji-item";
+        return kind === "emoji-btn";
       default:
         return false;
     }
@@ -187,9 +225,12 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
 
   function handleSelectContact(id: string) {
     setActiveContact(id);
+    setActiveGroupId(null);
+    setCreatingGroup(false);
     setAttachMenu(false);
     setPhotoPicker(false);
     setReactionTarget(null);
+    setEmojiPickerOpen(false);
     if (step?.action === "select-contact" && step.target === id) {
       completeStep();
     }
@@ -201,6 +242,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     const next = [...currentMessages, { from: "me" as const, text }];
     setThreads((prev) => ({ ...prev, [activeContact]: next }));
     setDraft("");
+    setEmojiPickerOpen(false);
     if (step?.action === "send-message") {
       const target = (step.value ?? "").toLowerCase();
       if (!target || text.toLowerCase().includes(target)) {
@@ -245,6 +287,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   function handleAttachBtn() {
     setAttachMenu((prev) => !prev);
     setPhotoPicker(false);
+    setEmojiPickerOpen(false);
   }
 
   function handleAttachPhotosRow() {
@@ -252,9 +295,8 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setAttachMenu(false);
   }
 
-  function handleAttachOtherRow(label: string) {
+  function handleAttachOtherRow(_label: string) {
     setAttachMenu(false);
-    // Informational — no real action for non-photo attachments
   }
 
   function handlePhotoPick(src: string) {
@@ -273,6 +315,7 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
     setCameraOff(false);
     setAttachMenu(false);
     setPhotoPicker(false);
+    setEmojiPickerOpen(false);
     if (step?.action === "start-call") completeStep();
   }
 
@@ -289,6 +332,84 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
   function handleEndCall() {
     setInCall(false);
     if (step?.action === "end-call") completeStep();
+  }
+
+  // --- Group handlers ---
+  function handleNewGroupBtn() {
+    setCreatingGroup(true);
+    setGroupPicks([]);
+    setActiveContact(null);
+    setActiveGroupId(null);
+    setEmojiPickerOpen(false);
+    if (step?.action === "create-group") completeStep();
+  }
+
+  function handleGroupPickContact(contactId: string) {
+    if (!groupPicks.includes(contactId)) {
+      setGroupPicks((prev) => [...prev, contactId]);
+    }
+    if (step?.action === "add-to-group" && step.target === contactId) {
+      completeStep();
+    }
+  }
+
+  function handleStartChat() {
+    if (groupPicks.length === 0) return;
+    const newGroup: GroupInfo = {
+      id: `group-${Date.now()}`,
+      name: "Group Chat",
+      memberIds: [...groupPicks],
+    };
+    const firstId = groupPicks[0];
+    const seedMsg: Message = {
+      from: "contact",
+      senderId: firstId,
+      text: "Hey everyone! Glad we have a group chat now!",
+    };
+    setGroups((prev) => [...prev, newGroup]);
+    setGroupThreads((prev) => ({ ...prev, [newGroup.id]: [seedMsg] }));
+    setActiveGroupId(newGroup.id);
+    setCreatingGroup(false);
+    // Step not complete yet — user still needs to type + send
+  }
+
+  function handleGroupSend() {
+    const text = groupDraft.trim();
+    if (!text || !activeGroupId) return;
+    const next = [...currentGroupMessages, { from: "me" as const, text }];
+    setGroupThreads((prev) => ({ ...prev, [activeGroupId]: next }));
+    setGroupDraft("");
+    setEmojiPickerOpen(false);
+    if (step?.action === "send-group-message") {
+      const target = (step.value ?? "").toLowerCase();
+      if (!target || text.toLowerCase().includes(target)) {
+        completeStep();
+      }
+    }
+  }
+
+  function handleSelectGroup(groupId: string) {
+    setActiveGroupId(groupId);
+    setActiveContact(null);
+    setCreatingGroup(false);
+    setEmojiPickerOpen(false);
+  }
+
+  // --- Emoji handlers ---
+  function handleEmojiBtn() {
+    setEmojiPickerOpen((prev) => !prev);
+    setAttachMenu(false);
+    setPhotoPicker(false);
+  }
+
+  function handleEmojiPick(emoji: string) {
+    if (activeGroupId) {
+      setGroupDraft((prev) => prev + emoji);
+    } else {
+      setDraft((prev) => prev + emoji);
+    }
+    setEmojiPickerOpen(false);
+    if (step?.action === "pick-emoji") completeStep();
   }
 
   if (inCall) {
@@ -318,7 +439,6 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
               </div>
               <p className="text-sm text-green-400">Connected</p>
             </div>
-            {/* Self preview */}
             <div className="absolute bottom-4 right-4 w-24 h-32 bg-gray-700 rounded-lg border border-gray-600 overflow-hidden flex flex-col items-center justify-center">
               <div className="w-10 h-10 rounded-full bg-gray-500 mb-1" />
               <span className="text-[10px] text-gray-300 bg-gray-800/80 px-1.5 py-0.5 rounded">You (pretend)</span>
@@ -377,37 +497,219 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
       flash={flash}
     >
       <div className="flex-1 flex overflow-hidden">
-        {/* Contacts sidebar */}
+        {/* Contacts / group picker sidebar */}
         <div className="w-48 border-r bg-gray-50 flex flex-col overflow-y-auto">
-          <div className="p-3 border-b bg-gray-100">
-            <p className="font-bold text-sm text-gray-600">Contacts</p>
-          </div>
-          {CONTACTS.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => handleSelectContact(c.id)}
-              className={`flex items-center gap-3 px-3 py-3 text-left border-b transition-all hover:bg-blue-50 ${
-                activeContact === c.id ? "bg-blue-100" : ""
-              } ${hl("contact", c.id) ? pulse : ""}`}
-            >
-              <span className="relative w-9 h-9 rounded-full bg-gray-200 overflow-hidden shrink-0">
-                <Image src={c.avatar} alt={c.name} fill sizes="36px" className="object-cover" />
-              </span>
-              <div className="min-w-0">
-                <p className="font-medium text-sm truncate">{c.name}</p>
-                <p className="text-xs text-gray-500 truncate">{c.status}</p>
+          {creatingGroup ? (
+            /* Group creation picker */
+            <>
+              <div className="p-3 border-b bg-gray-100">
+                <p className="font-bold text-sm text-gray-700">New Group Chat</p>
+                <p className="text-xs text-gray-500 mt-0.5">Pick people to add</p>
               </div>
-            </button>
-          ))}
+              {CONTACTS.map((c) => {
+                const picked = groupPicks.includes(c.id);
+                return (
+                  <button
+                    key={c.id}
+                    onClick={() => handleGroupPickContact(c.id)}
+                    className={`flex items-center gap-3 px-3 py-3 text-left border-b transition-all hover:bg-blue-50 ${
+                      picked ? "bg-blue-50" : ""
+                    } ${hl("group-pick-contact", c.id) ? pulse : ""}`}
+                  >
+                    <span className="relative w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                      <Image src={c.avatar} alt={c.name} fill sizes="32px" className="object-cover" />
+                    </span>
+                    <span className="flex-1 font-medium text-sm truncate">{c.name}</span>
+                    <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                      picked ? "bg-blue-500 border-blue-500" : "border-gray-400"
+                    }`}>
+                      {picked && <span className="text-white text-[10px] font-bold">✓</span>}
+                    </span>
+                  </button>
+                );
+              })}
+              <div className="p-3 mt-auto border-t">
+                <button
+                  onClick={handleStartChat}
+                  disabled={groupPicks.length < 1}
+                  className={`w-full py-2 rounded-lg text-sm font-semibold transition-all ${
+                    groupPicks.length > 0
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  } ${hl("start-chat-btn") ? pulse : ""}`}
+                >
+                  Start Chat
+                </button>
+              </div>
+            </>
+          ) : (
+            /* Normal contacts list */
+            <>
+              <div className="p-3 border-b bg-gray-100 flex items-center justify-between">
+                <p className="font-bold text-sm text-gray-600">Contacts</p>
+                <button
+                  onClick={handleNewGroupBtn}
+                  title="New group chat"
+                  className={`w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold hover:bg-blue-200 transition-all ${
+                    hl("new-group-btn") ? pulse : ""
+                  }`}
+                >
+                  +
+                </button>
+              </div>
+              {CONTACTS.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => handleSelectContact(c.id)}
+                  className={`flex items-center gap-3 px-3 py-3 text-left border-b transition-all hover:bg-blue-50 ${
+                    activeContact === c.id ? "bg-blue-100" : ""
+                  } ${hl("contact", c.id) ? pulse : ""}`}
+                >
+                  <span className="relative w-9 h-9 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                    <Image src={c.avatar} alt={c.name} fill sizes="36px" className="object-cover" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{c.name}</p>
+                    <p className="text-xs text-gray-500 truncate">{c.status}</p>
+                  </div>
+                </button>
+              ))}
+              {/* Groups section */}
+              {groups.length > 0 && (
+                <>
+                  <div className="px-3 py-2 bg-gray-100 border-t border-b">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Groups</p>
+                  </div>
+                  {groups.map((g) => (
+                    <button
+                      key={g.id}
+                      onClick={() => handleSelectGroup(g.id)}
+                      className={`flex items-center gap-3 px-3 py-3 text-left border-b transition-all hover:bg-blue-50 ${
+                        activeGroupId === g.id ? "bg-blue-100" : ""
+                      }`}
+                    >
+                      <span className="w-9 h-9 rounded-full bg-blue-200 flex items-center justify-center shrink-0 text-blue-700 text-sm font-bold">
+                        {g.memberIds.length}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-medium text-sm truncate">{g.name}</p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {g.memberIds
+                            .map((id) => CONTACTS.find((c) => c.id === id)?.name ?? id)
+                            .join(", ")}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </>
+              )}
+            </>
+          )}
         </div>
 
         {/* Chat area */}
         <div className="flex-1 flex flex-col relative">
-          {!activeContact ? (
-            <div className="flex-1 flex items-center justify-center text-gray-400">
-              <p>Select a contact to start chatting</p>
-            </div>
-          ) : (
+          {activeGroupId && currentGroupObj ? (
+            /* Group chat view */
+            <>
+              {/* Group header */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b bg-gray-50">
+                <div className="flex -space-x-2">
+                  {currentGroupObj.memberIds.slice(0, 3).map((id) => {
+                    const contact = CONTACTS.find((c) => c.id === id);
+                    return contact ? (
+                      <span key={id} className="relative w-7 h-7 rounded-full bg-gray-200 overflow-hidden border-2 border-white shrink-0">
+                        <Image src={contact.avatar} alt={contact.name} fill sizes="28px" className="object-cover" />
+                      </span>
+                    ) : null;
+                  })}
+                </div>
+                <div>
+                  <p className="font-medium text-sm">{currentGroupObj.name}</p>
+                  <p className="text-xs text-gray-500">
+                    {currentGroupObj.memberIds
+                      .map((id) => CONTACTS.find((c) => c.id === id)?.name ?? id)
+                      .join(", ")}
+                  </p>
+                </div>
+              </div>
+
+              {/* Group messages */}
+              <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+                {currentGroupMessages.map((msg, i) => {
+                  const sender = msg.senderId ? CONTACTS.find((c) => c.id === msg.senderId) : null;
+                  return (
+                    <div key={i} className={`flex flex-col max-w-[75%] ${msg.from === "me" ? "self-end items-end" : "self-start items-start"}`}>
+                      {msg.from === "contact" && sender && (
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="relative w-5 h-5 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                            <Image src={sender.avatar} alt={sender.name} fill sizes="20px" className="object-cover" />
+                          </span>
+                          <span className="text-xs text-gray-500 font-medium">{sender.name}</span>
+                        </div>
+                      )}
+                      <div className={`px-4 py-2 rounded-2xl text-sm ${
+                        msg.from === "me"
+                          ? "bg-blue-500 text-white rounded-br-md"
+                          : "bg-gray-200 text-gray-900 rounded-bl-md"
+                      }`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Group compose bar */}
+              <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 relative">
+                {/* Emoji picker overlay */}
+                {emojiPickerOpen && (
+                  <div className={`absolute bottom-14 left-4 bg-white border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
+                    <p className="text-xs text-gray-500 mb-2 font-medium">Pick an emoji:</p>
+                    <div className="grid grid-cols-6 gap-1.5">
+                      {EMOJI_OPTIONS.map((emoji) => (
+                        <button
+                          key={emoji}
+                          onClick={() => handleEmojiPick(emoji)}
+                          className="w-8 h-8 text-lg hover:scale-125 transition-transform flex items-center justify-center"
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <button
+                  onClick={handleEmojiBtn}
+                  className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-lg hover:bg-gray-300 transition-all ${
+                    hl("emoji-btn") ? pulse : ""
+                  }`}
+                  title="Emoji"
+                >
+                  <span className="text-base">&#128512;</span>
+                </button>
+                <input
+                  value={groupDraft}
+                  onChange={(e) => setGroupDraft(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleGroupSend()}
+                  placeholder="Type a message..."
+                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 transition-all ${
+                    hl("group-message-input") ? pulse : ""
+                  }`}
+                />
+                <button
+                  onClick={handleGroupSend}
+                  className={`px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-all ${
+                    hl("group-send-btn") ? pulse : ""
+                  }`}
+                >
+                  Send
+                </button>
+              </div>
+            </>
+          ) : activeContact ? (
+            /* 1-to-1 chat view */
             <>
               {/* Chat header */}
               <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
@@ -460,7 +762,6 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                         ))}
                       </div>
                     )}
-                    {/* Reaction picker */}
                     {reactionTarget === i && msg.from === "contact" && (
                       <div className={`flex gap-2 mt-2 p-2 bg-white border rounded-lg shadow-lg ${hl("reaction-picker") ? pulse : ""}`}>
                         {["👍", "❤️", "😂", "😮", "😢"].map((emoji) => (
@@ -475,7 +776,6 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Send nudge */}
               {sendNudge && (
                 <div className="mx-4 mb-1 px-3 py-1.5 bg-orange-100 border border-orange-300 rounded text-sm text-orange-800">
                   {sendNudge}
@@ -550,6 +850,34 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                   </div>
                 )}
 
+                {/* Emoji picker */}
+                {emojiPickerOpen && (
+                  <div className={`absolute bottom-14 left-14 bg-white border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
+                    <p className="text-xs text-gray-500 mb-2 font-medium">Pick an emoji:</p>
+                    <div className="grid grid-cols-6 gap-1.5">
+                      {EMOJI_OPTIONS.map((emoji) => (
+                        <button
+                          key={emoji}
+                          onClick={() => handleEmojiPick(emoji)}
+                          className="w-8 h-8 text-lg hover:scale-125 transition-transform flex items-center justify-center"
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleEmojiBtn}
+                  className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-all ${
+                    hl("emoji-btn") ? pulse : ""
+                  }`}
+                  title="Emoji"
+                >
+                  <span className="text-base">&#128512;</span>
+                </button>
+
                 <input
                   value={draft}
                   onChange={(e) => { setDraft(e.target.value); setSendNudge(null); }}
@@ -569,6 +897,11 @@ export default function GuidedMessagingTask({ goal, steps, onResult }: GuidedMes
                 </button>
               </div>
             </>
+          ) : (
+            /* Empty state */
+            <div className="flex-1 flex items-center justify-center text-gray-400">
+              <p>Select a contact to start chatting</p>
+            </div>
           )}
         </div>
       </div>

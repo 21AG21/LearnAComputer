@@ -5,23 +5,32 @@
   "order": 520,
   "title": "Group Conversations",
   "videoUrl": "",
-  "drDigitalIntro": "A group chat sends a message to several people at once.\n• Click compose and add multiple contacts.\n• Everyone in the group sees the replies.\n• Great for events, family, and plans. You can add or remove people anytime.",
+  "drDigitalIntro": "A group chat lets you message several people at once.\n\n- Tap the + button in the Contacts header to start a new group.\n- Pick the people you want to add — a checkmark appears next to each one.\n- Hit Start Chat and a group thread opens.\n- Everyone in the group can see all the messages.\n- Great for planning events, staying in touch with family, or working on a project together.",
   "playgroundTask": {
     "type": "guided-messaging",
-    "goal": "You started a new conversation with Jordan",
+    "goal": "You created a group chat and sent your first message",
     "steps": [
       {
-        "say": "Click on Jordan to open a different conversation.",
-        "action": "select-contact",
+        "say": "Click the + button next to Contacts to start a new group.",
+        "action": "create-group"
+      },
+      {
+        "say": "Check the box next to Alex to add them to the group.",
+        "action": "add-to-group",
+        "target": "alex"
+      },
+      {
+        "say": "Check the box next to Jordan too.",
+        "action": "add-to-group",
         "target": "jordan"
       },
       {
-        "say": "Send Jordan a message.",
-        "action": "send-message",
-        "value": "Hey"
+        "say": "Click Start Chat to open the group — then type anything and send it.",
+        "action": "send-group-message",
+        "value": ""
       }
     ]
   },
-  "drDigitalSuccess": "Nice! You can have separate conversations with different people — each one stays in its own thread.",
-  "drDigitalHint": "Click Jordan in the contacts panel on the left, type anything in the message box, and press Enter or Send."
+  "drDigitalSuccess": "You created a group chat! Everyone in the group will see your messages — perfect for making plans with friends and family.",
+  "drDigitalHint": "Click the + button at the top of the contacts list. Check Alex and Jordan, then click Start Chat. Type anything and send."
 }
