@@ -22,20 +22,75 @@ interface GuidedSecurityTaskProps {
   steps: GuidedSecurityStep[];
   mode?: SimMode;
   hint?: string;
+  /** Mirrors the lesson's `chrome`, so the phishing section can present links the way they really arrive. */
+  chrome?: "browser" | "settings" | "mail" | "messages" | "bare";
   onResult: (success: boolean) => void;
 }
 
 type Section = "password-tester" | "login" | "2fa" | "phishing" | "privacy";
 
-const PHISHING_LINK_DATA: Record<string, { url: string; safe: boolean; reason: string }> = {
-  "Verify your account": { url: "bank-secure-login.fakesite.ru", safe: false, reason: "The URL ends in .fakesite.ru — real banks use their own domain, not a random Russian site." },
-  "View your order": { url: "amazon.com/orders", safe: true, reason: "This goes to amazon.com — the real Amazon website." },
-  "Free WiFi Login": { url: "http://free-wifi-portal.net", safe: false, reason: "This uses http:// (not secure) and goes to an unknown site that could steal your info." },
-  "Bank of America Login": { url: "https://bankofamerica.com/login", safe: true, reason: "This goes to the real Bank of America website with https://." },
-  "Complete Your Purchase": { url: "https://shop.example/checkout", safe: true, reason: "This goes to shop.example — a legitimate checkout page." },
-  "Complete Purchase": { url: "https://shop.example/checkout", safe: true, reason: "This goes to shop.example — a legitimate checkout page." },
-  "Claim 90% Discount NOW": { url: "http://deals-4u-cheap.xyz/buy", safe: false, reason: "Suspicious domain deals-4u-cheap.xyz, uses http://, and the \"90% discount NOW\" is a classic scam tactic." },
-  "Enter Card Details": { url: "http://sh0p-deals.xyz/pay", safe: false, reason: "The URL uses a zero instead of 'o' in 'sh0p' — scammers misspell real sites to trick you." },
+interface PhishingItem {
+  url: string;
+  safe: boolean;
+  reason: string;
+  /** Who it claims to be from. */
+  from: string;
+  /** Subject line in Mail; ignored in Messages, where texts have no subject. */
+  subject: string;
+  when: string;
+  /** The message body, with {link} marking where the link sits in the sentence. */
+  body: string;
+}
+
+const PHISHING_LINK_DATA: Record<string, PhishingItem> = {
+  "Verify your account": {
+    url: "bank-secure-login.fakesite.ru", safe: false,
+    reason: "The URL ends in .fakesite.ru — real banks use their own domain, not a random Russian site.",
+    from: "First National Bank Security", subject: "Unusual activity — action required", when: "8:04 am",
+    body: "We detected a sign-in from a new device. Your account will be locked in 24 hours unless you confirm it was you. {link}",
+  },
+  "View your order": {
+    url: "amazon.com/orders", safe: true,
+    reason: "This goes to amazon.com — the real Amazon website.",
+    from: "Amazon", subject: "Your order has shipped", when: "Yesterday",
+    body: "Good news — order #38291 is on its way and should arrive tomorrow. {link}",
+  },
+  "Free WiFi Login": {
+    url: "http://free-wifi-portal.net", safe: false,
+    reason: "This uses http:// (not secure) and goes to an unknown site that could steal your info.",
+    from: "+1 (555) 0142", subject: "Free WiFi", when: "Just now",
+    body: "You are near a free hotspot! Sign in here to get online: {link}",
+  },
+  "Bank of America Login": {
+    url: "https://bankofamerica.com/login", safe: true,
+    reason: "This goes to the real Bank of America website with https://.",
+    from: "Bank of America", subject: "Your monthly statement is ready", when: "Mon",
+    body: "Your February statement is available. Sign in to view it: {link}",
+  },
+  "Complete Your Purchase": {
+    url: "https://shop.example/checkout", safe: true,
+    reason: "This goes to shop.example — a legitimate checkout page.",
+    from: "Shop", subject: "You left something in your basket", when: "3h ago",
+    body: "Your basket is still saved. Pick up where you left off: {link}",
+  },
+  "Complete Purchase": {
+    url: "https://shop.example/checkout", safe: true,
+    reason: "This goes to shop.example — a legitimate checkout page.",
+    from: "Shop", subject: "You left something in your basket", when: "3h ago",
+    body: "Your basket is still saved. Pick up where you left off: {link}",
+  },
+  "Claim 90% Discount NOW": {
+    url: "http://deals-4u-cheap.xyz/buy", safe: false,
+    reason: "Suspicious domain deals-4u-cheap.xyz, uses http://, and the \"90% discount NOW\" is a classic scam tactic.",
+    from: "DEALS4U", subject: "90% OFF — TODAY ONLY!!!", when: "6:12 am",
+    body: "Congratulations!!! You have been selected for a 90% discount on everything. Offer ends in one hour. {link}",
+  },
+  "Enter Card Details": {
+    url: "http://sh0p-deals.xyz/pay", safe: false,
+    reason: "The URL uses a zero instead of 'o' in 'sh0p' — scammers misspell real sites to trick you.",
+    from: "Sh0p Deals", subject: "Payment failed — update your card", when: "11:47 pm",
+    body: "We could not process your payment. Re-enter your card to avoid cancellation. {link}",
+  },
 };
 
 function passwordStrength(pw: string): { label: string; level: number; color: string } {
@@ -85,7 +140,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
   );
 }
 
-export default function GuidedSecurityTask({ goal, steps, mode, hint, onResult }: GuidedSecurityTaskProps) {
+export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "browser", onResult }: GuidedSecurityTaskProps) {
   const [loggedIn, setLoggedIn] = useState<{ username: string; method: string } | null>(null);
 
   function inferSection(s: GuidedSecurityStep | undefined): Section {
@@ -145,8 +200,11 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, onResult }
       case "enter-2fa-code": return kind === "twofa-input";
       case "verify-2fa": return kind === "verify-btn";
       case "inspect-link": return kind === "link-reveal" && name === step.target;
-      case "mark-safe": return kind === "safe-btn";
-      case "mark-dangerous": return kind === "danger-btn";
+      case "mark-safe":
+      case "mark-dangerous":
+        if (kind === "link-reveal") return openMessage !== step.target && name === step.target;
+        if (kind === "inline-link") return openMessage === step.target && inspectedLink !== step.target;
+        return inspectedLink === step.target && kind === (step.action === "mark-safe" ? "safe-btn" : "danger-btn");
       case "toggle-setting": return kind === "privacy-toggle" && name === step.target;
       default: return false;
     }
@@ -221,6 +279,17 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, onResult }
       setLoggedIn({ username, method: "password + verification code" });
       tryStep((s) => s.action === "verify-2fa");
     }
+  }
+
+  /** Mail and Messages present the links as what they are; every other chrome keeps the plain list. */
+  const isThread = chrome === "messages";
+  const [openMessage, setOpenMessage] = useState<string | null>(null);
+
+  function handleOpenMessage(linkText: string) {
+    setOpenMessage(linkText);
+    setInspectedLink(null);
+    setWrongAnswer(null);
+    tryStep((s) => s.action === "inspect-link" && s.target === linkText);
   }
 
   function handleInspectLink(linkText: string) {
@@ -527,58 +596,113 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, onResult }
 
       {/* Phishing Inspector — with wrong-answer feedback */}
       {section === "phishing" && (
-        <div className="flex-1 overflow-y-auto p-4">
-          <h3 className="font-bold text-base mb-1">Phishing Inspector</h3>
-          <p className="text-xs text-gray-500 mb-4">Click &quot;Reveal URL&quot; to see where a link really goes, then decide if it&apos;s safe.</p>
-          <div className="flex flex-col gap-3">
+        <div className="flex-1 min-h-0 flex overflow-hidden">
+          {/* Message list — an inbox in Mail, a text thread in Messages */}
+          <div className={`${isThread ? "w-40" : "w-56"} shrink-0 border-r overflow-y-auto bg-gray-50`}>
+            <p className="px-3 py-2 text-xs font-bold uppercase tracking-wide text-gray-500 border-b bg-white">
+              {isThread ? "Messages" : "Inbox"}
+            </p>
             {phishingLinks.map((linkText) => {
-              const data = PHISHING_LINK_DATA[linkText];
+              const item = PHISHING_LINK_DATA[linkText];
               const verdict = linkVerdicts[linkText];
-              const isWrong = wrongAnswer?.link === linkText;
               return (
-                <div key={linkText} className={`p-3 border rounded-xl transition-all ${
-                  verdict === "safe" ? "border-green-300 bg-green-50" :
-                  verdict === "dangerous" ? "border-red-300 bg-red-50" :
-                  isWrong ? "border-red-400 bg-red-50 animate-[shake_0.4s_ease-in-out]" :
-                  "border-gray-200"
-                }`}>
-                  <p className="text-sm font-medium text-blue-600 underline cursor-pointer mb-2">{linkText}</p>
-                  {verdict ? (
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm inline-flex items-center gap-1">{verdict === "safe" ? <><CheckCircleIcon size={14} className="text-green-500" /> Safe</> : <><XCircleIcon size={14} className="text-red-500" /> Dangerous</>}</span>
-                        <span className="text-xs text-gray-500 font-mono truncate">{data?.url}</span>
-                      </div>
-                      <p className="text-xs text-gray-600 mt-1">{data?.reason}</p>
-                    </div>
-                  ) : inspectedLink === linkText ? (
-                    <div>
-                      <div className="bg-white border rounded px-2 py-1 text-xs font-mono text-gray-700 mb-2 truncate inline-flex items-center gap-1"><LinkIcon size={12} /> {data?.url}</div>
-                      {isWrong && (
-                        <div className="bg-red-100 border border-red-200 rounded-lg p-2 mb-2">
-                          <p className="text-xs text-red-700 font-medium">Not quite — try again!</p>
-                          <p className="text-xs text-red-600 mt-1">{wrongAnswer.reason}</p>
-                        </div>
-                      )}
-                      <div className="flex gap-2">
-                        <button onClick={() => handleVerdict("safe")} className={`flex-1 py-1.5 text-xs bg-green-500 text-white rounded-lg hover:bg-green-600 inline-flex items-center justify-center gap-1 ${hl("safe-btn") ? pulse : ""}`}><CheckCircleIcon size={12} /> Safe</button>
-                        <button onClick={() => handleVerdict("dangerous")} className={`flex-1 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 inline-flex items-center justify-center gap-1 ${hl("danger-btn") ? pulse : ""}`}><XCircleIcon size={12} /> Dangerous</button>
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => handleInspectLink(linkText)}
-                      className={`w-full py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-all ${hl("link-reveal", linkText) ? pulse : ""}`}
-                    >
-                      Reveal URL
-                    </button>
-                  )}
-                </div>
+                <button
+                  key={linkText}
+                  onClick={() => handleOpenMessage(linkText)}
+                  className={`w-full text-left px-3 py-2 border-b transition-colors ${
+                    openMessage === linkText ? "bg-blue-100" : "hover:bg-gray-100"
+                  } ${hl("link-reveal", linkText) ? pulse : ""}`}
+                >
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm font-semibold truncate flex-1">{item?.from}</span>
+                    {verdict === "safe" && <CheckCircleIcon size={12} className="text-green-500 shrink-0" />}
+                    {verdict === "dangerous" && <XCircleIcon size={12} className="text-red-500 shrink-0" />}
+                  </div>
+                  {!isThread && <p className="text-xs text-gray-600 truncate">{item?.subject}</p>}
+                  <p className="text-[10px] text-gray-400">{item?.when}</p>
+                </button>
               );
             })}
             {phishingLinks.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-8">No phishing links in this activity.</p>
+              <p className="text-sm text-gray-400 text-center py-8 px-2">No messages in this activity.</p>
             )}
+          </div>
+
+          {/* Reading pane */}
+          <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+            {!openMessage ? (
+              <div className="flex-1 flex items-center justify-center p-6 text-center">
+                <p className="text-sm text-gray-400">
+                  {isThread ? "Pick a conversation to read it." : "Pick a message to read it."}
+                </p>
+              </div>
+            ) : (() => {
+              const item = PHISHING_LINK_DATA[openMessage]!;
+              const verdict = linkVerdicts[openMessage];
+              const isWrong = wrongAnswer?.link === openMessage;
+              const revealed = inspectedLink === openMessage || !!verdict;
+              const [before, after] = item.body.split("{link}");
+              return (
+                <>
+                  <div className="flex-1 min-h-0 overflow-y-auto p-4">
+                    {!isThread && <h3 className="font-bold text-base mb-0.5">{item.subject}</h3>}
+                    <p className="text-xs text-gray-500 mb-3">From {item.from} · {item.when}</p>
+                    <div className={isThread ? "bg-gray-100 rounded-2xl rounded-tl-sm p-3 max-w-sm" : ""}>
+                      <p className="text-sm leading-relaxed">
+                        {before}
+                        <button
+                          onClick={() => handleInspectLink(openMessage)}
+                          className={`text-blue-600 underline break-all hover:text-blue-800 rounded ${
+                            !revealed && hl("inline-link", openMessage) ? pulse : ""
+                          }`}
+                        >
+                          {openMessage}
+                        </button>
+                        {after}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Link preview bar — the real URL, the way a mail client shows it */}
+                  <div className="shrink-0 border-t bg-gray-50 p-3">
+                    {!revealed ? (
+                      <p className="text-xs text-gray-500">
+                        Click the link in the message to see where it really goes. Looking is safe — it does not open anything.
+                      </p>
+                    ) : (
+                      <>
+                        <div className="bg-white border rounded px-2 py-1 text-xs font-mono text-gray-700 mb-2 truncate inline-flex items-center gap-1 max-w-full">
+                          <LinkIcon size={12} className="shrink-0" /> <span className="truncate">{item.url}</span>
+                        </div>
+                        {verdict ? (
+                          <div>
+                            <span className="text-sm inline-flex items-center gap-1">
+                              {verdict === "safe"
+                                ? <><CheckCircleIcon size={14} className="text-green-500" /> Safe</>
+                                : <><XCircleIcon size={14} className="text-red-500" /> Dangerous</>}
+                            </span>
+                            <p className="text-xs text-gray-600 mt-1">{item.reason}</p>
+                          </div>
+                        ) : (
+                          <>
+                            {isWrong && (
+                              <div className="bg-red-100 border border-red-200 rounded-lg p-2 mb-2">
+                                <p className="text-xs text-red-700 font-medium">Not quite — try again!</p>
+                                <p className="text-xs text-red-600 mt-1">{wrongAnswer.reason}</p>
+                              </div>
+                            )}
+                            <div className="flex gap-2">
+                              <button onClick={() => handleVerdict("safe")} className={`flex-1 py-1.5 text-xs bg-green-500 text-white rounded-lg hover:bg-green-600 inline-flex items-center justify-center gap-1 ${hl("safe-btn") ? pulse : ""}`}><CheckCircleIcon size={12} /> Safe</button>
+                              <button onClick={() => handleVerdict("dangerous")} className={`flex-1 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 inline-flex items-center justify-center gap-1 ${hl("danger-btn") ? pulse : ""}`}><XCircleIcon size={12} /> Dangerous</button>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
       )}

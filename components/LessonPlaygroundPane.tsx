@@ -203,7 +203,7 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           )}
           {task.type === "guided-security" && (() => {
             const chrome = task.chrome ?? "browser";
-            const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />;
+            const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} chrome={chrome} onResult={onResult} />;
             if (chrome === "settings") return <DesktopLaunch app="settings">{inner}</DesktopLaunch>;
             if (chrome === "mail")     return <DesktopLaunch app="mail">{inner}</DesktopLaunch>;
             if (chrome === "messages") return <DesktopLaunch app="messages">{inner}</DesktopLaunch>;

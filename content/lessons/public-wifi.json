@@ -3,36 +3,38 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Online Transactions",
   "order": 1070,
-  "title": "Public WiFi Safety",
+  "title": "Using WiFi You Do Not Own",
   "videoUrl": "",
-  "drDigitalIntro": "Public WiFi is convenient but less secure than home.\n\u2022 Others on the network could see your data.\n\u2022 Avoid banking or email on it; stick to https sites.\n\u2022 A VPN adds protection. Reading the news is fine \u2014 just skip anything private.",
+  "drDigitalIntro": "Free WiFi in a café, hotel, or airport is genuinely useful — and it is somebody else's network.\n\n- A café network usually opens a sign-in page before it lets you online. That page is called a captive portal.\n- Giving it your email is normal. Giving it a password you use anywhere else is not — no legitimate network needs one.\n- On a network you do not control, assume someone could be watching which sites you visit.\n- Turn off cross-site tracking before you browse, and save banking and shopping for a network you trust.\n- If a page asks you to install something to get online, close it. That is never a real requirement.",
   "playgroundTask": {
-    "type": "guided-security",
-    "chrome": "bare",
-    "goal": "You identified risks on public WiFi",
+    "type": "guided-troubleshooting",
+    "scenario": "Joining a café network through its sign-in page, then locking privacy down before browsing",
+    "goal": "You joined a public network safely and tightened your privacy",
     "steps": [
       {
-        "say": "Inspect 'Free WiFi Login' \u2014 this link is from a suspicious sign-in portal.",
-        "action": "inspect-link",
-        "target": "Free WiFi Login"
+        "say": "The browser has no connection. Open the WiFi list from the bar at the top.",
+        "action": "open-wifi-panel"
       },
       {
-        "say": "The URL is unsecured. Mark it Dangerous.",
-        "action": "mark-dangerous",
-        "target": "Free WiFi Login"
+        "say": "Join 'Coffee Shop Free WiFi'.",
+        "action": "join-network",
+        "target": "Coffee Shop Free WiFi"
       },
       {
-        "say": "Now go to Privacy and turn off Location when on public networks.",
-        "action": "go-to-section",
-        "target": "privacy"
+        "say": "The café wants your email before it lets you online. That is normal — click Continue.",
+        "action": "captive-portal-continue"
       },
       {
-        "say": "Toggle off Location sharing.",
-        "action": "toggle-setting",
-        "target": "Location"
+        "say": "You are online, but on somebody else's network. Open Settings from the dock.",
+        "action": "open-settings-privacy"
+      },
+      {
+        "say": "Turn off cross-site tracking.",
+        "action": "toggle-privacy-tracking"
       }
     ]
   },
-  "drDigitalSuccess": "You identified public WiFi risks! Be cautious about what you access on public networks.",
-  "drDigitalHint": "Inspect links for unsecured URLs and limit what personal info your device shares on public networks."
+  "drDigitalSuccess": "That is the whole routine for public WiFi: join through the sign-in page, hand over an email and nothing more, then turn tracking off before you browse. Do it every time and free WiFi stops being a risk.",
+  "drDigitalHint": "The WiFi icon sits in the bar along the top of the screen. Once you are online, the Settings icon is in the dock at the bottom.",
+  "warning": "A real café page must never ask for a password you use elsewhere. If one does, close it and stay off that network."
 }

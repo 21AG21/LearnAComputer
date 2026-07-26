@@ -261,7 +261,10 @@ export type PlaygroundTask =
           | "copy-code" | "open-browser" | "paste-code" | "submit-support"
           | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart"
           | "type-in-app"
-          | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app";
+          | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app"
+          | "join-network" | "captive-portal-continue" | "open-settings-privacy" | "toggle-privacy-tracking"
+          | "click-forgot-link" | "open-mail-from-dock" | "open-reset-email" | "click-reset-link"
+          | "type-new-password" | "confirm-login";
         target?: string;
         value?: string;
       }>;

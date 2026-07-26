@@ -5,44 +5,44 @@
   "order": 1040,
   "title": "Spotting Scams and Phishing",
   "videoUrl": "",
-  "drDigitalIntro": "Phishing uses fake messages to steal your information.\n• They pretend to be your bank, a delivery service, or a trusted company.\n• Warning signs: urgency, misspelled addresses, and mismatched links.\n• Hover over a link to see where it really goes — when in doubt, don't click.",
+  "drDigitalIntro": "Phishing is a fake message pretending to be someone you trust — your bank, a shop, a delivery company.\n\n- The message wants you to click a link and hand over a password or card number.\n- The words in a link can say anything. Only the address underneath it is real.\n- Clicking a link to *look* at where it goes is safe. Typing your details into the page it opens is not.\n- The tell is almost always the address: a strange ending, http:// instead of https://, or a familiar name spelled slightly wrong.\n- Real companies never ask for a password by email. When in doubt, close the message and go to the site yourself.",
   "playgroundTask": {
     "type": "guided-security",
     "chrome": "mail",
     "goal": "You identified safe and dangerous links",
     "steps": [
       {
-        "say": "Click 'Reveal URL' on 'Verify your account' to see where the link really goes.",
+        "say": "Open the message from First National Bank Security.",
         "action": "inspect-link",
         "target": "Verify your account"
       },
       {
-        "say": "That URL goes to fakesite.ru — mark it as Dangerous.",
+        "say": "Click the link in the message to reveal where it really goes — then mark it Dangerous.",
         "action": "mark-dangerous",
         "target": "Verify your account"
       },
       {
-        "say": "Now reveal the URL for 'View your order'.",
+        "say": "Open the message from Amazon.",
         "action": "inspect-link",
         "target": "View your order"
       },
       {
-        "say": "That URL goes to amazon.com — mark it as Safe.",
+        "say": "Reveal its link. It goes to the real amazon.com — mark it Safe.",
         "action": "mark-safe",
         "target": "View your order"
       },
       {
-        "say": "Reveal the URL for 'Claim 90% Discount NOW'.",
+        "say": "Open the one from DEALS4U.",
         "action": "inspect-link",
         "target": "Claim 90% Discount NOW"
       },
       {
-        "say": "The URL goes to deals-4u-cheap.xyz with http:// — mark it Dangerous.",
+        "say": "Reveal its link: deals-4u-cheap.xyz over http. Mark it Dangerous.",
         "action": "mark-dangerous",
         "target": "Claim 90% Discount NOW"
       }
     ]
   },
-  "drDigitalSuccess": "You spotted the phishing links! Always check where a link goes before clicking.",
-  "drDigitalHint": "Click 'Reveal URL' on each link to see its real URL, then mark it Safe or Dangerous."
+  "drDigitalSuccess": "You read three real messages and judged each one by its address rather than its wording. That is the whole skill — and it works in email, texts, and chat apps alike.",
+  "drDigitalHint": "Click a message on the left to read it. The blue link inside is clickable — clicking it only reveals the address, it does not open the page. Then decide."
 }

@@ -13,7 +13,10 @@ export type GuidedTroubleshootingStep = {
     | "copy-code" | "open-browser" | "paste-code" | "submit-support"
     | "dismiss-error" | "open-settings" | "click-restart" | "confirm-restart"
     | "type-in-app"
-    | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app";
+    | "open-app-market" | "go-to-my-apps" | "delete-broken-app" | "go-to-store-tab" | "reinstall-app"
+    | "join-network" | "captive-portal-continue" | "open-settings-privacy" | "toggle-privacy-tracking"
+    | "click-forgot-link" | "open-mail-from-dock" | "open-reset-email" | "click-reset-link"
+    | "type-new-password" | "confirm-login";
   target?: string;
   value?: string;
 };
@@ -35,7 +38,10 @@ interface FrozenApp {
   closed: boolean;
 }
 
-function inferScenarioMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi" | "error-code" | "error-restart" | "app-reinstall" {
+function inferScenarioMode(steps: GuidedTroubleshootingStep[]):
+  "frozen" | "wifi" | "error-code" | "error-restart" | "app-reinstall" | "public-wifi" | "password-reset" {
+  if (steps.some((s) => s.action === "join-network" || s.action === "captive-portal-continue")) return "public-wifi";
+  if (steps.some((s) => s.action === "click-forgot-link" || s.action === "open-mail-from-dock")) return "password-reset";
   if (steps.some((s) => s.action === "force-quit" || s.action === "click-frozen")) return "frozen";
   if (steps.some((s) => s.action === "copy-code" || s.action === "paste-code")) return "error-code";
   if (steps.some((s) => s.action === "dismiss-error" || s.action === "click-restart")) return "error-restart";
@@ -44,6 +50,8 @@ function inferScenarioMode(steps: GuidedTroubleshootingStep[]): "frozen" | "wifi
 }
 
 const NETWORKS = ["CoolKids Network", "Neighbor's WiFi", "Coffee Shop"];
+/** The café network the public-wifi scenario joins, alongside two you have no password for. */
+const PUBLIC_NETWORKS = ["Coffee Shop Free WiFi", "CoffeeShop-Staff", "Neighbour 5G"];
 
 export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode: simMode, hint, onResult }: Props) {
 
@@ -57,8 +65,20 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
   });
   const [clickedFrozen, setClickedFrozen] = useState(false);
   const [wifiPanelOpen, setWifiPanelOpen] = useState(false);
-  const [wifiOn, setWifiOn] = useState(() => mode === "wifi" ? false : true);
-  const [connectedNetwork, setConnectedNetwork] = useState<string | null>(() => mode === "wifi" ? null : "CoolKids Network");
+  const [wifiOn, setWifiOn] = useState(() => mode !== "wifi");
+  const [connectedNetwork, setConnectedNetwork] = useState<string | null>(
+    () => (mode === "wifi" || mode === "public-wifi" ? null : "CoolKids Network"),
+  );
+
+  // public-wifi state
+  const [portalStage, setPortalStage] = useState<"offline" | "portal" | "online">("offline");
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [trackingOn, setTrackingOn] = useState(true);
+
+  // password-reset state
+  const [prStage, setPrStage] = useState<"login" | "sent" | "mail" | "email" | "reset" | "done">("login");
+  const [prApp, setPrApp] = useState<"browser" | "mail">("browser");
+  const [prPassword, setPrPassword] = useState("");
   const [forgottenNetworks, setForgottenNetworks] = useState<string[]>([]);
   const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
 
@@ -115,6 +135,16 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
       case "force-quit": return kind === "fq-btn" && name === step.target;
       case "restart-app": return kind === "dock-app" && name === step.target;
       case "open-wifi-panel": return kind === "wifi-icon";
+      case "join-network": return kind === "network-row" && name === step.target;
+      case "captive-portal-continue": return kind === "portal-continue";
+      case "open-settings-privacy": return kind === "dock-app" && name === "Settings";
+      case "toggle-privacy-tracking": return kind === "privacy-toggle";
+      case "click-forgot-link": return kind === "forgot-link";
+      case "open-mail-from-dock": return kind === "dock-app" && name === "Mail";
+      case "open-reset-email": return kind === "reset-email-row";
+      case "click-reset-link": return kind === "reset-email-link";
+      case "type-new-password": return kind === "new-password-input";
+      case "confirm-login": return kind === "confirm-login-btn";
       case "toggle-wifi": return kind === "wifi-toggle";
       case "reconnect-wifi": return kind === "reconnect-btn";
       case "forget-network": return kind === "forget-btn" && name === step.target;
@@ -188,6 +218,67 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
   function handleReinstallApp() {
     setArAppInstalled(true);
     tryStep((s) => s.action === "reinstall-app");
+  }
+
+  function handleJoinNetwork(network: string) {
+    if (searchingNetwork) return;
+    setSearchingNetwork(network);
+    setTimeout(() => {
+      setSearchingNetwork(null);
+      setConnectedNetwork(network);
+      setWifiPanelOpen(false);
+      // A café network drops you on its sign-in page rather than straight onto the web.
+      setPortalStage("portal");
+      tryStep((s) => s.action === "join-network" && s.target === network);
+    }, 1500);
+  }
+
+  function handlePortalContinue() {
+    setPortalStage("online");
+    tryStep((s) => s.action === "captive-portal-continue");
+  }
+
+  function handleOpenSettingsPrivacy() {
+    setPrivacyOpen(true);
+    tryStep((s) => s.action === "open-settings-privacy");
+  }
+
+  function handleToggleTracking() {
+    setTrackingOn((v) => !v);
+    tryStep((s) => s.action === "toggle-privacy-tracking");
+  }
+
+  function handleForgotPasswordLink() {
+    setPrStage("sent");
+    tryStep((s) => s.action === "click-forgot-link");
+  }
+
+  function handleOpenMailFromDock() {
+    setPrApp("mail");
+    setPrStage("mail");
+    tryStep((s) => s.action === "open-mail-from-dock");
+  }
+
+  function handleOpenPrResetEmail() {
+    setPrStage("email");
+    tryStep((s) => s.action === "open-reset-email");
+  }
+
+  function handleClickPrResetLink() {
+    // The link hands you back to the browser, exactly as it does on a real machine.
+    setPrApp("browser");
+    setPrStage("reset");
+    tryStep((s) => s.action === "click-reset-link");
+  }
+
+  function handleTypeNewPassword(value: string) {
+    setPrPassword(value);
+    tryStep((s) => s.action === "type-new-password" && (!s.value || value === s.value));
+  }
+
+  function handleConfirmLogin() {
+    setPrStage("done");
+    tryStep((s) => s.action === "confirm-login");
   }
 
   function handleOpenWifiPanel() {
@@ -272,6 +363,8 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
     if (mode === "error-restart") return [{ id: "Settings", label: "Settings" }];
     if (mode === "error-code") return [{ id: "Photos", label: "Photos" }, { id: "Browser", label: "Browser" }, { id: "Notes", label: "Notes" }];
     if (mode === "wifi") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }, { id: "Settings", label: "Settings" }];
+    if (mode === "public-wifi") return [{ id: "Browser", label: "Browser" }, { id: "Settings", label: "Settings" }];
+    if (mode === "password-reset") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }];
     if (mode === "app-reinstall") {
       const market = { id: "App Market", label: "App Market" };
       if (arAppDeleted && !arAppInstalled) return [market];
@@ -341,7 +434,7 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
             </div>
             {wifiOn && (
               <div className="space-y-1.5">
-                {NETWORKS.filter((n) => !forgottenNetworks.includes(n)).map((network) => (
+                {(mode === "public-wifi" ? PUBLIC_NETWORKS : NETWORKS).filter((n) => !forgottenNetworks.includes(n)).map((network) => (
                   <div key={network} className={`flex items-center justify-between p-2 rounded-lg text-xs ${connectedNetwork === network ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"}`}>
                     <span className="flex items-center gap-1.5">
                       {connectedNetwork === network && <span className="text-blue-500">&#10003;</span>}
@@ -351,18 +444,22 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
                     <div className="flex gap-1">
                       {connectedNetwork !== network && !searchingNetwork && (
                         <button
-                          onClick={() => handleReconnect(network)}
-                          className={`px-1.5 py-0.5 bg-blue-500 text-white rounded text-[10px] ${hl("reconnect-btn") ? pulse : ""}`}
+                          onClick={() => (mode === "public-wifi" ? handleJoinNetwork(network) : handleReconnect(network))}
+                          className={`px-1.5 py-0.5 bg-blue-500 text-white rounded text-[10px] ${
+                            hl("reconnect-btn") || hl("network-row", network) ? pulse : ""
+                          }`}
                         >
                           Join
                         </button>
                       )}
-                      <button
-                        onClick={() => handleForgetNetwork(network)}
-                        className={`px-1.5 py-0.5 text-gray-500 hover:text-red-500 text-[10px] ${hl("forget-btn", network) ? pulse : ""}`}
-                      >
-                        Forget
-                      </button>
+                      {mode !== "public-wifi" && (
+                        <button
+                          onClick={() => handleForgetNetwork(network)}
+                          className={`px-1.5 py-0.5 text-gray-500 hover:text-red-500 text-[10px] ${hl("forget-btn", network) ? pulse : ""}`}
+                        >
+                          Forget
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -488,6 +585,203 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
           )}
 
           {/* Desktop View - Frozen App Window */}
+          {/* Public WiFi — browser goes offline → café portal → online, then Settings ▸ Privacy */}
+          {view === "desktop" && mode === "public-wifi" && !privacyOpen && (
+            <div className="p-4">
+              {portalStage === "offline" && (
+                <div className="py-10 text-center">
+                  <svg viewBox="0 0 24 24" className="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
+                  </svg>
+                  <p className="text-sm font-medium text-gray-500 mb-1">You are not connected to the internet</p>
+                  <p className="text-xs text-gray-400">There is a café network nearby. The WiFi icon is in the bar above.</p>
+                </div>
+              )}
+
+              {portalStage === "portal" && (
+                <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
+                  <div className="bg-amber-800 text-amber-50 px-4 py-3 text-center">
+                    <p className="text-lg font-bold tracking-wide">The Corner Café</p>
+                    <p className="text-xs text-amber-200">Guest WiFi sign-in</p>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-gray-700 mb-3">Enter your email address to get online. It is free.</p>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1">Email address</label>
+                    <input
+                      readOnly
+                      value="you@example.com"
+                      aria-label="Email address"
+                      className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 bg-gray-50"
+                    />
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-3">
+                      <p className="text-xs text-blue-800">
+                        This page wants your <strong>email</strong> — that is normal for café WiFi. It must never ask for a
+                        password you use anywhere else. If it does, close the page and stay off that network.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handlePortalContinue}
+                      className={`w-full py-2 bg-amber-700 text-white font-bold rounded-lg hover:bg-amber-800 ${hl("portal-continue") ? pulse : ""}`}
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {portalStage === "online" && (
+                <div className="py-10 text-center">
+                  <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-green-500 mb-3" fill="currentColor">
+                    <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
+                  </svg>
+                  <p className="text-sm font-medium text-green-600 mb-1">Connected to Coffee Shop Free WiFi</p>
+                  <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                    You are online — but this is somebody else&apos;s network. Tighten your privacy settings before you browse.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Public WiFi — the Privacy settings page */}
+          {view === "desktop" && mode === "public-wifi" && privacyOpen && (
+            <div className="p-4">
+              <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
+                  <GearIcon size={16} />
+                  <span className="font-bold text-sm">Settings</span>
+                  <span className="text-xs text-gray-500">/ Privacy</span>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <p className="text-sm font-semibold">Allow websites to track me across sites</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        On a network you do not control, turn this off.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleToggleTracking}
+                      role="switch"
+                      aria-checked={trackingOn}
+                      aria-label="Allow websites to track me across sites"
+                      className={`shrink-0 w-12 h-7 rounded-full transition-colors ${trackingOn ? "bg-blue-500" : "bg-gray-300"} ${hl("privacy-toggle") ? pulse : ""}`}
+                    >
+                      <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform ${trackingOn ? "translate-x-6" : "translate-x-1"}`} />
+                    </button>
+                  </div>
+                  {!trackingOn && (
+                    <p className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg p-2 mt-3">
+                      Tracking is off. Sites can still see what you visit on their own pages, but they can no longer follow
+                      you from one site to the next.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Password reset — browser login ▸ Mail ▸ back to the browser */}
+          {view === "desktop" && mode === "password-reset" && (
+            <div className="p-4">
+              {prApp === "mail" ? (
+                <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
+                  <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
+                    <MailIcon size={16} />
+                    <span className="font-bold text-sm">Mail</span>
+                    <span className="text-xs text-gray-500">/ Inbox</span>
+                  </div>
+                  {prStage === "mail" ? (
+                    <button
+                      onClick={handleOpenPrResetEmail}
+                      className={`w-full text-left px-4 py-3 border-b hover:bg-gray-50 ${hl("reset-email-row") ? pulse : ""}`}
+                    >
+                      <p className="text-sm font-semibold">First National Bank</p>
+                      <p className="text-xs text-gray-600">Reset your password</p>
+                      <p className="text-[10px] text-gray-400">Just now</p>
+                    </button>
+                  ) : (
+                    <div className="p-4">
+                      <h3 className="font-bold text-sm mb-0.5">Reset your password</h3>
+                      <p className="text-xs text-gray-500 mb-3">From First National Bank · Just now</p>
+                      <p className="text-sm mb-4">
+                        We received a request to reset the password for your account. Use the button below within one hour.
+                        If this was not you, you can ignore this message.
+                      </p>
+                      <button
+                        onClick={handleClickPrResetLink}
+                        className={`px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 ${hl("reset-email-link") ? pulse : ""}`}
+                      >
+                        Reset my password
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="max-w-sm mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
+                  <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
+                    <GlobeIcon size={16} />
+                    <span className="font-mono text-xs text-gray-600">firstbank.example</span>
+                  </div>
+                  <div className="p-4">
+                    {prStage === "login" && (
+                      <>
+                        <h3 className="font-bold text-base mb-3 text-center">Sign in</h3>
+                        <input readOnly value="you@example.com" aria-label="Email" className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-2 bg-gray-50" />
+                        <input readOnly type="password" value="......" aria-label="Password" className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-2 bg-gray-50" />
+                        <p className="text-xs text-red-600 mb-3">That password is not right.</p>
+                        <button
+                          onClick={handleForgotPasswordLink}
+                          className={`text-sm text-blue-600 underline rounded ${hl("forgot-link") ? pulse : ""}`}
+                        >
+                          Forgot password?
+                        </button>
+                      </>
+                    )}
+                    {prStage === "sent" && (
+                      <div className="text-center py-4">
+                        <MailIcon size={32} className="mx-auto text-blue-500 mb-2" />
+                        <p className="text-sm font-semibold mb-1">Check your email</p>
+                        <p className="text-xs text-gray-500">
+                          We sent a reset link to you@example.com. Open the Mail app in the dock below to read it.
+                        </p>
+                      </div>
+                    )}
+                    {prStage === "reset" && (
+                      <>
+                        <h3 className="font-bold text-base mb-1 text-center">Choose a new password</h3>
+                        <p className="text-[10px] text-gray-400 font-mono mb-3 text-center truncate">firstbank.example/reset?token=abc123</p>
+                        <input
+                          value={prPassword}
+                          onChange={(e) => handleTypeNewPassword(e.target.value)}
+                          type="text"
+                          aria-label="New password"
+                          placeholder="New password"
+                          className={`w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-blue-400 ${hl("new-password-input") ? pulse : ""}`}
+                        />
+                        <button
+                          onClick={handleConfirmLogin}
+                          disabled={!prPassword}
+                          className={`w-full py-2 text-sm font-bold rounded-lg text-white ${prPassword ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-300 cursor-default"} ${hl("confirm-login-btn") ? pulse : ""}`}
+                        >
+                          Save &amp; sign in
+                        </button>
+                      </>
+                    )}
+                    {prStage === "done" && (
+                      <div className="text-center py-4">
+                        <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-2 text-2xl">&#10003;</div>
+                        <p className="text-sm font-semibold mb-0.5">Signed in as you@example.com</p>
+                        <p className="text-xs text-gray-500">First National Bank · Personal account</p>
+                        <p className="text-xs text-gray-400 mt-2">Your new password is saved. Keep it in a password manager.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {view === "desktop" && mode === "frozen" && (
             <div className="p-4">
               {frozenTarget && !frozenTarget.closed && (
@@ -787,7 +1081,15 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
               <button
                 key={app.id}
                 onClick={() => {
-                  if (mode === "app-reinstall" && app.id === "App Market") {
+                  if (mode === "public-wifi" && app.id === "Settings") {
+                    handleOpenSettingsPrivacy();
+                  } else if (mode === "public-wifi" && app.id === "Browser") {
+                    setPrivacyOpen(false);
+                  } else if (mode === "password-reset" && app.id === "Mail") {
+                    handleOpenMailFromDock();
+                  } else if (mode === "password-reset" && app.id === "Browser") {
+                    setPrApp("browser");
+                  } else if (mode === "app-reinstall" && app.id === "App Market") {
                     handleOpenAppMarket();
                   } else if (step?.action === "open-browser" && app.id === "Browser") {
                     handleOpenBrowser();

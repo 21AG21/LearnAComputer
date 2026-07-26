@@ -404,6 +404,8 @@ Multi-section security simulator: passwords (live strength meter), login, 2FA, p
 
 After a successful `login`, `verify-2fa`, or `use-passkey`, the sim transitions to a `LoggedInPanel` showing the account name, plan, and security status. A Sign Out button returns to the login form.
 
+The **phishing section follows `chrome`**: with `"mail"` it renders a real inbox (sender, subject, timestamp, reading pane); with `"messages"` a text thread. In both, `inspect-link` means *opening the message*, and the link sits inline in the body — clicking it reveals the true address in a preview bar before the Safe/Dangerous buttons appear. Any other `chrome` value keeps the same two-pane layout without subject lines.
+
 ```json
 "playgroundTask": {
   "type": "guided-security",
@@ -447,7 +449,11 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
 }
 ```
 
-`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`. The mode is **inferred** from the step actions — the `scenario` field is a free-text description for the lesson author only. The frozen app's name comes from the `force-quit` step's `target`. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`, `type-in-app`, `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`), `go-to-store-tab`, `reinstall-app` (`target`).
+`scenario` values: `frozen-notes`, `frozen-browser`, `no-wifi`, `error-code`, `error-restart`, `public-wifi`, `password-reset`. The mode is **inferred** from the step actions — the `scenario` field is a free-text description for the lesson author only. The frozen app's name comes from the `force-quit` step's `target`. Actions: `read-error`, `click-frozen`, `open-force-quit`, `force-quit` (`target`), `restart-app` (`target`), `open-wifi-panel`, `toggle-wifi`, `reconnect-wifi`, `forget-network`, `copy-code`, `open-browser`, `paste-code`, `submit-support`, `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`, `type-in-app`, `open-app-market`, `go-to-my-apps`, `delete-broken-app` (`target`), `go-to-store-tab`, `reinstall-app` (`target`), `join-network` (`target`), `captive-portal-continue`, `open-settings-privacy`, `toggle-privacy-tracking`, `click-forgot-link`, `open-mail-from-dock`, `open-reset-email`, `click-reset-link`, `type-new-password` (optional `value`), `confirm-login`.
+
+The **`public-wifi` scenario** (inferred from `join-network` or `captive-portal-continue`): the desktop boots offline, the menu-bar WiFi list offers café networks, joining one shows "Connecting…" then drops the learner on a captive-portal sign-in page, and Continue puts them online. Settings in the dock then opens a Privacy panel with a cross-site-tracking toggle. Steps use: `open-wifi-panel`, `join-network`, `captive-portal-continue`, `open-settings-privacy`, `toggle-privacy-tracking`.
+
+The **`password-reset` scenario** (inferred from `click-forgot-link` or `open-mail-from-dock`): starts on a bank login form in the browser, spans to the Mail app in the dock for the reset email, and the link in that email hands control back to the browser for the new-password form. Finishing shows a signed-in account panel. Steps use: `click-forgot-link`, `open-mail-from-dock`, `open-reset-email`, `click-reset-link`, `type-new-password`, `confirm-login`.
 
 The `error-restart` scenario: on mount a system error dialog appears ("Something went wrong"); learner clicks OK to dismiss → clicks Settings in the dock → clicks Restart button → confirms in a dialog → 1.5s black-screen animation → success desktop. Steps use: `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
 
