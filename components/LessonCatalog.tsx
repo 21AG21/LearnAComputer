@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getCompletedSlugs, resetProgress } from "@/lib/progress";
+import { unitArt } from "@/lib/unitArt";
 import { CheckIcon } from "@/components/Playground/Icons";
 import type { ModuleRoute } from "@/lib/lessons";
 
@@ -82,7 +84,12 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
         const unitRoutes = routes.filter((r) => r.unit === unit);
         return (
           <div key={unit} className="space-y-3">
-            <h2 className="text-base font-bold text-gray-500 uppercase tracking-widest">{unit}</h2>
+            <div className="flex items-center gap-3">
+              <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg border border-gray-200">
+                <Image src={unitArt(unit)} alt="" fill sizes="80px" className="object-cover" />
+              </div>
+              <h2 className="text-base font-bold text-gray-500 uppercase tracking-widest">{unit}</h2>
+            </div>
             <div className="space-y-2">
               {unitRoutes.map((route) => {
                 const done = route.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;

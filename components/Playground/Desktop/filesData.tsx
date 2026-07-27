@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { photoSrc } from "@/lib/photoAssets";
 import {
   HomeIcon, FolderIcon, TrashIcon,
   ImageIcon, FileDocIcon, NoteIcon, SpreadsheetIcon, BookClosedIcon, MusicIcon,
@@ -76,9 +77,10 @@ export interface FileEntry {
 }
 
 export const ATTACHABLE_FILES: FileEntry[] = [
-  { name: "VacationPhoto.png", image: "/playgrounds/VacationPhoto.png" },
+  { name: "VacationPhoto.png", image: photoSrc("tropical-beach") },
   { name: "GroceryList.txt",   contents: "Milk\nEggs\nBread\nApples" },
   { name: "Budget.xlsx",       image: "/playgrounds/Budget.png" },
   { name: "SecretRecipie.docx", contents: "Grandma's secret cookies:\nbutter, sugar, flour, love." },
   { name: "FavoriteSong.mp3",  icon: "music" },
+  { name: "Sunset.png",        image: photoSrc("sunset-beach") },
 ];

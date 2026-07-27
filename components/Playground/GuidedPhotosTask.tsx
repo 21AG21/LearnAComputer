@@ -10,6 +10,7 @@ import {
   RectangleIcon, UndoIcon, SearchIcon,
 } from "./Icons";
 import { getThread, saveThread } from "@/lib/chat";
+import { photoSrc } from "@/lib/photoAssets";
 
 export type GuidedPhotosStep = {
   say: string;
@@ -43,18 +44,36 @@ interface Photo {
   initialEdits?: { brightness?: number; contrast?: number; rotation?: number };
 }
 
+/**
+ * The library. Four labels are load-bearing — Unit 7 lessons open "Beach Vacation",
+ * "Bird in Garden", "Dog at the Park" and "Orange Cat" by name, and search for
+ * "beach", "bird" and "dog" — so those stay however the art changes.
+ */
 const INITIAL_PHOTOS: Photo[] = [
-  { id: "vacation", label: "Beach Vacation", src: "/playgrounds/VacationPhoto.png", favorite: false, albums: [], deleted: false },
-  { id: "dog", label: "Dog at the Park", src: "/playgrounds/Dog.png", favorite: false, albums: [], deleted: false },
-  { id: "bird", label: "Bird in Garden", src: "/playgrounds/Bird.png", favorite: false, albums: [], deleted: false, initialEdits: { brightness: 55, contrast: 80, rotation: 270 } },
-  { id: "cow", label: "Cow on the Farm", src: "/playgrounds/Cow.png", favorite: false, albums: [], deleted: false },
-  { id: "snake", label: "Snake in the Sun", src: "/playgrounds/Snake.png", favorite: false, albums: [], deleted: false },
-  { id: "orange-cat", label: "Orange Cat", src: "/playgrounds/Cat1.png", favorite: false, albums: [], deleted: false },
-  { id: "grumpy-cat", label: "Grumpy Cat", src: "/playgrounds/Cat2.png", favorite: false, albums: [], deleted: false },
-  { id: "bird-flight", label: "Bird in Flight", src: "/playgrounds/animal-bird.png", favorite: false, albums: [], deleted: false },
-  { id: "cow-field", label: "Cow in Field", src: "/playgrounds/animal-cow.png", favorite: false, albums: [], deleted: false },
-  { id: "snake-coil", label: "Coiled Snake", src: "/playgrounds/animal-snake.png", favorite: false, albums: [], deleted: false },
-  { id: "budget", label: "Budget Screenshot", src: "/playgrounds/Budget.png", favorite: false, albums: [], deleted: false },
+  { id: "vacation",  label: "Beach Vacation",   src: photoSrc("tropical-beach"),  favorite: false, albums: [], deleted: false },
+  { id: "dog",       label: "Dog at the Park",  src: photoSrc("dog-field"),       favorite: false, albums: [], deleted: false },
+  { id: "bird",      label: "Bird in Garden",   src: photoSrc("bird-branch"),     favorite: false, albums: [], deleted: false, initialEdits: { brightness: 55, contrast: 80, rotation: 270 } },
+  { id: "orange-cat",label: "Orange Cat",       src: photoSrc("cat-sleeping"),    favorite: false, albums: [], deleted: false },
+  { id: "sunset",    label: "Sunset at the Beach", src: photoSrc("sunset-beach"), favorite: false, albums: [], deleted: false },
+  { id: "mountains", label: "Mountains at Dawn", src: photoSrc("mountain-dawn"),  favorite: false, albums: [], deleted: false },
+  { id: "lake",      label: "Still Lake",       src: photoSrc("lake-mirror"),     favorite: false, albums: [], deleted: false },
+  { id: "forest",    label: "Path Through the Woods", src: photoSrc("forest-path"), favorite: false, albums: [], deleted: false },
+  { id: "autumn",    label: "Autumn Woods",     src: photoSrc("autumn-woods"),    favorite: false, albums: [], deleted: false },
+  { id: "meadow",    label: "Wildflower Meadow", src: photoSrc("wildflower-meadow"), favorite: false, albums: [], deleted: false },
+  { id: "stars",     label: "Starry Night",     src: photoSrc("starry-night"),    favorite: false, albums: [], deleted: false },
+  { id: "moon",      label: "Full Moon",        src: photoSrc("full-moon"),       favorite: false, albums: [], deleted: false },
+  { id: "city",      label: "City at Dusk",     src: photoSrc("city-dusk"),       favorite: false, albums: [], deleted: false },
+  { id: "bridge",    label: "Bridge at Night",  src: photoSrc("bridge-night"),    favorite: false, albums: [], deleted: false },
+  { id: "harbour",   label: "Boats in the Harbour", src: photoSrc("harbour"),     favorite: false, albums: [], deleted: false },
+  { id: "flower",    label: "Sunflower",        src: photoSrc("single-flower"),   favorite: false, albums: [], deleted: false },
+  { id: "leaf",      label: "A Single Leaf",    src: photoSrc("autumn-leaf"),     favorite: false, albums: [], deleted: false },
+  { id: "coffee",    label: "Morning Coffee",   src: photoSrc("coffee-cup"),      favorite: false, albums: [], deleted: false },
+  { id: "breakfast", label: "Breakfast",        src: photoSrc("breakfast-table"), favorite: false, albums: [], deleted: false },
+  { id: "plant",     label: "Plant on the Windowsill", src: photoSrc("windowsill-plant"), favorite: false, albums: [], deleted: false },
+  { id: "books",     label: "Bookshelf",        src: photoSrc("bookshelf"),       favorite: false, albums: [], deleted: false },
+  { id: "butterfly", label: "Butterfly",        src: photoSrc("butterfly"),       favorite: false, albums: [], deleted: false },
+  { id: "koi",       label: "Koi Pond",         src: photoSrc("fish"),            favorite: false, albums: [], deleted: false },
+  { id: "rainbow",   label: "Rainbow After Rain", src: photoSrc("rainbow"),       favorite: false, albums: [], deleted: false },
 ];
 
 const FILTERS = ["Vivid", "Dramatic", "B&W", "Warm", "Cool"];

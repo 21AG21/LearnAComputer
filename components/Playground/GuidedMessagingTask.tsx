@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
+import { photoSrc } from "@/lib/photoAssets";
 
 /** A step's `value` is the text the message must contain; empty or absent accepts anything. */
 function matchesText(value: string | undefined, text: string): boolean {
@@ -61,12 +62,12 @@ const CONTACTS: Contact[] = [
 ];
 
 const PHOTO_OPTIONS = [
-  { src: "/playgrounds/Dog.png", label: "Dog" },
-  { src: "/playgrounds/file-vacation-photo.png", label: "Beach" },
-  { src: "/playgrounds/Cat1.png", label: "Cat" },
-  { src: "/playgrounds/Bird.png", label: "Bird" },
-  { src: "/playgrounds/Cow.png", label: "Cow" },
-  { src: "/playgrounds/Snake.png", label: "Snake" },
+  { src: photoSrc("tropical-beach"), label: "Beach" },
+  { src: photoSrc("dog-field"),      label: "Dog" },
+  { src: photoSrc("cat-sleeping"),   label: "Cat" },
+  { src: photoSrc("sunset-beach"),   label: "Sunset" },
+  { src: photoSrc("coffee-cup"),     label: "Coffee" },
+  { src: photoSrc("mountain-dawn"),  label: "Mountains" },
 ];
 
 const EMOJI_OPTIONS = ["😀", "😂", "❤️", "👍", "🎉", "😎", "🤔", "😢", "🔥", "✨", "🙏", "💯"];

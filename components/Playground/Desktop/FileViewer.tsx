@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { ImageIcon, MusicIcon } from "../Icons";
 import type { Item } from "./filesData";
+import { photoSrc } from "@/lib/photoAssets";
 
 // ── Image map ─────────────────────────────────────────────────────────────────
 
 const IMAGE_SRC: Record<string, string> = {
-  "VacationPhoto.png": "/playgrounds/VacationPhoto.png",
-  "Sunset.png": "/playgrounds/VacationPhoto.png",
-  "img_20250104_FINAL(2).jpg": "/playgrounds/VacationPhoto.png",
+  "VacationPhoto.png": photoSrc("tropical-beach"),
+  "Sunset.png": photoSrc("sunset-beach"),
+  "img_20250104_FINAL(2).jpg": photoSrc("misty-morning"),
 };
 
 // ── Budget data ───────────────────────────────────────────────────────────────
