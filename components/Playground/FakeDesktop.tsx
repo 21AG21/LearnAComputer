@@ -14,11 +14,12 @@ import AppMarketApp from "./Desktop/AppMarketApp";
 import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
 import WindowControls from "./WindowControls";
 import Dock from "./Dock";
+import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
 import { BellOffIcon } from "./Icons";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
 
-const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "photos", "app-market", "calendar", "reminders", "notes"];
+export const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "photos", "app-market", "calendar", "reminders", "notes"];
 
 interface SettingsCallbacks {
   highlightSection?: string;
@@ -198,42 +199,21 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
   return (
     <div className={`h-full w-full flex flex-col overflow-hidden relative ${isDark ? "bg-gray-900" : "bg-white"}`} style={{ fontSize: `${theme.textScale / 100}em`, fontWeight: theme.boldText ? 600 : 400 }}>
       {/* Menu bar */}
-      <div className={`relative h-9 shrink-0 flex items-center justify-between px-2 text-lg font-semibold border-b ${isDark ? "bg-gray-800 text-gray-100 border-gray-700" : "bg-white text-gray-900 border-gray-200"}`}>
-        <div className="flex items-center gap-2">
-          {activeApp && (
-            <WindowControls onClose={() => closeApp(activeApp)} onMinimize={minimizeApp} showMaximize={false} />
-          )}
-          <span className="font-[var(--font-app-title)]">{activeApp ? APP_TITLES[activeApp] : "Desktop"}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          {theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
-          <button
-            onClick={() => openPanel === "wifi" ? dismissPanel() : setOpenPanel("wifi")}
-            aria-label="Wi-Fi status"
-            aria-expanded={openPanel === "wifi"}
-            className={`rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "wifi" ? "bg-black/10 dark:bg-white/15" : ""}`}
-          >
-            <WifiIcon className="w-6 h-5" />
-          </button>
-          <button
-            onClick={() => openPanel === "battery" ? dismissPanel() : setOpenPanel("battery")}
-            aria-label="Battery status"
-            aria-expanded={openPanel === "battery"}
-            className={`flex items-center gap-1 rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "battery" ? "bg-black/10 dark:bg-white/15" : ""}`}
-          >
-            <BatteryIcon className="w-8 h-4" />
-            {batteryPercent !== null && <span>{batteryPercent}%</span>}
-          </button>
-          <button
-            onClick={() => openPanel === "calendar" ? dismissPanel() : setOpenPanel("calendar")}
-            aria-label="Open calendar"
-            aria-expanded={openPanel === "calendar"}
-            suppressHydrationWarning
-            className={`rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${openPanel === "calendar" ? "bg-black/10 dark:bg-white/15" : ""}`}
-          >
-            {time}
-          </button>
-        </div>
+      <div className="relative shrink-0">
+        <DesktopMenuBar
+          dark={isDark}
+          title={activeApp ? APP_TITLES[activeApp] : "Desktop"}
+          leading={
+            activeApp && (
+              <WindowControls onClose={() => closeApp(activeApp)} onMinimize={minimizeApp} showMaximize={false} />
+            )
+          }
+          trailing={theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
+          time={time}
+          batteryPercent={batteryPercent}
+          openPanel={openPanel}
+          onTogglePanel={(panel) => (openPanel === panel ? dismissPanel() : setOpenPanel(panel))}
+        />
 
         {(openPanel === "wifi" || closingPanel === "wifi") && (
           <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={dismissPanel} title="WiFi Networks" closing={closingPanel === "wifi"}>
@@ -276,11 +256,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
       <div className="relative flex-1" onClick={() => openPanel ? dismissPanel() : undefined}>
         <div
           className="absolute inset-0"
-          style={{
-            background: isDark
-              ? "linear-gradient(115deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%)"
-              : "linear-gradient(115deg, #f5b9b9 0%, #fadcdc 20%, #d9f1d9 38%, #c2e9c2 50%, #daf2da 62%, #ccd3f3 82%, #bdc7ef 100%)",
-          }}
+          style={{ background: wallpaper(isDark) }}
         />
         <div className="absolute bottom-4 inset-x-2 flex justify-center">
           <Dock
@@ -488,22 +464,4 @@ function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: bo
   );
 }
 
-function WifiIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 26" className={className} aria-hidden="true">
-      <path d="M2 9 A20 20 0 0 1 30 9" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M7 14.5 A13 13 0 0 1 25 14.5" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M12 20 A7 7 0 0 1 20 20" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <circle cx="16" cy="24" r="2.2" fill="currentColor" />
-    </svg>
-  );
-}
 
-function BatteryIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 40 20" className={className} aria-hidden="true">
-      <rect x="1" y="1.5" width="33" height="17" rx="6" fill="none" stroke="currentColor" strokeWidth="2.5" />
-      <rect x="35" y="6.5" width="4" height="7" rx="2" fill="currentColor" />
-    </svg>
-  );
-}

@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 import Dock from "./Dock";
-import { NoteIcon } from "./Icons";
+import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
+import { NoteIcon, GlobeIcon, FolderIcon, ChatIcon, FileDocIcon, MailIcon, GearIcon, CameraIcon, CalendarIcon, BellIcon, CartIcon } from "./Icons";
+import { BUILT_IN_APPS, APP_TITLES, type DesktopAppId } from "./FakeDesktop";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 
@@ -25,12 +27,132 @@ export interface DesktopStep {
 
 const HIDE_WINDOW_ACTIONS: StepAction[] = ["open-app", "open-clock", "open-wifi-panel", "open-battery-panel"];
 
-const DOCK_APPS = [
-  { id: "notes",    label: "Notes" },
-  { id: "browser",  label: "Browser" },
-  { id: "files",    label: "Files" },
-  { id: "messages", label: "Messages" },
-] as const;
+// The same ten apps, in the same order, as FakeDesktop's dock. A learner who counts
+// four apps here and ten in the next lesson is looking at two different computers.
+const DOCK_APPS: { id: DesktopAppId; label: string }[] = BUILT_IN_APPS.map((id) => ({
+  id,
+  label: APP_TITLES[id],
+}));
+
+const APP_GLYPH: Record<string, ReactNode> = {
+  notes: <NoteIcon size={16} />,
+  browser: <GlobeIcon size={16} />,
+  files: <FolderIcon size={16} />,
+  messages: <ChatIcon size={16} />,
+  mail: <MailIcon size={16} />,
+  settings: <GearIcon size={16} />,
+  photos: <CameraIcon size={16} />,
+  calendar: <CalendarIcon size={16} />,
+  reminders: <BellIcon size={16} />,
+  "app-market": <CartIcon size={16} />,
+};
+
+/** A plausible glimpse of each app. These lessons teach the window, so the app itself
+ *  stays read-only — but it has to be recognisably the app the learner clicked. */
+const APP_CONTENT: Record<string, ReactNode> = {
+  notes: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Shopping List</p>
+      <ul className="list-disc list-inside space-y-1">
+        <li>Milk</li>
+        <li>Eggs</li>
+        <li>Bread</li>
+        <li>Apples</li>
+      </ul>
+    </>
+  ),
+  browser: (
+    <>
+      <div className="mb-3 rounded border border-gray-300 bg-gray-50 px-2 py-1 font-mono text-xs text-gray-500">
+        gardeningtips.example
+      </div>
+      <p className="font-semibold mb-1 text-gray-800">When to plant tomatoes</p>
+      <p className="text-xs leading-relaxed">
+        Wait until the last frost has passed and the soil has warmed. In most gardens that means late
+        spring — tomatoes set outside too early simply sit and sulk.
+      </p>
+    </>
+  ),
+  files: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Documents</p>
+      <ul className="space-y-1 text-xs">
+        <li className="flex items-center gap-2"><FolderIcon size={14} /> Taxes</li>
+        <li className="flex items-center gap-2"><FileDocIcon size={14} /> GroceryList.txt</li>
+        <li className="flex items-center gap-2"><FileDocIcon size={14} /> Budget.xlsx</li>
+      </ul>
+    </>
+  ),
+  messages: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Alex</p>
+      <div className="space-y-1.5 text-xs">
+        <p className="w-fit rounded-2xl bg-gray-100 px-3 py-1.5">Are we still on for Saturday?</p>
+        <p className="ml-auto w-fit rounded-2xl bg-blue-500 px-3 py-1.5 text-white">Yes! See you at 2.</p>
+      </div>
+    </>
+  ),
+  mail: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Inbox</p>
+      <ul className="space-y-1.5 text-xs">
+        <li><span className="font-semibold text-gray-700">Mom</span> — Sunday lunch?</li>
+        <li><span className="font-semibold text-gray-700">City Library</span> — Your hold is ready</li>
+        <li><span className="font-semibold text-gray-700">Newsletter</span> — This week in gardening</li>
+      </ul>
+    </>
+  ),
+  settings: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Settings</p>
+      <ul className="space-y-1 text-xs">
+        <li>Appearance</li>
+        <li>Display</li>
+        <li>Accessibility</li>
+        <li>Storage</li>
+      </ul>
+    </>
+  ),
+  photos: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Recents</p>
+      <div className="grid grid-cols-3 gap-1">
+        {["#cfe3fb", "#dcf2e3", "#fde0e4", "#fdf1cb", "#e8e1fb", "#fdeccd"].map((c) => (
+          <div key={c} className="aspect-square rounded" style={{ background: c }} />
+        ))}
+      </div>
+    </>
+  ),
+  calendar: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">This week</p>
+      <ul className="space-y-1.5 text-xs">
+        <li><span className="font-semibold text-gray-700">Wed 2:00 pm</span> — Dentist</li>
+        <li><span className="font-semibold text-gray-700">Fri 10:00 am</span> — Book club</li>
+      </ul>
+    </>
+  ),
+  reminders: (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">Reminders</p>
+      <ul className="space-y-1.5 text-xs">
+        <li>Buy groceries</li>
+        <li>Call the pharmacy</li>
+        <li>Water the plants</li>
+      </ul>
+    </>
+  ),
+  "app-market": (
+    <>
+      <p className="font-semibold mb-2 text-gray-800">App Market</p>
+      <ul className="space-y-1.5 text-xs">
+        <li>WeatherNow — Free</li>
+        <li>Puzzle Quest — Free</li>
+        <li>Recipe Keeper — Free</li>
+      </ul>
+    </>
+  ),
+};
 
 interface GuidedDesktopTaskProps {
   goal: string;
@@ -134,7 +256,8 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
   }, []);
 
   useEffect(() => {
-    const fmt = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    // Lowercased to match FakeDesktop's clock — same computer, same clock.
+    const fmt = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase();
     setTime(fmt());
     const id = setInterval(() => setTime(fmt()), 30_000);
     return () => clearInterval(id);
@@ -240,51 +363,28 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
     >
       <div className="h-full flex flex-col select-none">
       {/* Desktop area */}
-      <div className="flex-1 min-h-0 relative bg-[#3b6ea5] overflow-hidden">
-        {/* Subtle dot grid */}
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "24px 24px" }}
-        />
-
-        {/* Menu bar */}
-        <div className="absolute inset-x-0 top-0 h-6 z-10 flex items-center justify-between px-3 text-white text-[11px]" style={{ background: "rgba(20,30,45,0.88)" }}>
-          <span className="text-gray-400 font-semibold tracking-wide text-[10px] uppercase">PlaygroundOS</span>
-          <div className="flex items-center gap-3">
-            {/* WiFi */}
-            <button
-              onClick={() => handleMenuBarClick("wifi")}
-              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "wifi" ? "bg-white/20" : ""} ${step?.action === "open-wifi-panel" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
-              aria-label="WiFi"
-            >
-              <svg viewBox="0 0 20 16" className="w-4 h-3.5" fill="currentColor"><path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/></svg>
-            </button>
-            {/* Battery */}
-            <button
-              onClick={() => handleMenuBarClick("battery")}
-              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "battery" ? "bg-white/20" : ""} ${step?.action === "open-battery-panel" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
-              aria-label="Battery"
-            >
-              <svg viewBox="0 0 24 12" className="w-5 h-3" fill="currentColor">
-                <rect x="0.5" y="0.5" width="19" height="11" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.2"/>
-                <rect x="20" y="3.5" width="3" height="5" rx="1"/>
-                <rect x="2" y="2" width={Math.round(15 * batteryPct / 100)} height="8" rx="1.5"/>
-              </svg>
-            </button>
-            {/* Clock */}
-            <button
-              onClick={() => handleMenuBarClick("clock")}
-              className={`rounded px-1 py-0.5 transition-colors hover:bg-white/15 ${menuPanel === "clock" ? "bg-white/20" : ""} ${step?.action === "open-clock" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
-              aria-label="Clock"
-            >
-              {time}
-            </button>
-          </div>
+      <div className="flex-1 min-h-0 relative overflow-hidden" style={{ background: wallpaper(false) }}>
+        {/* Menu bar — the same one FakeDesktop shows, so Unit 1 teaches the computer
+            the rest of the course goes on using. */}
+        <div className="absolute inset-x-0 top-0 z-10">
+          <DesktopMenuBar
+            title={windowVisible && !minimized && !isClosed ? openedAppLabel : "Desktop"}
+            time={time}
+            batteryPercent={batteryPct}
+            openPanel={menuPanel === "clock" ? "calendar" : menuPanel}
+            onTogglePanel={(panel) => handleMenuBarClick(panel === "calendar" ? "clock" : panel)}
+            highlight={
+              step?.action === "open-wifi-panel" ? "wifi"
+              : step?.action === "open-battery-panel" ? "battery"
+              : step?.action === "open-clock" ? "calendar"
+              : null
+            }
+          />
         </div>
 
         {/* Menu panels */}
         {menuPanel && (
-          <div className="absolute top-6 right-2 z-20 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-slide-down">
+          <div className="absolute top-10 right-2 z-20 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-slide-down">
             <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gray-50">
               <span className="text-xs font-semibold text-gray-700">
                 {menuPanel === "clock" ? "Date & Time" : menuPanel === "wifi" ? "WiFi" : "Battery"}
@@ -341,7 +441,9 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
               }`}
               onMouseDown={onTitleDown}
             >
-              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)] inline-flex items-center gap-1"><NoteIcon size={16} /> {openedAppLabel}</span>
+              <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)] inline-flex items-center gap-1">
+                {APP_GLYPH[openedAppId] ?? <NoteIcon size={16} />} {openedAppLabel}
+              </span>
               <div className="flex-1" />
               <WindowControls
                 onMinimize={onMinimize}
@@ -351,15 +453,11 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
               />
             </div>
 
-            {/* Window content */}
+            {/* Window content — the lesson is about the window, not the app, but the app
+                still has to be the one the learner opened. A browser showing a shopping
+                list teaches them the wrong thing about what a browser is. */}
             <div className="flex-1 p-3 text-gray-600 text-sm overflow-auto pointer-events-none">
-              <p className="font-semibold mb-2 text-gray-800">Shopping List</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Milk</li>
-                <li>Eggs</li>
-                <li>Bread</li>
-                <li>Apples</li>
-              </ul>
+              {APP_CONTENT[openedAppId] ?? APP_CONTENT.notes}
             </div>
 
             {/* Resize handle (bottom-right corner) */}
@@ -378,12 +476,10 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
             )}
           </div>
         )}
-      </div>
 
-      {/* Dock */}
-      <div className="shrink-0 flex items-center justify-center py-2 px-4">
+      {/* Dock — on the wallpaper, where FakeDesktop puts it, not on a strip below it */}
+      <div className="absolute bottom-4 inset-x-2 flex justify-center">
         <Dock
-          tone="dark"
           size="sm"
           items={DOCK_APPS.map((app) => ({
             id: app.id,
@@ -398,6 +494,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
             onDockClick(id);
           }}
         />
+      </div>
       </div>
       </div>
     </SimulatorFrame>
