@@ -1,0 +1,57 @@
+{
+  "slug": "final-real-machine",
+  "unit": "Final Assessment",
+  "module": "Your Own Computer",
+  "order": 1565,
+  "title": "The last one is not a simulation",
+  "videoUrl": "",
+  "drDigitalIntro": "Everything in this course until now has been a careful drawing of a computer. This last mission is your actual machine, and this page checks four things about it that cannot be faked.\n• Your window size, measured as you drag it.\n• A web address you copied from somewhere else, which only counts if it arrives by pasting.\n• A PDF you saved in the last hour, checked for what it is and when you made it.\n• A screenshot you took in the last hour, measured on your own computer and sent nowhere.\nThere is no simulator here and nothing to reset. That is the point of finishing.",
+  "playgroundTask": {
+    "type": "real-world",
+    "goal": "You finished the course on your own machine",
+    "steps": [
+      {
+        "say": "Make this window small, then make it fill the screen.",
+        "check": "window-max",
+        "detail": "Your first lesson was that a window is a thing you can pick up and change the size of. Prove it one more time."
+      },
+      {
+        "say": "Read the address bar and type the address of this page.",
+        "check": "type-answer",
+        "match": "hostname",
+        "detail": "The part before the first slash. The habit that catches fakes."
+      },
+      {
+        "say": "Copy the web address of any other page and paste it here.",
+        "check": "paste",
+        "minChars": 10,
+        "detail": "Open something else — a news site, a shop, an encyclopedia — click the address bar, copy the address, and paste it below."
+      },
+      {
+        "say": "Save any web page as a PDF, then pick the file here.",
+        "check": "file",
+        "file": {
+          "kind": "pdf",
+          "recentMinutes": 60
+        },
+        "detail": "Press Ctrl+P or Command+P, change the destination to Save as PDF, and save it. Then press the button and find it."
+      },
+      {
+        "say": "Take a screenshot and pick it here.",
+        "check": "file",
+        "file": {
+          "kind": "image",
+          "recentMinutes": 60
+        },
+        "detail": "On a Mac hold Shift and Command and press 3. On Windows hold the Windows key and Shift and press S, then save it."
+      },
+      {
+        "say": "Teach one thing from this course to somebody else.",
+        "check": "confirm",
+        "detail": "The last step of learning anything is saying it out loud to another person. Pick the one thing you wish somebody had told you at the start."
+      }
+    ]
+  },
+  "drDigitalSuccess": "That was your computer, your files and your window — no practice machine anywhere in it. You are done.",
+  "drDigitalHint": "Each step tells you exactly what it wants and why it turned something down. Nothing here is a trick."
+}

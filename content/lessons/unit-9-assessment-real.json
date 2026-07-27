@@ -3,12 +3,40 @@
   "unit": "Unit 9: System Settings",
   "module": "Unit 9 Assessment",
   "order": 961,
-  "title": "Now set up your own computer",
+  "title": "Mission: a setting this page can see",
   "videoUrl": "",
-  "drDigitalIntro": "Do the same on the machine in front of you. These are the settings worth knowing where to find.\n\n1. Open Settings — the gear icon, or search your computer for 'Settings'.\n2. Try dark mode and light mode. Keep whichever is easier on your eyes.\n3. Move the brightness to a level that is comfortable in the room you are in right now.\n4. Turn on Night Shift (Mac) or Night Light (Windows) so evenings are warmer and easier to read.\n5. If text feels small, look under Display or Accessibility for a text size or scaling setting.\n6. Find the Storage page and note how much free space you have.\n\nNone of this is permanent. Every one of these can be changed back in seconds.",
+  "drDigitalIntro": "Settings are not decoration. They are how you make a computer suit your eyes, your room and your evening.\n• You will change dark mode in your computer's own settings, and this page will notice by itself, because your browser passes that preference on to every website you visit.\n• That is worth understanding on its own: some of your settings are visible to the sites you use, which is how they know to show you a dark page.\n• The rest of the mission is on your honour — brightness, night light, notifications and storage.\n• Nothing here is permanent. Every one of these can be put back in ten seconds.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You changed a real setting and watched this page notice",
+    "steps": [
+      {
+        "say": "Change dark mode in your computer's own settings.",
+        "check": "dark-mode",
+        "detail": "Not in this page — in the computer's settings, where it applies to everything. Look under Appearance, Personalisation, or Display. The box below changes on its own when you do it."
+      },
+      {
+        "say": "Move the brightness until it is comfortable for the room you are actually in.",
+        "check": "confirm",
+        "detail": "Most people run a screen far brighter than they need. The right level is the one where the white parts of the screen match a sheet of paper on the desk."
+      },
+      {
+        "say": "Turn on the evening warm-light setting.",
+        "check": "confirm",
+        "detail": "It is called Night Shift or Night Light depending on the computer. It takes the blue out of the screen after dark, which most people find easier on the eyes."
+      },
+      {
+        "say": "Turn off notifications for one app that interrupts you too much.",
+        "check": "confirm",
+        "detail": "Notifications are opt-out, not opt-in. Every app assumes it deserves your attention until you say otherwise."
+      },
+      {
+        "say": "Look at what is taking up space on your computer.",
+        "check": "confirm",
+        "detail": "There is a storage page in Settings that shows what is using the disk. You do not have to delete anything today — knowing where to look is the skill."
+      }
+    ]
   },
-  "drDigitalSuccess": "",
-  "drDigitalHint": "If you cannot find a setting, use the search box at the top of the Settings window and type what you want, like 'brightness'."
+  "drDigitalSuccess": "You changed a setting on your own computer and this page saw it happen. That is not a trick: it is your browser telling websites what you prefer.",
+  "drDigitalHint": "The first step needs the computer's settings, not the browser's and not this page's. If your computer is already in dark mode, turning it off works just as well."
 }

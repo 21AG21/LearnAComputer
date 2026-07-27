@@ -3,12 +3,124 @@
   "unit": "Unit 3: Files and Folders",
   "module": "Unit 3 Assessment",
   "order": 391,
-  "title": "Now organize a real folder",
+  "title": "Mission: sort a real folder",
   "videoUrl": "",
-  "drDigitalIntro": "You have proved it in the simulator. Do it once on your own computer and it will stick.\n\n1. Open your real Downloads folder — it is in the sidebar of your file manager.\n2. Make one new folder inside it and give it a name that means something to you.\n3. Drag two or three related files into that folder.\n4. Rename one file that has a confusing name, like a photo called IMG_4471.\n5. Delete something you know you do not need. It goes to the Trash, so it is not gone forever.\n\nThere is no single right answer and nothing here is checked. The point is that your Downloads folder ends the day tidier than it started.",
+  "drDigitalIntro": "This is the real thing. You will download a folder of fifteen files onto your own computer, sort it out yourself, and then show it back to this page — which checks every single file.\n• Make three folders inside it, named exactly Photos, Documents and Money, and put every file in the right one.\n• One file is called scan0001.pdf, which tells you nothing at all. Open it, see what it is, and rename it to something that says so.\n• Three files are junk and should be deleted: 'Copy of Copy of Untitled.txt', 'New Text Document.txt', and 'download (1).csv', which is the same budget you already have.\n• Be careful with 'Untitled document (2).txt' — the name looks like junk, but open it and you will find it is worth keeping. That is the whole lesson: names lie, contents do not.\n• When you press Show me the folder, your browser hands this page the list of names inside it. Nothing is uploaded, and this page has nowhere to send anything.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You sorted a real folder on your own computer",
+    "download": {
+      "file": "messy-folder.zip",
+      "label": "Download the messy folder",
+      "note": "15 files, about 16 KB. Everything in it is harmless: pictures, text files, a spreadsheet and three PDFs."
+    },
+    "steps": [
+      {
+        "say": "Download the practice folder.",
+        "check": "download",
+        "detail": "It is a zip file — one file with fifteen files packed inside it. Your browser will put it in your Downloads folder."
+      },
+      {
+        "say": "Find it in Downloads and unzip it.",
+        "check": "confirm",
+        "detail": "Double-click the zip. On a Mac a folder called messy-folder appears next to it. On Windows, choose Extract All and then Extract. Do the sorting in the unzipped folder, not inside the zip."
+      },
+      {
+        "say": "Open the folder and look at what is in there.",
+        "check": "confirm",
+        "detail": "Fifteen files and no order at all — pictures, letters, bills and junk, exactly like a real Downloads folder after a busy month. Open two or three to see what they are."
+      },
+      {
+        "say": "Make three folders inside it: Photos, Documents and Money.",
+        "check": "confirm",
+        "detail": "Right-click on the empty space inside the folder and choose New Folder, or use the New Folder button in the toolbar. Spelling matters here, because the check reads the names."
+      },
+      {
+        "say": "Move every file into the folder where it belongs.",
+        "check": "confirm",
+        "detail": "Pictures and screenshots into Photos. Letters, notes and lists into Documents. Bills, receipts and the budget into Money. Drag them, or select and use cut and paste."
+      },
+      {
+        "say": "Open scan0001.pdf, then rename it after what you find inside.",
+        "check": "confirm",
+        "detail": "A name like scan0001 was written by a machine, not a person. Open the file, read what it actually is, and give it a name your future self would recognise."
+      },
+      {
+        "say": "Delete the three junk files.",
+        "check": "confirm",
+        "detail": "'Copy of Copy of Untitled.txt' and 'New Text Document.txt' are both empty, and 'download (1).csv' is a second copy of the budget. They go to the Trash or Recycle Bin, so nothing is gone forever."
+      },
+      {
+        "say": "Show me the folder, and I will check every file.",
+        "check": "folder",
+        "detail": "Press the button, then choose the messy-folder folder itself — not the zip, and not the folder it is sitting in. Your browser may ask whether you are sure about letting a page see a folder; that is normal, and it is only the names it sees.",
+        "expect": {
+          "folders": [
+            "Photos",
+            "Documents",
+            "Money"
+          ],
+          "placements": [
+            {
+              "file": "IMG_20250712_113045.jpg",
+              "in": "Photos"
+            },
+            {
+              "file": "DSC_0043.jpg",
+              "in": "Photos"
+            },
+            {
+              "file": "beach-day.jpg",
+              "in": "Photos"
+            },
+            {
+              "file": "Screenshot 2025-07-12 at 14.22.08.png",
+              "in": "Photos"
+            },
+            {
+              "file": "Untitled document (2).txt",
+              "in": "Documents"
+            },
+            {
+              "file": "letter to the council FINAL final v2.txt",
+              "in": "Documents"
+            },
+            {
+              "file": "book club notes.txt",
+              "in": "Documents"
+            },
+            {
+              "file": "holiday-packing-list.txt",
+              "in": "Documents"
+            },
+            {
+              "file": "budget-2025.csv",
+              "in": "Money"
+            },
+            {
+              "file": "electricity bill march.pdf",
+              "in": "Money"
+            },
+            {
+              "file": "receipt-kettle.pdf",
+              "in": "Money"
+            }
+          ],
+          "absent": [
+            "Copy of Copy of Untitled.txt",
+            "New Text Document.txt",
+            "download (1).csv"
+          ],
+          "renamed": {
+            "was": "scan0001.pdf",
+            "in": "Money",
+            "rejectPattern": "^(scan|img|dsc|untitled|new|copy|document\\d|file|doc\\d)"
+          },
+          "noLooseFiles": true
+        }
+      }
+    ]
   },
-  "drDigitalSuccess": "",
-  "drDigitalHint": "Take your time — this one is on your own machine, not in the simulator."
+  "drDigitalSuccess": "Fifteen files, three folders, one renamed and three deleted — on your own computer, checked one by one. That is the whole skill.",
+  "drDigitalHint": "If the check says a file is in the wrong place, it names the file and the folder it should be in. Fix it on your computer and press Check it again — you can do that as often as you like."
 }

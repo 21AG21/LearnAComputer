@@ -3,12 +3,42 @@
   "unit": "Unit 2: Keyboard and Typing",
   "module": "Unit 2 Assessment",
   "order": 296,
-  "title": "Now try it on your own computer",
+  "title": "Mission: type it, then move it",
   "videoUrl": "",
-  "drDigitalIntro": "You have typed, selected, formatted and used shortcuts on a practice keyboard. Now use your real one.\n• Open any program you can type in — a notes app, an email, even the search box in your browser.\n• Type a sentence, select it with Shift and the arrow keys, and copy it with Ctrl+C (or Command+C on a Mac).\n• Paste it somewhere else with Ctrl+V, then undo with Ctrl+Z.\n• The keys are in the same places on your keyboard as they were on the practice one.",
+  "drDigitalIntro": "Copying between two different programs is the moment typing stops being typing and starts being useful.\n• You will type a sentence in one of your own apps, copy it, and paste it into the box on this page.\n• The box can tell the difference between text you typed and text you pasted, so it only counts if the copy really worked.\n• The sentence to type is: The quick brown fox jumps over the lazy dog.\n• It uses every letter of the alphabet, which is why typists have practised on it for a hundred years.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You typed it, copied it and pasted it between two real programs",
+    "steps": [
+      {
+        "say": "Open something you can type in on your own computer.",
+        "check": "confirm",
+        "detail": "A notes app, an email you never send, even the search box in another window. Anywhere text can go."
+      },
+      {
+        "say": "Type this into it: The quick brown fox jumps over the lazy dog.",
+        "check": "confirm",
+        "detail": "Capital T at the start, full stop at the end. Take your time — accuracy first, speed comes later and comes free."
+      },
+      {
+        "say": "Select it, copy it, and paste it into the box below.",
+        "check": "paste",
+        "minChars": 40,
+        "detail": "Select by dragging across the words. Copy with Ctrl+C, or Command+C on a Mac. Then click in the box below and press Ctrl+V, or Command+V."
+      },
+      {
+        "say": "With that box active, press Ctrl+A (or Command+A) to select everything in it.",
+        "check": "keys",
+        "keys": "ctrl+a",
+        "detail": "A is for all. It is the fastest way to grab a whole page of text without dragging across it."
+      },
+      {
+        "say": "Back in your own app, undo what you typed with Ctrl+Z (or Command+Z).",
+        "check": "confirm",
+        "detail": "Undo is the reason nothing you do to text is permanent. Press it more than once and it keeps stepping backwards."
+      }
+    ]
   },
-  "drDigitalSuccess": "Those shortcuts work in almost every program you will ever use.",
-  "drDigitalHint": "Read along, then try it in any program on your own computer."
+  "drDigitalSuccess": "You moved text out of one program and into another. That works between any two programs on the machine.",
+  "drDigitalHint": "The box below only accepts text that arrives by pasting. If you type into it, nothing happens — copy from your own app instead."
 }

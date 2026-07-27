@@ -5,10 +5,39 @@
   "order": 1361,
   "title": "Now adjust your own computer",
   "videoUrl": "",
-  "drDigitalIntro": "You have tried all of these on a practice computer. The last step is to try them on yours.\n• Open Settings on your own computer and look for a section called Accessibility, Ease of Access, or Universal Access — the name varies.\n• Change one thing. Look at the screen. Decide whether you prefer it.\n• If you do not like it, change it straight back. That is the whole point of this unit.\n• Do not try to set everything at once. One change a day is plenty.",
+  "drDigitalIntro": "You have moved every one of these settings on a practice machine. Now move them where they count.\n• You will zoom this page in and back out, and the page reads the real zoom level as you do it.\n• You will turn on Reduce Motion in your computer's own settings, and this page will see it change, because your browser passes that preference on to every website.\n• Then the ones only you can judge: text size, pointer size, and the screen reader.\n• Nothing here is a commitment. Every setting in this mission goes back exactly the way it came.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You set up your own computer the way it suits you",
+    "steps": [
+      {
+        "say": "Zoom this page in past 120 per cent, then put it back to 100.",
+        "check": "zoom",
+        "detail": "Hold Ctrl, or Command on a Mac, and press the + key. Ctrl and 0 puts it back. This changes one website's size and nothing else — which is exactly what you want when only one site sets its text too small."
+      },
+      {
+        "say": "Turn Reduce Motion on in your computer's own settings.",
+        "check": "reduce-motion",
+        "detail": "It is in the accessibility section of Settings. It stops windows sliding and screens sweeping about, which helps a lot of people and is worth trying even if you have never thought about it."
+      },
+      {
+        "say": "Make the text bigger everywhere, not just on one page.",
+        "check": "confirm",
+        "detail": "This is a system setting, not a browser one — it changes menus, buttons and labels across every app. Bigger text means less fits on screen, which is a trade worth making if you are squinting."
+      },
+      {
+        "say": "Make the pointer bigger until you can find it without hunting.",
+        "check": "confirm",
+        "detail": "Losing the pointer is not a failing of yours; the default is small. There is also a setting that makes it grow when you shake the mouse."
+      },
+      {
+        "say": "Turn the screen reader on for one minute, then turn it off.",
+        "check": "confirm",
+        "detail": "It reads aloud whatever you point at. One minute is enough to understand how somebody who cannot see the screen uses the same computer you do."
+      }
+    ]
   },
-  "drDigitalSuccess": "Your computer should fit you, not the other way round.",
-  "drDigitalHint": "Read along, then go and try one setting on your own computer."
+  "drDigitalSuccess": "Every one of those was on your own machine, and two of them this page could see for itself.",
+  "drDigitalHint": "For Reduce Motion, look in the accessibility part of Settings — it is usually under a heading about motion or animation. The box updates the moment you switch it.",
+  "warning": "The screen reader takes over the keyboard while it is on. To turn it off again: on a Mac hold Command and press F5; on Windows hold the Windows key and Ctrl and press Enter."
 }

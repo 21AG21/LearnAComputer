@@ -3,12 +3,47 @@
   "unit": "Unit 7: Photos",
   "module": "Unit 7 Assessment",
   "order": 781,
-  "title": "Now sort your own photos",
+  "title": "Mission: your own photos, measured",
   "videoUrl": "",
-  "drDigitalIntro": "You have edited, shared, favourited and recovered photos in the practice library. Now open yours.\n• Find a photo you like and mark it as a favourite.\n• Make an album and put three or four related photos in it — a trip, a person, an occasion.\n• Try the editing tools on one photo: brightness, crop, a filter. There is always a way to undo.\n• Delete a photo you do not want, then look in Recently Deleted to see that it is still recoverable.",
+  "drDigitalIntro": "Photos have a shape and a size, and knowing that is the difference between 'this picture will not fit' and knowing why.\n• You will pick two photos from your own computer: one wider than it is tall, and one taller than it is wide.\n• The page reads each one's real width and height and shows them to you. It measures them here on your machine and never sends them anywhere.\n• Then you will rename a photo to something meaningful and pick that one, and the page will turn it down if the name is still the one the camera gave it.\n• IMG_4471 means nothing in five years. 'Dad at the lake' still means something.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You measured and named your own photos",
+    "steps": [
+      {
+        "say": "Find a photo on your computer that is wider than it is tall.",
+        "check": "file",
+        "file": {
+          "kind": "image",
+          "orientation": "landscape"
+        },
+        "detail": "A landscape, a group of people, most things taken with the camera held sideways. The page will tell you exactly how many dots across and down it is."
+      },
+      {
+        "say": "Now find one that is taller than it is wide.",
+        "check": "file",
+        "file": {
+          "kind": "image",
+          "orientation": "portrait"
+        },
+        "detail": "A portrait of one person, a tall building, almost anything taken with a phone held upright."
+      },
+      {
+        "say": "Make an album and put three or four related photos in it.",
+        "check": "confirm",
+        "detail": "A trip, a person, an occasion. An album does not move or copy the pictures — it is a second way of looking at the ones you already have."
+      },
+      {
+        "say": "Rename one photo to something that says what it is, then pick that one.",
+        "check": "file",
+        "file": {
+          "kind": "image",
+          "rejectPattern": "^(img|dsc|photo|screenshot|image|untitled|new)"
+        },
+        "detail": "Rename it in your photo library or your file manager first. Then press the button and choose it. A name starting with IMG or DSC will be turned down, because that is the camera talking, not you."
+      }
+    ]
   },
-  "drDigitalSuccess": "Your own library works the same way, and nothing you did is permanent for at least thirty days.",
-  "drDigitalHint": "Read along, then open the photo app on your own computer or phone."
+  "drDigitalSuccess": "Two shapes, an album, and one photo that will still make sense to you in ten years.",
+  "drDigitalHint": "The shape is decided by the picture itself, not by how you are looking at it. If a photo is turned down, the page tells you its real width and height so you can see why."
 }

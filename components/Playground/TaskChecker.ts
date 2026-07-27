@@ -1,3 +1,5 @@
+import type { FolderExpect } from "@/lib/lessons";
+
 export type SuccessCondition = "pasted-matches-source";
 
 export interface CopyPasteSubmission {
@@ -86,4 +88,169 @@ export function checkNotesShortcut(action: string, e: KbEvent): boolean {
     case "redo":       return mod && e.shiftKey && e.key === "z";
     default:           return false;
   }
+}
+
+// ─── Real-world missions ────────────────────────────────────────────────────
+// The learner organizes a folder on their own machine and hands it back through
+// a directory picker. These functions see only names and paths — the file
+// contents are never read, and nothing is ever uploaded.
+
+
+export interface FolderReport {
+  pass: boolean;
+  /** What they got right, so a near-miss doesn't read as total failure. */
+  wins: string[];
+  issues: string[];
+  /** Set when the picked folder plainly isn't the practice one. */
+  wrongFolder?: boolean;
+}
+
+/** Files a file manager creates on its own. Judging someone for these would be unfair. */
+const SYSTEM_FILES = [".ds_store", "thumbs.db", "desktop.ini", ".localized"];
+
+const isSystemFile = (name: string) => SYSTEM_FILES.includes(name.toLowerCase()) || name.startsWith("._");
+
+/**
+ * Turn the picker's relative paths into `{ folder, name }`, where folder is "" for
+ * anything sitting loose at the top.
+ *
+ * The picker always prefixes every path with the chosen folder's own name, so the
+ * first segment is dropped. If the learner picked the folder *containing* their
+ * work instead, a second common segment is dropped too — as long as it isn't one
+ * of the folders they were asked to make.
+ */
+export function normalizeFolderPaths(paths: string[], expectedFolders: string[] = []): Array<{ folder: string; name: string }> {
+  const expected = expectedFolders.map((f) => f.toLowerCase());
+  let parts = paths
+    .map((p) => p.split("/").filter(Boolean))
+    .filter((segs) => segs.length > 0 && !isSystemFile(segs[segs.length - 1]));
+
+  const stripCommonRoot = () => {
+    if (parts.length === 0) return false;
+    const head = parts[0][0];
+    if (!head || expected.includes(head.toLowerCase())) return false;
+    if (!parts.every((segs) => segs.length > 1 && segs[0] === head)) return false;
+    parts = parts.map((segs) => segs.slice(1));
+    return true;
+  };
+
+  stripCommonRoot();
+  stripCommonRoot();
+
+  return parts.map((segs) => ({
+    folder: segs.length > 1 ? segs[0] : "",
+    name: segs[segs.length - 1],
+  }));
+}
+
+export function checkOrganizedFolder(paths: string[], expect: FolderExpect): FolderReport {
+  const entries = normalizeFolderPaths(paths, expect.folders);
+  const wins: string[] = [];
+  const issues: string[] = [];
+
+  const eq = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
+  const find = (file: string) => entries.find((e) => eq(e.name, file));
+  const folderNames = Array.from(new Set(entries.map((e) => e.folder).filter(Boolean)));
+
+  // Did they hand back the right folder at all?
+  const known = [...expect.placements.map((p) => p.file), ...(expect.absent ?? []), expect.renamed?.was].filter(
+    Boolean,
+  ) as string[];
+  const recognised = known.filter((f) => find(f)).length;
+  if (entries.length === 0) {
+    return { pass: false, wins, issues: ["That folder is empty. Pick the folder you unzipped."], wrongFolder: true };
+  }
+  if (recognised === 0) {
+    return {
+      pass: false,
+      wins,
+      issues: [
+        `None of the practice files are in there — I found ${entries.length} other file${entries.length === 1 ? "" : "s"}. Pick the folder that came out of the zip, not the one it is sitting in.`,
+      ],
+      wrongFolder: true,
+    };
+  }
+
+  // Folders they were asked to make
+  for (const folder of expect.folders) {
+    if (folderNames.some((f) => eq(f, folder))) {
+      wins.push(`Folder "${folder}" exists`);
+    } else {
+      issues.push(
+        folderNames.length > 0
+          ? `There is no folder called "${folder}". I can see: ${folderNames.join(", ")}.`
+          : `There are no folders in here yet — "${folder}" is missing.`,
+      );
+    }
+  }
+
+  // Every file in its place
+  const misplaced: string[] = [];
+  const missing: string[] = [];
+  for (const { file, in: target } of expect.placements) {
+    const entry = find(file);
+    if (!entry) {
+      missing.push(file);
+    } else if (!eq(entry.folder, target)) {
+      misplaced.push(
+        entry.folder
+          ? `"${file}" is in ${entry.folder} — it belongs in ${target}.`
+          : `"${file}" is still loose at the top — it belongs in ${target}.`,
+      );
+    }
+  }
+  const placed = expect.placements.length - misplaced.length - missing.length;
+  if (placed > 0) wins.push(`${placed} of ${expect.placements.length} files are in the right folder`);
+  issues.push(...misplaced.slice(0, 4));
+  if (misplaced.length > 4) issues.push(`…and ${misplaced.length - 4} more in the wrong folder.`);
+  for (const file of missing.slice(0, 3)) {
+    issues.push(`I cannot find "${file}" anywhere. Did it get deleted by mistake? Check your trash.`);
+  }
+
+  // Junk that should be gone
+  const survivors = (expect.absent ?? []).filter((f) => find(f));
+  if ((expect.absent ?? []).length > 0 && survivors.length === 0) wins.push("The junk files are gone");
+  for (const file of survivors) {
+    issues.push(`"${file}" is still here. That one was junk — delete it.`);
+  }
+
+  // The file that had to be renamed after reading it
+  if (expect.renamed) {
+    const { was, in: target, rejectPattern } = expect.renamed;
+    const stillThere = find(was);
+    const expectedInTarget = expect.placements.filter((p) => eq(p.in, target)).map((p) => p.file);
+    const extras = entries.filter(
+      (e) => eq(e.folder, target) && !expectedInTarget.some((f) => eq(f, e.name)) && !eq(e.name, was),
+    );
+
+    if (stillThere) {
+      issues.push(`"${was}" still has its old name. Open it, see what it is, and rename it after that.`);
+    } else if (extras.length === 0) {
+      issues.push(`Nothing renamed turned up in ${target}. "${was}" should be in there under a better name.`);
+    } else if (rejectPattern && new RegExp(rejectPattern, "i").test(extras[0].name)) {
+      issues.push(`"${extras[0].name}" still does not say what the file is. Name it after what you saw inside it.`);
+    } else {
+      wins.push(`"${was}" is now "${extras[0].name}"`);
+    }
+  }
+
+  // Nothing left lying loose
+  if (expect.noLooseFiles) {
+    const loose = entries.filter((e) => !e.folder);
+    const unaccounted = loose.filter(
+      (e) => !expect.placements.some((p) => eq(p.file, e.name)) && !(expect.absent ?? []).some((f) => eq(f, e.name)),
+    );
+    if (loose.length === 0) {
+      wins.push("Nothing is left loose at the top level");
+    } else if (unaccounted.length > 0) {
+      issues.push(
+        `${unaccounted.length} file${unaccounted.length === 1 ? " is" : "s are"} still loose at the top: ${unaccounted
+          .slice(0, 3)
+          .map((e) => `"${e.name}"`)
+          .join(", ")}.`,
+      );
+    }
+  }
+
+  return { pass: issues.length === 0, wins, issues };
 }

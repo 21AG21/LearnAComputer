@@ -3,12 +3,36 @@
   "unit": "Unit 10: Online Safety and Security",
   "module": "Unit 10 Assessment",
   "order": 1101,
-  "title": "Now check your own accounts",
+  "title": "Mission: check your own accounts",
   "videoUrl": "",
-  "drDigitalIntro": "You have judged phishing messages, built strong passwords and used two-factor codes in practice. Now check your real accounts.\n• Pick your most important account — email or banking — and turn on two-factor authentication if it is not already on.\n• Change any password you use in more than one place. Reused passwords are the single biggest risk most people carry.\n• Look at the last suspicious message you received and find the real address behind the link, without clicking it.\n• If you are ever unsure, close the message and go to the company's website yourself. That habit alone prevents most scams.",
+  "drDigitalIntro": "A fake site can copy a real one perfectly — the logo, the layout, the wording, all of it. The one thing it cannot copy is the address in the bar at the top.\n• You will read this page's real address out of that bar and type it back, because that is the habit that catches nearly every phishing attempt.\n• Then you will do the two things that actually protect an account: two-factor authentication on the important one, and no reused passwords.\n• Reused passwords are the single biggest risk most people carry. One leak somewhere becomes a break-in everywhere.\n• None of this is checked by the page except the first step. It is checked by you not being burgled.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You checked the address bar and hardened a real account",
+    "steps": [
+      {
+        "say": "Read the address bar and type the address this page is really at.",
+        "check": "type-answer",
+        "match": "hostname",
+        "detail": "The part before the first slash. A convincing fake will have a convincing page and an address that is slightly wrong — an extra word, a different ending, a zero for an o."
+      },
+      {
+        "say": "Turn on two-factor authentication for your most important account.",
+        "check": "confirm",
+        "detail": "Email first, because everything else resets through it. Two-factor means a stolen password on its own is not enough to get in."
+      },
+      {
+        "say": "Change any password you use in more than one place.",
+        "check": "confirm",
+        "detail": "Start with the ones attached to money or email. Three unrelated words with a number is easier to remember and harder to break than Passw0rd!"
+      },
+      {
+        "say": "Find the last suspicious message you received and check the sender's real address.",
+        "check": "confirm",
+        "detail": "The display name is decoration and anyone can set it. The address behind it is the fact. They almost never match on a scam."
+      }
+    ]
   },
-  "drDigitalSuccess": "These four habits protect you more than any software you could install.",
-  "drDigitalHint": "Read along, then check one of your own accounts."
+  "drDigitalSuccess": "You read a real address bar and did the two things that actually protect an account. Most people never do either.",
+  "drDigitalHint": "For the first step, ignore everything on the page and read the strip at the very top of the browser window."
 }

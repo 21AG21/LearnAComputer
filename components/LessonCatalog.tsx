@@ -35,7 +35,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
   const units = Array.from(new Set(routes.map((r) => r.unit)));
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8 space-y-8">
+    <div className="mx-auto w-full max-w-5xl px-6 py-8 space-y-8">
       {/* Overall progress */}
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
@@ -91,7 +91,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
               </div>
               <h2 className="text-base font-bold text-gray-500 uppercase tracking-widest dark:text-gray-400">{unit}</h2>
             </div>
-            <div className="space-y-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {unitRoutes.map((route) => {
                 const done = route.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;
                 const total = route.subLessons.length;

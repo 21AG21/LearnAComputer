@@ -3,12 +3,39 @@
   "unit": "Unit 5: Messages and Video Calls",
   "module": "Unit 5 Assessment",
   "order": 571,
-  "title": "Now message someone real",
+  "title": "Mission: reach a real person",
   "videoUrl": "",
-  "drDigitalIntro": "You have sent messages, reacted, attached photos and run a video call in practice. Now do it for real.\n• Open your messaging app and send one message to someone who will be pleased to hear from you.\n• React to something they sent instead of typing a reply — press and hold, or double-tap, the message.\n• Send them a photo from your own library.\n• If they are up for it, start a video call and find the buttons for muting yourself and turning the camera off before you need them.",
+  "drDigitalIntro": "Practice conversations are safe because nobody is on the other end. This one has somebody on the other end.\n• Send one real message to somebody who will be glad to hear from you. That is the point of the whole unit.\n• You will also take a screenshot — a picture of your own screen — and hand it to this page, which reads its size and shape to confirm you made it just now.\n• The picture is measured on your own computer and never sent anywhere.\n• On a Mac, hold Shift and Command and press 3. On Windows, press the Windows key and Shift and S, then save the picture.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You reached a real person and made a real screenshot",
+    "steps": [
+      {
+        "say": "Send one real message to somebody who will be pleased to hear from you.",
+        "check": "confirm",
+        "detail": "It does not need to be an occasion. 'Thinking of you' is a complete message and always lands well."
+      },
+      {
+        "say": "React to something they sent instead of typing a reply.",
+        "check": "confirm",
+        "detail": "Press and hold the message, or double-tap it. A reaction says 'I read this' without either of you having to keep the conversation going."
+      },
+      {
+        "say": "Take a screenshot of your screen right now, then pick it here.",
+        "check": "file",
+        "file": {
+          "kind": "image",
+          "recentMinutes": 30
+        },
+        "detail": "A screenshot is a photograph of your own screen, saved as a picture file — usually onto your desktop or into Pictures. It is how you show somebody what you are seeing when describing it is hopeless."
+      },
+      {
+        "say": "Start a video call and find the mute button before you need it.",
+        "check": "confirm",
+        "detail": "Find mute and camera-off in the first ten seconds of a call, while nothing is urgent. Hunting for mute with a barking dog in the room is not the moment to learn where it lives."
+      }
+    ]
   },
-  "drDigitalSuccess": "Knowing where the mute button is before the call starts is the whole trick.",
-  "drDigitalHint": "Read along, then open your own messaging app."
+  "drDigitalSuccess": "A real message to a real person, and a screenshot you made yourself. Both of those are worth more than any practice conversation.",
+  "drDigitalHint": "For the screenshot step, the picture has to be one you made in the last half hour — an old photo will be turned down, and the page will tell you how old it is."
 }

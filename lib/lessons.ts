@@ -298,7 +298,78 @@ export type PlaygroundTask =
         target?: string;
       }>;
     }
-  | { type: "keyboard-nav-game" };
+  | { type: "keyboard-nav-game" }
+  | {
+      /**
+       * A mission carried out on the learner's OWN computer, checked by the page.
+       * Every check reads something real — a folder they organized, a file they
+       * picked, a setting they changed, their network going down — and every read
+       * happens in the browser. Nothing is uploaded anywhere.
+       */
+      type: "real-world";
+      goal: string;
+      /** Optional file served from /public that the mission starts by downloading. */
+      download?: { file: string; label: string; note?: string };
+      steps: RealWorldStep[];
+    };
+
+/** What a picked folder has to look like for the sort to count as done. */
+export interface FolderExpect {
+  /** Folder names the learner was told to create, matched case-insensitively. */
+  folders: string[];
+  /** Every file that must end up in a named folder. */
+  placements: Array<{ file: string; in: string }>;
+  /** Files that were junk — they must not survive anywhere in the tree. */
+  absent?: string[];
+  /** A file whose name said nothing and had to be renamed after reading it. */
+  renamed?: { was: string; in: string; rejectPattern?: string };
+  /** When true, no file may be left loose at the top level. */
+  noLooseFiles?: boolean;
+}
+
+/** What a picked file has to be. */
+export interface FileExpect {
+  kind?: "image" | "pdf" | "any";
+  /** The exact file they were sent — proves they found their own Downloads folder. */
+  nameIs?: string;
+  /** Must have been created/modified within this many minutes — proves they did it just now. */
+  recentMinutes?: number;
+  minBytes?: number;
+  orientation?: "landscape" | "portrait";
+  /** Reject names the learner clearly did not choose (IMG_1234, Screenshot …). */
+  rejectPattern?: string;
+}
+
+export interface RealWorldStep {
+  say: string;
+  /** Extra explanation shown under the control. */
+  detail?: string;
+  check:
+    | "confirm"
+    | "download"
+    | "folder"
+    | "file"
+    | "paste"
+    | "window-max"
+    | "zoom"
+    | "dark-mode"
+    | "reduce-motion"
+    | "offline"
+    | "online"
+    | "type-answer"
+    | "keys";
+  expect?: FolderExpect;
+  file?: FileExpect;
+  /** type-answer: what counts as right. `match` compares against something the page can measure. */
+  answers?: string[];
+  match?: "battery" | "hostname" | "browser" | "text";
+  tolerance?: number;
+  /** paste: how much text, and text it must NOT be (so pasting our own words back fails). */
+  minChars?: number;
+  notText?: string;
+  /** keys: a combination like "ctrl+shift+t" (ctrl also accepts the Command key). */
+  keys?: string;
+}
 
 export interface Lesson {
   slug: string;

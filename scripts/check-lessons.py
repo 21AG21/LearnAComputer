@@ -100,6 +100,44 @@ for les in lessons:
             f"which appears in neither the step text nor the lesson brief"
         )
 
+# ─── Real-world missions ─────────────────────────────────────────────────────
+# The same rule as above, applied to the machine in front of the learner. A
+# mission that checks for a folder called "Money" without ever saying the word
+# "Money" is asking them to guess, and the failure would arrive at the very last
+# step after twenty minutes of sorting. Anything the check compares by name —
+# folder names, the junk files to delete, the file to rename, a named download —
+# has to appear in the brief or in a step. Downloads must also actually exist.
+for les in lessons:
+    task = les.get("playgroundTask", {})
+    if task.get("type") != "real-world":
+        continue
+    steps = task.get("steps") or []
+    text = " ".join(
+        [les.get("drDigitalIntro", ""), les.get("drDigitalHint", ""), task.get("goal", "")]
+        + [s.get("say", "") + " " + s.get("detail", "") for s in steps]
+    ).lower()
+
+    def require(value, what):
+        if value and value.lower() not in text:
+            errors.append(f"UNGIVEN MISSION VALUE: {les['slug']} checks for {what} {value!r}, which the lesson never states")
+
+    download = task.get("download")
+    if download:
+        path = os.path.join("public", "missions", download["file"])
+        if not os.path.exists(path):
+            errors.append(f"MISSING ASSET: {les['slug']} offers '{download['file']}' but {path} does not exist")
+
+    for step in steps:
+        expect = step.get("expect") or {}
+        for folder in expect.get("folders", []):
+            require(folder, "a folder called")
+        for junk in expect.get("absent", []):
+            require(junk, "the deletion of")
+        if expect.get("renamed"):
+            require(expect["renamed"].get("was"), "the renaming of")
+        if (step.get("file") or {}).get("nameIs"):
+            require(step["file"]["nameIs"], "the file")
+
 # Report
 if errors:
     print(f"\n{len(errors)} ERROR(S) FOUND:\n")

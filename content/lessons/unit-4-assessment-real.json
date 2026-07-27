@@ -3,12 +3,50 @@
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Unit 4 Assessment",
   "order": 499,
-  "title": "Now browse on your own computer",
+  "title": "Mission: find what you downloaded",
   "videoUrl": "",
-  "drDigitalIntro": "You have navigated, searched, opened tabs and closed a scam popup in the practice browser. Now use yours.\n• Open your browser and type a website address you know straight into the address bar.\n• Open a second tab and search for something in it, then switch between the two tabs.\n• Look for the padlock in the address bar and check it is there before typing anything personal.\n• Close the tabs you no longer need. A browser with thirty tabs open is slower and harder to use.",
+  "drDigitalIntro": "Downloading something is easy. Finding it afterwards is where people get stuck, and it is the whole difference between a computer that feels useful and one that feels like it eats things.\n• You will download a small file from this page and then hand the same file back, which you can only do by finding it in your own Downloads folder.\n• The file is called Downloads-Practice.pdf. If you pick anything else, the page will say so.\n• You will also read this page's real web address out of the address bar and type it back.\n• Nothing is uploaded. The file stays on your computer; the page only reads its name.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You found your own Downloads folder and read your own address bar",
+    "download": {
+      "file": "Downloads-Practice.pdf",
+      "label": "Download the practice file",
+      "note": "A one-page PDF, about 1 KB. It exists purely so you can go and find it again."
+    },
+    "steps": [
+      {
+        "say": "Read the address bar at the top of this browser and type the address of this page.",
+        "check": "type-answer",
+        "match": "hostname",
+        "detail": "Just the part before the first slash — the site's own name. That strip at the top is the only part of a page a website cannot fake."
+      },
+      {
+        "say": "Download the practice file.",
+        "check": "download",
+        "detail": "Your browser will save it without asking, or ask you where to put it. Either way, notice where it says it went."
+      },
+      {
+        "say": "Find Downloads-Practice.pdf on your computer and hand it back.",
+        "check": "file",
+        "file": {
+          "kind": "pdf",
+          "nameIs": "Downloads-Practice.pdf"
+        },
+        "detail": "Press Choose a file, then find your Downloads folder in the side of the window that opens. This is the step that proves a download is never lost — it is in a folder, with a name."
+      },
+      {
+        "say": "Open a new tab and go to a site you know by typing its address.",
+        "check": "confirm",
+        "detail": "Type it straight into the address bar rather than searching for it. If you know the address, searching first is a detour that scam sites rely on."
+      },
+      {
+        "say": "Find the padlock in the address bar on a site where you sign in.",
+        "check": "confirm",
+        "detail": "The padlock means the line between you and that site is private. It does not mean the site is honest — but its absence, on a page asking for a password, is a reason to stop."
+      }
+    ]
   },
-  "drDigitalSuccess": "That is the same browser you practised on, with real websites in it.",
-  "drDigitalHint": "Read along, then open your own browser and try each step."
+  "drDigitalSuccess": "You downloaded a file, went and found it, and read the real address of the page you were on. Those two habits between them prevent most of the trouble beginners have online.",
+  "drDigitalHint": "If the file check says the name is wrong, you have picked a different file. Look for Downloads-Practice.pdf specifically, in the Downloads folder."
 }

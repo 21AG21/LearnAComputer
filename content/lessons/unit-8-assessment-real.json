@@ -3,12 +3,36 @@
   "unit": "Unit 8: Apps",
   "module": "Unit 8 Assessment",
   "order": 871,
-  "title": "Now install something on your own computer",
+  "title": "Mission: the apps you already have",
   "videoUrl": "",
-  "drDigitalIntro": "You have searched, installed, granted permissions, updated and deleted apps in the practice store. Now use the real one.\n• Open your computer's app store and search for something you actually want.\n• Before installing, read what permissions it asks for. An app that wants your contacts to show the weather is asking for too much.\n• Install it, open it once, and see whether you use it again in a week.\n• Delete an app you have not opened in months. Storage is easier to free this way than any other.",
+  "drDigitalIntro": "An app is just a program. The thing you are reading this in is one, and noticing that makes the whole idea less mysterious.\n• You will name the program you are browsing in, and the page will check your answer against what your browser reports about itself.\n• Then you will open your computer's own app store and go through an install properly, reading the permissions instead of clicking past them.\n• An app that wants your contacts in order to show the weather is asking for more than it needs.\n• Deleting an app you never open is not a loss. It is space and attention back.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You worked out what your own apps are and what they are asking for",
+    "steps": [
+      {
+        "say": "You are reading this inside an app. Type its name.",
+        "check": "type-answer",
+        "match": "browser",
+        "detail": "The program you use to look at web pages. Its name is on the menu bar at the top of the screen, or under the window's own menu next to the word About."
+      },
+      {
+        "say": "Open your computer's app store and search for something you actually want.",
+        "check": "confirm",
+        "detail": "Not something you have heard of — something you would use this week. A crossword, a radio player, a magnifier."
+      },
+      {
+        "say": "Before installing it, read the permissions it asks for.",
+        "check": "confirm",
+        "detail": "Permissions are the app asking for keys to parts of your computer: the camera, the microphone, your files, your location. Each one should have an obvious reason."
+      },
+      {
+        "say": "Delete one app you have not opened in a year.",
+        "check": "confirm",
+        "detail": "You can install it again for nothing if you turn out to want it. Nothing about deleting an app is permanent except the space it gives back."
+      }
+    ]
   },
-  "drDigitalSuccess": "Installing and deleting are both one click, and both are reversible.",
-  "drDigitalHint": "Read along, then open the app store on your own computer."
+  "drDigitalSuccess": "You named the program you are sitting in, and you read permissions before agreeing to them. Both are the sort of thing people never quite get told.",
+  "drDigitalHint": "For the first step: look at the very top of the screen, or open the window's menu and find About. The name is right there."
 }

@@ -3,12 +3,42 @@
   "unit": "Unit 1: Meet Your Laptop",
   "module": "Unit 1 Assessment",
   "order": 61,
-  "title": "Now try it on your own computer",
+  "title": "Mission: your own machine",
   "videoUrl": "",
-  "drDigitalIntro": "You have opened apps, moved windows and used the trackpad on a practice machine. Now use yours.\n• Open any app on your own computer, then drag its window by the strip along the top.\n• Drag a corner to make the window bigger, then use the buttons at its top corner to hide it and bring it back.\n• Find the clock, the battery and the WiFi symbol on your own screen. They are usually along one edge.\n• Close the app properly rather than leaving it open. A window you closed is a window you understand.",
+  "drDigitalIntro": "Every computer you have used on this site was a drawing of one. This one is real — it is the machine you are sitting at.\n• You will shrink this window and then make it fill the screen, and the page measures both as you do it.\n• You will read your own battery level off your own screen and type it in. I check that against what your computer reports, so a guess will not pass.\n• The rest is on your honour: opening an app, finding the clock, closing a window.\n• Nothing here can go wrong. The worst outcome is a window left the wrong size, which you already know how to fix.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You ran the mission on your own computer",
+    "steps": [
+      {
+        "say": "Open any app on your own computer.",
+        "check": "confirm",
+        "detail": "A notes app, a photo viewer, a second browser window — whatever sits on your dock or taskbar. Leave it open."
+      },
+      {
+        "say": "Make this window small, then make it fill the screen.",
+        "check": "window-max",
+        "detail": "Drag an edge or a corner to change the size. The numbers below come from the window itself, so they move as you drag."
+      },
+      {
+        "say": "Find the battery on your own screen and type the percentage.",
+        "check": "type-answer",
+        "match": "battery",
+        "tolerance": 5,
+        "detail": "It sits along one edge of the screen, usually near the clock. Type just the number. If your computer has no battery — most desktop computers do not — type 100."
+      },
+      {
+        "say": "Find the clock and the WiFi symbol on your own screen.",
+        "check": "confirm",
+        "detail": "They live along the same edge as the battery. Knowing where that strip is means you can always tell the time, the connection and the charge at a glance."
+      },
+      {
+        "say": "Close the app you opened, using its own close button.",
+        "check": "confirm",
+        "detail": "The close button is on the window, not on the app's icon in the dock. Closing a window is not the same as quitting the program."
+      }
+    ]
   },
-  "drDigitalSuccess": "Every one of those is the same action on your machine as it was on the practice one.",
-  "drDigitalHint": "Read along, then try each step on your own computer."
+  "drDigitalSuccess": "That was your machine, your window and your battery. No practice computer involved.",
+  "drDigitalHint": "Take the window one at a time: shrink it clearly smaller than the screen first, then push it back out to the edges."
 }

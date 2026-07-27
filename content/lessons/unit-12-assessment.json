@@ -5,10 +5,43 @@
   "order": 1261,
   "title": "Now do it all on your own computer",
   "videoUrl": "",
-  "drDigitalIntro": "You've learned everything you need. Now put it all together — on your real computer!\n\nHere's your final checklist. Try to do each one:\n\n1. Send an email to a friend or family member with a photo attached.\n2. Create a Google Doc at docs.google.com — type a short note and share it with someone.\n3. Go to maps.google.com and get walking directions to your nearest library.\n4. Make a video call to a family member (use Zoom, FaceTime, WhatsApp, or whatever app they use).\n5. Open your Calendar app and create an event for next week.\n\nYou don't have to do them all today — but try at least two or three. Every one of these is something you can now do confidently.",
+  "drDigitalIntro": "One errand, from looking something up to having it saved where you can find it again.\n• You will look up something genuinely local — bus times, opening hours, a phone number — and copy the address of the page you found it on.\n• Then you will save that page as a PDF instead of printing it onto paper, and hand the PDF back to this page.\n• Save as PDF lives inside the Print window on every computer. Most people never notice it is there, and it turns any page into a document you keep.\n• The PDF has to be one you made in the last half hour, so this only passes if you really do it now.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You ran a real errand from start to finish",
+    "steps": [
+      {
+        "say": "Look up something local and real — bus times, opening hours, a phone number.",
+        "check": "confirm",
+        "detail": "Something you would genuinely want to know today. The errand is the point; the practice is the by-product."
+      },
+      {
+        "say": "Copy the web address of the page you found it on and paste it here.",
+        "check": "paste",
+        "minChars": 10,
+        "detail": "Click once on the address bar to select the whole address, copy it with Ctrl+C or Command+C, then paste it into the box below. That is also how you send a page to somebody else."
+      },
+      {
+        "say": "Print that page to a PDF instead of paper.",
+        "check": "confirm",
+        "detail": "Press Ctrl+P, or Command+P on a Mac. In the window that opens, change the printer to Save as PDF — on Windows it is called Microsoft Print to PDF. Then choose where to save it."
+      },
+      {
+        "say": "Pick the PDF you just saved.",
+        "check": "file",
+        "file": {
+          "kind": "pdf",
+          "recentMinutes": 45
+        },
+        "detail": "It went wherever you told it to — usually Documents or Downloads. The page checks that it really is a PDF and that you made it just now."
+      },
+      {
+        "say": "Put one real thing in your calendar with a reminder.",
+        "check": "confirm",
+        "detail": "An appointment, a bin day, someone's birthday. A reminder you will actually receive beats a note you have to remember to read."
+      }
+    ]
   },
-  "drDigitalSuccess": "Congratulations — you've completed the course! You can now email, message, browse, manage files, take photos, install apps, and stay safe online. You're a confident computer user. Keep exploring and trying new things!",
-  "drDigitalHint": "Pick any two items from the checklist and try them on your real computer. You've practiced all of these in the lessons."
+  "drDigitalSuccess": "You looked something up, kept the address, turned a web page into a document and saved it where you can find it. That is a whole errand done on a computer.",
+  "drDigitalHint": "For the PDF step: it is inside the Print window, not the Save menu. Change the destination from your printer to Save as PDF."
 }

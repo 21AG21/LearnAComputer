@@ -79,6 +79,27 @@ export default function PrivacyPage() {
         can be made from inside a lesson.
       </p>
 
+      <h2>The missions that read your own files</h2>
+      <p>
+        Each unit ends with a mission carried out on your real computer, and some steps ask you to
+        hand something back: the folder you organized, a file you downloaded, a photo, a PDF you
+        saved. Those steps use your browser&apos;s ordinary file and folder picker.
+      </p>
+      <p>
+        Nothing you pick is uploaded. There is no server to upload it to: the checking code runs in
+        the page, on your device, and the result is a message on screen. For a folder, the page
+        receives the names and paths of the files inside it and nothing else. For a single file, it
+        reads the name, the size, the type, the date it was last changed, and — for a picture — its
+        width and height in order to tell you the shape. The contents are not sent anywhere, and the
+        page keeps nothing after you close it.
+      </p>
+      <p>
+        Two mission steps read a setting your browser already tells every website you visit: whether
+        you prefer dark mode, and whether you have asked for reduced motion. One reads the battery
+        level your browser reports, on the browsers that report it. Another notices when your
+        computer goes offline. None of that is stored.
+      </p>
+
       <h2>Children</h2>
       <p>
         The site does not knowingly collect personal information from anyone, including children. If

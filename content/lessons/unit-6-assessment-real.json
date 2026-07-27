@@ -3,12 +3,36 @@
   "unit": "Unit 6: Email",
   "module": "Unit 6 Assessment",
   "order": 681,
-  "title": "Now send a real email",
+  "title": "Mission: a real email, sent and found",
   "videoUrl": "",
-  "drDigitalIntro": "You have composed, replied, forwarded, attached and archived in the practice mailbox. Now use your own.\n• Open your email and write to someone who will not mind a test message — a friend, or yourself.\n• Put something useful in the subject line. 'Hello' tells the reader nothing.\n• Attach a photo or a file, then send it.\n• When a reply arrives, use Reply rather than starting a new message, so the conversation stays together.",
+  "drDigitalIntro": "Email to yourself is the most underrated tool on a computer: a note that survives the machine dying, a way to move a file between two devices, a reminder that arrives where you will actually see it.\n• You will send yourself a real email with a real attachment.\n• When it arrives, you will copy its subject line and paste it into this page. Only text that arrives by pasting counts, so this proves you went and found the message.\n• A subject line should be readable a year later. 'Hello' and 'stuff' both fail that test.\n• Nothing you paste leaves this page.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You sent a real email and went back to find it",
+    "steps": [
+      {
+        "say": "Write an email to yourself with a subject that actually says something.",
+        "check": "confirm",
+        "detail": "Your own address in the To box. Something like 'Boiler service booking - March' in the subject: a person, a thing, a time."
+      },
+      {
+        "say": "Attach a file to it, then send it.",
+        "check": "confirm",
+        "detail": "The paperclip. Pick any harmless file — a photo will do. Attaching is how documents travel between people and between your own devices."
+      },
+      {
+        "say": "When it arrives, copy its subject line and paste it here.",
+        "check": "paste",
+        "minChars": 8,
+        "detail": "Open the message, select the subject text, copy it with Ctrl+C or Command+C, then paste it into the box below."
+      },
+      {
+        "say": "Reply to it rather than starting a new message.",
+        "check": "confirm",
+        "detail": "Reply keeps the whole exchange as one thread, so a year from now the question and the answer are still in the same place. A fresh message throws that away."
+      }
+    ]
   },
-  "drDigitalSuccess": "Everything you practised is in your real mailbox too, under slightly different names.",
-  "drDigitalHint": "Read along, then send one real email from your own account."
+  "drDigitalSuccess": "Sent, arrived, found and answered — your own mailbox, not a practice one.",
+  "drDigitalHint": "The box only accepts pasted text. Go to the message, select the subject, copy it, then paste."
 }

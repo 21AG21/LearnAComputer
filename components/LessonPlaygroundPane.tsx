@@ -31,6 +31,7 @@ import GuidedDesktopTask from "@/components/Playground/GuidedDesktopTask";
 import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
 import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
 import DesktopLaunch from "@/components/Playground/DesktopLaunch";
+import RealWorldMission from "@/components/Playground/RealWorldMission";
 import { checkTypeText } from "@/components/Playground/TaskChecker";
 import { NoteIcon, GlobeIcon } from "@/components/Playground/Icons";
 import type { PlaygroundTask } from "@/lib/lessons";
@@ -224,6 +225,9 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
             <GuidedDesktopTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
           )}
           {task.type === "keyboard-nav-game" && <KeyboardNavTask onResult={onResult} />}
+          {task.type === "real-world" && (
+            <RealWorldMission goal={task.goal} download={task.download} steps={task.steps} onResult={onResult} />
+          )}
           {task.type === "notes-shortcut" && (
             <DesktopLaunch app="notes">
               <GuidedNotesTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />

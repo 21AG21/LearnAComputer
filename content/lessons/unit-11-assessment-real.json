@@ -3,12 +3,36 @@
   "unit": "Unit 11: Troubleshooting",
   "module": "Unit 11 Assessment",
   "order": 1191,
-  "title": "Now fix something on your own computer",
+  "title": "Mission: break it on purpose",
   "videoUrl": "",
-  "drDigitalIntro": "You have force-quit a frozen app, reconnected WiFi, read an error code and reinstalled a broken app in practice.\n• Next time something freezes, do not hold the power button first. Try force-quitting just that app.\n• When a page will not load, check whether other sites work. That tells you whether the problem is your connection or that one site.\n• Write down an error code exactly as it appears before you close the message. Searching for it usually finds someone who has already solved it.\n• Restarting genuinely fixes a surprising number of problems, and it costs you two minutes.",
+  "drDigitalIntro": "The time to practise an emergency is when there is no emergency.\n• You will turn your own WiFi off, on purpose, while nothing important is happening — and this page will notice the moment it goes.\n• This lesson is already loaded, so it keeps working with no connection. That is worth seeing for yourself: not everything on a screen needs the internet.\n• Then you will turn it back on and watch it come back.\n• Finally you will force quit an app while it is behaving perfectly, so the day it freezes you already know where the button is.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You broke it on purpose and put it back",
+    "steps": [
+      {
+        "say": "Turn your WiFi off.",
+        "check": "offline",
+        "detail": "Use the WiFi symbol along the edge of your screen, or the switch in Settings. The dot below turns red when the computer really is offline — that is your own network, not a picture of one."
+      },
+      {
+        "say": "Now turn it back on.",
+        "check": "online",
+        "detail": "Same switch. Some computers take a few seconds to reconnect, which is worth seeing too — waiting ten seconds fixes more problems than restarting does."
+      },
+      {
+        "say": "Force quit an app while nothing is wrong with it.",
+        "check": "confirm",
+        "detail": "On a Mac, hold Option and Command and press Escape. On Windows, hold Ctrl and Shift and press Escape, then End Task. Doing it once calmly is worth more than reading about it ten times."
+      },
+      {
+        "say": "Open that app again.",
+        "check": "confirm",
+        "detail": "It comes straight back. Force quitting closes the program, not the work you saved — which is the fear that stops people doing it when they should."
+      }
+    ]
   },
-  "drDigitalSuccess": "Most computer problems have a plain explanation and a two-minute fix.",
-  "drDigitalHint": "Read along, then keep these four steps in mind next time something goes wrong."
+  "drDigitalSuccess": "You took your own machine offline, brought it back, and force quit something on purpose. None of that will be frightening the day it happens by accident.",
+  "drDigitalHint": "If the dot will not turn red, you may be on a wired connection as well — turning off WiFi alone leaves that one working.",
+  "warning": "Turn WiFi off only when nothing else on your computer is in the middle of downloading or uploading."
 }
