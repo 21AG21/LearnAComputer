@@ -1,0 +1,52 @@
+{
+  "slug": "final-files",
+  "unit": "Final Assessment",
+  "module": "Packing and Paperwork",
+  "order": 1530,
+  "title": "Sort out the paperwork",
+  "videoUrl": "",
+  "drDigitalIntro": "The travel documents are scattered across the computer with the rest of Dr. Digital's files.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-files",
+    "mode": "assessment",
+    "goal": "The travel paperwork is filed and the mess is cleared",
+    "hint": "The toolbar along the top of the Files window has everything you need. Deleted things are not gone — check the last item in the list on the left.",
+    "steps": [
+      {
+        "say": "There is a folder called Travel.",
+        "action": "new-folder",
+        "value": "Travel"
+      },
+      {
+        "say": "The tax return is filed under Documents rather than loose at Home.",
+        "action": "move",
+        "target": "TaxReturn.pdf",
+        "into": "Documents"
+      },
+      {
+        "say": "The photo with the meaningless name is now called Holiday-2026.jpg.",
+        "action": "rename",
+        "target": "img_20250104_FINAL(2).jpg",
+        "value": "Holiday-2026.jpg"
+      },
+      {
+        "say": "You found the budget file without scrolling for it.",
+        "action": "search",
+        "value": "budget",
+        "reveal": "Budget.xlsx"
+      },
+      {
+        "say": "The old letter is in the bin.",
+        "action": "delete",
+        "target": "Letter.docx"
+      },
+      {
+        "say": "You changed your mind — the letter is back where it was.",
+        "action": "restore",
+        "target": "Letter.docx"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Made a folder, filed a document, gave a file a name that means something, and pulled something back out of the bin.",
+  "drDigitalHint": "New Folder, Rename and Move to Trash sit above the files. Trash is the last item in the left-hand list, and things there can be put back."
+}

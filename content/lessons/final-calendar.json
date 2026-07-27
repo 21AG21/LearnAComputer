@@ -1,0 +1,52 @@
+{
+  "slug": "final-calendar",
+  "unit": "Final Assessment",
+  "module": "Planning the Trip",
+  "order": 1521,
+  "title": "Put it in the diary",
+  "videoUrl": "",
+  "drDigitalIntro": "The dates are settled. Get them written down where they will not be forgotten.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-calendar",
+    "mode": "assessment",
+    "goal": "The trip is in the calendar and the packing is on a list",
+    "hint": "A day has to be chosen before an event can be added to it. Reminders are a separate view from the calendar — look for the way to switch between them.",
+    "steps": [
+      {
+        "say": "There is an event in the calendar on a Thursday.",
+        "action": "select-day",
+        "target": "Thursday"
+      },
+      {
+        "say": "That event is called Flight.",
+        "action": "set-title",
+        "value": "Flight"
+      },
+      {
+        "say": "The event has a time on it.",
+        "action": "set-time",
+        "value": "9:00 AM"
+      },
+      {
+        "say": "The event is saved, not still being edited.",
+        "action": "save-event"
+      },
+      {
+        "say": "You are looking at reminders rather than the calendar.",
+        "action": "switch-view",
+        "target": "reminders"
+      },
+      {
+        "say": "There is a reminder that says Pack sunscreen.",
+        "action": "set-reminder-text",
+        "value": "Pack sunscreen"
+      },
+      {
+        "say": "That reminder is saved.",
+        "action": "save-reminder"
+      }
+    ]
+  },
+  "drDigitalSuccess": "A trip that is written down is a trip that happens. That is the whole point of a calendar.",
+  "drDigitalHint": "Pick the day first, then look for the way to add something to it. Reminders live behind a switch near the top."
+}

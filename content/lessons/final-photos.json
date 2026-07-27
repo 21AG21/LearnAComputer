@@ -1,0 +1,48 @@
+{
+  "slug": "final-photos",
+  "unit": "Final Assessment",
+  "module": "Packing and Paperwork",
+  "order": 1532,
+  "title": "Pick the photos to take",
+  "videoUrl": "",
+  "drDigitalIntro": "Dr. Digital wants a small album of favourites to show people on the trip.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-photos",
+    "mode": "assessment",
+    "goal": "You built an album and rescued a photo you nearly lost",
+    "hint": "An album has to exist before a photo can go into it. Deleted photos are not gone yet — there is a section for them in the list on the left.",
+    "steps": [
+      {
+        "say": "There is an album called Trip.",
+        "action": "create-album",
+        "value": "Trip"
+      },
+      {
+        "say": "A photo of the mountains is in that album.",
+        "action": "select-photo",
+        "target": "Mountains at Dawn"
+      },
+      {
+        "say": "That photo is in the Trip album.",
+        "action": "add-to-album",
+        "value": "Trip"
+      },
+      {
+        "say": "The photo of the koi is marked as a favourite.",
+        "action": "favorite"
+      },
+      {
+        "say": "The bookshelf photo is in the bin.",
+        "action": "delete",
+        "target": "Bookshelf"
+      },
+      {
+        "say": "You changed your mind and got it back.",
+        "action": "recover",
+        "target": "Bookshelf"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You made an album, filled it, marked a favourite, and proved that deleting a photo is not the end of it.",
+  "drDigitalHint": "Make the album first, then select a photo and look for the way to add it. Recently Deleted is in the list down the left."
+}

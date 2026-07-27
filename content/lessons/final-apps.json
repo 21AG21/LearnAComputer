@@ -1,0 +1,46 @@
+{
+  "slug": "final-apps",
+  "unit": "Final Assessment",
+  "module": "Packing and Paperwork",
+  "order": 1531,
+  "title": "Get the right app for the trip",
+  "videoUrl": "",
+  "drDigitalIntro": "Dr. Digital wants to know the weather at the destination, and the computer is short on space.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nRead what an app asks for before you agree to it.",
+  "playgroundTask": {
+    "type": "guided-app-store",
+    "mode": "assessment",
+    "goal": "You installed what was needed and removed what was not",
+    "hint": "Searching finds an app faster than browsing categories. Apps you already have are not in the store — they are in a separate list.",
+    "steps": [
+      {
+        "say": "You searched rather than browsed.",
+        "action": "search",
+        "value": "weather"
+      },
+      {
+        "say": "The weather app's page is open.",
+        "action": "select-app",
+        "target": "WeatherNow"
+      },
+      {
+        "say": "It is installing or installed.",
+        "action": "install"
+      },
+      {
+        "say": "You read what it asked for and agreed.",
+        "action": "allow-permission"
+      },
+      {
+        "say": "You are looking at what is already on the computer, not the store.",
+        "action": "go-to-installed"
+      },
+      {
+        "say": "A game nobody plays is no longer taking up space.",
+        "action": "delete-app",
+        "target": "Puzzle Quest"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You searched, checked the permissions, installed what was wanted and freed space by removing what was not.",
+  "drDigitalHint": "The search box is at the top. Once something is installed it moves out of the store into your own list — look for the tab that says so."
+}

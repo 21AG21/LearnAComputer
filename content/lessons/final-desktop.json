@@ -1,0 +1,43 @@
+{
+  "slug": "final-desktop",
+  "unit": "Final Assessment",
+  "module": "Before You Go",
+  "order": 1511,
+  "title": "Clear the desk",
+  "videoUrl": "",
+  "drDigitalIntro": "Dr. Digital's desktop is a mess and there are windows everywhere.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-desktop",
+    "mode": "assessment",
+    "goal": "You tidied the desktop and checked the time",
+    "hint": "The controls for a window sit at the top-right of the window itself. The clock is at the far right of the bar along the top of the screen.",
+    "steps": [
+      {
+        "say": "A window is somewhere other than where it started.",
+        "action": "move"
+      },
+      {
+        "say": "A window is a different size than it started.",
+        "action": "resize"
+      },
+      {
+        "say": "A window is out of the way but the app is still running.",
+        "action": "minimize"
+      },
+      {
+        "say": "That window is back on screen.",
+        "action": "restore"
+      },
+      {
+        "say": "You checked today's date without leaving the desktop.",
+        "action": "open-clock"
+      },
+      {
+        "say": "The panel you opened is closed again.",
+        "action": "close-panel"
+      }
+    ]
+  },
+  "drDigitalSuccess": "A window you can move, resize, hide and bring back is a window you are in charge of.",
+  "drDigitalHint": "Everything you need is on the window itself or in the bar across the top of the screen."
+}

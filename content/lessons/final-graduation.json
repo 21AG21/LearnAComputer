@@ -1,0 +1,14 @@
+{
+  "slug": "final-graduation",
+  "unit": "Final Assessment",
+  "module": "Graduation",
+  "order": 1570,
+  "title": "You are finished",
+  "videoUrl": "",
+  "drDigitalIntro": "That is the whole course. Thirteen units, and a final assessment you completed without being shown where to click.\n• You can move, resize and close a window; find, rename and rescue a file; browse without being caught out.\n• You can write an email with a subject line that means something, and spot the one that is a scam.\n• You can install an app and read what it asks for first, join a public network safely, and set a screen up for your own eyes.\n• Most importantly: you know that almost nothing on a computer is permanent, and that the control which made a change is the control that undoes it.\n• Go and do all of it on your own computer. That was always the point.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "You have finished LearnAComputer. Nothing on that machine is beyond you now — and when something is new, it will still be a window, a menu and a button.",
+  "drDigitalHint": "Read along, then go and use your computer."
+}

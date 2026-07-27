@@ -1,0 +1,40 @@
+{
+  "slug": "final-security",
+  "unit": "Final Assessment",
+  "module": "While You Are Away",
+  "order": 1550,
+  "title": "Two messages arrive at the hotel",
+  "videoUrl": "",
+  "drDigitalIntro": "Two messages land while Dr. Digital is away. One is real. One is not.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nOpen a message before judging it, and look at where the link actually goes.",
+  "playgroundTask": {
+    "type": "guided-security",
+    "mode": "assessment",
+    "goal": "You judged both messages correctly",
+    "hint": "The words in a link and the address behind it are two different things. Open the message, reveal the address, and read it from the end backwards.",
+    "steps": [
+      {
+        "say": "You revealed where the bank message's link actually goes.",
+        "action": "inspect-link",
+        "target": "Verify your account"
+      },
+      {
+        "say": "The bank message has been judged correctly.",
+        "action": "mark-dangerous",
+        "target": "Verify your account"
+      },
+      {
+        "say": "You revealed where the shipping message's link goes.",
+        "action": "inspect-link",
+        "target": "View your order"
+      },
+      {
+        "say": "The shipping message has been judged correctly.",
+        "action": "mark-safe",
+        "target": "View your order"
+      }
+    ],
+    "chrome": "mail"
+  },
+  "drDigitalSuccess": "You checked the real address before deciding, on both. That habit is worth more than any security software.",
+  "drDigitalHint": "Read the address from the right-hand end backwards — the part just before the first single slash is the site you are really going to."
+}

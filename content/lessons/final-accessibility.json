@@ -1,0 +1,41 @@
+{
+  "slug": "final-accessibility",
+  "unit": "Final Assessment",
+  "module": "While You Are Away",
+  "order": 1553,
+  "title": "Make it readable on the plane",
+  "videoUrl": "",
+  "drDigitalIntro": "Reading on a plane, in bad light, with tired eyes. Set the screen up for it.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "mode": "assessment",
+    "goal": "You made the screen readable in poor light",
+    "hint": "Three of these live on one page of Settings — the page named after making things easier to use.",
+    "steps": [
+      {
+        "say": "Text across the whole computer is larger.",
+        "action": "slider",
+        "target": "text-size",
+        "min": 125,
+        "max": 140
+      },
+      {
+        "say": "Text is heavier as well as larger.",
+        "action": "toggle",
+        "target": "bold-text"
+      },
+      {
+        "say": "Light and dark colours are further apart than they were.",
+        "action": "toggle",
+        "target": "increase-contrast"
+      },
+      {
+        "say": "The pointer is easier to find.",
+        "action": "toggle",
+        "target": "larger-pointer"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Bigger, heavier, sharper, and a pointer you can find. Four settings, and none of them permanent.",
+  "drDigitalHint": "One page of Settings holds three of the four. Look for the section about making the computer easier to use."
+}

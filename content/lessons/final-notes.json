@@ -1,0 +1,45 @@
+{
+  "slug": "final-notes",
+  "unit": "Final Assessment",
+  "module": "Getting Home",
+  "order": 1560,
+  "title": "Write it up",
+  "videoUrl": "",
+  "drDigitalIntro": "Back home. Dr. Digital wants a note about the trip, formatted properly.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nThis one is keyboard only — the toolbar buttons will not count.",
+  "playgroundTask": {
+    "type": "notes-shortcut",
+    "mode": "assessment",
+    "goal": "You formatted a note using only the keyboard",
+    "hint": "Every one of these is the Control key (or Command on a Mac) held down with a single letter. The letter is usually the first letter of the word.",
+    "steps": [
+      {
+        "say": "There is something written in the editor.",
+        "action": "type",
+        "value": "any"
+      },
+      {
+        "say": "All of it is selected.",
+        "action": "select-all"
+      },
+      {
+        "say": "It is bold.",
+        "action": "bold"
+      },
+      {
+        "say": "It is italic as well.",
+        "action": "italic"
+      },
+      {
+        "say": "A copy of it is on the clipboard.",
+        "action": "copy"
+      },
+      {
+        "say": "The last change has been undone.",
+        "action": "undo"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Bold, italic, copy and undo without touching the mouse once. That is faster than any toolbar.",
+  "drDigitalHint": "Hold Control (or Command) and press a single letter. B, I, A, C and Z are the ones you need.",
+  "warning": "Use the keyboard for this one — clicking the toolbar buttons will not count."
+}

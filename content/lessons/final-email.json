@@ -1,0 +1,52 @@
+{
+  "slug": "final-email",
+  "unit": "Final Assessment",
+  "module": "Telling People",
+  "order": 1540,
+  "title": "Write to the neighbour",
+  "videoUrl": "",
+  "drDigitalIntro": "Someone needs to water the plants. There is also something in this inbox that should not be trusted.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nOne message here is a scam. Find it yourself.",
+  "playgroundTask": {
+    "type": "guided-email",
+    "mode": "assessment",
+    "goal": "You wrote a real message and dealt with a fake one",
+    "hint": "A scam leans on urgency and asks for something no real company asks for by email. The buttons for answering and filing only appear once a message is open.",
+    "steps": [
+      {
+        "say": "The scam is out of the inbox and marked as what it is.",
+        "action": "mark-spam",
+        "target": "You won $1,000,000!!!"
+      },
+      {
+        "say": "You are writing a new message, not answering an old one.",
+        "action": "compose"
+      },
+      {
+        "say": "It is addressed to neighbour@example.com.",
+        "action": "set-to",
+        "value": "neighbour@example.com"
+      },
+      {
+        "say": "The subject line says what the message is about.",
+        "action": "set-subject",
+        "value": "Plants"
+      },
+      {
+        "say": "There is something in the body.",
+        "action": "set-body",
+        "value": ""
+      },
+      {
+        "say": "The message has been sent.",
+        "action": "send"
+      },
+      {
+        "say": "The meeting email is filed away rather than left in the inbox.",
+        "action": "archive",
+        "target": "Meeting Tuesday"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You spotted the scam, wrote a message with a subject line that means something, and filed what you were finished with.",
+  "drDigitalHint": "Read the subject lines — one promises money for nothing. Compose is the button for a brand new message; Archive files one you are done with."
+}

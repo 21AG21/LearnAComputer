@@ -1,0 +1,52 @@
+{
+  "slug": "final-messaging",
+  "unit": "Final Assessment",
+  "module": "Telling People",
+  "order": 1541,
+  "title": "Tell the family",
+  "videoUrl": "",
+  "drDigitalIntro": "Grandma should hear about this from you rather than from someone else.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-messaging",
+    "mode": "assessment",
+    "goal": "You told the family and started a group",
+    "hint": "A conversation opens by choosing who it is with. Starting a group is a different control from sending a message — look near the heading above the contact list.",
+    "steps": [
+      {
+        "say": "You are in a conversation with Grandma.",
+        "action": "select-contact",
+        "target": "grandma"
+      },
+      {
+        "say": "She has been told about the trip.",
+        "action": "send-message",
+        "value": "trip"
+      },
+      {
+        "say": "You reacted to something she said rather than replying in words.",
+        "action": "add-reaction"
+      },
+      {
+        "say": "A group is being started.",
+        "action": "create-group"
+      },
+      {
+        "say": "Alex is in it.",
+        "action": "add-to-group",
+        "target": "alex"
+      },
+      {
+        "say": "Sam is in it too.",
+        "action": "add-to-group",
+        "target": "sam"
+      },
+      {
+        "say": "The group has a message in it.",
+        "action": "send-group-message",
+        "value": ""
+      }
+    ]
+  },
+  "drDigitalSuccess": "One conversation, one reaction, and a group of three. That is most of what messaging is.",
+  "drDigitalHint": "Click a name to open that conversation. The control for starting a group sits beside the word Contacts."
+}

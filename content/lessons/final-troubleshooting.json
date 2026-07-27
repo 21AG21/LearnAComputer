@@ -1,0 +1,39 @@
+{
+  "slug": "final-troubleshooting",
+  "unit": "Final Assessment",
+  "module": "While You Are Away",
+  "order": 1551,
+  "title": "The hotel WiFi",
+  "videoUrl": "",
+  "drDigitalIntro": "The laptop is offline in a café and the network needs joining.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-troubleshooting",
+    "scenario": "public-wifi",
+    "goal": "You got online on a public network and turned off tracking",
+    "steps": [
+      {
+        "say": "Click the WiFi icon in the menu bar.",
+        "action": "open-wifi-panel"
+      },
+      {
+        "say": "Join the café's network.",
+        "action": "join-network",
+        "target": "Cafe Guest"
+      },
+      {
+        "say": "The sign-in page appeared — continue past it.",
+        "action": "captive-portal-continue"
+      },
+      {
+        "say": "Open Settings from the dock and find Privacy.",
+        "action": "open-settings-privacy"
+      },
+      {
+        "say": "Turn off cross-site tracking now that you are on a network you do not control.",
+        "action": "toggle-privacy-tracking"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Online, and with tracking turned off on a network you do not control. That is the right order to do it in.",
+  "drDigitalHint": "The WiFi icon is in the bar across the top. Public networks usually show a sign-in page before they let you through."
+}

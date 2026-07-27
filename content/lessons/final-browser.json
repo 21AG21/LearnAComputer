@@ -1,0 +1,45 @@
+{
+  "slug": "final-browser",
+  "unit": "Final Assessment",
+  "module": "Planning the Trip",
+  "order": 1520,
+  "title": "Look up the details",
+  "videoUrl": "",
+  "drDigitalIntro": "Before booking anything, Dr. Digital wants the bus times and something to read on the journey.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nOne of these sites is not what it claims to be. Do not click anything on it.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "mode": "assessment",
+    "goal": "You researched the trip without falling for anything",
+    "hint": "A site you know the address of does not need a search engine. Two tabs let you keep one page while you read another. The padlock in the address bar tells you whether a connection is private.",
+    "steps": [
+      {
+        "say": "The bus timetable is on screen.",
+        "action": "navigate",
+        "url": "citytransit.example"
+      },
+      {
+        "say": "You have a second tab open.",
+        "action": "new-tab"
+      },
+      {
+        "say": "A long article about growing things is on screen in one of your tabs.",
+        "action": "navigate",
+        "url": "gardeningtips.example"
+      },
+      {
+        "say": "You saved that article to read later.",
+        "action": "reading-list-add"
+      },
+      {
+        "say": "You checked whether the connection to the current page is private.",
+        "action": "lock-click"
+      },
+      {
+        "say": "The article is large enough to read comfortably.",
+        "action": "zoom-in"
+      }
+    ]
+  },
+  "drDigitalSuccess": "You found what you needed, kept it for later, and checked the connection before trusting it.",
+  "drDigitalHint": "The address bar takes a typed address directly. The star saves a page; the buttons under the address bar do the rest."
+}

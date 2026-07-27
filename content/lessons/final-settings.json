@@ -1,0 +1,41 @@
+{
+  "slug": "final-settings",
+  "unit": "Final Assessment",
+  "module": "While You Are Away",
+  "order": 1552,
+  "title": "Set the laptop up for the evening",
+  "videoUrl": "",
+  "drDigitalIntro": "It is late, the room is dark, and the screen is too bright to look at.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "mode": "assessment",
+    "goal": "You set the screen up for a dark room",
+    "hint": "Two different pages of Settings are involved. One controls how bright the screen is; another controls whether it is light or dark.",
+    "steps": [
+      {
+        "say": "The screen is showing light text on a dark background.",
+        "action": "toggle",
+        "target": "dark-mode"
+      },
+      {
+        "say": "The screen is dimmer than it was.",
+        "action": "slider",
+        "target": "brightness",
+        "min": 20,
+        "max": 45
+      },
+      {
+        "say": "The colours are warmer, for looking at late at night.",
+        "action": "toggle",
+        "target": "night-shift"
+      },
+      {
+        "say": "Notifications will not interrupt.",
+        "action": "toggle",
+        "target": "do-not-disturb"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Dark, dim, warm and quiet. That is a laptop you can use at midnight without regretting it.",
+  "drDigitalHint": "Work through the list on the left. Appearance holds the light-or-dark switch, Display holds brightness, and the quiet switch is under Notifications."
+}
