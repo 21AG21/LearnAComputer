@@ -1,0 +1,14 @@
+{
+  "slug": "unit-4-assessment-real",
+  "unit": "Unit 4: The Internet and Browsing",
+  "module": "Unit 4 Assessment",
+  "order": 499,
+  "title": "Now browse on your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "You have navigated, searched, opened tabs and closed a scam popup in the practice browser. Now use yours.\n• Open your browser and type a website address you know straight into the address bar.\n• Open a second tab and search for something in it, then switch between the two tabs.\n• Look for the padlock in the address bar and check it is there before typing anything personal.\n• Close the tabs you no longer need. A browser with thirty tabs open is slower and harder to use.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "That is the same browser you practised on, with real websites in it.",
+  "drDigitalHint": "Read along, then open your own browser and try each step."
+}

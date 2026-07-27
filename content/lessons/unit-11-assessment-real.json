@@ -1,0 +1,14 @@
+{
+  "slug": "unit-11-assessment-real",
+  "unit": "Unit 11: Troubleshooting",
+  "module": "Unit 11 Assessment",
+  "order": 1191,
+  "title": "Now fix something on your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "You have force-quit a frozen app, reconnected WiFi, read an error code and reinstalled a broken app in practice.\n• Next time something freezes, do not hold the power button first. Try force-quitting just that app.\n• When a page will not load, check whether other sites work. That tells you whether the problem is your connection or that one site.\n• Write down an error code exactly as it appears before you close the message. Searching for it usually finds someone who has already solved it.\n• Restarting genuinely fixes a surprising number of problems, and it costs you two minutes.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Most computer problems have a plain explanation and a two-minute fix.",
+  "drDigitalHint": "Read along, then keep these four steps in mind next time something goes wrong."
+}

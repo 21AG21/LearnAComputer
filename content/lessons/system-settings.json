@@ -1,7 +1,7 @@
 {
   "slug": "system-settings",
   "unit": "Unit 9: System Settings",
-  "module": "Customizing Your computer",
+  "module": "Customizing Your Computer",
   "order": 900,
   "title": "System Settings Overview",
   "videoUrl": "",
@@ -10,8 +10,16 @@
     "type": "guided-settings",
     "goal": "You explored Settings and turned on Dark Mode",
     "steps": [
-      { "say": "Click Appearance in the sidebar.", "action": "open-section", "target": "appearance" },
-      { "say": "Turn on Dark Mode — watch the whole screen change!", "action": "toggle", "target": "dark-mode" }
+      {
+        "say": "Click Appearance in the sidebar.",
+        "action": "open-section",
+        "target": "appearance"
+      },
+      {
+        "say": "Turn on Dark Mode — watch the whole screen change!",
+        "action": "toggle",
+        "target": "dark-mode"
+      }
     ]
   },
   "drDigitalSuccess": "Dark Mode on! Notice how the menu bar, dock, and background all changed. You can always come back to Settings and switch it off.",

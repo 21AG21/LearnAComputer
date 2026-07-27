@@ -1,0 +1,14 @@
+{
+  "slug": "unit-10-assessment-real",
+  "unit": "Unit 10: Online Safety and Security",
+  "module": "Unit 10 Assessment",
+  "order": 1101,
+  "title": "Now check your own accounts",
+  "videoUrl": "",
+  "drDigitalIntro": "You have judged phishing messages, built strong passwords and used two-factor codes in practice. Now check your real accounts.\n• Pick your most important account — email or banking — and turn on two-factor authentication if it is not already on.\n• Change any password you use in more than one place. Reused passwords are the single biggest risk most people carry.\n• Look at the last suspicious message you received and find the real address behind the link, without clicking it.\n• If you are ever unsure, close the message and go to the company's website yourself. That habit alone prevents most scams.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "These four habits protect you more than any software you could install.",
+  "drDigitalHint": "Read along, then check one of your own accounts."
+}

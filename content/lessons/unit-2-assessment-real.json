@@ -1,0 +1,14 @@
+{
+  "slug": "unit-2-assessment-real",
+  "unit": "Unit 2: Keyboard and Typing",
+  "module": "Unit 2 Assessment",
+  "order": 296,
+  "title": "Now try it on your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "You have typed, selected, formatted and used shortcuts on a practice keyboard. Now use your real one.\n• Open any program you can type in — a notes app, an email, even the search box in your browser.\n• Type a sentence, select it with Shift and the arrow keys, and copy it with Ctrl+C (or Command+C on a Mac).\n• Paste it somewhere else with Ctrl+V, then undo with Ctrl+Z.\n• The keys are in the same places on your keyboard as they were on the practice one.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Those shortcuts work in almost every program you will ever use.",
+  "drDigitalHint": "Read along, then try it in any program on your own computer."
+}

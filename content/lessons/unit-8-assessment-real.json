@@ -1,0 +1,14 @@
+{
+  "slug": "unit-8-assessment-real",
+  "unit": "Unit 8: Apps",
+  "module": "Unit 8 Assessment",
+  "order": 871,
+  "title": "Now install something on your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "You have searched, installed, granted permissions, updated and deleted apps in the practice store. Now use the real one.\n• Open your computer's app store and search for something you actually want.\n• Before installing, read what permissions it asks for. An app that wants your contacts to show the weather is asking for too much.\n• Install it, open it once, and see whether you use it again in a week.\n• Delete an app you have not opened in months. Storage is easier to free this way than any other.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Installing and deleting are both one click, and both are reversible.",
+  "drDigitalHint": "Read along, then open the app store on your own computer."
+}
