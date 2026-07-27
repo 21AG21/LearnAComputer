@@ -40,16 +40,33 @@ function writeState(state: ProgressState) {
   }
 }
 
+/**
+ * Fired after any change, so the account sync can push without every call site
+ * having to know whether somebody is signed in.
+ */
+export const PROGRESS_EVENT = "lac-progress-changed";
+
+function announce() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(PROGRESS_EVENT));
+}
+
 export function markComplete(slug: string): void {
   const state = readState();
   if (!state.completedSlugs.includes(slug)) {
     state.completedSlugs.push(slug);
     writeState(state);
+    announce();
   }
 }
 
 export function getCompletedSlugs(): string[] {
   return readState().completedSlugs;
+}
+
+/** Used by the account sync when the merged list is bigger than the local one. */
+export function replaceCompletedSlugs(slugs: string[]): void {
+  writeState({ version: SCHEMA_VERSION, completedSlugs: slugs });
+  announce();
 }
 
 export function resetProgress(): void {
@@ -58,4 +75,5 @@ export function resetProgress(): void {
   if (typeof window !== "undefined") {
     localStorage.removeItem("lac-sim");
   }
+  announce();
 }

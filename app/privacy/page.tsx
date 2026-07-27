@@ -55,14 +55,22 @@ export default function PrivacyPage() {
 
       <h2>Accounts</h2>
       <p>
-        The site can be run with optional accounts. If the operator of this installation has enabled
-        them, the sign-in page will accept an email address and password, which are handled by
-        Supabase, a third-party authentication service. In that case Supabase stores your email
-        address and a hashed password on its own servers under its own privacy policy.
+        Accounts are optional and there is no password. If the operator of this installation has
+        enabled them, the sign-in page asks for an email address and sends a one-time code to it.
+        Sign-in is handled by Supabase, a third-party service, which stores your email address on
+        its own servers under its own privacy policy.
       </p>
       <p>
-        If accounts have not been enabled, the sign-in page will tell you so, and you can use the
-        whole course without one. No part of the course requires an account.
+        While you are signed in, the list of lessons you have finished is copied to your account so
+        it follows you to another computer. That list is the only thing stored: no lesson answers,
+        nothing you typed into the practice apps, and nothing from the missions that read your own
+        files. Other learners cannot see it — the database allows each account to read and write
+        only its own row.
+      </p>
+      <p>
+        <strong>Reset all progress</strong> on the Lessons page clears the account copy as well as
+        the device copy. If accounts have not been enabled, the sign-in page will say so, and the
+        whole course works without one.
       </p>
 
       <h2>Analytics and advertising</h2>
