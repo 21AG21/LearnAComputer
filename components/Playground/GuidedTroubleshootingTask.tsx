@@ -444,6 +444,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
               <span className="text-sm font-semibold">WiFi</span>
               <button
                 onClick={handleToggleWifi}
+                aria-label={wifiOn ? "Turn WiFi off" : "Turn WiFi on"}
+                aria-pressed={wifiOn}
                 className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${wifiOn ? "bg-green-500" : "bg-gray-300"} ${hl("wifi-toggle") ? pulse : ""}`}
               >
                 <span className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform ${wifiOn ? "translate-x-[18px]" : "translate-x-0.5"}`} />

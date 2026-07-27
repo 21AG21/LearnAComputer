@@ -1,5 +1,6 @@
 "use client";
 
+import { readSimState, writeSimState } from "@/lib/simState";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -172,18 +173,16 @@ const BUILT_IN_APPS: App[] = [
 
 const CATEGORIES = ["All", "Games", "Tools", "Social", "Creativity"];
 
-const SIM_KEY = "lac-sim-apps";
-
+// Installed apps live inside the shared "lac-sim" blob rather than a key of their
+// own, so that Reset all progress — which clears that one key — really does
+// uninstall them. They used to sit under "lac-sim-apps", which reset never
+// touched, leaving a learner who reset with apps still installed.
 function loadInstalledIds(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(SIM_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
+  return readSimState<string[]>("apps") ?? [];
 }
 
 function saveInstalledIds(ids: string[]) {
-  try { localStorage.setItem(SIM_KEY, JSON.stringify(ids)); } catch {}
+  writeSimState("apps", ids);
 }
 
 export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedAppStoreTaskProps) {

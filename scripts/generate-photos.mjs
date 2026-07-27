@@ -424,7 +424,7 @@ S["river-bend"] = (w, h, rng) => {
   return s;
 };
 
-S["canyon"] = (w, h, rng) => {
+S["canyon"] = (w, h, _rng) => {
   const sky = linear([["0", "#5d90bd"], ["1", "#e9c894"]]);
   let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
   const bands = ["#b4653c", "#c67c4a", "#a2542f", "#8d4527", "#743721"];

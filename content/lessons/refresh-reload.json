@@ -2,7 +2,7 @@
   "slug": "refresh-reload",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Using the browser",
-  "order": 495,
+  "order": 491,
   "title": "Refresh and Reload",
   "videoUrl": "",
   "drDigitalIntro": "Sometimes a page doesn't load right — it looks broken or half-finished.\n• Click the ⟳ reload button to fetch a fresh copy.\n• It's the first thing to try when a page acts up.\n• Let's try it on a page that didn't load.",

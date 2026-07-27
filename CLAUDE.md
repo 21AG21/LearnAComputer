@@ -12,6 +12,7 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 
 ```sh
 npm run dev          # dev server on :3000
+# /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -28,8 +29,14 @@ app/
   lessons/[slug]/page.tsx # Dynamic route — renders one module (multiple sub-lessons)
   funny-cat-video/        # Easter-egg page opened by the right-click playground
   playground/page.tsx     # Standalone playground sandbox
+  login/, auth/callback/  # Passwordless sign-in (email + code) and the magic-link landing
+  error.tsx, not-found.tsx # Friendly failure pages — never a blank screen or a bare 404
+  dev/mount-check/        # Dev-only activity mount harness
 
 components/
+  AuthProvider.tsx         # Supabase session + progress sync (pull/merge on sign-in, debounced push)
+  AccountNav.tsx           # Nav account corner: email, sync state, sign out
+  MountCheck.tsx           # Dev-only harness behind /dev/mount-check
   DrDigital.tsx            # Speech-bubble mascot (intro / success / hint moods)
   DrDigitalAvatar.tsx      # Reusable avatar image
   HomeGreeting.tsx         # Client component for progress-aware homepage message
@@ -66,12 +73,12 @@ components/
     GuidedCalendarTask.tsx  # Guided calendar + reminders sim
     GuidedDesktopTask.tsx   # Guided window management (move, resize, minimize, etc.)
     KeyboardNavTask.tsx     # Keyboard navigation game (Tab, Enter, arrow keys)
+    RealWorldMission.tsx    # Missions on the learner's own computer + RealWorldChecks.tsx
     DesktopBrowserRightClickTask.tsx
     DesktopBrowserScrollTask.tsx
     DesktopBrowserZoomTask.tsx
     DesktopFileExplorerTask.tsx
     FakeDesktop.tsx         # Desktop environment: 10-app dock, menu bar, battery, wifi, clock
-    MusicNoteIcon.tsx       # SVG music note for file previews
 
     Desktop/               # Apps that run inside FakeDesktop
       AppWindow.tsx         # Draggable/closeable window frame
@@ -87,7 +94,9 @@ content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
 
 lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
-  progress.ts              # localStorage read/write for completed slugs
+  progress.ts              # localStorage read/write for completed slugs (fires lac-progress-changed)
+  cloudProgress.ts         # Pull/merge/push that same list to Supabase for signed-in learners
+  supabase.ts              # Browser client, or null when the env vars are absent
   chat.ts                  # localStorage read/write for messaging threads
   simState.ts              # localStorage read/write for persistent sim state (lac-sim)
 
@@ -365,7 +374,7 @@ A simulated app marketplace with 12 apps across 4 categories, permissions, and p
 }
 ```
 
-Actions: `search` (`value`), `select-app` (`target`), `install`, `allow-permission`, `deny-permission` (cancels install), `go-to-installed`, `go-to-store`, `update-app` (`target`), `delete-app` (`target`), `open-app` (`target`), `go-to-category` (`target`). Installed apps persist across lessons via `lac-sim-apps` in localStorage.
+Actions: `search` (`value`), `select-app` (`target`), `install`, `allow-permission`, `deny-permission` (cancels install), `go-to-installed`, `go-to-store`, `update-app` (`target`), `delete-app` (`target`), `open-app` (`target`), `go-to-category` (`target`). Installed apps persist across lessons under the `apps` sub-key of `lac-sim` (via `lib/simState.ts`), so Reset all progress uninstalls them.
 
 #### `guided-settings` schema
 
@@ -606,9 +615,14 @@ Stored in `localStorage` under key `"lac-progress"`:
 `LessonModuleRunner` calls `markComplete(slug)` when a sub-lesson's playground is finished.
 Sub-lessons with `type: "none"` or `"placeholder"` auto-advance (no gate).
 
+When somebody is signed in, `AuthProvider` mirrors that list to Supabase: pulled and
+merged on sign-in, pushed 1.5s after a change, deleted on reset. localStorage stays
+the working copy because lesson pages read progress synchronously. See
+`docs/ACCOUNTS_AND_SYNC.md`.
+
 ### Sim State
 
-Persistent simulator state is stored in `localStorage` under key `"lac-sim"` (one JSON object with namespaced sub-keys). Used by the App Market to persist installed apps across lessons (`lac-sim-apps`). The dashboard's "Reset all progress" button clears both `lac-progress` and `lac-sim`.
+Persistent simulator state is stored in `localStorage` under key `"lac-sim"` — one JSON object with namespaced sub-keys, read and written only through `lib/simState.ts`. The App Market keeps installed apps under the `apps` sub-key. **Never write a `lac-*` key directly**: "Reset all progress" clears `lac-progress` and `lac-sim`, so anything stored under its own key survives a reset. That was a real bug — installed apps used to live under `lac-sim-apps` and reset never touched them.
 
 ### Chat threads
 

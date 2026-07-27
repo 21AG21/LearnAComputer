@@ -3,7 +3,9 @@ import { type SVGProps } from "react";
 type IconProps = SVGProps<SVGSVGElement> & { size?: number };
 
 function base(size: number, props: IconProps): SVGProps<SVGSVGElement> {
-  const { size: _, ...rest } = props;
+  // size becomes width/height below, so it must not also land on the element.
+  const rest = { ...props };
+  delete rest.size;
   return {
     width: size,
     height: size,

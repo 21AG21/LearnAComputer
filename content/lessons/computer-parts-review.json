@@ -5,11 +5,11 @@
   "order": 18,
   "title": "Match the parts",
   "videoUrl": "",
-  "drDigitalIntro": "Let's see how much you remember!\n\u2022 Match each part of the laptop to its name.",
+  "drDigitalIntro": "Every laptop is the same handful of parts, whatever the badge on the lid says.\n• The screen shows you what the computer is doing. It is the only part that talks back.\n• The keyboard is how you put words in; the trackpad is how you point at things.\n• The webcam sits above the screen, and the little light beside it comes on when it is watching.\n• The ports along the sides are where everything else plugs in — power, headphones, a memory stick.\n• Naming the parts matters for one practical reason: it is how you describe a problem to somebody who can help.",
   "playgroundTask": {
     "type": "match-parts",
     "instructions": "Click a dot on the laptop, then click the name it belongs to."
   },
-  "drDigitalSuccess": "Wonderful \u2014 you know your laptop inside and out!",
+  "drDigitalSuccess": "Wonderful — you know your laptop inside and out!",
   "drDigitalHint": "Click a dot on the laptop first, then click the name you think it is. Green means you got it!"
 }

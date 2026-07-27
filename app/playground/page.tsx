@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import FakeDesktop from "@/components/Playground/FakeDesktop";
 
 export const metadata: Metadata = {
-  title: "Playground",
+  title: "Playground — LearnAComputer",
 };
 
 export default function PlaygroundPage() {

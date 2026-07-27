@@ -93,7 +93,6 @@ export default function FileManager({
     setSearch("");
     setDropTarget(null);
     setDraggedFile(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
   const inTrash = location === "trash";

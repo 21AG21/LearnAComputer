@@ -32,7 +32,6 @@ import KeyboardNavTask from "@/components/Playground/KeyboardNavTask";
 import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
 import DesktopLaunch from "@/components/Playground/DesktopLaunch";
 import RealWorldMission from "@/components/Playground/RealWorldMission";
-import { checkTypeText } from "@/components/Playground/TaskChecker";
 import { NoteIcon, GlobeIcon } from "@/components/Playground/Icons";
 import type { PlaygroundTask } from "@/lib/lessons";
 
@@ -41,9 +40,28 @@ interface LessonPlaygroundPaneProps {
   /** Whether the learner has started this sub-lesson's activity — owned by the parent so it can survive across the module's shared fullscreen session. */
   started: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
-  /** Closes the activity and returns to the idle desktop, without leaving fullscreen or advancing lessons. */
-  onExit: () => void;
+  /**
+   * Closes the activity and returns to the idle desktop. The pane does not use it
+   * directly — the sims that need an exit take their own — but the runner passes
+   * it, so it stays part of the contract.
+   */
+  onExit?: () => void;
 }
+
+/**
+ * Every task type this pane knows how to render. A type in the union that is not
+ * in here used to produce an empty white box behind a Start activity button —
+ * silent, and impossible to tell from a broken activity.
+ */
+const HANDLED = new Set<PlaygroundTask["type"]>([
+  "keyboard-shortcut", "type-text", "shape-click-game", "file-explorer-open",
+  "browser-right-click", "browser-scroll-code", "pinch-zoom", "match-parts",
+  "open-all-apps", "edit-text", "edit-file", "drag-sort-files", "spot-the-fake",
+  "url-navigator", "guided-files", "guided-browser", "guided-messaging",
+  "guided-email", "guided-photos", "guided-app-store", "guided-settings",
+  "guided-security", "guided-troubleshooting", "guided-calendar", "guided-desktop",
+  "keyboard-nav-game", "notes-shortcut", "real-world", "none", "placeholder",
+]);
 
 /**
  * The right-hand playground pane on a lesson page. Idle, it's just the fake
@@ -51,7 +69,7 @@ interface LessonPlaygroundPaneProps {
  * the "start" trigger and the site's fullscreen session live one level up in
  * LessonModuleRunner, so switching between sub-lessons doesn't toggle fullscreen.
  */
-export default function LessonPlaygroundPane({ task, started, onResult, onExit }: LessonPlaygroundPaneProps) {
+export default function LessonPlaygroundPane({ task, started, onResult }: LessonPlaygroundPaneProps) {
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
@@ -227,6 +245,14 @@ export default function LessonPlaygroundPane({ task, started, onResult, onExit }
           {task.type === "keyboard-nav-game" && <KeyboardNavTask onResult={onResult} />}
           {task.type === "real-world" && (
             <RealWorldMission goal={task.goal} download={task.download} steps={task.steps} onResult={onResult} />
+          )}
+          {!HANDLED.has(task.type) && (
+            <div className="flex h-full items-center justify-center p-8 text-center">
+              <p className="max-w-sm text-gray-600">
+                This activity type ({task.type}) has no playground wired up yet. Use Skip this activity to carry on —
+                nothing is wrong with your computer.
+              </p>
+            </div>
           )}
           {task.type === "notes-shortcut" && (
             <DesktopLaunch app="notes">

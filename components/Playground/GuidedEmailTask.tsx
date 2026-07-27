@@ -110,6 +110,9 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
       });
     }, 1000);
     return () => { if (undoTimer.current) clearInterval(undoTimer.current); };
+    // Only the identity of the pill should restart the countdown — depending on
+    // the whole object would clear and restart the interval every tick.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [undoPill?.emailId]);
 
   function hl(kind: string, name?: string): boolean {

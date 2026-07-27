@@ -1,5 +1,7 @@
 "use client";
 
+import { clearSimState } from "./simState";
+
 // Progress is persisted in localStorage so it survives tab closes and returns across days.
 // The read/write shape is intentionally small so it can be swapped for a real account + DB
 // later without touching call sites. A schema version field lets future migrations
@@ -71,9 +73,7 @@ export function replaceCompletedSlugs(slugs: string[]): void {
 
 export function resetProgress(): void {
   writeState({ version: SCHEMA_VERSION, completedSlugs: [] });
-  // Also clear sim state (installed apps, etc.)
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("lac-sim");
-  }
+  // Also clear practice-simulator state (installed apps, and anything added later).
+  clearSimState();
   announce();
 }

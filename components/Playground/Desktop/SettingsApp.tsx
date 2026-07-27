@@ -77,7 +77,6 @@ export default function SettingsApp({
   const bg = dark ? "bg-gray-900" : "bg-gray-50";
   const text = dark ? "text-gray-100" : "text-gray-900";
   const sidebar = dark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200";
-  const panel = dark ? "bg-gray-800" : "bg-white";
   const muted = dark ? "text-gray-400" : "text-gray-500";
 
   function selectSection(s: Section) {
@@ -135,7 +134,6 @@ export default function SettingsApp({
             onDarkToggle={(v) => { theme.set({ dark: v }); onToggle?.("dark-mode", v); }}
             onNightShiftToggle={(v) => { theme.set({ nightShift: v }); onToggle?.("night-shift", v); }}
             highlightToggle={highlightToggle}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -145,7 +143,6 @@ export default function SettingsApp({
             brightness={theme.brightness}
             onBrightness={(v) => { theme.set({ brightness: v }); onSlider?.("brightness", v); }}
             highlightSlider={highlightSlider}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -162,7 +159,7 @@ export default function SettingsApp({
           />
         )}
         {active === "wifi" && (
-          <WifiPanel panelClass={panel} mutedClass={muted} isDark={dark} highlightToggle={highlightToggle} onToggle={onToggle} />
+          <WifiPanel mutedClass={muted} isDark={dark} highlightToggle={highlightToggle} onToggle={onToggle} />
         )}
         {active === "bluetooth" && (
           <BluetoothPanel
@@ -170,7 +167,6 @@ export default function SettingsApp({
             highlightDeviceDisconnect={highlightDeviceDisconnect}
             onDeviceSelect={onDeviceSelect}
             onDeviceDisconnect={onDeviceDisconnect}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -180,7 +176,6 @@ export default function SettingsApp({
             muted_={theme.notificationsMuted}
             onToggle_={(v) => { theme.set({ notificationsMuted: v }); onToggle?.("do-not-disturb", v); }}
             highlightToggle={highlightToggle}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -196,7 +191,6 @@ export default function SettingsApp({
             highlightItem={highlightItem}
             highlightToggle={highlightToggle}
             onToggle={onToggle}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -205,12 +199,11 @@ export default function SettingsApp({
           <PrivacyPanel
             highlightToggle={highlightToggle}
             onToggle={onToggle}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
         )}
-        {active === "about" && <AboutPanel panelClass={panel} mutedClass={muted} isDark={dark} />}
+        {active === "about" && <AboutPanel mutedClass={muted} isDark={dark} />}
       </div>
     </div>
   );
@@ -257,8 +250,8 @@ function Card({ children, className = "", isDark }: { children: React.ReactNode;
   );
 }
 
-function AppearancePanel({ dark, nightShift, onDarkToggle, onNightShiftToggle, highlightToggle, panelClass, mutedClass, isDark }: {
-  dark: boolean; nightShift: boolean; onDarkToggle: (v: boolean) => void; onNightShiftToggle: (v: boolean) => void; highlightToggle?: string; panelClass: string; mutedClass: string; isDark: boolean;
+function AppearancePanel({ dark, nightShift, onDarkToggle, onNightShiftToggle, highlightToggle, mutedClass, isDark }: {
+  dark: boolean; nightShift: boolean; onDarkToggle: (v: boolean) => void; onNightShiftToggle: (v: boolean) => void; highlightToggle?: string; mutedClass: string; isDark: boolean;
 }) {
   return (
     <div>
@@ -273,8 +266,8 @@ function AppearancePanel({ dark, nightShift, onDarkToggle, onNightShiftToggle, h
   );
 }
 
-function DisplayPanel({ brightness, onBrightness, highlightSlider, panelClass, mutedClass, isDark }: {
-  brightness: number; onBrightness: (v: number) => void; highlightSlider?: string; panelClass: string; mutedClass: string; isDark: boolean;
+function DisplayPanel({ brightness, onBrightness, highlightSlider, mutedClass, isDark }: {
+  brightness: number; onBrightness: (v: number) => void; highlightSlider?: string; mutedClass: string; isDark: boolean;
 }) {
   return (
     <div>
@@ -376,8 +369,8 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
   );
 }
 
-function WifiPanel({ panelClass, mutedClass, isDark, highlightToggle, onToggle }: {
-  panelClass: string; mutedClass: string; isDark: boolean; highlightToggle?: string; onToggle?: (target: string, value: boolean) => void;
+function WifiPanel({ mutedClass, isDark, highlightToggle, onToggle }: {
+  mutedClass: string; isDark: boolean; highlightToggle?: string; onToggle?: (target: string, value: boolean) => void;
 }) {
   const [wifiOn, setWifiOn] = useState(true);
   return (
@@ -400,12 +393,11 @@ function WifiPanel({ panelClass, mutedClass, isDark, highlightToggle, onToggle }
   );
 }
 
-function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onDeviceSelect, onDeviceDisconnect, panelClass, mutedClass, isDark }: {
+function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onDeviceSelect, onDeviceDisconnect, mutedClass, isDark }: {
   highlightDeviceConnect?: string;
   highlightDeviceDisconnect?: string;
   onDeviceSelect?: (device: string) => void;
   onDeviceDisconnect?: (device: string) => void;
-  panelClass: string;
   mutedClass: string;
   isDark: boolean;
 }) {
@@ -470,8 +462,8 @@ function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onD
   );
 }
 
-function NotificationsPanel({ muted_, onToggle_, highlightToggle, panelClass, mutedClass, isDark }: {
-  muted_: boolean; onToggle_: (v: boolean) => void; highlightToggle?: string; panelClass: string; mutedClass: string; isDark: boolean;
+function NotificationsPanel({ muted_, onToggle_, highlightToggle, mutedClass, isDark }: {
+  muted_: boolean; onToggle_: (v: boolean) => void; highlightToggle?: string; mutedClass: string; isDark: boolean;
 }) {
   return (
     <div>
@@ -484,12 +476,11 @@ function NotificationsPanel({ muted_, onToggle_, highlightToggle, panelClass, mu
   );
 }
 
-function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTrash, highlightItem, highlightToggle, onToggle, panelClass, mutedClass, isDark }: {
-  items: StorageItem[]; trashSize: number; totalGb: number; usedGb: number; onDelete: (name: string) => void; onEmptyTrash: () => void; highlightItem?: string; highlightToggle?: string; onToggle?: (name: string, val: boolean) => void; panelClass: string; mutedClass: string; isDark: boolean;
+function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTrash, highlightItem, highlightToggle, onToggle, mutedClass, isDark }: {
+  items: StorageItem[]; trashSize: number; totalGb: number; usedGb: number; onDelete: (name: string) => void; onEmptyTrash: () => void; highlightItem?: string; highlightToggle?: string; onToggle?: (name: string, val: boolean) => void; mutedClass: string; isDark: boolean;
 }) {
   const [autoBackup, setAutoBackup] = useState(false);
   const [backupTime, setBackupTime] = useState<string | null>(null);
-  const usedPct = (usedGb / totalGb) * 100;
   const segments = [
     { label: "Photos", color: "bg-pink-400", gb: items.filter((i) => !i.deleted && i.category === "photos").reduce((s, i) => s + i.sizeGb, 0) },
     { label: "Apps", color: "bg-blue-400", gb: items.filter((i) => !i.deleted && i.category === "apps").reduce((s, i) => s + i.sizeGb, 0) },
@@ -572,10 +563,9 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
   );
 }
 
-function PrivacyPanel({ highlightToggle, onToggle, panelClass, mutedClass, isDark }: {
-  highlightToggle?: string; onToggle?: (target: string, value: boolean) => void; panelClass: string; mutedClass: string; isDark: boolean;
+function PrivacyPanel({ highlightToggle, onToggle, mutedClass, isDark }: {
+  highlightToggle?: string; onToggle?: (target: string, value: boolean) => void; mutedClass: string; isDark: boolean;
 }) {
-  void panelClass;
   const [crossSite, setCrossSite] = useState(true);
   const [location, setLocation] = useState(true);
   const [popups, setPopups] = useState(false);
@@ -617,8 +607,7 @@ function SimulatedDataBanner() {
   );
 }
 
-function AboutPanel({ panelClass, mutedClass, isDark }: { panelClass: string; mutedClass: string; isDark: boolean }) {
-  void panelClass;
+function AboutPanel({ mutedClass, isDark }: { mutedClass: string; isDark: boolean }) {
   return (
     <div>
       <h2 className="text-lg font-semibold mb-3">About</h2>

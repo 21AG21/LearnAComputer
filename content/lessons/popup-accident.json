@@ -2,14 +2,16 @@
   "slug": "popup-accident",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Online Safety",
-  "order": 494,
+  "order": 496,
   "title": "What If You Click a Scam?",
   "videoUrl": "",
   "drDigitalIntro": "What if you accidentally click a scam popup?\n• Don't panic — what matters is what you do next.\n• Never open any file it downloaded.\n• Delete the downloaded file immediately.\n• Let's practice cleaning up after a scam click.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Clean up after accidentally clicking a scam popup",
-    "initialDownloads": ["SystemCleaner.exe"],
+    "initialDownloads": [
+      "SystemCleaner.exe"
+    ],
     "steps": [
       {
         "say": "Go to freegames.example — type it and press Enter.",

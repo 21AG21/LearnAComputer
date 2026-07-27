@@ -291,7 +291,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
     setAttachMenu(false);
   }
 
-  function handleAttachOtherRow(_label: string) {
+  function handleAttachOtherRow() {
     setAttachMenu(false);
   }
 
@@ -799,21 +799,21 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       Photos
                     </button>
                     <button
-                      onClick={() => handleAttachOtherRow("Files")}
+                      onClick={() => handleAttachOtherRow()}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg>
                       Files
                     </button>
                     <button
-                      onClick={() => handleAttachOtherRow("Camera")}
+                      onClick={() => handleAttachOtherRow()}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
                       Camera
                     </button>
                     <button
-                      onClick={() => handleAttachOtherRow("Voice memo")}
+                      onClick={() => handleAttachOtherRow()}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
                     >
                       <MicIcon className="w-5 h-5" />

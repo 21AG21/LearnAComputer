@@ -2,7 +2,7 @@
   "slug": "https-secure",
   "unit": "Unit 4: The Internet and Browsing",
   "module": "Online Safety",
-  "order": 491,
+  "order": 493,
   "title": "HTTPS and Secure Websites",
   "videoUrl": "",
   "drDigitalIntro": "The lock icon means your connection is encrypted — scrambled so nobody between you and the site can read it.\n• Not the coffee-shop WiFi owner, not your internet provider.\n• But the lock does NOT mean the site itself is safe! A scam site can have a lock too.\n• The lock protects the pipe, not what's on the other end.\n• Always look for the lock before typing passwords or card numbers.",
