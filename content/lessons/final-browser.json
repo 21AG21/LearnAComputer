@@ -5,7 +5,7 @@
   "order": 1520,
   "title": "Look up the details",
   "videoUrl": "",
-  "drDigitalIntro": "Before booking anything, Dr. Digital wants the bus times and something to read on the journey.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nOne of these sites is not what it claims to be. Do not click anything on it.",
+  "drDigitalIntro": "Before booking anything, Dr. Digital wants the bus times and something to read on the journey.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nOne of these sites is not what it claims to be. Do not click anything on it.\n\nYou are given the two sites by name: **City Transit** for the timetable and **Gardening Tips** for the article. Both sit on the browser's new-tab page. How you reach them, and everything after, is yours.",
   "playgroundTask": {
     "type": "guided-browser",
     "mode": "assessment",

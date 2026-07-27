@@ -5,7 +5,7 @@
   "order": 1260,
   "title": "An errand, start to finish",
   "videoUrl": "",
-  "drDigitalIntro": "This is your assessment for this unit. No step-by-step instructions and nothing highlighted.\n• You need the bus times, a recipe saved for later, and a check that the page you end on is secure.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button points at where to look, not at what to click.",
+  "drDigitalIntro": "This is your assessment for this unit. No step-by-step instructions and nothing highlighted.\n• You need the bus times, a recipe saved for later, and a check that the page you end on is secure.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button points at where to look, not at what to click.\n\nYou are given the two places to look: **City Transit** for the bus times and **Recipe Box** for the recipe. Both are on the browser's new-tab page — finding them there, and doing the rest, is the assessment.",
   "playgroundTask": {
     "type": "guided-browser",
     "mode": "assessment",

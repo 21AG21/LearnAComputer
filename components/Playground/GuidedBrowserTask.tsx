@@ -96,7 +96,15 @@ for (const id of Object.keys(PAGES) as PageId[]) {
   TITLE_TO_PAGE[PAGES[id].title] = id;
 }
 
-const FAVORITES: PageId[] = ["shop", "google", "wikipedia", "weather", "news", "recipes", "library", "bookshop"];
+// Every legitimate site is reachable from the new-tab page. A learner asked to put
+// "the bus timetable on screen" must be able to FIND citytransit.example, not recall
+// it — an assessment that hides a fictional domain tests memory, not browsing.
+// freegames (the scam site) and pickacolor (an activity page) stay off deliberately:
+// lessons navigate to those on purpose, and neither belongs in a list of favourites.
+const FAVORITES: PageId[] = [
+  "shop", "google", "wikipedia", "weather", "news", "recipes",
+  "library", "bookshop", "transit", "garden", "petnews", "bank", "support",
+];
 
 /** Rich page bodies — rendered instead of the plain {title + body} block. */
 const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
@@ -985,11 +993,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             {activePage.kind === "newtab" && (
               <div>
                 <p className="text-gray-500 font-semibold mb-3">Favorites</p>
-                <div className="grid grid-cols-3 gap-3 max-w-md">
+                <div className="grid grid-cols-4 gap-3 max-w-2xl">
                   {FAVORITES.map((f) => (
                     <button key={f} onClick={() => navigate(f)} className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-gray-200 hover:bg-gray-50">
                       <span className="text-gray-600">{PAGES[f].icon}</span>
-                      <span className="text-xs font-semibold">{PAGES[f].title}</span>
+                      <span className="text-xs font-semibold text-center leading-tight">{PAGES[f].title}</span>
+                      <span className="text-[10px] text-gray-500 text-center leading-tight">{PAGES[f].url}</span>
                     </button>
                   ))}
                 </div>

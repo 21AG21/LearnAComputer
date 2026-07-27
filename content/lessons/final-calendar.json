@@ -5,7 +5,7 @@
   "order": 1521,
   "title": "Put it in the diary",
   "videoUrl": "",
-  "drDigitalIntro": "The dates are settled. Get them written down where they will not be forgotten.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.",
+  "drDigitalIntro": "The dates are settled. Get them written down where they will not be forgotten.\nThere are no step-by-step instructions here. You get a list of things to accomplish and you decide how.\n• Nothing glows yellow. No control is highlighted.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button gives a nudge toward where to look — never the answer.\n\nYou are given the details to enter: the flight is on **Thursday at 9:00 AM**, and the reminder should say **Pack sunscreen**.",
   "playgroundTask": {
     "type": "guided-calendar",
     "mode": "assessment",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate lesson JSON files: unique orders, capitalization, no banned types."""
+"""Validate lesson JSON: orders, capitalization, banned types, ungiven values."""
 
 import json
 import glob
@@ -50,6 +50,55 @@ for les in lessons:
     task_type = les.get("playgroundTask", {}).get("type", "none")
     if task_type in banned_types:
         errors.append(f"BANNED TYPE: {les['slug']} uses '{task_type}'")
+
+# ─── Every typed value must be given to the learner ──────────────────────────
+# An objective that says "The bus timetable is on screen" while the only way to
+# get there is recalling the fictional domain citytransit.example tests memory,
+# not browsing. Anything the learner must TYPE or INVENT — a URL, a name, a
+# search term, a time — has to appear either in the step's own `say` text or in
+# the lesson brief. Targets they can point at on screen (an email subject, a
+# photo label, an app tile) are exempt: those are discoverable by looking.
+TYPED_VALUE_FIELD = {
+    "navigate": "url", "new-folder": "value", "rename": "value", "search": "value",
+    "save": "value", "create-album": "value", "add-to-album": "value",
+    "go-to-album": "target", "set-title": "value", "set-reminder-text": "value",
+    "set-time": "value", "set-repeat": "value", "select-day": "target",
+    "set-to": "value", "set-cc": "value", "set-bcc": "value", "set-subject": "value",
+    "set-body": "value", "send-message": "value", "send-group-message": "value",
+    "type-username": "value",
+}
+
+# Sites reachable by clicking a tile on the browser's new-tab page. Keep in sync
+# with FAVORITES in components/Playground/GuidedBrowserTask.tsx.
+BROWSER_FAVORITES = {
+    "shop.example", "google.com", "wikipedia.org", "weather.com", "dailynews.example",
+    "recipebox.example", "citylibrary.example", "bookshop.example", "citytransit.example",
+    "gardeningtips.example", "petnews.example", "firstbank.example", "support.example",
+}
+
+for les in lessons:
+    task = les.get("playgroundTask", {})
+    steps = task.get("steps") or []
+    brief = " ".join([
+        les.get("drDigitalIntro", ""), les.get("drDigitalHint", ""),
+        task.get("hint", ""), task.get("goal", ""),
+    ]).lower()
+    for step in steps:
+        field = TYPED_VALUE_FIELD.get(step.get("action"))
+        if not field:
+            continue
+        value = step.get(field)
+        # An empty value means "anything is accepted"; "any" is the literal wildcard.
+        if not value or value == "any":
+            continue
+        if step["action"] == "navigate" and value in BROWSER_FAVORITES:
+            continue
+        if value.lower() in brief or value.lower() in step.get("say", "").lower():
+            continue
+        errors.append(
+            f"UNGIVEN VALUE: {les['slug']} step '{step['action']}' needs {value!r}, "
+            f"which appears in neither the step text nor the lesson brief"
+        )
 
 # Report
 if errors:

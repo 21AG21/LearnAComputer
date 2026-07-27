@@ -18,6 +18,25 @@ const MOOD_STYLES: Record<DrDigitalMood, string> = {
  * with "• " (or "- ") become a bulleted list; every other non-empty line is a
  * paragraph. Single-line messages (success/hint) render as one paragraph.
  */
+/**
+ * Renders **bold** spans. Lesson briefs use it to mark the data a learner is *given*
+ * — an album name, a search term, a site — as distinct from the skill being assessed.
+ */
+function Rich({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={i} className="font-bold">{part.slice(2, -2)}</strong>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
 function MessageBody({ message }: { message: string }) {
   const lines = message.split("\n").map((l) => l.trim()).filter(Boolean);
 
@@ -41,7 +60,7 @@ function MessageBody({ message }: { message: string }) {
       {blocks.map((block, i) =>
         block.type === "p" ? (
           <p key={i} className="text-2xl leading-relaxed">
-            {block.text}
+            <Rich text={block.text} />
           </p>
         ) : (
           <ul key={i} className="space-y-2">
@@ -50,7 +69,7 @@ function MessageBody({ message }: { message: string }) {
                 <span aria-hidden="true" className="text-blue-500 shrink-0">
                   •
                 </span>
-                <span>{item}</span>
+                <span><Rich text={item} /></span>
               </li>
             ))}
           </ul>

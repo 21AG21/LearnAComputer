@@ -20,7 +20,7 @@
         "action": "reply"
       },
       {
-        "say": "Type your reply in the message body.",
+        "say": "Type your reply — say \"Yes\" somewhere in it.",
         "action": "set-body",
         "value": "Yes"
       },

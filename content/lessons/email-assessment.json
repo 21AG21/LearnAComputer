@@ -26,7 +26,7 @@
         "target": "Team meeting reminder"
       },
       {
-        "say": "Fix the body: delete the duplicate words (meeting meeting, is is, the the) and fix the capitals. Click outside the text box when you are done.",
+        "say": "Fix the body: delete the duplicate words and fix the capitals, so the line reads \"the meeting is on Thursday\". Click outside the text box when you are done.",
         "action": "set-body",
         "value": "meeting is on Thursday"
       },
