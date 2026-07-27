@@ -1,8 +1,8 @@
 {
   "slug": "app-vs-website",
   "unit": "Unit 8: Apps",
-  "module": "Apps vs Websites",
-  "order": 800,
+  "module": "Getting Apps",
+  "order": 805,
   "title": "Apps vs. Websites",
   "videoUrl": "",
   "drDigitalIntro": "Apps and websites are different.\n• A website opens in your browser when you type its address.\n• An app is a program you install, with its own icon.\n• Apps can work offline and send alerts; websites work anywhere. You'll use both!",

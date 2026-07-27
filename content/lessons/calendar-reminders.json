@@ -1,8 +1,8 @@
 {
   "slug": "calendar-reminders",
   "unit": "Unit 12: Everyday Life with Your Computer",
-  "module": "Organization",
-  "order": 1220,
+  "module": "Staying in Touch",
+  "order": 1250,
   "title": "Calendar and Reminders",
   "videoUrl": "",
   "drDigitalIntro": "A calendar holds things that happen at a time. A reminder holds things you need to do. Your computer keeps both.\n\n- Click a day, then create an event and give it a name and a time. That is the whole job.\n- Reminders are simpler: type what you need to remember, and tick it off when it is done.\n- Both live on your computer rather than in your head, which is the entire point.\n- If you use the same account on a phone, what you add here shows up there too.\n- The common mistake is putting a to-do on the calendar. If it has no particular time, it belongs in reminders.",
@@ -11,16 +11,52 @@
     "goal": "You put an appointment on the calendar and a task in your reminders",
     "launchApp": "calendar",
     "steps": [
-      { "say": "Click on Wednesday.", "action": "select-day", "target": "Wednesday" },
-      { "say": "Create a new event.", "action": "create-event" },
-      { "say": "Name it Doctor appointment.", "action": "set-title", "value": "Doctor appointment" },
-      { "say": "Set the time to 2:00 PM.", "action": "set-time", "value": "2:00 PM" },
-      { "say": "Save it.", "action": "save-event" },
-      { "say": "Buying milk has no set time, so it belongs in reminders. Switch over to Reminders.", "action": "switch-view", "target": "reminders" },
-      { "say": "Create a reminder.", "action": "create-reminder" },
-      { "say": "Type Buy milk.", "action": "set-reminder-text", "value": "Buy milk" },
-      { "say": "Save it.", "action": "save-reminder" },
-      { "say": "You picked up the milk — tick it off.", "action": "complete-reminder", "target": "Buy milk" }
+      {
+        "say": "Click on Wednesday.",
+        "action": "select-day",
+        "target": "Wednesday"
+      },
+      {
+        "say": "Create a new event.",
+        "action": "create-event"
+      },
+      {
+        "say": "Name it Doctor appointment.",
+        "action": "set-title",
+        "value": "Doctor appointment"
+      },
+      {
+        "say": "Set the time to 2:00 PM.",
+        "action": "set-time",
+        "value": "2:00 PM"
+      },
+      {
+        "say": "Save it.",
+        "action": "save-event"
+      },
+      {
+        "say": "Buying milk has no set time, so it belongs in reminders. Switch over to Reminders.",
+        "action": "switch-view",
+        "target": "reminders"
+      },
+      {
+        "say": "Create a reminder.",
+        "action": "create-reminder"
+      },
+      {
+        "say": "Type Buy milk.",
+        "action": "set-reminder-text",
+        "value": "Buy milk"
+      },
+      {
+        "say": "Save it.",
+        "action": "save-reminder"
+      },
+      {
+        "say": "You picked up the milk — tick it off.",
+        "action": "complete-reminder",
+        "target": "Buy milk"
+      }
     ]
   },
   "drDigitalSuccess": "That is the difference in practice: the appointment went on the calendar because it happens at 2:00, and the milk went in reminders because it just needs doing. Keep them separate and both stay useful.",

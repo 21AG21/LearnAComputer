@@ -1,8 +1,8 @@
 {
   "slug": "notifications-sound",
   "unit": "Unit 9: System Settings",
-  "module": "System Behavior",
-  "order": 940,
+  "module": "Connections and Behaviour",
+  "order": 930,
   "title": "Notifications and Sound",
   "videoUrl": "",
   "drDigitalIntro": "You control which apps interrupt you.\n• Turn off notifications from distracting apps.\n• Turn on Do Not Disturb when you want quiet time.\n• Look for the bell icon in the menu bar to see if it's on.",
@@ -10,8 +10,16 @@
     "type": "guided-settings",
     "goal": "You turned on Do Not Disturb",
     "steps": [
-      { "say": "Click Notifications in the sidebar.", "action": "open-section", "target": "notifications" },
-      { "say": "Turn on Do Not Disturb — look for the crossed-bell icon in the menu bar!", "action": "toggle", "target": "do-not-disturb" }
+      {
+        "say": "Click Notifications in the sidebar.",
+        "action": "open-section",
+        "target": "notifications"
+      },
+      {
+        "say": "Turn on Do Not Disturb — look for the crossed-bell icon in the menu bar!",
+        "action": "toggle",
+        "target": "do-not-disturb"
+      }
     ]
   },
   "drDigitalSuccess": "Do Not Disturb is on! See the crossed-bell icon in the menu bar? That means no interruptions until you turn it off.",

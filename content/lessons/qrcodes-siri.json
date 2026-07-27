@@ -1,8 +1,8 @@
 {
   "slug": "qrcodes-siri",
   "unit": "Unit 12: Everyday Life with Your Computer",
-  "module": "Smart Features",
-  "order": 1260,
+  "module": "Out and About",
+  "order": 1213,
   "title": "QR Codes",
   "videoUrl": "",
   "drDigitalIntro": "QR codes are those square black-and-white patterns you see on menus, signs, and packaging. They're just links in disguise.\n\nHow to scan a QR code:\n• On your phone, open the Camera app and point it at the QR code.\n• A link appears at the top of the screen — click it.\n• That's it! The link opens in your browser.\n\nWhere you'll see them:\n• Restaurant menus (\"Scan here for our menu\")\n• Event tickets and boarding passes\n• Product packaging (links to instructions or warranty info)\n• Signs in stores or museums\n\nSafety tip: only scan QR codes from sources you trust. A QR code on a random sticker stuck to a lamp post could lead anywhere — treat it like clicking a link from a stranger.",

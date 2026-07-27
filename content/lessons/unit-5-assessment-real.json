@@ -1,0 +1,14 @@
+{
+  "slug": "unit-5-assessment-real",
+  "unit": "Unit 5: Messages and Video Calls",
+  "module": "Unit 5 Assessment",
+  "order": 571,
+  "title": "Now message someone real",
+  "videoUrl": "",
+  "drDigitalIntro": "You have sent messages, reacted, attached photos and run a video call in practice. Now do it for real.\n• Open your messaging app and send one message to someone who will be pleased to hear from you.\n• React to something they sent instead of typing a reply — press and hold, or double-tap, the message.\n• Send them a photo from your own library.\n• If they are up for it, start a video call and find the buttons for muting yourself and turning the camera off before you need them.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Knowing where the mute button is before the call starts is the whole trick.",
+  "drDigitalHint": "Read along, then open your own messaging app."
+}

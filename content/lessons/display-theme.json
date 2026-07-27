@@ -1,8 +1,8 @@
 {
   "slug": "display-theme",
   "unit": "Unit 9: System Settings",
-  "module": "Appearance",
-  "order": 920,
+  "module": "Getting Around Settings",
+  "order": 910,
   "title": "Display and Night Shift",
   "videoUrl": "",
   "drDigitalIntro": "You can adjust your screen brightness and warmth.\n• Lower brightness in a dark room to reduce eye strain.\n• Night Shift warms your screen colors at night — less blue light helps you sleep better.\n• Find both settings in Settings.",
@@ -10,10 +10,28 @@
     "type": "guided-settings",
     "goal": "You adjusted the display and turned on Night Shift",
     "steps": [
-      { "say": "Click Display in the sidebar.", "action": "open-section", "target": "display" },
-      { "say": "Drag the Brightness slider down to about 60% — imagine it's dark outside.", "action": "slider", "target": "brightness", "min": 40, "max": 70 },
-      { "say": "Now go to Appearance.", "action": "open-section", "target": "appearance" },
-      { "say": "Turn on Night Shift to warm the screen colors.", "action": "toggle", "target": "night-shift" }
+      {
+        "say": "Click Display in the sidebar.",
+        "action": "open-section",
+        "target": "display"
+      },
+      {
+        "say": "Drag the Brightness slider down to about 60% — imagine it's dark outside.",
+        "action": "slider",
+        "target": "brightness",
+        "min": 40,
+        "max": 70
+      },
+      {
+        "say": "Now go to Appearance.",
+        "action": "open-section",
+        "target": "appearance"
+      },
+      {
+        "say": "Turn on Night Shift to warm the screen colors.",
+        "action": "toggle",
+        "target": "night-shift"
+      }
     ]
   },
   "drDigitalSuccess": "Notice the warmer, dimmer screen! Night Shift reduces blue light and lower brightness helps in dark rooms.",

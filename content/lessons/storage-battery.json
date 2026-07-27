@@ -1,8 +1,8 @@
 {
   "slug": "storage-battery",
   "unit": "Unit 9: System Settings",
-  "module": "System Behavior",
-  "order": 950,
+  "module": "Connections and Behaviour",
+  "order": 940,
   "title": "Storage and Battery",
   "videoUrl": "",
   "drDigitalIntro": "When your computer is slow, storage might be full.\n• Storage shows what's taking up space — photos, apps, files.\n• Delete large files you don't need to free up space.\n• Empty the Trash to actually reclaim the space.",
@@ -10,9 +10,20 @@
     "type": "guided-settings",
     "goal": "You freed up storage space",
     "steps": [
-      { "say": "Click Storage in the sidebar to see what's using space.", "action": "open-section", "target": "storage" },
-      { "say": "Delete 'Old Videos' — you don't need them anymore.", "action": "delete-item", "target": "Old Videos" },
-      { "say": "Now empty the Trash to actually free the space.", "action": "empty-trash" }
+      {
+        "say": "Click Storage in the sidebar to see what's using space.",
+        "action": "open-section",
+        "target": "storage"
+      },
+      {
+        "say": "Delete 'Old Videos' — you don't need them anymore.",
+        "action": "delete-item",
+        "target": "Old Videos"
+      },
+      {
+        "say": "Now empty the Trash to actually free the space.",
+        "action": "empty-trash"
+      }
     ]
   },
   "drDigitalSuccess": "You freed up 4 GB! Remember: deleting files moves them to Trash. Empty the Trash to actually reclaim the space.",

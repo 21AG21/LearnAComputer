@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function PlaygroundPage() {
   return (
-    <div className="h-full">
+    <div className="h-full text-gray-900">
       <FakeDesktop />
     </div>
   );

@@ -1,0 +1,18 @@
+{
+  "slug": "qr-practice",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Out and About",
+  "order": 1212,
+  "title": "What a QR code really is",
+  "videoUrl": "",
+  "drDigitalIntro": "A QR code is a web address written as a pattern of squares instead of letters.\n• Your phone's camera reads the pattern and shows you the address it contains.\n• Nothing happens automatically — you still have to tap the address to go there.\n• That pause is the important bit. Read the address before you tap it, exactly as you would a link in an email.\n• The QR code on this practice menu contains one address. Type it in yourself.",
+  "playgroundTask": {
+    "type": "url-navigator",
+    "instructions": "The QR code on the café menu contains this address. Type it in and press Enter.",
+    "prompt": "The code on the table reads: menu.cafe.example",
+    "targetUrl": "menu.cafe.example",
+    "successTitle": "Café Menu"
+  },
+  "drDigitalSuccess": "A QR code is a link in disguise, and a link is something you read before you follow.",
+  "drDigitalHint": "Type menu.cafe.example exactly as the code gives it."
+}

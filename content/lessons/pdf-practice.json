@@ -1,0 +1,39 @@
+{
+  "slug": "pdf-practice",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents and Printing",
+  "order": 1240,
+  "title": "Downloading and opening a PDF",
+  "videoUrl": "",
+  "drDigitalIntro": "A PDF is a document that looks the same everywhere — same layout on any computer, phone or printer.\n• Downloading one puts a copy on your computer. It does not open by itself.\n• Downloads collect in one place in the browser, and that is where you open them from.\n• A PDF opens in a viewer with page numbers and a zoom control, not in an editor. You read it; you do not usually change it.\n• Download the recipe below and open it.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "goal": "You downloaded a PDF and opened it",
+    "steps": [
+      {
+        "say": "Type recipebox.example into the address bar and press Enter.",
+        "action": "navigate",
+        "url": "recipebox.example"
+      },
+      {
+        "say": "Download the recipe.",
+        "action": "download"
+      },
+      {
+        "say": "Open the Downloads panel to find what you just saved.",
+        "action": "open-downloads"
+      },
+      {
+        "say": "Open the recipe PDF.",
+        "action": "open-download",
+        "file": "ApplePieRecipe.pdf"
+      },
+      {
+        "say": "Zoom in on the recipe so it is easier to read.",
+        "action": "zoom-in"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Downloaded, found, opened and enlarged. That is the whole life of a PDF.",
+  "drDigitalHint": "The download button is on the page. Once it is saved, the Downloads button in the browser's grey row is where you open it from."
+}

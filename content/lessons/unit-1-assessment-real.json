@@ -1,0 +1,14 @@
+{
+  "slug": "unit-1-assessment-real",
+  "unit": "Unit 1: Meet Your Laptop",
+  "module": "Unit 1 Assessment",
+  "order": 61,
+  "title": "Now try it on your own computer",
+  "videoUrl": "",
+  "drDigitalIntro": "You have opened apps, moved windows and used the trackpad on a practice machine. Now use yours.\n• Open any app on your own computer, then drag its window by the strip along the top.\n• Drag a corner to make the window bigger, then use the buttons at its top corner to hide it and bring it back.\n• Find the clock, the battery and the WiFi symbol on your own screen. They are usually along one edge.\n• Close the app properly rather than leaving it open. A window you closed is a window you understand.",
+  "playgroundTask": {
+    "type": "none"
+  },
+  "drDigitalSuccess": "Every one of those is the same action on your machine as it was on the practice one.",
+  "drDigitalHint": "Read along, then try each step on your own computer."
+}

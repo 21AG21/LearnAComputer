@@ -1,0 +1,45 @@
+{
+  "slug": "cloud-vs-computer",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents and Printing",
+  "order": 1232,
+  "title": "On this computer, or in the cloud?",
+  "videoUrl": "",
+  "drDigitalIntro": "Some things live on the computer in front of you. Some live on a company's computer and you reach them through a browser.\n• On this computer: it works with no internet, but it is lost if the computer is lost.\n• In the cloud: it works from any device you sign in to, but not without a connection.\n• Neither is better. Most people keep working documents in the cloud and large private things locally.\n• Sort the items below into where each one actually lives.",
+  "playgroundTask": {
+    "type": "drag-sort-files",
+    "instructions": "Put each item where it lives. Click an item, then click a box.",
+    "categories": [
+      "On this computer",
+      "In the cloud"
+    ],
+    "items": [
+      {
+        "label": "A document you opened at Google Docs",
+        "category": "In the cloud"
+      },
+      {
+        "label": "A photo you just took, before you back it up",
+        "category": "On this computer"
+      },
+      {
+        "label": "An email you can read on your phone and your laptop",
+        "category": "In the cloud"
+      },
+      {
+        "label": "A file in your Documents folder",
+        "category": "On this computer"
+      },
+      {
+        "label": "A file in Google Drive",
+        "category": "In the cloud"
+      },
+      {
+        "label": "A note in the Notes app you have not synced",
+        "category": "On this computer"
+      }
+    ]
+  },
+  "drDigitalSuccess": "That is the whole distinction. If you need it without internet, keep it here; if you need it everywhere, put it there.",
+  "drDigitalHint": "Ask one question about each: could you open it with the internet turned off?"
+}

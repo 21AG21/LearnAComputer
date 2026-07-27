@@ -1,8 +1,8 @@
 {
   "slug": "bluetooth-devices",
   "unit": "Unit 9: System Settings",
-  "module": "Connections",
-  "order": 930,
+  "module": "Connections and Behaviour",
+  "order": 920,
   "title": "Connecting Bluetooth Devices",
   "videoUrl": "",
   "drDigitalIntro": "Bluetooth lets your computer talk to nearby devices without any wires — like wireless headphones, keyboards, and mice.\n• When you want to connect a device, open Settings, go to Bluetooth, and click Connect next to it. The device must be powered on and in range (about 10 metres).\n• Once connected, the device shows 'Connected' in the list. Your computer will remember it and reconnect automatically next time.\n• To disconnect a device — for example to share your headphones with a phone — click Disconnect. The device stays in the list so you can reconnect easily.\n• If a device will not connect, try turning Bluetooth off and back on, or restart the device you are connecting.\n• One device at a time is usually the rule: if your headphones are connected to your computer, they may not play sound from your phone at the same time.",

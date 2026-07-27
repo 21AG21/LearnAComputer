@@ -1,0 +1,33 @@
+{
+  "slug": "shopping-spot-fake",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Shopping and Money",
+  "order": 1220,
+  "title": "Which shop is real?",
+  "videoUrl": "",
+  "drDigitalIntro": "Fake shops copy a real one closely enough to fool a quick glance.\n• The giveaway is almost always the web address, not the page design. Anyone can copy a design.\n• Look for a misspelled name, an odd ending, or http:// where you expected https://.\n• A price that is far below everyone else is the second-best clue.\n• One of the three shops below is not what it claims. Find it.",
+  "playgroundTask": {
+    "type": "spot-the-fake",
+    "instructions": "One of these three shops is fake. Click the one you should not trust.",
+    "items": [
+      {
+        "label": "Shop",
+        "preview": "https://shop.example — Kettle, £24.99 — free returns within 30 days",
+        "isFake": false
+      },
+      {
+        "label": "Sh0p Deals",
+        "preview": "http://sh0p-deals.xyz — Kettle, £4.99 — PAY NOW, no returns",
+        "isFake": true
+      },
+      {
+        "label": "Book Shop",
+        "preview": "https://bookshop.example — Paperbacks from £6.50 — delivery in 3 days",
+        "isFake": false
+      }
+    ],
+    "fakeExplanation": "Three things gave it away at once: a zero instead of an 'o' in 'sh0p', an address ending in .xyz rather than the shop's own name, and http:// instead of https://. The impossible price and 'no returns' confirm it."
+  },
+  "drDigitalSuccess": "You read the address rather than the page. That is the habit that keeps money where it belongs.",
+  "drDigitalHint": "Ignore how the pages look. Read the three web addresses and find the one that is pretending."
+}

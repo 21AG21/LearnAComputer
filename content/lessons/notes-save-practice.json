@@ -1,0 +1,28 @@
+{
+  "slug": "notes-save-practice",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Documents and Printing",
+  "order": 1230,
+  "title": "Writing something down and keeping it",
+  "videoUrl": "",
+  "drDigitalIntro": "Writing a note is easy. Finding it again a month later is the part people get wrong.\n• When you save something, the computer asks two questions: what is it called, and where does it go.\n• A name like 'Untitled 3' answers neither. A name like 'shopping-list' answers both.\n• Putting it in Documents rather than leaving it loose means you know where to look next time.\n• Save a note into Documents here, then do the same on your own computer in the next lesson.",
+  "playgroundTask": {
+    "type": "guided-files",
+    "goal": "You saved a note somewhere you will find it again",
+    "steps": [
+      {
+        "say": "Click Documents in the list on the left, so you can see where the note is going.",
+        "action": "go-to",
+        "target": "Documents"
+      },
+      {
+        "say": "Save your note as shopping-list, into Documents.",
+        "action": "save",
+        "value": "shopping-list",
+        "into": "Documents"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Named, and in a folder you chose. That note is findable in a month.",
+  "drDigitalHint": "Use the Save button, give the note a name that describes it, and pick Documents as the destination."
+}

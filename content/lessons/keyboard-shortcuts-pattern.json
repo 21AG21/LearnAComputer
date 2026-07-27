@@ -1,8 +1,8 @@
 {
   "slug": "keyboard-shortcuts-pattern",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Keyboard Shortcuts",
-  "order": 250,
+  "module": "Shortcuts and Navigation",
+  "order": 252,
   "title": "The shortcut pattern",
   "videoUrl": "",
   "drDigitalIntro": "Here is the secret: shortcuts follow one simple pattern.\n• Hold Ctrl (or Command on a Mac) and press a letter.\n• C copies, V pastes, X cuts, Z undoes, S saves.\n• A selects all, B bolds, I italicizes, U underlines.\n• The letter is always a clue: C = Copy, V = paste (the V points down like a pour), Z = undo (the last letter — last chance!).\n• Once you know the pattern, you can guess most shortcuts without looking them up.",

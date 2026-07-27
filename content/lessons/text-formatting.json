@@ -1,8 +1,8 @@
 {
   "slug": "text-formatting",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Text Formatting",
-  "order": 245,
+  "module": "Shortcuts and Navigation",
+  "order": 250,
   "title": "Bold, italics, and underline",
   "videoUrl": "",
   "drDigitalIntro": "You can change how your words look to add emphasis.\n• Bold makes text stand out and look stronger.\n• Italics tilt the text to show titles, quotes, or gentle emphasis.\n• Underline draws a line under the text.\n• First select your text, then use Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline.\n• Same pattern: Ctrl (or Command on a Mac) plus the first letter of what you want.",

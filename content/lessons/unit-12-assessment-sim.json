@@ -1,0 +1,46 @@
+{
+  "slug": "unit-12-assessment-sim",
+  "unit": "Unit 12: Everyday Life with Your Computer",
+  "module": "Unit 12 Assessment",
+  "order": 1260,
+  "title": "An errand, start to finish",
+  "videoUrl": "",
+  "drDigitalIntro": "This is your assessment for this unit. No step-by-step instructions and nothing highlighted.\n• You need the bus times, a recipe saved for later, and a check that the page you end on is secure.\n• Do the objectives in any order.\n• Open the checklist with the small arrow in the dark bar to see what is left.\n• The Hint button points at where to look, not at what to click.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "mode": "assessment",
+    "goal": "You ran the whole errand in the browser",
+    "hint": "An address you already know does not need a search engine. Anything you download collects behind one button in the grey row. The padlock lives at the left of the address bar.",
+    "steps": [
+      {
+        "say": "The bus timetable is on screen.",
+        "action": "navigate",
+        "url": "citytransit.example"
+      },
+      {
+        "say": "The recipe site is open in a tab.",
+        "action": "navigate",
+        "url": "recipebox.example"
+      },
+      {
+        "say": "The recipe is saved onto the computer.",
+        "action": "download"
+      },
+      {
+        "say": "You found where downloads collect.",
+        "action": "open-downloads"
+      },
+      {
+        "say": "The recipe is open and readable.",
+        "action": "open-download",
+        "file": "ApplePieRecipe.pdf"
+      },
+      {
+        "say": "You checked whether the connection to the current page is private.",
+        "action": "lock-click"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Timetable, download, opened it, and checked the connection — without being told where any of it was.",
+  "drDigitalHint": "Everything is in the browser. Type addresses you know; use the grey row of buttons for the rest."
+}
