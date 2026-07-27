@@ -264,7 +264,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
             items={BUILT_IN_APPS.map((id) => ({
               id,
               label: APP_TITLES[id],
-              running: minimized.has(id),
+              // "When an app is open, a small green dot appears on its icon" — so it has
+              // to show while the app is in front too, not only once it is minimized.
+              running: minimized.has(id) || activeApp === id,
               highlighted: highlightApp === id,
               bouncing: launchingApp === id,
             }))}

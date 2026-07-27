@@ -484,7 +484,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
           items={DOCK_APPS.map((app) => ({
             id: app.id,
             label: app.label,
-            running: minimized && app.id === openedAppId,
+            running: app.id === openedAppId && (minimized || (windowVisible && !isClosed)),
             highlighted:
               (step?.action === "open-app" && step.target === app.id) ||
               (minimized && step?.action === "restore" && app.id === openedAppId),
