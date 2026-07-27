@@ -6,6 +6,14 @@ import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { GlobeIcon, MailIcon, GearIcon } from "./Icons";
 import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
+import DraggableWindow from "./Desktop/DraggableWindow";
+import AppBody, { type AppBodyId } from "./Desktop/AppBody";
+import SettingsApp from "./Desktop/SettingsApp";
+
+/** The dock keys apps by label ("App Market"); AppBody keys them by id ("app-market"). */
+function toAppBodyId(label: string): AppBodyId {
+  return label.trim().toLowerCase().replace(/\s+/g, "-") as AppBodyId;
+}
 
 export type GuidedTroubleshootingStep = {
   say: string;
@@ -53,7 +61,8 @@ function inferScenarioMode(steps: GuidedTroubleshootingStep[]):
 
 const NETWORKS = ["CoolKids Network", "Neighbor's WiFi", "Coffee Shop"];
 /** The café network the public-wifi scenario joins, alongside two you have no password for. */
-const PUBLIC_NETWORKS = ["Coffee Shop Free WiFi", "CoffeeShop-Staff", "Neighbour 5G"];
+const PUBLIC_GUEST_NETWORK = "Coffee Shop Free WiFi";
+const PUBLIC_NETWORKS = [PUBLIC_GUEST_NETWORK, "CoffeeShop-Staff", "Neighbour 5G"];
 
 const ALL_DOCK_APPS = [
   { id: "Messages", label: "Messages" },
@@ -73,6 +82,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const mode = inferScenarioMode(steps);
 
   const [view, setView] = useState<View>("desktop");
+  /** An app opened from the dock that this scenario has no script for — free play. */
+  const [freeApp, setFreeApp] = useState<AppBodyId | null>(null);
   const [frozenApps, setFrozenApps] = useState<FrozenApp[]>(() => {
     if (mode !== "frozen") return [];
     const target = steps.find((s) => s.action === "force-quit")?.target ?? "Notes";
@@ -88,7 +99,6 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   // public-wifi state
   const [portalStage, setPortalStage] = useState<"offline" | "portal" | "online">("offline");
   const [privacyOpen, setPrivacyOpen] = useState(false);
-  const [trackingOn, setTrackingOn] = useState(true);
 
   // password-reset state
   const [prStage, setPrStage] = useState<"login" | "sent" | "mail" | "email" | "reset" | "done">("login");
@@ -96,6 +106,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const [prPassword, setPrPassword] = useState("");
   const [forgottenNetworks, setForgottenNetworks] = useState<string[]>([]);
   const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
+  /** Why the last Join did not work. Shown in the WiFi panel. */
+  const [networkError, setNetworkError] = useState<string | null>(null);
 
   const [errorCode] = useState(() => {
     const s = steps.find((s) => s.action === "copy-code");
@@ -207,6 +219,17 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
     tryStep((s) => s.action === "force-quit" && s.target === name);
   }
 
+  /**
+   * True when reopening this app is the thing the lesson is asking for right now.
+   * Without the guard, clicking Photos on step 1 of the error-code lesson jumped
+   * straight to "Photos is working again" while the banner still said to copy the
+   * error code — the scenario resolved itself before the learner had done anything.
+   */
+  function wantsRestart(name: string): boolean {
+    if (!step) return true; // assessment mode, or free play after the lesson is done
+    return step.action === "restart-app" && (step.target ?? "") === name;
+  }
+
   function handleRestartApp(name: string) {
     if (mode === "error-code") {
       setAppReopened(true);
@@ -244,9 +267,16 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   function handleJoinNetwork(network: string) {
     if (searchingNetwork) return;
+    setNetworkError(null);
     setSearchingNetwork(network);
     setTimeout(() => {
       setSearchingNetwork(null);
+      // Only the guest network lets a stranger on. The other two spin and then refuse,
+      // and they say why — a Join button that quietly does nothing teaches nothing.
+      if (network !== PUBLIC_GUEST_NETWORK) {
+        setNetworkError(`${network} needs a password you do not have. Try the guest network.`);
+        return;
+      }
       setConnectedNetwork(network);
       setWifiPanelOpen(false);
       // A café network drops you on its sign-in page rather than straight onto the web.
@@ -265,9 +295,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
     tryStep((s) => s.action === "open-settings-privacy");
   }
 
-  function handleToggleTracking() {
-    setTrackingOn((v) => !v);
-    tryStep((s) => s.action === "toggle-privacy-tracking");
+  function handleToggleTracking(value: boolean) {
+    // SettingsApp owns the switch's own state; the step says turn it off, so
+    // switching it back on must not count.
+    if (!value) tryStep((s) => s.action === "toggle-privacy-tracking");
   }
 
   function handleForgotPasswordLink() {
@@ -317,11 +348,14 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   function handleReconnect(network: string) {
     if (searchingNetwork) return;
+    setNetworkError(null);
     setSearchingNetwork(network);
     setTimeout(() => {
-      setConnectedNetwork(network === "CoolKids Network" ? network : null);
+      const isHome = network === "CoolKids Network";
+      setConnectedNetwork(isHome ? network : null);
       setSearchingNetwork(null);
-      tryStep((s) => s.action === "reconnect-wifi" && network === "CoolKids Network");
+      if (!isHome) setNetworkError(`${network} is not your network — you do not have its password.`);
+      tryStep((s) => s.action === "reconnect-wifi" && isHome);
     }, 1500);
   }
 
@@ -381,21 +415,22 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
     }, 1500);
   }
 
-  const dockApps = (() => {
-    if (mode === "error-restart") return [{ id: "Settings", label: "Settings" }];
-    if (mode === "error-code") return [{ id: "Photos", label: "Photos" }, { id: "Browser", label: "Browser" }, { id: "Notes", label: "Notes" }];
-    if (mode === "wifi") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }, { id: "Settings", label: "Settings" }];
-    if (mode === "public-wifi") return [{ id: "Browser", label: "Browser" }, { id: "Settings", label: "Settings" }];
-    if (mode === "password-reset") return [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }];
-    if (mode === "app-reinstall") {
-      const market = { id: "App Market", label: "App Market" };
-      if (arAppDeleted && !arAppInstalled) return [market];
-      return [{ id: arBrokenTarget, label: arBrokenTarget }, market];
+  /**
+   * The dock icons this scenario has its own answer for. Every other icon opens the
+   * real app, exactly as it does everywhere else in the course — a dock where seven
+   * of the ten icons did nothing at all was the "broken computer" feeling this unit
+   * is supposed to be curing.
+   */
+  const scenarioIds = (() => {
+    switch (mode) {
+      case "error-restart": return new Set(["Settings"]);
+      case "error-code": return new Set([errorApp, "Browser"]);
+      case "public-wifi": return new Set(["Settings", "Browser"]);
+      case "password-reset": return new Set(["Mail", "Browser"]);
+      case "app-reinstall": return new Set([arBrokenTarget, "App Market"]);
+      case "frozen": return new Set([frozenApps[0]?.name ?? "Notes"]);
+      default: return new Set<string>();
     }
-    const frozen = frozenTarget?.name ?? "Notes";
-    const base = [{ id: "Browser", label: "Browser" }, { id: "Mail", label: "Mail" }];
-    if (base.some((a) => a.id === frozen)) return base;
-    return [{ id: frozen, label: frozen }, ...base];
   })();
 
   return (
@@ -410,8 +445,14 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
       flash={flash}
       objectives={objectives}
       hint={hint}
+      // This sim *is* the desktop, and the desktop draws its own menu bar. With the
+      // frame's chrome on there were two stacked title bars — the upper one blank,
+      // with close and minimize buttons that did nothing.
+      chrome={false}
     >
-      <div className="flex-1 flex flex-col overflow-hidden relative" style={{ background: wallpaper(false) }}>
+      {/* h-full, not flex-1: with the frame's chrome off the parent is a plain block,
+          and a flex-1 child of a block collapses to the height of its content. */}
+      <div className="h-full flex flex-col overflow-hidden relative" style={{ background: wallpaper(false) }}>
         {/* Menu Bar */}
         <div className="relative shrink-0">
           <DesktopMenuBar
@@ -482,6 +523,11 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     </div>
                   </div>
                 ))}
+                {networkError && (
+                  <p className="rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-[11px] leading-snug text-amber-800">
+                    {networkError}
+                  </p>
+                )}
                 {forgottenNetworks.includes("CoolKids Network") && !connectedNetwork && (
                   <button
                     onClick={() => handleReconnect("CoolKids Network")}
@@ -499,6 +545,19 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto relative">
+          {/* An app the scenario has no script for, opened from the dock. Same window,
+              same app, same everything as every other dock in the course. */}
+          {freeApp && (
+            <DraggableWindow
+              key={freeApp}
+              title={ALL_DOCK_APPS.find((a) => toAppBodyId(a.id) === freeApp)?.label ?? "App"}
+              initial={{ x: 24, y: 16, w: 520, h: 380 }}
+              onClose={() => setFreeApp(null)}
+              onMinimize={() => setFreeApp(null)}
+            >
+              <AppBody id={freeApp} />
+            </DraggableWindow>
+          )}
           {/* Error Dialog Overlay */}
           {mode === "error-code" && !errorDismissed && (
             <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
@@ -663,42 +722,25 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             </div>
           )}
 
-          {/* Public WiFi — the Privacy settings page */}
+          {/* Public WiFi — Privacy, in the same Settings app Unit 9 teaches. This used to be
+              a bespoke card with a toggle called "Allow websites to track me across sites";
+              the real app calls it Cross-Site Tracking, and the lesson copy said neither. */}
           {view === "desktop" && mode === "public-wifi" && privacyOpen && (
-            <div className="p-4">
-              <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
-                <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
-                  <GearIcon size={16} />
-                  <span className="font-bold text-sm">Settings</span>
-                  <span className="text-xs text-gray-500">/ Privacy</span>
-                </div>
-                <div className="p-4">
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <div>
-                      <p className="text-sm font-semibold">Allow websites to track me across sites</p>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        On a network you do not control, turn this off.
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleToggleTracking}
-                      role="switch"
-                      aria-checked={trackingOn}
-                      aria-label="Allow websites to track me across sites"
-                      className={`shrink-0 w-12 h-7 rounded-full transition-colors ${trackingOn ? "bg-blue-500" : "bg-gray-300"} ${hl("privacy-toggle") ? pulse : ""}`}
-                    >
-                      <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform ${trackingOn ? "translate-x-6" : "translate-x-1"}`} />
-                    </button>
-                  </div>
-                  {!trackingOn && (
-                    <p className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg p-2 mt-3">
-                      Tracking is off. Sites can still see what you visit on their own pages, but they can no longer follow
-                      you from one site to the next.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <DraggableWindow
+              title="Settings"
+              icon={<GearIcon size={16} />}
+              initial={{ x: 24, y: 16, w: 560, h: 400 }}
+              onClose={() => setPrivacyOpen(false)}
+              onMinimize={() => setPrivacyOpen(false)}
+            >
+              <SettingsApp
+                initialSection="privacy"
+                highlightToggle={hl("privacy-toggle") ? "cross-site-tracking" : undefined}
+                onToggle={(target, value) => {
+                  if (target === "cross-site-tracking") handleToggleTracking(value);
+                }}
+              />
+            </DraggableWindow>
           )}
 
           {/* Password reset — browser login ▸ Mail ▸ back to the browser */}
@@ -1024,32 +1066,21 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             </div>
           )}
 
-          {/* Error-Restart: Settings panel */}
+          {/* Error-Restart: the same Settings app again, opened on About where Restart lives. */}
           {mode === "error-restart" && erSettingsOpen && !erRestarting && !erRestarted && (
-            <div className="h-full bg-white">
-              <div className="bg-gray-100 border-b px-4 py-2.5 flex items-center">
-                <button onClick={() => setErSettingsOpen(false)} className="text-gray-400 hover:text-gray-600 mr-2">&larr;</button>
-                <span className="text-sm font-semibold text-gray-700">Settings</span>
-              </div>
-              <div className="p-4 space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 px-1">About</h3>
-                <div className="bg-gray-50 rounded-xl border border-gray-200 divide-y divide-gray-200 text-sm">
-                  <div className="flex justify-between px-4 py-2.5 text-gray-500"><span>Computer Name</span><span>My Computer</span></div>
-                  <div className="flex justify-between px-4 py-2.5 text-gray-500"><span>Software Version</span><span>14.2.1</span></div>
-                </div>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 px-1 pt-2">System</h3>
-                <div className="bg-gray-50 rounded-xl border border-gray-200 text-sm">
-                  <button
-                    onClick={handleErClickRestart}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-amber-600 font-medium hover:bg-amber-50 rounded-xl ${hl("restart-btn") ? pulse : ""}`}
-                  >
-                    <span>Restart</span>
-                    <span>&rsaquo;</span>
-                  </button>
-                </div>
-                <p className="text-xs text-gray-400 px-1">Restarting will close all open apps and reload your computer.</p>
-              </div>
-            </div>
+            <DraggableWindow
+              title="Settings"
+              icon={<GearIcon size={16} />}
+              initial={{ x: 24, y: 16, w: 560, h: 400 }}
+              onClose={() => setErSettingsOpen(false)}
+              onMinimize={() => setErSettingsOpen(false)}
+            >
+              <SettingsApp
+                initialSection="about"
+                onRestart={handleErClickRestart}
+                highlightRestart={hl("restart-btn")}
+              />
+            </DraggableWindow>
           )}
 
           {/* Error-Restart: confirm dialog */}
@@ -1108,14 +1139,15 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 setPrApp("browser");
               } else if (mode === "app-reinstall" && id === "App Market") {
                 handleOpenAppMarket();
-              } else if (step?.action === "open-browser" && id === "Browser") {
+              } else if (mode === "error-code" && id === "Browser") {
                 handleOpenBrowser();
               } else if (mode === "error-restart" && id === "Settings") {
                 handleErOpenSettings();
-              } else if (dockApps.some((a) => a.id === id)) {
+              } else if (scenarioIds.has(id) && wantsRestart(id)) {
                 handleRestartApp(id);
+              } else {
+                setFreeApp(toAppBodyId(id));
               }
-              // else: no-op for decorative dock items
             }}
           />
         </div>

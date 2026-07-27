@@ -16,9 +16,9 @@
         "action": "open-wifi-panel"
       },
       {
-        "say": "Join the café's network.",
+        "say": "Join Coffee Shop Free WiFi — the guest network, not the staff one.",
         "action": "join-network",
-        "target": "Cafe Guest"
+        "target": "Coffee Shop Free WiFi"
       },
       {
         "say": "The sign-in page appeared — continue past it.",

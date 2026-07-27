@@ -2,9 +2,10 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import DraggableWindow from "./Desktop/DraggableWindow";
+import AppBody, { type AppBodyId } from "./Desktop/AppBody";
 import Dock from "./Dock";
 import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
-import { NoteIcon, GlobeIcon, FolderIcon, ChatIcon, FileDocIcon, MailIcon, GearIcon, CameraIcon, CalendarIcon, BellIcon, CartIcon } from "./Icons";
+import { NoteIcon, GlobeIcon, FolderIcon, ChatIcon, MailIcon, GearIcon, CameraIcon, CalendarIcon, BellIcon, CartIcon } from "./Icons";
 import { BUILT_IN_APPS, APP_TITLES, type DesktopAppId } from "./FakeDesktop";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -48,112 +49,6 @@ const APP_GLYPH: Record<string, ReactNode> = {
   "app-market": <CartIcon size={16} />,
 };
 
-/** A plausible glimpse of each app shown in the window content area. */
-const APP_CONTENT: Record<string, ReactNode> = {
-  notes: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Shopping List</p>
-      <ul className="list-disc list-inside space-y-1">
-        <li>Milk</li>
-        <li>Eggs</li>
-        <li>Bread</li>
-        <li>Apples</li>
-      </ul>
-    </>
-  ),
-  browser: (
-    <>
-      <div className="mb-3 rounded border border-gray-300 bg-gray-50 px-2 py-1 font-mono text-xs text-gray-500">
-        gardeningtips.example
-      </div>
-      <p className="font-semibold mb-1 text-gray-800">When to plant tomatoes</p>
-      <p className="text-xs leading-relaxed">
-        Wait until the last frost has passed and the soil has warmed. In most gardens that means late
-        spring — tomatoes set outside too early simply sit and sulk.
-      </p>
-    </>
-  ),
-  files: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Documents</p>
-      <ul className="space-y-1 text-xs">
-        <li className="flex items-center gap-2"><FolderIcon size={14} /> Taxes</li>
-        <li className="flex items-center gap-2"><FileDocIcon size={14} /> GroceryList.txt</li>
-        <li className="flex items-center gap-2"><FileDocIcon size={14} /> Budget.xlsx</li>
-      </ul>
-    </>
-  ),
-  messages: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Alex</p>
-      <div className="space-y-1.5 text-xs">
-        <p className="w-fit rounded-2xl bg-gray-100 px-3 py-1.5">Are we still on for Saturday?</p>
-        <p className="ml-auto w-fit rounded-2xl bg-blue-500 px-3 py-1.5 text-white">Yes! See you at 2.</p>
-      </div>
-    </>
-  ),
-  mail: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Inbox</p>
-      <ul className="space-y-1.5 text-xs">
-        <li><span className="font-semibold text-gray-700">Mom</span> — Sunday lunch?</li>
-        <li><span className="font-semibold text-gray-700">City Library</span> — Your hold is ready</li>
-        <li><span className="font-semibold text-gray-700">Newsletter</span> — This week in gardening</li>
-      </ul>
-    </>
-  ),
-  settings: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Settings</p>
-      <ul className="space-y-1 text-xs">
-        <li>Appearance</li>
-        <li>Display</li>
-        <li>Accessibility</li>
-        <li>Storage</li>
-      </ul>
-    </>
-  ),
-  photos: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Recents</p>
-      <div className="grid grid-cols-3 gap-1">
-        {["#cfe3fb", "#dcf2e3", "#fde0e4", "#fdf1cb", "#e8e1fb", "#fdeccd"].map((c) => (
-          <div key={c} className="aspect-square rounded" style={{ background: c }} />
-        ))}
-      </div>
-    </>
-  ),
-  calendar: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">This week</p>
-      <ul className="space-y-1.5 text-xs">
-        <li><span className="font-semibold text-gray-700">Wed 2:00 pm</span> — Dentist</li>
-        <li><span className="font-semibold text-gray-700">Fri 10:00 am</span> — Book club</li>
-      </ul>
-    </>
-  ),
-  reminders: (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">Reminders</p>
-      <ul className="space-y-1.5 text-xs">
-        <li>Buy groceries</li>
-        <li>Call the pharmacy</li>
-        <li>Water the plants</li>
-      </ul>
-    </>
-  ),
-  "app-market": (
-    <>
-      <p className="font-semibold mb-2 text-gray-800">App Market</p>
-      <ul className="space-y-1.5 text-xs">
-        <li>WeatherNow — Free</li>
-        <li>Puzzle Quest — Free</li>
-        <li>Recipe Keeper — Free</li>
-      </ul>
-    </>
-  ),
-};
-
 interface GuidedDesktopTaskProps {
   goal: string;
   steps: DesktopStep[];
@@ -162,7 +57,8 @@ interface GuidedDesktopTaskProps {
   onResult: (success: boolean) => void;
 }
 
-const INIT = { x: 50, y: 50, w: 400, h: 280 };
+/** Small enough that maximizing is a visible change, big enough that the real app inside is legible. */
+const INIT = { x: 40, y: 36, w: 480, h: 340 };
 
 export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }: GuidedDesktopTaskProps) {
   const [minimized, setMinimized] = useState(false);
@@ -358,8 +254,11 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
               onMoved={() => tryStep((s) => s.action === "move")}
               onResized={() => tryStep((s) => s.action === "resize")}
             >
-              <div className="flex-1 p-3 text-gray-600 text-sm overflow-auto pointer-events-none">
-                {APP_CONTENT[openedAppId] ?? APP_CONTENT.notes}
+              {/* The real app, not a drawing of one — but inert, because this lesson is
+                  about the window frame and a stray click inside should not start a
+                  video call. `select-none` keeps a drag on the body from selecting text. */}
+              <div className="flex-1 min-h-0 overflow-hidden pointer-events-none select-none">
+                <AppBody id={(openedAppId as AppBodyId) ?? "notes"} />
               </div>
             </DraggableWindow>
           )}

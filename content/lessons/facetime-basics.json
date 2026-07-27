@@ -20,7 +20,7 @@
         "action": "start-call"
       },
       {
-        "say": "Great! You're connected. Now end the call by clicking the red phone button.",
+        "say": "Great! You're connected. Now end the call by clicking the wide red End call button.",
         "action": "end-call"
       }
     ]

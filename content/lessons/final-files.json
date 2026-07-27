@@ -36,7 +36,7 @@
         "reveal": "Budget.xlsx"
       },
       {
-        "say": "The old letter is in the bin.",
+        "say": "The old letter is in the Trash.",
         "action": "delete",
         "target": "Letter.docx"
       },
@@ -47,6 +47,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Made a folder, filed a document, gave a file a name that means something, and pulled something back out of the bin.",
+  "drDigitalSuccess": "Made a folder, filed a document, gave a file a name that means something, and pulled something back out of the Trash.",
   "drDigitalHint": "New Folder, Rename and Move to Trash sit above the files. Trash is the last item in the left-hand list, and things there can be put back."
 }

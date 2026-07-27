@@ -19,9 +19,9 @@
         "minStrength": 4
       },
       {
-        "say": "Decide about 'Bank of America Login'.",
+        "say": "Decide about 'First National Bank Login'.",
         "action": "mark-safe",
-        "target": "Bank of America Login"
+        "target": "First National Bank Login"
       },
       {
         "say": "Decide about 'Enter Card Details'.",

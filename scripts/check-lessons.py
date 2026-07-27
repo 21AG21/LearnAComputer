@@ -3,8 +3,8 @@
 
 import json
 import glob
-import sys
 import re
+import sys
 import os
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -137,6 +137,68 @@ for les in lessons:
             require(expect["renamed"].get("was"), "the renaming of")
         if (step.get("file") or {}).get("nameIs"):
             require(step["file"]["nameIs"], "the file")
+
+
+# ---------------------------------------------------------------------------
+# Every target a step names must exist in the simulator it names it to.
+#
+# Two lessons shipped with targets nothing in the sim matched: a WiFi network
+# called "Cafe Guest" that was never in the list, and a calendar day named
+# "Wednesday" checked against a grid of numbers. Both left the learner on a step
+# that no click could ever complete — one of them in the final assessment. The
+# sets below are read out of the components, so they cannot drift.
+# ---------------------------------------------------------------------------
+
+def _src(rel):
+    with open(os.path.join("components", "Playground", rel), encoding="utf-8") as fh:
+        return fh.read()
+
+def _find(rel, pattern):
+    return set(re.findall(pattern, _src(rel), re.M))
+
+try:
+    KNOWN = {
+        ("guided-photos", "select-photo"): _find("GuidedPhotosTask.tsx", r'label: "([^"]+)",\s+src: photoSrc'),
+        ("guided-photos", "delete"):       _find("GuidedPhotosTask.tsx", r'label: "([^"]+)",\s+src: photoSrc'),
+        ("guided-photos", "recover"):      _find("GuidedPhotosTask.tsx", r'label: "([^"]+)",\s+src: photoSrc'),
+        ("guided-photos", "favorite"):     _find("GuidedPhotosTask.tsx", r'label: "([^"]+)",\s+src: photoSrc'),
+        ("guided-photos", "unfavorite"):   _find("GuidedPhotosTask.tsx", r'label: "([^"]+)",\s+src: photoSrc'),
+        ("guided-app-store", "select-app"): _find("GuidedAppStoreTask.tsx", r'id: "\w+", name: "([^"]+)"'),
+        ("guided-app-store", "install"):    _find("GuidedAppStoreTask.tsx", r'id: "\w+", name: "([^"]+)"'),
+        ("guided-app-store", "delete-app"): _find("GuidedAppStoreTask.tsx", r'id: "\w+", name: "([^"]+)"'),
+        ("guided-app-store", "update-app"): _find("GuidedAppStoreTask.tsx", r'id: "\w+", name: "([^"]+)"'),
+        ("guided-messaging", "select-contact"): _find("GuidedMessagingTask.tsx", r'\{ id: "(\w+)", name: "\w+", avatar'),
+        ("guided-messaging", "add-to-group"):   _find("GuidedMessagingTask.tsx", r'\{ id: "(\w+)", name: "\w+", avatar'),
+        ("guided-security", "inspect-link"):    _find("GuidedSecurityTask.tsx", r'^  "([^"]+)": \{'),
+        ("guided-security", "mark-safe"):       _find("GuidedSecurityTask.tsx", r'^  "([^"]+)": \{'),
+        ("guided-security", "mark-dangerous"):  _find("GuidedSecurityTask.tsx", r'^  "([^"]+)": \{'),
+        ("guided-settings", "open-section"):    _find("Desktop/SettingsApp.tsx", r'\{ id: "(\w+)", label: "[^"]+", icon:'),
+        ("guided-troubleshooting", "join-network"): _find("GuidedTroubleshootingTask.tsx", r'PUBLIC_NETWORKS = \[PUBLIC_GUEST_NETWORK, "([^"]+)", "([^"]+)"') or set(),
+        ("guided-calendar", "select-day"): {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"} | {str(n) for n in range(1, 32)},
+    }
+    # PUBLIC_NETWORKS is written with the guest network as a named constant.
+    guest = _find("GuidedTroubleshootingTask.tsx", r'PUBLIC_GUEST_NETWORK = "([^"]+)"')
+    decoys = set(re.findall(r'PUBLIC_NETWORKS = \[PUBLIC_GUEST_NETWORK, ([^\]]+)\]', _src("GuidedTroubleshootingTask.tsx")))
+    KNOWN[("guided-troubleshooting", "join-network")] = guest | {
+        d.strip().strip('"') for chunk in decoys for d in chunk.split(",")
+    }
+except (OSError, IndexError):
+    KNOWN = {}
+
+for les in lessons:
+    task = les.get("playgroundTask") or {}
+    ttype = task.get("type")
+    for i, step in enumerate(task.get("steps") or []):
+        if not isinstance(step, dict):
+            continue
+        allowed = KNOWN.get((ttype, step.get("action")))
+        target = step.get("target")
+        if allowed and target is not None and target not in allowed:
+            errors.append(
+                f"UNKNOWN TARGET: {les['slug']} step {i + 1} asks for "
+                f"{ttype}.{step['action']} {target!r}, which the simulator does not have"
+            )
+
 
 # Report
 if errors:

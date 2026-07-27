@@ -18,7 +18,7 @@
         "value": "Trip"
       },
       {
-        "say": "A photo of the mountains is in that album.",
+        "say": "The photo called Mountains at Dawn is the one open on screen.",
         "action": "select-photo",
         "target": "Mountains at Dawn"
       },
@@ -28,11 +28,12 @@
         "value": "Trip"
       },
       {
-        "say": "The photo of the koi is marked as a favourite.",
-        "action": "favorite"
+        "say": "The photo called Koi Pond is marked as a favorite.",
+        "action": "favorite",
+        "target": "Koi Pond"
       },
       {
-        "say": "The bookshelf photo is in the bin.",
+        "say": "The bookshelf photo is in Recently Deleted.",
         "action": "delete",
         "target": "Bookshelf"
       },
@@ -43,6 +44,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You made an album, filled it, marked a favourite, and proved that deleting a photo is not the end of it.",
+  "drDigitalSuccess": "You made an album, filled it, marked a favorite, and proved that deleting a photo is not the end of it.",
   "drDigitalHint": "Make the album first, then select a photo and look for the way to add it. Recently Deleted is in the list down the left."
 }

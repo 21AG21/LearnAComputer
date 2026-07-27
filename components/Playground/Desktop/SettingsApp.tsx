@@ -22,6 +22,8 @@ const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
 ];
 
 interface SettingsAppProps {
+  /** Which panel is showing when the app opens. Defaults to Appearance. */
+  initialSection?: Section;
   highlightSection?: string;
   highlightToggle?: string;
   highlightSlider?: string;
@@ -35,6 +37,12 @@ interface SettingsAppProps {
   onEmptyTrash?: () => void;
   onDeviceSelect?: (device: string) => void;
   onDeviceDisconnect?: (device: string) => void;
+  /**
+   * Only the troubleshooting lessons pass this. Without it there is no Restart row —
+   * a beginner browsing Settings should not find a button that reboots the computer.
+   */
+  onRestart?: () => void;
+  highlightRestart?: boolean;
 }
 
 interface StorageItem {
@@ -54,6 +62,7 @@ const INITIAL_STORAGE: StorageItem[] = [
 ];
 
 export default function SettingsApp({
+  initialSection = "appearance",
   highlightSection,
   highlightToggle,
   highlightSlider,
@@ -67,9 +76,11 @@ export default function SettingsApp({
   onEmptyTrash,
   onDeviceSelect,
   onDeviceDisconnect,
+  onRestart,
+  highlightRestart,
 }: SettingsAppProps) {
   const theme = useSimTheme();
-  const [active, setActive] = useState<Section>("appearance");
+  const [active, setActive] = useState<Section>(initialSection);
   const [storageItems, setStorageItems] = useState<StorageItem[]>(INITIAL_STORAGE);
   const [trashSize, setTrashSize] = useState(0);
 
@@ -203,7 +214,9 @@ export default function SettingsApp({
             isDark={dark}
           />
         )}
-        {active === "about" && <AboutPanel mutedClass={muted} isDark={dark} />}
+        {active === "about" && (
+          <AboutPanel mutedClass={muted} isDark={dark} onRestart={onRestart} highlightRestart={highlightRestart} />
+        )}
       </div>
     </div>
   );
@@ -213,6 +226,8 @@ function Toggle({ on, onToggle, label, highlight, isDark }: { on: boolean; onTog
   return (
     <button
       onClick={() => onToggle(!on)}
+      role="switch"
+      aria-checked={on}
       className={`flex items-center justify-between w-full py-2 ${highlight ? "ring-2 ring-yellow-400 animate-pulse rounded px-2" : ""}`}
     >
       <span>{label}</span>
@@ -607,10 +622,29 @@ function SimulatedDataBanner() {
   );
 }
 
-function AboutPanel({ mutedClass, isDark }: { mutedClass: string; isDark: boolean }) {
+function AboutPanel({ mutedClass, isDark, onRestart, highlightRestart }: {
+  mutedClass: string; isDark: boolean; onRestart?: () => void; highlightRestart?: boolean;
+}) {
   return (
     <div>
       <h2 className="text-lg font-semibold mb-3">About</h2>
+      {/* Restart goes first when it is the reason the learner opened this panel — below
+          the specifications it fell under the fold of a small window. */}
+      {onRestart && (
+        <Card isDark={isDark}>
+          <div className="font-medium mb-2">System</div>
+          <button
+            onClick={onRestart}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium ${
+              isDark ? "bg-amber-900/40 text-amber-300 hover:bg-amber-900/60" : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+            } ${highlightRestart ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+          >
+            <span>Restart</span>
+            <span aria-hidden="true">&rsaquo;</span>
+          </button>
+          <p className={`text-xs ${mutedClass} mt-2`}>Restarting closes all open apps and starts your computer again.</p>
+        </Card>
+      )}
       <SimulatedDataBanner />
       <Card isDark={isDark}>
         <div className="space-y-2">

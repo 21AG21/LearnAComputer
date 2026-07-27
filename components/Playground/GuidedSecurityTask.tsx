@@ -61,19 +61,13 @@ const PHISHING_LINK_DATA: Record<string, PhishingItem> = {
     from: "+1 (555) 0142", subject: "Free WiFi", when: "Just now",
     body: "You are near a free hotspot! Sign in here to get online: {link}",
   },
-  "Bank of America Login": {
-    url: "https://bankofamerica.com/login", safe: true,
-    reason: "This goes to the real Bank of America website with https://.",
-    from: "Bank of America", subject: "Your monthly statement is ready", when: "Mon",
+  "First National Bank Login": {
+    url: "https://firstbank.example/login", safe: true,
+    reason: "This goes to firstbank.example — your bank's own address, over https.",
+    from: "First National Bank", subject: "Your monthly statement is ready", when: "Mon",
     body: "Your February statement is available. Sign in to view it: {link}",
   },
   "Complete Your Purchase": {
-    url: "https://shop.example/checkout", safe: true,
-    reason: "This goes to shop.example — a legitimate checkout page.",
-    from: "Shop", subject: "You left something in your basket", when: "3h ago",
-    body: "Your basket is still saved. Pick up where you left off: {link}",
-  },
-  "Complete Purchase": {
     url: "https://shop.example/checkout", safe: true,
     reason: "This goes to shop.example — a legitimate checkout page.",
     from: "Shop", subject: "You left something in your basket", when: "3h ago",

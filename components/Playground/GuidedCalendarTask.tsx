@@ -53,6 +53,23 @@ const PRESET_REMINDERS: Reminder[] = [
 const DAYS_IN_MONTH = 31;
 const MONTH_NAME = "July 2026";
 const MONTH_START_DOW = 3; // Wednesday (0=Sun)
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+/** Which weekday the given date of this month falls on. */
+function weekdayOf(day: number): string {
+  return WEEKDAYS[(MONTH_START_DOW + day - 1) % 7];
+}
+
+/**
+ * Lessons name the day the way a person would — "Wednesday" — while the grid is
+ * numbered. This used to compare the name against the number, so every `select-day`
+ * step was unreachable: no highlight, and the step never ticked however you clicked.
+ * A bare number still works for a lesson that wants one specific date.
+ */
+function dayMatchesTarget(day: number, target?: string): boolean {
+  if (!target) return true;
+  return target === String(day) || target.toLowerCase() === weekdayOf(day).toLowerCase();
+}
 
 const REPEAT_OPTIONS = ["None", "Daily", "Weekly", "Monthly", "Yearly"];
 const CALENDARS = ["Personal", "Work"];
@@ -74,7 +91,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
     switch (step.action) {
-      case "select-day": return kind === "day-cell" && name === step.target;
+      case "select-day": return kind === "day-cell" && dayMatchesTarget(Number(name), step.target);
       case "create-event": return creatingEvent ? false : kind === "new-event-btn";
       case "set-title": return kind === "event-title";
       case "set-time": return kind === "event-time";
@@ -95,7 +112,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
   function handleSelectDay(day: number) {
     setSelectedDay(day);
     setCreatingEvent(false);
-    tryStep((s) => s.action === "select-day" && (s.target === String(day) || s.target === undefined));
+    tryStep((s) => s.action === "select-day" && dayMatchesTarget(day, s.target));
   }
 
   function handleCreateEvent() {
@@ -298,8 +315,9 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
               <div className="px-3 pt-3 pb-1 font-semibold text-sm text-gray-700">{MONTH_NAME}</div>
               {/* Day headers */}
               <div className="grid grid-cols-7 px-2 pb-1">
-                {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                  <div key={i} className="text-center text-xs text-gray-400 font-medium py-1">{d}</div>
+                {/* Three letters, not one — "T" and "S" each stood for two different days. */}
+                {WEEKDAYS.map((d) => (
+                  <div key={d} className="text-center text-xs text-gray-400 font-medium py-1">{d.slice(0, 3)}</div>
                 ))}
               </div>
               {/* Calendar grid */}

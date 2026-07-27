@@ -279,7 +279,9 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
       saveInstalledIds(next);
       setSelectedApp(null);
     }
-    tryStep((s) => s.action === "install");
+    // In assessment mode every unmet objective is scanned, so an untargeted check
+    // let "install WeatherNow" be satisfied by installing anything at all.
+    tryStep((s) => s.action === "install" && (!s.target || s.target === selectedApp.name));
   }
 
   function handleAllowPermission() {
