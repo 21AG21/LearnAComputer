@@ -5,7 +5,7 @@
   "order": 530,
   "title": "Sending Photos",
   "videoUrl": "",
-  "drDigitalIntro": "You can share photos in a conversation — not just words!\n\n- Tap the + button beside the message box to open the attachment menu.\n- Choose Photos to see your photo library.\n- Pick any picture and it sends instantly.\n- The person on the other end can tap it to view it full-size.\n- You can also attach files, videos, and voice memos the same way.",
+  "drDigitalIntro": "You can share photos in a conversation — not just words!\n\n- Click the + button beside the message box to open the attachment menu.\n- Choose Photos to see your photo library.\n- Pick any picture and it sends instantly.\n- The person on the other end can click it to view it full-size.\n- You can also attach files, videos, and voice memos the same way.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You sent a photo in a conversation",

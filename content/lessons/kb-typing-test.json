@@ -5,7 +5,7 @@
   "order": 205,
   "title": "Typing practice: send an email",
   "videoUrl": "",
-  "drDigitalIntro": "Now let's put everything together by typing a real email.\n• You will open the Mail app, write a message, and send it — just like on a real computer.\n• The email uses capital letters (Shift), a question mark (?), an exclamation mark (!), and commas inside a big number.\n• Capital letters need Shift: hold Shift and tap the letter at the same time.\n• Commas and punctuation are on the keyboard — look to the right of the letters.\n• Take your time — accuracy matters more than speed.",
+  "drDigitalIntro": "Now let's put everything together by typing a real email.\n• You will open the Mail app, write a message, and send it — just like on a real computer.\n• The email uses capital letters (Shift), a question mark (?), an exclamation mark (!), and commas inside a big number.\n• Capital letters need Shift: hold Shift and click the letter at the same time.\n• Commas and punctuation are on the keyboard — look to the right of the letters.\n• Take your time — accuracy matters more than speed.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "Send an email to Dr. Digital",

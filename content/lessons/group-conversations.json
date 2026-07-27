@@ -5,7 +5,7 @@
   "order": 520,
   "title": "Group Conversations",
   "videoUrl": "",
-  "drDigitalIntro": "A group chat lets you message several people at once.\n\n- Tap the + button in the Contacts header to start a new group.\n- Pick the people you want to add — a checkmark appears next to each one.\n- Hit Start Chat and a group thread opens.\n- Everyone in the group can see all the messages.\n- Great for planning events, staying in touch with family, or working on a project together.",
+  "drDigitalIntro": "A group chat lets you message several people at once.\n\n- Click the + button in the Contacts header to start a new group.\n- Pick the people you want to add — a checkmark appears next to each one.\n- Hit Start Chat and a group thread opens.\n- Everyone in the group can see all the messages.\n- Great for planning events, staying in touch with family, or working on a project together.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "You created a group chat and sent your first message",

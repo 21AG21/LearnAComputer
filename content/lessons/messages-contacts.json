@@ -5,7 +5,7 @@
   "order": 500,
   "title": "Your Contact List",
   "videoUrl": "",
-  "drDigitalIntro": "A contact is a person you have saved in your phone or computer — their name, phone number, or email address, all in one place.\n• The contacts list shows everyone you can message. Tap a name to open their conversation.\n• Each conversation remembers everything you have ever said to that person.\n• You do not have to send a message just because you open a conversation — you can just read it.\n• New messages appear as a preview in the list so you can see who wrote without opening it.",
+  "drDigitalIntro": "A contact is a person you have saved in your phone or computer — their name, phone number, or email address, all in one place.\n• The contacts list shows everyone you can message. Click a name to open their conversation.\n• Each conversation remembers everything you have ever said to that person.\n• You do not have to send a message just because you open a conversation — you can just read it.\n• New messages appear as a preview in the list so you can see who wrote without opening it.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "Browse your contacts and read a few conversations",
