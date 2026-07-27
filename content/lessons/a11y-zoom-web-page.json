@@ -1,0 +1,30 @@
+{
+  "slug": "a11y-zoom-web-page",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Zooming In",
+  "order": 1350,
+  "title": "Zooming one web page",
+  "videoUrl": "",
+  "drDigitalIntro": "Sometimes only one page is the problem, and changing the whole computer is too much.\n• Every browser can zoom a single page in and out.\n• The zoom control sits in the browser's toolbar and shows a percentage — 100% is normal size.\n• The browser remembers the zoom for that website, so a site with small print stays readable next time.\n• Common mistake: zooming so far in that the page starts wrapping oddly. Two or three steps is usually enough.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "goal": "You zoomed a web page in",
+    "steps": [
+      {
+        "say": "Type citytransit.example into the address bar and press Enter.",
+        "action": "navigate",
+        "url": "citytransit.example"
+      },
+      {
+        "say": "Click the + button in the zoom control to zoom in.",
+        "action": "zoom-in"
+      },
+      {
+        "say": "Click + once more.",
+        "action": "zoom-in"
+      }
+    ]
+  },
+  "drDigitalSuccess": "The timetable is much easier to read now, and the browser will remember it for this site.",
+  "drDigitalHint": "The zoom control is the box on the right of the browser's grey button row, showing a percentage."
+}

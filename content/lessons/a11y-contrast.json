@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-contrast",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Colour and Contrast",
+  "order": 1331,
+  "title": "Increasing contrast",
+  "videoUrl": "",
+  "drDigitalIntro": "Contrast is the gap between the light parts of the screen and the dark parts.\n• Increase Contrast pushes pale colours paler and dark colours darker, so edges and text stand out.\n• It is gentler than inverting — the screen keeps looking normal, just sharper.\n• It helps with faint grey text and thin dividing lines, which are everywhere in modern software.\n• Try it with Bold Text on. The two work well together.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You increased the screen contrast",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Click the switch next to Increase Contrast.",
+        "action": "toggle",
+        "target": "increase-contrast"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Look at the grey helper text under each setting — it is easier to read now.",
+  "drDigitalHint": "Increase Contrast is the second switch in the Colour and Contrast card."
+}

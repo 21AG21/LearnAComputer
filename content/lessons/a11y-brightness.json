@@ -1,0 +1,29 @@
+{
+  "slug": "a11y-brightness",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Text You Can Read",
+  "order": 1322,
+  "title": "Screen brightness",
+  "videoUrl": "",
+  "drDigitalIntro": "A screen that is too bright is as hard to read as one that is too dim.\n• Brightness lives under Display, not Accessibility — but it does the same job.\n• Turn it down in a dark room and up near a window.\n• If your eyes ache at the end of the day, brightness is usually the first thing to try.\n• Common mistake: turning brightness all the way down to save battery, then squinting for an hour.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You set the screen brightness by hand",
+    "steps": [
+      {
+        "say": "Click Display in the list on the left.",
+        "action": "open-section",
+        "target": "display"
+      },
+      {
+        "say": "Drag the Brightness slider down to somewhere between 40 and 60.",
+        "action": "slider",
+        "target": "brightness",
+        "min": 40,
+        "max": 60
+      }
+    ]
+  },
+  "drDigitalSuccess": "The whole screen dimmed. That is the control to reach for in a dark room.",
+  "drDigitalHint": "Display is the second item in the left-hand list. Brightness is the slider at the top of it."
+}

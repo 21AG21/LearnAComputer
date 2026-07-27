@@ -7,3 +7,12 @@
 :-webkit-full-screen { height: 100%; width: 100%; }
 :fullscreen .playground-root { height: 100%; }
 :-webkit-full-screen .playground-root { height: 100%; }
+
+/* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

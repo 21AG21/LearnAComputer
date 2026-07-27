@@ -17,6 +17,7 @@ const BY_UNIT: Record<string, string> = {
   "Unit 10: Online Safety and Security": "full-moon",
   "Unit 11: Troubleshooting": "storm-clouds",
   "Unit 12: Everyday Life with Your Computer": "breakfast-table",
+  "Unit 13: Making Your Computer Easier to Use": "wave-lines",
   "Final Capstone": "mountain-dawn",
 };
 

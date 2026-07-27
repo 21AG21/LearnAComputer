@@ -14,7 +14,7 @@ import AppMarketApp from "./Desktop/AppMarketApp";
 import DraggableWindow from "./Desktop/DraggableWindow";
 import FileViewer from "./Desktop/FileViewer";
 import { iconFor, type Item } from "./Desktop/filesData";
-import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
+import { SimThemeProvider, useSimTheme, themeFilter, themeCursor } from "./Desktop/SimThemeContext";
 import Dock from "./Dock";
 import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
 import {
@@ -239,7 +239,15 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
   const isDark = theme.dark;
 
   return (
-    <div className={`h-full w-full flex flex-col overflow-hidden relative ${isDark ? "bg-gray-900" : "bg-white"}`} style={{ fontSize: `${theme.textScale / 100}em`, fontWeight: theme.boldText ? 600 : 400 }}>
+    <div
+      className={`h-full w-full flex flex-col overflow-hidden relative ${isDark ? "bg-gray-900" : "bg-white"} ${theme.reduceMotion ? "reduce-motion" : ""}`}
+      style={{
+        fontSize: `${theme.textScale / 100}em`,
+        fontWeight: theme.boldText ? 600 : 400,
+        filter: themeFilter(theme),
+        cursor: themeCursor(theme),
+      }}
+    >
       {/* Menu bar */}
       <div className="relative shrink-0">
         <DesktopMenuBar
@@ -486,6 +494,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       {theme.nightShift && (
         <div className="absolute inset-0 pointer-events-none bg-orange-500/15 transition-opacity" style={{ filter: "sepia(0.15)" }} />
       )}
+      {theme.spokenDescriptions && <SpokenDescriptionBar />}
     </div>
   );
 }
@@ -567,5 +576,30 @@ function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: bo
         ))}
       </div>
     </StatusPanel>
+  );
+}
+
+/**
+ * Stands in for a screen reader. A real one speaks; this one prints, because a
+ * learner needs to see that pointing at a control announces its name.
+ */
+function SpokenDescriptionBar() {
+  const [spoken, setSpoken] = useState("Desktop");
+
+  useEffect(() => {
+    function announce(e: MouseEvent) {
+      const el = (e.target as HTMLElement | null)?.closest("[aria-label],button,a,input") as HTMLElement | null;
+      const name = el?.getAttribute("aria-label") || el?.textContent?.trim();
+      setSpoken(name && name.length <= 60 ? name : "Desktop");
+    }
+    document.addEventListener("mouseover", announce);
+    return () => document.removeEventListener("mouseover", announce);
+  }, []);
+
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 bg-black/85 px-4 py-2 text-center text-sm font-semibold text-white">
+      <span className="mr-2 rounded bg-white/20 px-1.5 py-0.5 text-[10px] uppercase tracking-widest">Speaking</span>
+      {spoken}
+    </div>
   );
 }

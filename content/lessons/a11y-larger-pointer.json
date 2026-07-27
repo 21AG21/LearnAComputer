@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-larger-pointer",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Pointer, Motion and Sound",
+  "order": 1340,
+  "title": "Making the pointer easier to find",
+  "videoUrl": "",
+  "drDigitalIntro": "Losing the mouse pointer on a big screen is one of the most common frustrations there is.\n• Larger Pointer makes the arrow noticeably bigger, so your eye catches it straight away.\n• It does not change what the pointer does — only how big it looks.\n• If you still lose it, shaking the mouse quickly makes the pointer grow briefly on most computers.\n• This is the setting people most often say they wish they had known about years ago.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You made the mouse pointer bigger",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Click the switch next to Larger Pointer, then move your mouse to see it.",
+        "action": "toggle",
+        "target": "larger-pointer"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Move the mouse around the desktop — the arrow is much harder to lose now.",
+  "drDigitalHint": "Larger Pointer is the first switch in the Pointer and Motion card, near the bottom of the Accessibility page."
+}

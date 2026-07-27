@@ -1,0 +1,42 @@
+{
+  "slug": "a11y-turning-it-back",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Pointer, Motion and Sound",
+  "order": 1343,
+  "title": "Turning it all back off",
+  "videoUrl": "",
+  "drDigitalIntro": "The single biggest reason people never try these settings is the fear of not being able to undo them.\n• Every switch in this unit is a switch. Clicking it a second time puts things back.\n• Even Invert Colours, which changes the screen most dramatically, is undone by the same control that turned it on.\n• If a change makes the screen hard to read, the setting you need is still in the same place — it just looks different.\n• In this activity the screen starts inverted and greyscale. Put it back to normal.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You put the screen back to normal",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Turn Invert Colours on, so the screen flips.",
+        "action": "toggle",
+        "target": "invert-colours"
+      },
+      {
+        "say": "Now click the same switch again to turn it back off.",
+        "action": "toggle",
+        "target": "invert-colours"
+      },
+      {
+        "say": "Under Colour Filters, click Greyscale.",
+        "action": "toggle",
+        "target": "colour-filter-greyscale"
+      },
+      {
+        "say": "Now click Off to bring the colour back.",
+        "action": "toggle",
+        "target": "colour-filter-none"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Nothing you change here is permanent. That is worth remembering the next time you are tempted not to try something.",
+  "drDigitalHint": "The control that made the change is the control that undoes it — the same switch, the same place."
+}

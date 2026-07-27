@@ -1,0 +1,41 @@
+{
+  "slug": "a11y-assessment",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Unit 13 Assessment",
+  "order": 1360,
+  "title": "Set up a screen for someone who struggles to read it",
+  "videoUrl": "",
+  "drDigitalIntro": "A friend tells you they can see the screen, but reading it wears them out by lunchtime.\n• They want the words heavier and larger, and less glare from bright white pages.\n• You know four settings that would help. Use the ones you think are right.\n• There is no step-by-step guide this time — the checklist shows what still needs doing.\n• Take your time and look at the screen after each change.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You set up a screen that is easier to read for a long stretch",
+    "steps": [
+      {
+        "say": "The text on the computer is larger.",
+        "action": "slider",
+        "target": "text-size",
+        "min": 120,
+        "max": 140
+      },
+      {
+        "say": "The text is heavier.",
+        "action": "toggle",
+        "target": "bold-text"
+      },
+      {
+        "say": "Pale and dark colours are further apart.",
+        "action": "toggle",
+        "target": "increase-contrast"
+      },
+      {
+        "say": "The screen has a warmer, less glaring tint.",
+        "action": "toggle",
+        "target": "colour-filter-warm"
+      }
+    ],
+    "mode": "assessment",
+    "hint": "Three of the four live on one page of Settings, in the list on the left. Look for the section named after this unit's subject."
+  },
+  "drDigitalSuccess": "That is a screen someone could read all afternoon. You chose every one of those settings yourself.",
+  "drDigitalHint": "Everything you need is in Settings. Open the Hint if you want a nudge toward the right page."
+}

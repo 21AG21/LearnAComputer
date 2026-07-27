@@ -1,0 +1,30 @@
+{
+  "slug": "a11y-zoom-vs-text-size",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Zooming In",
+  "order": 1351,
+  "title": "Zoom or text size?",
+  "videoUrl": "",
+  "drDigitalIntro": "Two settings make things bigger, and they are not interchangeable.\n• Text Size changes every menu, button and label on the whole computer, in every app.\n• Browser zoom changes one website, and only inside the browser.\n• Use Text Size if everything feels small. Use zoom if one particular page is the problem.\n• In this activity you will read a long article by zooming it, without touching the computer-wide setting.",
+  "playgroundTask": {
+    "type": "guided-browser",
+    "goal": "You zoomed an article to read it comfortably",
+    "steps": [
+      {
+        "say": "Type gardeningtips.example into the address bar and press Enter.",
+        "action": "navigate",
+        "url": "gardeningtips.example"
+      },
+      {
+        "say": "Zoom in so the article text is comfortable to read.",
+        "action": "zoom-in"
+      },
+      {
+        "say": "Zoom in once more.",
+        "action": "zoom-in"
+      }
+    ]
+  },
+  "drDigitalSuccess": "That article is now set the way you like it, and the rest of the computer is untouched.",
+  "drDigitalHint": "Zoom lives in the browser toolbar, not in Settings. Look for the percentage on the right of the grey button row."
+}

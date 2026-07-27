@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useSimTheme } from "./SimThemeContext";
+import { useSimTheme, type ColourFilter } from "./SimThemeContext";
 import {
   PaletteIcon, DisplayIcon, AccessibilityIcon, WifiIcon,
   BellIcon, SaveIcon, InfoIcon, ShieldIcon, SmartphoneIcon,
@@ -152,13 +152,11 @@ export default function SettingsApp({
         )}
         {active === "accessibility" && (
           <AccessibilityPanel
-            textScale={theme.textScale}
-            boldText={theme.boldText}
-            onTextScale={(v) => { theme.set({ textScale: v }); onSlider?.("text-size", v); }}
-            onBoldToggle={(v) => { theme.set({ boldText: v }); onToggle?.("bold-text", v); }}
+            theme={theme}
+            onSlider={onSlider}
+            onToggle={onToggle}
             highlightToggle={highlightToggle}
             highlightSlider={highlightSlider}
-            panelClass={panel}
             mutedClass={muted}
             isDark={dark}
           />
@@ -289,17 +287,90 @@ function DisplayPanel({ brightness, onBrightness, highlightSlider, panelClass, m
   );
 }
 
-function AccessibilityPanel({ textScale, boldText, onTextScale, onBoldToggle, highlightToggle, highlightSlider, panelClass, mutedClass, isDark }: {
-  textScale: number; boldText: boolean; onTextScale: (v: number) => void; onBoldToggle: (v: boolean) => void; highlightToggle?: string; highlightSlider?: string; panelClass: string; mutedClass: string; isDark: boolean;
+function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highlightSlider, mutedClass, isDark }: {
+  theme: ReturnType<typeof useSimTheme>;
+  onSlider?: (target: string, value: number) => void;
+  onToggle?: (target: string, value: boolean) => void;
+  highlightToggle?: string; highlightSlider?: string; mutedClass: string; isDark: boolean;
 }) {
+  const filters: { id: ColourFilter; label: string }[] = [
+    { id: "none", label: "Off" },
+    { id: "greyscale", label: "Greyscale" },
+    { id: "warm", label: "Warm" },
+  ];
   return (
-    <div>
-      <h2 className="text-lg font-semibold mb-3">Accessibility</h2>
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold">Accessibility</h2>
+
       <Card isDark={isDark}>
-        <Slider value={textScale} min={100} max={140} label="Text Size" highlight={highlightSlider === "text-size"} onChange={onTextScale} isDark={isDark} />
+        <p className={`text-xs font-bold uppercase tracking-widest ${mutedClass} mb-2`}>Text</p>
+        <Slider
+          value={theme.textScale} min={100} max={140} label="Text Size"
+          highlight={highlightSlider === "text-size"} isDark={isDark}
+          onChange={(v) => { theme.set({ textScale: v }); onSlider?.("text-size", v); }}
+        />
         <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Make text larger across your computer</div>
-        <Toggle on={boldText} onToggle={onBoldToggle} label="Bold Text" highlight={highlightToggle === "bold-text"} isDark={isDark} />
+        <Toggle
+          on={theme.boldText} label="Bold Text" isDark={isDark}
+          highlight={highlightToggle === "bold-text"}
+          onToggle={(v) => { theme.set({ boldText: v }); onToggle?.("bold-text", v); }}
+        />
         <div className={`text-xs ${mutedClass} mt-1`}>Make all text heavier for easier reading</div>
+      </Card>
+
+      <Card isDark={isDark}>
+        <p className={`text-xs font-bold uppercase tracking-widest ${mutedClass} mb-2`}>Colour and contrast</p>
+        <Toggle
+          on={theme.invert} label="Invert Colours" isDark={isDark}
+          highlight={highlightToggle === "invert-colours"}
+          onToggle={(v) => { theme.set({ invert: v }); onToggle?.("invert-colours", v); }}
+        />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Flip light and dark — white pages become black</div>
+        <Toggle
+          on={theme.highContrast} label="Increase Contrast" isDark={isDark}
+          highlight={highlightToggle === "increase-contrast"}
+          onToggle={(v) => { theme.set({ highContrast: v }); onToggle?.("increase-contrast", v); }}
+        />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Push light colours lighter and dark colours darker</div>
+        <p className="text-sm font-semibold mb-1.5">Colour Filters</p>
+        <div className="flex gap-2">
+          {filters.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => { theme.set({ colourFilter: f.id }); onToggle?.(`colour-filter-${f.id}`, true); }}
+              className={`px-3 py-1.5 rounded-lg border-2 text-sm font-semibold ${
+                theme.colourFilter === f.id
+                  ? "border-blue-600 bg-blue-600 text-white"
+                  : isDark ? "border-gray-600 text-gray-200" : "border-gray-400 text-gray-700"
+              } ${highlightToggle === `colour-filter-${f.id}` ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <div className={`text-xs ${mutedClass} mt-1`}>Helps if some colours are hard to tell apart</div>
+      </Card>
+
+      <Card isDark={isDark}>
+        <p className={`text-xs font-bold uppercase tracking-widest ${mutedClass} mb-2`}>Pointer and motion</p>
+        <Toggle
+          on={theme.largeCursor} label="Larger Pointer" isDark={isDark}
+          highlight={highlightToggle === "larger-pointer"}
+          onToggle={(v) => { theme.set({ largeCursor: v }); onToggle?.("larger-pointer", v); }}
+        />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Make the arrow bigger so it is easier to find</div>
+        <Toggle
+          on={theme.reduceMotion} label="Reduce Motion" isDark={isDark}
+          highlight={highlightToggle === "reduce-motion"}
+          onToggle={(v) => { theme.set({ reduceMotion: v }); onToggle?.("reduce-motion", v); }}
+        />
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Stop windows sliding and fading when they open</div>
+        <Toggle
+          on={theme.spokenDescriptions} label="Spoken Descriptions" isDark={isDark}
+          highlight={highlightToggle === "spoken-descriptions"}
+          onToggle={(v) => { theme.set({ spokenDescriptions: v }); onToggle?.("spoken-descriptions", v); }}
+        />
+        <div className={`text-xs ${mutedClass} mt-1`}>Read out the name of whatever you point at</div>
       </Card>
     </div>
   );

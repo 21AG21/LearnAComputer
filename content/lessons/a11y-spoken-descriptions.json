@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-spoken-descriptions",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Pointer, Motion and Sound",
+  "order": 1342,
+  "title": "Spoken descriptions",
+  "videoUrl": "",
+  "drDigitalIntro": "A screen reader says out loud whatever you are pointing at.\n• It is what people who cannot see the screen use to operate a computer entirely by ear.\n• It also helps anyone who finds reading tiring, or who wants confirmation before they click something.\n• On this practice computer the words appear in a black bar along the bottom instead of being spoken, so you can see exactly what a real screen reader would say.\n• Turn it on, then move your mouse over the dock and watch the bar change.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You turned on spoken descriptions",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Click the switch next to Spoken Descriptions, then hover over the dock.",
+        "action": "toggle",
+        "target": "spoken-descriptions"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Move your mouse across the dock — the bar at the bottom names each app as you reach it.",
+  "drDigitalHint": "Spoken Descriptions is the last switch on the Accessibility page."
+}

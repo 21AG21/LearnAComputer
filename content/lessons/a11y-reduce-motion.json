@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-reduce-motion",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Pointer, Motion and Sound",
+  "order": 1341,
+  "title": "Reducing motion",
+  "videoUrl": "",
+  "drDigitalIntro": "Windows normally slide, fade and zoom as they open and close.\n• Those animations look pleasant, but they make some people dizzy or queasy, and they slow down anyone who just wants the window there now.\n• Reduce Motion switches them off. Windows simply appear and disappear.\n• Nothing stops working — the computer does exactly what it did before, just without the movement.\n• If you get motion sickness on a phone or in a car, this one is worth trying.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You turned off the window animations",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Click the switch next to Reduce Motion.",
+        "action": "toggle",
+        "target": "reduce-motion"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Open and close an app from the dock now — the window just appears, with no sliding.",
+  "drDigitalHint": "Reduce Motion is the second switch in the Pointer and Motion card."
+}

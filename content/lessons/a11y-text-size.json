@@ -1,0 +1,29 @@
+{
+  "slug": "a11y-text-size",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Text You Can Read",
+  "order": 1320,
+  "title": "Making text bigger",
+  "videoUrl": "",
+  "drDigitalIntro": "The fastest fix for small print is to make all the text bigger at once.\n• Text Size lives in Settings, under Accessibility.\n• Drag the slider right and every menu, label and message grows together.\n• This is different from zooming a single web page — this changes the whole computer.\n• Common mistake: nudging it up by one step and deciding it did not work. Push it well past halfway and look again.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You made every label on the computer bigger",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Drag the Text Size slider until it reads between 125 and 140.",
+        "action": "slider",
+        "target": "text-size",
+        "min": 125,
+        "max": 140
+      }
+    ]
+  },
+  "drDigitalSuccess": "Look at the menu on the left — every word grew with it.",
+  "drDigitalHint": "Accessibility is the third item in the left-hand list. The Text Size slider is the first control inside it."
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-colour-filters",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Colour and Contrast",
+  "order": 1332,
+  "title": "Colour filters",
+  "videoUrl": "",
+  "drDigitalIntro": "About one man in twelve finds certain colour pairs hard to tell apart — most often red and green.\n• A colour filter changes how the computer shows colour so those pairs stop clashing.\n• Greyscale removes colour entirely: everything becomes shades of grey. Nothing depends on hue any more.\n• Warm shifts the whole screen toward orange, which some people find easier on the eyes at night.\n• Off is the third choice, and it is where you started.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You switched the screen to greyscale",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Under Colour Filters, click the Greyscale button.",
+        "action": "toggle",
+        "target": "colour-filter-greyscale"
+      }
+    ]
+  },
+  "drDigitalSuccess": "All the colour drained out. Look at the dock — the app tiles are now told apart by their shapes, not their colours.",
+  "drDigitalHint": "Colour Filters is the row of three buttons at the bottom of the Colour and Contrast card."
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "a11y-bold-text",
+  "unit": "Unit 13: Making Your Computer Easier to Use",
+  "module": "Text You Can Read",
+  "order": 1321,
+  "title": "Bold text",
+  "videoUrl": "",
+  "drDigitalIntro": "Bigger is not always clearer. Sometimes what you need is heavier.\n• Bold Text thickens every letter on the computer without making anything take up more room.\n• It helps most on thin, pale text — the grey helper lines under a setting, for example.\n• Try it together with a larger Text Size and see which combination you prefer.\n• It is a switch, not a slider: it is either on or off.",
+  "playgroundTask": {
+    "type": "guided-settings",
+    "goal": "You turned on Bold Text",
+    "steps": [
+      {
+        "say": "Click Accessibility in the list on the left.",
+        "action": "open-section",
+        "target": "accessibility"
+      },
+      {
+        "say": "Click the switch next to Bold Text.",
+        "action": "toggle",
+        "target": "bold-text"
+      }
+    ]
+  },
+  "drDigitalSuccess": "Every word on the screen just got heavier. Leave it on if you like it.",
+  "drDigitalHint": "Bold Text sits just under the Text Size slider, in the first card of the Accessibility page."
+}
