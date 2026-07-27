@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
@@ -14,6 +13,7 @@ import CalendarApp from "./Desktop/CalendarApp";
 import AppMarketApp from "./Desktop/AppMarketApp";
 import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
 import WindowControls from "./WindowControls";
+import Dock from "./Dock";
 import { BellOffIcon } from "./Icons";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
@@ -47,19 +47,6 @@ interface FakeDesktopProps {
   settingsProps?: SettingsCallbacks;
   autoOpenApp?: DesktopAppId;
 }
-
-const APPS: { id: DesktopAppId; label: string; icon: string }[] = [
-  { id: "messages",   label: "Messages",   icon: "/playgrounds/dock-messages.png" },
-  { id: "browser",    label: "Browser",    icon: "/playgrounds/dock-browser.png" },
-  { id: "files",      label: "Files",      icon: "/playgrounds/dock-files.png" },
-  { id: "mail",       label: "Mail",       icon: "/playgrounds/dock-mail.png" },
-  { id: "settings",   label: "Settings",   icon: "/playgrounds/dock-settings.png" },
-  { id: "photos",     label: "Photos",     icon: "/playgrounds/dock-photos.png" },
-  { id: "app-market", label: "App Market", icon: "/playgrounds/dock-app-market.png" },
-  { id: "calendar",   label: "Calendar",   icon: "/playgrounds/dock-calendar.png" },
-  { id: "reminders",  label: "Reminders",  icon: "/playgrounds/dock-reminders.png" },
-  { id: "notes",      label: "Notes",      icon: "/playgrounds/dock-notes.png" },
-];
 
 export const APP_TITLES: Record<DesktopAppId, string> = {
   messages: "Messages",
@@ -295,31 +282,18 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
               : "linear-gradient(115deg, #f5b9b9 0%, #fadcdc 20%, #d9f1d9 38%, #c2e9c2 50%, #daf2da 62%, #ccd3f3 82%, #bdc7ef 100%)",
           }}
         />
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 items-end">
-          {APPS.map(({ id, label, icon }) => (
-            <div key={id} className="flex flex-col items-center gap-0.5">
-              <button
-                onClick={() => openApp(id)}
-                aria-label={label}
-                className={`flex flex-col items-center gap-0.5 ${
-                  launchingApp === id ? "animate-dock-bounce" : "transition-transform hover:scale-110 active:scale-95"
-                }`}
-              >
-                <div className={`relative w-14 h-14 rounded-2xl overflow-hidden ${highlightApp === id ? "animate-ring-pulse" : ""}`}>
-                  <Image src={icon} alt="" fill sizes="56px" className="object-contain" />
-                  {minimized.has(id) && (
-                    <span
-                      aria-label={`${APP_TITLES[id]} is still open`}
-                      className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white"
-                    />
-                  )}
-                </div>
-                <span className={`text-[9px] font-medium leading-none select-none ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                  {APP_TITLES[id]}
-                </span>
-              </button>
-            </div>
-          ))}
+        <div className="absolute bottom-4 inset-x-2 flex justify-center">
+          <Dock
+            tone={isDark ? "dark" : "light"}
+            items={BUILT_IN_APPS.map((id) => ({
+              id,
+              label: APP_TITLES[id],
+              running: minimized.has(id),
+              highlighted: highlightApp === id,
+              bouncing: launchingApp === id,
+            }))}
+            onOpen={(id) => openApp(id as DesktopAppId)}
+          />
         </div>
 
         {/* Apps — kept mounted while minimized so their state survives. Each wrapper's own

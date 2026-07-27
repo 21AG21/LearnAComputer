@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import WindowControls from "./WindowControls";
+import Dock from "./Dock";
 import { NoteIcon } from "./Icons";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -26,10 +26,10 @@ export interface DesktopStep {
 const HIDE_WINDOW_ACTIONS: StepAction[] = ["open-app", "open-clock", "open-wifi-panel", "open-battery-panel"];
 
 const DOCK_APPS = [
-  { id: "notes",    label: "Notes",    icon: "/playgrounds/dock-notes.png" },
-  { id: "browser",  label: "Browser",  icon: "/playgrounds/dock-browser.png" },
-  { id: "files",    label: "Files",    icon: "/playgrounds/dock-files.png" },
-  { id: "messages", label: "Messages", icon: "/playgrounds/dock-messages.png" },
+  { id: "notes",    label: "Notes" },
+  { id: "browser",  label: "Browser" },
+  { id: "files",    label: "Files" },
+  { id: "messages", label: "Messages" },
 ] as const;
 
 interface GuidedDesktopTaskProps {
@@ -381,30 +381,23 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
       </div>
 
       {/* Dock */}
-      <div className="shrink-0 bg-white/10 border-t border-white/20 flex items-center justify-center gap-3 py-2 px-4 backdrop-blur-sm" style={{ background: "rgba(30,40,55,0.85)" }}>
-        {DOCK_APPS.map((app) => {
-          const isTarget = step?.action === "open-app" && step.target === app.id;
-          const isMinimizedTarget = minimized && step?.action === "restore";
-          return (
-            <div key={app.id} className="flex flex-col items-center gap-0.5">
-              <button
-                onClick={() => {
-                  if (minimized && app.id === openedAppId && allow((s) => s.action === "restore")) { onRestore(); return; }
-                  onDockClick(app.id);
-                }}
-                className={`relative w-12 h-12 rounded-xl overflow-hidden transition-transform hover:scale-110 ${
-                  isTarget || (isMinimizedTarget && app.id === openedAppId) ? "ring-4 ring-yellow-400 animate-pulse" : ""
-                }`}
-              >
-                <Image src={app.icon} alt={app.label} fill sizes="48px" className="object-contain" />
-                {minimized && app.id === openedAppId && (
-                  <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-400" />
-                )}
-              </button>
-              <span className="text-[9px] font-medium text-gray-300 leading-none select-none">{app.label}</span>
-            </div>
-          );
-        })}
+      <div className="shrink-0 flex items-center justify-center py-2 px-4">
+        <Dock
+          tone="dark"
+          size="sm"
+          items={DOCK_APPS.map((app) => ({
+            id: app.id,
+            label: app.label,
+            running: minimized && app.id === openedAppId,
+            highlighted:
+              (step?.action === "open-app" && step.target === app.id) ||
+              (minimized && step?.action === "restore" && app.id === openedAppId),
+          }))}
+          onOpen={(id) => {
+            if (minimized && id === openedAppId && allow((s) => s.action === "restore")) { onRestore(); return; }
+            onDockClick(id);
+          }}
+        />
       </div>
       </div>
     </SimulatorFrame>

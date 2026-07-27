@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
-import { GlobeIcon, MailIcon, GearIcon, CameraIcon, NoteIcon, SmartphoneIcon } from "./Icons";
+import { GlobeIcon, MailIcon, GearIcon } from "./Icons";
 
 export type GuidedTroubleshootingStep = {
   say: string;
@@ -1069,44 +1070,34 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
         </div>
 
         {/* Dock */}
-        <div className="h-14 shrink-0 flex items-center justify-center gap-3 bg-white/80 backdrop-blur border-t border-gray-200 px-4">
-          {dockApps.map((app) => {
-            const isTarget = hl("dock-app", app.id);
-            const appIconMap: Record<string, ReactNode> = {
-              Browser: <GlobeIcon size={24} />, Mail: <MailIcon size={24} />, Settings: <GearIcon size={24} />,
-              Photos: <CameraIcon size={24} />, Notes: <NoteIcon size={24} />,
-            };
-            const appIcon = appIconMap[app.id] ?? <SmartphoneIcon size={24} />;
-            return (
-              <button
-                key={app.id}
-                onClick={() => {
-                  if (mode === "public-wifi" && app.id === "Settings") {
-                    handleOpenSettingsPrivacy();
-                  } else if (mode === "public-wifi" && app.id === "Browser") {
-                    setPrivacyOpen(false);
-                  } else if (mode === "password-reset" && app.id === "Mail") {
-                    handleOpenMailFromDock();
-                  } else if (mode === "password-reset" && app.id === "Browser") {
-                    setPrApp("browser");
-                  } else if (mode === "app-reinstall" && app.id === "App Market") {
-                    handleOpenAppMarket();
-                  } else if (step?.action === "open-browser" && app.id === "Browser") {
-                    handleOpenBrowser();
-                  } else if (mode === "error-restart" && app.id === "Settings") {
-                    handleErOpenSettings();
-                  } else {
-                    handleRestartApp(app.id);
-                  }
-                }}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all hover:bg-gray-100 ${isTarget ? pulse : ""}`}
-                aria-label={app.label}
-              >
-                <span className="text-gray-600">{appIcon}</span>
-                <span className="text-[10px] text-gray-500">{app.label}</span>
-              </button>
-            );
-          })}
+        <div className="shrink-0 flex items-center justify-center px-4 py-2">
+          <Dock
+            size="sm"
+            items={dockApps.map((app) => ({
+              id: app.id,
+              label: app.label,
+              highlighted: hl("dock-app", app.id),
+            }))}
+            onOpen={(id) => {
+              if (mode === "public-wifi" && id === "Settings") {
+                handleOpenSettingsPrivacy();
+              } else if (mode === "public-wifi" && id === "Browser") {
+                setPrivacyOpen(false);
+              } else if (mode === "password-reset" && id === "Mail") {
+                handleOpenMailFromDock();
+              } else if (mode === "password-reset" && id === "Browser") {
+                setPrApp("browser");
+              } else if (mode === "app-reinstall" && id === "App Market") {
+                handleOpenAppMarket();
+              } else if (step?.action === "open-browser" && id === "Browser") {
+                handleOpenBrowser();
+              } else if (mode === "error-restart" && id === "Settings") {
+                handleErOpenSettings();
+              } else {
+                handleRestartApp(id);
+              }
+            }}
+          />
         </div>
       </div>
     </SimulatorFrame>
