@@ -5,6 +5,7 @@ import SimulatorFrame from "./SimulatorFrame";
 import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { GlobeIcon, MailIcon, GearIcon } from "./Icons";
+import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
 
 export type GuidedTroubleshootingStep = {
   say: string;
@@ -54,7 +55,20 @@ const NETWORKS = ["CoolKids Network", "Neighbor's WiFi", "Coffee Shop"];
 /** The café network the public-wifi scenario joins, alongside two you have no password for. */
 const PUBLIC_NETWORKS = ["Coffee Shop Free WiFi", "CoffeeShop-Staff", "Neighbour 5G"];
 
-export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode: simMode, hint, onResult }: Props) {
+const ALL_DOCK_APPS = [
+  { id: "Messages", label: "Messages" },
+  { id: "Browser",  label: "Browser"  },
+  { id: "Files",    label: "Files"    },
+  { id: "Mail",     label: "Mail"     },
+  { id: "Settings", label: "Settings" },
+  { id: "Photos",   label: "Photos"   },
+  { id: "App Market", label: "App Market" },
+  { id: "Calendar", label: "Calendar" },
+  { id: "Reminders", label: "Reminders" },
+  { id: "Notes",    label: "Notes"    },
+];
+
+export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, hint, onResult }: Props) {
 
   const mode = inferScenarioMode(steps);
 
@@ -83,7 +97,7 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
   const [forgottenNetworks, setForgottenNetworks] = useState<string[]>([]);
   const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
 
-  const [errorCode, setErrorCode] = useState(() => {
+  const [errorCode] = useState(() => {
     const s = steps.find((s) => s.action === "copy-code");
     return s?.value ?? "PX-4402";
   });
@@ -117,11 +131,18 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
   const arBrokenTarget = steps.find((s) => s.action === "delete-broken-app")?.target ?? "Browser";
 
   const [time, setTime] = useState("11:15 am");
+  const [batteryPct, setBatteryPct] = useState<number | null>(null);
   useEffect(() => {
     const update = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase());
     update();
     const id = setInterval(update, 30_000);
     return () => clearInterval(id);
+  }, []);
+  useEffect(() => {
+    if (!("getBattery" in navigator)) return;
+    (navigator as unknown as { getBattery: () => Promise<{ level: number }> }).getBattery().then((b) => {
+      setBatteryPct(Math.round(b.level * 100));
+    }).catch(() => {});
   }, []);
 
   const { step, stepIndex, done, flash, tryStep, objectives } =
@@ -390,40 +411,35 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
       objectives={objectives}
       hint={hint}
     >
-      <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 relative">
+      <div className="flex-1 flex flex-col overflow-hidden relative" style={{ background: wallpaper(false) }}>
         {/* Menu Bar */}
-        <div className="h-8 shrink-0 flex items-center justify-between px-3 bg-white border-b border-gray-200 text-sm">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleOpenForceQuit}
-              className={`font-semibold text-gray-700 hover:text-gray-900 ${hl("system-menu") ? pulse + " rounded px-1" : ""}`}
-              title="System menu"
-            >
-              <svg viewBox="0 0 16 16" className="w-4 h-4 inline" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
-            </button>
-            <span className="text-gray-500 font-medium text-xs">
-              {view === "browser-support" ? "Browser" : view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-gray-500">
-            <button
-              onClick={handleOpenWifiPanel}
-              className={`${hl("wifi-icon") ? pulse + " rounded px-1" : ""}`}
-              title="WiFi"
-            >
-              {wifiOn && connectedNetwork ? (
-                <svg viewBox="0 0 20 16" className="w-5 h-4" fill="currentColor"><path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/></svg>
-              ) : (
-                <svg viewBox="0 0 20 16" className="w-5 h-4" fill="currentColor" opacity={0.3}><path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/><line x1="2" y1="2" x2="18" y2="14" stroke="currentColor" strokeWidth="2"/></svg>
-              )}
-            </button>
-            <span>{time}</span>
-          </div>
-        </div>
+        <div className="relative shrink-0">
+          <DesktopMenuBar
+            title={view === "browser-support" ? "Browser" : view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
+            leading={
+              <button
+                onClick={handleOpenForceQuit}
+                className={`font-semibold text-gray-700 hover:text-gray-900 ${hl("system-menu") ? pulse + " rounded px-1" : ""}`}
+                title="System menu"
+              >
+                <svg viewBox="0 0 16 16" className="w-4 h-4 inline" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
+              </button>
+            }
+            time={time}
+            batteryPercent={batteryPct}
+            openPanel={wifiPanelOpen ? "wifi" : null}
+            onTogglePanel={(panel) => {
+              if (panel === "wifi") {
+                if (wifiPanelOpen) setWifiPanelOpen(false);
+                else handleOpenWifiPanel();
+              }
+            }}
+            highlight={hl("wifi-icon") ? "wifi" : null}
+          />
 
         {/* WiFi Panel Dropdown */}
         {wifiPanelOpen && (
-          <div className="absolute top-8 right-3 z-50 w-56 bg-white rounded-xl shadow-xl border border-gray-200 p-3">
+          <div className="absolute top-full right-2 z-50 w-56 bg-white rounded-xl shadow-xl border border-gray-200 p-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold">WiFi</span>
               <button
@@ -477,6 +493,7 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
             {!wifiOn && <p className="text-xs text-gray-400 text-center py-2">WiFi is off</p>}
           </div>
         )}
+        </div>{/* end menu bar container */}
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto relative">
@@ -1070,10 +1087,10 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
         </div>
 
         {/* Dock */}
-        <div className="shrink-0 flex items-center justify-center px-4 py-2">
+        <div className="shrink-0 flex items-center justify-center px-2 py-2">
           <Dock
-            size="sm"
-            items={dockApps.map((app) => ({
+            size="md"
+            items={ALL_DOCK_APPS.map((app) => ({
               id: app.id,
               label: app.label,
               highlighted: hl("dock-app", app.id),
@@ -1093,9 +1110,10 @@ export default function GuidedTroubleshootingTask({ goal, scenario, steps, mode:
                 handleOpenBrowser();
               } else if (mode === "error-restart" && id === "Settings") {
                 handleErOpenSettings();
-              } else {
+              } else if (dockApps.some((a) => a.id === id)) {
                 handleRestartApp(id);
               }
+              // else: no-op for decorative dock items
             }}
           />
         </div>

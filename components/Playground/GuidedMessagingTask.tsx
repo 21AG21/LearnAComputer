@@ -35,6 +35,7 @@ interface GuidedMessagingTaskProps {
   steps: GuidedMessagingStep[];
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -135,7 +136,7 @@ function PhoneEndIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export default function GuidedMessagingTask({ goal, steps, mode, hint, onResult }: GuidedMessagingTaskProps) {
+export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedMessagingTaskProps) {
   const [activeContact, setActiveContact] = useState<string | null>(null);
   const [threads, setThreads] = useState<Record<string, Message[]>>(INITIAL_THREADS);
   const [draft, setDraft] = useState("");
@@ -410,6 +411,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, onResult 
         flash={flash}
         objectives={objectives}
         hint={hint}
+        freePlay={freePlay}
       >
         <div className="flex-1 min-h-0 flex flex-col bg-gray-900 text-white">
           <div className="flex-1 flex items-center justify-center relative p-4">
@@ -484,6 +486,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, onResult 
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Contacts / group picker sidebar */}

@@ -27,6 +27,7 @@ interface GuidedEmailTaskProps {
   seedDraft?: { to: string; subject: string; body: string };
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -62,7 +63,7 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
 
 const ATTACH_FILES = ATTACHABLE_FILES.map((f) => f.name);
 
-export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, onResult }: GuidedEmailTaskProps) {
+export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, freePlay, onResult }: GuidedEmailTaskProps) {
   const [emails, setEmails] = useState<Email[]>(() => {
     if (!seedDraft) return INITIAL_EMAILS;
     return [
@@ -332,6 +333,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, on
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}

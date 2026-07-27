@@ -97,6 +97,367 @@ for (const id of Object.keys(PAGES) as PageId[]) {
 
 const FAVORITES: PageId[] = ["shop", "google", "wikipedia", "weather", "news", "recipes", "library", "bookshop"];
 
+/** Rich page bodies — rendered instead of the plain {title + body} block. */
+const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
+  petnews: (
+    <div className="space-y-3">
+      <div className="border-b-2 border-gray-800 pb-2">
+        <h1 className="text-2xl font-black tracking-tight">Pet News Daily</h1>
+        <nav className="flex gap-4 text-xs font-semibold text-gray-500 mt-1">
+          {["Home", "Dogs", "Cats", "Birds", "Local"].map((n) => (
+            <span key={n} className={n === "Home" ? "text-orange-600 underline" : "cursor-pointer hover:underline"}>{n}</span>
+          ))}
+        </nav>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="col-span-2 border border-gray-200 rounded-lg p-3">
+          <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
+          <h2 className="text-base font-bold mt-1 leading-tight">Dog Wins National Frisbee Championship for Third Year Running</h2>
+          <p className="text-xs text-gray-500 mt-1">By our Sports Correspondent · 2 hours ago</p>
+          <p className="text-sm text-gray-700 mt-2 leading-relaxed">Biscuit, a four-year-old Golden Retriever from Maplewood, leapt 6.2 metres and caught the disc before it cleared the fence. The crowd erupted.</p>
+        </div>
+        <div className="space-y-2">
+          <div className="border border-gray-200 rounded-lg p-2">
+            <h3 className="text-xs font-bold leading-tight">Scientists Confirm Cats Nap 16 Hours a Day</h3>
+            <p className="text-xs text-gray-500 mt-0.5">4 hours ago</p>
+          </div>
+          <div className="border border-gray-200 rounded-lg p-2">
+            <h3 className="text-xs font-bold leading-tight">Local Shelter Adopts Out 200 Animals This Month</h3>
+            <p className="text-xs text-gray-500 mt-0.5">Yesterday</p>
+          </div>
+          <div className="border border-gray-100 rounded-lg p-2 bg-gray-50">
+            <p className="text-xs font-semibold text-gray-400 mb-1">MOST READ</p>
+            <ol className="text-xs text-blue-700 space-y-0.5 list-decimal list-inside">
+              <li>Why dogs tilt their head</li>
+              <li>Hamster wins obstacle course</li>
+              <li>Cat refuses apology</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <p className="text-xs text-gray-400 border-t border-gray-100 pt-2">petnews.example · All content fictional · Subscribe for daily updates</p>
+    </div>
+  ),
+  shop: (
+    <div className="space-y-3">
+      <div className="bg-blue-600 text-white rounded-lg p-3 text-center">
+        <p className="font-black text-lg">Today&apos;s Deals</p>
+        <p className="text-sm opacity-90">Laptops from $299 · Free shipping on orders over $50</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {[
+          { name: "Laptops", sub: "Starting at $299", bg: "bg-blue-50", border: "border-blue-100" },
+          { name: "Tablets", sub: "Starting at $199", bg: "bg-green-50", border: "border-green-100" },
+          { name: "Phones", sub: "Starting at $399", bg: "bg-pink-50", border: "border-pink-100" },
+          { name: "Headphones", sub: "Starting at $49", bg: "bg-yellow-50", border: "border-yellow-100" },
+        ].map((cat) => (
+          <div key={cat.name} className={`${cat.bg} border ${cat.border} rounded-lg p-3 cursor-pointer hover:brightness-95`}>
+            <p className="font-bold text-sm">{cat.name}</p>
+            <p className="text-xs text-gray-600">{cat.sub}</p>
+          </div>
+        ))}
+      </div>
+      <div className="border border-gray-200 rounded-lg p-3">
+        <p className="text-xs font-semibold text-gray-400 mb-2">FEATURED PRODUCT</p>
+        <div className="flex gap-3 items-center">
+          <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center shrink-0"><CartIcon size={24} /></div>
+          <div className="min-w-0">
+            <p className="font-bold text-sm">UltraBook Pro 14</p>
+            <p className="text-xs text-gray-500">8 GB RAM · 256 GB SSD · All-day battery</p>
+            <p className="font-black text-blue-600 text-sm mt-0.5">$349 <span className="line-through text-gray-400 font-normal text-xs">$499</span></p>
+          </div>
+          <div className="shrink-0 bg-blue-600 text-white text-xs font-bold rounded-lg px-2 py-1">Add</div>
+        </div>
+      </div>
+    </div>
+  ),
+  wikipedia: (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 border-b pb-2">
+        <span className="font-black text-lg italic">Wikipedia</span>
+        <span className="text-xs text-gray-500">The Free Encyclopedia</span>
+      </div>
+      <h1 className="text-2xl font-bold">Computer</h1>
+      <p className="text-xs text-gray-500 italic mb-1">From Wikipedia, the free encyclopedia</p>
+      <p className="text-sm text-gray-700 leading-relaxed">A <strong>computer</strong> is an electronic device that processes information according to a set of instructions called a program. Modern computers can perform billions of operations per second and are used in nearly every field of human activity.</p>
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs">
+        <p className="font-semibold mb-1">Contents</p>
+        <ol className="list-decimal list-inside text-blue-700 space-y-0.5">
+          <li>History</li>
+          <li>How computers work</li>
+          <li>Types of computers</li>
+          <li>Uses in everyday life</li>
+        </ol>
+      </div>
+      <p className="text-sm text-gray-700 leading-relaxed">The word &quot;computer&quot; originally referred to a person who performed calculations by hand. The first programmable electronic computer, ENIAC, was completed in 1945 and filled an entire room.</p>
+      <p className="text-xs text-gray-400 border-t pt-2">Content available under CC BY-SA 4.0 · wikipedia.org · 6,782,345 articles in English</p>
+    </div>
+  ),
+  weather: (
+    <div className="space-y-3">
+      <div className="rounded-xl p-4 text-white" style={{ background: "linear-gradient(135deg,#3b82f6,#38bdf8)" }}>
+        <p className="text-xs font-semibold opacity-80 uppercase tracking-wide">Your Location · Today</p>
+        <div className="flex items-end gap-3 mt-1">
+          <p className="text-5xl font-black leading-none">72°</p>
+          <div>
+            <p className="font-bold text-lg leading-tight">Sunny</p>
+            <p className="text-sm opacity-80">Feels like 74° · UV: High</p>
+          </div>
+        </div>
+        <p className="text-xs mt-2 opacity-70">H: 76° · L: 58° · Wind: 8 mph W · Humidity: 42%</p>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">Hourly Forecast</p>
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {[["9 AM","70°"],["10 AM","72°"],["11 AM","74°"],["12 PM","76°"],["1 PM","75°"],["2 PM","73°"]].map(([h, t]) => (
+            <div key={h} className="flex flex-col items-center shrink-0 text-xs bg-blue-50 border border-blue-100 rounded-lg px-2 py-1.5">
+              <span className="text-gray-500">{h}</span>
+              <span className="font-bold text-gray-800 mt-0.5">{t}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">This Week</p>
+        <div className="grid grid-cols-5 gap-1 text-xs text-center">
+          {[["Mon","74°","58°"],["Tue","68°","55°"],["Wed","63°","52°"],["Thu","70°","57°"],["Fri","75°","60°"]].map(([d, h, l]) => (
+            <div key={d} className="bg-gray-50 border border-gray-100 rounded-lg p-1.5">
+              <p className="font-semibold text-gray-500">{d}</p>
+              <p className="font-bold text-gray-800">{h}</p>
+              <p className="text-gray-400">{l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  news: (
+    <div className="space-y-3">
+      <div className="border-b-2 border-gray-800 pb-2">
+        <h1 className="text-xl font-black tracking-tight">Daily News</h1>
+        <p className="text-xs text-gray-500 mt-0.5">dailynews.example · Your trusted local source</p>
+      </div>
+      <div>
+        <span className="text-xs bg-red-100 text-red-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
+        <h2 className="text-lg font-bold mt-1 leading-tight">10 Easy Soup Recipes for a Cozy Winter</h2>
+        <p className="text-xs text-gray-500 mt-0.5">By J. Andrews, Food Editor · Today</p>
+        <p className="text-sm text-gray-700 mt-2 leading-relaxed">As temperatures drop, there is nothing more comforting than a bowl of homemade soup. We have tested dozens of recipes so you don&apos;t have to. From a classic tomato to a hearty minestrone, every one of these takes under an hour.</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="border border-gray-200 rounded-lg p-2">
+          <p className="font-bold text-sm leading-tight">Council Approves New Library Wing</p>
+          <p className="text-gray-500 mt-0.5">Politics · 3 hours ago</p>
+        </div>
+        <div className="border border-gray-200 rounded-lg p-2">
+          <p className="font-bold text-sm leading-tight">Local Artist Opens Garden Studio</p>
+          <p className="text-gray-500 mt-0.5">Arts · Yesterday</p>
+        </div>
+      </div>
+    </div>
+  ),
+  recipes: (
+    <div className="space-y-3">
+      <div className="border-b pb-2">
+        <h1 className="text-xl font-black">Recipe Box</h1>
+        <p className="text-xs text-gray-500">Home-tested recipes, every week</p>
+      </div>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+        <span className="text-xs font-semibold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">FEATURED RECIPE</span>
+        <h2 className="text-lg font-bold mt-1">Grandma&apos;s Classic Apple Pie</h2>
+        <p className="text-xs text-gray-500">By R. Thompson · Prep: 30 min · Bake: 55 min · Serves 8</p>
+        <p className="text-sm text-gray-700 mt-2 leading-relaxed">The flakiest crust you will ever make, filled with warm cinnamon apples. This recipe has been in the family for over sixty years.</p>
+        <div className="mt-2 text-xs">
+          <p className="font-semibold mb-1 text-gray-700">Ingredients (partial):</p>
+          <ul className="list-disc list-inside text-gray-600 space-y-0.5">
+            <li>6 medium apples, peeled and sliced</li>
+            <li>1 cup sugar, 1 tsp cinnamon</li>
+            <li>Butter pastry for two-crust pie</li>
+          </ul>
+        </div>
+      </div>
+      <p className="text-xs text-gray-500">Download the full recipe with step-by-step instructions:</p>
+    </div>
+  ),
+  freegames: (
+    <div className="space-y-2">
+      <div className="rounded-xl p-3 text-center text-white" style={{ background: "linear-gradient(135deg,#eab308,#ef4444)" }}>
+        <h1 className="text-2xl font-black">Free Games!!!</h1>
+        <p className="text-sm opacity-90">Play 1000s of FREE games! No download needed!!!</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {["Bubble Pop Mania", "Super Clicker 3", "Money Rain", "Lucky Spinner"].map((g) => (
+          <div key={g} className="border-2 border-dashed border-yellow-400 rounded-lg p-2 bg-yellow-50">
+            <p className="font-bold text-sm">{g}</p>
+            <p className="text-xs text-gray-500">Free · Rated 4.9 stars</p>
+            <div className="mt-1.5 bg-green-500 text-white text-xs font-black text-center rounded py-0.5">PLAY NOW</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+  library: (
+    <div className="space-y-3">
+      <div className="rounded-lg p-3 text-white" style={{ background: "#92400e" }}>
+        <h1 className="font-black text-lg">City Library</h1>
+        <p className="text-xs opacity-90">citylibrary.example</p>
+      </div>
+      <div className="flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1.5">
+        <SearchIcon size={14} />
+        <span className="text-sm text-gray-400 flex-1">Search by title, author, or keyword…</span>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+          <p className="font-bold text-amber-800 mb-1">New Arrivals</p>
+          <ul className="text-gray-700 space-y-0.5">
+            <li>The Maplewood Gardener</li>
+            <li>Understanding Your Computer</li>
+            <li>Soup Through the Ages</li>
+          </ul>
+        </div>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5">
+          <p className="font-bold text-blue-800 mb-1">Hours</p>
+          <ul className="text-gray-700 space-y-0.5">
+            <li>Mon–Fri: 9 am – 8 pm</li>
+            <li>Saturday: 9 am – 6 pm</li>
+            <li>Sunday: Closed</li>
+          </ul>
+        </div>
+      </div>
+      <p className="text-xs text-gray-400 text-center">Over 80,000 titles · Free membership · citylibrary.example</p>
+    </div>
+  ),
+  transit: (
+    <div className="space-y-3">
+      <div className="rounded-lg p-3 text-white" style={{ background: "#1d4ed8" }}>
+        <h1 className="font-black text-lg">City Transit</h1>
+        <p className="text-xs opacity-80">citytransit.example · Live schedules</p>
+      </div>
+      <div>
+        <h2 className="font-bold text-sm mb-1">Route 12 — Downtown to Airport</h2>
+        <div className="border border-gray-200 rounded-lg overflow-hidden text-xs">
+          <div className="grid grid-cols-3 bg-gray-100 px-3 py-1.5 font-semibold text-gray-600 text-xs">
+            <span>Departs</span><span>Midtown</span><span>Airport</span>
+          </div>
+          {[["7:00 am","7:22 am","7:45 am"],["8:15 am","8:37 am","9:00 am"],["9:30 am","9:52 am","10:15 am"],["10:45 am","11:07 am","11:30 am"],["12:00 pm","12:22 pm","12:45 pm"],["1:15 pm","1:37 pm","2:00 pm"],["2:30 pm","2:52 pm","3:15 pm"],["3:45 pm","4:07 pm","4:30 pm"],["5:00 pm","5:22 pm","5:45 pm"],["10:00 pm","10:22 pm","10:45 pm"]].map(([dep, mid, arr]) => (
+            <div key={dep} className="grid grid-cols-3 px-3 py-1.5 border-t border-gray-100 hover:bg-gray-50">
+              <span className="font-medium">{dep}</span><span className="text-gray-500">{mid}</span><span>{arr}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs">
+        <p className="font-semibold mb-0.5">Fares</p>
+        <p className="text-gray-700">Adult: $2.50 · Senior/Student: $1.25 · Children under 5: Free</p>
+        <p className="text-gray-400 mt-1">Buy a 10-trip book and save 20%</p>
+      </div>
+    </div>
+  ),
+  garden: (
+    <div className="space-y-3">
+      <div className="rounded-lg p-3 text-white" style={{ background: "#166534" }}>
+        <h1 className="font-black text-lg">Gardening Tips</h1>
+        <p className="text-xs opacity-80">gardeningtips.example</p>
+      </div>
+      <article className="space-y-2.5">
+        <h2 className="text-xl font-bold">When to Plant Tomatoes</h2>
+        <p className="text-xs text-gray-500">By M. Chen, Gardening Editor · 15 min read</p>
+        <p className="text-sm text-gray-700 leading-relaxed">Tomatoes are the most rewarding vegetables a home gardener can grow — but also the most common source of frustration when planted too early or in the wrong spot.</p>
+        <p className="text-sm text-gray-700 leading-relaxed"><strong>Wait for the last frost.</strong> Do not put tomato seedlings outside until all risk of frost has passed and the soil is above 15°C. In most gardens this means late spring.</p>
+        <p className="text-sm text-gray-700 leading-relaxed"><strong>Choose a sunny spot.</strong> Tomatoes need at least six hours of direct sun per day. Less than that and you will get leaves, not fruit.</p>
+        <p className="text-sm text-gray-700 leading-relaxed"><strong>Water deeply, not often.</strong> Water twice a week and let the top inch of soil dry out between sessions. The most common mistake is overwatering in cool weather.</p>
+        <p className="text-sm text-gray-700 leading-relaxed"><strong>Stake early.</strong> Put the stake in at planting time, before the roots establish, to avoid damaging them later.</p>
+      </article>
+      <p className="text-xs text-gray-400 border-t pt-2">gardeningtips.example · Check back daily for seasonal guides</p>
+    </div>
+  ),
+  bank: (
+    <div className="space-y-3">
+      <div className="rounded-lg p-3 text-white flex items-center gap-2" style={{ background: "#1e3a5f" }}>
+        <LockIcon size={18} />
+        <div>
+          <h1 className="font-black text-base leading-tight">First National Bank</h1>
+          <p className="text-xs opacity-80">Secure Online Banking</p>
+        </div>
+      </div>
+      <div className="border border-gray-200 rounded-xl p-4 space-y-3">
+        <h2 className="font-bold text-center text-gray-800 text-sm">Sign In to Your Account</h2>
+        <div className="space-y-2">
+          <div>
+            <p className="text-xs font-semibold text-gray-500 mb-0.5">Username</p>
+            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-400">Enter username</div>
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 mb-0.5">Password</p>
+            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-400">••••••••</div>
+          </div>
+          <div className="w-full bg-blue-700 text-white text-center rounded-lg py-2 font-bold text-sm cursor-pointer hover:bg-blue-800">Sign In</div>
+        </div>
+      </div>
+      <div className="bg-green-50 border border-green-200 rounded-lg p-2 flex items-center gap-2 text-xs">
+        <LockIcon size={12} />
+        <p className="text-green-800">Your connection to firstbank.example is secure and encrypted.</p>
+      </div>
+    </div>
+  ),
+  bookshop: (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 border-b pb-2">
+        <BookClosedIcon size={20} />
+        <h1 className="font-black text-lg">Book Shop</h1>
+        <span className="ml-auto text-xs text-gray-400">Free shipping over $35</span>
+      </div>
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">New Arrivals</p>
+      <div className="grid grid-cols-2 gap-2">
+        {[
+          { title: "The Maplewood Gardener", author: "M. Chen", price: "$16.99", bg: "bg-green-100" },
+          { title: "Understanding Your Computer", author: "Dr. D.", price: "$24.99", bg: "bg-blue-100" },
+          { title: "101 Soup Recipes", author: "J. Andrews", price: "$22.99", bg: "bg-red-100" },
+          { title: "Walks Around the World", author: "P. Rivera", price: "$19.99", bg: "bg-yellow-100" },
+        ].map((b) => (
+          <div key={b.title} className="border border-gray-200 rounded-lg p-2 hover:bg-gray-50 cursor-pointer">
+            <div className={`${b.bg} rounded-lg h-14 mb-2 flex items-center justify-center`}><BookClosedIcon size={24} /></div>
+            <p className="text-xs font-bold leading-tight">{b.title}</p>
+            <p className="text-xs text-gray-500">{b.author}</p>
+            <p className="text-xs font-black text-blue-700 mt-0.5">{b.price}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+  support: (
+    <div className="space-y-3">
+      <div className="rounded-lg p-3 text-white" style={{ background: "#374151" }}>
+        <h1 className="font-bold">Computer Support</h1>
+        <p className="text-xs opacity-70">Find solutions to common problems</p>
+      </div>
+      <div className="flex items-center gap-2 border-2 border-gray-300 rounded-full px-3 py-1.5 focus-within:border-blue-500">
+        <SearchIcon size={14} />
+        <span className="text-sm text-gray-400 flex-1">Enter an error code or describe the problem…</span>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Common Solutions</p>
+        <div className="space-y-1.5">
+          {[
+            { code: "ERR_04", desc: "App not responding — force quit and reopen" },
+            { code: "ERR_07", desc: "No internet connection — check WiFi settings" },
+            { code: "ERR_12", desc: "Not enough storage — delete unused files" },
+            { code: "ERR_19", desc: "Printer offline — restart the printer" },
+          ].map((e) => (
+            <div key={e.code} className="flex items-start gap-2 border border-gray-200 rounded-lg p-2 text-xs hover:bg-gray-50">
+              <span className="font-black text-red-600 shrink-0">{e.code}</span>
+              <span className="text-gray-700">{e.desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs text-center text-blue-800">
+        <p className="font-semibold">Still stuck? Call support: 1-800-555-0100</p>
+        <p className="text-blue-600">Mon–Fri, 9 am – 5 pm</p>
+      </div>
+    </div>
+  ),
+};
+
 const PICK_SEQ = ["red", "green", "blue", "green", "red", "blue", "green", "red", "blue", "red"] as const;
 type PickColor = (typeof PICK_SEQ)[number];
 
@@ -666,11 +1027,15 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
 
             {activePage.kind === "site" && !isBroken && (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-gray-600">{activePage.icon}</span>
-                  <h1 className="text-3xl font-black">{activePage.title}</h1>
-                </div>
-                <p className="text-lg text-gray-700 leading-relaxed max-w-lg">{activePage.body}</p>
+                {PAGE_CONTENT[activeTab.pageId] ?? (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-600">{activePage.icon}</span>
+                      <h1 className="text-3xl font-black">{activePage.title}</h1>
+                    </div>
+                    <p className="text-lg text-gray-700 leading-relaxed max-w-lg">{activePage.body}</p>
+                  </>
+                )}
                 {activePage.download && (
                   <button onClick={clickDownloadLink} className={`self-start px-5 py-2.5 bg-blue-600 text-white font-bold rounded-lg border-2 border-black inline-flex items-center gap-2 ${hl("download-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>
                     <DownloadIcon size={16} /> Download {activePage.download}

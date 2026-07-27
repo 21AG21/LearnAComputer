@@ -21,6 +21,7 @@ interface GuidedCalendarTaskProps {
   initialView?: "month" | "reminders";
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean) => void;
 }
 
@@ -56,7 +57,7 @@ const MONTH_START_DOW = 3; // Wednesday (0=Sun)
 const REPEAT_OPTIONS = ["None", "Daily", "Weekly", "Monthly", "Yearly"];
 const CALENDARS = ["Personal", "Work"];
 
-export default function GuidedCalendarTask({ goal, steps, initialView, mode, hint, onResult }: GuidedCalendarTaskProps) {
+export default function GuidedCalendarTask({ goal, steps, initialView, mode, hint, freePlay, onResult }: GuidedCalendarTaskProps) {
   const [view, setView] = useState<"month" | "day" | "reminders">(initialView ?? "month");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(PRESET_EVENTS);
@@ -168,6 +169,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar */}

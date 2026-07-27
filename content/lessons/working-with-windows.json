@@ -5,13 +5,13 @@
   "order": 50,
   "title": "Working with windows",
   "videoUrl": "",
-  "drDigitalIntro": "Every app opens in a window \u2014 a rectangle you can move and resize.\n\u2022 Move a window by dragging its title bar.\n\u2022 Resize it by dragging the corner handle.\n\u2022 Minimize hides it to the taskbar. Maximize fills the screen.\n\u2022 Close removes the window entirely.",
+  "drDigitalIntro": "Every app opens in a window — a rectangle you can move and resize.\n• Move a window by dragging the strip at the top with the app's name on it.\n• Resize it by dragging the corner handle at the bottom-right.\n• Minimize hides the window and leaves the app running in the dock. Maximize fills the screen.\n• Close removes the window entirely.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "You moved, resized, minimized, maximized, and closed a window",
     "steps": [
       {
-        "say": "Drag the title bar (the yellow strip at the top of the window) to move the window.",
+        "say": "Drag the strip at the top of the window — the one with the app's name on it — to move the window.",
         "action": "move"
       },
       {
@@ -19,27 +19,27 @@
         "action": "resize"
       },
       {
-        "say": "Click the \u2212 button to minimize the window.",
+        "say": "Click the − button to minimize the window.",
         "action": "minimize"
       },
       {
-        "say": "Click the 'Notes' button in the taskbar at the bottom to bring the window back.",
+        "say": "Click the Notes icon in the dock at the bottom to bring the window back.",
         "action": "restore"
       },
       {
-        "say": "Click the \u25a1 button to maximize the window so it fills the screen.",
+        "say": "Click the □ button to maximize the window so it fills the screen.",
         "action": "maximize"
       },
       {
-        "say": "Click the \u25a1 button again to restore the window to its normal size.",
+        "say": "Click the □ button again to restore the window to its normal size.",
         "action": "restore-max"
       },
       {
-        "say": "Click the \u2715 button to close the window.",
+        "say": "Click the ✕ button to close the window.",
         "action": "close"
       }
     ]
   },
-  "drDigitalSuccess": "You moved, resized, minimized, maximized, and closed a window \u2014 you're a window expert!",
-  "drDigitalHint": "Look for the yellow highlight \u2014 it shows exactly what to click or drag next."
+  "drDigitalSuccess": "You moved, resized, minimized, maximized, and closed a window — you're a window expert!",
+  "drDigitalHint": "Look for the pulsing yellow ring — it shows exactly what to click or drag next."
 }

@@ -5,12 +5,12 @@
   "order": 4,
   "title": "Two-finger scrolling",
   "videoUrl": "",
-  "drDigitalIntro": "Scrolling lets you see more of a long page.\n\u2022 On a trackpad: place two fingers side by side and slide them up or down.\n\u2022 On a mouse: roll the scroll wheel with your index finger.\n\u2022 Scroll down slowly to reveal more content at the bottom.\n\u2022 Scroll back up to go back to the top.",
+  "drDigitalIntro": "Scrolling lets you see more of a long page.\n• On a trackpad: place two fingers side by side and slide them down.\n• On a mouse: roll the scroll wheel with your index finger.\n• The page moves under your fingers — more content appears from the bottom.\n• Sliding your fingers up scrolls back toward the top.",
   "playgroundTask": {
     "type": "browser-scroll-code",
-    "instructions": "Scroll down using two fingers to find the code, then scroll back up and type it into the box.",
+    "instructions": "Scroll down using two fingers until you find the secret code, then type it into the box.",
     "code": "7X2Q"
   },
-  "drDigitalSuccess": "You found it and scrolled right back! Two-finger scrolling is officially yours.",
-  "drDigitalHint": "Two fingers on the trackpad \u2014 slide them down to scroll. On a mouse, roll the wheel down. Keep scrolling until the secret code appears."
+  "drDigitalSuccess": "You found the code at the bottom of the page. Two-finger scrolling is officially yours.",
+  "drDigitalHint": "Two fingers on the trackpad — slide them down to scroll. On a mouse, roll the wheel down. Keep scrolling until the secret code appears."
 }

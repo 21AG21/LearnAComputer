@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
 import FilesApp from "./Desktop/FilesApp";
@@ -11,11 +11,16 @@ import NotesApp from "./Desktop/NotesApp";
 import PhotosApp from "./Desktop/PhotosApp";
 import CalendarApp from "./Desktop/CalendarApp";
 import AppMarketApp from "./Desktop/AppMarketApp";
+import DraggableWindow from "./Desktop/DraggableWindow";
+import FileViewer from "./Desktop/FileViewer";
+import { iconFor, type Item } from "./Desktop/filesData";
 import { SimThemeProvider, useSimTheme } from "./Desktop/SimThemeContext";
-import WindowControls from "./WindowControls";
 import Dock from "./Dock";
 import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
-import { BellOffIcon } from "./Icons";
+import {
+  BellOffIcon, ChatIcon, GlobeIcon, FolderIcon, MailIcon,
+  GearIcon, CameraIcon, CalendarIcon, BellIcon, CartIcon, NoteIcon,
+} from "./Icons";
 
 export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
 
@@ -62,9 +67,21 @@ export const APP_TITLES: Record<DesktopAppId, string> = {
   notes: "Notes",
 };
 
+const APP_GLYPH: Record<DesktopAppId, ReactNode> = {
+  messages: <ChatIcon size={16} />,
+  browser: <GlobeIcon size={16} />,
+  files: <FolderIcon size={16} />,
+  mail: <MailIcon size={16} />,
+  settings: <GearIcon size={16} />,
+  photos: <CameraIcon size={16} />,
+  "app-market": <CartIcon size={16} />,
+  calendar: <CalendarIcon size={16} />,
+  reminders: <BellIcon size={16} />,
+  notes: <NoteIcon size={16} />,
+};
+
 const WIFI_NETWORKS = [{ name: "CoolKids Network" }, { name: "Neighbor's WiFi" }, { name: "Coffee shop" }, { name: "Backup" }];
 
-// Battery Status API — non-standard, Chromium-only. Guarded and typed loosely on purpose.
 interface BatteryManagerLike {
   level: number;
   addEventListener: (type: "levelchange", listener: () => void) => void;
@@ -81,10 +98,9 @@ export default function FakeDesktop(props: FakeDesktopProps) {
 
 function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
   const theme = useSimTheme();
+  const desktopRef = useRef<HTMLDivElement>(null);
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
-  // Apps that are open-but-minimized (still running, not quit) — these show a green dot on the desktop.
   const [minimized, setMinimized] = useState<Set<DesktopAppId>>(new Set());
-  // Bumping a key remounts (resets) an app after it's closed; minimizing keeps its state.
   const [appKeys, setAppKeys] = useState<Record<DesktopAppId, number>>({
     messages: 0, browser: 0, files: 0, mail: 0,
     settings: 0, photos: 0, "app-market": 0, calendar: 0, reminders: 0, notes: 0,
@@ -94,12 +110,11 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
   const [openPanel, setOpenPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
   const [connectedNetwork, setConnectedNetwork] = useState<string | null>("CoolKids Network");
   const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
-  // Transient visual states: an app plays its close/minimize animation here before
-  // actually unmounting/hiding, since CSS can't animate a jump straight to display:none.
   const [closingApp, setClosingApp] = useState<DesktopAppId | null>(null);
   const [minimizingApp, setMinimizingApp] = useState<DesktopAppId | null>(null);
   const [launchingApp, setLaunchingApp] = useState<DesktopAppId | null>(null);
   const [closingPanel, setClosingPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
+  const [openFileViewers, setOpenFileViewers] = useState<{ uid: string; item: Item }[]>([]);
 
   useEffect(() => {
     if (autoOpenApp) setActiveApp(autoOpenApp);
@@ -128,6 +143,28 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
     });
     return () => battery?.removeEventListener("levelchange", handleChange);
   }, []);
+
+  function getDefaultRect(): { x: number; y: number; w: number; h: number } {
+    const el = desktopRef.current;
+    if (!el) return { x: 24, y: 24, w: 520, h: 400 };
+    return {
+      x: 24,
+      y: 24,
+      w: Math.max(480, Math.floor(el.offsetWidth * 0.76)),
+      h: Math.max(360, Math.floor(el.offsetHeight * 0.78)),
+    };
+  }
+
+  function shouldRender(id: DesktopAppId) {
+    return activeApp === id || minimized.has(id) || closingApp === id || minimizingApp === id || launchingApp === id;
+  }
+
+  function windowAnim(id: DesktopAppId) {
+    if (closingApp === id) return "animate-window-close";
+    if (minimizingApp === id) return "animate-window-minimize";
+    if (activeApp === id || launchingApp === id) return "animate-window-open";
+    return "";
+  }
 
   function dismissPanel() {
     const current = openPanel;
@@ -186,12 +223,18 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
     if (network.name === connectedNetwork || searchingNetwork) return;
     setSearchingNetwork(network.name);
     setTimeout(() => {
-      // Only the learner's own network is known-good; the others are neighbors'/public
-      // networks that need a password we don't have, so connecting to them fails —
-      // but the list stays visible so they can always click back to CoolKids Network.
       setConnectedNetwork(network.name === "CoolKids Network" ? network.name : null);
       setSearchingNetwork(null);
     }, 2000);
+  }
+
+  function openFileViewer(item: Item) {
+    const uid = `fv-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    setOpenFileViewers((prev) => [...prev, { uid, item }]);
+  }
+
+  function closeFileViewer(uid: string) {
+    setOpenFileViewers((prev) => prev.filter((v) => v.uid !== uid));
   }
 
   const isDark = theme.dark;
@@ -203,11 +246,6 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
         <DesktopMenuBar
           dark={isDark}
           title={activeApp ? APP_TITLES[activeApp] : "Desktop"}
-          leading={
-            activeApp && (
-              <WindowControls onClose={() => closeApp(activeApp)} onMinimize={minimizeApp} showMaximize={false} />
-            )
-          }
           trailing={theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
           time={time}
           batteryPercent={batteryPercent}
@@ -253,124 +291,196 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
       </div>
 
       {/* Desktop */}
-      <div className="relative flex-1" onClick={() => openPanel ? dismissPanel() : undefined}>
-        <div
-          className="absolute inset-0"
-          style={{ background: wallpaper(isDark) }}
-        />
-        <div className="absolute bottom-4 inset-x-2 flex justify-center">
+      <div
+        ref={desktopRef}
+        className="relative flex-1 overflow-hidden"
+        onClick={() => openPanel ? dismissPanel() : undefined}
+      >
+        <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />
+
+        {/* Apps as draggable windows */}
+        {shouldRender("messages") && (
+          <DraggableWindow
+            key={appKeys.messages}
+            title="Messages"
+            icon={APP_GLYPH.messages}
+            initial={getDefaultRect()}
+            minimized={minimized.has("messages")}
+            onClose={() => closeApp("messages")}
+            onMinimize={minimizeApp}
+            className={windowAnim("messages")}
+          >
+            <MessagingApp />
+          </DraggableWindow>
+        )}
+        {shouldRender("browser") && (
+          <DraggableWindow
+            key={appKeys.browser}
+            title="Browser"
+            icon={APP_GLYPH.browser}
+            initial={getDefaultRect()}
+            minimized={minimized.has("browser")}
+            onClose={() => closeApp("browser")}
+            onMinimize={minimizeApp}
+            className={windowAnim("browser")}
+          >
+            <BrowserApp
+              onClose={() => closeApp("browser")}
+              onMinimize={minimizeApp}
+              noWifi={!connectedNetwork}
+            />
+          </DraggableWindow>
+        )}
+        {shouldRender("files") && (
+          <DraggableWindow
+            key={appKeys.files}
+            title="Files"
+            icon={APP_GLYPH.files}
+            initial={getDefaultRect()}
+            minimized={minimized.has("files")}
+            onClose={() => closeApp("files")}
+            onMinimize={minimizeApp}
+            className={windowAnim("files")}
+          >
+            <FilesApp
+              onClose={() => closeApp("files")}
+              onMinimize={minimizeApp}
+              hint={filesHint}
+              highlight={filesHighlight}
+              enabled={filesEnabled}
+              showHeader={false}
+              onFileOpened={onFileOpened}
+              onFileOpen={openFileViewer}
+            />
+          </DraggableWindow>
+        )}
+        {shouldRender("mail") && (
+          <DraggableWindow
+            key={appKeys.mail}
+            title="Mail"
+            icon={APP_GLYPH.mail}
+            initial={getDefaultRect()}
+            minimized={minimized.has("mail")}
+            onClose={() => closeApp("mail")}
+            onMinimize={minimizeApp}
+            className={windowAnim("mail")}
+          >
+            <MailApp />
+          </DraggableWindow>
+        )}
+        {shouldRender("settings") && (
+          <DraggableWindow
+            key={appKeys.settings}
+            title="Settings"
+            icon={APP_GLYPH.settings}
+            initial={getDefaultRect()}
+            minimized={minimized.has("settings")}
+            onClose={() => closeApp("settings")}
+            onMinimize={minimizeApp}
+            className={windowAnim("settings")}
+          >
+            <SettingsApp key={appKeys.settings} {...settingsProps} />
+          </DraggableWindow>
+        )}
+        {shouldRender("notes") && (
+          <DraggableWindow
+            key={appKeys.notes}
+            title="Notes"
+            icon={APP_GLYPH.notes}
+            initial={getDefaultRect()}
+            minimized={minimized.has("notes")}
+            onClose={() => closeApp("notes")}
+            onMinimize={minimizeApp}
+            className={windowAnim("notes")}
+          >
+            <NotesApp />
+          </DraggableWindow>
+        )}
+        {shouldRender("photos") && (
+          <DraggableWindow
+            key={appKeys.photos}
+            title="Photos"
+            icon={APP_GLYPH.photos}
+            initial={getDefaultRect()}
+            minimized={minimized.has("photos")}
+            onClose={() => closeApp("photos")}
+            onMinimize={minimizeApp}
+            className={windowAnim("photos")}
+          >
+            <PhotosApp />
+          </DraggableWindow>
+        )}
+        {shouldRender("app-market") && (
+          <DraggableWindow
+            key={appKeys["app-market"]}
+            title="App Market"
+            icon={APP_GLYPH["app-market"]}
+            initial={getDefaultRect()}
+            minimized={minimized.has("app-market")}
+            onClose={() => closeApp("app-market")}
+            onMinimize={minimizeApp}
+            className={windowAnim("app-market")}
+          >
+            <AppMarketApp />
+          </DraggableWindow>
+        )}
+        {shouldRender("calendar") && (
+          <DraggableWindow
+            key={appKeys.calendar}
+            title="Calendar"
+            icon={APP_GLYPH.calendar}
+            initial={getDefaultRect()}
+            minimized={minimized.has("calendar")}
+            onClose={() => closeApp("calendar")}
+            onMinimize={minimizeApp}
+            className={windowAnim("calendar")}
+          >
+            <CalendarApp initialView="calendar" />
+          </DraggableWindow>
+        )}
+        {shouldRender("reminders") && (
+          <DraggableWindow
+            key={appKeys.reminders}
+            title="Reminders"
+            icon={APP_GLYPH.reminders}
+            initial={getDefaultRect()}
+            minimized={minimized.has("reminders")}
+            onClose={() => closeApp("reminders")}
+            onMinimize={minimizeApp}
+            className={windowAnim("reminders")}
+          >
+            <CalendarApp key={appKeys.reminders} initialView="reminders" />
+          </DraggableWindow>
+        )}
+
+        {/* File viewer windows */}
+        {openFileViewers.map((fv, i) => (
+          <DraggableWindow
+            key={fv.uid}
+            title={fv.item.name}
+            icon={iconFor(fv.item, 16)}
+            initial={{ x: 80 + i * 28, y: 60 + i * 28, w: 460, h: 380 }}
+            onClose={() => closeFileViewer(fv.uid)}
+            onMinimize={() => {}}
+            className="animate-window-open"
+          >
+            <FileViewer item={fv.item} />
+          </DraggableWindow>
+        ))}
+
+        {/* Dock — rendered after apps so it stays clickable when windows overlap it */}
+        <div className="absolute bottom-4 inset-x-2 flex justify-center z-10">
           <Dock
             tone={isDark ? "dark" : "light"}
             items={BUILT_IN_APPS.map((id) => ({
               id,
               label: APP_TITLES[id],
-              // "When an app is open, a small green dot appears on its icon" — so it has
-              // to show while the app is in front too, not only once it is minimized.
               running: minimized.has(id) || activeApp === id,
               highlighted: highlightApp === id,
               bouncing: launchingApp === id,
             }))}
             onOpen={(id) => openApp(id as DesktopAppId)}
           />
-        </div>
-
-        {/* Apps — kept mounted while minimized so their state survives. Each wrapper's own
-            key never changes; only the inner app's key (bumped on real close) resets it. */}
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "messages" ? "animate-window-close" : minimizingApp === "messages" ? "animate-window-minimize" : activeApp === "messages" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <MessagingApp
-            key={appKeys.messages}
-            onClose={() => closeApp("messages")}
-            onMinimize={minimizeApp}
-            showHeader={false}
-            noWifi={!connectedNetwork}
-          />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "browser" ? "animate-window-close" : minimizingApp === "browser" ? "animate-window-minimize" : activeApp === "browser" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <BrowserApp
-            key={appKeys.browser}
-            onClose={() => closeApp("browser")}
-            onMinimize={minimizeApp}
-            noWifi={!connectedNetwork}
-          />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "files" ? "animate-window-close" : minimizingApp === "files" ? "animate-window-minimize" : activeApp === "files" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <FilesApp
-            key={appKeys.files}
-            onClose={() => closeApp("files")}
-            onMinimize={minimizeApp}
-            hint={filesHint}
-            highlight={filesHighlight}
-            enabled={filesEnabled}
-            showHeader={false}
-            onFileOpened={onFileOpened}
-          />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "mail" ? "animate-window-close" : minimizingApp === "mail" ? "animate-window-minimize" : activeApp === "mail" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <MailApp
-            key={appKeys.mail}
-            onClose={() => closeApp("mail")}
-            onMinimize={minimizeApp}
-            showHeader={false}
-            noWifi={!connectedNetwork}
-          />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "settings" ? "animate-window-close" : minimizingApp === "settings" ? "animate-window-minimize" : activeApp === "settings" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <SettingsApp key={appKeys.settings} {...settingsProps} />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "notes" ? "animate-window-close" : minimizingApp === "notes" ? "animate-window-minimize" : activeApp === "notes" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <NotesApp key={appKeys.notes} onClose={() => closeApp("notes")} onMinimize={minimizeApp} showHeader={false} />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "photos" ? "animate-window-close" : minimizingApp === "photos" ? "animate-window-minimize" : activeApp === "photos" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <PhotosApp key={appKeys.photos} onClose={() => closeApp("photos")} onMinimize={minimizeApp} showHeader={false} />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "app-market" ? "animate-window-close" : minimizingApp === "app-market" ? "animate-window-minimize" : activeApp === "app-market" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <AppMarketApp key={appKeys["app-market"]} onClose={() => closeApp("app-market")} onMinimize={minimizeApp} showHeader={false} />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "calendar" ? "animate-window-close" : minimizingApp === "calendar" ? "animate-window-minimize" : activeApp === "calendar" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <CalendarApp key={appKeys.calendar} onClose={() => closeApp("calendar")} onMinimize={minimizeApp} showHeader={false} initialView="calendar" />
-        </div>
-        <div
-          className={`absolute inset-0 ${
-            closingApp === "reminders" ? "animate-window-close" : minimizingApp === "reminders" ? "animate-window-minimize" : activeApp === "reminders" ? "animate-window-open" : "hidden"
-          }`}
-        >
-          <CalendarApp key={appKeys.reminders} onClose={() => closeApp("reminders")} onMinimize={minimizeApp} showHeader={false} initialView="reminders" />
         </div>
       </div>
 
@@ -465,5 +575,3 @@ function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: bo
     </StatusPanel>
   );
 }
-
-

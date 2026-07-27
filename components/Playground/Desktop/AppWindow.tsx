@@ -28,7 +28,7 @@ export default function AppWindow({ title, icon, onClose, onMinimize, showHeader
           <WindowControls onMinimize={onMinimize} onClose={onClose} showMaximize={false} />
         </div>
       )}
-      <div className="flex-1 overflow-hidden">{children}</div>
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{children}</div>
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { FolderIcon, SaveIcon, SearchIcon } from "../Icons";
 import { iconFor, Item, Loc, LOC_TITLE, makeItems, SIDEBAR } from "./filesData";
+import FileViewer from "./FileViewer";
 
 // ── Public types ─────────────────────────────────────────────────────────────
 
@@ -48,6 +49,8 @@ export interface FileManagerProps {
   onItemsChange?: (items: Item[]) => void;
   /** When true: arrow keys navigate, Enter opens, mouse clicks are blocked with a nudge. */
   keyboardNav?: boolean;
+  /** Open file in a viewer window instead of the inline modal (used by FakeDesktop freePlay). */
+  onFileOpen?: (item: Item) => void;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -76,6 +79,7 @@ export default function FileManager({
   onSearchChange,
   onItemsChange,
   keyboardNav = false,
+  onFileOpen,
 }: FileManagerProps) {
   const enabled: FileManagerEnabled = enabledProp ?? ALL_ENABLED;
 
@@ -180,7 +184,11 @@ export default function FileManager({
       onItemDoubleClick?.(item);
       return;
     }
-    setPreview(item);
+    if (onFileOpen) {
+      onFileOpen(item);
+    } else {
+      setPreview(item);
+    }
     onItemDoubleClick?.(item);
   }
 
@@ -419,18 +427,26 @@ export default function FileManager({
       {/* Preview modal */}
       {preview && (
         <FileModal onClose={handlePreviewClose}>
-          <div className="flex flex-col items-center gap-3 p-6">
-            <span className="text-gray-500">{iconFor(preview, 56)}</span>
-            <p className="text-xl font-black">{preview.name}</p>
-            <p className="whitespace-pre-wrap text-center text-gray-700 text-lg">{preview.body}</p>
-            <button
-              onClick={handlePreviewClose}
-              className={`mt-2 px-5 py-2 bg-blue-600 text-white font-bold rounded-lg border-2 border-black ${
-                pendingPreviewClose ? `ring-4 ring-yellow-400 ${pulse}` : ""
-              }`}
-            >
-              {pendingPreviewClose ? "Got it — Close" : "Close"}
-            </button>
+          {/* Same viewer the desktop opens, so a file looks identical in every unit. */}
+          <div className="flex h-[26rem] w-[34rem] max-w-full flex-col">
+            <div className="flex shrink-0 items-center justify-between gap-3 border-b-2 border-gray-300 bg-gray-100 px-3 py-2">
+              <span className="flex items-center gap-2 text-sm font-bold text-gray-700">
+                <span className="text-gray-500">{iconFor(preview, 18)}</span>
+                {preview.name}
+              </span>
+              <button
+                onClick={handlePreviewClose}
+                aria-label={`Close ${preview.name}`}
+                className={`flex h-7 w-7 items-center justify-center rounded-md border-2 border-black bg-white text-sm font-bold hover:bg-gray-200 ${
+                  pendingPreviewClose ? `ring-4 ring-yellow-400 ${pulse}` : ""
+                }`}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-hidden">
+              <FileViewer item={preview} />
+            </div>
           </div>
         </FileModal>
       )}

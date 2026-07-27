@@ -29,6 +29,7 @@ interface GuidedPhotosTaskProps {
   steps: GuidedPhotosStep[];
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -67,7 +68,7 @@ const CONTACTS = [
   { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png" },
 ];
 
-export default function GuidedPhotosTask({ goal, steps, mode, hint, onResult }: GuidedPhotosTaskProps) {
+export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedPhotosTaskProps) {
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [albums, setAlbums] = useState<string[]>(["Vacation", "Family", "Pets"]);
   const [section, setSection] = useState("All Photos");
@@ -299,6 +300,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, onResult }: 
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}

@@ -26,6 +26,8 @@ interface SimulatorFrameProps {
   onHint?: () => void;
   /** When false, skip the title bar and window border — children fill the pane directly. Default true. */
   chrome?: boolean;
+  /** Free-play mode: no banner, no frame, no celebration — children fill the container directly. */
+  freePlay?: boolean;
   children: ReactNode;
 }
 
@@ -43,6 +45,7 @@ export default function SimulatorFrame({
   hint,
   onHint,
   chrome = true,
+  freePlay,
   children,
 }: SimulatorFrameProps) {
   const isAssessment = !!objectives;
@@ -72,6 +75,8 @@ export default function SimulatorFrame({
       if (celebrationTimer.current) clearTimeout(celebrationTimer.current);
     };
   }, [done]);
+
+  if (freePlay) return <div className="h-full w-full overflow-hidden">{children}</div>;
 
   return (
     <div className="h-full flex flex-col bg-white overflow-hidden select-none relative">

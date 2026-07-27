@@ -172,7 +172,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
 
   return (
     <div className="h-full flex">
-      <div ref={leftPanelRef} className={`w-full shrink-0 overflow-y-auto p-6 space-y-6 ${subLesson.media || hasGate ? "lg:max-w-xl" : "lg:max-w-3xl mx-auto"}`}>
+      <div ref={leftPanelRef} className={`w-full shrink-0 overflow-y-auto p-6 space-y-6 ${hasGate ? "lg:max-w-xl" : subLesson.media ? "lg:max-w-2xl" : "lg:max-w-3xl mx-auto"}`}>
         <Link href="/lessons" className="text-sm text-gray-500 underline">
           ← All lessons
         </Link>

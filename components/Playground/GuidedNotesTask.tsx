@@ -20,10 +20,11 @@ interface GuidedNotesTaskProps {
   steps: NotesStep[];
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean) => void;
 }
 
-export default function GuidedNotesTask({ goal, steps, mode, hint, onResult }: GuidedNotesTaskProps) {
+export default function GuidedNotesTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedNotesTaskProps) {
   const [toolbarNudge, setToolbarNudge] = useState<string | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -75,12 +76,14 @@ export default function GuidedNotesTask({ goal, steps, mode, hint, onResult }: G
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       <AppWindow
         title="Notes"
         icon={<NoteIcon size={18} />}
         onClose={() => {}}
         onMinimize={() => {}}
+        showHeader={!freePlay}
       >
         <div className="h-full flex flex-col">
           {/* Formatting toolbar */}

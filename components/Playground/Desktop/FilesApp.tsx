@@ -4,12 +4,15 @@ import AppWindow from "./AppWindow";
 import { FolderIcon } from "../Icons";
 import FileManager from "./FileManager";
 import type { FileManagerHighlight, FileManagerEnabled } from "./FileManager";
+import type { Item } from "./filesData";
 
 interface FilesAppProps {
   onClose: () => void;
   onMinimize: () => void;
   /** Called when the learner double-clicks a file (forwarded for task validation). */
   onFileOpened?: (name: string) => void;
+  /** Called to open a file viewer window (FakeDesktop freePlay mode). */
+  onFileOpen?: (item: Item) => void;
   /** Yellow-highlighted hint — only pass from the specific lesson that needs it. */
   hint?: string;
   showHeader?: boolean;
@@ -19,7 +22,7 @@ interface FilesAppProps {
   enabled?: FileManagerEnabled;
 }
 
-export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, showHeader = true, highlight, enabled }: FilesAppProps) {
+export default function FilesApp({ onClose, onMinimize, onFileOpened, onFileOpen, hint, showHeader = true, highlight, enabled }: FilesAppProps) {
   return (
     <AppWindow title="Files" icon={<FolderIcon size={18} />} onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
       <div className="h-full flex flex-col">
@@ -30,6 +33,7 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened, hint, show
           <FileManager
             highlight={highlight}
             enabled={enabled}
+            onFileOpen={onFileOpen}
             onItemDoubleClick={(item) => { if (item.kind === "file") onFileOpened?.(item.name); }}
           />
         </div>

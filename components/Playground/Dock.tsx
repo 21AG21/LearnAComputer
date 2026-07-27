@@ -38,6 +38,11 @@ const TINTS: Record<string, string> = {
 
 const FALLBACK_TINT = "#e5e8ee";
 
+/** Dock-only abbreviations. The full name stays in aria-label, title bars and lesson copy. */
+const SHORT_LABELS: Record<string, string> = {
+  "app-market": "Market",
+};
+
 /** Call sites key apps by id ("app-market") or by label ("App Market"). Accept both. */
 function normalize(key: string) {
   return key.trim().toLowerCase().replace(/\s+/g, "-");
@@ -128,7 +133,7 @@ export default function Dock({ items, onOpen, tone = "light", size = "md", showL
                   tone === "dark" ? "text-slate-200" : "text-slate-700"
                 }`}
               >
-                {label}
+                {SHORT_LABELS[normalize(id)] ?? SHORT_LABELS[normalize(label)] ?? label}
               </span>
             )}
           </button>

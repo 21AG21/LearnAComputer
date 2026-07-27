@@ -5,12 +5,12 @@
   "order": 40,
   "title": "Opening apps",
   "videoUrl": "",
-  "drDigitalIntro": "To open an app, click its icon in the dock at the bottom of the screen.\n\u2022 Each icon represents a different app \u2014 click it once to open it.\n\u2022 A window will appear on the desktop.\n\u2022 If an app is not in the dock, you can search your computer's files for it.\n\u2022 Let's practice: open any four apps from the dock.",
+  "drDigitalIntro": "To open an app, click its icon in the dock along the bottom of the screen.\n• Ten apps live there: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders and Notes.\n• One click on an icon opens that app in its own window.\n• These are the real apps — the same Files, Mail and Browser you will use for the rest of the course.\n• Open any four of them and have a look around. Nothing you click can break anything.",
   "playgroundTask": {
     "type": "open-all-apps",
-    "instructions": "Open any 4 apps from the dock \u2014 pick whichever ones you like!",
+    "instructions": "Open any 4 apps from the dock — pick whichever ones you like.",
     "targetCount": 4
   },
-  "drDigitalSuccess": "That's how you open apps \u2014 click and go! You opened four of them.",
-  "drDigitalHint": "Click any icon at the bottom of the desktop to open that app. Try clicking four different icons."
+  "drDigitalSuccess": "That is how you open apps — one click and go. You opened four of them.",
+  "drDigitalHint": "Click any icon in the dock along the bottom of the desktop. Four different icons finishes the activity."
 }
