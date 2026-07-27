@@ -94,6 +94,7 @@ export default function GuidedSettingsTask({ goal, steps, mode, hint, onResult }
       flash={flash}
       objectives={objectives}
       hint={hint}
+      chrome={false}
     >
       <FakeDesktop
         autoOpenApp="settings"

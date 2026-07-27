@@ -125,12 +125,12 @@ export default function EditFileTask({
       totalSteps={2}
       done={false}
       goal={`Open and fix ${fileName}`}
+      chrome={false}
     >
       <FakeDesktop
         highlightApp={phase === "desktop" ? "files" : undefined}
         onAppOpened={(app) => { if (app === "files") setPhase("files"); }}
         filesHighlight={phase === "files" ? { kind: "item", target: fileName } : null}
-        filesEnabled={{ open: true }}
         onFileOpened={(name) => { if (name === fileName) setPhase("editing"); }}
       />
     </SimulatorFrame>

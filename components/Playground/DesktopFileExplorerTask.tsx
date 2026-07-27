@@ -45,12 +45,12 @@ export default function DesktopFileExplorerTask({ filesToOpen, onResult }: Deskt
       totalSteps={totalSteps}
       done={done}
       goal={`Open ${filesToOpen.join(" and ")}`}
+      chrome={false}
     >
       <FakeDesktop
         highlightApp={phase === "desktop" ? "files" : undefined}
         onAppOpened={(app) => { if (app === "files") setPhase("files"); }}
         filesHighlight={phase === "files" && nextFile ? { kind: "item", target: nextFile } : null}
-        filesEnabled={{ open: true }}
         onFileOpened={(name) =>
           setOpened((prev) => (prev.includes(name) ? prev : [...prev, name]))
         }

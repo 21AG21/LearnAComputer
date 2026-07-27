@@ -14,16 +14,6 @@ export interface FileManagerHighlight {
   target?: string;
 }
 
-export interface FileManagerEnabled {
-  open?: boolean;
-  newFolder?: boolean;
-  rename?: boolean;
-  move?: boolean;
-  search?: boolean;
-  delete?: boolean;
-  restore?: boolean;
-}
-
 export interface FileManagerProps {
   highlight?: FileManagerHighlight | null;
   nudge?: string | null;
@@ -31,7 +21,6 @@ export interface FileManagerProps {
   resetKey?: number;
   /** Show "Got it — Close" button in the preview modal (for guided open-file step) */
   pendingPreviewClose?: boolean;
-  enabled?: FileManagerEnabled;
   // ── Callbacks ────────────────────────────────────────────────────────────
   onSidebarClick?: (loc: Loc, label: string) => void;
   onItemClick?: (item: Item) => void;
@@ -55,17 +44,11 @@ export interface FileManagerProps {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-const ALL_ENABLED: FileManagerEnabled = {
-  open: true, newFolder: true, rename: true,
-  move: true, search: true, delete: true, restore: true,
-};
-
 export default function FileManager({
   highlight,
   nudge,
   resetKey,
   pendingPreviewClose,
-  enabled: enabledProp,
   onSidebarClick,
   onItemClick,
   onItemDoubleClick,
@@ -81,7 +64,6 @@ export default function FileManager({
   keyboardNav = false,
   onFileOpen,
 }: FileManagerProps) {
-  const enabled: FileManagerEnabled = enabledProp ?? ALL_ENABLED;
 
   const [items, setItems]       = useState<Item[]>(makeItems);
   const [location, setLocation] = useState<Loc>("home");
@@ -198,7 +180,7 @@ export default function FileManager({
   }
 
   function handleNewFolder() {
-    if (naming || !enabled.newFolder) return;
+    if (naming) return;
     const id = "newfolder-" + Date.now();
     setItems((prev) => [...prev, { id, name: "", kind: "folder", loc: location }]);
     setNaming({ id, draft: "" });
@@ -225,7 +207,7 @@ export default function FileManager({
   }
 
   function handleRenameButtonClick() {
-    if (!selected || !enabled.rename) return;
+    if (!selected) return;
     const it = items.find((i) => i.id === selected);
     if (!it) return;
     onRenameButtonClick?.();
@@ -233,7 +215,7 @@ export default function FileManager({
   }
 
   function handleDeleteButtonClick() {
-    if (!selected || !enabled.delete) return;
+    if (!selected) return;
     const it = items.find((i) => i.id === selected);
     if (!it) return;
     setItems((prev) => prev.map((x) => x.id === it.id ? { ...x, loc: "trash" } : x));
@@ -242,7 +224,7 @@ export default function FileManager({
   }
 
   function handleRestoreButtonClick() {
-    if (!selected || !enabled.restore) return;
+    if (!selected) return;
     const it = items.find((i) => i.id === selected);
     if (!it) return;
     setItems((prev) => prev.map((x) => x.id === it.id ? { ...x, loc: "home" } : x));
@@ -267,7 +249,7 @@ export default function FileManager({
   function handleDrop(e: React.DragEvent, destLoc: Loc) {
     e.preventDefault();
     const dragName = e.dataTransfer.getData("text/plain");
-    if (!dragName || !enabled.move) return;
+    if (!dragName) return;
     moveItemTo(dragName, destLoc);
   }
 
@@ -281,33 +263,27 @@ export default function FileManager({
 
         {!inTrash && (
           <>
-            {enabled.newFolder && (
-              <ToolbarBtn
-                label="＋ New Folder"
-                onClick={handleNewFolder}
-                highlight={hl("toolbar-newfolder")}
-              />
-            )}
-            {enabled.rename && (
-              <ToolbarBtn
-                label="Rename"
-                onClick={handleRenameButtonClick}
-                disabled={!selected}
-                highlight={hl("toolbar-rename")}
-              />
-            )}
-            {enabled.delete && (
-              <ToolbarBtn
-                label="Move to Trash"
-                onClick={handleDeleteButtonClick}
-                disabled={!selected}
-                highlight={hl("toolbar-trash")}
-              />
-            )}
+            <ToolbarBtn
+              label="＋ New Folder"
+              onClick={handleNewFolder}
+              highlight={hl("toolbar-newfolder")}
+            />
+            <ToolbarBtn
+              label="Rename"
+              onClick={handleRenameButtonClick}
+              disabled={!selected}
+              highlight={hl("toolbar-rename")}
+            />
+            <ToolbarBtn
+              label="Move to Trash"
+              onClick={handleDeleteButtonClick}
+              disabled={!selected}
+              highlight={hl("toolbar-trash")}
+            />
           </>
         )}
 
-        {inTrash && enabled.restore && (
+        {inTrash && (
           <ToolbarBtn
             label="Put Back"
             onClick={handleRestoreButtonClick}
@@ -316,21 +292,19 @@ export default function FileManager({
           />
         )}
 
-        {enabled.search !== false && (
-          <div
-            className={`ml-auto flex items-center bg-white border-2 rounded-md px-2 py-1 ${
-              hl("search") ? `border-yellow-400 ${pulse}` : "border-gray-400"
-            }`}
-          >
-            <span className="text-gray-400 mr-1"><SearchIcon size={16} /></span>
-            <input
-              value={search}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder="Search"
-              className="w-28 outline-none text-sm bg-transparent"
-            />
-          </div>
-        )}
+        <div
+          className={`ml-auto flex items-center bg-white border-2 rounded-md px-2 py-1 ${
+            hl("search") ? `border-yellow-400 ${pulse}` : "border-gray-400"
+          }`}
+        >
+          <span className="text-gray-400 mr-1"><SearchIcon size={16} /></span>
+          <input
+            value={search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search"
+            className="w-28 outline-none text-sm bg-transparent"
+          />
+        </div>
       </div>
 
       {/* Body: sidebar + file grid */}
@@ -338,7 +312,7 @@ export default function FileManager({
         {/* Sidebar */}
         <div className="w-40 shrink-0 bg-[#eef1f5] border-r-2 border-gray-300 py-2 overflow-auto">
           {SIDEBAR.map((s) => {
-            const droppable = enabled.move && s.id !== "home" && s.id !== "trash";
+            const droppable = s.id !== "home" && s.id !== "trash";
             const isDropOver = dropTarget === `sidebar-${s.id}`;
             return (
               <button
@@ -374,8 +348,8 @@ export default function FileManager({
           <div className="grid grid-cols-3 gap-4 content-start">
             {visible.map((item) => {
               const isNaming = naming?.id === item.id;
-              const canDrag = item.kind === "file" && !inTrash && (enabled.move || enabled.delete);
-              const canDropFolder = item.kind === "folder" && enabled.move;
+              const canDrag = item.kind === "file" && !inTrash;
+              const canDropFolder = item.kind === "folder";
               const isDropOver = dropTarget === item.id && item.kind === "folder";
               return (
                 <div

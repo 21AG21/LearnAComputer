@@ -48,6 +48,7 @@ interface GuidedBrowserTaskProps {
   initialDownloads?: string[];
   mode?: SimMode;
   hint?: string;
+  freePlay?: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
@@ -473,7 +474,7 @@ interface Tab {
   fwd: PageId[];
 }
 
-export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", hint, onResult }: GuidedBrowserTaskProps) {
+export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", hint, freePlay, onResult }: GuidedBrowserTaskProps) {
   const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
   const [activeId, setActiveId] = useState("t1");
   const [editing, setEditing] = useState(false);
@@ -840,6 +841,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       flash={flash}
       objectives={objectives}
       hint={hint}
+      freePlay={freePlay}
     >
       {/* Tab strip */}
       <div className="shrink-0 bg-gray-200 border-b-2 border-gray-300 flex items-stretch gap-1 px-2 pt-2">

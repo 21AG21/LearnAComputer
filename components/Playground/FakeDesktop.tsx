@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import MessagingApp from "./Desktop/MessagingApp";
 import BrowserApp from "./Desktop/BrowserApp";
 import FilesApp from "./Desktop/FilesApp";
-import type { FileManagerHighlight, FileManagerEnabled } from "./Desktop/FileManager";
+import type { FileManagerHighlight } from "./Desktop/FileManager";
 import MailApp from "./Desktop/MailApp";
 import SettingsApp from "./Desktop/SettingsApp";
 import NotesApp from "./Desktop/NotesApp";
@@ -46,7 +46,6 @@ interface FakeDesktopProps {
   onAppOpened?: (app: DesktopAppId) => void;
   filesHint?: string;
   filesHighlight?: FileManagerHighlight | null;
-  filesEnabled?: FileManagerEnabled;
   onFileOpened?: (name: string) => void;
   highlightApp?: DesktopAppId;
   interceptApps?: DesktopAppId[];
@@ -96,7 +95,7 @@ export default function FakeDesktop(props: FakeDesktopProps) {
   );
 }
 
-function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
+function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
   const theme = useSimTheme();
   const desktopRef = useRef<HTMLDivElement>(null);
   const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
@@ -324,11 +323,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
             onMinimize={minimizeApp}
             className={windowAnim("browser")}
           >
-            <BrowserApp
-              onClose={() => closeApp("browser")}
-              onMinimize={minimizeApp}
-              noWifi={!connectedNetwork}
-            />
+            <BrowserApp noWifi={!connectedNetwork} />
           </DraggableWindow>
         )}
         {shouldRender("files") && (
@@ -347,7 +342,6 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, filesEnabled
               onMinimize={minimizeApp}
               hint={filesHint}
               highlight={filesHighlight}
-              enabled={filesEnabled}
               showHeader={false}
               onFileOpened={onFileOpened}
               onFileOpen={openFileViewer}

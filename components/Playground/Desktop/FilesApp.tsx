@@ -3,7 +3,7 @@
 import AppWindow from "./AppWindow";
 import { FolderIcon } from "../Icons";
 import FileManager from "./FileManager";
-import type { FileManagerHighlight, FileManagerEnabled } from "./FileManager";
+import type { FileManagerHighlight } from "./FileManager";
 import type { Item } from "./filesData";
 
 interface FilesAppProps {
@@ -18,11 +18,9 @@ interface FilesAppProps {
   showHeader?: boolean;
   /** Pulse highlight forwarded to FileManager. */
   highlight?: FileManagerHighlight | null;
-  /** Which toolbar buttons to render — absent = all buttons visible. */
-  enabled?: FileManagerEnabled;
 }
 
-export default function FilesApp({ onClose, onMinimize, onFileOpened, onFileOpen, hint, showHeader = true, highlight, enabled }: FilesAppProps) {
+export default function FilesApp({ onClose, onMinimize, onFileOpened, onFileOpen, hint, showHeader = true, highlight }: FilesAppProps) {
   return (
     <AppWindow title="Files" icon={<FolderIcon size={18} />} onClose={onClose} onMinimize={onMinimize} showHeader={showHeader}>
       <div className="h-full flex flex-col">
@@ -32,7 +30,6 @@ export default function FilesApp({ onClose, onMinimize, onFileOpened, onFileOpen
         <div className="flex-1 min-h-0">
           <FileManager
             highlight={highlight}
-            enabled={enabled}
             onFileOpen={onFileOpen}
             onItemDoubleClick={(item) => { if (item.kind === "file") onFileOpened?.(item.name); }}
           />

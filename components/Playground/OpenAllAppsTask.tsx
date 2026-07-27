@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import FakeDesktop, { DesktopAppId } from "./FakeDesktop";
+import SimulatorFrame from "./SimulatorFrame";
 
 interface OpenAllAppsTaskProps {
   instructions: string;
@@ -24,18 +25,19 @@ export default function OpenAllAppsTask({ instructions, targetCount = 4, onResul
     }
   }
 
+  const done = opened.size >= targetCount;
+
   return (
-    <div className="h-full w-full flex flex-col">
-      <div className="shrink-0 bg-[#1d2733] text-white px-4 py-3 text-center font-semibold text-lg">
-        <span aria-live="polite">
-          {opened.size < targetCount
-            ? `Open any ${targetCount} apps — ${opened.size} of ${targetCount} opened`
-            : instructions}
-        </span>
-      </div>
-      <div className="flex-1 min-h-0 relative">
-        <FakeDesktop onAppOpened={handleAppOpened} />
-      </div>
-    </div>
+    <SimulatorFrame
+      appName="Desktop"
+      instruction={done ? instructions : `Open any ${targetCount} apps from the dock.`}
+      stepIndex={Math.min(opened.size, targetCount)}
+      totalSteps={targetCount}
+      done={done}
+      goal={`You opened ${targetCount} apps`}
+      chrome={false}
+    >
+      <FakeDesktop onAppOpened={handleAppOpened} />
+    </SimulatorFrame>
   );
 }
