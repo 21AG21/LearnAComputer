@@ -114,7 +114,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   const drDigitalMood = attemptState === "success" ? "success" : attemptState === "failed" ? "hint" : "neutral";
 
   const navBtn = "min-w-[120px] justify-center inline-flex items-center gap-1 border-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-all active:scale-95";
-  const skipBtn = "rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:scale-95";
+  const skipBtn = "rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:scale-95 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700";
 
   const nextLabel = isLastSubLesson && !nextModuleSlug ? "Finish" : "Next →";
   const justSucceeded = attemptState === "success";
@@ -123,7 +123,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
     return (
       <div className="h-full flex">
         <div className="w-full lg:max-w-xl shrink-0 p-6">
-          <p className="text-sm text-gray-400 animate-pulse">Loading…</p>
+          <p className="text-sm text-gray-400 animate-pulse dark:text-gray-500">Loading…</p>
         </div>
       </div>
     );
@@ -133,17 +133,17 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
     return (
       <div className="h-full flex">
         <div className="w-full lg:max-w-xl shrink-0 overflow-y-auto p-6 space-y-6">
-          <Link href="/lessons" className="text-sm text-gray-500 underline">
+          <Link href="/lessons" className="text-sm text-gray-500 underline dark:text-gray-400">
             ← All lessons
           </Link>
           <div>
-            <p className="text-sm text-gray-500">{route.unit} &middot; {route.module}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{route.unit} &middot; {route.module}</p>
             <h1 className="text-2xl font-bold">{route.module}</h1>
           </div>
           <div className="rounded-lg border-2 border-green-500 bg-green-50 p-6 text-center space-y-3">
             <p className="text-5xl">✓</p>
             <p className="text-xl font-bold text-green-700">Module complete!</p>
-            <p className="text-gray-600">You&apos;ve finished every lesson in this module.</p>
+            <p className="text-gray-600 dark:text-gray-300">You&apos;ve finished every lesson in this module.</p>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -151,7 +151,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                 if (nextModuleSlug) router.push(`/lessons/${nextModuleSlug}`);
                 else router.push("/lessons");
               }}
-              className={`${navBtn} border-gray-900 bg-white text-gray-900 hover:bg-gray-50`}
+              className={`${navBtn} border-gray-900 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800`}
             >
               {nextModuleSlug ? "Next module →" : "Finish"}
             </button>
@@ -173,13 +173,13 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   return (
     <div className="h-full flex">
       <div ref={leftPanelRef} className={`w-full shrink-0 overflow-y-auto p-6 space-y-6 ${hasGate ? "lg:max-w-xl" : subLesson.media ? "lg:max-w-2xl" : "lg:max-w-3xl mx-auto"}`}>
-        <Link href="/lessons" className="text-sm text-gray-500 underline">
+        <Link href="/lessons" className="text-sm text-gray-500 underline dark:text-gray-400">
           ← All lessons
         </Link>
 
         <div key={subLesson.slug} className="space-y-6 motion-reduce:animate-none animate-lesson-in">
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {route.unit} &middot; {route.module} &middot; {index + 1} of {route.subLessons.length}
             </p>
             <h1 className="text-2xl font-bold">{subLesson.title}</h1>
@@ -211,7 +211,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
           )}
 
           {subLesson.playgroundTask.type === "placeholder" && (
-            <p className="text-sm text-gray-500 border rounded p-3 bg-gray-50">This activity is coming soon.</p>
+            <p className="text-sm text-gray-500 border border-gray-200 rounded p-3 bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">This activity is coming soon.</p>
           )}
 
           {hasGate && attemptState !== "success" && (
@@ -220,7 +220,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                 <>
                   <button
                     onClick={handleStart}
-                    className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95"
+                    className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95 dark:border-gray-300 dark:bg-gray-900 dark:hover:bg-gray-100 dark:hover:text-gray-900"
                   >
                     Start activity
                   </button>
@@ -232,7 +232,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                 <>
                   <button
                     onClick={() => setStarted(false)}
-                    className="border-2 border-red-600 text-red-600 rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-red-600 hover:text-white active:scale-95"
+                    className="border-2 border-red-600 text-red-600 rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-red-600 hover:text-white active:scale-95 dark:bg-gray-900 dark:text-red-400"
                   >
                     Exit activity
                   </button>
@@ -279,7 +279,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                     router.push(`/lessons/${previousModuleSlug}`);
                   }
                 }}
-                className={`${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50`}
+                className={`${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800`}
               >
                 {index === 0 && previousModuleSlug ? "← Previous module" : "← Back"}
               </button>
@@ -292,7 +292,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                     ? "border-green-600 bg-green-500 text-white hover:bg-green-600 animate-pop-attention shadow-lg"
                     : alreadyDone
                     ? "border-green-600 bg-green-500 text-white hover:bg-green-600"
-                    : "border-gray-900 bg-white text-gray-900 hover:bg-gray-50"
+                    : "border-gray-900 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 {nextLabel}
@@ -303,7 +303,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
       </div>
 
       {subLesson.media ? (
-        <div className="hidden lg:flex flex-1 min-w-0 bg-gray-50 border-l border-gray-200">
+        <div className="hidden lg:flex flex-1 min-w-0 bg-gray-50 border-l border-gray-200 dark:bg-[#0b1016] dark:border-gray-800">
           <LessonMedia src={subLesson.media.src} alt={subLesson.media.alt} caption={subLesson.media.caption} />
         </div>
       ) : hasGate ? (

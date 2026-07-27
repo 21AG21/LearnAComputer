@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getCompletedSlugs, resetProgress } from "@/lib/progress";
 import { unitArt } from "@/lib/unitArt";
+import SiteFooter from "@/components/SiteFooter";
 import { CheckIcon } from "@/components/Playground/Icons";
 import type { ModuleRoute } from "@/lib/lessons";
 
@@ -39,9 +40,9 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
           <h1 className="text-2xl font-bold">Lessons</h1>
-          <span className="text-sm text-gray-500">{totalCompleted} of {totalSubLessons} complete</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{totalCompleted} of {totalSubLessons} complete</span>
         </div>
-        <div className="h-3 rounded-full bg-gray-200 overflow-hidden">
+        <div className="h-3 rounded-full bg-gray-200 overflow-hidden dark:bg-gray-800">
           <div
             className="h-full rounded-full bg-green-500 transition-all duration-500"
             style={{ width: `${overallPct}%` }}
@@ -51,7 +52,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
 
       {/* Continue / all-complete card */}
       {allComplete ? (
-        <div className="rounded-xl border-2 border-green-500 bg-green-50 p-5 flex items-center gap-4">
+        <div className="rounded-xl border-2 border-green-500 bg-green-50 p-5 flex items-center gap-4 dark:bg-green-950/40">
           <div className="shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white">
             <CheckIcon size={20} />
           </div>
@@ -63,15 +64,15 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
       ) : continueRoute ? (
         <Link
           href={`/lessons/${continueRoute.moduleSlug}`}
-          className="block rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors"
+          className="block rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors dark:border-gray-600 dark:bg-gray-900 dark:hover:bg-gray-800"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Continue where you left off</p>
-          <p className="text-xs text-gray-500">{continueRoute.unit}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1 dark:text-gray-500">Continue where you left off</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{continueRoute.unit}</p>
           <p className="font-bold text-lg">{continueRoute.module}</p>
           {(() => {
             const doneInModule = continueRoute.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;
             return (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
                 Lesson {doneInModule + 1} of {continueRoute.subLessons.length}
               </p>
             );
@@ -85,10 +86,10 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
         return (
           <div key={unit} className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg border border-gray-200">
+              <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
                 <Image src={unitArt(unit)} alt="" fill sizes="80px" className="object-cover" />
               </div>
-              <h2 className="text-base font-bold text-gray-500 uppercase tracking-widest">{unit}</h2>
+              <h2 className="text-base font-bold text-gray-500 uppercase tracking-widest dark:text-gray-400">{unit}</h2>
             </div>
             <div className="space-y-2">
               {unitRoutes.map((route) => {
@@ -102,7 +103,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                   <div key={route.moduleSlug} className="space-y-1">
                   <Link
                     href={`/lessons/${route.moduleSlug}`}
-                    className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-400 transition-colors"
+                    className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-400 transition-colors dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-600"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <p className="font-semibold">{route.module}</p>
@@ -117,26 +118,26 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                         </span>
                       )}
                       {state === "not-started" && (
-                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500">
+                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
                           Not started
                         </span>
                       )}
                     </div>
                     <div className="mt-2 flex items-center gap-3">
-                      <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                      <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden dark:bg-gray-800">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${state === "complete" ? "bg-green-500" : "bg-blue-500"}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-gray-400 shrink-0">{done}/{total}</span>
+                      <span className="text-xs text-gray-400 shrink-0 dark:text-gray-500">{done}/{total}</span>
                     </div>
                   </Link>
                   {state === "complete" && (
                     <div className="flex justify-end pr-1">
                       <Link
                         href={`/lessons/${route.moduleSlug}?restart=1`}
-                        className="text-xs text-gray-400 hover:text-gray-600 underline"
+                        className="text-xs text-gray-400 hover:text-gray-600 underline dark:text-gray-500 dark:hover:text-gray-300"
                       >
                         Redo
                       </Link>
@@ -151,8 +152,8 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
       })}
 
       {/* Footer */}
-      <div className="border-t pt-6 space-y-3">
-        <p className="text-sm text-gray-500">
+      <div className="border-t border-gray-200 pt-6 space-y-3 dark:border-gray-800">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Progress is saved on this device. Clearing your browser data or switching to a different device will reset it.
         </p>
         <button
@@ -167,6 +168,8 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
           Reset all progress
         </button>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

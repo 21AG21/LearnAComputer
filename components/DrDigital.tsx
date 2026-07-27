@@ -8,9 +8,9 @@ interface DrDigitalProps {
 }
 
 const MOOD_STYLES: Record<DrDigitalMood, string> = {
-  neutral: "border-gray-300 bg-white",
-  hint: "border-yellow-400 bg-yellow-100",
-  success: "border-green-400 bg-green-50",
+  neutral: "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900",
+  hint: "border-yellow-400 bg-yellow-100 dark:bg-yellow-950/50",
+  success: "border-green-400 bg-green-50 dark:bg-green-950/40",
 };
 
 /**

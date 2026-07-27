@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import HomeGreeting from "@/components/HomeGreeting";
+import SiteFooter from "@/components/SiteFooter";
 import { getModuleRoutes, getAllLessons } from "@/lib/lessons";
 import { unitArt } from "@/lib/unitArt";
 import { photoSrc } from "@/lib/photoAssets";
@@ -36,23 +37,23 @@ export default function Home() {
         <div className="flex gap-3">
           <Link
             href={`/lessons/${firstModule.moduleSlug}`}
-            className="inline-block rounded border px-4 py-2 font-semibold"
+            className="inline-block rounded border border-gray-300 px-4 py-2 font-semibold transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
           >
             Begin Unit 1
           </Link>
-          <Link href="/lessons" className="inline-block rounded border px-4 py-2">
+          <Link href="/lessons" className="inline-block rounded border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800">
             Browse lessons
           </Link>
         </div>
 
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400">What you will learn</h2>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">What you will learn</h2>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {units.map((unit) => (
               <Link
                 key={unit}
                 href="/lessons"
-                className="group relative block h-24 overflow-hidden rounded-lg border border-gray-200"
+                className="group relative block h-24 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800"
               >
                 <Image
                   src={unitArt(unit)}
@@ -70,6 +71,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }
