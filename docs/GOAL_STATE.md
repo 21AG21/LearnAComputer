@@ -16,7 +16,7 @@ what moved, what's proven, what's still a demo risk.
 
 | Area | State | Proof |
 |---|---|---|
-| Every lesson completable, mechanically proven | **In progress** — headless `npm run solve-check` is canonical; 115→135→141→144 of 166 across fix rounds; 22 remain (3 guided: history-autofill, app-permissions, internet-problems; 19 assessments = solver capability) | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Every lesson completable, mechanically proven | **In progress** — headless `npm run solve-check` is canonical; 115→135→141→144→148 of 166 across fix rounds; **every guided lesson passes** — the 18 remaining are all assessment-mode objective chains (solver capability, not learner risk) | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
 | Reading level ≤ grade 8, enforced at build | **Done** — worst intro was 10.9, now all ≤ 5.6 | `scripts/check-lessons.py` |
@@ -63,6 +63,17 @@ have stranded a real learner mid-lesson:
 5. Browser: step glowed a download row inside a closed Downloads panel.
 6. Files: completing "arrow until highlighted" wiped the selection, making the
    very next step ("press Enter to open it") impossible by keyboard.
+
+## Handoff for the next session
+
+Start here: `npm run solve-check` (dev server on :3000 first). The 18 failures
+in `docs/solve-check-latest.txt` are all assessments — each needs the solver
+taught a multi-stage objective chain (install-with-permissions, share-via,
+force-quit menus, calendar save flows). The debugging loop that works: filtered
+run → read the solver trace (`iter` lines + ring contents) → if stuck, add a
+`[sim]`-prefixed console.log (the runner relays them) → fix → single-lesson
+retest → full run → commit. Seven real learner-stranding bugs were found under
+"solver" failures this way — assume each cluster may hide one.
 
 ## Session log
 
