@@ -174,6 +174,15 @@ export function GlobeIcon({ size = 20, ...props }: IconProps) {
   );
 }
 
+export function MapPinIcon({ size = 20, ...props }: IconProps) {
+  return (
+    <svg {...base(size, props)}>
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
 export function MailIcon({ size = 20, ...props }: IconProps) {
   return (
     <svg {...base(size, props)}>

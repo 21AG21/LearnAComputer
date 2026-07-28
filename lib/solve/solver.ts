@@ -119,7 +119,7 @@ let navSpin = 0;
  * action's own control.
  */
 const NAV_LABELS = [
-  "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Store", "My Apps", "Contacts",
+  "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Store", "My Apps", "App Market", "Contacts",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
   // Escape hatches out of detail views, so a hunt can reach list-level controls.
@@ -383,7 +383,7 @@ function gesturesFor(step: AnyStep, el: HTMLElement, root: HTMLElement): Gesture
  * highlights, so it lives here; guided mode reaching here is close to a failure
  * and only a handful of steps legitimately have no on-screen target.
  */
-function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
+function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = []): Gesture[] {
   const out: Gesture[] = [];
   const action = step.action ?? "";
   const value = valueFor(step);
@@ -463,7 +463,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     unfavorite: "favorite favourite",
     "go-to-installed": "my apps",
     install: "install get",
-    "go-to-store": "store",
+    "go-to-store": "store market",
     "open-force-quit": "force quit",
     "open-downloads": "downloads",
   };
@@ -472,7 +472,8 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     if (!isReachable(b)) return false;
     // A bare navigation entry is never the action's own control — the sidebar
     // "Trash" matched delete's "trash" synonym and navigated the target away.
-    if (NAV_LABELS.includes(textOf(b))) return false;
+    // Except for go-to-* actions, where the nav entry IS the control ("My Apps").
+    if (!action.startsWith("go-to") && NAV_LABELS.includes(textOf(b))) return false;
     const label = (textOf(b) || b.getAttribute("aria-label") || "").toLowerCase();
     if (!label || label.length > 32) return false;
     const words = actionWords.split(" ").filter((w) => !["go", "to", "app", "add"].includes(w));
@@ -483,7 +484,12 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
   // the same breath. A bare "Move to Trash" click deleted whatever happened to be
   // selected — which was another objective's file, wrecking the whole assessment.
   const SELECTION_ACTIONS = new Set(["delete", "rename", "restore", "recover", "archive", "mark-spam"]);
-  if (SELECTION_ACTIONS.has(action) && step.target) {
+  // Row actions are handled exclusively by the My Apps row compound below — a
+  // generic "Delete" click acts on whichever row comes first, the wrong app.
+  const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app"]);
+  if (ROW_ACTIONS.has(action) && step.target) {
+    // no generic clicks
+  } else if (SELECTION_ACTIONS.has(action) && step.target) {
     const leaves = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(
       (n) => isReachable(n) && textOf(n) === step.target,
     );
@@ -513,6 +519,52 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     }
   } else {
     for (const b of actionButtons.slice(0, 6)) out.push(() => click(b));
+  }
+
+  // Row actions live on the My Apps tab, but the target's name on a store or
+  // detail page fools targetOnScreen into calling off the hunt. Go to My Apps
+  // and press the row's own button in one breath.
+  if (["delete-app", "update-app", "open-app"].includes(action) && step.target) {
+    const verb = { "delete-app": /delete|remove/i, "update-app": /update/i, "open-app": /open/i }[action]!;
+    const myApps = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === "My Apps",
+    );
+    if (myApps) {
+      out.push(async () => {
+        click(myApps);
+        await wait(150);
+        const name = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(
+          (n) => n.childElementCount === 0 && textOf(n) === step.target && isReachable(n),
+        )[0];
+        for (let row = name?.parentElement; row; row = row.parentElement) {
+          const btns = Array.from(row.querySelectorAll<HTMLElement>("button")).filter((b) => verb.test(textOf(b)));
+          if (btns.length === 1) { click(btns[0]); break; }
+          if (btns.length > 1) break; // overshot the row into the whole list
+        }
+      });
+    }
+  }
+
+  // Install lives on an app's detail page. When no install button is in sight,
+  // open the app the assessment's own select-app objective names, then press
+  // the button that appears — one breath, like the selection compounds above.
+  if (["install", "allow-permission", "update-app"].includes(action) && actionButtons.length === 0) {
+    const appName = step.target ?? all.find((s) => s.action === "select-app")?.target;
+    if (appName) {
+      const card = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button'], [class*='cursor-pointer']")).find(
+        (el) => isReachable(el) && textOf(el).toLowerCase().includes(appName.toLowerCase()),
+      );
+      if (card) {
+        out.push(async () => {
+          click(card);
+          await wait(150);
+          const btn = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+            (b) => isReachable(b) && /install|get|update/i.test(textOf(b)),
+          );
+          if (btn) click(btn);
+        });
+      }
+    }
   }
 
   // Setting ids are kebab-case ("night-shift") while their labels are words
@@ -552,6 +604,21 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
       } else {
         out.push(() => click(control));
       }
+    } else if (action === "toggle") {
+      // Grouped choice chips: the id "colour-filter-warm" belongs to a chip
+      // labeled just "Warm" under a "Colour Filters" heading. Match a button on
+      // the id's trailing word(s), longest suffix first.
+      const parts = humanTarget.split(" ");
+      for (let n = parts.length - 1; n >= 1; n--) {
+        const suffix = parts.slice(-n).join(" ");
+        const chip = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b).toLowerCase() === suffix,
+        );
+        if (chip) {
+          out.push(() => click(chip));
+          break;
+        }
+      }
     }
   }
   const navHunt = () => {
@@ -583,7 +650,10 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
 
   // Text match: the surest way to find "Documents" or "Send" without a ring.
   // The humanized target rides along for kebab-case ids ("night-shift").
-  const wanted = [step.target, humanTarget !== step.target?.toLowerCase() ? humanTarget : null, step.title, step.value, step.file, step.into, step.to].filter(
+  // A search step's value is a query to type, never a thing to click — hunting
+  // it clicked whichever app card mentioned the query word, forever.
+  const clickableValue = action.includes("search") ? null : step.value;
+  const wanted = [step.target, humanTarget !== step.target?.toLowerCase() ? humanTarget : null, step.title, clickableValue, step.file, step.into, step.to].filter(
     Boolean,
   ) as string[];
   if (wanted.length) {
@@ -613,7 +683,21 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     const fields = Array.from(
       root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
     ).filter((f) => isReachable(f) && (action.includes("search") ? isSearchBox(f) : !isSearchBox(f)));
-    for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
+    // Typing goes last for everything except search: the search-box-only filter
+    // already guarantees the right field, and clicks kept winning the race by
+    // "changing the screen" without ever searching.
+    if (action.includes("search")) out.unshift(...fields.map((f) => () => typeInto(f, value, { enter: true })));
+    else for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
+    // A search objective with no search box in sight (the box lives on another
+    // page — the store front, not My Apps): go looking like a learner would.
+    // A modal dialog may be covering the page — clear it before hunting.
+    if (action.includes("search") && fields.length === 0) {
+      const dlg = Array.from(root.querySelectorAll<HTMLElement>("button")).filter(
+        (b) => isReachable(b) && ["Allow", "Don't Allow", "OK", "Cancel"].includes(textOf(b)),
+      );
+      for (const b of dlg) out.push(() => click(b));
+      navHunt();
+    }
   }
 
   return out;
@@ -864,7 +948,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
 
     if (!moved) {
       let gi = 0;
-      for (const gesture of ringlessGestures(step, root)) {
+      for (const gesture of ringlessGestures(step, root, opts.steps)) {
         await gesture();
         await settle();
         gi += 1;

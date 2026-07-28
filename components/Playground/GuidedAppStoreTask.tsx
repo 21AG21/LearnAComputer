@@ -4,7 +4,7 @@ import { readSimState, writeSimState } from "@/lib/simState";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
-import { CartIcon, SmartphoneIcon, CameraIcon, MicIcon, LockIcon } from "./Icons";
+import { CartIcon, SmartphoneIcon, CameraIcon, MicIcon, LockIcon, MapPinIcon } from "./Icons";
 
 export type GuidedAppStoreStep = {
   say: string;
@@ -89,7 +89,7 @@ const STORE_APPS: App[] = [
   {
     id: "weathernow", name: "WeatherNow", icon: "🌤️", color: "bg-blue-400",
     category: "Tools", description: "Accurate hourly and 7-day weather forecasts for your location. Beautiful weather animations.",
-    permissions: [], price: "Free", rating: 4.7, downloads: "800K+", tags: [], hasUpdate: true,
+    permissions: ["Location"], price: "Free", rating: 4.7, downloads: "800K+", tags: [], hasUpdate: true,
     reviews: [
       { name: "Mia C.", stars: 5, text: "Most accurate weather app I've used." },
       { name: "Ethan D.", stars: 4, text: "Love the animations. Sometimes slow to load." },
@@ -205,10 +205,14 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
     // Apps with delete/update/open steps must be pre-installed so the action has something to act on.
     const toUninstall = new Set<string>();
     const toInstall = new Set<string>();
+    // A targetless install step (assessments) installs whatever app the
+    // select-app step opens — that app must start uninstalled too, or a learner
+    // who installed it in an earlier lesson meets an impossible objective.
+    const targetlessInstall = steps.some((s) => s.action === "install" && !s.target);
     for (const s of steps) {
       const app = STORE_APPS.find((a) => a.name === s.target);
       if (!app) continue;
-      if (s.action === "install") toUninstall.add(app.id);
+      if (s.action === "install" || (s.action === "select-app" && targetlessInstall)) toUninstall.add(app.id);
       if (s.action === "delete-app" || s.action === "update-app" || s.action === "open-app") toInstall.add(app.id);
     }
     for (const id of toUninstall) saved.delete(id);
@@ -341,6 +345,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
   function permIcon(perm: string): ReactNode {
     if (perm === "Camera") return <CameraIcon size={20} />;
     if (perm === "Microphone") return <MicIcon size={20} />;
+    if (perm === "Location") return <MapPinIcon size={20} />;
     return <LockIcon size={20} />;
   }
 

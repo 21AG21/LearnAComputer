@@ -26,6 +26,10 @@
         "target": "WeatherNow"
       },
       {
+        "say": "WeatherNow asks to know your location so it can show local weather. That is a fair request for a weather app — click Allow.",
+        "action": "allow-permission"
+      },
+      {
         "say": "Click 'My Apps' to see your installed apps.",
         "action": "go-to-installed"
       },
