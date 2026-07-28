@@ -1,0 +1,134 @@
+
+> learn-a-computer@0.1.0 solve-check
+> node scripts/solve-check.mjs
+
+  12 / 170  (5s)
+  15 / 170  (10s)
+  24 / 170  (15s)
+  30 / 170  (20s)
+  39 / 170  (25s)
+  44 / 170  (30s)
+  48 / 170  (35s)
+  49 / 170  (40s)
+  52 / 170  (45s)
+  54 / 170  (50s)
+  57 / 170  (55s)
+  59 / 170  (60s)
+  62 / 170  (65s)
+  63 / 170  (70s)
+  66 / 170  (75s)
+  71 / 170  (80s)
+  74 / 170  (85s)
+  79 / 170  (90s)
+  82 / 170  (95s)
+  85 / 170  (100s)
+  87 / 170  (105s)
+  91 / 170  (110s)
+  96 / 170  (120s)
+  99 / 170  (125s)
+  102 / 170  (130s)
+  108 / 170  (135s)
+  111 / 170  (140s)
+  115 / 170  (145s)
+  118 / 170  (150s)
+  120 / 170  (155s)
+  125 / 170  (160s)
+  126 / 170  (165s)
+  135 / 170  (170s)
+  139 / 170  (175s)
+  144 / 170  (180s)
+  149 / 170  (185s)
+  153 / 170  (190s)
+  156 / 170  (195s)
+  158 / 170  (200s)
+  159 / 170  (205s)
+  160 / 170  (210s)
+  162 / 170  (215s)
+  163 / 170  (225s)
+  164 / 170  (230s)
+  166 / 170  (235s)
+  retry 0 / 31  (240s)
+  retry 2 / 31  (245s)
+  retry 3 / 31  (250s)
+  retry 5 / 31  (255s)
+  retry 6 / 31  (260s)
+  retry 7 / 31  (265s)
+  retry 8 / 31  (270s)
+  retry 10 / 31  (275s)
+  retry 11 / 31  (280s)
+  retry 12 / 31  (285s)
+  retry 13 / 31  (290s)
+  retry 16 / 31  (295s)
+  retry 18 / 31  (300s)
+  retry 20 / 31  (310s)
+  retry 22 / 31  (315s)
+  retry 23 / 31  (320s)
+  retry 24 / 31  (325s)
+  retry 25 / 31  (330s)
+  retry 27 / 31  (335s)
+  retry 28 / 31  (345s)
+  retry 29 / 31  (350s)
+
+31 activities cannot be finished:
+
+- unit-1-assessment (guided-desktop) — stopped at 4/9: Step 4 highlights nothing on screen (action: restore-max)“Put it back to its smaller size.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|8:46 am|×|Messages|Browser|Files|Mail]
+
+- kb-arrow-keys (guided-files) — stopped at 1/2: Step 1 does not respond to its own highlight (action: arrow-select, target: GroceryList.txt)“Press the right or down arrow key until GroceryList.txt is highlighted.”rings=[div"GroceryList.txt"@377x79] buttons=[＋ New Folder|Rename|Move to Trash|Home|Documents|Pictures|Downloads|Trash]
+
+- browser-vs-search (guided-browser) — stopped at 4/4: Step 4 highlights nothing on screen (action: open-result)“Google gives you a list of results. Click Recipe Box to open that page.”rings=[] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
+
+- safari-downloads (guided-browser) — stopped at 4/4: Step 4 highlights nothing on screen (action: open-download)“Click Open next to ApplePieRecipe.pdf to read it in the browser.”rings=[] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
+
+- popup-accident (guided-browser) — stopped at 4/4: Step 4 highlights nothing on screen (action: delete-download)“There's SystemCleaner.exe — that's the fake file. Click the trash icon next to it to delete it immediately.”rings=[] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
+
+- unit-4-assessment (guided-browser) — stopped at 2/5: Step 2 highlights nothing on screen (action: close-popup)“Go to freegames.example and get rid of the pop-up without clicking anything inside it.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
+
+- unit-5-assessment (guided-messaging) — stopped at 1/8: Step 1 highlights nothing on screen (action: attach-photo)“Send a photo to someone.”rings=[] buttons=[Hint|▼|+|AlexHey! What'|JordanFree to |SamAt work|GrandmaMiss yo|DoggoWoof!|Video Call|+]
+
+- unit-6-assessment (guided-email) — stopped at 1/6: Step 1 highlights nothing on screen (action: set-body)“Say something in your reply.”rings=[] buttons=[Hint|▼|Compose|Inbox5|Sent|Drafts|Spam|Archive]
+
+- photos-app (guided-photos) — stopped at 2/3: Step 2 highlights nothing on screen (action: select-photo, target: Dog at the Park)“Click Back, then open the Dog at the Park photo.”rings=[] buttons=[Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|+ New Album|← Back|Fav]
+
+- photo-favorites (guided-photos) — stopped at 3/5: Step 3 highlights nothing on screen (action: select-photo, target: Dog at the Park)“Click Back, then open the Dog at the Park photo.”rings=[] buttons=[Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|+ New Album|← Back|Fav]
+
+- photo-albums (guided-photos) — stopped at 4/6: Step 4 highlights nothing on screen (action: select-photo, target: Beach Vacation)“Click Back, then open Beach Vacation.”rings=[] buttons=[Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|+ New Album|← Back|Fav]
+
+- unit-7-assessment (guided-photos) — stopped at 3/7: Step 3 highlights nothing on screen (action: share)“Send the fixed photo to Grandma.”rings=[] buttons=[Hint|▼|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Garden|+ New Album]
+
+- app-permissions (guided-app-store) — stopped at 5/8: Step 5 highlights nothing on screen (action: search)“Good. Now search for 'PhotoFun' — a photo-sharing app that genuinely needs your camera.”rings=[] buttons=[Back to Store]
+
+- unit-8-assessment (guided-app-store) — stopped at 2/6: Step 2 highlights nothing on screen (action: go-to-installed)“Go and look at everything installed on this computer.”rings=[] buttons=[Hint|▼|App Market|My Apps|← Back|Get (Free)]
+
+- password-managers (guided-security) — stopped at 2/3: Step 2 never completes — 14 interactions with its own highlight changed the screen but not the step (action: type-login-password)“Type a strong password: 'Tr0ub4dor&3!'.”rings=[] buttons=[Passwords|Login|Phishing|Privacy]
+
+- two-factor (guided-security) — stopped at 2/5: Step 2 never completes — 14 interactions with its own highlight changed the screen but not the step (action: type-login-password)“Type your password: 'Secure#2025!'.”rings=[] buttons=[Passwords|Login|Phishing|Privacy]
+
+- unit-10-assessment (guided-security) — stopped at 2/6: Step 2 highlights nothing on screen (action: mark-safe, target: Complete Your Purchase)“Decide about 'Complete Your Purchase'.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
+
+- internet-problems (guided-troubleshooting) — stopped at 3/3: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: reconnect-wifi)“WiFi is on but not connected. Click 'Join' next to CoolKids Network.”rings=[] buttons=[?|Wi-Fi status|100%|8:47 am|Turn WiFi off|Forget|Forget|Forget|Messages|Browser]
+
+- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|8:47 am|Messages|Browser|Files|Mail]
+
+- pdf-practice (guided-browser) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-download)“Open the recipe PDF.”rings=[] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
+
+- unit-12-assessment-sim (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: open-downloads)“You found where downloads collect.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
+
+- a11y-assessment (guided-settings) — stopped at 4/4: Step 4 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: colour-filter-warm)“The screen has a warmer, less glaring tint.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|8:47 am|Minimize|Maximize|✕|Appearance|Display]
+
+- final-desktop (guided-desktop) — stopped at 5/6: Step 5 highlights nothing on screen (action: open-clock)“You checked today's date without leaving the desktop.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|8:47 am|Messages|Browser|Files|Mail|Settings]
+
+- final-browser (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: new-tab)“You have a second tab open.”rings=[] buttons=[Hint|▼|×|+|‹|Reload|Site security|Bookmark this |Reading List|History]
+
+- final-calendar (guided-calendar) — stopped at 1/7: Step 1 highlights nothing on screen (action: save-event)“The event is saved, not still being edited.”rings=[] buttons=[Hint|▼|Month|Day|Reminders|Personal|Work|+ New Event|Save|Cancel]
+
+- final-apps (guided-app-store) — stopped at 2/6: Step 2 highlights nothing on screen (action: go-to-installed)“You are looking at what is already on the computer, not the store.”rings=[] buttons=[Hint|▼|App Market|My Apps|← Back|Installed ✓]
+
+- final-photos (guided-photos) — stopped at 2/6: Step 2 never completes — 14 interactions with its own highlight changed the screen but not the step (action: select-photo, target: Mountains at Dawn)“The photo called Mountains at Dawn is the one open on screen.”rings=[] buttons=[Hint|▼|Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Trip]
+
+- final-email (guided-email) — stopped at 5/7: Step 5 highlights nothing on screen (action: archive, target: Meeting Tuesday)“The meeting email is filed away rather than left in the inbox.”rings=[] buttons=[Hint|▼|Compose|Inbox5|Sent1|Drafts|Spam|Archive]
+
+- final-messaging (guided-messaging) — stopped at 3/7: Step 3 highlights nothing on screen (action: add-to-group, target: sam)“Sam is in it too.”rings=[] buttons=[Hint|▼|+|AlexHey! What'|JordanFree to |SamAt work|GrandmaMiss yo|DoggoWoof!|Video Call|+]
+
+- final-security (guided-security) — stopped at 1/4: Step 1 highlights nothing on screen (action: mark-dangerous, target: Verify your account)“The bank message has been judged correctly.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
+
+- final-settings (guided-settings) — stopped at 3/4: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: night-shift)“The colours are warmer, for looking at late at night.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|8:48 am|Minimize|Maximize|✕|Appearance|Display]

@@ -5,10 +5,29 @@
   "order": 1231,
   "title": "Notes and Documents",
   "videoUrl": "",
-  "drDigitalIntro": "The Notes app is perfect for quick ideas, lists, and reminders.\n\nTry it on your own computer:\n\n1. Open the Notes app (look for it in your apps or search for \"Notes\").\n2. Click New Note (or the + button).\n3. Type a shopping list:\n   Milk\n   Eggs\n   Bread\n   Butter\n4. Notice it saves automatically — no need to click Save.\n5. Close the app and open it again — your note is still there!\n\nNotes sync across your devices. If you write a note on your computer, it appears on your phone too (as long as you're signed in to the same account).\n\nFor longer writing like letters, reports, or school work, use a word processor like Google Docs (free in your browser) or Microsoft Word.",
+  "drDigitalIntro": "Your computer comes with a notes app — perfect for quick lists and ideas, and it saves by itself.\n• Find it: it is called Notes on a Mac, Notepad on Windows. Search your apps for it.\n• Make a new note (look for a + or a New button) and type a short list of your own — three things you actually need this week.\n• Notice there is no Save button to press. It keeps your words on its own.\n• Then use two skills from Unit 2: select your list and copy it (Ctrl+A then Ctrl+C), come back here, and paste it.\n• I can tell the difference between pasted text and typed text — so the paste is the proof.",
   "playgroundTask": {
-    "type": "none"
+    "type": "real-world",
+    "goal": "You wrote a real note in your own notes app and copied it out",
+    "steps": [
+      {
+        "say": "Open the notes app on your computer and start a new note.",
+        "check": "confirm",
+        "detail": "Notes on a Mac, Notepad on Windows. Search your apps if you do not see it."
+      },
+      {
+        "say": "Type a list of three things you need this week — your own words.",
+        "check": "confirm",
+        "detail": "Anything real: groceries, errands, birthdays. Three lines is plenty."
+      },
+      {
+        "say": "Copy your list there, then paste it in the box below.",
+        "check": "paste",
+        "minChars": 10,
+        "detail": "In the notes app: Ctrl+A to select all, Ctrl+C to copy (Command on a Mac). Click the box, then Ctrl+V. Typing it out by hand will not count — it has to arrive as a paste."
+      }
+    ]
   },
-  "drDigitalSuccess": "Notes are saved automatically and sync across all your devices. Use Notes for quick thoughts, and Google Docs or Word for longer documents.",
-  "drDigitalHint": "Open the Notes app on your computer and try creating a new note."
+  "drDigitalSuccess": "A real note, in your real notes app, copied between two programs — that is everyday computing, done. Your list is still sitting in the notes app whenever you need it.",
+  "drDigitalHint": "The copy happens in the notes app; the paste happens here. Ctrl+A, Ctrl+C over there — click the box here — Ctrl+V."
 }

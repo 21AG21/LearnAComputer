@@ -100,6 +100,30 @@ export const EXEMPT: Record<string, string> = {
   placeholder: "No activity.",
 };
 
+/**
+ * A rolling trace of what the solver did, kept on `window` so the headless
+ * runner can print it when a lesson fails. Costs nothing to leave on.
+ */
+function trace(line: string) {
+  const w = window as unknown as { __solveTrace?: string[] };
+  (w.__solveTrace ??= []).push(line);
+  if (w.__solveTrace!.length > 120) w.__solveTrace!.shift();
+}
+
+/** Rotates where the nav-hunt starts, so it visits every place instead of ping-ponging. */
+let navSpin = 0;
+
+/**
+ * Navigation labels across the sims — where the hunt looks when a target is not
+ * on screen. Also the labels the action-button matcher must never treat as an
+ * action's own control.
+ */
+const NAV_LABELS = [
+  "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Store", "My Apps", "Contacts",
+  // Settings sections — a toggle lives behind its section, so the hunt must open them.
+  "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
+];
+
 /** Anything the sims use to mean "this is the control you want next". */
 const RING = [
   "[class*='ring-yellow']",
@@ -179,6 +203,8 @@ interface Snapshot {
   done: boolean;
   ring: string;
   body: number;
+  /** Assessment: per-objective bitstring ("0100…"); empty in guided mode. */
+  objdone: string;
 }
 
 function readFrame(root: HTMLElement) {
@@ -200,6 +226,7 @@ function snapshot(root: HTMLElement): Snapshot {
       })
       .join("|"),
     body: root.querySelectorAll("*").length,
+    objdone: frame?.dataset.simObjdone ?? "",
   };
 }
 
@@ -368,28 +395,138 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     if (editor) out.push(() => { editor.focus(); key(editor, shortcut.k, { ctrlKey: true, metaKey: true, ...shortcut.mods }); });
   }
 
-  if (value !== null) {
-    const fields = Array.from(
-      root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
-    ).filter(isReachable);
-    for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
-  }
-
   // The action's own words name its control more often than not: `new-folder` is
   // a "New Folder" button, `create-album` a "New Album" one, `mark-spam` a
-  // "Spam" button. Try the human phrasing of the action alongside the targets.
-  const actionWords = action.replace(/-/g, " ");
+  // "Spam" button. Where the UI words differ from the action's, the synonym
+  // table bridges them — "delete" is a button called Move to Trash.
+  const ACTION_SYNONYMS: Record<string, string> = {
+    delete: "trash remove",
+    restore: "put back restore",
+    recover: "recover put back",
+    unspam: "not spam",
+    "reading-list-add": "reading list",
+    favorite: "favorite favourite",
+    unfavorite: "favorite favourite",
+  };
+  const actionWords = `${action.replace(/-/g, " ")} ${ACTION_SYNONYMS[action] ?? ""}`.trim();
   const actionButtons = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter((b) => {
     if (!isReachable(b)) return false;
+    // A bare navigation entry is never the action's own control — the sidebar
+    // "Trash" matched delete's "trash" synonym and navigated the target away.
+    if (NAV_LABELS.includes(textOf(b))) return false;
     const label = (textOf(b) || b.getAttribute("aria-label") || "").toLowerCase();
     if (!label || label.length > 32) return false;
     const words = actionWords.split(" ").filter((w) => !["go", "to", "app", "add"].includes(w));
     return words.some((w) => w.length > 2 && label.includes(w));
   });
-  for (const b of actionButtons.slice(0, 6)) out.push(() => click(b));
+
+  // Actions that operate on "the selected thing" must select their own target in
+  // the same breath. A bare "Move to Trash" click deleted whatever happened to be
+  // selected — which was another objective's file, wrecking the whole assessment.
+  const SELECTION_ACTIONS = new Set(["delete", "rename", "restore", "recover", "archive", "mark-spam"]);
+  if (SELECTION_ACTIONS.has(action) && step.target) {
+    const leaves = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(
+      (n) => isReachable(n) && textOf(n) === step.target,
+    );
+    const targetEl = leaves[leaves.length - 1];
+    if (targetEl) {
+      // Include currently-disabled matches: the button is often disabled *until*
+      // something is selected, which is exactly what the compound gesture fixes.
+      const candidates = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter((b) => {
+        if (NAV_LABELS.includes(textOf(b))) return false;
+        const label = (textOf(b) || b.getAttribute("aria-label") || "").toLowerCase();
+        if (!label || label.length > 32) return false;
+        const words = actionWords.split(" ").filter((w) => !["go", "to", "app", "add"].includes(w));
+        return words.some((w) => w.length > 2 && label.includes(w));
+      });
+      for (const b of candidates.slice(0, 3)) {
+        out.push(async () => {
+          click(targetEl);
+          await wait(60);
+          // Re-resolve: the button may have been disabled until the selection existed.
+          const label = textOf(b) || b.getAttribute("aria-label") || "";
+          const live = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).find(
+            (x) => isReachable(x) && (textOf(x) || x.getAttribute("aria-label")) === label,
+          );
+          if (live) click(live);
+        });
+      }
+    }
+  } else {
+    for (const b of actionButtons.slice(0, 6)) out.push(() => click(b));
+  }
+
+  // Setting ids are kebab-case ("night-shift") while their labels are words
+  // ("Night Shift") — match on the human form.
+  const humanTarget = step.target?.replace(/-/g, " ").toLowerCase();
+
+  // When the target names something that is not on screen at all, a learner
+  // goes looking — back to Home, over to the Inbox. The solver hunts the same
+  // way, through NAV_LABELS. The rotation matters: always starting at Home
+  // ping-ponged between the first two places forever (each click "changed the
+  // screen", so the hunt never advanced).
+  const targetOnScreen = () =>
+    !humanTarget ||
+    Array.from(root.querySelectorAll<HTMLElement>("*")).some(
+      (n) => n.childElementCount === 0 && textOf(n).toLowerCase().includes(humanTarget),
+    );
+
+  // Toggles and sliders: find the labelled row, act on its control — the label
+  // itself is not clickable in the Settings app.
+  if ((action === "toggle" || action === "slider") && humanTarget) {
+    const label = Array.from(root.querySelectorAll<HTMLElement>("*")).find(
+      (n) => n.childElementCount === 0 && textOf(n).toLowerCase() === humanTarget && isReachable(n),
+    );
+    // Walk outward from the label until a container actually holds a control —
+    // querying the parent first grabbed the *neighboring* setting's switch.
+    let container: HTMLElement | null | undefined = label?.closest("div");
+    let control: HTMLElement | null = null;
+    for (let hop = 0; container && hop < 4 && !control; hop++) {
+      control = container.querySelector<HTMLElement>("[role='switch'], input[type='range']");
+      container = container.parentElement;
+    }
+    if (control) {
+      if (isRange(control)) {
+        const lo = step.min ?? Number((control as HTMLInputElement).min || 0);
+        const hi = step.max ?? Number((control as HTMLInputElement).max || 100);
+        out.push(() => setRange(control as HTMLInputElement, Math.round((lo + hi) / 2)));
+      } else {
+        out.push(() => click(control));
+      }
+    }
+  }
+  const navHunt = () => {
+    const navs = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter(
+      (b) => isReachable(b) && NAV_LABELS.includes(textOf(b)),
+    );
+    const start = navSpin++ % Math.max(navs.length, 1);
+    for (const b of [...navs.slice(start), ...navs.slice(0, start)]) out.push(() => click(b));
+  };
+
+  // Without a current step there is no click-then-click move path (the sims gate
+  // it on the guided step), so dragging is the one gesture that moves a file —
+  // and clicking the destination's name in a sidebar would *navigate*, not move.
+  if (action === "move" && step.target && step.into) {
+    if (!targetOnScreen()) {
+      navHunt();
+      return out;
+    }
+    const all = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(isReachable);
+    const srcAll = all.filter((n) => textOf(n) === step.target);
+    const dstAll = all.filter((n) => textOf(n) === step.into);
+    const src = srcAll[srcAll.length - 1]; // innermost
+    const dst = dstAll[dstAll.length - 1];
+    if (src && dst) out.push(() => dragTo(src, dst));
+    return out;
+  }
+
+  if (!targetOnScreen()) navHunt();
 
   // Text match: the surest way to find "Documents" or "Send" without a ring.
-  const wanted = [step.target, step.title, step.value, step.file, step.into, step.to].filter(Boolean) as string[];
+  // The humanized target rides along for kebab-case ids ("night-shift").
+  const wanted = [step.target, humanTarget !== step.target?.toLowerCase() ? humanTarget : null, step.title, step.value, step.file, step.into, step.to].filter(
+    Boolean,
+  ) as string[];
   if (wanted.length) {
     const clickable = Array.from(root.querySelectorAll<HTMLElement>("button, a, [role='button'], li, tr, [class*='cursor-pointer']")).filter(isReachable);
     for (const w of wanted) {
@@ -401,6 +538,19 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
         out.push(() => click(el));
       }
     }
+  }
+
+  // Typing goes LAST, after every click has had its chance — the first visible
+  // input is very often the wrong one (typing a file's new name into the search
+  // box filtered the file out of view and wedged the whole lesson). Search boxes
+  // are only fair game for search steps.
+  if (value !== null) {
+    const isSearchBox = (f: HTMLElement) =>
+      /search/i.test(f.getAttribute("placeholder") ?? "") || (f as HTMLInputElement).type === "search";
+    const fields = Array.from(
+      root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
+    ).filter((f) => isReachable(f) && (action.includes("search") || !isSearchBox(f)));
+    for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
   }
 
   return out;
@@ -515,30 +665,43 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
   let pursue = 0;
   let pursueMoves = 0;
 
-  // The page reports document.hidden whenever the embedded pane is off screen —
-  // and a hidden page throttles the sims' own timers (loading bars, connecting
-  // spinners), so the world the solver is judging is genuinely paused. Never
-  // burn budget against it, and never return a verdict from it.
+  // The page reports document.hidden whenever the embedded pane is off screen.
+  // Hidden, the sims' own timers throttle to ~1s ticks — slow but alive — so
+  // the solver keeps working. What it must not do is issue a *verdict* from a
+  // hidden world, so before any failure return it parks until visible — but
+  // only up to a total per-lesson allowance: a pane that never comes back must
+  // not deadlock the whole run. Past the allowance, verdicts proceed and are
+  // tagged, and the retry pass gives the lesson a second chance later.
+  const PARK_ALLOWANCE_MS = 150_000;
+  let parkedMs = 0;
+  const parkedOut = () => parkedMs >= PARK_ALLOWANCE_MS;
   const waitWhileHidden = async () => {
-    while (document.hidden && !opts.signal?.aborted) {
-      const t0 = performance.now();
+    const t0 = performance.now();
+    while (document.hidden && !opts.signal?.aborted && parkedMs + (performance.now() - t0) < PARK_ALLOWANCE_MS) {
       await wait(300);
-      started += performance.now() - t0; // hidden time doesn't count against the budget
     }
+    const spent = performance.now() - t0;
+    parkedMs += spent;
+    started += spent; // parked time doesn't count against the budget
   };
+  const hiddenTag = () => (document.hidden ? " [pane was hidden — verdict unreliable]" : "");
 
   while (performance.now() - started < budget) {
     if (opts.signal?.aborted) return outcome(false, "Aborted");
-    await waitWhileHidden();
     const before = snapshot(root);
     if (before.done) return outcome(true);
 
     if (before.progress === lastProgress) {
       if (++spinning > MAX_SPIN) {
+        if (document.hidden && !parkedOut()) {
+          await waitWhileHidden();
+          spinning = Math.floor(MAX_SPIN / 2); // half a lap of grace once visible
+          continue;
+        }
         const step = opts.steps[Math.min(before.progress, total - 1)];
         return outcome(
           false,
-          `Step ${before.progress + 1} never completes — ${MAX_SPIN} interactions with its own highlight changed the screen but not the step (action: ${step?.action ?? "?"}${step?.target ? `, target: ${step.target}` : ""})`,
+          `Step ${before.progress + 1} never completes — ${MAX_SPIN} interactions with its own highlight changed the screen but not the step (action: ${step?.action ?? "?"}${step?.target ? `, target: ${step.target}` : ""})${hiddenTag()}`,
         );
       }
     } else {
@@ -548,18 +711,23 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
     }
 
     // Guided mode: the frame's progress *is* the current step. Assessment mode
-    // deliberately has no order — and the solver cannot see *which* objectives
-    // are met, only how many — so it works on one objective at a time and moves
-    // to the next when the current one stops responding. Walking JSON order
-    // strictly deadlocks the moment an earlier gesture happens to satisfy a
-    // later objective (in the window assessment, clicking a dock icon for
-    // "restore" also completes "open-app").
-    const step = opts.assessment
-      ? opts.steps[pursue % total]
-      : opts.steps[Math.min(before.progress, total - 1)];
+    // has no order, but the frame's objdone bitstring says exactly which
+    // objectives are still open — pursue the first of those (offset by `pursue`
+    // when it stops responding, wrapping over the other open ones). Blind
+    // cycling used to trample one objective's target while chasing another.
+    let step: AnyStep | undefined;
+    if (opts.assessment) {
+      const open: number[] = [];
+      for (let i = 0; i < total; i++) if (before.objdone[i] !== "1") open.push(i);
+      if (open.length === 0) return outcome(true);
+      step = opts.steps[open[pursue % open.length]];
+    } else {
+      step = opts.steps[Math.min(before.progress, total - 1)];
+    }
     if (!step) return outcome(true);
 
     let moved = false;
+    trace(`iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning}`);
 
     // The color-sequence game runs on its own loop: the spin guard would cut off
     // a sequence that legitimately takes ten picks.
@@ -597,22 +765,26 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
       for (const gesture of gesturesFor(step, el, root)) {
         await gesture();
         await settle();
-        if (changed(before, snapshot(root))) { moved = true; break; }
+        if (changed(before, snapshot(root))) { moved = true; trace(`  ring-gesture moved (el="${textOf(el).slice(0, 20)}")`); break; }
       }
       if (moved) break;
     }
 
     if (!moved) {
+      let gi = 0;
       for (const gesture of ringlessGestures(step, root)) {
         await gesture();
         await settle();
-        if (changed(before, snapshot(root))) { moved = true; break; }
+        gi += 1;
+        if (changed(before, snapshot(root))) { moved = true; trace(`  ringless #${gi} moved`); break; }
       }
+      if (!moved) trace(`  ringless exhausted (${gi} gestures)`);
     }
 
     if (!moved && (await tryDrag(step, root))) {
       await settle();
       moved = changed(before, snapshot(root));
+      if (moved) trace("  tryDrag moved");
     }
 
     if (opts.assessment && moved) {
@@ -629,7 +801,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
       // spinner, a restart animation. Real delays are a house rule, so the solver
       // has to be as patient as a learner.
       await settle(SLOW_SETTLE_MS);
-      if (document.hidden) {
+      if (document.hidden && !parkedOut()) {
         // The pane went off screen mid-iteration: whatever just "failed" was a
         // stalled world, not a broken lesson. Park and replay the iteration.
         await waitWhileHidden();
@@ -647,9 +819,9 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
         const ringCount = rings(root).length;
         return outcome(
           false,
-          ringCount === 0
+          (ringCount === 0
             ? `Step ${before.progress + 1} highlights nothing on screen (action: ${step.action ?? step.check ?? "?"}${step.target ? `, target: ${step.target}` : ""})`
-            : `Step ${before.progress + 1} does not respond to its own highlight (action: ${step.action ?? "?"}${step.target ? `, target: ${step.target}` : ""})`,
+            : `Step ${before.progress + 1} does not respond to its own highlight (action: ${step.action ?? "?"}${step.target ? `, target: ${step.target}` : ""})`) + hiddenTag(),
           step,
         );
       }

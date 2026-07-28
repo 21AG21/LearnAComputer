@@ -89,6 +89,10 @@ export default function SimulatorFrame({
       data-sim-progress={isAssessment ? doneCount : Math.min(stepIndex ?? 0, totalSteps ?? 0)}
       data-sim-total={isAssessment ? objTotal : (totalSteps ?? 0)}
       data-sim-mode={isAssessment ? "assessment" : "guided"}
+      // Which objectives are met, as a bitstring ("01100…"). The solver pursues
+      // exactly the first unmet one; guessing blindly made it lap through
+      // objectives and trample one objective's target while chasing another.
+      data-sim-objdone={isAssessment ? objectives!.map((o) => (o.done ? "1" : "0")).join("") : undefined}
     >
       {/* Guidance banner */}
       <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">

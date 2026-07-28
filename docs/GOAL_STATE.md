@@ -34,10 +34,14 @@ what moved, what's proven, what's still a demo risk.
 The buyer-with-crossed-arms test: what is the weakest thing they could land on?
 Ranked, current worst first. Fixing the top item promotes the next.
 
-1. **Unit 12 "Documents and Printing"** — 6 of 9 lessons are read-only
-   explainers in a course that sells itself as hands-on. A skeptical buyer who
-   clicks here sees text, not the product's magic. (Master plan §2.3 — print
-   dialog sim.)
+1. ~~**Unit 12 "Documents and Printing"** — 6 of 9 lessons read-only~~
+   **Fixed 2026-07-27:** four of the six converted to *checked real-world
+   missions* using existing check kinds — the print shortcut is caught with a
+   real Ctrl+P keypress, the PDF lesson verifies an actual just-downloaded PDF
+   from the learner's Downloads, the notes lesson verifies a real copy-paste
+   out of their own notes app, and the Google Docs lesson verifies a pasted
+   docs.google.com address. Module is now 7 hands-on / 2 walkthroughs.
+   *(Pending: drive each once in the browser before the next demo.)*
 2. **A lesson failing mid-demo.** Mitigated by solve-check + error boundary;
    the residual risk is the exempt types (reflex games, real-trackpad
    gestures) which only mount-check covers.
@@ -56,3 +60,14 @@ Ranked, current worst first. Fixing the top item promotes the next.
   highlight, adaptive shapes game. Stage D landed: 11 intros rewritten, FK
   build check, order audit script, Keyboard Tour split, scaffolding sentences.
   Sales playbook v1 written. Full-course solve runs iterating; goal set.
+- **2026-07-27 (later):** The embedded pane proved unusable for long runs
+  (hidden-tab throttling froze the sims mid-run), so the harness gained a
+  headless Playwright runner — `npm run solve-check` — which is now the
+  canonical way to prove the course. Assessment solving was rebuilt on a
+  per-objective done bitstring exposed by `SimulatorFrame`
+  (`data-sim-objdone`), with compound select-then-act gestures after the
+  solver was caught deleting one objective's file while chasing another.
+  Unit 12's worst-screen problem closed by converting four read-only lessons
+  into checked real-world missions (JSON-only, existing check kinds).
+  Full-course headless run in flight at session close — results and the
+  remaining failure list belong at the top of the next session.
