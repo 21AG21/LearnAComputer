@@ -50,6 +50,20 @@ Ranked, current worst first. Fixing the top item promotes the next.
 4. **No instructor view yet** — for a school buyer, "how do I see my class?"
    currently has a design doc for an answer, not a screen.
 
+## Real learner-stranding bugs found by solve-check (running tally)
+
+Every one of these passed tsc, lint, the validator and mount-check, and would
+have stranded a real learner mid-lesson:
+
+1. `useStepRunner` finish race — every step done, completion never fired.
+2. `useStepRunner` multi-complete race — one navigation advanced three steps,
+   silently skipping two (Enter + Go + loading timer in one tick).
+3. Email: step glowed a row hidden behind the open reading pane.
+4. Photos: step glowed a tile hidden behind the open photo (Back never glowed).
+5. Browser: step glowed a download row inside a closed Downloads panel.
+6. Files: completing "arrow until highlighted" wiped the selection, making the
+   very next step ("press Enter to open it") impossible by keyboard.
+
 ## Session log
 
 - **2026-07-27 (this session):** Master plan written and pushed. Stage A
