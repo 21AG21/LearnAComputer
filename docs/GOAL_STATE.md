@@ -69,5 +69,16 @@ Ranked, current worst first. Fixing the top item promotes the next.
   solver was caught deleting one objective's file while chasing another.
   Unit 12's worst-screen problem closed by converting four read-only lessons
   into checked real-world missions (JSON-only, existing check kinds).
-  Full-course headless run in flight at session close — results and the
-  remaining failure list belong at the top of the next session.
+  Definitive full-course headless run: **135/166 playable lessons complete
+  end-to-end**; the 31-lesson failure list (with per-failure screen
+  diagnostics and solver traces) is committed as
+  `docs/solve-check-latest.txt` — that file is the **standing worklist for
+  the next session**. Triage note: the failures cluster by *solver
+  capability* (multi-phase assessment flows: attach-photo pickers,
+  open-downloads panels, phishing inspect flows, force-quit menus), and each
+  cluster resolves like today's Unit 3 case did — trace, teach the solver
+  the missing gesture, and occasionally find a real product bug underneath
+  (two found and fixed today). Solo-pass/queue-fail non-determinism remains
+  for a few (a11y-assessment) — suspect cross-lesson `lac-sim`/localStorage
+  carry-over within one harness page session; consider clearing storage
+  between lessons in SolveCheck. Commits: `7c46a6a`, `a94ce74`.
