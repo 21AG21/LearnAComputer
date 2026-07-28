@@ -177,7 +177,9 @@ function valueFor(step: AnyStep): string | null {
       return step.query ?? step.value ?? null;
     case "type-password":
     case "type-login-password":
-      return STRONG_PASSWORD;
+      // The lesson may prescribe the exact password ("Type 'Secure#2025!'") —
+      // the sim checks for it, so an invented strong one never completes.
+      return step.value ?? STRONG_PASSWORD;
     case "type-new-password":
       return step.value ?? STRONG_PASSWORD;
     case "enter-2fa-code":
