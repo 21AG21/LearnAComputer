@@ -115,7 +115,12 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
     switch (step.action) {
-      case "select-photo": return kind === "photo" && name === step.target;
+      case "select-photo":
+        // The photo view replaces the grid, so while a different photo is open
+        // the wanted tile is not on screen. Glowing an invisible tile stranded
+        // learners on "Click Back, then open X" — the glow belongs on Back.
+        if (selectedPhoto && selectedPhoto.label !== step.target) return kind === "back-btn";
+        return kind === "photo" && name === step.target;
       case "favorite": return kind === "fav-btn";
       case "unfavorite": return kind === "fav-btn";
       case "delete": return kind === "delete-btn";
@@ -401,7 +406,12 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
             <div className="flex-1 overflow-y-auto">
               {/* Toolbar */}
               <div className="p-3 border-b flex items-center gap-2 flex-wrap">
-                <button onClick={() => { setSelectedPhoto(null); resetEdits(); }} className="text-gray-400 hover:text-gray-600 mr-1">← Back</button>
+                <button
+                  onClick={() => { setSelectedPhoto(null); resetEdits(); }}
+                  className={`text-gray-400 hover:text-gray-600 mr-1 rounded px-1 ${hl("back-btn") ? pulse : ""}`}
+                >
+                  ← Back
+                </button>
                 <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 hover:bg-gray-50"} ${hl("fav-btn") ? pulse : ""}`}>
                   {selectedPhoto.favorite ? <HeartFilledIcon size={12} /> : <HeartIcon size={12} />} Fav
                 </button>
