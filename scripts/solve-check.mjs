@@ -39,6 +39,7 @@ await page.getByRole("button", { name: /^(Run|Restart)$/ }).click();
 // Progress heartbeat, so a long run is visibly alive.
 const started = Date.now();
 let lastCounter = "";
+let shotTaken = false;
 const heartbeat = setInterval(async () => {
   try {
     const counter = await page
@@ -48,6 +49,17 @@ const heartbeat = setInterval(async () => {
     if (counter && counter !== lastCounter) {
       lastCounter = counter;
       console.log(`  ${counter.trim()}  (${Math.round((Date.now() - started) / 1000)}s)`);
+    }
+    // Mid-run capture for single-lesson debugging: shoot while the retry pass is
+    // wedged, when the failure state is actually on screen.
+    if (filter && process.env.SOLVE_SHOT && !shotTaken) {
+      shotTaken = true;
+      setTimeout(async () => {
+        try {
+          await page.screenshot({ path: process.env.SOLVE_SHOT, fullPage: true });
+          console.log(`  (mid-retry screenshot: ${process.env.SOLVE_SHOT})`);
+        } catch { /* page may have finished */ }
+      }, 3000);
     }
   } catch {
     /* page mid-render; next tick will catch up */
@@ -59,6 +71,11 @@ await page.waitForSelector("#solve-check-result", { timeout: 45 * 60_000 });
 clearInterval(heartbeat);
 
 const solveTrace = await page.evaluate(() => window.__solveTrace ?? []);
+// Single-lesson debugging: freeze the moment of failure as pixels.
+if (filter && process.env.SOLVE_SHOT) {
+  await page.screenshot({ path: process.env.SOLVE_SHOT, fullPage: true });
+  console.log(`(screenshot: ${process.env.SOLVE_SHOT})`);
+}
 const summary = await page.locator("#solve-check-result > p").first().textContent();
 // Only the failure list — the exemption catalog lives in a <details> below it.
 const realFailures = await page.locator("#solve-check-result > ul > li").allTextContents();

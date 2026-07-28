@@ -77,9 +77,11 @@ export function isReachable(el: Element): boolean {
  */
 export function clickTarget(el: HTMLElement): HTMLElement {
   const cursor = getComputedStyle(el).cursor;
+  // `text` is here because an address bar styled cursor-text is itself the thing
+  // to click — drilling inward found the lock icon inside it instead.
   const selfInteractive =
     el.matches("button, a, input, select, [role='button']") ||
-    ["pointer", "grab", "grabbing", "move", "se-resize"].includes(cursor);
+    ["pointer", "grab", "grabbing", "move", "se-resize", "text"].includes(cursor);
   if (!selfInteractive) {
     const inner = el.querySelector("button, a, input, select, [role='button']");
     if (inner instanceof HTMLElement && isReachable(inner)) return inner;

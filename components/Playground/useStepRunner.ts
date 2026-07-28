@@ -64,8 +64,18 @@ export function useStepRunner<S extends RunnerStep>({
     setTimeout(() => onResult(true), finishDelayMs);
   }, [finishDelayMs, onResult]);
 
+  /**
+   * Which index last ticked. Several handlers can fire from one gesture — the
+   * address bar's Enter, the Go button, the loading timer — and inside one React
+   * tick they all read the *same* current step, so without this guard a single
+   * navigation advanced the lesson three steps and silently skipped two.
+   */
+  const lastCompletedIndex = useRef(-1);
+
   /** Guided: satisfy the current step and advance. */
   const completeStep = useCallback(() => {
+    if (lastCompletedIndex.current === stepIndex) return;
+    lastCompletedIndex.current = stepIndex;
     ding();
     setCompleted((prev) => new Set(prev).add(stepIndex));
     setStepIndex((i) => i + 1);

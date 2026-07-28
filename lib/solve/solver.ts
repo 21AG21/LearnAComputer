@@ -547,9 +547,13 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
   if (value !== null) {
     const isSearchBox = (f: HTMLElement) =>
       /search/i.test(f.getAttribute("placeholder") ?? "") || (f as HTMLInputElement).type === "search";
+    // Search queries go in search boxes and ONLY search boxes — typed into the
+    // address bar, "apple pie recipe" navigates to the not-a-real-site page and
+    // wedges the lesson. Everything else avoids search boxes for the same reason
+    // in reverse (a filename typed there filters the file out of view).
     const fields = Array.from(
       root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
-    ).filter((f) => isReachable(f) && (action.includes("search") || !isSearchBox(f)));
+    ).filter((f) => isReachable(f) && (action.includes("search") ? isSearchBox(f) : !isSearchBox(f)));
     for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
   }
 
@@ -727,7 +731,13 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
     if (!step) return outcome(true);
 
     let moved = false;
-    trace(`iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning}`);
+    {
+      const addr = root.querySelector<HTMLInputElement>("input")?.value ?? "";
+      const results = Array.from(root.querySelectorAll("p")).filter((p) => /Top result/.test(p.textContent ?? "")).length;
+      trace(
+        `iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning} addr="${addr.slice(0, 28)}" results=${results}`,
+      );
+    }
 
     // The color-sequence game runs on its own loop: the spin guard would cut off
     // a sequence that legitimately takes ten picks.
@@ -744,11 +754,19 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
     // A learner whose cursor is already blinking in a box types in the box. They
     // do not go back and press the button that opened it again. Several steps put
     // the ring on that button and drop it once the field appears (New Folder,
-    // Rename), so following the ring alone loops forever on the button.
+    // Rename), so following the ring alone loops forever on the button. But the
+    // box has to be the *right kind* of box: a search query typed into the
+    // still-focused address bar navigated to the not-a-real-site page and wedged
+    // the lesson — search values go only into search-looking fields.
     const focused = document.activeElement;
     const value = valueFor(step);
+    const focusedIsSearch =
+      focused instanceof HTMLElement &&
+      (/search/i.test(focused.getAttribute("placeholder") ?? "") || (focused as HTMLInputElement).type === "search");
+    const focusedFits = (step.action ?? "").includes("search") ? focusedIsSearch : !focusedIsSearch;
     if (
       value !== null &&
+      focusedFits &&
       focused instanceof HTMLElement &&
       root.contains(focused) &&
       (isTextInput(focused) || isContentEditable(focused))
