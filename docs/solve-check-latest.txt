@@ -6,7 +6,7 @@
   15 / 170  (10s)
   24 / 170  (15s)
   30 / 170  (20s)
-  39 / 170  (25s)
+  38 / 170  (25s)
   44 / 170  (30s)
   48 / 170  (35s)
   50 / 170  (40s)
@@ -47,29 +47,27 @@
   162 / 170  (215s)
   163 / 170  (220s)
   165 / 170  (230s)
-  retry 0 / 24  (235s)
-  retry 1 / 24  (240s)
-  retry 2 / 24  (245s)
-  retry 3 / 24  (250s)
-  retry 5 / 24  (255s)
-  retry 7 / 24  (265s)
-  retry 8 / 24  (270s)
-  retry 10 / 24  (275s)
-  retry 12 / 24  (280s)
-  retry 13 / 24  (285s)
-  retry 15 / 24  (290s)
-  retry 16 / 24  (295s)
-  retry 17 / 24  (300s)
-  retry 18 / 24  (305s)
-  retry 20 / 24  (310s)
-  retry 21 / 24  (320s)
-  retry 22 / 24  (325s)
+  retry 0 / 22  (235s)
+  retry 1 / 22  (240s)
+  retry 2 / 22  (245s)
+  retry 3 / 22  (250s)
+  retry 5 / 22  (255s)
+  retry 7 / 22  (265s)
+  retry 8 / 22  (270s)
+  retry 10 / 22  (275s)
+  retry 11 / 22  (285s)
+  retry 14 / 22  (290s)
+  retry 15 / 22  (295s)
+  retry 16 / 22  (300s)
+  retry 17 / 22  (305s)
+  retry 18 / 22  (310s)
+  retry 19 / 22  (320s)
 
-24 activities cannot be finished:
+22 activities cannot be finished:
 
-- unit-1-assessment (guided-desktop) — stopped at 4/9: Step 4 highlights nothing on screen (action: restore-max)“Put it back to its smaller size.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|9:30 am|×|Messages|Browser|Files|Mail]
+- unit-1-assessment (guided-desktop) — stopped at 4/9: Step 4 highlights nothing on screen (action: restore-max)“Put it back to its smaller size.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|10:14 am|×|Messages|Browser|Files|Mail]
 
-- history-autofill (guided-browser) — stopped at 3/3: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: history-visit)“Want to go back to Book Shop without retyping? Click History, then click Book Shop in the list.”rings=[button"Book Shopbookshop.exam"@252x37] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
+- history-autofill (guided-browser) — stopped at 3/3: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: history-visit)“Want to go back to Book Shop without retyping? Click History, then click Book Shop in the list.”rings=[] buttons=[×|+|‹|Reload|Site security|Bookmark this |Reading List|History|Downloads|New Window]
 
 - unit-4-assessment (guided-browser) — stopped at 2/5: Step 2 highlights nothing on screen (action: close-popup)“Go to freegames.example and get rid of the pop-up without clicking anything inside it.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
 
@@ -83,21 +81,17 @@
 
 - unit-8-assessment (guided-app-store) — stopped at 2/6: Step 2 highlights nothing on screen (action: go-to-installed)“Go and look at everything installed on this computer.”rings=[] buttons=[Hint|▼|App Market|My Apps|← Back|Get (Free)]
 
-- password-managers (guided-security) — stopped at 2/3: Step 2 never completes — 14 interactions with its own highlight changed the screen but not the step (action: type-login-password)“Type a strong password: 'Tr0ub4dor&3!'.”rings=[] buttons=[Passwords|Login|Phishing|Privacy]
-
-- two-factor (guided-security) — stopped at 2/5: Step 2 never completes — 14 interactions with its own highlight changed the screen but not the step (action: type-login-password)“Type your password: 'Secure#2025!'.”rings=[] buttons=[Passwords|Login|Phishing|Privacy]
-
 - unit-10-assessment (guided-security) — stopped at 2/6: Step 2 highlights nothing on screen (action: mark-safe, target: Complete Your Purchase)“Decide about 'Complete Your Purchase'.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
 
-- internet-problems (guided-troubleshooting) — stopped at 3/3: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: reconnect-wifi)“WiFi is on but not connected. Click 'Join' next to CoolKids Network.”rings=[] buttons=[?|Wi-Fi status|100%|9:30 am|Turn WiFi off|Forget|Forget|Forget|Messages|Browser]
+- internet-problems (guided-troubleshooting) — stopped at 3/3: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: reconnect-wifi)“WiFi is on but not connected. Click 'Join' next to CoolKids Network.”rings=[] buttons=[?|Wi-Fi status|100%|10:15 am|Turn WiFi off|Forget|Forget|Forget|Messages|Browser]
 
-- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|9:30 am|Messages|Browser|Files|Mail]
+- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|10:15 am|Messages|Browser|Files|Mail]
 
 - unit-12-assessment-sim (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: open-downloads)“You found where downloads collect.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
 
-- a11y-assessment (guided-settings) — stopped at 4/4: Step 4 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: colour-filter-warm)“The screen has a warmer, less glaring tint.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|9:30 am|Minimize|Maximize|✕|Appearance|Display]
+- a11y-assessment (guided-settings) — stopped at 4/4: Step 4 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: colour-filter-warm)“The screen has a warmer, less glaring tint.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|10:15 am|Minimize|Maximize|✕|Appearance|Display]
 
-- final-desktop (guided-desktop) — stopped at 5/6: Step 5 highlights nothing on screen (action: open-clock)“You checked today's date without leaving the desktop.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|9:30 am|Messages|Browser|Files|Mail|Settings]
+- final-desktop (guided-desktop) — stopped at 5/6: Step 5 highlights nothing on screen (action: open-clock)“You checked today's date without leaving the desktop.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|10:15 am|Messages|Browser|Files|Mail|Settings]
 
 - final-browser (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: new-tab)“You have a second tab open.”rings=[] buttons=[Hint|▼|×|+|‹|Reload|Site security|Bookmark this |Reading List|History]
 
@@ -113,4 +107,4 @@
 
 - final-security (guided-security) — stopped at 1/4: Step 1 highlights nothing on screen (action: mark-dangerous, target: Verify your account)“The bank message has been judged correctly.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
 
-- final-settings (guided-settings) — stopped at 3/4: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: night-shift)“The colours are warmer, for looking at late at night.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|9:31 am|Minimize|Maximize|✕|Appearance|Display]
+- final-settings (guided-settings) — stopped at 3/4: Step 3 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: night-shift)“The colours are warmer, for looking at late at night.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|10:16 am|Minimize|Maximize|✕|Appearance|Display]
