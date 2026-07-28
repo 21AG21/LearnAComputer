@@ -162,6 +162,8 @@ const WINDOW_BUTTON: Record<string, string> = {
   "lock-click": "Site security",
   // Messaging
   "create-group": "New group chat",
+  // Troubleshooting
+  "open-force-quit": "System menu",
 };
 
 /**
@@ -506,7 +508,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   const SELECTION_ACTIONS = new Set(["delete", "rename", "restore", "recover", "archive", "mark-spam"]);
   // Row actions are handled exclusively by the My Apps row compound below — a
   // generic "Delete" click acts on whichever row comes first, the wrong app.
-  const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app"]);
+  const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app", "force-quit"]);
   if ((ROW_ACTIONS.has(action) && step.target) || ["close-popup", "add-to-album", "share", "select-day", "set-reminder-text", "save-reminder"].includes(action)) {
     // Row actions: handled by the My Apps compound below. close-popup: only the
     // aria-labeled ✕ is safe — a generic "close" match hits tab-close buttons,
@@ -695,6 +697,16 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
       : undefined;
     const pick = named ?? thumbs[0];
     if (pick) out.push(() => click(pick));
+  }
+
+  // Force Quit dialog: each app row carries its own Force Quit button —
+  // press the target's, never the first one going.
+  if (action === "force-quit" && step.target) {
+    const row = Array.from(root.querySelectorAll<HTMLElement>("div"))
+      .filter((d) => textOf(d).startsWith(step.target!) && d.querySelector("button"))
+      .pop();
+    const btn = row?.querySelector<HTMLElement>("button");
+    if (btn && isReachable(btn)) out.push(() => click(btn));
   }
 
   // Phishing: the step target names the INLINE LINK inside a message, while

@@ -214,8 +214,13 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   }
 
   function handleForceQuit(name: string) {
+    const wasFrozen = frozenApps.find((a) => a.name === name)?.frozen;
     setFrozenApps((prev) => prev.map((a) => a.name === name ? { ...a, closed: true, frozen: false } : a));
     setView("desktop");
+    // Force-quitting the frozen app IS working out which app is stuck — without
+    // this, a learner who reads "(Not Responding)" in the dialog and kills the
+    // app first can never complete the identify objective: the window is gone.
+    if (wasFrozen) tryStep((s) => s.action === "click-frozen");
     tryStep((s) => s.action === "force-quit" && s.target === name);
   }
 
@@ -462,6 +467,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 onClick={handleOpenForceQuit}
                 className={`font-semibold text-gray-700 hover:text-gray-900 ${hl("system-menu") ? pulse + " rounded px-1" : ""}`}
                 title="System menu"
+                aria-label="System menu"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4 inline" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
               </button>

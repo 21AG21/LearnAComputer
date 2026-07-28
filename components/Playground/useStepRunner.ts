@@ -100,15 +100,20 @@ export function useStepRunner<S extends RunnerStep>({
   }, [isAssessment, stepIndex, steps.length, finish]);
 
   /** Assessment: satisfy one specific objective, whatever order it came in. */
+  // Ref mirror, not the state closure: two same-tick completions (one handler
+  // proving two objectives at once) each rebuilt `next` from the same stale
+  // `completed` and the second silently erased the first.
+  const assessDone = useRef<Set<number>>(new Set());
   const markComplete = useCallback(
     (index: number) => {
-      if (completed.has(index)) return;
-      const next = new Set(completed).add(index);
+      if (assessDone.current.has(index)) return;
+      assessDone.current.add(index);
+      const next = new Set(assessDone.current);
       setCompleted(next);
       ding();
       if (next.size >= steps.length) finish();
     },
-    [completed, ding, finish, steps.length],
+    [ding, finish, steps.length],
   );
 
   /**
