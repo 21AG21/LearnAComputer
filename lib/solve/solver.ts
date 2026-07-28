@@ -151,6 +151,12 @@ const WINDOW_BUTTON: Record<string, string> = {
   "open-battery-panel": "Battery status",
   "open-clock": "Open calendar",
   "close-panel": "Close panel",
+  // Browser chrome
+  "new-tab": "New tab",
+  "close-popup": "Close popup",
+  "zoom-in": "Zoom in",
+  "zoom-out": "Zoom out",
+  "lock-click": "Site security",
 };
 
 /**
@@ -472,8 +478,9 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     if (!isReachable(b)) return false;
     // A bare navigation entry is never the action's own control — the sidebar
     // "Trash" matched delete's "trash" synonym and navigated the target away.
-    // Except for go-to-* actions, where the nav entry IS the control ("My Apps").
-    if (!action.startsWith("go-to") && NAV_LABELS.includes(textOf(b))) return false;
+    // Except for go-to-* actions, where the nav entry IS the control ("My Apps"),
+    // and open-downloads, whose toolbar button shares Files' "Downloads" label.
+    if (!action.startsWith("go-to") && action !== "open-downloads" && NAV_LABELS.includes(textOf(b))) return false;
     const label = (textOf(b) || b.getAttribute("aria-label") || "").toLowerCase();
     if (!label || label.length > 32) return false;
     const words = actionWords.split(" ").filter((w) => !["go", "to", "app", "add"].includes(w));
@@ -487,8 +494,10 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   // Row actions are handled exclusively by the My Apps row compound below — a
   // generic "Delete" click acts on whichever row comes first, the wrong app.
   const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app"]);
-  if (ROW_ACTIONS.has(action) && step.target) {
-    // no generic clicks
+  if ((ROW_ACTIONS.has(action) && step.target) || action === "close-popup") {
+    // Row actions: handled by the My Apps compound below. close-popup: only the
+    // aria-labeled ✕ is safe — a generic "close" match hits tab-close buttons,
+    // and anything inside the popup fails the lesson.
   } else if (SELECTION_ACTIONS.has(action) && step.target) {
     const leaves = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(
       (n) => isReachable(n) && textOf(n) === step.target,
@@ -519,6 +528,36 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     }
   } else {
     for (const b of actionButtons.slice(0, 6)) out.push(() => click(b));
+  }
+
+  // The browser's address bar is a div until clicked — click it, and the
+  // autofocused input that appears gets typed into on the next iteration by
+  // the focused-input branch.
+  if (action === "navigate" && value !== null) {
+    for (const el of Array.from(root.querySelectorAll<HTMLElement>("[class*='cursor-text']")).filter(isReachable)) {
+      out.push(() => click(el));
+    }
+  }
+
+  // Some objectives live on a specific practice site (the scam popup only
+  // exists on freegames.example). When the control is nowhere on screen,
+  // navigate there the same way a learner told "go to X and…" would.
+  const ACTION_PAGE: Record<string, string> = {
+    "close-popup": "freegames.example",
+    "cookie-decline": "weather.com",
+    download: "recipebox.example",
+  };
+  const needPage = ACTION_PAGE[action];
+  if (needPage && byLabel(WINDOW_BUTTON[action] ?? "").length === 0 && actionButtons.length === 0) {
+    const addr = Array.from(root.querySelectorAll<HTMLElement>("[class*='cursor-text']")).find(isReachable);
+    if (addr) {
+      out.push(async () => {
+        click(addr);
+        await wait(100);
+        const f = document.activeElement;
+        if (f instanceof HTMLElement && root.contains(f) && isTextInput(f)) await typeInto(f, needPage, { enter: true });
+      });
+    }
   }
 
   // Row actions live on the My Apps tab, but the target's name on a store or
