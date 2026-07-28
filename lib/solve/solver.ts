@@ -859,10 +859,13 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
           spinning = Math.floor(MAX_SPIN / 2); // half a lap of grace once visible
           continue;
         }
-        const step = opts.steps[Math.min(before.progress, total - 1)];
+        // In assessment mode name the first OPEN objective — steps[progress] is
+        // ordinal position, not what is actually unmet, and blamed the wrong step.
+        const openIdx = opts.assessment ? before.objdone.indexOf("0") : -1;
+        const step = opts.steps[openIdx >= 0 ? openIdx : Math.min(before.progress, total - 1)];
         return outcome(
           false,
-          `Step ${before.progress + 1} never completes — ${MAX_SPIN} interactions with its own highlight changed the screen but not the step (action: ${step?.action ?? "?"}${step?.target ? `, target: ${step.target}` : ""})${hiddenTag()}`,
+          `Step ${(openIdx >= 0 ? openIdx : before.progress) + 1} never completes — ${MAX_SPIN} interactions with its own highlight changed the screen but not the step (action: ${step?.action ?? "?"}${step?.target ? `, target: ${step.target}` : ""})${hiddenTag()}`,
         );
       }
     } else {

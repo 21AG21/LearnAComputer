@@ -14,53 +14,51 @@
   56 / 170  (50s)
   58 / 170  (55s)
   60 / 170  (60s)
-  63 / 170  (65s)
+  62 / 170  (65s)
+  63 / 170  (70s)
   69 / 170  (75s)
   72 / 170  (80s)
-  77 / 170  (85s)
-  82 / 170  (90s)
+  76 / 170  (85s)
+  81 / 170  (90s)
   85 / 170  (95s)
   90 / 170  (100s)
   91 / 170  (105s)
-  96 / 170  (110s)
-  99 / 170  (115s)
-  101 / 170  (120s)
-  108 / 170  (125s)
-  111 / 170  (130s)
-  114 / 170  (135s)
-  116 / 170  (140s)
-  118 / 170  (145s)
-  122 / 170  (150s)
-  126 / 170  (155s)
-  131 / 170  (160s)
-  139 / 170  (165s)
-  141 / 170  (170s)
-  146 / 170  (175s)
-  151 / 170  (180s)
-  153 / 170  (185s)
-  154 / 170  (190s)
-  157 / 170  (195s)
-  159 / 170  (200s)
-  160 / 170  (205s)
-  161 / 170  (210s)
-  162 / 170  (215s)
-  163 / 170  (225s)
-  165 / 170  (230s)
-  retry 0 / 16  (235s)
-  retry 1 / 16  (240s)
-  retry 2 / 16  (245s)
-  retry 3 / 16  (250s)
-  retry 4 / 16  (255s)
-  retry 6 / 16  (265s)
-  retry 7 / 16  (275s)
-  retry 9 / 16  (280s)
-  retry 10 / 16  (285s)
-  retry 11 / 16  (290s)
-  retry 12 / 16  (295s)
-  retry 13 / 16  (300s)
-  retry 14 / 16  (310s)
+  95 / 170  (110s)
+  101 / 170  (115s)
+  106 / 170  (120s)
+  111 / 170  (125s)
+  114 / 170  (130s)
+  116 / 170  (135s)
+  118 / 170  (140s)
+  122 / 170  (145s)
+  126 / 170  (150s)
+  138 / 170  (160s)
+  141 / 170  (165s)
+  146 / 170  (170s)
+  151 / 170  (175s)
+  153 / 170  (180s)
+  157 / 170  (185s)
+  158 / 170  (190s)
+  160 / 170  (195s)
+  162 / 170  (200s)
+  163 / 170  (210s)
+  164 / 170  (215s)
+  167 / 170  (220s)
+  retry 0 / 13  (225s)
+  retry 1 / 13  (230s)
+  retry 2 / 13  (235s)
+  retry 3 / 13  (240s)
+  retry 4 / 13  (245s)
+  retry 5 / 13  (250s)
+  retry 6 / 13  (255s)
+  retry 7 / 13  (260s)
+  retry 8 / 13  (265s)
+  retry 9 / 13  (270s)
+  retry 10 / 13  (275s)
+  retry 11 / 13  (280s)
+  retry 12 / 13  (285s)
 
-16 activities cannot be finished:
+13 activities cannot be finished:
 
 - unit-4-assessment (guided-browser) — stopped at 2/5: Step 2 highlights nothing on screen (action: close-popup)“Go to freegames.example and get rid of the pop-up without clicking anything inside it.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
 
@@ -70,21 +68,15 @@
 
 - unit-7-assessment (guided-photos) — stopped at 3/7: Step 3 highlights nothing on screen (action: share)“Send the fixed photo to Grandma.”rings=[] buttons=[Hint|▼|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Garden|+ New Album]
 
-- unit-8-assessment (guided-app-store) — stopped at 2/6: Step 2 highlights nothing on screen (action: go-to-installed)“Go and look at everything installed on this computer.”rings=[] buttons=[Hint|▼|App Market|My Apps|← Back|Installed ✓]
-
 - unit-10-assessment (guided-security) — stopped at 2/6: Step 2 highlights nothing on screen (action: mark-safe, target: Complete Your Purchase)“Decide about 'Complete Your Purchase'.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
 
-- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|2:08 pm|Messages|Browser|Files|Mail]
+- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|2:30 pm|Messages|Browser|Files|Mail]
 
 - unit-12-assessment-sim (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: open-downloads)“You found where downloads collect.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
-
-- a11y-assessment (guided-settings) — stopped at 4/4: Step 4 never completes — 14 interactions with its own highlight changed the screen but not the step (action: toggle, target: colour-filter-warm)“The screen has a warmer, less glaring tint.”rings=[] buttons=[Hint|▼|Wi-Fi status|100%|2:08 pm|Minimize|Maximize|✕|Appearance|Display]
 
 - final-browser (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: new-tab)“You have a second tab open.”rings=[] buttons=[Hint|▼|×|+|‹|Reload|Site security|Bookmark this |Reading List|History]
 
 - final-calendar (guided-calendar) — stopped at 1/7: Step 1 highlights nothing on screen (action: save-event)“The event is saved, not still being edited.”rings=[] buttons=[Hint|▼|Month|Day|Reminders|Personal|Work|+ New Event|Save|Cancel]
-
-- final-apps (guided-app-store) — stopped at 2/6: Step 2 highlights nothing on screen (action: go-to-installed)“You are looking at what is already on the computer, not the store.”rings=[] buttons=[Hint|▼|App Market|My Apps|← Back|Installed ✓]
 
 - final-photos (guided-photos) — stopped at 2/6: Step 2 highlights nothing on screen (action: delete, target: Bookshelf)“The bookshelf photo is in Recently Deleted.”rings=[] buttons=[Hint|▼|Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Trip]
 
