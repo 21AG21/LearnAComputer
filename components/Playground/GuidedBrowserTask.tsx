@@ -588,8 +588,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       case "open-result":
         return kind === "search-result" && name === step.title;
       case "delete-download":
+        // The download rows only exist while the Downloads panel is open. With it
+        // closed, the ring pointed at nothing and the learner had no glow at all —
+        // the way forward is the Downloads button that opens the panel.
+        if (menu !== "downloads") return kind === "downloads-btn";
         return kind === "download-delete" && name === step.file;
       case "open-download":
+        if (menu !== "downloads") return kind === "downloads-btn";
         return kind === "download-open" && name === step.file;
       default:
         return false;
