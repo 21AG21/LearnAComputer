@@ -22,7 +22,8 @@ what moved, what's proven, what's still a demo risk.
 | Reading level ≤ grade 8, enforced at build | **Done** — worst intro was 10.9, now all ≤ 5.6 | `scripts/check-lessons.py` |
 | Curriculum order sanity | **Done** — audit script + Keyboard Tour split + scaffolding sentences | `scripts/audit-order.py` |
 | Demo deployment | **Existing** — Vercel deploy from `main`; every push updates it | `CLAUDE.md` |
-| Sales playbook (cold call, demo, objections, implementation) | **Done, v1** — keep current as product moves | `docs/SALES_PLAYBOOK.md` |
+| Sales playbook (cold call, demo, objections) | **Done, v1** | `docs/SALES_PLAYBOOK.md` |
+| Implementation runbook (setup, pilot plan, session scripts, troubleshooting matrix, all operator prompts) | **Done, v1** | `docs/IMPLEMENTATION_GUIDE.md` |
 | Accounts + progress sync (multi-machine demo) | **Done** — email + code sign-in, merge-on-signin | `docs/ACCOUNTS_AND_SYNC.md` |
 | Instructor visibility (the paid feature) | **Designed, not built** — Stage J of the master plan | `docs/PROGRESS_MONITORING.md` |
 | Certificates | **Not built** — Stage J | `docs/MASTER_PLAN.md` §6.3 |
