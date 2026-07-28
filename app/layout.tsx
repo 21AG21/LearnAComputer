@@ -5,6 +5,7 @@ import PageTransition from "@/components/PageTransition";
 import ThemeToggle, { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
 import AuthProvider from "@/components/AuthProvider";
 import StorageNotice from "@/components/StorageNotice";
+import SmallScreenGuard from "@/components/SmallScreenGuard";
 import AccountNav from "@/components/AccountNav";
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </nav>
           <StorageNotice />
+          <SmallScreenGuard />
           <PageTransition>{children}</PageTransition>
         </AuthProvider>
       </body>
