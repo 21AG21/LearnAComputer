@@ -19,9 +19,34 @@ export function checkCopyPasteTask(
   }
 }
 
+/**
+ * Typing checks forgive what keyboards do on their own: a double space, a smart
+ * quote the browser swapped in, a straight dash for an em-dash. `exact` keeps
+ * judging capitals and punctuation — that is what those lessons teach — but even
+ * an exact lesson must not fail someone over whitespace or autocorrected quotes
+ * they cannot see.
+ */
 export function checkTypeText(targetText: string, submitted: string, exact = false): boolean {
-  if (exact) return submitted.trim() === targetText.trim();
-  return submitted.trim().toLowerCase() === targetText.trim().toLowerCase();
+  const a = normalize(submitted);
+  const b = normalize(targetText);
+  if (exact) return a === b;
+  return a.toLowerCase() === b.toLowerCase();
+}
+
+/**
+ * The word the learner should look at when a typing check fails: the index of the
+ * first word (in the target's words) that differs. `null` means the texts match.
+ * "Not quite, try again" tells a beginner nothing; "check the highlighted word"
+ * tells them where to look.
+ */
+export function firstMismatchWord(targetText: string, submitted: string, exact = false): number | null {
+  const fold = (s: string) => (exact ? normalize(s) : normalize(s).toLowerCase());
+  const want = fold(targetText).split(" ");
+  const got = fold(submitted).split(" ");
+  for (let i = 0; i < want.length; i++) {
+    if (got[i] !== want[i]) return i;
+  }
+  return got.length > want.length ? want.length - 1 : null;
 }
 
 export function checkShapeScore(score: number, targetScore: number): boolean {

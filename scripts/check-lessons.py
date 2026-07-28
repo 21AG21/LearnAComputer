@@ -200,7 +200,54 @@ for les in lessons:
             )
 
 
+# 8. Reading level. The audience reads at a middle-school level at best, and some
+# read English as a second language. drDigitalIntro is the teaching text, so it is
+# the string held to a grade. Above 8 is a warning (rewrite soon); above 10 the
+# build fails — nobody in the target audience can comfortably read grade-10 prose.
+warnings = []
+
+
+def _syllables(word):
+    word = word.lower().strip(".,!?;:'\"()-•")
+    if not word:
+        return 0
+    groups = re.findall(r"[aeiouy]+", word)
+    n = len(groups)
+    if word.endswith("e") and n > 1:
+        n -= 1
+    return max(n, 1)
+
+
+def _fk_grade(text):
+    # A bullet is a sentence for reading purposes: it is read as one unit.
+    sentences = [s for s in re.split(r"[.!?\n]+", text) if s.strip()]
+    words = text.split()
+    if not sentences or not words:
+        return 0.0
+    syl = sum(_syllables(w) for w in words)
+    return 0.39 * (len(words) / len(sentences)) + 11.8 * (syl / len(words)) - 15.59
+
+
+FK_WARN, FK_FAIL, INTRO_WARN_WORDS = 8.0, 10.0, 180
+
+for les in lessons:
+    intro = les.get("drDigitalIntro", "")
+    grade = _fk_grade(intro)
+    if grade > FK_FAIL:
+        errors.append(
+            f"READING LEVEL: {les['slug']} intro reads at grade {grade:.1f} (limit {FK_FAIL:.0f}) — shorter sentences, plainer words"
+        )
+    elif grade > FK_WARN:
+        warnings.append(f"READING LEVEL: {les['slug']} intro reads at grade {grade:.1f} — aim for {FK_WARN:.0f} or below")
+    if len(intro.split()) > INTRO_WARN_WORDS:
+        warnings.append(f"INTRO LENGTH: {les['slug']} intro is {len(intro.split())} words — a wall of text for this audience")
+
+
 # Report
+if warnings:
+    print(f"{len(warnings)} warning(s):")
+    for w in warnings:
+        print(f"  ~ {w}")
 if errors:
     print(f"\n{len(errors)} ERROR(S) FOUND:\n")
     for e in errors:

@@ -45,6 +45,14 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
   const [score, setScore] = useState(0);
   const nextId = useRef(0);
   const finished = useRef(false);
+  /**
+   * Shapes that reached the bottom un-clicked. This is the first activity in the
+   * whole course — often somebody's first minutes ever holding a mouse — and each
+   * escape quietly slows the fall, down to about half speed. A confident clicker
+   * never lets one escape and never notices; a struggling one stops feeling like
+   * the game is running away from them. There is no fail state either way.
+   */
+  const escaped = useRef(0);
 
   useEffect(() => {
     const spawnInterval = setInterval(() => {
@@ -60,9 +68,16 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
     }, SPAWN_MS);
 
     const fallInterval = setInterval(() => {
-      setShapes((prev) =>
-        prev.map((s) => ({ ...s, top: s.top + FALL_PERCENT_PER_TICK })).filter((s) => s.top < 102)
-      );
+      const perTick = FALL_PERCENT_PER_TICK / (1 + Math.min(escaped.current, 8) * 0.12);
+      setShapes((prev) => {
+        const remaining: FallingShape[] = [];
+        for (const s of prev) {
+          const next = { ...s, top: s.top + perTick };
+          if (next.top >= 102) escaped.current += 1;
+          else remaining.push(next);
+        }
+        return remaining;
+      });
     }, TICK_MS);
 
     return () => {

@@ -1,11 +1,11 @@
 {
   "slug": "kb-tab-practical",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Keyboard Tour",
+  "module": "Special Keys",
   "order": 212,
   "title": "Tab in action: pick a color",
   "videoUrl": "",
-  "drDigitalIntro": "Tab is not just for forms — you can use it to move around any page without touching the mouse.\n• On a real website, pressing Tab jumps between links, buttons, and input boxes in order.\n• You can see which element has focus because it gets a visible border or highlight.\n• Press Enter when the right one is highlighted to activate it.\n• Try this now: navigate to pickacolor.example and complete the color sequence using only Tab and Enter.",
+  "drDigitalIntro": "Tab is not just for forms — you can use it to move around any page without touching the mouse.\n• On a real website, pressing Tab jumps between links, buttons, and input boxes in order.\n• You can see which element has focus because it gets a visible border or highlight.\n• Press Enter when the right one is highlighted to activate it.\n• Try this now: navigate to pickacolor.example and complete the color sequence using only Tab and Enter.\n• You will learn the browser properly in Unit 4 — today the glowing highlights walk you to the page, and your only job is the keyboard.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Complete the color sequence using Tab and Enter",

@@ -1,11 +1,11 @@
 {
   "slug": "kb-doggo",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Keyboard Tour",
+  "module": "Special Keys",
   "order": 214,
   "title": "Typing challenge: reply to Doggo",
   "videoUrl": "",
-  "drDigitalIntro": "You have learned the whole keyboard — now let's put it to work!\n• Doggo is hungry and sent you a message in the Messages app.\n• Open Messages from the dock, find Doggo in the contacts list, and type a reply.\n• You will need letters, numbers, spaces, punctuation, and the Shift key for capitals.\n• This is exactly how you send a message on a real computer — the same steps work in any messaging app.",
+  "drDigitalIntro": "You have learned the whole keyboard — now let's put it to work!\n• Doggo is hungry and sent you a message in the Messages app.\n• Open Messages from the dock, find Doggo in the contacts list, and type a reply.\n• You will need letters, numbers, spaces, punctuation, and the Shift key for capitals.\n• This is exactly how you send a message on a real computer — the same steps work in any messaging app.\n• Messages gets its own unit later (Unit 5) — today the highlights show you where to click, and the typing is the lesson.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "Reply to Doggo's message",

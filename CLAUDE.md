@@ -13,10 +13,17 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 ```sh
 npm run dev          # dev server on :3000
 # /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
+# /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
+python3 scripts/check-lessons.py  # lesson validation (targets, capitalization, reading level)
+python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 ```
+
+After touching any sim component or lesson steps, run **solve-check as well as
+mount-check** — mounting proves an activity renders; solving proves a learner can
+finish it, and the two unfinishable-lesson bugs were invisible to everything else.
 
 ## Project Structure
 
@@ -32,11 +39,15 @@ app/
   login/, auth/callback/  # Passwordless sign-in (email + code) and the magic-link landing
   error.tsx, not-found.tsx # Friendly failure pages — never a blank screen or a bare 404
   dev/mount-check/        # Dev-only activity mount harness
+  dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
 
 components/
   AuthProvider.tsx         # Supabase session + progress sync (pull/merge on sign-in, debounced push)
   AccountNav.tsx           # Nav account corner: email, sync state, sign out
   MountCheck.tsx           # Dev-only harness behind /dev/mount-check
+  SolveCheck.tsx           # Dev-only harness behind /dev/solve-check (drives lib/solve/)
+  ActivityErrorBoundary.tsx # One sim crash never blanks the lesson page
+  StorageNotice.tsx        # One calm banner when localStorage cannot save
   DrDigital.tsx            # Speech-bubble mascot (intro / success / hint moods)
   DrDigitalAvatar.tsx      # Reusable avatar image
   HomeGreeting.tsx         # Client component for progress-aware homepage message
@@ -100,6 +111,10 @@ lib/
   supabase.ts              # Browser client, or null when the env vars are absent
   chat.ts                  # localStorage read/write for messaging threads
   simState.ts              # localStorage read/write for persistent sim state (lac-sim)
+  safeStorage.ts           # localStorage wrapper all three stores go through: in-memory
+                           # fallback when writes fail (private browsing, locked-down
+                           # machines) + one lac-storage-degraded event for StorageNotice
+  solve/                   # Dev-only auto-solver behind /dev/solve-check (gestures + loop)
 
 public/playgrounds/        # Static images used by playground components
 ```

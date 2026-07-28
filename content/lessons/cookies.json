@@ -5,7 +5,7 @@
   "order": 494,
   "title": "Cookies: Website Memory",
   "videoUrl": "",
-  "drDigitalIntro": "A cookie is a little note a website leaves on your computer so it remembers you.\n• Helpful cookies: keeping you logged in, remembering your shopping cart.\n• Tracking cookies: advertisers plant the same cookie on many sites so they can follow you everywhere and build a profile of what you read, search, and buy.\n• That's why cookie banners ask permission — and why \"Decline\" or \"Reject non-essential\" is the safe default.",
+  "drDigitalIntro": "A cookie is a small note a website leaves on your computer so it can remember you.\n• Some cookies help you. A cookie is why a shop still has your basket after you close the page, and why you do not have to log in every single time.\n• Some cookies watch you. Advertisers put the same cookie on many sites, then follow you from one to the next and build up a picture of what you read and what you buy.\n• That is why sites ask. When a cookie banner appears, Decline is a safe answer. The page still works, and you have said no to being followed.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Respond to a cookie banner",

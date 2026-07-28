@@ -1,6 +1,7 @@
 "use client";
 
 import { clearSimState } from "./simState";
+import { storageGet, storageSet } from "./safeStorage";
 
 // Progress is persisted in localStorage so it survives tab closes and returns across days.
 // The read/write shape is intentionally small so it can be swapped for a real account + DB
@@ -18,7 +19,7 @@ interface ProgressState {
 function readState(): ProgressState {
   if (typeof window === "undefined") return { version: SCHEMA_VERSION, completedSlugs: [] };
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = storageGet(STORAGE_KEY);
     if (!raw) return { version: SCHEMA_VERSION, completedSlugs: [] };
     const parsed = JSON.parse(raw);
     // Unknown or future version → start fresh rather than corrupting with bad data.
@@ -34,12 +35,11 @@ function readState(): ProgressState {
 
 function writeState(state: ProgressState) {
   if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // localStorage can throw in private-browsing mode or when the quota is exceeded.
-    // Degrade silently — the learner loses persistence for this session only.
-  }
+  // When localStorage is unavailable (private browsing, locked-down machines),
+  // safeStorage keeps the state in memory so this session still works, and fires
+  // one event so StorageNotice can say so. Silence here used to mean progress
+  // vanishing within the session.
+  storageSet(STORAGE_KEY, JSON.stringify(state));
 }
 
 /**

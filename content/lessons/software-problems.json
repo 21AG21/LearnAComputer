@@ -5,7 +5,7 @@
   "order": 1115,
   "title": "Software Problems",
   "videoUrl": "",
-  "drDigitalIntro": "If force-quitting and restarting do not fix an app, the next step is to delete it and reinstall it.\n• Deleting an app removes it completely — any bugs or corrupted files go with it.\n• Reinstalling downloads a clean, fresh copy. Your documents and photos are not affected.\n• Where to reinstall: open App Market and search for the app, then click Install.\n• When to do this: after the app crashes repeatedly, shows unexpected errors after an update, or refuses to open even after a restart.\n• After reinstalling, open the app and test it to confirm the problem is gone.",
+  "drDigitalIntro": "When force-quitting and restarting do not fix an app, the next thing to try is deleting it and installing it again.\n• Deleting takes the whole app away, and any damaged bits of it go too.\n• Installing brings back a clean copy. Your own documents and photos are not touched — they are not part of the app.\n• Where to do it: open App Market, search for the app, and click Install.\n• When to do it: the app keeps crashing, or it started going wrong after an update, or it will not open even after you restart the computer.\n• Afterwards, open the app and try it. That is how you know the fix worked.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You deleted and reinstalled a broken app to fix it",

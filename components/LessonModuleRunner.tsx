@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DrDigital from "@/components/DrDigital";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
+import ActivityErrorBoundary from "@/components/ActivityErrorBoundary";
 import LessonMedia from "@/components/LessonMedia";
 import { markComplete, getCompletedSlugs } from "@/lib/progress";
 import type { ModuleRoute } from "@/lib/lessons";
@@ -308,13 +309,17 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
         </div>
       ) : hasGate ? (
         <div className="hidden lg:block flex-1 min-w-0 p-4">
-          <LessonPlaygroundPane
-            key={activityAttempt}
-            task={subLesson.playgroundTask}
-            started={started}
-            onResult={handleResult}
-            onExit={() => setStarted(false)}
-          />
+          {/* One crashed sim must not blank the lesson page — the boundary keeps the
+              left panel and its skip button alive, and Try again remounts the sim. */}
+          <ActivityErrorBoundary onRetry={() => setActivityAttempt((n) => n + 1)}>
+            <LessonPlaygroundPane
+              key={activityAttempt}
+              task={subLesson.playgroundTask}
+              started={started}
+              onResult={handleResult}
+              onExit={() => setStarted(false)}
+            />
+          </ActivityErrorBoundary>
         </div>
       ) : null}
     </div>

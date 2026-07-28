@@ -5,7 +5,7 @@
   "order": 840,
   "title": "Updating Apps",
   "videoUrl": "",
-  "drDigitalIntro": "App updates bring new features and security fixes.\n• Keeping apps updated protects you from bugs and security holes.\n• Most devices can update apps automatically.\n• Updates are free — even for paid apps.",
+  "drDigitalIntro": "An update is a newer version of an app you already have.\n• Updates fix mistakes in the app, and they close the holes that thieves use to get in. An old app is the easy way into a computer.\n• Updates often add new things the app can do, too.\n• Most computers can update apps on their own. That is a setting worth leaving on.\n• Updates are free, even for an app you paid for. If something asks you to pay to update, that is not an update.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You installed and updated an app",

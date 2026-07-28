@@ -1,11 +1,11 @@
 {
   "slug": "kb-arrow-keys",
   "unit": "Unit 2: Keyboard and Typing",
-  "module": "Keyboard Tour",
+  "module": "Special Keys",
   "order": 213,
   "title": "Arrow keys",
   "videoUrl": "",
-  "drDigitalIntro": "The four arrow keys move you around — no mouse needed.\n• Press the right or down arrow to move to the next item.\n• Press the left or up arrow to move back.\n• Press Enter to open whichever item is highlighted.\n• Arrow keys work in file lists, menus, web pages, and many other places.",
+  "drDigitalIntro": "The four arrow keys move you around — no mouse needed.\n• Press the right or down arrow to move to the next item.\n• Press the left or up arrow to move back.\n• Press Enter to open whichever item is highlighted.\n• Arrow keys work in file lists, menus, web pages, and many other places.\n• The Files app gets its own unit later (Unit 3) — for now, just follow the glow and drive it with the keyboard.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Navigate a file list using only the arrow keys",

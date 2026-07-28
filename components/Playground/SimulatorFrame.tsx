@@ -79,7 +79,17 @@ export default function SimulatorFrame({
   if (freePlay) return <div className="h-full w-full overflow-hidden">{children}</div>;
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden select-none relative">
+    <div
+      className="h-full flex flex-col bg-white overflow-hidden select-none relative"
+      // Read by the solve-check harness (/dev/solve-check) to tell whether a gesture
+      // advanced the activity. Parsing "Step 3 of 9" out of the banner text worked
+      // until the banner was translated or reworded; an attribute is the contract.
+      data-sim-frame=""
+      data-sim-done={done ? "1" : "0"}
+      data-sim-progress={isAssessment ? doneCount : Math.min(stepIndex ?? 0, totalSteps ?? 0)}
+      data-sim-total={isAssessment ? objTotal : (totalSteps ?? 0)}
+      data-sim-mode={isAssessment ? "assessment" : "guided"}
+    >
       {/* Guidance banner */}
       <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
         <div className="flex items-center gap-3">

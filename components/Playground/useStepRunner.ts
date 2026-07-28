@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ObjectiveItem } from "./SimulatorFrame";
 
 export type SimMode = "guided" | "assessment";
@@ -53,7 +53,13 @@ export function useStepRunner<S extends RunnerStep>({
     onStepComplete?.();
   }, [flashMs, onStepComplete]);
 
+  // Idempotent, and via a ref rather than `done`, because two completions in one
+  // tick both read the same `done`. Announcing success twice fired the lesson's
+  // completion twice.
+  const finishedRef = useRef(false);
   const finish = useCallback(() => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
     setDone(true);
     setTimeout(() => onResult(true), finishDelayMs);
   }, [finishDelayMs, onResult]);
@@ -62,9 +68,20 @@ export function useStepRunner<S extends RunnerStep>({
   const completeStep = useCallback(() => {
     ding();
     setCompleted((prev) => new Set(prev).add(stepIndex));
-    if (stepIndex + 1 >= steps.length) finish();
     setStepIndex((i) => i + 1);
-  }, [ding, finish, stepIndex, steps.length]);
+  }, [ding, stepIndex]);
+
+  /**
+   * Finishing is decided by where the walk ended up, not by the handler that
+   * happened to run last. Two completions in the same tick — a double-click whose
+   * click and dblclick handlers both satisfy the step — used to read the same
+   * stale `stepIndex`, so the index jumped over the last step and the "is this the
+   * final one?" test never came true. The activity stayed silently unfinished with
+   * every step done. Found by /dev/solve-check on the very first lesson it played.
+   */
+  useEffect(() => {
+    if (!isAssessment && steps.length > 0 && stepIndex >= steps.length) finish();
+  }, [isAssessment, stepIndex, steps.length, finish]);
 
   /** Assessment: satisfy one specific objective, whatever order it came in. */
   const markComplete = useCallback(

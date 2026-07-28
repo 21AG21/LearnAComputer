@@ -118,7 +118,12 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
     switch (step.action) {
-      case "open-email": return kind === "email-row" && name === step.target;
+      case "open-email":
+        // The reading pane replaces the list, so while a different email is open
+        // the wanted row does not exist on screen. Glowing an invisible row
+        // stranded learners: the way forward is the ✕ that closes this email.
+        if (selectedEmail && selectedEmail.subject !== step.target) return kind === "close-reading";
+        return kind === "email-row" && name === step.target;
       case "compose": return kind === "compose-btn";
       case "set-to": return kind === "field-to";
       case "set-cc": return kind === "field-cc";
@@ -419,7 +424,13 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
                     <h3 className="font-semibold text-sm">{selectedEmail.subject}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">From: {selectedEmail.from} · {selectedEmail.date}</p>
                   </div>
-                  <button onClick={() => setSelectedEmail(null)} className="text-gray-400 hover:text-gray-600 flex-shrink-0">✕</button>
+                  <button
+                    onClick={() => setSelectedEmail(null)}
+                    aria-label="Close email"
+                    className={`text-gray-400 hover:text-gray-600 flex-shrink-0 rounded px-1 ${hl("close-reading") ? pulse : ""}`}
+                  >
+                    ✕
+                  </button>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   <button onClick={handleReply} className={`px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-all inline-flex items-center gap-1 ${hl("reply-btn") ? pulse : ""}`}><ReplyIcon size={12} /> Reply</button>

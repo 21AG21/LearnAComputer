@@ -5,7 +5,7 @@
   "order": 290,
   "title": "Clean up a messy email",
   "videoUrl": "",
-  "drDigitalIntro": "Time to put everything together — this exercise uses every keyboard skill from Unit 2.\n• Someone typed this email in a hurry and made several mistakes: words appear twice in a row, sentences start with lowercase letters, and days of the week are not capitalized.\n• Open your Drafts folder, then open the draft to start editing it.\n• Use the arrow keys to move to the mistakes and Delete to remove the extra words.\n• When the email looks correct, click Send — sending it is the whole point.",
+  "drDigitalIntro": "Time to put it all together. This one uses every keyboard skill from Unit 2.\n• Someone wrote this email in a hurry. Words got typed twice, sentences start with a small letter, and the days of the week are not capitalized.\n• Open your Drafts folder, then open the draft to start editing.\n• Use the arrow keys to reach each mistake and Delete to take out the extra words.\n• When it reads properly, click Send. Sending it is the point.\n• The Mail app gets its own unit later (Unit 6) — the highlights lead you to the draft, and the keyboard work is the test.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "Fix the messy draft and send it",
