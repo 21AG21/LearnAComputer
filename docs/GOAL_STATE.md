@@ -16,7 +16,7 @@ what moved, what's proven, what's still a demo risk.
 
 | Area | State | Proof |
 |---|---|---|
-| Every lesson completable, mechanically proven | **In progress** — headless `npm run solve-check` is canonical; 115→135→141→144→148→150→153 of 166 across fix rounds; **every guided lesson passes** — the 13 remaining are all assessment-mode objective chains (solver capability, not learner risk; the round also surfaced one real content bug, WeatherNow's missing permission prompt) | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 132 playable activities pass, zero failures**, including every guided lesson AND all assessments. (Earlier ledger entries said "of 166" — that denominator was an accounting error; the playable set has always been 132: 198 lessons − 28 explanation-only − 38 exempt, which are 18 real-world missions plus 20 stepless activity types.) The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
 | Reading level ≤ grade 8, enforced at build | **Done** — worst intro was 10.9, now all ≤ 5.6 | `scripts/check-lessons.py` |
@@ -64,20 +64,43 @@ have stranded a real learner mid-lesson:
 5. Browser: step glowed a download row inside a closed Downloads panel.
 6. Files: completing "arrow until highlighted" wiped the selection, making the
    very next step ("press Enter to open it") impossible by keyboard.
+7. App Market: WeatherNow asked for no permissions, so final-apps'
+   "read what it asked for and agreed" objective was impossible as authored —
+   it now asks for Location, and updating-apps teaches the Allow step.
+8. App Market: installs persist across lessons (by design), so a learner who
+   installed the app earlier met an impossible targetless install objective —
+   mount seeding now un-installs the select-app target too.
+9. Troubleshooting: force-quitting the frozen app never satisfied "work out
+   which app is stuck" — once the window was gone the objective was
+   unreachable; force-quitting the frozen app now completes it.
+10. `useStepRunner.markComplete` rebuilt its set from the state closure, so
+    two objective completions in one tick silently dropped the first — any
+    handler proving two objectives at once lost one.
 
 ## Handoff for the next session
 
-Start here: `npm run solve-check` (dev server on :3000 first). The 18 failures
-in `docs/solve-check-latest.txt` are all assessments — each needs the solver
-taught a multi-stage objective chain (install-with-permissions, share-via,
-force-quit menus, calendar save flows). The debugging loop that works: filtered
-run → read the solver trace (`iter` lines + ring contents) → if stuck, add a
-`[sim]`-prefixed console.log (the runner relays them) → fix → single-lesson
-retest → full run → commit. Seven real learner-stranding bugs were found under
-"solver" failures this way — assume each cluster may hide one.
+Start here: `npm run solve-check` (dev server on :3000 first) — it should
+report **all 132 playable activities pass**. If a change regresses that,
+the debugging loop that works: filtered run → read the solver trace (`iter`
+lines now name what each gesture clicked) → if stuck, add a `[sim]`-prefixed
+console.log (the runner relays them) → fix → single-lesson retest → full run
+→ commit. Ten real learner-stranding bugs were found under "solver" failures
+this way — assume any new failure may hide one. Remaining goal work lives in
+the worst-screen watchlist above (instructor view, site chrome) and Stage C
+(task #123).
 
 ## Session log
 
+- **2026-07-28:** **Solve-check complete: all 132 playable activities pass,
+  zero failures — every guided lesson and every assessment.** The last 13
+  failures fell in one day of cluster-by-cluster work (app store, browser,
+  messaging, email, photos, calendar, security, troubleshooting), each fixed
+  by teaching the solver the sim's real vocabulary (aria-labels, alt text,
+  phase ladders that never step backwards) — and four of them hid real
+  product bugs, now items 7–10 in the tally above. The messaging and
+  troubleshooting sims also gained aria-labels on icon-only buttons, a real
+  accessibility improvement. The old "of 166" denominator in this ledger was
+  an accounting error; the playable set has always been 132.
 - **2026-07-27 (this session):** Master plan written and pushed. Stage A
   (solve-check harness) built — found and fixed a completion-race in
   `useStepRunner` affecting every guided sim, plus the email reading-pane

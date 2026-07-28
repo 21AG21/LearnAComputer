@@ -8,80 +8,34 @@
   36 / 170  (20s)
   41 / 170  (25s)
   45 / 170  (30s)
-  49 / 170  (35s)
+  48 / 170  (35s)
   51 / 170  (40s)
   54 / 170  (45s)
   56 / 170  (50s)
   58 / 170  (55s)
   60 / 170  (60s)
-  62 / 170  (65s)
-  63 / 170  (70s)
-  69 / 170  (75s)
-  72 / 170  (80s)
-  76 / 170  (85s)
-  81 / 170  (90s)
-  85 / 170  (95s)
-  90 / 170  (100s)
-  91 / 170  (105s)
-  95 / 170  (110s)
-  101 / 170  (115s)
-  106 / 170  (120s)
-  111 / 170  (125s)
-  114 / 170  (130s)
-  116 / 170  (135s)
-  118 / 170  (140s)
-  122 / 170  (145s)
-  126 / 170  (150s)
-  138 / 170  (160s)
-  141 / 170  (165s)
-  146 / 170  (170s)
-  151 / 170  (175s)
-  153 / 170  (180s)
-  157 / 170  (185s)
-  158 / 170  (190s)
-  160 / 170  (195s)
-  162 / 170  (200s)
-  163 / 170  (210s)
-  164 / 170  (215s)
-  167 / 170  (220s)
-  retry 0 / 13  (225s)
-  retry 1 / 13  (230s)
-  retry 2 / 13  (235s)
-  retry 3 / 13  (240s)
-  retry 4 / 13  (245s)
-  retry 5 / 13  (250s)
-  retry 6 / 13  (255s)
-  retry 7 / 13  (260s)
-  retry 8 / 13  (265s)
-  retry 9 / 13  (270s)
-  retry 10 / 13  (275s)
-  retry 11 / 13  (280s)
-  retry 12 / 13  (285s)
+  63 / 170  (65s)
+  66 / 170  (70s)
+  71 / 170  (75s)
+  77 / 170  (80s)
+  82 / 170  (85s)
+  87 / 170  (90s)
+  93 / 170  (95s)
+  98 / 170  (100s)
+  104 / 170  (105s)
+  111 / 170  (110s)
+  114 / 170  (115s)
+  115 / 170  (120s)
+  121 / 170  (125s)
+  124 / 170  (130s)
+  131 / 170  (135s)
+  139 / 170  (140s)
+  144 / 170  (145s)
+  149 / 170  (150s)
+  153 / 170  (155s)
+  157 / 170  (160s)
+  159 / 170  (165s)
+  162 / 170  (170s)
+  165 / 170  (175s)
 
-13 activities cannot be finished:
-
-- unit-4-assessment (guided-browser) — stopped at 2/5: Step 2 highlights nothing on screen (action: close-popup)“Go to freegames.example and get rid of the pop-up without clicking anything inside it.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
-
-- unit-5-assessment (guided-messaging) — stopped at 1/8: Step 1 highlights nothing on screen (action: attach-photo)“Send a photo to someone.”rings=[] buttons=[Hint|▼|+|AlexHey! What'|JordanFree to |SamAt work|GrandmaMiss yo|DoggoWoof!|Video Call|+]
-
-- unit-6-assessment (guided-email) — stopped at 1/6: Step 1 highlights nothing on screen (action: set-body)“Say something in your reply.”rings=[] buttons=[Hint|▼|Compose|Inbox5|Sent|Drafts|Spam|Archive]
-
-- unit-7-assessment (guided-photos) — stopped at 3/7: Step 3 highlights nothing on screen (action: share)“Send the fixed photo to Grandma.”rings=[] buttons=[Hint|▼|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Garden|+ New Album]
-
-- unit-10-assessment (guided-security) — stopped at 2/6: Step 2 highlights nothing on screen (action: mark-safe, target: Complete Your Purchase)“Decide about 'Complete Your Purchase'.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
-
-- unit-11-assessment (guided-troubleshooting) — stopped at 4/5: Step 4 highlights nothing on screen (action: open-force-quit)“Normal closing will not work on it. Find the system menu that can.”rings=[] buttons=[Hint|▼|?|Wi-Fi status|100%|2:30 pm|Messages|Browser|Files|Mail]
-
-- unit-12-assessment-sim (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: open-downloads)“You found where downloads collect.”rings=[] buttons=[Hint|▼|×|+|Reload|Bookmark this |Reading List|History|Downloads|New Window]
-
-- final-browser (guided-browser) — stopped at 1/6: Step 1 highlights nothing on screen (action: new-tab)“You have a second tab open.”rings=[] buttons=[Hint|▼|×|+|‹|Reload|Site security|Bookmark this |Reading List|History]
-
-- final-calendar (guided-calendar) — stopped at 1/7: Step 1 highlights nothing on screen (action: save-event)“The event is saved, not still being edited.”rings=[] buttons=[Hint|▼|Month|Day|Reminders|Personal|Work|+ New Event|Save|Cancel]
-
-- final-photos (guided-photos) — stopped at 2/6: Step 2 highlights nothing on screen (action: delete, target: Bookshelf)“The bookshelf photo is in Recently Deleted.”rings=[] buttons=[Hint|▼|Search|All Photos|Favorites|Recently Delet|Vacation|Family|Pets|Trip]
-
-- final-email (guided-email) — stopped at 5/7: Step 5 highlights nothing on screen (action: archive, target: Meeting Tuesday)“The meeting email is filed away rather than left in the inbox.”rings=[] buttons=[Hint|▼|Compose|Inbox5|Sent1|Drafts|Spam|Archive]
-
-- final-messaging (guided-messaging) — stopped at 3/7: Step 3 highlights nothing on screen (action: add-to-group, target: sam)“Sam is in it too.”rings=[] buttons=[Hint|▼|+|AlexHey! What'|JordanFree to |SamAt work|GrandmaMiss yo|DoggoWoof!|Video Call|+]
-
-- final-security (guided-security) — stopped at 1/4: Step 1 highlights nothing on screen (action: mark-dangerous, target: Verify your account)“The bank message has been judged correctly.”rings=[] buttons=[Hint|▼|Passwords|Login|Phishing|Privacy|?|?|?|?]
+Every one of the 132 playable activities can be finished.
