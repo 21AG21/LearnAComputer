@@ -25,13 +25,13 @@ export default function HomeProgress({ modules }: { modules: ModuleSummary[] }) 
 
   return (
     <div className="rounded-xl border border-gray-200 p-5 dark:border-gray-800">
-      <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+      <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
         Where you are
       </h2>
 
       <p className="mt-3 text-3xl font-bold tabular-nums">
         {done}
-        <span className="text-lg font-normal text-gray-400 dark:text-gray-500"> / {total}</span>
+        <span className="text-lg font-normal text-gray-500 dark:text-gray-400"> / {total}</span>
       </p>
       <p className="text-sm text-gray-500 dark:text-gray-400">lessons finished</p>
 
@@ -44,7 +44,7 @@ export default function HomeProgress({ modules }: { modules: ModuleSummary[] }) 
 
       {next ? (
         <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-800">
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
             Up next
           </p>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{next.unit}</p>

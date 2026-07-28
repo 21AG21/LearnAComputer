@@ -88,9 +88,9 @@ export default function CertificatePage() {
               </button>
             ))}
           {finished.length === 0 && (
-            <p className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center text-gray-500 dark:border-gray-700">
+            <p className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center text-gray-500 dark:text-gray-400 dark:border-gray-700">
               No completed units yet — finish a unit and come back.{" "}
-              <Link href="/lessons" className="text-blue-600 underline">
+              <Link href="/lessons" className="text-blue-600 underline dark:text-blue-400">
                 Back to lessons
               </Link>
             </p>
@@ -101,7 +101,7 @@ export default function CertificatePage() {
           <button
             onClick={() => window.print()}
             disabled={!name.trim()}
-            className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-lg font-bold text-white hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500"
+            className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-lg font-bold text-white hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500 dark:text-gray-400"
           >
             {name.trim() ? "Print certificate" : "Type your name first"}
           </button>
@@ -111,7 +111,7 @@ export default function CertificatePage() {
       {/* The certificate itself — what the printer sees */}
       {chosen && name.trim() && (
         <div className="mt-8 border-8 border-double border-gray-800 p-10 text-center print:mt-0 print:border-gray-800">
-          <p className="text-sm font-bold uppercase tracking-[0.3em] text-gray-500">Certificate of Completion</p>
+          <p className="text-sm font-bold uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">Certificate of Completion</p>
           <p className="mt-8 text-lg text-gray-600">This certifies that</p>
           <p className="mt-2 text-4xl font-bold">{name.trim()}</p>
           <p className="mt-6 text-lg text-gray-600">has completed</p>
@@ -123,7 +123,7 @@ export default function CertificatePage() {
               ? "every hands-on lesson, assessment, and real-world mission across all fourteen units"
               : "every hands-on lesson in this unit, including its assessment"}
           </p>
-          <div className="mt-12 flex items-end justify-between text-sm text-gray-500">
+          <div className="mt-12 flex items-end justify-between text-sm text-gray-500 dark:text-gray-400">
             <span>{today}</span>
             <span className="border-t-2 border-gray-400 px-8 pt-1">LearnAComputer</span>
           </div>

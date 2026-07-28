@@ -68,7 +68,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
           href={`/lessons/${continueRoute.moduleSlug}`}
           className="block rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors dark:border-gray-600 dark:bg-gray-900 dark:hover:bg-gray-800"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1 dark:text-gray-500">Continue where you left off</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1 dark:text-gray-400">Continue where you left off</p>
           <p className="text-xs text-gray-500 dark:text-gray-400">{continueRoute.unit}</p>
           <p className="font-bold text-lg">{continueRoute.module}</p>
           {(() => {
@@ -120,7 +120,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                         </span>
                       )}
                       {state === "not-started" && (
-                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-400">
                           Not started
                         </span>
                       )}
@@ -132,14 +132,14 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-gray-400 shrink-0 dark:text-gray-500">{done}/{total}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 dark:text-gray-400">{done}/{total}</span>
                     </div>
                   </Link>
                   {state === "complete" && (
                     <div className="flex justify-end pr-1">
                       <Link
                         href={`/lessons/${route.moduleSlug}?restart=1`}
-                        className="text-xs text-gray-400 hover:text-gray-600 underline dark:text-gray-500 dark:hover:text-gray-300"
+                        className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-600 underline dark:text-gray-400 dark:hover:text-gray-300"
                       >
                         Redo
                       </Link>
@@ -180,7 +180,7 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
               await forgetAccountProgress();
             }
           }}
-          className="text-sm text-red-600 underline hover:text-red-800"
+          className="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
         >
           Reset all progress
         </button>

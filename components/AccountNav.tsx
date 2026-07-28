@@ -12,7 +12,7 @@ import { useAuth } from "@/components/AuthProvider";
 export default function AccountNav() {
   const { email, ready, syncState, signOut } = useAuth();
 
-  if (!ready) return <span className="text-sm text-gray-400">&nbsp;</span>;
+  if (!ready) return <span className="text-sm text-gray-500 dark:text-gray-400">&nbsp;</span>;
 
   if (!email) {
     return (
@@ -34,7 +34,7 @@ export default function AccountNav() {
         {email}
       </span>
       <span
-        className={`hidden text-xs md:inline ${syncState === "error" ? "text-red-600" : "text-gray-400 dark:text-gray-500"}`}
+        className={`hidden text-xs md:inline ${syncState === "error" ? "text-red-600" : "text-gray-500 dark:text-gray-400"}`}
       >
         {status}
       </span>

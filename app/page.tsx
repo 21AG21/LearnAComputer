@@ -92,7 +92,7 @@ export default function Home() {
             </div>
 
             <section>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 What you will learn
               </h2>
               <div className="mt-3">
@@ -105,7 +105,7 @@ export default function Home() {
             <HomeProgress modules={moduleSummaries} />
 
             <div className="rounded-xl border border-gray-200 p-5 dark:border-gray-800">
-              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 How this works
               </h2>
               <dl className="mt-3 space-y-4">

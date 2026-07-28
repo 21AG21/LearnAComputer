@@ -124,7 +124,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
     return (
       <div className="h-full flex">
         <div className="w-full lg:max-w-xl shrink-0 p-6">
-          <p className="text-sm text-gray-400 animate-pulse dark:text-gray-500">Loading…</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 animate-pulse dark:text-gray-500">Loading…</p>
         </div>
       </div>
     );
