@@ -209,6 +209,9 @@ function valueFor(step: AnyStep): string | null {
       // An empty `value` means "any message counts" — but an empty draft cannot
       // be sent, so the solver still has to say *something*.
       return step.value || "Cats are my favorite";
+    case "set-body":
+      // Same deal: "say something in your reply" accepts anything but not nothing.
+      return step.value || "Thanks for your message. See you soon!";
     default:
       return step.value ?? null;
   }
@@ -502,8 +505,10 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     // aria-labeled ✕ is safe — a generic "close" match hits tab-close buttons,
     // and anything inside the popup fails the lesson.
   } else if (SELECTION_ACTIONS.has(action) && step.target) {
+    // The target may be scrolled below the fold of its list — still actionable,
+    // a learner would scroll to it, so the gesture scrolls first.
     const leaves = Array.from(root.querySelectorAll<HTMLElement>("*")).filter(
-      (n) => isReachable(n) && textOf(n) === step.target,
+      (n) => textOf(n) === step.target && (isReachable(n) || n.offsetParent !== null),
     );
     const targetEl = leaves[leaves.length - 1];
     if (targetEl) {
@@ -518,14 +523,20 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
       });
       for (const b of candidates.slice(0, 3)) {
         out.push(async () => {
+          targetEl.scrollIntoView({ block: "center" });
           click(targetEl);
           await wait(60);
-          // Re-resolve: the button may have been disabled until the selection existed.
+          // Re-resolve: the button may have been disabled until the selection
+          // existed. When a sidebar folder shares the action button's label
+          // ("Archive" the folder vs "Archive" the action), prefer the match
+          // that FOLLOWS the target in the document — the reading pane's.
           const label = textOf(b) || b.getAttribute("aria-label") || "";
-          const live = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).find(
+          const live = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter(
             (x) => isReachable(x) && (textOf(x) || x.getAttribute("aria-label")) === label,
           );
-          if (live) click(live);
+          const after = live.find((x) => targetEl.compareDocumentPosition(x) & Node.DOCUMENT_POSITION_FOLLOWING);
+          const pick = after ?? live[live.length - 1];
+          if (pick) click(pick);
         });
       }
     }
@@ -572,6 +583,15 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     );
     if (row) out.push(() => click(row));
   }
+  // Reply and forward live in an open email's reading pane — when neither
+  // button is on screen, open an email from the list the way a learner would.
+  if (["reply", "forward"].includes(action) && actionButtons.length === 0) {
+    const row = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button'], [class*='cursor-pointer']")).find(
+      (el) => isReachable(el) && textOf(el).length > 20,
+    );
+    if (row) out.push(() => click(row));
+  }
+
   if (action === "send-group-message") {
     // The group thread may exist but be closed — its sidebar row reopens it.
     const groupRow = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
@@ -719,8 +739,15 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     }
   }
   const navHunt = () => {
+    // An open detail view can replace the very list the target lives in —
+    // closing it is the first move of any hunt.
+    for (const esc of Array.from(root.querySelectorAll<HTMLElement>("[aria-label='Close email']")).filter(isReachable)) {
+      out.push(() => click(esc));
+    }
+    // Folder buttons carry unread counts ("Inbox4"), so match label + digits.
+    const isNav = (t: string) => NAV_LABELS.some((label) => t === label || new RegExp(`^${label}\\d+$`).test(t));
     const navs = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter(
-      (b) => isReachable(b) && NAV_LABELS.includes(textOf(b)),
+      (b) => isReachable(b) && isNav(textOf(b)),
     );
     const start = navSpin++ % Math.max(navs.length, 1);
     for (const b of [...navs.slice(start), ...navs.slice(0, start)]) out.push(() => click(b));
@@ -754,14 +781,18 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     Boolean,
   ) as string[];
   if (wanted.length) {
-    const clickable = Array.from(root.querySelectorAll<HTMLElement>("button, a, [role='button'], li, tr, [class*='cursor-pointer']")).filter(isReachable);
+    const anyClickable = Array.from(root.querySelectorAll<HTMLElement>("button, a, [role='button'], li, tr, [class*='cursor-pointer']"));
+    const clickable = anyClickable.filter(isReachable);
     for (const w of wanted) {
-      const hit = clickable.filter((el) => textOf(el).toLowerCase().includes(w.toLowerCase()));
+      let hit = clickable.filter((el) => textOf(el).toLowerCase().includes(w.toLowerCase()));
+      // Nothing reachable matched, but a match may be scrolled below the fold
+      // of its list — a learner would scroll to it.
+      if (hit.length === 0) hit = anyClickable.filter((el) => el.offsetParent !== null && textOf(el).toLowerCase().includes(w.toLowerCase()));
       // Innermost match only, so a whole panel is not clicked because it contains the word.
       const inner = hit.filter((el) => !hit.some((o) => o !== el && el.contains(o)));
       for (const el of inner.slice(0, 3)) {
         if (DOUBLE_CLICK.has(action)) out.push(() => doubleClick(el));
-        out.push(() => click(el));
+        out.push(() => { el.scrollIntoView({ block: "center" }); click(el); });
       }
     }
   }
@@ -778,7 +809,13 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     // wedges the lesson. Everything else avoids search boxes for the same reason
     // in reverse (a filename typed there filters the file out of view).
     const fields = Array.from(
-      root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
+      root.querySelectorAll<HTMLElement>(
+        // A body is a textarea — typing prose into the To input corrupts the
+        // recipient before the right field ever gets its turn.
+        action === "set-body"
+          ? "textarea, [contenteditable='true']"
+          : "input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']",
+      ),
     ).filter((f) => isReachable(f) && (action.includes("search") ? isSearchBox(f) : !isSearchBox(f)));
     // Typing goes last for everything except search and send: those two have
     // a value destined for the one visible box, and clicks kept winning the
