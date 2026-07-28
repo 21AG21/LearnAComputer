@@ -105,8 +105,12 @@ function mouse(el: HTMLElement, type: string, extra: MouseEventInit = {}) {
   );
 }
 
+/** What the most recent gesture actually did — surfaced in the solver trace. */
+export let lastAct = "";
+
 export function click(el: HTMLElement) {
   const t = clickTarget(el);
+  lastAct = `click:${(t.textContent ?? t.getAttribute("aria-label") ?? "").trim().slice(0, 28)}`;
   t.scrollIntoView({ block: "nearest" });
   mouse(t, "pointerdown");
   mouse(t, "mousedown");
@@ -115,6 +119,7 @@ export function click(el: HTMLElement) {
 }
 
 export function doubleClick(el: HTMLElement) {
+  lastAct = `dblclick:${(el.textContent ?? "").trim().slice(0, 28)}`;
   const t = clickTarget(el);
   t.scrollIntoView({ block: "nearest" });
   click(t);
@@ -144,6 +149,7 @@ export function key(el: Element | Document, k: string, mods: Partial<KeyboardEve
 }
 
 export async function typeInto(el: Editable, value: string, { enter = false } = {}): Promise<boolean> {
+  lastAct = `type:${value.slice(0, 20)}`;
   if (isTextInput(el)) {
     el.focus();
     setNativeValue(el, value);
@@ -168,6 +174,7 @@ export async function typeInto(el: Editable, value: string, { enter = false } = 
 }
 
 export function setRange(el: HTMLInputElement, value: number) {
+  lastAct = `range:${value}`;
   setNativeValue(el, String(value));
   el.dispatchEvent(new Event("change", { bubbles: true }));
 }

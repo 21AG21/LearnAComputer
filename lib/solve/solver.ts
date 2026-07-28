@@ -26,6 +26,7 @@ import {
   isReachable,
   isTextInput,
   key,
+  lastAct,
   longPress,
   rightClick,
   setRange,
@@ -119,7 +120,7 @@ let navSpin = 0;
  * action's own control.
  */
 const NAV_LABELS = [
-  "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Store", "My Apps", "App Market", "Contacts",
+  "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Favorites", "Recently Deleted", "Store", "My Apps", "App Market", "Contacts",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
   // Escape hatches out of detail views, so a hunt can reach list-level controls.
@@ -212,6 +213,10 @@ function valueFor(step: AnyStep): string | null {
     case "set-body":
       // Same deal: "say something in your reply" accepts anything but not nothing.
       return step.value || "Thanks for your message. See you soon!";
+    case "add-to-album":
+      // The value names a picker ROW — typed into the new-album box it mints
+      // a duplicate album instead.
+      return null;
     default:
       return step.value ?? null;
   }
@@ -470,8 +475,8 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     recover: "recover put back",
     unspam: "not spam",
     "reading-list-add": "reading list",
-    favorite: "favorite favourite",
-    unfavorite: "favorite favourite",
+    favorite: "favorite favourite fav",
+    unfavorite: "favorite favourite fav",
     "go-to-installed": "my apps",
     install: "install get",
     "go-to-store": "store market",
@@ -500,7 +505,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   // Row actions are handled exclusively by the My Apps row compound below — a
   // generic "Delete" click acts on whichever row comes first, the wrong app.
   const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app"]);
-  if ((ROW_ACTIONS.has(action) && step.target) || action === "close-popup") {
+  if ((ROW_ACTIONS.has(action) && step.target) || ["close-popup", "add-to-album", "share"].includes(action)) {
     // Row actions: handled by the My Apps compound below. close-popup: only the
     // aria-labeled ✕ is safe — a generic "close" match hits tab-close buttons,
     // and anything inside the popup fails the lesson.
@@ -608,6 +613,88 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     if (endCall) out.push(() => click(endCall));
   }
 
+  // Photos: share picks its channel from the step's `via`; brightness and
+  // contrast are labelled range sliders aimed at the middle of the step's
+  // "min-max" window; the album picker panel names the exact row; and edit
+  // controls only exist with a photo open, so open one — the named one when
+  // the step names it.
+  if (action === "share") {
+    // Phase ladder: contact chip → channel button → the Share button — never
+    // backwards, since re-clicking Share resets the sheet to its first phase.
+    const chip =
+      step.to &&
+      Array.from(root.querySelectorAll<HTMLElement>("div"))
+        .find((d) => (d.textContent ?? "").startsWith("Send to:"))
+        ?.querySelector<HTMLElement>("button") &&
+      Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+        (b) => isReachable(b) && textOf(b).toLowerCase() === step.to!.toLowerCase(),
+      );
+    const channel =
+      step.via &&
+      Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+        (b) => isReachable(b) && textOf(b).toLowerCase() === step.via,
+      );
+    const shareBtn = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === "Share",
+    );
+    if (chip) out.push(() => click(chip));
+    else if (channel) out.push(() => click(channel));
+    else if (shareBtn) out.push(() => click(shareBtn));
+  }
+  if (action.startsWith("adjust-")) {
+    const which = action.replace("adjust-", "");
+    const range = Array.from(root.querySelectorAll<HTMLInputElement>("input[type='range']")).find(
+      (r) => isReachable(r) && (r.closest("div")?.textContent ?? "").toLowerCase().includes(which),
+    );
+    if (range) {
+      const [lo, hi] = (step.value ?? "").split("-").map(Number);
+      const mid = Number.isFinite(lo) && Number.isFinite(hi) ? Math.round((lo + hi) / 2) : 120;
+      out.push(() => setRange(range, mid));
+    }
+  }
+  if (action === "add-to-album") {
+    // Phase ladder: picker row → the "Album" toolbar button → open the photo
+    // the sibling select-photo objective names (or any photo). Never the
+    // "+ New Album" button — that mints a duplicate album.
+    const panel = Array.from(root.querySelectorAll<HTMLElement>("div")).find((d) =>
+      (d.textContent ?? "").startsWith("Add to album:"),
+    );
+    const row =
+      panel && step.value
+        ? Array.from(panel.querySelectorAll<HTMLElement>("button")).find((b) => textOf(b) === step.value)
+        : undefined;
+    const albumBtn = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === "Album",
+    );
+    if (row) out.push(() => click(row));
+    else if (albumBtn) out.push(() => click(albumBtn));
+    else {
+      const wantPhoto = all.find((s) => s.action === "select-photo")?.target?.toLowerCase();
+      const thumbs = Array.from(root.querySelectorAll<HTMLElement>("button")).filter(
+        (b) => isReachable(b) && b.querySelector("img"),
+      );
+      const named = wantPhoto
+        ? thumbs.find((b) => (b.querySelector("img")?.getAttribute("alt") ?? "").toLowerCase().includes(wantPhoto))
+        : undefined;
+      const pick = named ?? thumbs[0];
+      if (pick) out.push(() => click(pick));
+    }
+  }
+  const PHOTO_DETAIL_ACTIONS = new Set([
+    "rotate", "revert", "crop", "adjust-brightness", "adjust-contrast", "apply-filter", "share", "favorite", "unfavorite",
+  ]);
+  if (PHOTO_DETAIL_ACTIONS.has(action) && actionButtons.length === 0) {
+    const altOf = (b: HTMLElement) => b.querySelector("img")?.getAttribute("alt") ?? "";
+    const thumbs = Array.from(root.querySelectorAll<HTMLElement>("button")).filter(
+      (b) => isReachable(b) && (textOf(b).length > 0 || altOf(b).length > 0) && b.querySelector("img"),
+    );
+    const named = step.target
+      ? thumbs.find((b) => (textOf(b) + altOf(b)).toLowerCase().includes(step.target!.toLowerCase()))
+      : undefined;
+    const pick = named ?? thumbs[0];
+    if (pick) out.push(() => click(pick));
+  }
+
   // The browser's address bar is a div until clicked — click it, and the
   // autofocused input that appears gets typed into on the next iteration by
   // the focused-input branch.
@@ -697,6 +784,10 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     !humanTarget ||
     Array.from(root.querySelectorAll<HTMLElement>("*")).some(
       (n) => n.childElementCount === 0 && textOf(n).toLowerCase().includes(humanTarget),
+    ) ||
+    // Image-only tiles (photo grids) carry their name in alt text.
+    Array.from(root.querySelectorAll<HTMLImageElement>("img[alt]")).some((i) =>
+      i.alt.toLowerCase().includes(humanTarget),
     );
 
   // Toggles and sliders: find the labelled row, act on its control — the label
@@ -776,18 +867,24 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   // The humanized target rides along for kebab-case ids ("night-shift").
   // A search step's value is a query to type, never a thing to click — hunting
   // it clicked whichever app card mentioned the query word, forever.
-  const clickableValue = action.includes("search") ? null : step.value;
+  // add-to-album's value names a picker row the dedicated compound clicks —
+  // hunting it here hits the same-named sidebar album and navigates away.
+  const clickableValue = action.includes("search") || action === "add-to-album" ? null : step.value;
   const wanted = [step.target, humanTarget !== step.target?.toLowerCase() ? humanTarget : null, step.title, clickableValue, step.file, step.into, step.to].filter(
     Boolean,
   ) as string[];
   if (wanted.length) {
     const anyClickable = Array.from(root.querySelectorAll<HTMLElement>("button, a, [role='button'], li, tr, [class*='cursor-pointer']"));
     const clickable = anyClickable.filter(isReachable);
-    for (const w of wanted) {
-      let hit = clickable.filter((el) => textOf(el).toLowerCase().includes(w.toLowerCase()));
+    // Image-only tiles match on their img alt text, like a screen reader.
+    const matches = (el: HTMLElement, w: string) =>
+      textOf(el).toLowerCase().includes(w) ||
+      Array.from(el.querySelectorAll("img")).some((i) => (i.getAttribute("alt") ?? "").toLowerCase().includes(w));
+    for (const w of wanted.map((x) => x.toLowerCase())) {
+      let hit = clickable.filter((el) => matches(el, w));
       // Nothing reachable matched, but a match may be scrolled below the fold
       // of its list — a learner would scroll to it.
-      if (hit.length === 0) hit = anyClickable.filter((el) => el.offsetParent !== null && textOf(el).toLowerCase().includes(w.toLowerCase()));
+      if (hit.length === 0) hit = anyClickable.filter((el) => el.offsetParent !== null && matches(el, w));
       // Innermost match only, so a whole panel is not clicked because it contains the word.
       const inner = hit.filter((el) => !hit.some((o) => o !== el && el.contains(o)));
       for (const el of inner.slice(0, 3)) {
@@ -826,6 +923,11 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     // page — the store front, not My Apps): go looking like a learner would.
     // A modal dialog may be covering the page — clear it before hunting.
     if (action.includes("search") && fields.length === 0) {
+      // A "Search" button may reveal the box (Photos hides it in the sidebar).
+      const reveal = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+        (b) => isReachable(b) && textOf(b) === "Search",
+      );
+      if (reveal) out.push(() => click(reveal));
       const dlg = Array.from(root.querySelectorAll<HTMLElement>("button")).filter(
         (b) => isReachable(b) && ["Allow", "Don't Allow", "OK", "Cancel"].includes(textOf(b)),
       );
@@ -1089,7 +1191,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
         await gesture();
         await settle();
         gi += 1;
-        if (changed(before, snapshot(root))) { moved = true; trace(`  ringless #${gi} moved`); break; }
+        if (changed(before, snapshot(root))) { moved = true; trace(`  ringless #${gi} moved (${lastAct})`); break; }
       }
       if (!moved) trace(`  ringless exhausted (${gi} gestures)`);
     }
