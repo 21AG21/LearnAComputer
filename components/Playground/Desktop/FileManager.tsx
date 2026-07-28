@@ -84,10 +84,13 @@ export default function FileManager({
   // Notify parent whenever items change so it can auto-complete precondition-already-met steps.
   useEffect(() => { onItemsChange?.(items); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset ephemeral state when the parent increments resetKey
+  // Reset ephemeral state when the parent increments resetKey. Selection is NOT
+  // ephemeral: the keyboard lesson says "arrow until GroceryList is highlighted"
+  // (step ticks) and then "now press Enter to open it" — wiping the selection
+  // between those steps made Enter do nothing and the lesson unfinishable by the
+  // very method it teaches. Real file managers keep selection; so do we.
   useEffect(() => {
     if (resetKey === undefined) return;
-    setSelected(null);
     setNaming(null);
     setPreview(null);
     setSearch("");

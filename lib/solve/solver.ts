@@ -272,10 +272,25 @@ function gesturesFor(step: AnyStep, el: HTMLElement, root: HTMLElement): Gesture
   }
 
   // Selecting with the keyboard: the ring marks the file, but clicking it is
-  // nudged away by design — the keydown listener sits on the grid above it. No
-  // early return: before the app opens, the ring is the *dock icon*, and the
+  // nudged away by design — the keydown listener sits on the focusable grid
+  // above it, so that is where the keys go (focused first, like real hands).
+  // Selection is a class-only change the solver's snapshot cannot see, so the
+  // gesture presses through the whole list itself and watches the step counter.
+  // No early return: before the app opens, the ring is the *dock icon*, and the
   // click fallback below is what launches it.
-  if (action === "arrow-select") out.push(() => key(el, "ArrowDown"));
+  if (action === "arrow-select") {
+    out.push(async () => {
+      const grid = el.closest<HTMLElement>("[tabindex]") ?? el;
+      const frame = root.querySelector<HTMLElement>("[data-sim-frame]");
+      const startProgress = frame?.dataset.simProgress;
+      grid.focus();
+      for (let i = 0; i < 12; i++) {
+        key(grid, "ArrowDown");
+        await wait(40);
+        if (frame?.dataset.simProgress !== startProgress) break;
+      }
+    });
+  }
 
   // A shortcut lesson is about the keyboard; the ring is only a hint.
   const shortcut = SHORTCUT_KEYS[action];
@@ -327,7 +342,18 @@ function gesturesFor(step: AnyStep, el: HTMLElement, root: HTMLElement): Gesture
     out.push(() => typeInto(field, "Practice text", { enter: false }));
   }
 
-  if (DOUBLE_CLICK.has(action)) out.push(() => doubleClick(el));
+  if (DOUBLE_CLICK.has(action)) {
+    // Keyboard-only lessons open the selected item with Enter on the grid and
+    // nudge the mouse away — try the keyboard door first; it is harmless elsewhere.
+    const grid = el.closest<HTMLElement>("[tabindex]");
+    if (grid) {
+      out.push(() => {
+        grid.focus();
+        key(grid, "Enter");
+      });
+    }
+    out.push(() => doubleClick(el));
+  }
   if (action === "add-reaction") {
     out.push(() => doubleClick(el));
     out.push(() => longPress(el));
