@@ -146,6 +146,11 @@ const WINDOW_BUTTON: Record<string, string> = {
   "restore-max": "Maximize",
   close: "Close",
   "close-app": "Close",
+  // Menu-bar panels — the desktop's status icons carry these aria-labels.
+  "open-wifi-panel": "Wi-Fi status",
+  "open-battery-panel": "Battery status",
+  "open-clock": "Open calendar",
+  "close-panel": "Close panel",
 };
 
 /**
@@ -396,6 +401,25 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
       root.querySelectorAll<HTMLElement>("[class*='cursor-grab'], [class*='cursor-se-resize'], [aria-label='Drag to resize']"),
     ).filter(isReachable);
     for (const h of handles) out.push(() => dragBy(h, 70, 55));
+  }
+
+  // `restore` wants the *running* app's dock icon (the one wearing the green
+  // dot) — spraying clicks across the dock just opens other apps and un-does
+  // the minimize. If a window is visible, minimize it first in the same breath.
+  if (action === "restore") {
+    const runningDock = Array.from(root.querySelectorAll<HTMLElement>("button[aria-label]")).find(
+      (b) => isReachable(b) && b.querySelector("[class*='green']"),
+    );
+    if (runningDock) {
+      out.push(async () => {
+        const minimize = Array.from(root.querySelectorAll<HTMLElement>("[aria-label='Minimize']")).find(isReachable);
+        if (minimize) {
+          click(minimize);
+          await wait(80);
+        }
+        click(runningDock);
+      });
+    }
   }
 
   // `restore` / `restart-app` / `open-app`: the control is a dock icon. Prefer the
