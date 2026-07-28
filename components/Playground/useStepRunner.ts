@@ -65,17 +65,23 @@ export function useStepRunner<S extends RunnerStep>({
   }, [finishDelayMs, onResult]);
 
   /**
-   * Which index last ticked. Several handlers can fire from one gesture — the
-   * address bar's Enter, the Go button, the loading timer — and inside one React
-   * tick they all read the *same* current step, so without this guard a single
-   * navigation advanced the lesson three steps and silently skipped two.
+   * Which index last ticked, and when. Several handlers can fire from one
+   * gesture — the address bar's Enter, the Go button, the loading timer — and
+   * inside one React tick they all read the *same* current step, so without
+   * this guard a single navigation advanced the lesson three steps and
+   * silently skipped two. The guard is time-boxed: it blocks the same-tick
+   * double-fire, never an honest retry — dev StrictMode can replay a render
+   * (discarding the state update but keeping the ref), and a forever-guard
+   * turned that replay into a lesson that could never tick again.
    */
-  const lastCompletedIndex = useRef(-1);
+  const lastCompleted = useRef<{ idx: number; t: number } | null>(null);
 
   /** Guided: satisfy the current step and advance. */
   const completeStep = useCallback(() => {
-    if (lastCompletedIndex.current === stepIndex) return;
-    lastCompletedIndex.current = stepIndex;
+    const now = performance.now();
+    const last = lastCompleted.current;
+    if (last && last.idx === stepIndex && now - last.t < 150) return;
+    lastCompleted.current = { idx: stepIndex, t: now };
     ding();
     setCompleted((prev) => new Set(prev).add(stepIndex));
     setStepIndex((i) => i + 1);

@@ -763,7 +763,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
       const addr = root.querySelector<HTMLInputElement>("input")?.value ?? "";
       const results = Array.from(root.querySelectorAll("p")).filter((p) => /Top result/.test(p.textContent ?? "")).length;
       trace(
-        `iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning} addr="${addr.slice(0, 28)}" results=${results}`,
+        `iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning} addr="${addr.slice(0, 28)}" results=${results} ring=[${before.ring.slice(0, 48)}]`,
       );
     }
 

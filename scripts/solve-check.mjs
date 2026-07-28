@@ -22,6 +22,10 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 page.on("pageerror", (e) => console.error(`[pageerror] ${e.message}`));
+// Sims may emit temporary `[sim]` debug lines while a failure is being chased.
+page.on("console", (m) => {
+  if (m.text().startsWith("[sim]")) console.log(`  ${m.text()}`);
+});
 
 try {
   await page.goto(`${BASE}/dev/solve-check`, { waitUntil: "networkidle" });
