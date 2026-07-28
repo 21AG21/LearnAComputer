@@ -309,6 +309,10 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
 
   function handleDismissDenied() {
     setDenied(null);
+    // "Back to Store" means the store — landing on the canceled app's detail
+    // page left the next step ("search for…") pointing at a search bar that
+    // was not on screen.
+    setSelectedApp(null);
   }
 
   function handleUpdate(appName: string) {
@@ -351,7 +355,15 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <p className="text-sm text-red-700 font-medium mb-1">Installation canceled</p>
               <p className="text-xs text-red-600">{denied.app.name} needs these permissions to work.</p>
             </div>
-            <button onClick={handleDismissDenied} className="w-full py-2.5 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200">Back to Store</button>
+            {/* This card replaces the whole store, so while a next step is waiting
+                the only way forward is this button — it gets the glow, or the
+                learner is told to search a store they cannot see. */}
+            <button
+              onClick={handleDismissDenied}
+              className={`w-full py-2.5 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 ${step && !finished ? pulse : ""}`}
+            >
+              Back to Store
+            </button>
           </div>
         </div>
       </SimulatorFrame>

@@ -122,6 +122,8 @@ const NAV_LABELS = [
   "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Store", "My Apps", "Contacts",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
+  // Escape hatches out of detail views, so a hunt can reach list-level controls.
+  "\u2190 Back", "Back", "Back to Store",
 ];
 
 /** Anything the sims use to mean "this is the control you want next". */
@@ -150,7 +152,7 @@ const WINDOW_BUTTON: Record<string, string> = {
  * Dialog steps whose only control is an obvious confirm button with no ring — a
  * learner sees a dialog and clicks OK; the solver does the same.
  */
-const CONFIRM_LABELS = ["OK", "Got it", "Continue", "Done", "Close", "Dismiss", "Restart", "Yes"];
+const CONFIRM_LABELS = ["OK", "Got it", "Continue", "Done", "Close", "Dismiss", "Restart", "Yes", "Allow"];
 
 /** Notes shortcuts must come from the keyboard — clicking the toolbar button is nudged, by design. */
 const SHORTCUT_KEYS: Record<string, { k: string; mods?: Partial<KeyboardEventInit> }> = {
@@ -435,6 +437,11 @@ function ringlessGestures(step: AnyStep, root: HTMLElement): Gesture[] {
     "reading-list-add": "reading list",
     favorite: "favorite favourite",
     unfavorite: "favorite favourite",
+    "go-to-installed": "my apps",
+    install: "install get",
+    "go-to-store": "store",
+    "open-force-quit": "force quit",
+    "open-downloads": "downloads",
   };
   const actionWords = `${action.replace(/-/g, " ")} ${ACTION_SYNONYMS[action] ?? ""}`.trim();
   const actionButtons = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter((b) => {
@@ -690,6 +697,13 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
   let spinning = 0;
   let lastProgress = -1;
   const MAX_SPIN = Math.max(14, total + 6);
+  // The sims answer some gestures on a deliberate delay (navigation runs a 250ms
+  // loading beat). The macrotask-fast loop can burn all its spins before the
+  // first delayed handler ever lands — and once the harness declares failure and
+  // unmounts, those queued completions dispatch into a dead instance. A spin
+  // verdict therefore needs wall-clock time at this progress, not just attempts.
+  let stuckSince = performance.now();
+  const MIN_STUCK_MS = 3000;
   // Assessment mode: which objective is being worked on, and how many screen
   // changes it has produced without completing anything. Multi-stage objectives
   // (open the scam email, *then* mark it spam) need several iterations on the
@@ -725,6 +739,13 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
 
     if (before.progress === lastProgress) {
       if (++spinning > MAX_SPIN) {
+        if (performance.now() - stuckSince < MIN_STUCK_MS) {
+          // Attempts exhausted but barely any time has passed — a delayed
+          // completion may still be in flight. Let the clock catch up.
+          await wait(400);
+          spinning = Math.floor(MAX_SPIN / 2);
+          continue;
+        }
         if (document.hidden && !parkedOut()) {
           await waitWhileHidden();
           spinning = Math.floor(MAX_SPIN / 2); // half a lap of grace once visible
@@ -740,6 +761,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
       spinning = 0;
       lastProgress = before.progress;
       pursueMoves = 0;
+      stuckSince = performance.now();
     }
 
     // Guided mode: the frame's progress *is* the current step. Assessment mode
