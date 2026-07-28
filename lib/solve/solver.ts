@@ -505,7 +505,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   // Row actions are handled exclusively by the My Apps row compound below — a
   // generic "Delete" click acts on whichever row comes first, the wrong app.
   const ROW_ACTIONS = new Set(["delete-app", "update-app", "open-app"]);
-  if ((ROW_ACTIONS.has(action) && step.target) || ["close-popup", "add-to-album", "share"].includes(action)) {
+  if ((ROW_ACTIONS.has(action) && step.target) || ["close-popup", "add-to-album", "share", "select-day", "set-reminder-text", "save-reminder"].includes(action)) {
     // Row actions: handled by the My Apps compound below. close-popup: only the
     // aria-labeled ✕ is safe — a generic "close" match hits tab-close buttons,
     // and anything inside the popup fails the lesson.
@@ -693,6 +693,86 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
       : undefined;
     const pick = named ?? thumbs[0];
     if (pick) out.push(() => click(pick));
+  }
+
+  // Event fields only exist in the open event form — from anywhere else,
+  // + New Event opens it, and the Month tab gets back to the calendar first.
+  if (["set-title", "set-time", "set-repeat", "save-event"].includes(action)) {
+    const formOpen = root.querySelector<HTMLInputElement>("input[placeholder='Event title']");
+    if (formOpen && action === "save-event" && !formOpen.value) {
+      // A fresh form cannot be saved empty — give it a title, then Save.
+      out.push(async () => {
+        await typeInto(formOpen, "Practice event");
+        await wait(80);
+        const save = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "Save",
+        );
+        if (save) click(save);
+      });
+    }
+    if (!formOpen) {
+      const opener =
+        Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "+ New Event",
+        ) ??
+        Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "Month",
+        );
+      if (opener) out.push(() => click(opener));
+    }
+  }
+
+  // Symmetric ladder for reminders: form → typed text → Save. The generic
+  // matcher is suppressed for these — the "Reminders" tab matches "reminder"
+  // and clicking it closes the very form being saved.
+  if (["set-reminder-text", "save-reminder"].includes(action)) {
+    const box = root.querySelector<HTMLInputElement>("input[placeholder='Reminder text']");
+    if (!box) {
+      const opener =
+        Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "+ New Reminder",
+        ) ??
+        Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "Reminders",
+        );
+      if (opener) out.push(() => click(opener));
+    } else if (action === "save-reminder") {
+      out.push(async () => {
+        if (!box.value) {
+          await typeInto(box, "Practice reminder");
+          await wait(80);
+        }
+        const save = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+          (b) => isReachable(b) && textOf(b) === "Save",
+        );
+        if (save) click(save);
+      });
+    }
+  }
+
+  // A weekday-named day ("Thursday") is any numbered cell in that weekday's
+  // column — find the header, then a number button aligned under it.
+  if (action === "select-day" && step.target && !/^\d+$/.test(step.target)) {
+    const prefix = step.target.slice(0, 3).toLowerCase();
+    const header = Array.from(root.querySelectorAll<HTMLElement>("*")).find(
+      (n) => n.childElementCount === 0 && textOf(n).toLowerCase().startsWith(prefix) && isReachable(n),
+    );
+    if (header) {
+      const hx = header.getBoundingClientRect();
+      const hCenter = hx.left + hx.width / 2;
+      const cell = Array.from(root.querySelectorAll<HTMLElement>("button")).find((b) => {
+        if (!isReachable(b) || !/^\d+$/.test(textOf(b))) return false;
+        const r = b.getBoundingClientRect();
+        return Math.abs(r.left + r.width / 2 - hCenter) < r.width / 2;
+      });
+      if (cell) out.push(() => click(cell));
+    } else {
+      // No weekday headers — probably the Day view. Back to Month first.
+      const month = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+        (b) => isReachable(b) && textOf(b) === "Month",
+      );
+      if (month) out.push(() => click(month));
+    }
   }
 
   // The browser's address bar is a div until clicked — click it, and the
@@ -1223,9 +1303,11 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
         continue;
       }
       if (!changed(before, snapshot(root))) {
-        // Assessment mode: one dead objective is not a verdict — move to the
-        // next, and only fail after a whole lap produced nothing.
-        if (opts.assessment && spinning < total) {
+        // Assessment mode: one dead objective is not a verdict — move on, and
+        // only fail after two whole laps produced nothing. Two, because one
+        // objective's gesture often creates the state another one needs (the
+        // + New Event click opens the form the title objective types into).
+        if (opts.assessment && spinning < Math.max(total * 2, 8)) {
           spinning += 1;
           pursue += 1;
           pursueMoves = 0;
