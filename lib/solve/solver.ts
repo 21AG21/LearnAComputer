@@ -157,6 +157,8 @@ const WINDOW_BUTTON: Record<string, string> = {
   "zoom-in": "Zoom in",
   "zoom-out": "Zoom out",
   "lock-click": "Site security",
+  // Messaging
+  "create-group": "New group chat",
 };
 
 /**
@@ -472,6 +474,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     "go-to-store": "store market",
     "open-force-quit": "force quit",
     "open-downloads": "downloads",
+    "send-group-message": "start chat",
   };
   const actionWords = `${action.replace(/-/g, " ")} ${ACTION_SYNONYMS[action] ?? ""}`.trim();
   const actionButtons = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter((b) => {
@@ -528,6 +531,61 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     }
   } else {
     for (const b of actionButtons.slice(0, 6)) out.push(() => click(b));
+  }
+
+  // Messaging: the attach flow ends on a photo grid inside a shadowed overlay —
+  // pick the first photo. A reaction is a double-click on the other person's
+  // last bubble, then any emoji from the picker that pops up. And several
+  // actions only exist inside an open 1-to-1 conversation, so as a last resort
+  // open one the way a learner would: click a contact in the sidebar.
+  if (action === "attach-photo") {
+    // Phase ladder — grid, then menu row, then the Attach button — and never a
+    // step backwards: re-clicking Attach while its menu is open toggles it shut.
+    const photoBtn = Array.from(root.querySelectorAll<HTMLElement>("div[class*='shadow-xl'] button")).find(
+      (b) => isReachable(b) && b.querySelector("img"),
+    );
+    const photosRow = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === "Photos",
+    );
+    if (photoBtn) out.push(() => click(photoBtn));
+    else if (photosRow) out.push(() => click(photosRow));
+    else for (const el of byLabel("Attach")) out.push(() => click(el));
+  }
+  if (action === "add-reaction") {
+    const bubbles = Array.from(root.querySelectorAll<HTMLElement>("[class*='rounded-bl-md']")).filter(isReachable);
+    const last = bubbles[bubbles.length - 1];
+    if (last) {
+      out.push(async () => {
+        doubleClick(last);
+        await wait(250);
+        const emojiBtn = Array.from(
+          root.querySelectorAll<HTMLElement>("div[class*='shadow-lg'] button, div[class*='shadow-xl'] button"),
+        ).find((b) => isReachable(b) && textOf(b).length > 0 && textOf(b).length <= 4);
+        if (emojiBtn) click(emojiBtn);
+      });
+    }
+  }
+  if (["attach-photo", "add-reaction", "start-call", "pick-emoji"].includes(action)) {
+    const CONTACT_NAMES = ["Alex", "Jordan", "Sam", "Grandma", "Doggo"];
+    const row = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && CONTACT_NAMES.some((n) => textOf(b).startsWith(n)),
+    );
+    if (row) out.push(() => click(row));
+  }
+  if (action === "send-group-message") {
+    // The group thread may exist but be closed — its sidebar row reopens it.
+    const groupRow = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b).includes("Group Chat"),
+    );
+    if (groupRow) out.push(() => click(groupRow));
+  }
+  if (!["start-call", "mute", "camera-off", "end-call"].includes(action)) {
+    // Stuck inside a video call while chasing something else: no other
+    // objective's controls exist on the call screen — hang up first.
+    const endCall = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === "End call",
+    );
+    if (endCall) out.push(() => click(endCall));
   }
 
   // The browser's address bar is a div until clicked — click it, and the
@@ -722,10 +780,10 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     const fields = Array.from(
       root.querySelectorAll<HTMLElement>("input:not([type='range']):not([type='checkbox']), textarea, [contenteditable='true']"),
     ).filter((f) => isReachable(f) && (action.includes("search") ? isSearchBox(f) : !isSearchBox(f)));
-    // Typing goes last for everything except search: the search-box-only filter
-    // already guarantees the right field, and clicks kept winning the race by
-    // "changing the screen" without ever searching.
-    if (action.includes("search")) out.unshift(...fields.map((f) => () => typeInto(f, value, { enter: true })));
+    // Typing goes last for everything except search and send: those two have
+    // a value destined for the one visible box, and clicks kept winning the
+    // race by "changing the screen" without ever typing.
+    if (action.includes("search") || action.startsWith("send")) out.unshift(...fields.map((f) => () => typeInto(f, value, { enter: true })));
     else for (const f of fields) out.push(() => typeInto(f, value, { enter: true }));
     // A search objective with no search box in sight (the box lives on another
     // page — the store front, not My Apps): go looking like a learner would.

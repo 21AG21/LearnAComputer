@@ -543,6 +543,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 <button
                   onClick={handleNewGroupBtn}
                   title="New group chat"
+                  aria-label="New group chat"
                   className={`w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold hover:bg-blue-200 transition-all ${
                     hl("new-group-btn") ? pulse : ""
                   }`}
@@ -679,6 +680,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     hl("emoji-btn") ? pulse : ""
                   }`}
                   title="Emoji"
+                  aria-label="Emoji"
                 >
                   <span className="text-base">&#128512;</span>
                 </button>
@@ -779,6 +781,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
               <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 relative">
                 <button
                   onClick={handleAttachBtn}
+                  aria-label="Attach"
                   className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-lg hover:bg-gray-300 transition-all ${
                     hl("attach-btn") ? pulse : ""
                   }`}
