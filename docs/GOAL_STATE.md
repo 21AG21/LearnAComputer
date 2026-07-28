@@ -27,7 +27,7 @@ what moved, what's proven, what's still a demo risk.
 | Instructor visibility (the paid feature) | **Designed, not built** — Stage J of the master plan | `docs/PROGRESS_MONITORING.md` |
 | Certificates | **Not built** — Stage J | `docs/MASTER_PLAN.md` §6.3 |
 | WCAG/contrast measured | **Not done** — Stage F | `docs/MASTER_PLAN.md` §1.6 |
-| Wrong-device (phone) handling | **Not done** — Stage E | `docs/MASTER_PLAN.md` §1.3 |
+| Wrong-device (phone) handling | **Done** — under 900px, a kind full-screen note with the live address and a continue-anyway escape | `components/SmallScreenGuard.tsx` |
 
 ## The "worst screen" watchlist
 
