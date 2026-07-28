@@ -16,7 +16,7 @@ what moved, what's proven, what's still a demo risk.
 
 | Area | State | Proof |
 |---|---|---|
-| Every lesson completable, mechanically proven | **In progress** — headless `npm run solve-check` is canonical; 115→135→141→144→148 of 166 across fix rounds; **every guided lesson passes** — the 18 remaining are all assessment-mode objective chains (solver capability, not learner risk) | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Every lesson completable, mechanically proven | **In progress** — headless `npm run solve-check` is canonical; 115→135→141→144→148→150 of 166 across fix rounds; **every guided lesson passes** — the 16 remaining are all assessment-mode objective chains (solver capability, not learner risk) | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
 | Reading level ≤ grade 8, enforced at build | **Done** — worst intro was 10.9, now all ≤ 5.6 | `scripts/check-lessons.py` |
