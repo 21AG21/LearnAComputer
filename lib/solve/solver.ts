@@ -123,6 +123,8 @@ const NAV_LABELS = [
   "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Favorites", "Recently Deleted", "Store", "My Apps", "App Market", "Contacts",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
+  // Security sim sections — the phishing inbox and password tester live behind these.
+  "Phishing", "Passwords",
   // Escape hatches out of detail views, so a hunt can reach list-level controls.
   "\u2190 Back", "Back", "Back to Store",
 ];
@@ -693,6 +695,31 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
       : undefined;
     const pick = named ?? thumbs[0];
     if (pick) out.push(() => click(pick));
+  }
+
+  // Phishing: the step target names the INLINE LINK inside a message, while
+  // the inbox row shows sender and subject. Click the link when visible;
+  // otherwise open the right row — rows are seeded in step order, so the Nth
+  // distinct phishing target is the Nth row.
+  if (["inspect-link", "mark-safe", "mark-dangerous"].includes(action) && step.target) {
+    const link = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (b) => isReachable(b) && textOf(b) === step.target,
+    );
+    if (link) out.push(() => click(link));
+    else {
+      const phishTargets: string[] = [];
+      for (const s of all) {
+        if (["inspect-link", "mark-safe", "mark-dangerous"].includes(s.action ?? "") && s.target && !phishTargets.includes(s.target)) {
+          phishTargets.push(s.target);
+        }
+      }
+      const idx = phishTargets.indexOf(step.target);
+      const list = Array.from(root.querySelectorAll<HTMLElement>("p")).find((p) =>
+        ["Inbox", "Messages"].includes(textOf(p)),
+      )?.parentElement;
+      const rows = list ? Array.from(list.querySelectorAll<HTMLElement>("button")).filter(isReachable) : [];
+      if (idx >= 0 && rows[idx]) out.push(() => click(rows[idx]));
+    }
   }
 
   // Event fields only exist in the open event form — from anywhere else,
