@@ -38,16 +38,27 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
     <div className="mx-auto w-full max-w-5xl px-6 py-8 space-y-8">
       {/* Overall progress */}
       <div className="space-y-2">
-        <div className="flex items-baseline justify-between">
+        <div className="flex items-baseline justify-between gap-4">
           <h1 className="text-2xl font-bold">Lessons</h1>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{totalCompleted} of {totalSubLessons} complete</span>
+          <span className="shrink-0 text-sm text-gray-500 dark:text-gray-400">
+            {totalCompleted === 0 ? `${totalSubLessons} lessons` : `${totalCompleted} of ${totalSubLessons} complete`}
+          </span>
         </div>
-        <div className="h-3 rounded-full bg-gray-200 overflow-hidden dark:bg-gray-800">
-          <div
-            className="h-full rounded-full bg-green-500 transition-all duration-500"
-            style={{ width: `${overallPct}%` }}
-          />
-        </div>
+        <p className="max-w-2xl text-gray-600 dark:text-gray-400">
+          {totalCompleted === 0
+            ? "Fourteen units, from holding a mouse to spotting a scam. Every lesson is something you do, not something you watch, and each unit ends with a task on your own computer. Free, and nothing to sign up for."
+            : "Pick up anywhere. Your place is saved on this device and does not expire."}
+        </p>
+        {/* An empty bar is a picture of nothing. Show it once there is
+            something to show. */}
+        {totalCompleted > 0 && (
+          <div className="h-3 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
+            <div
+              className="h-full rounded-full bg-green-500 transition-all duration-500"
+              style={{ width: `${overallPct}%` }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Continue / all-complete card */}
@@ -66,14 +77,18 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
           href={`/lessons/${continueRoute.moduleSlug}`}
           className="block rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors dark:border-gray-600 dark:bg-gray-900 dark:hover:bg-gray-800"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1 dark:text-gray-400">Continue where you left off</p>
+          <p className="mb-1 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+            {totalCompleted === 0 ? "Start here" : "Continue where you left off"}
+          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">{continueRoute.unit}</p>
           <p className="font-bold text-lg">{continueRoute.module}</p>
           {(() => {
             const doneInModule = continueRoute.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;
             return (
-              <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
-                Lesson {doneInModule + 1} of {continueRoute.subLessons.length}
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {doneInModule === 0
+                  ? `${continueRoute.subLessons.length} short lessons`
+                  : `Lesson ${doneInModule + 1} of ${continueRoute.subLessons.length}`}
               </p>
             );
           })()}
@@ -118,20 +133,22 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
                         </span>
                       )}
                       {state === "not-started" && (
-                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                          Not started
+                        <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                          {total} {total === 1 ? "lesson" : "lessons"}
                         </span>
                       )}
                     </div>
-                    <div className="mt-2 flex items-center gap-3">
-                      <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden dark:bg-gray-800">
-                        <div
-                          className={`h-full rounded-full transition-all duration-300 ${state === "complete" ? "bg-green-500" : "bg-blue-500"}`}
-                          style={{ width: `${pct}%` }}
-                        />
+                    {state !== "not-started" && (
+                      <div className="mt-2 flex items-center gap-3">
+                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                          <div
+                            className={`h-full rounded-full transition-all duration-300 ${state === "complete" ? "bg-green-500" : "bg-blue-500"}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">{done}/{total}</span>
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 dark:text-gray-400">{done}/{total}</span>
-                    </div>
+                    )}
                   </Link>
                   {state === "complete" && (
                     <div className="flex justify-end pr-1">

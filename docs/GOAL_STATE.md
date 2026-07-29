@@ -72,8 +72,20 @@ Ranked, current worst first. Fixing the top item promotes the next.
    activities), mission-check (18 real-world missions) and the error boundary.
    The residual risk is the 20 stepless types — reflex games and real-trackpad
    gestures — which only mount-check covers, plus the intermittent below.
-3. **The dashboard/catalog wrapper pages** — functional but plainer than the
-   lesson experience (Stage F site-chrome pass).
+3. ~~**The dashboard/catalog wrapper pages**~~ — **worked on 2026-07-28.** The
+   catalog is the dashboard (`/dashboard` redirects to it) and it is the
+   leave-behind screenshot in the demo, so it was the worst screen left. On a
+   first visit it opened with an empty full-width progress bar and sixty-six
+   identical gray "Not started" pills over sixty-six empty bars: a page-sized
+   picture of nothing, for a course that has not been started yet, which is
+   exactly when a buyer looks at it. Now it says what the course *is* in one
+   sentence (fourteen units, doing not watching, free, no sign-up), the call to
+   action reads **Start here** rather than the untrue "Continue where you left
+   off", each module shows its length — the one fact a beginner wants before
+   clicking — and bars appear only where there is progress to draw. Unit 2 is
+   above the fold where nothing was before.
+   Still open, and a matter of taste rather than correctness: the unit
+   thumbnails are decorative stock images that carry no meaning.
 4. ~~**No instructor view**~~ — removed with accounts on 2026-07-28. The
    answer in the room is now a straight "no, and here is why", which is a
    better position than an unfinished screen.
