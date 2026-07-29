@@ -986,3 +986,45 @@ This requires code changes — do not attempt with Haiku.
 2. Create a component in `components/Playground/`
 3. Add a checker in `TaskChecker.ts`
 4. Wire it into `LessonPlaygroundPane.tsx`
+
+## Lesson art and the layout that must not move
+
+A lesson page is two columns: the text on the left, and on the right either the
+activity or a picture. **The left column is one width for every kind of lesson**
+(`lg:max-w-xl`). It used to be three — narrow with an activity, wider with a
+picture, wide-and-centered with neither — so stepping through a module slid the
+text about and read as three different websites. Only the right pane changes.
+
+Every lesson with `type: "none"` therefore needs a picture, or the right pane
+collapses and the layout starts moving again. `scripts/check-lessons.py` fails
+the build on a no-activity lesson with neither `media` nor an entry in
+`lib/lessonArt.ts`.
+
+Art lives in three generated sets, all from `node scripts/generate-photos.mjs`,
+all seeded so re-running is byte-identical:
+
+| Manifest | Output | Manifest file | What it is |
+|---|---|---|---|
+| `MANIFEST` | `public/photos/` | `lib/photoAssets.ts` | the practice Photos library |
+| `SITE_MANIFEST` | `public/site/` | `lib/siteArt.ts` | contact portraits, practice-website pictures |
+| `LESSON_MANIFEST` | `public/lesson/` | `lib/lessonArt.ts` | the picture beside a no-activity lesson, keyed by slug |
+
+Keep them separate: `PhotosApp` renders `PHOTO_ASSETS` wholesale, so an avatar
+or a lesson diagram landing in that folder shows up in the learner's photo
+library.
+
+**Unit 1's and Unit 2's lesson art is deliberately one drawing repeated.** The
+same laptop with a different part outlined, the same keyboard with a different
+key outlined — so a learner meeting the seventh of them recognizes the machine
+and only has to find the new part. Add to `laptop()` / `keyboard()` rather than
+drawing a new machine.
+
+**Sizing a picture: cap the width, not the height.** `object-cover` inside a
+short full-width box is a letterbox crop that throws the subject away — a
+photo of a dog in a field became an empty field, and `object-bottom` then showed
+four legs. `w-full max-w-[300px] h-auto` shows the whole picture at any pane
+width. `object-cover` is only safe where the subject fills the frame (a
+bookshelf, a banner behind overlaid text).
+
+`LessonMedia` draws **no border**. `object-contain` letterboxes inside its box,
+so a border on that box frames mostly empty space.

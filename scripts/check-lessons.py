@@ -243,6 +243,30 @@ for les in lessons:
         warnings.append(f"INTRO LENGTH: {les['slug']} intro is {len(intro.split())} words — a wall of text for this audience")
 
 
+# ── Every lesson without an activity must have a picture ────────────────────
+#
+# Not decoration. The lesson page puts the activity in the right-hand pane; a
+# lesson with no activity puts a picture there instead. With neither, the pane
+# collapses and the whole page re-lays itself out around the missing column, so
+# stepping through a module makes the text jump about. The picture is what
+# holds the layout still.
+#
+# The art is drawn by scripts/generate-photos.mjs and keyed by slug in
+# lib/lessonArt.ts. A lesson's own "media" overrides it.
+with open("lib/lessonArt.ts") as fh:
+    art_slugs = set(re.findall(r'^\s*"([^"]+)":\s*\{\s*src:', fh.read(), re.M))
+for les in lessons:
+    if les["playgroundTask"]["type"] not in ("none", "placeholder"):
+        continue
+    if les.get("media") or les["slug"] in art_slugs:
+        continue
+    errors.append(
+        f"NO PICTURE: {les['slug']} has no activity and no image — add one to "
+        f"LESSON_MANIFEST in scripts/generate-photos.mjs and re-run it, or give "
+        f"the lesson its own \"media\". Without it the lesson page changes shape."
+    )
+
+
 # Report
 if warnings:
     print(f"{len(warnings)} warning(s):")

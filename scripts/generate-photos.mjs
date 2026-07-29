@@ -1698,6 +1698,437 @@ S["cover-soup"] = (w, h) => bookCover(w, h, "#d9713f", "#a5432f", "bowl");
 S["cover-walks"] = (w, h) => bookCover(w, h, "#e0a83f", "#a56f2f", "path");
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Lesson art — the picture beside a lesson that has no activity
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * A lesson with no playground used to show nothing at all, and the page
+ * silently switched to a centered single column to fill the gap. Reading three
+ * lessons in a row meant the text jumping from wide-and-centered to
+ * narrow-and-left and back, which reads as three different websites.
+ *
+ * So every no-activity lesson gets a picture, and the layout stops moving.
+ *
+ * Most of these teach one named part of something, so they are drawn as one
+ * diagram with that part picked out — the same laptop across Unit 1, the same
+ * keyboard across Unit 2. A learner meeting the seventh of them recognizes the
+ * machine and only has to find the new part.
+ */
+const CALLOUT = "#f0b429";
+const glowRect = (x, y, w2, h2, r = 6) =>
+  `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w2.toFixed(1)}" height="${h2.toFixed(1)}" rx="${r}" fill="none" stroke="${CALLOUT}" stroke-width="7" opacity="0.95"/>` +
+  `<rect x="${(x - 6).toFixed(1)}" y="${(y - 6).toFixed(1)}" width="${(w2 + 12).toFixed(1)}" height="${(h2 + 12).toFixed(1)}" rx="${r + 5}" fill="none" stroke="${CALLOUT}" stroke-width="3" opacity="0.35"/>`;
+
+/** An open laptop, three-quarters on, with one part called out. */
+function laptop(w, h, part) {
+  const g = linear([["0", "#eef2f7"], ["1", "#ccd8e4"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const cx = w * 0.5, baseY = h * 0.72, bw = w * 0.66, bh = h * 0.055;
+
+  if (part === "sleep") {
+    // Lid shut, seen slightly from the front, and big enough to be the subject
+    // rather than a bar at the bottom of an empty frame.
+    const lw = w * 0.62, lh = h * 0.14, lx = cx - lw / 2, ly = h * 0.56;
+    s += drop(cx, ly + lh * 1.5, lw * 0.55, lh * 0.42);
+    s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${lh.toFixed(1)}" rx="${(lh * 0.3).toFixed(1)}" fill="#5f6b78"/>`;
+    s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${(lh * 0.52).toFixed(1)}" rx="${(lh * 0.28).toFixed(1)}" fill="#8f9baa"/>`;
+    s += `<rect x="${(lx + lw * 0.02).toFixed(1)}" y="${(ly + lh * 0.06).toFixed(1)}" width="${(lw * 0.96).toFixed(1)}" height="${(lh * 0.16).toFixed(1)}" rx="${(lh * 0.08).toFixed(1)}" fill="#b4bfcc"/>`;
+    // The one light that tells you it is asleep and not off.
+    s += `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.13).toFixed(1)}" fill="#8fd47f"/>`;
+    s += `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.26).toFixed(1)}" fill="#8fd47f" opacity="0.3"/>`;
+    [[0.6, 0.42, 62], [0.68, 0.3, 44], [0.745, 0.21, 30]].forEach(([fx, fy, sz]) => {
+      s += `<text x="${(w * fx).toFixed(1)}" y="${(h * fy).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${sz}" font-weight="700" fill="#5f7185" opacity="0.8">Z</text>`;
+    });
+    return s;
+  }
+
+  const lidTop = baseY - h * 0.42;
+  s += drop(cx, baseY + bh * 1.5, bw * 0.58, bh * 1.0);
+  // Lid
+  s += `<path d="M ${(cx - bw * 0.44).toFixed(1)} ${baseY.toFixed(1)} L ${(cx - bw * 0.36).toFixed(1)} ${lidTop.toFixed(1)} L ${(cx + bw * 0.36).toFixed(1)} ${lidTop.toFixed(1)} L ${(cx + bw * 0.44).toFixed(1)} ${baseY.toFixed(1)} Z" fill="#4a5765"/>`;
+  const scr = linear([["0", "#5f8fc4"], ["1", "#3a5f8f"]]);
+  const sx = cx - bw * 0.325, sy = lidTop + h * 0.028, sw = bw * 0.65, sh = baseY - lidTop - h * 0.05;
+  s += `<defs>${scr.def}</defs><path d="M ${sx.toFixed(1)} ${(baseY - h * 0.022).toFixed(1)} L ${(cx - bw * 0.31).toFixed(1)} ${sy.toFixed(1)} L ${(cx + bw * 0.31).toFixed(1)} ${sy.toFixed(1)} L ${(sx + sw).toFixed(1)} ${(baseY - h * 0.022).toFixed(1)} Z" fill="url(#${scr.gid})"/>`;
+  // Camera dot in the lid bezel
+  s += `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.008).toFixed(1)}" fill="#20262e"/>`;
+  // Base
+  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${baseY.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
+  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${baseY.toFixed(1)}" width="${bw.toFixed(1)}" height="${(bh * 0.42).toFixed(1)}" rx="${(bh * 0.25).toFixed(1)}" fill="#b4bfcc"/>`;
+  // Keys and trackpad, drawn on the base's top face
+  const kx = cx - bw * 0.36, ky = baseY + bh * 0.06, kw = bw * 0.72, kh = bh * 0.22;
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 14; c++) {
+      s += `<rect x="${(kx + c * (kw / 14) + 1).toFixed(1)}" y="${(ky + r * (kh / 4) + 0.6).toFixed(1)}" width="${(kw / 14 - 2).toFixed(1)}" height="${(kh / 4 - 1.2).toFixed(1)}" rx="1.2" fill="#7f8b99"/>`;
+    }
+  }
+  const tx = cx - bw * 0.11, ty = baseY + bh * 0.34, tw2 = bw * 0.22, th2 = bh * 0.2;
+  s += `<rect x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" width="${tw2.toFixed(1)}" height="${th2.toFixed(1)}" rx="2" fill="#7f8b99"/>`;
+  // Speaker grilles either side of the keys
+  [-1, 1].forEach((d) => {
+    for (let i = 0; i < 4; i++) {
+      s += `<rect x="${(cx + d * bw * 0.4 - bw * 0.03 + i * bw * 0.014).toFixed(1)}" y="${(baseY + bh * 0.08).toFixed(1)}" width="${(bw * 0.007).toFixed(1)}" height="${(bh * 0.2).toFixed(1)}" rx="1" fill="#6f7b89"/>`;
+    }
+  });
+  // Ports along the near edge
+  [[-0.42, 0.05], [-0.34, 0.035], [0.34, 0.035], [0.42, 0.05]].forEach(([fx, fw2]) => {
+    s += `<rect x="${(cx + bw * fx - bw * fw2 / 2).toFixed(1)}" y="${(baseY + bh * 0.86).toFixed(1)}" width="${(bw * fw2).toFixed(1)}" height="${(bh * 0.16).toFixed(1)}" rx="2" fill="#5f6874"/>`;
+  });
+
+  if (part === "screen") s += glowRect(sx, sy, sw, sh, 4);
+  if (part === "keyboard") s += glowRect(kx - 4, ky - 3, kw + 8, kh + 6, 4);
+  if (part === "trackpad") s += glowRect(tx - 4, ty - 3, tw2 + 8, th2 + 6, 4);
+  if (part === "camera") s += `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.03).toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="6"/>`;
+  if (part === "speakers") {
+    [-1, 1].forEach((d) => { s += glowRect(cx + d * bw * 0.4 - bw * 0.036, baseY + bh * 0.04, bw * 0.072, bh * 0.28, 3); });
+  }
+  if (part === "ports") s += glowRect(cx - bw * 0.47, baseY + bh * 0.8, bw * 0.16, bh * 0.28, 3);
+  return s;
+}
+
+S["part-screen"] = (w, h) => laptop(w, h, "screen");
+S["part-keyboard"] = (w, h) => laptop(w, h, "keyboard");
+S["part-trackpad"] = (w, h) => laptop(w, h, "trackpad");
+S["part-speakers"] = (w, h) => laptop(w, h, "speakers");
+S["part-camera"] = (w, h) => laptop(w, h, "camera");
+S["part-ports"] = (w, h) => laptop(w, h, "ports");
+S["laptop-sleep"] = (w, h) => laptop(w, h, "sleep");
+
+/** A keyboard seen from above, with one key (or run of keys) picked out. */
+const KEY_ROWS = [
+  ["esc", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+  ["tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
+  ["caps", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "return"],
+  ["shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "shift"],
+  ["ctrl", "alt", "space", "alt", "ctrl"],
+];
+function keyboard(w, h, want) {
+  const g = linear([["0", "#e9edf2"], ["1", "#cbd5e0"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const bx = w * 0.07, by = h * 0.16, bw = w * 0.86, bh = h * 0.68;
+  s += drop(w * 0.5, by + bh + h * 0.03, bw * 0.5, h * 0.02);
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14" fill="#8f9baa"/>`;
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh * 0.94}" rx="14" fill="#b4bfcc"/>`;
+  const pad = bw * 0.022, rowH = (bh * 0.86) / KEY_ROWS.length;
+  const hits = [];
+  KEY_ROWS.forEach((row, r) => {
+    // Widths in units; space is wide, modifiers a little wider than letters.
+    const units = row.map((k) => (k === "space" ? 5 : ["tab", "caps", "shift", "return", "ctrl", "alt", "cmd", "esc"].includes(k) ? 1.5 : 1));
+    const total = units.reduce((a, b) => a + b, 0);
+    const avail = bw - pad * 2 - pad * (row.length - 1);
+    let x = bx + pad;
+    const y = by + bh * 0.06 + r * rowH;
+    row.forEach((k, i) => {
+      const kw = (units[i] / total) * avail;
+      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${kw.toFixed(1)}" height="${(rowH * 0.82).toFixed(1)}" rx="4" fill="#f4f6f8"/>`;
+      s += `<rect x="${x.toFixed(1)}" y="${(y + rowH * 0.68).toFixed(1)}" width="${kw.toFixed(1)}" height="${(rowH * 0.14).toFixed(1)}" rx="3" fill="#d8dde3"/>`;
+      const label = k.length > 1 && k !== "space" ? k : k === "space" ? "" : k.toUpperCase();
+      if (label) {
+        s += `<text x="${(x + kw / 2).toFixed(1)}" y="${(y + rowH * 0.55).toFixed(1)}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="${Math.min(rowH * 0.36, kw * 0.44).toFixed(1)}" fill="#5f6874">${label === "cmd" ? "ctrl" : label}</text>`;
+      }
+      if (want.includes(k)) hits.push([x, y, kw, rowH * 0.82]);
+      x += kw + pad;
+    });
+  });
+  hits.forEach(([x, y, kw, kh]) => { s += glowRect(x, y, kw, kh, 4); });
+  return s;
+}
+S["key-numbers"] = (w, h) => keyboard(w, h, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]);
+S["key-caps"] = (w, h) => keyboard(w, h, ["caps"]);
+S["key-ctrl"] = (w, h) => keyboard(w, h, ["ctrl"]);
+S["key-escape"] = (w, h) => keyboard(w, h, ["esc"]);
+
+/** A screen showing the practice desktop, with one region called out. */
+function desktopShot(w, h, region) {
+  const g = linear([["0", "#dfe6ee"], ["1", "#c2cfdc"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const bx = w * 0.08, by = h * 0.12, bw = w * 0.84, bh = h * 0.7;
+  s += drop(w * 0.5, by + bh + h * 0.05, bw * 0.34, h * 0.02);
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="10" fill="#2f3a45"/>`;
+  const ix = bx + bw * 0.014, iy = by + bh * 0.02, iw = bw * 0.972, ih = bh * 0.96;
+  const wall = linear([["0", "#f2c8c8"], ["0.5", "#c8e8c8"], ["1", "#c8ccf0"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  s += `<defs>${wall.def}</defs><rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" rx="6" fill="url(#${wall.gid})"/>`;
+  // Menu bar
+  const mh = ih * 0.075;
+  s += `<rect x="${ix}" y="${iy}" width="${iw}" height="${mh}" rx="6" fill="#fbfcfd"/>`;
+  s += `<rect x="${ix}" y="${(iy + mh * 0.5).toFixed(1)}" width="${iw}" height="${(mh * 0.5).toFixed(1)}" fill="#fbfcfd"/>`;
+  s += `<rect x="${(ix + iw * 0.02).toFixed(1)}" y="${(iy + mh * 0.32).toFixed(1)}" width="${(iw * 0.09).toFixed(1)}" height="${(mh * 0.34).toFixed(1)}" rx="2" fill="#4f5a66"/>`;
+  [0.84, 0.89, 0.94].forEach((fx) => {
+    s += `<rect x="${(ix + iw * fx).toFixed(1)}" y="${(iy + mh * 0.32).toFixed(1)}" width="${(iw * 0.035).toFixed(1)}" height="${(mh * 0.34).toFixed(1)}" rx="2" fill="#8f99a5"/>`;
+  });
+  // Dock
+  const dw = iw * 0.52, dh = ih * 0.11, dx = ix + (iw - dw) / 2, dy = iy + ih - dh * 1.35;
+  s += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${dw.toFixed(1)}" height="${dh.toFixed(1)}" rx="${(dh * 0.28).toFixed(1)}" fill="#fff" opacity="0.62"/>`;
+  const cols = ["#cfe6f5", "#d6e8d0", "#f5dfc0", "#dcd6f0", "#f5cfd6", "#d0e8e4"];
+  for (let i = 0; i < 6; i++) {
+    s += `<rect x="${(dx + dw * 0.045 + i * dw * 0.155).toFixed(1)}" y="${(dy + dh * 0.18).toFixed(1)}" width="${(dw * 0.12).toFixed(1)}" height="${(dh * 0.64).toFixed(1)}" rx="${(dh * 0.18).toFixed(1)}" fill="${cols[i]}"/>`;
+  }
+  if (region === "menubar") s += glowRect(ix, iy, iw, mh, 4);
+  if (region === "desktop") s += glowRect(ix + iw * 0.06, iy + mh * 1.4, iw * 0.88, ih - mh * 1.4 - dh * 1.6, 6);
+  return s;
+}
+S["screen-desktop-art"] = (w, h) => desktopShot(w, h, "desktop");
+S["screen-menubar-art"] = (w, h) => desktopShot(w, h, "menubar");
+
+/** Everything else: one idea, one picture. */
+const cloudPath = (cx, cy, r) =>
+  `<path d="M ${(cx - r * 1.5).toFixed(1)} ${(cy + r * 0.45).toFixed(1)} a ${(r * 0.62).toFixed(1)} ${(r * 0.62).toFixed(1)} 0 0 1 ${(r * 0.16).toFixed(1)} ${(-r * 1.18).toFixed(1)} a ${(r * 0.78).toFixed(1)} ${(r * 0.78).toFixed(1)} 0 0 1 ${(r * 1.42).toFixed(1)} ${(-r * 0.34).toFixed(1)} a ${(r * 0.58).toFixed(1)} ${(r * 0.58).toFixed(1)} 0 0 1 ${(r * 1.06).toFixed(1)} ${(r * 0.5).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.55).toFixed(1)} 0 0 1 ${(-r * 0.2).toFixed(1)} ${(r * 1.06).toFixed(1)} Z" fill="#fff" opacity="0.95"/>`;
+
+S["cloud-backup"] = (w, h) => {
+  const g = linear([["0", "#8fc4e8"], ["1", "#d8ecf6"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  s += cloudPath(w * 0.5, h * 0.32, Math.min(w, h) * 0.2);
+  // Phone below, photos rising into the cloud
+  const px = w * 0.5 - w * 0.055, py = h * 0.66, pw = w * 0.11, ph = h * 0.3;
+  s += `<rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="${(pw * 0.18).toFixed(1)}" fill="#2f3540"/>`;
+  s += `<rect x="${(px + pw * 0.07).toFixed(1)}" y="${(py + pw * 0.07).toFixed(1)}" width="${(pw * 0.86).toFixed(1)}" height="${(ph - pw * 0.14).toFixed(1)}" rx="${(pw * 0.12).toFixed(1)}" fill="#dfe8f0"/>`;
+  [["#f0c07f", -0.14, 0.54], ["#a8d8a0", 0, 0.5], ["#c4b0e8", 0.14, 0.56]].forEach(([c, dx, fy]) => {
+    s += `<g transform="rotate(${(dx * 60).toFixed(0)} ${(w * (0.5 + dx)).toFixed(1)} ${(h * fy).toFixed(1)})"><rect x="${(w * (0.5 + dx) - w * 0.038).toFixed(1)}" y="${(h * fy - h * 0.045).toFixed(1)}" width="${(w * 0.076).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#fff"/><rect x="${(w * (0.5 + dx) - w * 0.03).toFixed(1)}" y="${(h * fy - h * 0.035).toFixed(1)}" width="${(w * 0.06).toFixed(1)}" height="${(h * 0.055).toFixed(1)}" rx="2" fill="${c}"/></g>`;
+  });
+  s += `<path d="M ${(w * 0.5).toFixed(1)} ${(h * 0.62).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.46).toFixed(1)} M ${(w * 0.47).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.455).toFixed(1)} L ${(w * 0.53).toFixed(1)} ${(h * 0.5).toFixed(1)}" stroke="#2f6f9f" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return s;
+};
+
+S["app-vs-web"] = (w, h) => {
+  const g = linear([["0", "#eef1f5"], ["1", "#d2dae4"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  s += `<line x1="${(w * 0.5).toFixed(1)}" y1="${(h * 0.12).toFixed(1)}" x2="${(w * 0.5).toFixed(1)}" y2="${(h * 0.88).toFixed(1)}" stroke="#a8b4c0" stroke-width="3" stroke-dasharray="9 9"/>`;
+  // Left: an app icon on a device home screen
+  const px = w * 0.16, py = h * 0.22, pw = w * 0.18, ph = h * 0.56;
+  s += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${(pw * 0.14).toFixed(1)}" fill="#2f3540"/>`;
+  s += `<rect x="${(px + pw * 0.06).toFixed(1)}" y="${(py + pw * 0.06).toFixed(1)}" width="${(pw * 0.88).toFixed(1)}" height="${(ph - pw * 0.12).toFixed(1)}" rx="${(pw * 0.09).toFixed(1)}" fill="#e6ecf2"/>`;
+  for (let i = 0; i < 6; i++) {
+    const c = ["#7fb4e0", "#8fc48f", "#e8b46f", "#c4a8e0", "#e08f9f", "#7fc4bc"][i];
+    s += `<rect x="${(px + pw * 0.16 + (i % 2) * pw * 0.38).toFixed(1)}" y="${(py + ph * 0.14 + Math.floor(i / 2) * ph * 0.22).toFixed(1)}" width="${(pw * 0.3).toFixed(1)}" height="${(pw * 0.3).toFixed(1)}" rx="${(pw * 0.08).toFixed(1)}" fill="${c}"/>`;
+  }
+  // Right: a browser window with an address bar
+  const bx = w * 0.56, by = h * 0.28, bw = w * 0.36, bh = h * 0.44;
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="8" fill="#fff"/>`;
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${(bh * 0.2).toFixed(1)}" rx="8" fill="#e4e9ef"/>`;
+  s += `<rect x="${(bx + bw * 0.06).toFixed(1)}" y="${(by + bh * 0.055).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${(bh * 0.09).toFixed(1)}" rx="${(bh * 0.045).toFixed(1)}" fill="#fff"/>`;
+  for (let i = 0; i < 5; i++) {
+    s += `<rect x="${(bx + bw * 0.07).toFixed(1)}" y="${(by + bh * 0.32 + i * bh * 0.12).toFixed(1)}" width="${(bw * (i === 4 ? 0.4 : 0.84)).toFixed(1)}" height="${(bh * 0.055).toFixed(1)}" rx="3" fill="#c8d0d8"/>`;
+  }
+  return s;
+};
+
+S["hardware-trouble"] = (w, h) => {
+  let s = laptop(w, h, "none");
+  const cx = w * 0.74, cy = h * 0.3, r = Math.min(w, h) * 0.13;
+  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0b429"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(1)}" fill="#fdf6e4"/>`;
+  s += `<rect x="${(cx - r * 0.09).toFixed(1)}" y="${(cy - r * 0.46).toFixed(1)}" width="${(r * 0.18).toFixed(1)}" height="${(r * 0.6).toFixed(1)}" rx="${(r * 0.09).toFixed(1)}" fill="#a5701f"/>`;
+  s += `<circle cx="${cx}" cy="${(cy + r * 0.4).toFixed(1)}" r="${(r * 0.11).toFixed(1)}" fill="#a5701f"/>`;
+  return s;
+};
+
+S["peripheral-trouble"] = (w, h) => {
+  const g = linear([["0", "#f2f4f7"], ["1", "#d0d8e0"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  // The laptop side, with one socket empty.
+  const lx = w * 0.62, ly = h * 0.3, lw = w * 0.3, lh = h * 0.4;
+  s += drop(lx + lw / 2, ly + lh + h * 0.03, lw * 0.5, h * 0.02);
+  s += `<rect x="${lx}" y="${ly}" width="${lw}" height="${lh}" rx="10" fill="#8f9baa"/>`;
+  s += `<rect x="${lx}" y="${ly}" width="${lw}" height="${(lh * 0.16).toFixed(1)}" rx="10" fill="#a8b4c0"/>`;
+  const portY = ly + lh * 0.46, portW = lw * 0.16, portH = lh * 0.11;
+  s += `<rect x="${(lx - portW * 0.3).toFixed(1)}" y="${portY.toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="#39414a"/>`;
+  s += `<rect x="${(lx - portW * 0.3).toFixed(1)}" y="${(portY + lh * 0.22).toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="#39414a"/>`;
+
+  // The mouse, and a plug that stops short of the socket.
+  const mx = w * 0.22, my = h * 0.58, mw = w * 0.13, mh = h * 0.28;
+  s += drop(mx, my + mh * 0.55, mw * 0.6, mh * 0.09);
+  s += `<rect x="${(mx - mw / 2).toFixed(1)}" y="${(my - mh / 2).toFixed(1)}" width="${mw.toFixed(1)}" height="${mh.toFixed(1)}" rx="${(mw / 2).toFixed(1)}" fill="#d4dbe2"/>`;
+  s += `<path d="M ${(mx - mw / 2).toFixed(1)} ${(my - mh * 0.16).toFixed(1)} a ${(mw / 2).toFixed(1)} ${(mh * 0.34).toFixed(1)} 0 0 1 ${mw.toFixed(1)} 0 Z" fill="#eef2f6"/>`;
+  s += `<line x1="${mx.toFixed(1)}" y1="${(my - mh / 2).toFixed(1)}" x2="${mx.toFixed(1)}" y2="${(my - mh * 0.16).toFixed(1)}" stroke="#9fabb8" stroke-width="3"/>`;
+  s += `<rect x="${(mx - mw * 0.055).toFixed(1)}" y="${(my - mh * 0.34).toFixed(1)}" width="${(mw * 0.11).toFixed(1)}" height="${(mh * 0.13).toFixed(1)}" rx="3" fill="#9fabb8"/>`;
+  const cableEnd = w * 0.5;
+  s += `<path d="M ${(mx + mw * 0.42).toFixed(1)} ${(my - mh * 0.34).toFixed(1)} q ${(w * 0.09).toFixed(1)} ${(-h * 0.16).toFixed(1)} ${(cableEnd - mx - mw * 0.42).toFixed(1)} ${(portY + portH / 2 - my + mh * 0.34).toFixed(1)}" stroke="#6f7b89" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+  s += `<rect x="${cableEnd.toFixed(1)}" y="${(portY + portH * 0.06).toFixed(1)}" width="${(portW * 0.75).toFixed(1)}" height="${(portH * 0.88).toFixed(1)}" rx="2" fill="#b4bfcc" stroke="#6f7b89" stroke-width="3"/>`;
+  // The gap is the lesson.
+  s += glowRect(cableEnd - 8, portY - 10, (lx - portW * 0.3) - cableEnd + portW + 16, portH + 20, 6);
+  return s;
+};
+
+S["map-route"] = (w, h) => {
+  let s = `<rect width="${w}" height="${h}" fill="#e8e4d8"/>`;
+  s += `<rect x="0" y="${(h * 0.62).toFixed(1)}" width="${w}" height="${(h * 0.16).toFixed(1)}" fill="#cfe0ec"/>`;
+  for (let i = 0; i < 7; i++) {
+    s += `<rect x="${(w * (0.05 + i * 0.14)).toFixed(1)}" y="0" width="${(w * 0.02).toFixed(1)}" height="${h}" fill="#f7f5ee"/>`;
+  }
+  for (let i = 0; i < 5; i++) {
+    s += `<rect x="0" y="${(h * (0.08 + i * 0.2)).toFixed(1)}" width="${w}" height="${(h * 0.02).toFixed(1)}" fill="#f7f5ee"/>`;
+  }
+  for (let i = 0; i < 16; i++) {
+    const bx = w * (0.03 + (i % 8) * 0.12), by2 = h * (0.16 + Math.floor(i / 8) * 0.44);
+    s += `<rect x="${bx.toFixed(1)}" y="${by2.toFixed(1)}" width="${(w * 0.07).toFixed(1)}" height="${(h * 0.13).toFixed(1)}" rx="3" fill="${i % 3 ? "#dcd6c8" : "#cfd8c8"}"/>`;
+  }
+  s += `<path d="M ${(w * 0.18).toFixed(1)} ${(h * 0.78).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.78).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.4).toFixed(1)} L ${(w * 0.62).toFixed(1)} ${(h * 0.4).toFixed(1)} L ${(w * 0.62).toFixed(1)} ${(h * 0.22).toFixed(1)}" stroke="#2f6fdf" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const pin = (px, py, c) =>
+    `<path d="M ${px.toFixed(1)} ${py.toFixed(1)} c ${(-w * 0.032).toFixed(1)} ${(-h * 0.05).toFixed(1)} ${(-w * 0.032).toFixed(1)} ${(-h * 0.11).toFixed(1)} 0 ${(-h * 0.13).toFixed(1)} c ${(w * 0.032).toFixed(1)} ${(h * 0.02).toFixed(1)} ${(w * 0.032).toFixed(1)} ${(h * 0.08).toFixed(1)} 0 ${(h * 0.13).toFixed(1)} Z" fill="${c}"/>` +
+    `<circle cx="${px.toFixed(1)}" cy="${(py - h * 0.088).toFixed(1)}" r="${(w * 0.013).toFixed(1)}" fill="#fff"/>`;
+  s += pin(w * 0.18, h * 0.78, "#3f7f4f");
+  s += pin(w * 0.62, h * 0.22, "#cf3f3f");
+  return s;
+};
+
+S["qr-code"] = (w, h, rng) => {
+  const g = linear([["0", "#f2f4f7"], ["1", "#d8dee6"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const N = 17, side = Math.min(w, h) * 0.58, cell = side / N;
+  const ox = w * 0.5 - side / 2, oy = h * 0.5 - side / 2;
+  s += drop(w * 0.5, oy + side + h * 0.03, side * 0.55, h * 0.018);
+  s += `<rect x="${(ox - cell).toFixed(1)}" y="${(oy - cell).toFixed(1)}" width="${(side + cell * 2).toFixed(1)}" height="${(side + cell * 2).toFixed(1)}" rx="8" fill="#fff"/>`;
+  const finder = (fx, fy) => {
+    let t = `<rect x="${(ox + fx * cell).toFixed(1)}" y="${(oy + fy * cell).toFixed(1)}" width="${(cell * 7).toFixed(1)}" height="${(cell * 7).toFixed(1)}" fill="#1d2733"/>`;
+    t += `<rect x="${(ox + (fx + 1) * cell).toFixed(1)}" y="${(oy + (fy + 1) * cell).toFixed(1)}" width="${(cell * 5).toFixed(1)}" height="${(cell * 5).toFixed(1)}" fill="#fff"/>`;
+    t += `<rect x="${(ox + (fx + 2) * cell).toFixed(1)}" y="${(oy + (fy + 2) * cell).toFixed(1)}" width="${(cell * 3).toFixed(1)}" height="${(cell * 3).toFixed(1)}" fill="#1d2733"/>`;
+    return t;
+  };
+  const inFinder = (r, c) => (r < 8 && c < 8) || (r < 8 && c > N - 9) || (r > N - 9 && c < 8);
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      if (inFinder(r, c)) continue;
+      if (rng.f() > 0.52) s += `<rect x="${(ox + c * cell).toFixed(1)}" y="${(oy + r * cell).toFixed(1)}" width="${cell.toFixed(1)}" height="${cell.toFixed(1)}" fill="#1d2733"/>`;
+    }
+  }
+  s += finder(0, 0) + finder(N - 7, 0) + finder(0, N - 7);
+  return s;
+};
+
+S["safe-payment"] = (w, h) => {
+  const g = linear([["0", "#e4f0e8"], ["1", "#c2dccc"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const cw = w * 0.44, ch = cw * 0.63, cx = w * 0.5 - cw / 2, cy = h * 0.56 - ch / 2;
+  s += drop(w * 0.5, cy + ch + h * 0.04, cw * 0.5, h * 0.02);
+  s += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="14" fill="#3f6f8f"/>`;
+  s += `<rect x="${cx}" y="${(cy + ch * 0.2).toFixed(1)}" width="${cw}" height="${(ch * 0.17).toFixed(1)}" fill="#22384a"/>`;
+  s += `<rect x="${(cx + cw * 0.08).toFixed(1)}" y="${(cy + ch * 0.5).toFixed(1)}" width="${(cw * 0.16).toFixed(1)}" height="${(ch * 0.18).toFixed(1)}" rx="3" fill="#e8c96f"/>`;
+  for (let i = 0; i < 4; i++) {
+    s += `<rect x="${(cx + cw * 0.3 + i * cw * 0.17).toFixed(1)}" y="${(cy + ch * 0.56).toFixed(1)}" width="${(cw * 0.12).toFixed(1)}" height="${(ch * 0.07).toFixed(1)}" rx="2" fill="#a8c4d8"/>`;
+  }
+  // Padlock, closed
+  const lx = w * 0.5, ly = h * 0.24, lr = Math.min(w, h) * 0.09;
+  s += `<path d="M ${(lx - lr * 0.55).toFixed(1)} ${ly.toFixed(1)} a ${(lr * 0.55).toFixed(1)} ${(lr * 0.6).toFixed(1)} 0 0 1 ${(lr * 1.1).toFixed(1)} 0" stroke="#2f6f4f" stroke-width="${(lr * 0.26).toFixed(1)}" fill="none"/>`;
+  s += `<rect x="${(lx - lr * 0.8).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.6).toFixed(1)}" height="${(lr * 1.2).toFixed(1)}" rx="${(lr * 0.22).toFixed(1)}" fill="#3f8f5f"/>`;
+  s += `<circle cx="${lx.toFixed(1)}" cy="${(ly + lr * 0.55).toFixed(1)}" r="${(lr * 0.16).toFixed(1)}" fill="#e4f0e8"/>`;
+  return s;
+};
+
+S["share-doc"] = (w, h) => {
+  const g = linear([["0", "#eef2f7"], ["1", "#cfd9e4"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const dx = w * 0.14, dy = h * 0.18, dw = w * 0.34, dh = h * 0.64;
+  s += drop(dx + dw / 2, dy + dh + h * 0.03, dw * 0.5, h * 0.018);
+  s += `<rect x="${dx}" y="${dy}" width="${dw}" height="${dh}" rx="8" fill="#fff"/>`;
+  s += `<rect x="${dx}" y="${dy}" width="${dw}" height="${(dh * 0.09).toFixed(1)}" rx="8" fill="#4f7fbf"/>`;
+  for (let i = 0; i < 8; i++) {
+    s += `<rect x="${(dx + dw * 0.1).toFixed(1)}" y="${(dy + dh * 0.2 + i * dh * 0.085).toFixed(1)}" width="${(dw * (i % 4 === 3 ? 0.42 : 0.8)).toFixed(1)}" height="${(dh * 0.035).toFixed(1)}" rx="2" fill="#c8d0d8"/>`;
+  }
+  // Two people, one link between them
+  const face = (fx, fy, r, c) =>
+    `<circle cx="${fx.toFixed(1)}" cy="${fy.toFixed(1)}" r="${r.toFixed(1)}" fill="${c}"/>` +
+    `<circle cx="${fx.toFixed(1)}" cy="${(fy - r * 0.28).toFixed(1)}" r="${(r * 0.34).toFixed(1)}" fill="#fff" opacity="0.9"/>` +
+    `<path d="M ${(fx - r * 0.52).toFixed(1)} ${(fy + r * 0.62).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.5).toFixed(1)} 0 0 1 ${(r * 1.04).toFixed(1)} 0 Z" fill="#fff" opacity="0.9"/>`;
+  s += face(w * 0.72, h * 0.34, Math.min(w, h) * 0.1, "#4f8f9f");
+  s += face(w * 0.82, h * 0.66, Math.min(w, h) * 0.1, "#9f6f4f");
+  s += `<path d="M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.44).toFixed(1)} L ${(w * 0.66).toFixed(1)} ${(h * 0.36).toFixed(1)} M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.75).toFixed(1)} ${(h * 0.63).toFixed(1)}" stroke="#4f7fbf" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 10"/>`;
+  return s;
+};
+
+S["drive-cloud"] = (w, h) => {
+  const g = linear([["0", "#9fcfe8"], ["1", "#dff0f8"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  s += cloudPath(w * 0.5, h * 0.44, Math.min(w, h) * 0.3);
+  // Folders inside the cloud
+  const folder = (fx, fy, fw, c) =>
+    `<path d="M ${fx.toFixed(1)} ${(fy + fw * 0.16).toFixed(1)} l 0 ${(fw * 0.56).toFixed(1)} l ${fw.toFixed(1)} 0 l 0 ${(-fw * 0.56).toFixed(1)} l ${(-fw * 0.52).toFixed(1)} 0 l ${(-fw * 0.1).toFixed(1)} ${(-fw * 0.12).toFixed(1)} l ${(-fw * 0.38).toFixed(1)} 0 Z" fill="${c}"/>`;
+  s += folder(w * 0.34, h * 0.4, w * 0.1, "#e8b45f");
+  s += folder(w * 0.47, h * 0.4, w * 0.1, "#7fb4e0");
+  s += folder(w * 0.6, h * 0.4, w * 0.1, "#8fc48f");
+  return s;
+};
+
+S["staying-connected"] = (w, h) => {
+  const g = linear([["0", "#f0e8f5"], ["1", "#d4c8e4"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const bubble = (bx, by, bw, bh, c, flip) =>
+    `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.34).toFixed(1)}" fill="${c}"/>` +
+    `<path d="M ${(flip ? bx + bw - bh * 0.1 : bx + bh * 0.1).toFixed(1)} ${(by + bh).toFixed(1)} l ${(flip ? bh * 0.3 : -bh * 0.3).toFixed(1)} ${(bh * 0.3).toFixed(1)} l ${(flip ? -bh * 0.42 : bh * 0.42).toFixed(1)} ${(-bh * 0.14).toFixed(1)} Z" fill="${c}"/>`;
+  s += bubble(w * 0.1, h * 0.2, w * 0.42, h * 0.16, "#7f8fd8", false);
+  s += bubble(w * 0.44, h * 0.46, w * 0.44, h * 0.16, "#8fc4a8", true);
+  s += bubble(w * 0.14, h * 0.7, w * 0.32, h * 0.14, "#7f8fd8", false);
+  for (let i = 0; i < 3; i++) {
+    s += `<rect x="${(w * 0.16 + i * w * 0.07).toFixed(1)}" y="${(h * 0.26).toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
+    s += `<rect x="${(w * 0.5 + i * w * 0.07).toFixed(1)}" y="${(h * 0.52).toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
+  }
+  return s;
+};
+
+S["settings-adapt"] = (w, h) => {
+  const g = linear([["0", "#eef1f5"], ["1", "#cfd6de"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const px = w * 0.14, py = h * 0.16, pw = w * 0.72, ph = h * 0.68;
+  s += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="12" fill="#fff"/>`;
+  const rows = [
+    ["Text size", 0.72], ["Brightness", 0.4], ["Contrast", 0.58],
+  ];
+  rows.forEach(([label, v], i) => {
+    const ry = py + ph * (0.16 + i * 0.2);
+    s += `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>`;
+    s += `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#dde3ea"/>`;
+    s += `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5 * v).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#4f8fcf"/>`;
+    s += `<circle cx="${(px + pw * (0.42 + 0.5 * v)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.038).toFixed(1)}" fill="#fff" stroke="#4f8fcf" stroke-width="4"/>`;
+  });
+  // Two toggles below
+  [["Dark mode", true], ["Reduce motion", false]].forEach(([label, on], i) => {
+    const ry = py + ph * (0.72 + i * 0.16);
+    s += `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>`;
+    s += `<rect x="${(px + pw * 0.78).toFixed(1)}" y="${(ry - ph * 0.036).toFixed(1)}" width="${(pw * 0.14).toFixed(1)}" height="${(ph * 0.072).toFixed(1)}" rx="${(ph * 0.036).toFixed(1)}" fill="${on ? "#4f8fcf" : "#c8d0d8"}"/>`;
+    s += `<circle cx="${(px + pw * (on ? 0.885 : 0.815)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.029).toFixed(1)}" fill="#fff"/>`;
+  });
+  return s;
+};
+
+S["holiday-away"] = (w, h) => {
+  const sky = linear([["0", "#7fc4e8"], ["0.62", "#ffd8a8"], ["1", "#f5e0c0"]]);
+  let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
+  s += `<circle cx="${(w * 0.74).toFixed(1)}" cy="${(h * 0.3).toFixed(1)}" r="${(Math.min(w, h) * 0.11).toFixed(1)}" fill="#fff0c0"/>`;
+  s += `<rect x="0" y="${(h * 0.62).toFixed(1)}" width="${w}" height="${(h * 0.1).toFixed(1)}" fill="#6fb4cf"/>`;
+  s += `<rect x="0" y="${(h * 0.72).toFixed(1)}" width="${w}" height="${(h * 0.28).toFixed(1)}" fill="#f0dcb0"/>`;
+  // Deckchair and a closed laptop left behind
+  s += `<path d="M ${(w * 0.22).toFixed(1)} ${(h * 0.86).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.68).toFixed(1)} L ${(w * 0.42).toFixed(1)} ${(h * 0.7).toFixed(1)} L ${(w * 0.3).toFixed(1)} ${(h * 0.88).toFixed(1)} Z" fill="#e0654f"/>`;
+  s += `<line x1="${(w * 0.24).toFixed(1)}" y1="${(h * 0.88).toFixed(1)}" x2="${(w * 0.36).toFixed(1)}" y2="${(h * 0.74).toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
+  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.14).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#8f9baa"/>`;
+  // Palm
+  s += `<path d="M ${(w * 0.82).toFixed(1)} ${(h * 0.86).toFixed(1)} q ${(-w * 0.02).toFixed(1)} ${(-h * 0.24).toFixed(1)} ${(w * 0.01).toFixed(1)} ${(-h * 0.4).toFixed(1)}" stroke="#8a6a4a" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+  for (let i = 0; i < 5; i++) {
+    const a = -140 + i * 55;
+    s += `<ellipse cx="${(w * 0.83).toFixed(1)}" cy="${(h * 0.46).toFixed(1)}" rx="${(w * 0.075).toFixed(1)}" ry="${(h * 0.024).toFixed(1)}" fill="#3f8f5f" transform="rotate(${a} ${(w * 0.83).toFixed(1)} ${(h * 0.46).toFixed(1)})"/>`;
+  }
+  return s;
+};
+
+S["graduation"] = (w, h) => {
+  const g = radial([["0", "#fff4d8"], ["1", "#e8d9b8"]], { r: 0.75 });
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  // Certificate
+  const cx = w * 0.5, cw = w * 0.5, ch = cw * 0.72, cy = h * 0.56 - ch / 2;
+  s += drop(cx, cy + ch + h * 0.04, cw * 0.5, h * 0.02);
+  s += `<rect x="${(cx - cw / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="6" fill="#fffdf7"/>`;
+  s += `<rect x="${(cx - cw / 2 + 10).toFixed(1)}" y="${(cy + 10).toFixed(1)}" width="${(cw - 20).toFixed(1)}" height="${(ch - 20).toFixed(1)}" rx="3" fill="none" stroke="#c9a45f" stroke-width="4"/>`;
+  for (let i = 0; i < 4; i++) {
+    s += `<rect x="${(cx - cw * 0.3).toFixed(1)}" y="${(cy + ch * (0.34 + i * 0.13)).toFixed(1)}" width="${(cw * (i === 3 ? 0.28 : 0.6)).toFixed(1)}" height="${(ch * 0.045).toFixed(1)}" rx="3" fill="#d8d2c4"/>`;
+  }
+  s += `<circle cx="${(cx + cw * 0.3).toFixed(1)}" cy="${(cy + ch * 0.76).toFixed(1)}" r="${(ch * 0.11).toFixed(1)}" fill="#c9a45f"/>`;
+  // Cap
+  const mx = cx, my = h * 0.22, mw = w * 0.26;
+  s += `<polygon points="${mx.toFixed(1)},${(my - mw * 0.16).toFixed(1)} ${(mx + mw / 2).toFixed(1)},${my.toFixed(1)} ${mx.toFixed(1)},${(my + mw * 0.16).toFixed(1)} ${(mx - mw / 2).toFixed(1)},${my.toFixed(1)}" fill="#2f3540"/>`;
+  s += `<path d="M ${(mx - mw * 0.22).toFixed(1)} ${(my + mw * 0.07).toFixed(1)} l 0 ${(mw * 0.16).toFixed(1)} q ${(mw * 0.22).toFixed(1)} ${(mw * 0.1).toFixed(1)} ${(mw * 0.44).toFixed(1)} 0 l 0 ${(-mw * 0.16).toFixed(1)} Z" fill="#3f4750"/>`;
+  s += `<line x1="${(mx + mw / 2).toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + mw * 0.56).toFixed(1)}" y2="${(my + mw * 0.28).toFixed(1)}" stroke="#e0a83f" stroke-width="5"/>`;
+  s += `<circle cx="${(mx + mw * 0.56).toFixed(1)}" cy="${(my + mw * 0.3).toFixed(1)}" r="${(mw * 0.045).toFixed(1)}" fill="#e0a83f"/>`;
+  return s;
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Manifest
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1798,7 +2229,7 @@ const SITE_MANIFEST = [
 async function render(manifest, dir) {
   mkdirSync(dir, { recursive: true });
   const meta = [];
-  for (const [file, sceneName, label, [w, h]] of manifest) {
+  for (const [file, sceneName, label, [w, h], slug] of manifest) {
     const scene = S[sceneName];
     if (!scene) throw new Error(`No scene named ${sceneName}`);
     uid = 0;
@@ -1806,11 +2237,45 @@ async function render(manifest, dir) {
     const body = scene(w, h, rng);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${body}${finish(w, h)}</svg>`;
     await sharp(Buffer.from(svg)).webp({ quality: 82, effort: 5 }).toFile(join(dir, `${file}.webp`));
-    meta.push({ file, label, w, h });
+    meta.push({ file, label, w, h, slug });
     process.stdout.write(`  ${file}.webp\n`);
   }
   return meta;
 }
+
+/**
+ * Lesson art, keyed by lesson slug. The label is the alt text, so it says what
+ * is in the picture rather than repeating the lesson title.
+ */
+const LA = [1200, 800];
+const LESSON_MANIFEST = [
+  ["part-screen",      "part-screen",      "A laptop with the screen outlined",                 LA, "computer-parts-screen"],
+  ["part-keyboard",    "part-keyboard",    "A laptop with the keyboard outlined",               LA, "computer-parts-keyboard"],
+  ["part-trackpad",    "part-trackpad",    "A laptop with the trackpad outlined",               LA, "computer-parts-trackpad"],
+  ["part-speakers",    "part-speakers",    "A laptop with the speaker grilles outlined",        LA, "computer-parts-speakers"],
+  ["part-camera",      "part-camera",      "A laptop with the camera above the screen circled", LA, "computer-parts-camera"],
+  ["part-ports",       "part-ports",       "A laptop with the sockets along its edge outlined", LA, "computer-parts-ports"],
+  ["laptop-sleep",     "laptop-sleep",     "A closed laptop, asleep",                           LA, "sleep-laptop"],
+  ["screen-desktop",   "screen-desktop-art", "A screen with the empty desktop area outlined",   LA, "screen-desktop"],
+  ["screen-menubar",   "screen-menubar-art", "A screen with the bar across the top outlined",   LA, "screen-menu-bar"],
+  ["key-numbers",      "key-numbers",      "A keyboard with the row of number keys outlined",   LA, "kb-numbers"],
+  ["key-caps",         "key-caps",         "A keyboard with the Caps Lock key outlined",        LA, "kb-caps-lock"],
+  ["key-ctrl",         "key-ctrl",         "A keyboard with the Ctrl keys outlined",            LA, "kb-command"],
+  ["key-escape",       "key-escape",       "A keyboard with the Esc key outlined",              LA, "kb-escape"],
+  ["cloud-backup",     "cloud-backup",     "Photos rising from a phone into a cloud",           LA, "cloud-photos"],
+  ["app-vs-web",       "app-vs-web",       "App icons on a phone beside a browser window",      LA, "app-vs-website"],
+  ["hardware-trouble", "hardware-trouble", "A laptop with a warning sign beside it",            LA, "hardware-problems"],
+  ["peripheral-trouble","peripheral-trouble","A mouse whose cable stops short of the socket",   LA, "peripheral-problems"],
+  ["map-route",        "map-route",        "A street map with a route between two pins",        LA, "maps-navigation"],
+  ["qr-code",          "qr-code",          "A QR code",                                         LA, "qrcodes-siri"],
+  ["safe-payment",     "safe-payment",     "A bank card under a closed padlock",                LA, "shopping-banking"],
+  ["share-doc",        "share-doc",        "A document linked to two people",                   LA, "google-docs-share"],
+  ["drive-cloud",      "drive-cloud",      "Folders inside a cloud",                            LA, "google-drive-basics"],
+  ["staying-connected","staying-connected","Message bubbles going back and forth",              LA, "social-media"],
+  ["settings-adapt",   "settings-adapt",   "A settings panel of sliders and switches",          LA, "a11y-why"],
+  ["holiday-away",     "holiday-away",     "A beach with a deckchair and a closed laptop",      LA, "final-intro"],
+  ["graduation",       "graduation",       "A certificate and a graduation cap",                LA, "final-graduation"],
+];
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
@@ -1835,6 +2300,14 @@ async function main() {
     meta.map((m) => `  { id: ${JSON.stringify(m.file)}, src: ${JSON.stringify(`/photos/${m.file}.webp`)}, label: ${JSON.stringify(m.label)}, w: ${m.w}, h: ${m.h} },`).join("\n") +
     `\n];\n\nexport const photoSrc = (id: string) =>\n  PHOTO_ASSETS.find((p) => p.id === id)?.src ?? PHOTO_ASSETS[0].src;\n`;
   writeFileSync(join(ROOT, "lib", "photoAssets.ts"), ts);
+
+  const lessonMeta = await render(LESSON_MANIFEST, join(ROOT, "public", "lesson"));
+  const lessonTs = `// Generated by scripts/generate-photos.mjs — do not edit by hand.\n\n` +
+    `/** The picture beside a lesson that has no activity. Keyed by lesson slug. */\n` +
+    `export const LESSON_ART: Record<string, { src: string; alt: string; caption?: string }> = {\n` +
+    lessonMeta.map((m) => `  ${JSON.stringify(m.slug)}: { src: ${JSON.stringify(`/lesson/${m.file}.webp`)}, alt: ${JSON.stringify(m.label)} },`).join("\n") +
+    `\n};\n`;
+  writeFileSync(join(ROOT, "lib", "lessonArt.ts"), lessonTs);
 
   const siteMeta = await render(SITE_MANIFEST, join(ROOT, "public", "site"));
   const siteTs = `// Generated by scripts/generate-photos.mjs — do not edit by hand.\n\n` +
