@@ -16,7 +16,7 @@ import AppMarketApp from "./AppMarketApp";
  *
  * There used to be three answers to that question. `FakeDesktop` opened the real
  * app; `GuidedDesktopTask` opened a hand-drawn sketch of it — a browser showing
- * four lines of prose, a Photos app of coloured squares; `GuidedTroubleshootingTask`
+ * four lines of prose, a Photos app of colored squares; `GuidedTroubleshootingTask`
  * opened nothing at all for seven of its ten icons. So the same icon, clicked in
  * three different lessons, gave three different computers.
  *

@@ -10,7 +10,7 @@
     "type": "guided-browser",
     "mode": "assessment",
     "goal": "You ran the whole errand in the browser",
-    "hint": "An address you already know does not need a search engine. Anything you download collects behind one button in the grey row. The padlock lives at the left of the address bar.",
+    "hint": "An address you already know does not need a search engine. Anything you download collects behind one button in the gray row. The padlock lives at the left of the address bar.",
     "steps": [
       {
         "say": "The bus timetable is on screen.",
@@ -42,5 +42,5 @@
     ]
   },
   "drDigitalSuccess": "Timetable, download, opened it, and checked the connection — without being told where any of it was.",
-  "drDigitalHint": "Everything is in the browser. Type addresses you know; use the grey row of buttons for the rest."
+  "drDigitalHint": "Everything is in the browser. Type addresses you know; use the gray row of buttons for the rest."
 }

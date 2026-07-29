@@ -62,7 +62,7 @@ function inferScenarioMode(steps: GuidedTroubleshootingStep[]):
 const NETWORKS = ["CoolKids Network", "Neighbor's WiFi", "Coffee Shop"];
 /** The café network the public-wifi scenario joins, alongside two you have no password for. */
 const PUBLIC_GUEST_NETWORK = "Coffee Shop Free WiFi";
-const PUBLIC_NETWORKS = [PUBLIC_GUEST_NETWORK, "CoffeeShop-Staff", "Neighbour 5G"];
+const PUBLIC_NETWORKS = [PUBLIC_GUEST_NETWORK, "CoffeeShop-Staff", "Neighbor 5G"];
 
 const ALL_DOCK_APPS = [
   { id: "Messages", label: "Messages" },

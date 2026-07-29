@@ -5,7 +5,7 @@
   "order": 460,
   "title": "Downloads: Saving from the Internet",
   "videoUrl": "",
-  "drDigitalIntro": "Downloading brings a file from the internet to your computer.\n• Click a download link and the browser saves the file to your Downloads folder.\n• The browser's Downloads panel shows your recent files — look for an arrow icon or the word Downloads in the toolbar.\n• PDF files can be opened right inside the browser — no extra app needed.\n• Avoid downloading files from sites you don't recognise: stick to well-known sources.\n• Your Downloads folder can fill up over time — clear it out every few months.",
+  "drDigitalIntro": "Downloading brings a file from the internet to your computer.\n• Click a download link and the browser saves the file to your Downloads folder.\n• The browser's Downloads panel shows your recent files — look for an arrow icon or the word Downloads in the toolbar.\n• PDF files can be opened right inside the browser — no extra app needed.\n• Avoid downloading files from sites you don't recognize: stick to well-known sources.\n• Your Downloads folder can fill up over time — clear it out every few months.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Download a PDF and open it in the browser viewer",

@@ -57,7 +57,7 @@ export const PHOTO_ASSETS: PhotoAsset[] = [
   { id: "dog-field", src: "/photos/dog-field.webp", label: "Dog in the Field", w: 1440, h: 960 },
   { id: "fish", src: "/photos/fish.webp", label: "Koi Pond", w: 1440, h: 960 },
   { id: "butterfly", src: "/photos/butterfly.webp", label: "Butterfly", w: 1440, h: 960 },
-  { id: "gradient-mesh", src: "/photos/gradient-mesh.webp", label: "Colour Study", w: 1440, h: 960 },
+  { id: "gradient-mesh", src: "/photos/gradient-mesh.webp", label: "Color Study", w: 1440, h: 960 },
   { id: "concentric", src: "/photos/concentric.webp", label: "Rings", w: 1200, h: 1200 },
   { id: "geo-tiles", src: "/photos/geo-tiles.webp", label: "Tile Pattern", w: 1200, h: 1200 },
   { id: "wave-lines", src: "/photos/wave-lines.webp", label: "Wave Lines", w: 1440, h: 960 },

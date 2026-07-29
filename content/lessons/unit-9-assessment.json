@@ -10,7 +10,7 @@
     "type": "guided-settings",
     "mode": "assessment",
     "goal": "You set up the screen and checked your storage",
-    "hint": "Settings is split into sections down the left-hand side. The name of each section tells you what lives inside it — the one about text size is not the one about colour.",
+    "hint": "Settings is split into sections down the left-hand side. The name of each section tells you what lives inside it — the one about text size is not the one about color.",
     "steps": [
       {
         "say": "Make the text noticeably bigger.",
@@ -20,7 +20,7 @@
         "max": 200
       },
       {
-        "say": "Switch the screen to its dark colours.",
+        "say": "Switch the screen to its dark colors.",
         "action": "toggle",
         "target": "dark-mode"
       },
@@ -38,6 +38,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Bigger text, dark colours, a dimmer screen — and you know where to check your free space. Those four settings make a computer usable for hours instead of minutes.",
+  "drDigitalSuccess": "Bigger text, dark colors, a dimmer screen — and you know where to check your free space. Those four settings make a computer usable for hours instead of minutes.",
   "drDigitalHint": "Text size lives under Accessibility. Dark mode is under Appearance. Brightness is under Display. Free space has a section of its own."
 }

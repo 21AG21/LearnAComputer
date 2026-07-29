@@ -23,14 +23,14 @@
         "target": "bold-text"
       },
       {
-        "say": "Pale and dark colours are further apart.",
+        "say": "Pale and dark colors are further apart.",
         "action": "toggle",
         "target": "increase-contrast"
       },
       {
         "say": "The screen has a warmer, less glaring tint.",
         "action": "toggle",
-        "target": "colour-filter-warm"
+        "target": "color-filter-warm"
       }
     ],
     "mode": "assessment",

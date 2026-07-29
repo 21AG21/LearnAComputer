@@ -59,7 +59,7 @@ execution order at the end interleaves them — do not run them 1→6.
   different data inside a real app, seed the real app.
 - **Step targets must exist** — keep the UNKNOWN TARGET check in
   `scripts/check-lessons.py` fed when a sim gains a new targeted action.
-- **Handlers must honour `target`** — a `tryStep` predicate that ignores its target is
+- **Handlers must honor `target`** — a `tryStep` predicate that ignores its target is
   wrong in assessment mode even when guided ordering hides it.
 - **Assessments state outcomes, never clicks**, and never hide a value the learner
   could not have seen (`**bold**` givens in the brief).
@@ -94,7 +94,7 @@ execution order at the end interleaves them — do not run them 1→6.
   - Contrast has never been measured; `/accessibility` says so honestly
     (`SITE_AUDIT.md` → Workstream 1).
   - No automated test suite beyond validator/tsc/lint/mount harness → Workstream 1.
-  - `open-btn` dead highlight in the App Market; Colour/Color split across two apps
+  - `open-btn` dead highlight in the App Market; Color/Color split across two apps
     (deliberate); `facetime-*` slugs are branded and frozen → Workstream 3.
   - `docs/PROGRESS_MONITORING.md` designs a supervisor view — **designed, not built**
     → Workstream 6.
@@ -377,7 +377,7 @@ place to change the highlight color changes every sim.
   or fold anything orphaned.
 - Consistent empty states, loading shimmers, and hover states across the ten apps —
   one pass with a checklist, one doc table.
-- **Colour/Color stays split** (each lesson matches its own control) until
+- **Color/Color stays split** (each lesson matches its own control) until
   localization (6.5) forces the question — recorded, not forgotten.
 
 ## 3.5 Site-chrome coherence

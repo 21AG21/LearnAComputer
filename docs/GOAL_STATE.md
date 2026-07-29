@@ -91,6 +91,20 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (spelling):** The founder caught "Practise first" on the
+  homepage. The course had drifted into a mix of dialects — `colour` beside
+  Tailwind's `gray`, `behaviour`, `recognise`, `favourite`, `neighbour`,
+  `honour`, `metres`, `defences` — across 67 files of lesson copy, UI strings,
+  code identifiers and docs. All now American English, which is the market the
+  course is sold into. Two step-target families (`colour-filter-*`,
+  `invert-colours`) were renamed in lockstep across the settings sim and four
+  lessons; `a11y-colour-filters` keeps its British **slug** forever because
+  progress is keyed by slug, and that exception is documented in CLAUDE.md and
+  allowlisted by name in the new `scripts/spelling-check.py`. A dictionary pass
+  over every learner-facing string turned up no genuine typos beyond the
+  deliberate ones in `kb-delete` (the lesson where learners fix typos), which
+  are exempted. Metric distances also became feet — "6.2 meters" reads foreign
+  to the US programs being sold to.
 - **2026-07-28 (later):** Three founder-directed items. **The practice desktop
   now holds several windows at once** — `FakeDesktop` tracked a single
   `activeApp`, so opening a second app silently closed the first, which made

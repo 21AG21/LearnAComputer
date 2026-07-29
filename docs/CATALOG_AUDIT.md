@@ -21,10 +21,10 @@ Two Unit 7 lessons carried the same title and taught the same thing:
 | Slug | Order | Module | Steps |
 |---|---|---|---|
 | `photo-search` | 702 | Your Photo Library | 2 — open search, type "beach" |
-| `photo-people` | 711 | Organizing Photos | 4 — open search, type "dog", open the result, favourite it |
+| `photo-people` | 711 | Organizing Photos | 4 — open search, type "dog", open the result, favorite it |
 
 `photo-search` was the thinner of the two and sat in the wrong module —
-searching is organising, not browsing. Deleted. `photo-people` kept and
+searching is organizing, not browsing. Deleted. `photo-people` kept and
 retitled to **Finding a photo by searching**, which is what it teaches. Its
 slug still reads `photo-people`, which is a legacy of an earlier plan, but
 slugs are never renamed: progress is stored by slug, and renaming one silently
@@ -110,14 +110,14 @@ Seven lessons added, one to the end of each gap unit's assessment module:
 | `unit-2-assessment-real` | 296 | Type, select with Shift, copy, paste, undo — in any real program |
 | `unit-4-assessment-real` | 499 | Type an address, open a second tab, check the padlock, close tabs |
 | `unit-6-assessment-real` | 681 | Send one real email with a useful subject and an attachment |
-| `unit-7-assessment-real` | 781 | Favourite a photo, build an album, edit one, delete and find it again |
+| `unit-7-assessment-real` | 781 | Favorite a photo, build an album, edit one, delete and find it again |
 | `unit-8-assessment-real` | 871 | Install something wanted, read its permissions, delete something unused |
 | `unit-10-assessment-real` | 1101 | Turn on two-factor, change a reused password, inspect a link without clicking |
 | `unit-11-assessment-real` | 1191 | Force-quit instead of holding power, test other sites, record error codes |
 
 Every unit now has at least one. Each is a reading lesson (`type: "none"`) that
 names four concrete actions rather than saying "try it yourself" — a learner who
-is told to practise without being told what to practise does not practise.
+is told to practice without being told what to practice does not practice.
 
 ---
 
@@ -148,7 +148,7 @@ one lesson each.
 
 A module is a page, so a single-lesson module is a page with one step and a
 "next module" button. Unit 12 has seven of them and Unit 2 has five. Some are
-legitimately one idea; most should merge with a neighbour.
+legitimately one idea; most should merge with a neighbor.
 
 ### Three built playground types no lesson uses
 

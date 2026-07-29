@@ -15,7 +15,7 @@ Findings are split into what has been fixed and what is still open.
 The icon PNGs had been sliced from the source sheet with a stride that drifted
 off the grid. Everything after Files was half-cut and shifted one app to the
 right: **Mail showed a bell, Settings showed an envelope, Photos showed a gear,
-Notes showed a blank grey sliver.** The slices were opaque 320×267 rectangles
+Notes showed a blank gray sliver.** The slices were opaque 320×267 rectangles
 letterboxed into square tiles, so the ten icons merged into one ragged white
 strip lying on the wallpaper.
 
@@ -42,7 +42,7 @@ from it, with the same ten apps in the same order.
 The window body in `GuidedDesktopTask` was hardcoded to a Notes shopping list
 and the title bar to a Notes icon. The lesson that asks the learner to open the
 **browser** handed them a browser containing milk, eggs, bread and apples.
-Each app now shows something recognisably its own.
+Each app now shows something recognizably its own.
 
 ### 4. The catalog showed fifteen units instead of twelve
 
@@ -56,9 +56,9 @@ containing one lesson.
 ### 5. "Click the red X" — there is no red X
 
 Four lines of Unit 1 copy told the learner to find "the red X". The close
-button is a neutral grey ✕ that only reddens on hover; `WindowControls` says
+button is a neutral gray ✕ that only reddens on hover; `WindowControls` says
 the un-branded look is deliberate. A beginner hunting for a red X finds
-nothing. Copy now matches the control and mentions the hover colour.
+nothing. Copy now matches the control and mentions the hover color.
 
 ### 6. The running dot was described in the wrong place, and did not appear
 
@@ -116,7 +116,7 @@ and again in Unit 6 sees two unrelated programs with the same name.
 **Suggested approach.** Every guided sim already has the same shape —
 `{goal, steps, mode, hint, onResult}` — and `useStepRunner` degrades correctly
 with `steps: []` (no current step, no highlights, no completion callback), which
-is exactly free-play behaviour. Add a `chrome?: boolean` prop that each sim
+is exactly free-play behavior. Add a `chrome?: boolean` prop that each sim
 forwards to `SimulatorFrame` (which already supports `chrome={false}`), then
 make each `Desktop/XxxApp` a thin `AppWindow` wrapper around the guided sim with
 no steps. That deletes roughly 800 lines of stub and leaves one implementation

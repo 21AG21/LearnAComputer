@@ -1,14 +1,14 @@
 {
   "slug": "a11y-invert",
   "unit": "Unit 13: Making Your Computer Easier to Use",
-  "module": "Colour and Contrast",
+  "module": "Color and Contrast",
   "order": 1330,
-  "title": "Inverting the colours",
+  "title": "Inverting the colors",
   "videoUrl": "",
-  "drDigitalIntro": "Inverting swaps light for dark across the entire screen.\n• White pages become black, black text becomes white, and colours flip to their opposites.\n• Many people find a bright white page painful to read for long stretches. Inverting removes the glare completely.\n• It is the most dramatic change in this unit — do not be alarmed when the screen goes dark.\n• The switch that turned it on turns it back off. Nothing is broken.",
+  "drDigitalIntro": "Inverting swaps light for dark across the entire screen.\n• White pages become black, black text becomes white, and colors flip to their opposites.\n• Many people find a bright white page painful to read for long stretches. Inverting removes the glare completely.\n• It is the most dramatic change in this unit — do not be alarmed when the screen goes dark.\n• The switch that turned it on turns it back off. Nothing is broken.",
   "playgroundTask": {
     "type": "guided-settings",
-    "goal": "You inverted the screen colours",
+    "goal": "You inverted the screen colors",
     "steps": [
       {
         "say": "Click Accessibility in the list on the left.",
@@ -16,13 +16,13 @@
         "target": "accessibility"
       },
       {
-        "say": "Click the switch next to Invert Colours. The whole screen will flip.",
+        "say": "Click the switch next to Invert Colors. The whole screen will flip.",
         "action": "toggle",
-        "target": "invert-colours"
+        "target": "invert-colors"
       }
     ]
   },
   "drDigitalSuccess": "The whole computer flipped. Notice the switch is still there, ready to flip it back.",
-  "drDigitalHint": "Invert Colours is the first switch in the Colour and Contrast card. Scroll down inside the Settings window if you cannot see it.",
+  "drDigitalHint": "Invert Colors is the first switch in the Color and Contrast card. Scroll down inside the Settings window if you cannot see it.",
   "warning": "This lesson turns the whole screen dark. That is expected — the same switch turns it back."
 }

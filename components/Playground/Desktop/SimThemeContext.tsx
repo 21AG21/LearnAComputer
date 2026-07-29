@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-export type ColourFilter = "none" | "greyscale" | "warm";
+export type ColorFilter = "none" | "grayscale" | "warm";
 
 export interface SimTheme {
   dark: boolean;
@@ -13,7 +13,7 @@ export interface SimTheme {
   notificationsMuted: boolean;
   invert: boolean;
   highContrast: boolean;
-  colourFilter: ColourFilter;
+  colorFilter: ColorFilter;
   reduceMotion: boolean;
   largeCursor: boolean;
   spokenDescriptions: boolean;
@@ -32,7 +32,7 @@ const defaults: SimTheme = {
   notificationsMuted: false,
   invert: false,
   highContrast: false,
-  colourFilter: "none",
+  colorFilter: "none",
   reduceMotion: false,
   largeCursor: false,
   spokenDescriptions: false,
@@ -40,14 +40,14 @@ const defaults: SimTheme = {
 
 /**
  * The CSS filter chain the desktop wears. Brightness and Night Shift are drawn
- * as overlays instead, so they are not here. Order matters: the colour filter
- * and contrast act on the real colours, and invert runs last so it flips
+ * as overlays instead, so they are not here. Order matters: the color filter
+ * and contrast act on the real colors, and invert runs last so it flips
  * whatever they produced — which is what an inverted display actually does.
  */
 export function themeFilter(t: SimTheme): string | undefined {
   const parts: string[] = [];
-  if (t.colourFilter === "greyscale") parts.push("grayscale(1)");
-  if (t.colourFilter === "warm") parts.push("sepia(0.55) saturate(1.4) hue-rotate(-12deg)");
+  if (t.colorFilter === "grayscale") parts.push("grayscale(1)");
+  if (t.colorFilter === "warm") parts.push("sepia(0.55) saturate(1.4) hue-rotate(-12deg)");
   if (t.highContrast) parts.push("contrast(1.55)");
   if (t.invert) parts.push("invert(1) hue-rotate(180deg)");
   return parts.length ? parts.join(" ") : undefined;

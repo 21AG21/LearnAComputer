@@ -82,7 +82,7 @@ export default function LessonPlaygroundPane({ task, started, onResult }: Lesson
   };
 
   // text-gray-900 is not decorative: the simulated computer keeps its own light
-  // appearance in dark mode, so it must not inherit the site's light text colour.
+  // appearance in dark mode, so it must not inherit the site's light text color.
   return (
     <div className="playground-root relative h-full w-full border-4 border-gray-300 bg-white text-gray-900 overflow-hidden">
       {!started && <FakeDesktop />}

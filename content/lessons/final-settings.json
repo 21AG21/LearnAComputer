@@ -25,7 +25,7 @@
         "max": 45
       },
       {
-        "say": "The colours are warmer, for looking at late at night.",
+        "say": "The colors are warmer, for looking at late at night.",
         "action": "toggle",
         "target": "night-shift"
       },

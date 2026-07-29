@@ -3,7 +3,7 @@
 /**
  * One neutral, generalized set of window buttons used by every simulator so the
  * whole course looks like a single computer — minimize, maximize, close, drawn
- * on the RIGHT the way most computers do it (deliberately NOT the coloured
+ * on the RIGHT the way most computers do it (deliberately NOT the colored
  * dots-on-the-left that read as one specific brand).
  *
  * Pass a handler to make a control a real button; omit it and the control is

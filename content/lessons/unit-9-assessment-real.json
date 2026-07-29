@@ -5,7 +5,7 @@
   "order": 961,
   "title": "Mission: a setting this page can see",
   "videoUrl": "",
-  "drDigitalIntro": "Settings are not decoration. They are how you make a computer suit your eyes, your room and your evening.\n• You will change dark mode in your computer's own settings, and this page will notice by itself, because your browser passes that preference on to every website you visit.\n• That is worth understanding on its own: some of your settings are visible to the sites you use, which is how they know to show you a dark page.\n• The rest of the mission is on your honour — brightness, night light, notifications and storage.\n• Nothing here is permanent. Every one of these can be put back in ten seconds.",
+  "drDigitalIntro": "Settings are not decoration. They are how you make a computer suit your eyes, your room and your evening.\n• You will change dark mode in your computer's own settings, and this page will notice by itself, because your browser passes that preference on to every website you visit.\n• That is worth understanding on its own: some of your settings are visible to the sites you use, which is how they know to show you a dark page.\n• The rest of the mission is on your honor — brightness, night light, notifications and storage.\n• Nothing here is permanent. Every one of these can be put back in ten seconds.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You changed a real setting and watched this page notice",
@@ -13,7 +13,7 @@
       {
         "say": "Change dark mode in your computer's own settings.",
         "check": "dark-mode",
-        "detail": "Not in this page — in the computer's settings, where it applies to everything. Look under Appearance, Personalisation, or Display. The box below changes on its own when you do it."
+        "detail": "Not in this page — in the computer's settings, where it applies to everything. Look under Appearance, Personalization, or Display. The box below changes on its own when you do it."
       },
       {
         "say": "Move the brightness until it is comfortable for the room you are actually in.",

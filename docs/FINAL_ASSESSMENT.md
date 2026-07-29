@@ -35,7 +35,7 @@ reason to use the app it uses.
 | Packing and Paperwork | Sort out the paperwork | `guided-files` | 6 |
 | Packing and Paperwork | Get the right app for the trip | `guided-app-store` | 6 |
 | Packing and Paperwork | Pick the photos to take | `guided-photos` | 6 |
-| Telling People | Write to the neighbour | `guided-email` | 7 |
+| Telling People | Write to the neighbor | `guided-email` | 7 |
 | Telling People | Tell the family | `guided-messaging` | 7 |
 | While You Are Away | Two messages arrive at the hotel | `guided-security` | 4 |
 | While You Are Away | The hotel WiFi | `guided-troubleshooting` | 5 |
@@ -62,8 +62,8 @@ other than where it started."* The learner has to work out which control
 produces the stated result.
 
 **Use targets the unit's lessons did not use.** Unit 3 moves `Budget.xlsx`; the
-final assessment moves `TaxReturn.pdf`. Unit 7 favourites the bird; this
-favourites the koi. Unit 6 archives the Amazon email; this archives the meeting
+final assessment moves `TaxReturn.pdf`. Unit 7 favorites the bird; this
+favorites the koi. Unit 6 archives the Amazon email; this archives the meeting
 email. Muscle memory from the teaching lessons does not carry the learner
 through.
 

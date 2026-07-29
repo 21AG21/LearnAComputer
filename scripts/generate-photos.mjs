@@ -40,7 +40,7 @@ function makeRng(seedStr) {
   };
 }
 
-// ── Colour helpers ───────────────────────────────────────────────────────────
+// ── Color helpers ───────────────────────────────────────────────────────────
 
 function hex(h) {
   const s = h.replace("#", "");
@@ -163,7 +163,7 @@ function cloudBlob(x, y, w, h, fill, op, rng) {
   return s;
 }
 
-/** Horizontal glints on water — the thing that makes flat colour read as a surface. */
+/** Horizontal glints on water — the thing that makes flat color read as a surface. */
 function waterGlints(w, y0, y1, n, rng, col = "#ffffff") {
   let s = "";
   for (let i = 0; i < n; i++) {
@@ -1477,7 +1477,7 @@ const MANIFEST = [
   ["dog-field",         "dog-field",         "Dog in the Field",      L],
   ["fish",              "fish",              "Koi Pond",              L],
   ["butterfly",         "butterfly",         "Butterfly",             L],
-  ["gradient-mesh",     "gradient-mesh",     "Colour Study",          L],
+  ["gradient-mesh",     "gradient-mesh",     "Color Study",          L],
   ["concentric",        "concentric",        "Rings",                 Q],
   ["geo-tiles",         "geo-tiles",         "Tile Pattern",          Q],
   ["wave-lines",        "wave-lines",        "Wave Lines",            L],

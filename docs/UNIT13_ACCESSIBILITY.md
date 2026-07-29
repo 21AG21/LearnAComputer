@@ -22,14 +22,14 @@ simulated desktop — none is a switch that only remembers its own position.
 
 | Setting | What it actually does |
 |---|---|
-| Invert Colours | `filter: invert(1) hue-rotate(180deg)` on the whole desktop. White pages go black; the wallpaper flips hue. |
-| Increase Contrast | `filter: contrast(1.55)`. Grey helper text under each setting becomes legible. |
-| Colour Filters | Off / Greyscale / Warm. Greyscale is `grayscale(1)`; Warm is a sepia-and-hue shift. |
+| Invert Colors | `filter: invert(1) hue-rotate(180deg)` on the whole desktop. White pages go black; the wallpaper flips hue. |
+| Increase Contrast | `filter: contrast(1.55)`. Gray helper text under each setting becomes legible. |
+| Color Filters | Off / Grayscale / Warm. Grayscale is `grayscale(1)`; Warm is a sepia-and-hue shift. |
 | Larger Pointer | Swaps in a fat white-and-black arrow, drawn inline as a data-URI SVG cursor. |
 | Reduce Motion | Adds a `.reduce-motion` class that zeroes every animation and transition duration inside the desktop. Windows stop sliding. |
 | Spoken Descriptions | Draws a black bar along the bottom of the desktop naming whatever the pointer is over. A real screen reader speaks; this one prints, so the learner can *see* what would be said. |
 
-`themeFilter()` composes the filter chain in a deliberate order — colour filter,
+`themeFilter()` composes the filter chain in a deliberate order — color filter,
 then contrast, then invert last — because that is the order a real display
 applies them, and inverting a warm-filtered screen looks different from
 warm-filtering an inverted one.
@@ -51,8 +51,8 @@ Text Size, Bold Text, screen brightness. Brightness lives under Display rather
 than Accessibility, and the lesson says so, because a learner who goes looking
 under Accessibility and does not find it will conclude it does not exist.
 
-### Colour and Contrast (1330–1333)
-Invert, contrast, colour filters, then a lesson that builds a *combination* of
+### Color and Contrast (1330–1333)
+Invert, contrast, color filters, then a lesson that builds a *combination* of
 three. The combination lesson exists because the individual ones each imply
 "this is the answer," and none of them is.
 
@@ -62,7 +62,7 @@ mid-lesson, and without warning that reads as a fault.
 ### Pointer, Motion and Sound (1340–1343)
 Larger Pointer, Reduce Motion, Spoken Descriptions, and then
 `a11y-turning-it-back` — a lesson whose whole subject is undoing changes. It
-turns Invert on, turns it off, sets Greyscale, sets it back to Off. It is the
+turns Invert on, turns it off, sets Grayscale, sets it back to Off. It is the
 answer to the most common reason people never touch these settings.
 
 ### Zooming In (1350–1351)
@@ -98,9 +98,9 @@ catalog audit.
 
 ## Verified in the browser
 
-- The Accessibility page renders all three cards: Text, Colour and Contrast,
+- The Accessibility page renders all three cards: Text, Color and Contrast,
   Pointer and Motion.
-- Invert Colours flips the entire desktop, wallpaper and dock included, and the
+- Invert Colors flips the entire desktop, wallpaper and dock included, and the
   switch that did it is still visible and still works.
 - `a11y-invert` completes end to end: warning banner shows, both steps register,
   the completion banner appears and the sim stays interactive.

@@ -60,7 +60,7 @@ export default function AccessibilityPage() {
       <h2>Accessibility is also a subject here</h2>
       <p>
         <Link href="/lessons">Unit 13</Link> teaches the accessibility settings built into computers
-        — larger text, inverted colours, higher contrast, colour filters, a bigger pointer, reduced
+        — larger text, inverted colors, higher contrast, color filters, a bigger pointer, reduced
         motion and spoken descriptions — and lets you try each one on a practice machine before
         touching your own. If reading this site is hard, that unit may be the most useful place to
         start.

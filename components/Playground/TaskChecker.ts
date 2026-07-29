@@ -181,11 +181,11 @@ export function checkOrganizedFolder(paths: string[], expect: FolderExpect): Fol
   const known = [...expect.placements.map((p) => p.file), ...(expect.absent ?? []), expect.renamed?.was].filter(
     Boolean,
   ) as string[];
-  const recognised = known.filter((f) => find(f)).length;
+  const recognized = known.filter((f) => find(f)).length;
   if (entries.length === 0) {
     return { pass: false, wins, issues: ["That folder is empty. Pick the folder you unzipped."], wrongFolder: true };
   }
-  if (recognised === 0) {
+  if (recognized === 0) {
     return {
       pass: false,
       wins,

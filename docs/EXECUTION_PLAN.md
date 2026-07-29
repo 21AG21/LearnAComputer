@@ -1153,7 +1153,7 @@ The theme: **security tools are not websites.** `GuidedSecurityTask` renders ins
   And update `LessonPlaygroundPane.tsx` lines 197-201 to read `task.chrome` and choose the wrapper:
   ```tsx
   {task.type === "guided-security" && (() => {
-    const chrome = (task as any).chrome ?? "browser";  // default matches old behaviour
+    const chrome = (task as any).chrome ?? "browser";  // default matches old behavior
     const inner = <GuidedSecurityTask goal={task.goal} steps={task.steps} onResult={onResult} />;
     if (chrome === "browser")   return <DesktopLaunch app="browser">{inner}</DesktopLaunch>;
     if (chrome === "settings")  return <DesktopLaunch app="settings">{inner}</DesktopLaunch>;

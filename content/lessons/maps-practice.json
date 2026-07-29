@@ -5,7 +5,7 @@
   "order": 1210,
   "title": "Finding a map",
   "videoUrl": "",
-  "drDigitalIntro": "A map website works like any other website: you type its address and it loads.\n• The address for the most common one is maps.google.com.\n• Once it loads you type a place name into its search box, the same way you search anywhere else.\n• There is nothing to install. A map is just a web page.\n• Practise typing the address here first — the address bar is unforgiving about spelling.",
+  "drDigitalIntro": "A map website works like any other website: you type its address and it loads.\n• The address for the most common one is maps.google.com.\n• Once it loads you type a place name into its search box, the same way you search anywhere else.\n• There is nothing to install. A map is just a web page.\n• Practice typing the address here first — the address bar is unforgiving about spelling.",
   "playgroundTask": {
     "type": "url-navigator",
     "instructions": "Type the address of the map website into the address bar and press Enter.",

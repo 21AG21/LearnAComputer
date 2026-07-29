@@ -479,8 +479,8 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     recover: "recover put back",
     unspam: "not spam",
     "reading-list-add": "reading list",
-    favorite: "favorite favourite fav",
-    unfavorite: "favorite favourite fav",
+    favorite: "favorite favorite fav",
+    unfavorite: "favorite favorite fav",
     "go-to-installed": "my apps",
     install: "install get",
     "go-to-store": "store market",
@@ -932,8 +932,8 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
         out.push(() => click(control));
       }
     } else if (action === "toggle") {
-      // Grouped choice chips: the id "colour-filter-warm" belongs to a chip
-      // labeled just "Warm" under a "Colour Filters" heading. Match a button on
+      // Grouped choice chips: the id "color-filter-warm" belongs to a chip
+      // labeled just "Warm" under a "Color Filters" heading. Match a button on
       // the id's trailing word(s), longest suffix first.
       const parts = humanTarget.split(" ");
       for (let n = parts.length - 1; n >= 1; n--) {

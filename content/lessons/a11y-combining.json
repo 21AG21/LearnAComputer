@@ -1,11 +1,11 @@
 {
   "slug": "a11y-combining",
   "unit": "Unit 13: Making Your Computer Easier to Use",
-  "module": "Colour and Contrast",
+  "module": "Color and Contrast",
   "order": 1333,
   "title": "Finding your own combination",
   "videoUrl": "",
-  "drDigitalIntro": "None of these settings is the right answer on its own. The right answer is the mixture that suits you.\n• Someone reading at night might want Warm colours, high contrast and no inverting.\n• Someone with glare-sensitive eyes might want inverting and nothing else.\n• Change one thing at a time and look at the screen after each one. Changing three at once tells you nothing.\n• In this activity you will build one such combination: a warm, high-contrast screen with heavier text.",
+  "drDigitalIntro": "None of these settings is the right answer on its own. The right answer is the mixture that suits you.\n• Someone reading at night might want Warm colors, high contrast and no inverting.\n• Someone with glare-sensitive eyes might want inverting and nothing else.\n• Change one thing at a time and look at the screen after each one. Changing three at once tells you nothing.\n• In this activity you will build one such combination: a warm, high-contrast screen with heavier text.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "You built a warm, high-contrast, bold-text screen",
@@ -16,9 +16,9 @@
         "target": "accessibility"
       },
       {
-        "say": "Under Colour Filters, click Warm.",
+        "say": "Under Color Filters, click Warm.",
         "action": "toggle",
-        "target": "colour-filter-warm"
+        "target": "color-filter-warm"
       },
       {
         "say": "Turn on Increase Contrast.",
@@ -33,5 +33,5 @@
     ]
   },
   "drDigitalSuccess": "That is one combination out of dozens. Yours might look nothing like it, and that is the point.",
-  "drDigitalHint": "Work down the Accessibility page: Bold Text is in the first card, the other two are in the Colour and Contrast card."
+  "drDigitalHint": "Work down the Accessibility page: Bold Text is in the first card, the other two are in the Color and Contrast card."
 }

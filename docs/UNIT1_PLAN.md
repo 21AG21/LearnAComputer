@@ -69,7 +69,7 @@ is free play, already written.
 
 ### C. A third desktop, in the troubleshooting simulator
 
-`GuidedTroubleshootingTask` draws its own operating system: a **flat grey
+`GuidedTroubleshootingTask` draws its own operating system: a **flat gray
 rectangle** for a wallpaper, its own menu bar reading "Desktop", and a **dock of
 one icon** on a white strip. Hence "the dock should be bigger and it should be
 like the normal actual UI of how the computer really looks — it says desktop in
@@ -145,7 +145,7 @@ Same class of bug as the "red X" found in the last audit:
 | Lesson | Says | Actually |
 |---|---|---|
 | Two-finger scrolling | "scroll back up and type it into the box" | The code *and* the input are both at the bottom. You never scroll back up |
-| Working with windows | "the **yellow** strip at the top of the window" | The title bar is grey; only the highlight ring is yellow |
+| Working with windows | "the **yellow** strip at the top of the window" | The title bar is gray; only the highlight ring is yellow |
 | Working with windows | "the 'Notes' button in the **taskbar**" | It is a dock, and the course calls it a dock everywhere else |
 | Calendar stub | "Open a Calendar lesson to add events." | Dead-end signage inside the product |
 | App Market stub | "Open an App Market lesson to practice installing apps." | ditto |
@@ -158,7 +158,7 @@ lesson to add events? You should be able to add events whenever you want."
 
 `petnews.example` is a heading and two paragraphs. The funny-cat payoff is a
 picture with the caption *"That's one judgmental cat."* — the joke is missing.
-`Desktop/BrowserApp`'s new-tab page is six coloured squares with a letter in
+`Desktop/BrowserApp`'s new-tab page is six colored squares with a letter in
 each.
 
 ### I. Small, verified, unrelated
@@ -493,7 +493,7 @@ Priority order, by how often a learner lands there:
 5. The remaining nine.
 
 Keep every URL on `.example` and keep the existing cookie / popup / download /
-insecure behaviours exactly as they are — those are load-bearing for Units 4 and
+insecure behaviors exactly as they are — those are load-bearing for Units 4 and
 10.
 
 **Verify:** visit all 15 from *Guided browser* free play; each fills the window

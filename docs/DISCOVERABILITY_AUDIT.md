@@ -81,7 +81,7 @@ A learner asked to put the bus timetable on screen scans the page and sees
 Two sites stay off deliberately:
 
 - `freegames.example` — the scam site. Lessons navigate there on purpose; it does
-  not belong in a list of favourites, and having it one click away undercuts the
+  not belong in a list of favorites, and having it one click away undercuts the
   lesson where finding it is the point.
 - `pickacolor.example` — an activity page, not a destination.
 
@@ -134,7 +134,7 @@ Ran `final-browser` — the lesson the complaint was about — from a clean star
 
 1. The brief renders "City Transit" and "Gardening Tips" as real `<strong>`
    tags, no stray asterisks.
-2. Opening the browser from the dock shows 13 favourites, each with its address:
+2. Opening the browser from the dock shows 13 favorites, each with its address:
    **City Transit · citytransit.example**.
 3. Clicking that tile loads the Route 12 timetable and moves the counter to
    **OBJECTIVES: 1 OF 6 DONE** — with no prior knowledge of the domain.

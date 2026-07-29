@@ -22,7 +22,7 @@ const ICONS: Record<string, string> = {
   notes: "/playgrounds/dock-notes.png",
 };
 
-/** Soft tile colours, so ten black-line drawings still read as ten different apps. */
+/** Soft tile colors, so ten black-line drawings still read as ten different apps. */
 const TINTS: Record<string, string> = {
   messages: "#dcf2e3",
   browser: "#dbeafe",
@@ -66,7 +66,7 @@ export interface DockItem {
 interface DockProps {
   items: DockItem[];
   onOpen: (id: string) => void;
-  /** Tray colour. Match it to whatever sits behind the dock. */
+  /** Tray color. Match it to whatever sits behind the dock. */
   tone?: "light" | "dark";
   size?: "md" | "sm";
   showLabels?: boolean;

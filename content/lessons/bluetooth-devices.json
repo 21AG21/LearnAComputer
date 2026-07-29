@@ -1,11 +1,11 @@
 {
   "slug": "bluetooth-devices",
   "unit": "Unit 9: System Settings",
-  "module": "Connections and Behaviour",
+  "module": "Connections and Behavior",
   "order": 920,
   "title": "Connecting Bluetooth Devices",
   "videoUrl": "",
-  "drDigitalIntro": "Bluetooth lets your computer talk to things nearby without a wire — headphones, a keyboard, a mouse, a speaker.\n• To connect one: open Settings, go to Bluetooth, and click Connect next to the name of the device. It has to be switched on and close by, within about ten metres.\n• Once it works, the list says Connected. Your computer remembers it, so next time it connects on its own.\n• To disconnect — say you want to use the same headphones with your phone — click Disconnect. The name stays in the list, so connecting again is one click.\n• If it will not connect: turn Bluetooth off and on again, or switch the device off and on. That fixes it most of the time.\n• One thing at a time is the usual rule. Headphones connected to your computer may refuse to play sound from your phone until you disconnect them here.",
+  "drDigitalIntro": "Bluetooth lets your computer talk to things nearby without a wire — headphones, a keyboard, a mouse, a speaker.\n• To connect one: open Settings, go to Bluetooth, and click Connect next to the name of the device. It has to be switched on and close by, within about thirty feet.\n• Once it works, the list says Connected. Your computer remembers it, so next time it connects on its own.\n• To disconnect — say you want to use the same headphones with your phone — click Disconnect. The name stays in the list, so connecting again is one click.\n• If it will not connect: turn Bluetooth off and on again, or switch the device off and on. That fixes it most of the time.\n• One thing at a time is the usual rule. Headphones connected to your computer may refuse to play sound from your phone until you disconnect them here.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "Connect your wireless headphones and then disconnect them",

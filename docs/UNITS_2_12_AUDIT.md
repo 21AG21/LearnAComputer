@@ -45,7 +45,7 @@ had *only* real-world lessons. A learner who has never opened a map, downloaded
 a PDF, or looked at a shop's web address is being asked to do all three
 unpractised, on their own machine, with no safe rehearsal.
 
-The rest of the course uses a pattern: practise it in the simulator, then do it
+The rest of the course uses a pattern: practice it in the simulator, then do it
 for real. Unit 12 skipped the first half.
 
 ### Rebuilt
@@ -55,7 +55,7 @@ existing real-world ones. **Every original lesson was kept, with its slug** —
 they moved module and order, which is safe, rather than being deleted, which
 would have un-completed them for anyone mid-course.
 
-| Module | Practise | Then do it for real |
+| Module | Practice | Then do it for real |
 |---|---|---|
 | Out and About | `maps-practice` — type maps.google.com into an address bar | `maps-navigation` |
 | | `qr-practice` — a QR code contains an address; type the one it holds | `qrcodes-siri` |
@@ -93,7 +93,7 @@ module" button, which reads as a stutter rather than a chapter.
 | Unit | Before | After |
 |---|---|---|
 | 2 | Selecting Text, Editing, Text Formatting, Keyboard Shortcuts, Navigation | **Editing Text** (3), **Shortcuts and Navigation** (3) |
-| 9 | Customizing Your Computer, Appearance, Connections, System Behavior | **Getting Around Settings** (2), **Connections and Behaviour** (3) |
+| 9 | Customizing Your Computer, Appearance, Connections, System Behavior | **Getting Around Settings** (2), **Connections and Behavior** (3) |
 | 11 | Performance, Access Issues, Getting Support | **When You Are Stuck** (3) |
 | 7 | Cloud Storage (1, read-only) | folded into **Organizing Photos** |
 | 8 | Apps vs Websites (1, read-only) | folded into **Getting Apps** |
@@ -126,8 +126,8 @@ one lesson long and had no real-world partner:
 
 Adding site-wide dark mode set `dark:text-gray-100` on `<body>`. The simulated
 computer deliberately stays light — its appearance is a lesson subject — but
-text colour cascades, so any playground component relying on *inherited* colour
-rendered light-grey on white. It was invisible on the spot-the-fake cards.
+text color cascades, so any playground component relying on *inherited* color
+rendered light-gray on white. It was invisible on the spot-the-fake cards.
 
 Fixed at the two playground roots (`LessonPlaygroundPane` and
 `/playground`) with an explicit `text-gray-900`, rather than in each of the
@@ -152,7 +152,7 @@ build.
   glowing, as every other guided lesson does.
 - *Which shop is real?* renders three readable cards, accepts the click on the
   fake, and shows the explanation naming all three giveaways.
-- The text-colour fix confirmed by reloading the same lesson in dark mode.
+- The text-color fix confirmed by reloading the same lesson in dark mode.
 
 `npx tsc --noEmit`, `npm run lint` (0 errors), `scripts/check-lessons.py`
 (197 lessons) and `npm run build` all clean.

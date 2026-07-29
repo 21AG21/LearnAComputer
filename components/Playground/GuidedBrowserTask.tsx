@@ -100,7 +100,7 @@ for (const id of Object.keys(PAGES) as PageId[]) {
 // "the bus timetable on screen" must be able to FIND citytransit.example, not recall
 // it — an assessment that hides a fictional domain tests memory, not browsing.
 // freegames (the scam site) and pickacolor (an activity page) stay off deliberately:
-// lessons navigate to those on purpose, and neither belongs in a list of favourites.
+// lessons navigate to those on purpose, and neither belongs in a list of favorites.
 const FAVORITES: PageId[] = [
   "shop", "google", "wikipedia", "weather", "news", "recipes",
   "library", "bookshop", "transit", "garden", "petnews", "bank", "support",
@@ -123,7 +123,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
           <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
           <h2 className="text-base font-bold mt-1 leading-tight">Dog Wins National Frisbee Championship for Third Year Running</h2>
           <p className="text-xs text-gray-500 mt-1">By our Sports Correspondent · 2 hours ago</p>
-          <p className="text-sm text-gray-700 mt-2 leading-relaxed">Biscuit, a four-year-old Golden Retriever from Maplewood, leapt 6.2 metres and caught the disc before it cleared the fence. The crowd erupted.</p>
+          <p className="text-sm text-gray-700 mt-2 leading-relaxed">Biscuit, a four-year-old Golden Retriever from Maplewood, leapt twenty feet and caught the disc before it cleared the fence. The crowd erupted.</p>
         </div>
         <div className="space-y-2">
           <div className="border border-gray-200 rounded-lg p-2">

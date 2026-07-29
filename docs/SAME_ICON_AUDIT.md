@@ -29,7 +29,7 @@ different answers inside Unit 1 alone.
 ### The sketches
 
 `GuidedDesktopTask` drew its own idea of each app: a browser that was four lines
-of prose about tomatoes, a Photos app of six coloured squares, a Files app of
+of prose about tomatoes, a Photos app of six colored squares, a Files app of
 three list items. A learner met that browser in *Working with windows*, then met
 the real one in Unit 4.
 
@@ -94,7 +94,7 @@ a step that no click could finish.
 { "say": "Join the café's network.", "action": "join-network", "target": "Cafe Guest" }
 ```
 
-The sim offers `Coffee Shop Free WiFi`, `CoffeeShop-Staff` and `Neighbour 5G`.
+The sim offers `Coffee Shop Free WiFi`, `CoffeeShop-Staff` and `Neighbor 5G`.
 There is no `Cafe Guest`, so nothing highlighted and
 
 ```tsx
@@ -147,14 +147,14 @@ unmet objective, so the wrong action ticks the right box.
 | Where | Was | Now |
 |---|---|---|
 | `GuidedPhotosTask.handleFavorite` | `s.action === "favorite" \|\| s.action === "unfavorite"` — any photo, either direction | the photo and the direction must both match |
-| `GuidedPhotosTask.handleDelete` | `s.action === "delete"` — any photo | honours `target` |
-| `GuidedAppStoreTask.handleInstall` | `s.action === "install"` — any app | honours `target` |
+| `GuidedPhotosTask.handleDelete` | `s.action === "delete"` — any photo | honors `target` |
+| `GuidedAppStoreTask.handleInstall` | `s.action === "install"` — any app | honors `target` |
 
-The favourite one was the worst of the three: "un-favourite it" was satisfied by
+The favorite one was the worst of the three: "un-favorite it" was satisfied by
 favouriting it again.
 
 `final-photos` was leaning on that hole. Its third objective read *"The photo of
-the koi is marked as a favourite"* with **no target at all**, so favouriting
+the koi is marked as a favorite"* with **no target at all**, so favouriting
 anything passed it. It now names `Koi Pond` and the check enforces it.
 
 ---
@@ -167,7 +167,7 @@ A control that does nothing teaches nothing, and this course's audience reads
 - **Joining a WiFi network you have no password for.** Clicking Join on
   `CoffeeShop-Staff` spun for a second and then quietly connected to nothing. It
   now says *"CoffeeShop-Staff needs a password you do not have. Try the guest
-  network."* Same for the neighbour's network in the home-WiFi scenario.
+  network."* Same for the neighbor's network in the home-WiFi scenario.
 - **Reopening the wrong app mid-scenario.** In the frozen-app lesson, clicking
   Mail in the dock called the force-quit recovery path and announced that *Notes*
   was working again. Reopening now only counts when the current step actually
@@ -184,7 +184,7 @@ of what a regex flags here is prose, so the honest count is small:
 |---|---|
 | `final-files` — "out of the bin" ×2 | the Files sidebar says **Trash** |
 | `final-photos` — "in the bin" | Photos says **Recently Deleted** |
-| `final-photos` — "favourite" ×2 | the sidebar section is **Favorites** |
+| `final-photos` — "favorite" ×2 | the sidebar section is **Favorites** |
 | `facetime-basics` — "the red phone button" | the control is labelled **End call**, and the next lesson in the same module already called it that |
 | `final-files` step 5 | said the letter was *out* of the Trash where the step deletes it |
 | `final-photos` step 2 | described step 3's outcome, so two objectives read identically |
@@ -196,8 +196,8 @@ next pass does not "fix" them:
   computer, and naming both is right.
 - *"your computer's app store"* in the Unit 8 mission — same reason. **App
   Market** is the name of the simulated one only.
-- `colour` in the accessibility lessons and `color` in the Tab lesson — each
-  matches the label on the control it points at (**Colour Filters** in Settings,
+- `color` in the accessibility lessons and `color` in the Tab lesson — each
+  matches the label on the control it points at (**Color Filters** in Settings,
   **Pick a Color** in the browser).
 
 ### One real brand, in a phishing exercise
@@ -261,7 +261,7 @@ Recorded so the next pass does not redo it:
   seeded data in the real apps first.
 - **`open-btn` in `GuidedAppStoreTask`** is declared in the highlight switch and
   rendered nowhere. No lesson uses the `open-app` action, so nothing is broken.
-- **Two spellings of one word across two apps** — Settings says *Colour
+- **Two spellings of one word across two apps** — Settings says *Color
   Filters*, the browser says *Pick a Color*. Left alone deliberately: each lesson
   matches its own control, and the alternative churns lesson targets to fix
   something no learner is asked to type.

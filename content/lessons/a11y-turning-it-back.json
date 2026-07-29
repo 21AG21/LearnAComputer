@@ -5,7 +5,7 @@
   "order": 1343,
   "title": "Turning it all back off",
   "videoUrl": "",
-  "drDigitalIntro": "The single biggest reason people never try these settings is the fear of not being able to undo them.\n• Every switch in this unit is a switch. Clicking it a second time puts things back.\n• Even Invert Colours, which changes the screen most dramatically, is undone by the same control that turned it on.\n• If a change makes the screen hard to read, the setting you need is still in the same place — it just looks different.\n• In this activity the screen starts inverted and greyscale. Put it back to normal.",
+  "drDigitalIntro": "The single biggest reason people never try these settings is the fear of not being able to undo them.\n• Every switch in this unit is a switch. Clicking it a second time puts things back.\n• Even Invert Colors, which changes the screen most dramatically, is undone by the same control that turned it on.\n• If a change makes the screen hard to read, the setting you need is still in the same place — it just looks different.\n• In this activity the screen starts inverted and grayscale. Put it back to normal.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "You put the screen back to normal",
@@ -16,24 +16,24 @@
         "target": "accessibility"
       },
       {
-        "say": "Turn Invert Colours on, so the screen flips.",
+        "say": "Turn Invert Colors on, so the screen flips.",
         "action": "toggle",
-        "target": "invert-colours"
+        "target": "invert-colors"
       },
       {
         "say": "Now click the same switch again to turn it back off.",
         "action": "toggle",
-        "target": "invert-colours"
+        "target": "invert-colors"
       },
       {
-        "say": "Under Colour Filters, click Greyscale.",
+        "say": "Under Color Filters, click Grayscale.",
         "action": "toggle",
-        "target": "colour-filter-greyscale"
+        "target": "color-filter-grayscale"
       },
       {
-        "say": "Now click Off to bring the colour back.",
+        "say": "Now click Off to bring the color back.",
         "action": "toggle",
-        "target": "colour-filter-none"
+        "target": "color-filter-none"
       }
     ]
   },

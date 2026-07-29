@@ -9,7 +9,7 @@ import { photoSrc } from "@/lib/photoAssets";
 
 const HOW_IT_WORKS = [
   {
-    title: "Practise first",
+    title: "Practice first",
     body: "Every lesson comes with a simulated computer. Click it, break it, start it over — none of it is your real machine.",
   },
   {

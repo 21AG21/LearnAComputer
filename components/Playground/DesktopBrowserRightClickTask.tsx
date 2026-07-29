@@ -72,7 +72,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                 <div className="border-b-2 border-gray-800 pb-2">
                   <p className="text-xs font-semibold text-gray-500">PET NEWS DAILY · CATS</p>
                 </div>
-                <h1 className="text-2xl font-black leading-tight">Local Cat Judges Neighbour Without Comment</h1>
+                <h1 className="text-2xl font-black leading-tight">Local Cat Judges Neighbor Without Comment</h1>
                 <p className="text-sm text-gray-500">By Staff Correspondent, Cat Desk · Updated 4 minutes ago</p>
                 <div className="flex justify-center my-4">
                   <div className="relative w-44 h-72">
@@ -80,7 +80,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                   </div>
                 </div>
                 <p className="text-xs text-gray-400 italic -mt-2">Pictured: the cat in question. No comment was forthcoming.</p>
-                <p className="text-sm text-gray-700 leading-relaxed">A local cat, known only as &quot;Whiskers&quot; by neighbours who have not been formally introduced, spent approximately forty-five minutes on a windowsill yesterday, studying a passing cyclist with an expression that implied serious reservations.</p>
+                <p className="text-sm text-gray-700 leading-relaxed">A local cat, known only as &quot;Whiskers&quot; by neighbors who have not been formally introduced, spent approximately forty-five minutes on a windowsill yesterday, studying a passing cyclist with an expression that implied serious reservations.</p>
                 <p className="text-sm text-gray-700 leading-relaxed">&quot;I waved,&quot; confirmed the cyclist, who asked to remain anonymous. &quot;The cat did not wave back. The cat has never waved back.&quot;</p>
                 <p className="text-sm text-gray-700 leading-relaxed">The incident follows a series of similar events spanning three years, including the Great Staring Episode of 2023 and what sources describe as &quot;a very pointed tail-flick&quot; directed at a delivery driver in February.</p>
                 <div className="border-t pt-4 mt-2">
@@ -118,7 +118,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
               <div>
                 <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
                 <h2 className="text-lg font-bold mt-1 leading-tight">Dog Wins National Frisbee Championship for Third Year Running</h2>
-                <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">Biscuit, a four-year-old Golden Retriever, leapt 6.2 metres and caught the disc before it cleared the fence. The crowd erupted.</p>
+                <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">Biscuit, a four-year-old Golden Retriever, leapt twenty feet and caught the disc before it cleared the fence. The crowd erupted.</p>
               </div>
               <p className="text-sm text-gray-700">
                 Also in the news: scientists confirm that cats are, in fact, plotting something. To open the story in a new tab,{" "}
@@ -131,7 +131,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                   className="text-blue-600 underline text-base font-semibold cursor-context-menu select-none"
                   onClick={(e) => e.preventDefault()}
                 >
-                  Local Cat Judges Neighbour Without Comment →
+                  Local Cat Judges Neighbor Without Comment →
                 </button>
                 {/* Context menu */}
                 {menuPos && (

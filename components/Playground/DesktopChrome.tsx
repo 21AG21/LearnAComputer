@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 /**
- * The parts that make a simulated desktop recognisable: the wallpaper, the menu bar,
+ * The parts that make a simulated desktop recognizable: the wallpaper, the menu bar,
  * and the WiFi / battery / clock cluster at its right end.
  *
  * FakeDesktop and GuidedDesktopTask used to draw these separately — different

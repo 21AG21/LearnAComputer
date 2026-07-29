@@ -179,8 +179,8 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
     setPhotos((prev) => prev.map((p) => p.id === selectedPhoto.id ? { ...p, favorite: newVal } : p));
     setSelectedPhoto((p) => p ? { ...p, favorite: newVal } : p);
     // Both the photo and the direction have to match. This used to accept `favorite` or
-    // `unfavorite` on any photo at all, so "Favourite the beach photo" was satisfied by
-    // favouriting the cat — and "un-favourite it" by favouriting it again.
+    // `unfavorite` on any photo at all, so "Favorite the beach photo" was satisfied by
+    // favoriting the cat — and "un-favorite it" by favoriting it again.
     tryStep((s) =>
       s.action === (newVal ? "favorite" : "unfavorite") &&
       (!s.target || s.target === selectedPhoto.label));

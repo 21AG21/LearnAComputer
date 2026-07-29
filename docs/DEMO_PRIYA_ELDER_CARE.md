@@ -80,7 +80,7 @@ Do not open with features. Open with the sentence that matches what §0 told you
 
 **C. Any of them, if §0 turned up a scam incident — "the unit that pays for it."**
 > "You already know what one of these costs. Unit 10 is a scam inbox a resident
-> can practise in — where clicking the wrong link costs them nothing, and
+> can practice in — where clicking the wrong link costs them nothing, and
 > teaches them the thing that saves them later."
 
 Whichever you pick, land this before you touch the keyboard:
@@ -237,4 +237,4 @@ becomes a promise.
 - If something breaks live: *"Let me show you that on another lesson — and
   I'll have an answer for you tomorrow."* Then actually answer tomorrow.
 - Never demo on a phone or a narrow window. The site will show a "use a bigger
-  screen" guard, which is correct behaviour and a terrible first impression.
+  screen" guard, which is correct behavior and a terrible first impression.

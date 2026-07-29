@@ -44,7 +44,7 @@ export default function TermsPage() {
       <p>
         Everything inside a lesson activity is a simulation. The websites end in{" "}
         <code>.example</code>, the contacts are invented, and the shops sell nothing. No real email
-        is sent, no real file is deleted, and no real money can move. Practising here cannot damage
+        is sent, no real file is deleted, and no real money can move. Practicing here cannot damage
         anything.
       </p>
       <p>

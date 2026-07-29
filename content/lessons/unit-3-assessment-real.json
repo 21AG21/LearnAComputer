@@ -43,7 +43,7 @@
       {
         "say": "Open scan0001.pdf, then rename it after what you find inside.",
         "check": "confirm",
-        "detail": "A name like scan0001 was written by a machine, not a person. Open the file, read what it actually is, and give it a name your future self would recognise."
+        "detail": "A name like scan0001 was written by a machine, not a person. Open the file, read what it actually is, and give it a name your future self would recognize."
       },
       {
         "say": "Delete the three junk files.",

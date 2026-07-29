@@ -34,7 +34,7 @@ export default function AboutPage() {
         file, drag the window, or send the email inside a working simulation of a computer.
       </p>
       <p>
-        Recognising a correct answer and being able to do the thing are different skills, and only
+        Recognizing a correct answer and being able to do the thing are different skills, and only
         one of them is useful when you sit down at your own machine.
       </p>
 
@@ -52,7 +52,7 @@ export default function AboutPage() {
 
       <h2>Then on your own computer</h2>
       <p>
-        Practising in a simulation is safe, and that is also its limitation. Most units therefore end
+        Practicing in a simulation is safe, and that is also its limitation. Most units therefore end
         with a lesson that names four concrete things to go and do on your real machine — not
         &quot;try it yourself&quot;, which is not an instruction anyone can follow.
       </p>

@@ -45,7 +45,7 @@ export function ConfirmCheck({ step, onPass }: CheckProps) {
         I have done it
       </button>
       <Privacy>
-        This one is on your honour — it happens outside the browser, so the page cannot check it for you.
+        This one is on your honor — it happens outside the browser, so the page cannot check it for you.
       </Privacy>
     </div>
   );
@@ -555,7 +555,7 @@ export function AnswerCheck({ step, onPass }: CheckProps) {
 
     if (measured === null && (step.match === "hostname" || step.match === "browser")) {
       // Nothing measurable here, so the answer is taken at face value rather
-      // than failing someone for a browser we could not recognise.
+      // than failing someone for a browser we could not recognize.
       setProblem(null);
       onPass();
       return;

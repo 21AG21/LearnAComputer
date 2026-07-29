@@ -114,7 +114,7 @@ modules. `generateMetadata` now titles each module page after the module, and
 
 - `panelClass` was threaded into six Settings panels and used by none of them,
   with a `void panelClass;` in one to keep the compiler quiet — removed
-  throughout, along with a `usedPct` nothing rendered and a colour helper nothing
+  throughout, along with a `usedPct` nothing rendered and a color helper nothing
   read.
 - An `eslint-disable` in `FileManager` suppressed a rule that no longer fired.
 - The `undoPill` dependency warning in `GuidedEmailTask` was **correct to
@@ -175,5 +175,5 @@ Worth recording, so the next pass does not redo it:
   nothing has been run through a contrast checker, and `/accessibility` still
   says so honestly.
 - **No automated test suite.** The checks in this repo are a validator, a
-  type-checker, a linter and a mount harness. Nothing asserts behaviour except
+  type-checker, a linter and a mount harness. Nothing asserts behavior except
   the folder-checker tests written by hand during the missions work.

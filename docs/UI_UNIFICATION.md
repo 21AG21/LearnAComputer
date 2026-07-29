@@ -25,7 +25,7 @@ browser."
 
 ### 2. The dock's Browser was a stub
 
-`Desktop/BrowserApp` was 53 lines: eight coloured letter-tiles and the sentence
+`Desktop/BrowserApp` was 53 lines: eight colored letter-tiles and the sentence
 "Type an address in the bar above to visit a site." There was no bar above. The
 other six dock apps had already been collapsed onto their real implementations —
 Messages, Mail, Photos, App Market, Calendar and Notes are each a seven-line
@@ -111,7 +111,7 @@ to a learner: it looks and behaves like the browser they know.
 ## Verified in the browser
 
 - Dock → Browser opens the full browser in a draggable window: tab strip,
-  address bar, Reading List / History / Downloads / New Window, zoom, favourites.
+  address bar, Reading List / History / Downloads / New Window, zoom, favorites.
 - Unit 1 *Two-finger scrolling* shows the same chrome as Unit 4.
 - Unit 1 *Right click* shows the same chrome, and the Pet News front page and
   cat article render inside it.

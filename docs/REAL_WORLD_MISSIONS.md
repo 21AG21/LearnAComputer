@@ -46,7 +46,7 @@ learner's device, with nothing uploaded anywhere:
 
 `confirm` is the honest floor. Some things genuinely cannot be observed from a
 web page — whether you sent your sister a message, whether you read an app's
-permissions — and those steps say *"This one is on your honour"* in as many
+permissions — and those steps say *"This one is on your honor"* in as many
 words rather than pretending to check.
 
 ---

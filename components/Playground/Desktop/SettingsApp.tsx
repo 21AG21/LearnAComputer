@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useSimTheme, type ColourFilter } from "./SimThemeContext";
+import { useSimTheme, type ColorFilter } from "./SimThemeContext";
 import {
   PaletteIcon, DisplayIcon, AccessibilityIcon, WifiIcon,
   BellIcon, SaveIcon, InfoIcon, ShieldIcon, SmartphoneIcon,
@@ -301,9 +301,9 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
   onToggle?: (target: string, value: boolean) => void;
   highlightToggle?: string; highlightSlider?: string; mutedClass: string; isDark: boolean;
 }) {
-  const filters: { id: ColourFilter; label: string }[] = [
+  const filters: { id: ColorFilter; label: string }[] = [
     { id: "none", label: "Off" },
-    { id: "greyscale", label: "Greyscale" },
+    { id: "grayscale", label: "Grayscale" },
     { id: "warm", label: "Warm" },
   ];
   return (
@@ -327,11 +327,11 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
       </Card>
 
       <Card isDark={isDark}>
-        <p className={`text-xs font-bold uppercase tracking-widest ${mutedClass} mb-2`}>Colour and contrast</p>
+        <p className={`text-xs font-bold uppercase tracking-widest ${mutedClass} mb-2`}>Color and contrast</p>
         <Toggle
-          on={theme.invert} label="Invert Colours" isDark={isDark}
-          highlight={highlightToggle === "invert-colours"}
-          onToggle={(v) => { theme.set({ invert: v }); onToggle?.("invert-colours", v); }}
+          on={theme.invert} label="Invert Colors" isDark={isDark}
+          highlight={highlightToggle === "invert-colors"}
+          onToggle={(v) => { theme.set({ invert: v }); onToggle?.("invert-colors", v); }}
         />
         <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Flip light and dark — white pages become black</div>
         <Toggle
@@ -339,24 +339,24 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
           highlight={highlightToggle === "increase-contrast"}
           onToggle={(v) => { theme.set({ highContrast: v }); onToggle?.("increase-contrast", v); }}
         />
-        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Push light colours lighter and dark colours darker</div>
-        <p className="text-sm font-semibold mb-1.5">Colour Filters</p>
+        <div className={`text-xs ${mutedClass} mt-1 mb-3`}>Push light colors lighter and dark colors darker</div>
+        <p className="text-sm font-semibold mb-1.5">Color Filters</p>
         <div className="flex gap-2">
           {filters.map((f) => (
             <button
               key={f.id}
-              onClick={() => { theme.set({ colourFilter: f.id }); onToggle?.(`colour-filter-${f.id}`, true); }}
+              onClick={() => { theme.set({ colorFilter: f.id }); onToggle?.(`color-filter-${f.id}`, true); }}
               className={`px-3 py-1.5 rounded-lg border-2 text-sm font-semibold ${
-                theme.colourFilter === f.id
+                theme.colorFilter === f.id
                   ? "border-blue-600 bg-blue-600 text-white"
                   : isDark ? "border-gray-600 text-gray-200" : "border-gray-400 text-gray-700"
-              } ${highlightToggle === `colour-filter-${f.id}` ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
+              } ${highlightToggle === `color-filter-${f.id}` ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
             >
               {f.label}
             </button>
           ))}
         </div>
-        <div className={`text-xs ${mutedClass} mt-1`}>Helps if some colours are hard to tell apart</div>
+        <div className={`text-xs ${mutedClass} mt-1`}>Helps if some colors are hard to tell apart</div>
       </Card>
 
       <Card isDark={isDark}>

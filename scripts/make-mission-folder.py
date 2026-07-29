@@ -57,7 +57,7 @@ def pdf_bytes(lines, title_size=18):
 
 # ── Images ──────────────────────────────────────────────────────────────────
 def image_bytes(kind, fmt="JPEG", size=(640, 426)):
-    """Small but real pictures — recognisable enough to sort at a glance."""
+    """Small but real pictures — recognizable enough to sort at a glance."""
     img = Image.new("RGB", size, "white")
     d = ImageDraw.Draw(img)
     w, h = size
@@ -123,7 +123,7 @@ FILES = {
         "Dear Sir or Madam,\n\n"
         "I am writing about the streetlight outside number 14, which has been out\n"
         "since the middle of May. The pavement is very dark by the bus stop and a\n"
-        "neighbour has already had a fall there.\n\n"
+        "neighbor has already had a fall there.\n\n"
         "Yours faithfully,\n"
         "A. Resident\n"
     ),
