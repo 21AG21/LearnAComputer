@@ -172,15 +172,49 @@ report 132/132 off a run that had other browser work competing with it.
 
 ## Handoff for the next session
 
-Start here: `npm run solve-check` (dev server on :3000 first) — it should
-report **all 132 playable activities pass**. If a change regresses that,
-the debugging loop that works: filtered run → read the solver trace (`iter`
-lines now name what each gesture clicked) → if stuck, add a `[sim]`-prefixed
-console.log (the runner relays them) → fix → single-lesson retest → full run
-→ commit. Ten real learner-stranding bugs were found under "solver" failures
-this way — assume any new failure may hide one. Remaining goal work lives in
-the worst-screen watchlist above (instructor view, site chrome) and Stage C
-(task #123).
+**Run these first** (dev server on :3000): `solve-check` (132/132),
+`mission-check` (18/18), `hostile-check`, `recovery-check`, `demo-check`,
+`desktop-check`, then `check-lessons.py`, `check-actions.py`,
+`spelling-check.py`. Nine gates; all green as of 2026-07-28.
+
+**Debugging a solve-check failure**, the loop that works: filtered run (it now
+prints the slugs it played — read that line) → read the solver trace → if
+stuck, add a `[sim]`-prefixed console.log, which the runner relays → fix →
+single-lesson retest → **full run** → commit. Twelve real learner-stranding
+bugs have been found under "solver" failures this way. Assume any new failure
+hides one, and never conclude "flaky" from a re-run that happened to pass.
+
+**Two habits this project learned the hard way, both worth keeping:**
+
+1. *Negative-control every new check.* Three separate harnesses here have
+   reported a product fault that was really a bug in the harness, and one
+   printed a confident green line while inspecting half of what it claimed.
+   Break the bug on purpose and watch the check fail before trusting it.
+2. *Be most suspicious of your own recent work.* The last four real defects
+   were all found by auditing code written earlier the same session.
+
+### The next engineering item
+
+**Stage C (task #123).** `GuidedTroubleshootingTask`'s `password-reset`
+scenario (~line 753) hand-draws a mini Mail panel and a mini browser instead of
+using the real apps. It violates "one app per icon", and a learner notices
+immediately after doing all of Unit 6 in the real Mail.
+
+Not a small change, which is why it is still here: `MailApp` is a thin wrapper
+around `GuidedEmailTask`, so doing it properly means teaching that sim to seed
+an extra inbox message **and** to render a clickable link inside an email body —
+a component nine Unit 6 lessons depend on. Do it at the start of a session, not
+the end, and re-run the full solve-check afterwards.
+
+### What is waiting on the founder, not on code
+
+- **`supabase db push`** — the classroom migration. Until it runs, `/instructor`
+  and `/join` correctly say "not switched on", `demo-check` prints
+  `classrooms — NOT switched on`, and no sales document may claim the feature.
+- **`docs/SIGNED_IN_VERIFICATION.md`** — ten minutes in two browsers, plus SQL
+  that proves the security boundary without signing in.
+- **A conversation with a real buyer.** No harness substitutes for it, and
+  nothing further in this repo can produce it.
 
 ## Session log
 
