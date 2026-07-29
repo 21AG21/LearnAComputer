@@ -75,8 +75,16 @@ export default function PrivacyPage() {
 
       <h2>Analytics and advertising</h2>
       <p>
-        There are none. No analytics script, no advertising network, no third-party trackers, no
-        social media pixels. The pages you visit are not recorded anywhere we can see.
+        There is no advertising network, no social media pixel, and nothing that follows you to
+        other websites. We do count page views, using the measurement built into Vercel, the
+        company that hosts this site. It records which page was opened, roughly where in the world
+        the request came from, and what kind of device and browser it was. It sets no cookie, gives
+        you no identifier, and cannot tell one visitor from another or link a visit to a person.
+      </p>
+      <p>
+        It never sees anything from inside a lesson: not your progress, not your answers, not
+        anything you type into the practice apps. We use it to know which lessons are being opened
+        and whether pages are working, and for nothing else.
       </p>
 
       <h2>What the practice simulator is</h2>

@@ -14,16 +14,27 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 npm run dev          # dev server on :3000
 # /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
 # /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
+npm run solve-check  # headless: PLAYS all 132 playable activities to the end (canonical)
+npm run desktop-check # proves the practice desktop holds several windows at once
+npm run demo-check   # proves every page on the sales demo path loads clean
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
 python3 scripts/check-lessons.py  # lesson validation (targets, capitalization, reading level)
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
+node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 ```
+
+All three browser checks need `npm run dev` running on :3000 first.
 
 After touching any sim component or lesson steps, run **solve-check as well as
 mount-check** — mounting proves an activity renders; solving proves a learner can
 finish it, and the two unfinishable-lesson bugs were invisible to everything else.
+`solve-check` is currently green at **132/132**; keep it there.
+
+After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
+**desktop-check** — no guided lesson opens two apps at once, so solve-check
+cannot see a broken window stack, and multi-window is what Unit 1 teaches.
 
 ## Project Structure
 
@@ -656,6 +667,7 @@ After completing a module, the user can navigate to the next module or back to `
 - **Server vs Client**: Lesson data loading (`getAllLessons`, etc.) is server-only (uses `fs`). Progress, chat, and all playground components are `"use client"`.
 - **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
 - **FakeDesktop**: A self-contained desktop environment with a **10-app dock**: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes. The menu bar has a working clock, battery indicator (real Battery API), WiFi panel, and optional Do Not Disturb indicator. The taskbar shows open-app indicators (green dots). Settings changes (dark mode, brightness, Night Shift, text scale) are live via `SimThemeContext`.
+- **Multiple windows**: several apps can be open at once, cascaded so no window hides the one before it. Two lists drive this and they are deliberately separate: `openApps` fixes **DOM order** and is never re-sorted, `stack` holds **z-order**. Re-sorting the rendered list moves a window's element between mousedown and mouseup, which cancels the click — clicking Close on a background window raised it and swallowed the click. Raise windows by changing `stack` only. Every window body comes from `Desktop/AppBody.tsx`; `npm run desktop-check` guards the whole behaviour.
 - **Desktop-first launching**: Every guided lesson starts on the desktop — the learner opens the app from the dock themselves. `DesktopLaunch` wraps guided sims: it renders FakeDesktop with a highlighted dock icon and a dark banner ("Open Mail — click the glowing icon"), then swaps to the guided sim once the app is opened. No guided lesson should auto-open its app.
 - **SimulatorFrame**: Every playground activity is wrapped in `SimulatorFrame` — a dark `#1d2733` banner with instructions, optional step progress bar, and a two-stage completion (0.8s celebration overlay, then a slim persistent "lesson complete" banner that doesn't block interaction). Older Unit 1–2 tasks use single-activity mode (no step counter). Pass `chrome={false}` for sims that own a full-bleed desktop or browser. The duration constant `CELEBRATION_MS = 800` is exported from `SimulatorFrame.tsx` and imported by `KeyboardNavTask`.
 - **Non-blocking completion**: After finishing an activity, the sim remains interactive for free play. The celebration overlay clears after 0.8 seconds; a slim green banner stays. All read interactions (opening panels, switching folders, viewing popovers) continue working.

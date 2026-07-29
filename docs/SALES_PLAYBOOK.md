@@ -127,7 +127,7 @@ is the moment skeptics convert; let it breathe.
 | "What about our locked-down computers?" | "Nothing to install — it's a website. It even keeps working when the machine blocks saving; the learner sees one calm note and keeps going, and signing in (an email and a code, no passwords) saves their progress across machines." |
 | "How do we know it's working?" (funder/outcomes) | "Learners' progress syncs to their account, and the classroom dashboard for instructors is in development — today we support pilots with a simple check-in sheet, and pilot programs shape what that dashboard becomes." *(Do not oversell: the instructor view is designed, not shipped — `docs/PROGRESS_MONITORING.md`.)* |
 | "What does it cost?" | Pricing is not published; the model under consideration is free for individuals with paid institutional visibility and certification. In a pilot conversation: "The pilot costs you nothing but a classroom hour. Let's earn the pricing conversation." *(Numbers are the founder's call — never improvise them.)* |
-| "Data privacy? Our board will ask." | "The best answer in the industry: no ads, no trackers, no analytics. Unsigned-in, nothing leaves the machine. Signed in, we store an email and a list of finished lessons — that's the entire data model, and deleting the account deletes it." |
+| "Data privacy? Our board will ask." | "No ads, no trackers, no behavioural profiling, and nothing sold or shared. We count page views through our host — cookieless, no visitor identifier, and it never sees a single thing from inside a lesson. Signed out, nothing else leaves the machine. Signed in, we store an email and a list of finished lessons; that is the entire data model, and deleting the account deletes it." *(Say "we count page views" — the privacy page says so, and a buyer who checks and finds a contradiction is lost.)* |
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
 | "We're an elementary school" | "The course reads at the right level, but our accounts require an email, which isn't COPPA-appropriate for under-13s yet. Classroom accounts without child emails are on the roadmap — can I keep you posted?" |
 
@@ -189,12 +189,18 @@ support — say so, and give them your email.
 Shipped and demo-safe: 198 hands-on lessons across 14 units · guided
 highlighting everywhere · assessments with hints · real-world missions with
 in-browser verification · accounts with email-code sign-in and cross-machine
-progress · dark mode · crash containment (no blank screens) · locked-down
-machine tolerance · grade-5 reading level, enforced at build.
+progress · printable per-unit and full-course certificates (`/certificate`) ·
+a practice desktop that holds several windows at once (`/playground`) · dark
+mode · crash containment (no blank screens) · locked-down machine tolerance ·
+grade-5 reading level, enforced at build · **every one of the 132 playable
+activities mechanically proven finishable, re-proven on every change**
+(`npm run solve-check`) · WCAG AA contrast measured and fixed on the pages
+learners read, in both themes (`scripts/contrast-check.mjs`).
 
 Designed but NOT shipped (say "roadmap"): instructor/classroom dashboard ·
-certificates · WCAG audit · Spanish · under-13 accounts · phone/tablet
-guidance page. The full sequence is `docs/MASTER_PLAN.md`.
+certificate verification codes · full third-party WCAG audit · Spanish ·
+under-13 accounts · phone/tablet guidance page. The full sequence is
+`docs/MASTER_PLAN.md`.
 
 The fastest way to lose these buyers permanently is one overclaim. The
 product's honesty is part of the product.

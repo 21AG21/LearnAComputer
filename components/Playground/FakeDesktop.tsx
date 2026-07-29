@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import MessagingApp from "./Desktop/MessagingApp";
-import BrowserApp from "./Desktop/BrowserApp";
-import FilesApp from "./Desktop/FilesApp";
 import type { FileManagerHighlight } from "./Desktop/FileManager";
-import MailApp from "./Desktop/MailApp";
-import SettingsApp from "./Desktop/SettingsApp";
-import NotesApp from "./Desktop/NotesApp";
-import PhotosApp from "./Desktop/PhotosApp";
-import CalendarApp from "./Desktop/CalendarApp";
-import AppMarketApp from "./Desktop/AppMarketApp";
+import AppBody from "./Desktop/AppBody";
 import DraggableWindow from "./Desktop/DraggableWindow";
 import FileViewer from "./Desktop/FileViewer";
 import { iconFor, type Item } from "./Desktop/filesData";
@@ -98,7 +90,19 @@ export default function FakeDesktop(props: FakeDesktopProps) {
 function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
   const theme = useSimTheme();
   const desktopRef = useRef<HTMLDivElement>(null);
-  const [activeApp, setActiveApp] = useState<DesktopAppId | null>(null);
+  /**
+   * Which apps have a window, in the order they were opened. A real desktop lets
+   * you keep Mail open while you look something up in the Browser, and the
+   * course teaches exactly that, so one open app at a time was never right.
+   *
+   * This list fixes the DOM order and is deliberately never re-sorted: moving a
+   * window's element between mousedown and mouseup cancels the click, so
+   * raising a background window by clicking its Close button used to raise it
+   * and swallow the click. Stacking lives in `stack` and moves only z-index.
+   */
+  const [openApps, setOpenApps] = useState<DesktopAppId[]>([]);
+  /** The same windows ordered back to front — last entry is on top. */
+  const [stack, setStack] = useState<DesktopAppId[]>([]);
   const [minimized, setMinimized] = useState<Set<DesktopAppId>>(new Set());
   const [appKeys, setAppKeys] = useState<Record<DesktopAppId, number>>({
     messages: 0, browser: 0, files: 0, mail: 0,
@@ -116,7 +120,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
   const [openFileViewers, setOpenFileViewers] = useState<{ uid: string; item: Item }[]>([]);
 
   useEffect(() => {
-    if (autoOpenApp) setActiveApp(autoOpenApp);
+    if (!autoOpenApp) return;
+    setOpenApps((prev) => (prev.includes(autoOpenApp) ? prev : [...prev, autoOpenApp]));
+    setStack((prev) => (prev.includes(autoOpenApp) ? prev : [...prev, autoOpenApp]));
   }, [autoOpenApp]);
 
   useEffect(() => {
@@ -143,26 +149,43 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
     return () => battery?.removeEventListener("levelchange", handleChange);
   }, []);
 
-  function getDefaultRect(): { x: number; y: number; w: number; h: number } {
-    const el = desktopRef.current;
-    if (!el) return { x: 24, y: 24, w: 520, h: 400 };
-    return {
-      x: 24,
-      y: 24,
-      w: Math.max(480, Math.floor(el.offsetWidth * 0.76)),
-      h: Math.max(360, Math.floor(el.offsetHeight * 0.78)),
-    };
-  }
+  /**
+   * Where a window lands when it opens. Each new one steps down and right so a
+   * second window never hides the first — the whole point of having two.
+   * Remembered per app so closing one does not shuffle the others.
+   */
+  const rectsRef = useRef<Partial<Record<DesktopAppId, { x: number; y: number; w: number; h: number }>>>({});
 
-  function shouldRender(id: DesktopAppId) {
-    return activeApp === id || minimized.has(id) || closingApp === id || minimizingApp === id || launchingApp === id;
+  function rectFor(app: DesktopAppId) {
+    const cached = rectsRef.current[app];
+    if (cached) return cached;
+    const el = desktopRef.current;
+    const width = el?.offsetWidth ?? 900;
+    const height = el?.offsetHeight ?? 620;
+    const w = Math.min(760, Math.max(440, Math.round(width * 0.66)));
+    const h = Math.min(560, Math.max(330, Math.round(height * 0.7)));
+    const step = 28;
+    // Cascade only as far as the desktop can hold, then start over.
+    const room = Math.max(1, Math.floor(Math.min(width - w - 24, height - h - 72) / step));
+    const k = Object.keys(rectsRef.current).length % room;
+    const rect = { x: 20 + k * step, y: 16 + k * step, w, h };
+    rectsRef.current[app] = rect;
+    return rect;
   }
 
   function windowAnim(id: DesktopAppId) {
     if (closingApp === id) return "animate-window-close";
     if (minimizingApp === id) return "animate-window-minimize";
-    if (activeApp === id || launchingApp === id) return "animate-window-open";
+    if (launchingApp === id) return "animate-window-open";
     return "";
+  }
+
+  /** The window on top: the last-raised one that is not minimized. */
+  const focusedApp = [...stack].reverse().find((id) => !minimized.has(id)) ?? null;
+
+  /** Raise a window to the top without disturbing the others' order. */
+  function focusApp(app: DesktopAppId) {
+    setStack((prev) => (prev[prev.length - 1] === app ? prev : [...prev.filter((a) => a !== app), app]));
   }
 
   function dismissPanel() {
@@ -179,9 +202,12 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
     onAppOpened?.(app);
     if (interceptApps?.includes(app)) return;
     if (!BUILT_IN_APPS.includes(app)) return;
-    setLaunchingApp(app);
-    setTimeout(() => setLaunchingApp(null), 550);
-    setActiveApp(app);
+    // Clicking the dock icon of an app that is already open just brings it
+    // forward — the same thing every real dock does.
+    if (!openApps.includes(app)) {
+      setLaunchingApp(app);
+      setTimeout(() => setLaunchingApp(null), 550);
+    }
     setOpenPanel(null);
     setClosingPanel(null);
     setMinimized((prev) => {
@@ -190,6 +216,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       next.delete(app);
       return next;
     });
+    setOpenApps((prev) => (prev.includes(app) ? prev : [...prev, app]));
+    focusApp(app);
   }
 
   function closeApp(app: DesktopAppId) {
@@ -202,18 +230,22 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
         next.delete(app);
         return next;
       });
-      setActiveApp(null);
+      setOpenApps((prev) => prev.filter((a) => a !== app));
+      setStack((prev) => prev.filter((a) => a !== app));
+      // Forget the position so a reopened window cascades fresh.
+      delete rectsRef.current[app];
       setClosingApp(null);
     }, 150);
   }
 
-  function minimizeApp() {
-    if (!activeApp) return;
-    const app = activeApp;
+  /**
+   * Minimizing keeps the app in the stack: the window hides, the dock keeps its
+   * running dot, and the app's state survives until the learner clicks it back.
+   */
+  function minimizeApp(app: DesktopAppId) {
     setMinimizingApp(app);
     setTimeout(() => {
       setMinimized((prev) => new Set(prev).add(app));
-      setActiveApp(null);
       setMinimizingApp(null);
     }, 220);
   }
@@ -252,7 +284,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       <div className="relative shrink-0">
         <DesktopMenuBar
           dark={isDark}
-          title={activeApp ? APP_TITLES[activeApp] : "Desktop"}
+          title={focusedApp ? APP_TITLES[focusedApp] : "Desktop"}
           trailing={theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
           time={time}
           batteryPercent={batteryPercent}
@@ -305,155 +337,38 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       >
         <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />
 
-        {/* Apps as draggable windows */}
-        {shouldRender("messages") && (
+        {/* Apps as draggable windows, back to front */}
+        {openApps.map((id) => (
           <DraggableWindow
-            key={appKeys.messages}
-            title="Messages"
-            icon={APP_GLYPH.messages}
-            initial={getDefaultRect()}
-            minimized={minimized.has("messages")}
-            onClose={() => closeApp("messages")}
-            onMinimize={minimizeApp}
-            className={windowAnim("messages")}
+            key={`${id}-${appKeys[id]}`}
+            title={APP_TITLES[id]}
+            icon={APP_GLYPH[id]}
+            initial={rectFor(id)}
+            minimized={minimized.has(id)}
+            z={stack.indexOf(id) + 1}
+            focused={focusedApp === id}
+            onFocus={() => focusApp(id)}
+            onClose={() => closeApp(id)}
+            onMinimize={() => minimizeApp(id)}
+            className={windowAnim(id)}
           >
-            <MessagingApp />
-          </DraggableWindow>
-        )}
-        {shouldRender("browser") && (
-          <DraggableWindow
-            key={appKeys.browser}
-            title="Browser"
-            icon={APP_GLYPH.browser}
-            initial={getDefaultRect()}
-            minimized={minimized.has("browser")}
-            onClose={() => closeApp("browser")}
-            onMinimize={minimizeApp}
-            className={windowAnim("browser")}
-          >
-            <BrowserApp noWifi={!connectedNetwork} />
-          </DraggableWindow>
-        )}
-        {shouldRender("files") && (
-          <DraggableWindow
-            key={appKeys.files}
-            title="Files"
-            icon={APP_GLYPH.files}
-            initial={getDefaultRect()}
-            minimized={minimized.has("files")}
-            onClose={() => closeApp("files")}
-            onMinimize={minimizeApp}
-            className={windowAnim("files")}
-          >
-            <FilesApp
-              onClose={() => closeApp("files")}
-              onMinimize={minimizeApp}
-              hint={filesHint}
-              highlight={filesHighlight}
-              showHeader={false}
-              onFileOpened={onFileOpened}
-              onFileOpen={openFileViewer}
+            <AppBody
+              id={id}
+              extras={{
+                browser: { noWifi: !connectedNetwork },
+                settings: settingsProps,
+                files: {
+                  hint: filesHint,
+                  highlight: filesHighlight,
+                  onFileOpened,
+                  onFileOpen: openFileViewer,
+                  onClose: () => closeApp("files"),
+                  onMinimize: () => minimizeApp("files"),
+                },
+              }}
             />
           </DraggableWindow>
-        )}
-        {shouldRender("mail") && (
-          <DraggableWindow
-            key={appKeys.mail}
-            title="Mail"
-            icon={APP_GLYPH.mail}
-            initial={getDefaultRect()}
-            minimized={minimized.has("mail")}
-            onClose={() => closeApp("mail")}
-            onMinimize={minimizeApp}
-            className={windowAnim("mail")}
-          >
-            <MailApp />
-          </DraggableWindow>
-        )}
-        {shouldRender("settings") && (
-          <DraggableWindow
-            key={appKeys.settings}
-            title="Settings"
-            icon={APP_GLYPH.settings}
-            initial={getDefaultRect()}
-            minimized={minimized.has("settings")}
-            onClose={() => closeApp("settings")}
-            onMinimize={minimizeApp}
-            className={windowAnim("settings")}
-          >
-            <SettingsApp key={appKeys.settings} {...settingsProps} />
-          </DraggableWindow>
-        )}
-        {shouldRender("notes") && (
-          <DraggableWindow
-            key={appKeys.notes}
-            title="Notes"
-            icon={APP_GLYPH.notes}
-            initial={getDefaultRect()}
-            minimized={minimized.has("notes")}
-            onClose={() => closeApp("notes")}
-            onMinimize={minimizeApp}
-            className={windowAnim("notes")}
-          >
-            <NotesApp />
-          </DraggableWindow>
-        )}
-        {shouldRender("photos") && (
-          <DraggableWindow
-            key={appKeys.photos}
-            title="Photos"
-            icon={APP_GLYPH.photos}
-            initial={getDefaultRect()}
-            minimized={minimized.has("photos")}
-            onClose={() => closeApp("photos")}
-            onMinimize={minimizeApp}
-            className={windowAnim("photos")}
-          >
-            <PhotosApp />
-          </DraggableWindow>
-        )}
-        {shouldRender("app-market") && (
-          <DraggableWindow
-            key={appKeys["app-market"]}
-            title="App Market"
-            icon={APP_GLYPH["app-market"]}
-            initial={getDefaultRect()}
-            minimized={minimized.has("app-market")}
-            onClose={() => closeApp("app-market")}
-            onMinimize={minimizeApp}
-            className={windowAnim("app-market")}
-          >
-            <AppMarketApp />
-          </DraggableWindow>
-        )}
-        {shouldRender("calendar") && (
-          <DraggableWindow
-            key={appKeys.calendar}
-            title="Calendar"
-            icon={APP_GLYPH.calendar}
-            initial={getDefaultRect()}
-            minimized={minimized.has("calendar")}
-            onClose={() => closeApp("calendar")}
-            onMinimize={minimizeApp}
-            className={windowAnim("calendar")}
-          >
-            <CalendarApp initialView="calendar" />
-          </DraggableWindow>
-        )}
-        {shouldRender("reminders") && (
-          <DraggableWindow
-            key={appKeys.reminders}
-            title="Reminders"
-            icon={APP_GLYPH.reminders}
-            initial={getDefaultRect()}
-            minimized={minimized.has("reminders")}
-            onClose={() => closeApp("reminders")}
-            onMinimize={minimizeApp}
-            className={windowAnim("reminders")}
-          >
-            <CalendarApp key={appKeys.reminders} initialView="reminders" />
-          </DraggableWindow>
-        )}
+        ))}
 
         {/* File viewer windows */}
         {openFileViewers.map((fv, i) => (
@@ -462,6 +377,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
             title={fv.item.name}
             icon={iconFor(fv.item, 16)}
             initial={{ x: 80 + i * 28, y: 60 + i * 28, w: 460, h: 380 }}
+            z={BUILT_IN_APPS.length + i + 1}
             onClose={() => closeFileViewer(fv.uid)}
             onMinimize={() => {}}
             className="animate-window-open"
@@ -471,13 +387,13 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
         ))}
 
         {/* Dock — rendered after apps so it stays clickable when windows overlap it */}
-        <div className="absolute bottom-4 inset-x-2 flex justify-center z-10">
+        <div className="absolute bottom-4 inset-x-2 flex justify-center z-30">
           <Dock
             tone={isDark ? "dark" : "light"}
             items={BUILT_IN_APPS.map((id) => ({
               id,
               label: APP_TITLES[id],
-              running: minimized.has(id) || activeApp === id,
+              running: openApps.includes(id),
               highlighted: highlightApp === id,
               bouncing: launchingApp === id,
             }))}
@@ -518,7 +434,7 @@ function StatusPanel({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`absolute top-10 right-2 z-30 w-72 border-4 border-black bg-white shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
+      className={`absolute top-10 right-2 z-50 w-72 border-4 border-black bg-white shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
     >
       <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: tint }}>
         <p className="text-lg font-bold">{title}</p>

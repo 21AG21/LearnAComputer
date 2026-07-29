@@ -7,6 +7,7 @@ import AuthProvider from "@/components/AuthProvider";
 import StorageNotice from "@/components/StorageNotice";
 import SmallScreenGuard from "@/components/SmallScreenGuard";
 import AccountNav from "@/components/AccountNav";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -57,6 +58,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SmallScreenGuard />
           <PageTransition>{children}</PageTransition>
         </AuthProvider>
+        {/*
+          Page-view counts from the host we already deploy to: cookieless, no
+          cross-site identifier, and it never sees lesson progress — that stays
+          in localStorage and (for signed-in learners) our own Supabase project.
+        */}
+        <Analytics />
       </body>
     </html>
   );

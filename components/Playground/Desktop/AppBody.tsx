@@ -1,5 +1,6 @@
 "use client";
 
+import type { ComponentProps } from "react";
 import MessagingApp from "./MessagingApp";
 import BrowserApp from "./BrowserApp";
 import FilesApp from "./FilesApp";
@@ -25,18 +26,30 @@ export type AppBodyId =
   | "messages" | "browser" | "files" | "mail" | "settings"
   | "photos" | "app-market" | "calendar" | "reminders" | "notes";
 
-export default function AppBody({ id }: { id: AppBodyId }) {
+/**
+ * Per-app overrides for the callers that need them — the desktop passes the
+ * live WiFi state to the browser, lesson-specific highlights to Files, and the
+ * guided-settings callbacks to Settings. Everything not named here gets the
+ * same app every other dock gives you.
+ */
+export interface AppBodyExtras {
+  browser?: Partial<ComponentProps<typeof BrowserApp>>;
+  files?: Partial<ComponentProps<typeof FilesApp>>;
+  settings?: Partial<ComponentProps<typeof SettingsApp>>;
+}
+
+export default function AppBody({ id, extras }: { id: AppBodyId; extras?: AppBodyExtras }) {
   switch (id) {
     case "messages": return <MessagingApp />;
-    case "browser": return <BrowserApp />;
+    case "browser": return <BrowserApp {...extras?.browser} />;
     case "mail": return <MailApp />;
-    case "settings": return <SettingsApp />;
+    case "settings": return <SettingsApp {...extras?.settings} />;
     case "notes": return <NotesApp />;
     case "photos": return <PhotosApp />;
     case "app-market": return <AppMarketApp />;
     case "calendar": return <CalendarApp initialView="calendar" />;
     case "reminders": return <CalendarApp initialView="reminders" />;
     case "files":
-      return <FilesApp showHeader={false} onClose={() => {}} onMinimize={() => {}} />;
+      return <FilesApp showHeader={false} onClose={() => {}} onMinimize={() => {}} {...extras?.files} />;
   }
 }

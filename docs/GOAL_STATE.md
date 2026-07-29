@@ -91,6 +91,24 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (later):** Three founder-directed items. **The practice desktop
+  now holds several windows at once** — `FakeDesktop` tracked a single
+  `activeApp`, so opening a second app silently closed the first, which made
+  the "Working with Windows" module unteachable on the very screen it teaches.
+  Rebuilt on two deliberately separate lists (`openApps` for DOM order,
+  `stack` for z-order) after the naive one-list version introduced a worse bug:
+  re-sorting the rendered list moved a window's element between mousedown and
+  mouseup, cancelling the click, so Close on a background window raised it and
+  swallowed the press. Guarded by `npm run desktop-check` (14 assertions);
+  solve-check stayed green at 132/132 throughout, because no guided lesson
+  opens two apps at once — which is exactly why this bug survived so long.
+  **Vercel Analytics** added, and the privacy page rewritten to say so
+  truthfully (it claimed "no analytics script"; a buyer who checks and finds a
+  contradiction is lost). **Priya Elder Care demo runbook** written
+  (`docs/DEMO_PRIYA_ELDER_CARE.md`) with a verified click path, and
+  `npm run demo-check` proves every stop on that path loads clean — run it the
+  morning of. Sales playbook ground-truth refreshed (certificates and the
+  proven-completable claim are now shippable; privacy row corrected).
 - **2026-07-28:** **Solve-check complete: all 132 playable activities pass,
   zero failures — every guided lesson and every assessment.** The last 13
   failures fell in one day of cluster-by-cluster work (app store, browser,

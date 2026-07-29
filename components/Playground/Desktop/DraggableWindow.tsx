@@ -30,12 +30,18 @@ export interface DraggableWindowProps {
   onResized?: () => void;
   /** Applied to the root element — use for CSS animations. */
   className?: string;
+  /** Stacking order. Higher sits on top of other windows. */
+  z?: number;
+  /** Fired when the learner touches this window anywhere — used to raise it. */
+  onFocus?: () => void;
+  /** Dims the title bar when another window is on top, like a real desktop. */
+  focused?: boolean;
   children: ReactNode;
 }
 
 export default function DraggableWindow({
   title, icon, initial, minimized, onClose, onMinimize, onMaximize,
-  highlight, onMoved, onResized, className, children,
+  highlight, onMoved, onResized, className, z, onFocus, focused = true, children,
 }: DraggableWindowProps) {
   const [pos, setPos] = useState({ x: initial.x, y: initial.y });
   const [size, setSize] = useState({ w: initial.w, h: initial.h });
@@ -136,18 +142,29 @@ export default function DraggableWindow({
 
   return (
     <div
-      className={`absolute shadow-2xl border-2 border-gray-700 rounded-lg overflow-hidden flex flex-col bg-white select-none ${className ?? ""}`}
-      style={isMaximized ? { inset: 4 } : { left: pos.x, top: pos.y, width: size.w, height: size.h }}
+      className={`absolute shadow-2xl border-2 rounded-lg overflow-hidden flex flex-col bg-white select-none ${
+        focused ? "border-gray-700" : "border-gray-400"
+      } ${className ?? ""}`}
+      style={
+        isMaximized
+          ? { inset: 4, zIndex: z }
+          : { left: pos.x, top: pos.y, width: size.w, height: size.h, zIndex: z }
+      }
+      // Capture, so raising the window happens even when the click lands on a
+      // control inside it that stops propagation.
+      onMouseDownCapture={onFocus}
     >
       {/* Title bar */}
       <div
-        className={`shrink-0 bg-gray-100 border-b-2 border-gray-700 px-3 py-2 flex items-center gap-2 ${
-          !isMaximized ? "cursor-grab active:cursor-grabbing" : "cursor-default"
-        } ${highlight === "titlebar" ? "ring-4 ring-yellow-400 ring-inset animate-pulse" : ""}`}
+        className={`shrink-0 border-b-2 px-3 py-2 flex items-center gap-2 ${
+          focused ? "bg-gray-100 border-gray-700" : "bg-gray-200/70 border-gray-400"
+        } ${!isMaximized ? "cursor-grab active:cursor-grabbing" : "cursor-default"} ${
+          highlight === "titlebar" ? "ring-4 ring-yellow-400 ring-inset animate-pulse" : ""
+        }`}
         onMouseDown={onTitleDown}
       >
         {icon && <span className="flex items-center" aria-hidden="true">{icon}</span>}
-        <span className="font-bold text-gray-700 text-sm font-[var(--font-app-title)]">{title}</span>
+        <span className={`font-bold text-sm font-[var(--font-app-title)] ${focused ? "text-gray-700" : "text-gray-500"}`}>{title}</span>
         <div className="flex-1" />
         <WindowControls
           onMinimize={onMinimize}
