@@ -39,13 +39,39 @@ export interface Membership {
 /** Accounts are optional; without Supabase configured, classes simply do not exist. */
 export const classesEnabled = () => supabase !== null;
 
+/**
+ * Thrown when the tables are not there yet — the migration in
+ * supabase/migrations/ has not been applied to this project.
+ *
+ * This is the difference between a calm "not switched on yet" panel and the
+ * words `relation "public.classes" does not exist` on screen in front of a
+ * buyer. The gap between shipping the code and running the migration is
+ * exactly when somebody will open this page to see what it looks like.
+ */
+export class ClassesNotSetUpError extends Error {
+  constructor() {
+    super("Classes are not switched on for this site yet.");
+    this.name = "ClassesNotSetUpError";
+  }
+}
+
+/** Postgres says 42P01; PostgREST reports a stale schema cache as PGRST205. */
+function raise(error: { code?: string; message: string }): never {
+  const missing =
+    error.code === "42P01" ||
+    error.code === "PGRST205" ||
+    /schema cache|does not exist|find the (table|function)/i.test(error.message);
+  if (missing) throw new ClassesNotSetUpError();
+  throw new Error(error.message);
+}
+
 export async function listClasses(): Promise<ClassRow[]> {
   if (!supabase) return [];
   const { data, error } = await supabase
     .from("classes")
     .select("id, name, join_code, created_at")
     .order("created_at", { ascending: true });
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
   return data ?? [];
 }
 
@@ -56,20 +82,20 @@ export async function createClass(name: string, ownerId: string): Promise<ClassR
     .insert({ name: name.trim(), owner_id: ownerId })
     .select("id, name, join_code, created_at")
     .single();
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
   return data;
 }
 
 export async function renameClass(classId: string, name: string): Promise<void> {
   if (!supabase) return;
   const { error } = await supabase.from("classes").update({ name: name.trim() }).eq("id", classId);
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
 }
 
 export async function deleteClass(classId: string): Promise<void> {
   if (!supabase) return;
   const { error } = await supabase.from("classes").delete().eq("id", classId);
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
 }
 
 /**
@@ -85,7 +111,7 @@ export async function getRoster(classId: string): Promise<RosterEntry[]> {
     .select("learner_id, display_name, joined_at")
     .eq("class_id", classId)
     .order("display_name", { ascending: true });
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
   if (!members || members.length === 0) return [];
 
   const ids = members.map((m) => m.learner_id);
@@ -93,7 +119,7 @@ export async function getRoster(classId: string): Promise<RosterEntry[]> {
     .from("learner_progress")
     .select("user_id, completed_slugs")
     .in("user_id", ids);
-  if (pErr) throw new Error(pErr.message);
+  if (pErr) raise(pErr);
 
   const byId = new Map((progress ?? []).map((p) => [p.user_id, p.completed_slugs ?? []]));
   return members.map((m) => ({
@@ -111,7 +137,7 @@ export async function removeMember(classId: string, learnerId: string): Promise<
     .delete()
     .eq("class_id", classId)
     .eq("learner_id", learnerId);
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
 }
 
 /** Joining goes through a database function, so no learner can list classes. */
@@ -121,7 +147,7 @@ export async function joinClass(code: string, displayName: string): Promise<{ id
     code: code.trim(),
     learner_name: displayName.trim(),
   });
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
   const row = Array.isArray(data) ? data[0] : data;
   if (!row) throw new Error("No class has that code. Check it with whoever gave it to you.");
   return row as { id: string; name: string };
@@ -133,7 +159,7 @@ export async function myMemberships(): Promise<Membership[]> {
     .from("class_members")
     .select("class_id, display_name, classes(name)")
     .order("joined_at", { ascending: true });
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
   return (data ?? []).map((m) => {
     const cls = m.classes as unknown as { name: string } | { name: string }[] | null;
     const name = Array.isArray(cls) ? (cls[0]?.name ?? "Your class") : (cls?.name ?? "Your class");
@@ -144,5 +170,5 @@ export async function myMemberships(): Promise<Membership[]> {
 export async function leaveClass(classId: string): Promise<void> {
   if (!supabase) return;
   const { error } = await supabase.from("class_members").delete().eq("class_id", classId);
-  if (error) throw new Error(error.message);
+  if (error) raise(error);
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import {
   classesEnabled,
+  ClassesNotSetUpError,
   createClass,
   deleteClass,
   getRoster,
@@ -47,6 +48,14 @@ export default function InstructorView({ units }: { units: Unit[] }) {
   const [newName, setNewName] = useState("");
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
+  /** The tables are not there yet — an operator problem, not the visitor's. */
+  const [notSetUp, setNotSetUp] = useState(false);
+
+  /** Never put a database error in front of a visitor. */
+  const report = useCallback((e: unknown, fallback: string) => {
+    if (e instanceof ClassesNotSetUpError) setNotSetUp(true);
+    else setProblem(e instanceof Error ? e.message : fallback);
+  }, []);
 
   const totalLessons = units.reduce((n, u) => n + u.slugs.length, 0);
 
@@ -56,9 +65,9 @@ export default function InstructorView({ units }: { units: Unit[] }) {
       setClasses(rows);
       setActiveId((id) => id ?? rows[0]?.id ?? null);
     } catch (e) {
-      setProblem(e instanceof Error ? e.message : "Could not load your classes.");
+      report(e, "Could not load your classes.");
     }
-  }, []);
+  }, [report]);
 
   useEffect(() => {
     if (userId) void refreshClasses();
@@ -72,11 +81,11 @@ export default function InstructorView({ units }: { units: Unit[] }) {
     let live = true;
     getRoster(activeId)
       .then((r) => live && setRoster(r))
-      .catch((e) => live && setProblem(e instanceof Error ? e.message : "Could not load the roster."));
+      .catch((e) => live && report(e, "Could not load the roster."));
     return () => {
       live = false;
     };
-  }, [activeId]);
+  }, [activeId, report]);
 
   if (!classesEnabled()) {
     return (
@@ -111,6 +120,24 @@ export default function InstructorView({ units }: { units: Unit[] }) {
     );
   }
 
+  if (notSetUp) {
+    return (
+      <main className="mx-auto max-w-2xl px-6 py-16">
+        <h1 className="text-3xl font-bold">Classes are not switched on yet</h1>
+        <p className="mt-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+          Everything else on the site works normally — learners can carry on without this.
+        </p>
+        <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-400">
+          If you run this site: the classroom tables have not been created yet. Apply{" "}
+          <code className="rounded bg-gray-100 px-1 py-0.5 text-sm dark:bg-gray-800">
+            supabase/migrations/20260728_classes_and_instructor_visibility.sql
+          </code>{" "}
+          and reload this page.
+        </p>
+      </main>
+    );
+  }
+
   const active = classes.find((c) => c.id === activeId) ?? null;
 
   async function onCreate(e: React.FormEvent) {
@@ -124,7 +151,7 @@ export default function InstructorView({ units }: { units: Unit[] }) {
       setClasses((prev) => [...prev, row]);
       setActiveId(row.id);
     } catch (err) {
-      setProblem(err instanceof Error ? err.message : "Could not make that class.");
+      report(err, "Could not make that class.");
     } finally {
       setBusy(false);
     }

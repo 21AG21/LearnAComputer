@@ -3,7 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
-import { classesEnabled, joinClass, leaveClass, myMemberships, type Membership } from "@/lib/classes";
+import {
+  classesEnabled,
+  ClassesNotSetUpError,
+  joinClass,
+  leaveClass,
+  myMemberships,
+  type Membership,
+} from "@/lib/classes";
 
 export default function JoinClassView() {
   const { session, ready } = useAuth();
@@ -68,7 +75,15 @@ export default function JoinClassView() {
       setCode("");
       await refresh();
     } catch (err) {
-      setProblem(err instanceof Error ? err.message : "That did not work. Check the code and try again.");
+      // A database that has not been migrated is not the learner's fault, and
+      // "relation does not exist" means nothing to them.
+      setProblem(
+        err instanceof ClassesNotSetUpError
+          ? "Classes are not switched on for this site yet. Ask whoever gave you the code."
+          : err instanceof Error
+            ? err.message
+            : "That did not work. Check the code and try again.",
+      );
     } finally {
       setBusy(false);
     }

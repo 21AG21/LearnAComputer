@@ -73,6 +73,11 @@ computer. If they remember one thing, make it that.
 **Close of call:** get a demo scheduled or send the link + one-pager. Never
 end without a named next step and date.
 
+**The words, written out:** `docs/COLD_CALL_KIT.md` has the gatekeeper script,
+three openers by buyer type, voicemails, four email templates, a LinkedIn note,
+a rapid objection table, and the call-block routine. Nothing in it needs
+adapting before you dial.
+
 ## 4. The demo (12 minutes, scripted)
 
 Run it on the production site. Before any demo: open the site yourself,
