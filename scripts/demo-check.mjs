@@ -11,6 +11,11 @@
  * difference between a confident demo and a live surprise.
  *
  * Run it the morning of. If it is not green, do not demo that path.
+ *
+ * If everything fails at once with 500s and 404s, the dev server is almost
+ * certainly serving a wiped `.next` — someone ran a production build while it
+ * was running. Restart `npm run dev` and run this again. (That is a real
+ * failure this script caught, which is the point of having it.)
  */
 import { chromium } from "playwright";
 
@@ -62,6 +67,17 @@ for (const stop of PATH) {
     for (const b of bad) console.log(`        ${b}`);
     problems.push(`${stop.beat} (${stop.url}): ${bad.join("; ")}`);
   }
+}
+
+// Beat 5 hands the buyer a real download. A 404 there lands at the exact moment
+// the demo is asking them to believe the product, so check the bytes, not the page.
+for (const asset of ["/missions/messy-folder.zip", "/missions/Downloads-Practice.pdf"]) {
+  const res = await page.request.get(BASE + asset).catch((e) => ({ err: e }));
+  const status = res?.status?.() ?? 0;
+  const size = status === 200 ? (await res.body()).length : 0;
+  const ok = status === 200 && size > 1000;
+  console.log(`${ok ? "ok  " : "FAIL"}  mission download  ${asset}${ok ? ` (${size} bytes)` : ` — HTTP ${status}, ${size} bytes`}`);
+  if (!ok) problems.push(`mission download ${asset}: HTTP ${status}, ${size} bytes`);
 }
 
 await browser.close();

@@ -50,7 +50,11 @@ conversation afterwards?"* Their number beats yours, and now they said it.
   that beat from the path. Never demo something you are hoping about.
 
 **Morning of**
-- Re-drive the first two minutes only (catches a bad deploy in 90 seconds).
+- Run `npm run demo-check`. It opens every stop in §4, plus both mission
+  downloads, and fails if any one of them is not safe to show. Ninety seconds.
+  **If it is not green, do not demo that path.** (If *everything* fails with
+  500s, the dev server is serving a wiped `.next` — restart `npm run dev`.)
+- Re-drive the first two minutes by hand (catches a bad deploy in 90 seconds).
 - Charge the laptop. Bring the charger. Tether as backup — assume the venue
   Wi-Fi fails, because the demo is a website.
 - Reset progress: `/dashboard` → Reset all progress. A demo that opens on
