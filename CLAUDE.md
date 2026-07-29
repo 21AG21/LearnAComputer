@@ -24,6 +24,7 @@ npm run build        # production build (rm -rf .next first if switching from de
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
 python3 scripts/check-lessons.py  # lesson validation (targets, capitalization, reading level)
+python3 scripts/check-actions.py  # every action a sim advertises must be one a learner can finish
 python3 scripts/spelling-check.py # one dialect: American English, plus a typo list
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes

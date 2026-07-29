@@ -194,10 +194,15 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
   shipped twice before and motivated solve-check in the first place. Removed
   from the component, from `lib/lessons.ts`, and from the documented action
   list; opening an app is the dock's job, which is where the course teaches it.
-  Worth generalising next session: **a documented action with no handler is
-  invisible to every check we have**, because our harnesses only ever play
-  lessons that exist. A source-level check that every action in a sim's union
-  is reachable by some `tryStep` would close the whole class.
+  **Generalised the same day:** `python3 scripts/check-actions.py` compares each
+  sim's declared action union against the actions some `tryStep` predicate can
+  actually satisfy, and fails on anything an author could write but no learner
+  could finish. Clean across 8 sims; two dispatch through a lookup table and are
+  reported as not statically checkable rather than guessed at. Its own negative
+  control earned its keep: the first version **did not catch** a reintroduced
+  `open-app`, because a comment sitting inside the union stopped the regex early
+  and half the union was never read. A check that quietly inspects half of what
+  it claims to is worse than none — always re-break the bug and watch it fail.
 - **2026-07-28 (widening the sweep, and naming the competition):**
   `hostile-check` now sweeps **every module page** — roughly forty, derived
   from the lesson files rather than hand-picked — not the fifteen chrome routes
