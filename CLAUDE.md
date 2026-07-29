@@ -428,7 +428,7 @@ A simulated app marketplace with 12 apps across 4 categories, permissions, and p
 }
 ```
 
-Actions: `search` (`value`), `select-app` (`target`), `install`, `allow-permission`, `deny-permission` (cancels install), `go-to-installed`, `go-to-store`, `update-app` (`target`), `delete-app` (`target`), `open-app` (`target`), `go-to-category` (`target`). Installed apps persist across lessons under the `apps` sub-key of `lac-sim` (via `lib/simState.ts`), so Reset all progress uninstalls them.
+Actions: `search` (`value`), `select-app` (`target`), `install`, `allow-permission`, `deny-permission` (cancels install), `go-to-installed`, `go-to-store`, `update-app` (`target`), `delete-app` (`target`), `go-to-category` (`target`). Installed apps persist across lessons under the `apps` sub-key of `lac-sim` (via `lib/simState.ts`), so Reset all progress uninstalls them.
 
 #### `guided-settings` schema
 

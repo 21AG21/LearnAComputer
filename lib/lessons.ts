@@ -204,7 +204,8 @@ export type PlaygroundTask =
         say: string;
         action:
           | "search" | "select-app" | "install" | "allow-permission" | "deny-permission"
-          | "go-to-installed" | "go-to-store" | "update-app" | "delete-app" | "open-app"
+          // "open-app" was removed: the App Market could never satisfy it.
+          | "go-to-installed" | "go-to-store" | "update-app" | "delete-app"
           | "go-to-category";
         target?: string;
         value?: string;

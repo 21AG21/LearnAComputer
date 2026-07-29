@@ -184,6 +184,20 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (a trap laid for the next author):** `open-app` was a
+  **documented** App Market action that could never be satisfied. Its highlight
+  case pointed at an `open-btn` that nothing renders, and no handler ever
+  completed it. No lesson used it, so nothing was broken — but CLAUDE.md
+  advertised it, which means the next person to follow the documented schema
+  would have shipped an unfinishable lesson, and `check-lessons.py` would have
+  passed it because the app name was real. That is precisely the failure that
+  shipped twice before and motivated solve-check in the first place. Removed
+  from the component, from `lib/lessons.ts`, and from the documented action
+  list; opening an app is the dock's job, which is where the course teaches it.
+  Worth generalising next session: **a documented action with no handler is
+  invisible to every check we have**, because our harnesses only ever play
+  lessons that exist. A source-level check that every action in a sim's union
+  is reachable by some `tryStep` would close the whole class.
 - **2026-07-28 (widening the sweep, and naming the competition):**
   `hostile-check` now sweeps **every module page** — roughly forty, derived
   from the lesson files rather than hand-picked — not the fifteen chrome routes

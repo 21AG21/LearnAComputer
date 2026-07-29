@@ -10,7 +10,12 @@ export type GuidedAppStoreStep = {
   say: string;
   action:
     | "search" | "select-app" | "install" | "allow-permission" | "deny-permission"
-    | "go-to-installed" | "go-to-store" | "update-app" | "delete-app" | "open-app"
+    // No "open-app": the App Market never opened anything. Its highlight case
+    // pointed at an `open-btn` that nothing renders and no handler ever
+    // completed, so a step using it could never be satisfied — an unfinishable
+    // lesson waiting for the first author to follow the documented schema.
+    // Opening an app is the dock's job, which is where the course teaches it.
+    | "go-to-installed" | "go-to-store" | "update-app" | "delete-app"
     | "go-to-category";
   target?: string;
   value?: string;
@@ -213,7 +218,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
       const app = STORE_APPS.find((a) => a.name === s.target);
       if (!app) continue;
       if (s.action === "install" || (s.action === "select-app" && targetlessInstall)) toUninstall.add(app.id);
-      if (s.action === "delete-app" || s.action === "update-app" || s.action === "open-app") toInstall.add(app.id);
+      if (s.action === "delete-app" || s.action === "update-app") toInstall.add(app.id);
     }
     for (const id of toUninstall) saved.delete(id);
     for (const id of toInstall) { if (!toUninstall.has(id)) saved.add(id); }
@@ -237,7 +242,6 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
       case "go-to-store": return kind === "tab-store";
       case "update-app": return kind === "update-btn" && name === step.target;
       case "delete-app": return kind === "delete-btn" && name === step.target;
-      case "open-app": return kind === "open-btn" && name === step.target;
       case "go-to-category": return kind === "category-btn" && name === step.target;
       default: return false;
     }
