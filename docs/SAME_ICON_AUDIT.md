@@ -1149,3 +1149,57 @@ starts quietly not looking at things.
 **The remaining work is now one line long**, which it has not been at any point
 before: find out whether the scam popup's close button is genuinely out of
 reach, and if it is, fix it — then `ring-check` becomes the eleventh gate.
+
+## Round eighteen (2026-07-29): the scam popup's close button, and the eleventh gate
+
+Round seventeen left exactly one line of work: *find out whether the scam
+popup's close button is genuinely out of reach.* It is — was — and the reason is
+worth reading, because three attempts to measure it in a browser failed on
+automation mechanics and the answer came from the markup instead.
+
+```jsx
+<div className="flex-1 min-h-0 overflow-auto bg-white relative">   {/* page area */}
+  …
+  <div className="absolute inset-0 … flex items-center justify-center">  {/* overlay */}
+    <div className="… max-w-xs relative animate-pop-in">                 {/* dialog  */}
+      <button aria-label="Close popup" className="absolute -top-3 -right-3 …">
+```
+
+The page area is **both `relative` and `overflow-auto`**, so the overlay's
+`inset-0` pins to exactly the box that clips it. The dialog is centered in that
+box. The ✕ sits **twelve pixels outside** the dialog's top-right corner. On a
+short pane — which is the lesson pane's normal geometry — the centered dialog's
+top edge approaches the container's, and those twelve pixels are cut off.
+
+And scrolling cannot recover it: the overlay is pinned to the padding box, so it
+does not move with the scroll. The one control the entire lesson is about, in
+Unit 10's scam-popup lesson, **could not be reached at all.**
+
+The fix is one line and better design regardless: the ✕ sits *inside* the
+dialog's corner now (`top-1.5 right-1.5`, with `pt-8` so it clears the heading),
+where it cannot overflow at any pane size.
+
+### `ring-check` is now the eleventh gate
+
+Whole course, three consecutive runs: **zero, zero, zero.** It exits 1 on any
+finding, whole-course or filtered, and the advisory language is gone.
+
+Negative-controlled by putting the bug back — `-top-3 -right-3` and the overlay
+padding removed — and watching the whole-course run fail, naming both
+`popups-ads` and `popup-accident`. Then restored, and clean again.
+
+### What the whole arc says
+
+This check was built in round four, found nothing trustworthy, and was honestly
+labelled advisory with the note *"a checker cannot know when the sim is at
+rest"*. It stayed that way through fourteen rounds. Four different timing
+mechanisms were tried and abandoned. The thing that finally worked was not a
+better delay — it was **asking the sim to say when it had stopped moving**, and
+then believing the number it produced.
+
+The number it produced was 2, and both were real.
+
+Every count in this file is now something a gate enforces on every run:
+146 activities played, 18 missions, 27 stray-close recoveries, 104 double-click
+walks, 170 rings on screen, 198 lessons valid, zero cookies, zero third-party
+requests, and a pitch that matches the product.

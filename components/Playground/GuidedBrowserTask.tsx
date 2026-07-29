@@ -1158,11 +1158,21 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           </div>
         )}
 
-        {/* Scam popup */}
+        {/* Scam popup.
+            The overlay is pinned to this page area's padding box — that div is
+            both `relative` and `overflow-auto` — so anything hanging outside
+            the dialog is clipped by it, and scrolling cannot bring it back,
+            because the overlay does not move with the scroll. The ✕ used to sit
+            at `-top-3 -right-3`, twelve pixels outside the corner: on a short
+            pane the centered dialog's top edge approaches the container's, and
+            the close button — the one control this entire lesson is about — was
+            cut off with no way to reach it. It sits inside the corner now,
+            where it cannot overflow at any pane size. Found by `ring-check`
+            once that check was made stable enough to believe. */}
         {popupOpen && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30">
-            <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 max-w-xs text-center relative animate-pop-in">
-              <button onClick={closePopup} aria-label="Close popup" className={`absolute -top-3 -right-3 w-8 h-8 bg-white border-2 border-black rounded-full font-bold flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-2">
+            <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
+              <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-8 h-8 bg-white border-2 border-black rounded-full font-bold flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
               <p className="text-red-500 mb-2"><WarningIcon size={40} /></p>
               <p className="font-black text-red-600 text-lg">VIRUS DETECTED!!!</p>
               <p className="text-sm text-gray-700 my-2">Your computer is infected! Click below to clean it NOW!</p>

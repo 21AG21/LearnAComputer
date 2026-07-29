@@ -31,7 +31,7 @@ python3 scripts/pitch-check.py    # does the sales material describe the product
                                   # (reads EXEMPT/STEPLESS out of lib/solve/solver.ts — never copy them)
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
-npm run ring-check -- <slug>      # is the highlighted control actually ON SCREEN in that lesson?
+npm run ring-check                # is every highlighted control actually ON SCREEN? (a gate)
 ```
 
 All the browser checks need `npm run dev` running on :3000 first.
@@ -90,21 +90,21 @@ every other harness while stranding the one learner who most needs help: the
 one who just made the mistake the lesson is about.
 
 After touching `SimulatorFrame`'s reveal, any window's `initial` height, or a
-sim's scrolling layout, run **ring-check on the affected lesson**
-(`npm run ring-check -- <slug>`). It asks the one question no other harness
+sim's scrolling layout, run **`npm run ring-check`**. It asks the one question no other harness
 can — *is the pulsing ring on screen?* — because the solver reaches controls
 through the DOM and never has to see them. Two shipped bugs put a step's own
 target just below the fold and every check stayed green.
 
-**Its whole-course mode (`npm run ring-check`) is stable but still exits 0.**
-It used to give 8, 6 and 10 findings on identical code; since `SimulatorFrame`
-started publishing **`data-sim-settled`** (nothing changed inside the frame for
-400ms) and the record is written on that quiet tick, three consecutive runs give
-2, 2, 2. Those two are the scam popup's ✕ in `popups-ads` / `popup-accident`,
-undiagnosed. It stays exit-0 until they are resolved — flipping a gate onto
-known findings buys a red build or an exemption list, and an exemption list is
-where a check starts quietly not looking at things. See
-`docs/SAME_ICON_AUDIT.md` §§ *Round four* and *Round seventeen*.
+**`npm run ring-check` is a gate as of 2026-07-29** — whole course, exits 1 on
+any finding. It spent most of its life advisory because the count wobbled (8, 6,
+10 on identical code) until `SimulatorFrame` started publishing
+**`data-sim-settled`**. Then it read 2, 2, 2, and those two were a real defect:
+the scam popup's ✕ hung outside the dialog and was clipped by the page area,
+unreachable by scrolling. Fixed; three runs now give zero. The lesson worth
+carrying: the number was never going to become trustworthy by tuning a delay —
+it became trustworthy when the thing being measured was asked to say when it had
+stopped moving. See `docs/SAME_ICON_AUDIT.md` §§ *Round four*, *Seventeen* and
+*Eighteen*.
 
 **Anything that measures geometry must wait for `data-sim-settled`.** Measuring
 a moving screen is how a check reports a race and calls it a defect — which

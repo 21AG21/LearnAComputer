@@ -22,31 +22,31 @@
  * learner can never reach or a regression in that reveal. Both are bugs, and
  * the report says which remedy applies.
  *
- *   npm run ring-check -- <slug>   # ONE lesson. Trustworthy. Exits 1 on a finding.
- *   npm run ring-check             # whole course. ADVISORY ONLY — always exits 0.
+ *   npm run ring-check             # whole course — a gate; exits 1 on a finding
+ *   npm run ring-check -- <slug>   # one lesson, same contract
  *
  * Needs the dev server on :3000.
  *
- * ## Read this before believing a whole-course number
+ * ## It was advisory for most of its life, and why that ended
  *
- * **The single-lesson mode is a gate. The whole-course mode is a lead generator.**
- * That asymmetry is measured, not assumed:
+ * The whole-course count used to wobble: 8, then 6, then 10 findings on three
+ * consecutive runs of identical code, with the offending *step* changing between
+ * runs. Four mechanisms were tried — auditing from the solver's loop at 2 frames
+ * (42 findings), at 150ms (10), at 600ms (12), then last-observation-wins from
+ * inside the reveal (6–10) — and none was stable, because a ring is legitimately
+ * out of view for a frame whenever a panel is mid-render. The conclusion then
+ * was "a checker cannot know when the sim is at rest", which was half true.
  *
- *   - Single lesson, clean: passed 3/3 runs. Single lesson, bug planted:
- *     caught it 3/3 runs. Repeatable in both directions.
- *   - Whole course: 8, then 6, then 10 findings on three consecutive runs of
- *     identical code, with the offending *step* changing between runs.
+ * `SimulatorFrame` now publishes **`data-sim-settled`** — nothing inside the
+ * frame changed for 400ms — and writes the clipped-ring record on that quiet
+ * tick. Three runs gave 2, 2, 2. The two survivors were the scam popup's ✕ in
+ * `popups-ads` and `popup-accident`, a real defect (the close button hung
+ * outside the dialog and was clipped by the page area, unreachable by
+ * scrolling). Fixed. Three runs now give **zero, zero, zero**, so it is a gate.
  *
- * The reason is inherent, not a bug to be tuned away: a ring is legitimately out
- * of view for a frame or two whenever a panel is mid-render, a window is opening
- * or a view is transitioning, and across 170 lessons an automated run is almost
- * never at rest. Four mechanisms were tried — auditing from the solver's loop at
- * 2 frames (42 findings), at 150ms (10), at 600ms (12), then last-observation-
- * wins from inside the reveal (6–10). None was stable. Tuning until the number
- * looks green would only have hidden that.
- *
- * So the whole-course run prints leads and exits 0. Take a lead, re-run it
- * filtered to that one slug, and believe *that*.
+ * The lesson, for the next check like this: the number was never going to be
+ * trustworthy by tuning a delay. It became trustworthy when the thing being
+ * measured was asked to say when it had stopped moving.
  *
  * NEGATIVE CONTROL — run this before trusting a green result, because this repo
  * has shipped three harnesses that were quietly inspecting nothing. Two runs,
@@ -128,7 +128,7 @@ if (unique.length === 0) {
   process.exit(0);
 }
 
-console.log(`\n${unique.length} highlighted control(s) the learner may not be able to see:\n`);
+console.log(`\n${unique.length} highlighted control(s) the learner cannot see:\n`);
 for (const c of unique) {
   console.log(`  ${c.lesson}`);
   console.log(`    step:    ${c.say}`);
@@ -139,14 +139,8 @@ for (const c of unique) {
       ? "    that container scrolls, so the frame's reveal did not reach it"
       : "    that container does not scroll — nothing the learner does reveals it",
   );
-  if (!filter) console.log(`    confirm with: npm run ring-check -- ${c.lesson}`);
+  console.log(`    reproduce: npm run ring-check -- ${c.lesson}`);
   console.log("");
 }
 
-if (!filter) {
-  console.log("Whole-course mode is advisory: these are leads, not verdicts, and the");
-  console.log("list is not identical between runs. Confirm each one filtered to its own");
-  console.log("slug — that mode is repeatable. Exiting 0 on purpose.");
-  process.exit(0);
-}
 process.exit(1);

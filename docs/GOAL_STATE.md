@@ -45,6 +45,9 @@ number, because everything outside it is assumption wearing the same clothes.
 | Recovering from a deliberate mistake, end to end | `recovery-check` |
 | **No cookies and no third-party requests, on every route** | `hostile-check` |
 | Multi-window desktop | `desktop-check` |
+| **Every highlighted control is on screen** | `ring-check` — a gate since 2026-07-29 |
+| A stray click never strands the learner | `stray-check` |
+| The sales material matches the product | `pitch-check` |
 | Lesson shape, step targets, reading level, dialect | `check-lessons.py`, `spelling-check.py` |
 | WCAG AA contrast, both themes | `contrast-check.mjs` |
 
@@ -226,6 +229,14 @@ and § *Round three*.
 The next item is smaller and is written down rather than done, because it has
 only bitten twice and the stopgap holds:
 
+**Nothing named. For the first time in this ledger, the "next engineering item"
+section has no entry** — every item that has appeared here has been closed, and
+the last one (the scam popup's ✕) turned out to be a real defect in Unit 10's
+safety lesson. What remains is not engineering: it is a buyer in a room, which
+no commit produces.
+
+*Closed 2026-07-29, kept for the reasoning:*
+
 **Diagnose the scam popup's close button, then flip `ring-check` to a gate.**
 As of 2026-07-29 the sweep is **stable**: `SimulatorFrame` publishes
 `data-sim-settled` (quiet for 400ms) and the clipped-ring record is written on
@@ -268,6 +279,19 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the scam popup's close button, and the eleventh gate):** The one
+  named item, closed. The ✕ on Unit 10's scam popup sat twelve pixels *outside*
+  the dialog, and the overlay is pinned to a page area that is both `relative`
+  and `overflow-auto` — so on a short pane those pixels were clipped, and
+  scrolling could not recover them because the overlay does not move with the
+  scroll. **The one control that lesson is about could not be reached.** Three
+  browser probes failed on automation mechanics; the answer came from reading
+  the markup. Fixed by moving the ✕ inside the corner. `ring-check` now reports
+  zero three runs running and **is a gate** — negative-controlled by restoring
+  the bug and watching the whole-course run fail. The arc is worth remembering:
+  four timing mechanisms were tried over fourteen rounds and none worked; what
+  worked was asking the sim to say when it had stopped moving, and then
+  believing the number.
 - **2026-07-29 (the sim now says when it has stopped moving):** Round four
   concluded "a checker cannot know when the sim is at rest" and made ring-check
   advisory. The missing half of that sentence was that **the sim can**.
