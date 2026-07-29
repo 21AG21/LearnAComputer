@@ -93,10 +93,16 @@ Whichever you pick, land this before you touch the keyboard:
 
 ## 3. The one number that matters, and how to say it
 
-> "Every single activity in this course has been machine-proven finishable — a
-> harness plays all 132 of them to the end, the way a learner would, and it runs
-> again every time we change anything. Ten separate bugs that would have
-> stranded a real learner mid-lesson were caught that way."
+> "A hundred and fifty of the activities in this course have been machine-proven
+> finishable — harnesses play them to the end the way a learner would, including
+> every task we set on the learner's own computer, and they run again every time
+> we change anything. Ten separate bugs that would have stranded a real learner
+> mid-lesson were caught that way."
+
+If they ask whether that is all of them, the honest answer is the strong one:
+*"No — twenty are reflex and trackpad-gesture activities a script can't pinch or
+swipe. Those we prove render correctly and test by hand. I'd rather give you the
+real number."*
 
 This is the strongest credibility line we own, and it is literally true
 (`npm run solve-check`, `docs/GOAL_STATE.md`). Say it once, early, then prove it

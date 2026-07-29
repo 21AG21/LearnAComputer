@@ -15,6 +15,7 @@ npm run dev          # dev server on :3000
 # /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
 # /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
 npm run solve-check  # headless: PLAYS all 132 playable activities to the end (canonical)
+npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
 npm run build        # production build (rm -rf .next first if switching from dev)
@@ -32,6 +33,13 @@ After touching any sim component or lesson steps, run **solve-check as well as
 mount-check** — mounting proves an activity renders; solving proves a learner can
 finish it, and the two unfinishable-lesson bugs were invisible to everything else.
 `solve-check` is currently green at **132/132**; keep it there.
+
+After touching `RealWorldMission`, `RealWorldChecks` or any `real-world` lesson,
+run **mission-check** — solve-check exempts all 18 missions, so nothing else
+looks at them. It plays the learner's *computer*: real PNGs with real
+dimensions and real PDFs handed to the page's own file input, genuine paste
+events and key combinations, and CDP driving the screen, the window and the
+device pixel ratio apart from each other. Keep it green at **18/18**.
 
 After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
 **desktop-check** — no guided lesson opens two apps at once, so solve-check
@@ -52,6 +60,7 @@ app/
   error.tsx, not-found.tsx # Friendly failure pages — never a blank screen or a bare 404
   dev/mount-check/        # Dev-only activity mount harness
   dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
+  dev/mission-check/      # Dev-only: mounts one real-world mission for scripts/mission-check.mjs
 
 components/
   AuthProvider.tsx         # Supabase session + progress sync (pull/merge on sign-in, debounced push)

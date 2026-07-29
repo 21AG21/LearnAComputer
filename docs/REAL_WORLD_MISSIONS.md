@@ -260,8 +260,38 @@ Driven at 1680×900 and 2560×1400, in light and dark:
 - **Unit 13**: the zoom card reads a live percentage.
 
 `reduce-motion` shares its component and code path with `dark-mode`, which was
-driven; the query string is the only difference. Real browser zoom cannot be
-performed by automation, so `zoom` was verified as far as its live readout.
+driven; the query string is the only difference.
+
+## Proven by machine: `npm run mission-check`
+
+Hand-driving proves a mission once. Missions are exempt from solve-check —
+their steps are satisfied outside the page, so the in-page solver has nothing
+to click — which left all eighteen unguarded against every later change, and
+left four converted Unit 12 lessons never driven at all.
+
+`scripts/mission-check.mjs` closes that. It does not mock the checks or the
+page; it plays the learner's **computer**, through `/dev/mission-check`:
+
+| Check | What the harness really supplies |
+|---|---|
+| `file` | A PNG encoded on the spot at real pixel dimensions, so landscape vs portrait is decided by real geometry; real PDF bytes; a fresh mtime for `recentMinutes` |
+| `folder` | A correctly-sorted tree written to disk and handed to the same `webkitdirectory` input a learner uses |
+| `paste` | A genuine `paste` event carrying a `DataTransfer`, not a typed value |
+| `keys` | A real key combination through the browser's input pipeline |
+| `window-max` | CDP moving the window and the screen independently |
+| `zoom` | CDP changing the device pixel ratio for real — the earlier note here that automation could not do this was wrong |
+| `dark-mode` / `reduce-motion` | The media query actually flipped mid-step |
+| `offline` / `online` | The context's network actually cut |
+| `download` | The click, plus reading the delivered bytes to prove the file is not empty |
+
+Two harness bugs were caught before they could libel the product: clicking
+server-rendered HTML before React hydrated made every mission look stuck, and
+headless Chromium reports `screen.availWidth` as the viewport, which makes
+"smaller than the screen" impossible to satisfy. Both were the harness lying,
+not the course failing — the distinction is the whole value of the tool.
+
+A negative control keeps it honest: hand the portrait step a wide photo and
+the run fails, with the check's own words on screen.
 
 `npx tsc --noEmit`, `npm run lint`, `scripts/check-lessons.py` (198 lessons) and
 `npm run build` all clean.

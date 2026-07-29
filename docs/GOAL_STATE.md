@@ -17,6 +17,7 @@ what moved, what's proven, what's still a demo risk.
 | Area | State | Proof |
 |---|---|---|
 | Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 132 playable activities pass, zero failures**, including every guided lesson AND all assessments. (Earlier ledger entries said "of 166" — that denominator was an accounting error; the playable set has always been 132: 198 lessons − 28 explanation-only − 38 exempt, which are 18 real-world missions plus 20 stepless activity types.) The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Real-world missions provably finishable | **Done** — `npm run mission-check` plays **all 18 missions**, the last category no harness had ever touched (solve-check exempts them because their steps are satisfied outside the page). It drives the learner's *machine*: real PNGs whose real dimensions decide the landscape/portrait steps, real PDFs handed to the page's own file input, genuine paste events and key combinations, and CDP moving the screen, the window and the device pixel ratio independently. Proven honest by a negative control — feed the portrait step a wide photo and the run fails. This covered the four Unit 12 lessons converted from reading to missions that had never once been driven. | `scripts/mission-check.mjs` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
 | Reading level ≤ grade 8, enforced at build | **Done** — worst intro was 10.9, now all ≤ 5.6 | `scripts/check-lessons.py` |
@@ -42,10 +43,12 @@ Ranked, current worst first. Fixing the top item promotes the next.
    from the learner's Downloads, the notes lesson verifies a real copy-paste
    out of their own notes app, and the Google Docs lesson verifies a pasted
    docs.google.com address. Module is now 7 hands-on / 2 walkthroughs.
-   *(Pending: drive each once in the browser before the next demo.)*
-2. **A lesson failing mid-demo.** Mitigated by solve-check + error boundary;
-   the residual risk is the exempt types (reflex games, real-trackpad
-   gestures) which only mount-check covers.
+   **Closed 2026-07-28:** all four are now played end to end by
+   `npm run mission-check`, so the conversion is proven, not assumed.
+2. **A lesson failing mid-demo.** Mitigated by solve-check (132 simulated
+   activities), mission-check (18 real-world missions) and the error boundary.
+   The residual risk is the 20 stepless types — reflex games and real-trackpad
+   gestures — which only mount-check covers, plus the intermittent below.
 3. **The dashboard/catalog wrapper pages** — functional but plainer than the
    lesson experience (Stage F site-chrome pass).
 4. **No instructor view yet** — for a school buyer, "how do I see my class?"
@@ -77,6 +80,23 @@ have stranded a real learner mid-lesson:
     two objective completions in one tick silently dropped the first — any
     handler proving two objectives at once lost one.
 
+## Known flake in the gate (do not confuse with a bug)
+
+`unit-6-assessment` failed a full-course run twice on 2026-07-28 (SolveCheck
+retries first-pass failures and only reports a lesson that fails **twice**, so
+this was not a single blip), then passed on its own, passed with all of Unit 6
+in queue order, and passed on an immediate full re-run. The lesson file was
+untouched by the change under test. Nothing in the email sim persists across
+lessons — `GuidedEmailTask` never touches `lib/simState` — so the cross-lesson
+carry-over theory that explains the older `a11y-assessment` flake does not
+apply here; the likeliest cause is timing under load, since a second headless
+browser was running against the same dev server at the time.
+
+This matters beyond one lesson: **a gate that fails intermittently is
+indistinguishable from a real bug**, and the response must stay "reproduce it
+alone, then in its unit, then full" rather than "re-run until green." Do not
+report 132/132 off a run that had other browser work competing with it.
+
 ## Handoff for the next session
 
 Start here: `npm run solve-check` (dev server on :3000 first) — it should
@@ -91,6 +111,23 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (missions):** The last unproven category in the course is
+  proven. Eighteen real-world missions — one per unit, plus the capstone —
+  were exempt from solve-check by construction: their steps are satisfied by
+  things outside the page, so an in-page solver has nothing to click. Four of
+  them were Unit 12 lessons converted from reading to missions and never once
+  driven. `npm run mission-check` now plays the learner's *computer* instead
+  of the learner: PNGs generated with real pixel dimensions so the
+  landscape/portrait steps are decided by real geometry, real PDF bytes, a
+  correctly-sorted folder tree handed to the same `webkitdirectory` input a
+  learner uses, genuine `paste` events and key combinations, and CDP moving
+  the screen, the window and the device pixel ratio independently. All 18
+  pass. Two harness lies were caught and fixed on the way, both of which would
+  have slandered the product: clicking server-rendered HTML before React
+  hydrated (every mission looked stuck), and headless Chromium reporting
+  `screen.availWidth` as the viewport, which makes "smaller than the screen"
+  impossible. A negative control keeps the result honest — feed the portrait
+  step a wide photo and the run fails.
 - **2026-07-28 (spelling):** The founder caught "Practise first" on the
   homepage. The course had drifted into a mix of dialects — `colour` beside
   Tailwind's `gray`, `behaviour`, `recognise`, `favourite`, `neighbour`,

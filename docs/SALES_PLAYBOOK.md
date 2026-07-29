@@ -192,10 +192,16 @@ in-browser verification · accounts with email-code sign-in and cross-machine
 progress · printable per-unit and full-course certificates (`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
-grade-5 reading level, enforced at build · **every one of the 132 playable
-activities mechanically proven finishable, re-proven on every change**
-(`npm run solve-check`) · WCAG AA contrast measured and fixed on the pages
-learners read, in both themes (`scripts/contrast-check.mjs`).
+grade-5 reading level, enforced at build · **150 of the 170 activities
+mechanically proven finishable, re-proven on every change** — 132 simulated
+(`npm run solve-check`) plus all 18 real-world missions played on a real
+machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
+pages learners read, in both themes (`scripts/contrast-check.mjs`).
+
+The honest footnote, if pressed: the remaining 20 are reflex and trackpad-
+gesture activities that are proven to render but are not auto-played, because
+a script cannot pinch a trackpad. Say that plainly — the precision is what
+makes the 150 believable.
 
 Designed but NOT shipped (say "roadmap"): instructor/classroom dashboard ·
 certificate verification codes · full third-party WCAG audit · Spanish ·

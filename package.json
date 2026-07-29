@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "solve-check": "node scripts/solve-check.mjs",
     "desktop-check": "node scripts/desktop-check.mjs",
-    "demo-check": "node scripts/demo-check.mjs"
+    "demo-check": "node scripts/demo-check.mjs",
+    "mission-check": "node scripts/mission-check.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",
