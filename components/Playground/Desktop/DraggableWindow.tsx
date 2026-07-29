@@ -69,7 +69,7 @@ export default function DraggableWindow({
   onResizedRef.current = onResized;
 
   // Fit to the desktop once, on mount. Measured rather than guessed, because the
-  // playground pane is half the page in a lesson and the whole screen in fullscreen.
+  // playground pane's size depends on the browser window, so it must be measured.
   useEffect(() => {
     if (!fit) return;
     const host = rootRef.current?.parentElement;

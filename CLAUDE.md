@@ -134,7 +134,7 @@ components/
   DashboardView.tsx        # Client component for the dashboard
   PageTransition.tsx       # Fade/slide route transitions
   LessonModuleRunner.tsx   # Steps through sub-lessons, gates on playground completion
-  LessonPlaygroundPane.tsx # Right pane — Start Activity / Skip / fullscreen toggle
+  LessonPlaygroundPane.tsx # Right pane — Start Activity / Skip
 
   Playground/
     TaskChecker.ts         # Pure validation functions for every task type
@@ -743,7 +743,7 @@ After completing a module, the user can navigate to the next module or back to `
 ## Key Patterns
 
 - **Server vs Client**: Lesson data loading (`getAllLessons`, etc.) is server-only (uses `fs`). Progress, chat, and all playground components are `"use client"`.
-- **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
+- **No fullscreen**: there is no Fullscreen API anywhere in the product. It was removed, and its residue outlived it by a long way — two lessons still warned the learner *"Do not press Escape — it will exit the simulator"* about a session that no longer existed, one of them the lesson **teaching the Escape key**. If a warning tells a learner not to press something, verify the hazard is real before believing it; in a course whose pitch is "you cannot break this", a false warning costs more than the thing it warns about.
 - **FakeDesktop**: A self-contained desktop environment with a **10-app dock**: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes. The menu bar has a working clock, battery indicator (real Battery API), WiFi panel, and optional Do Not Disturb indicator. The taskbar shows open-app indicators (green dots). Settings changes (dark mode, brightness, Night Shift, text scale) are live via `SimThemeContext`.
 - **Window sizing**: `DraggableWindow` takes a pixel `initial` geometry plus an opt-in `fit` prop that measures the desktop on mount and shrinks to it. Single-window lessons should pass `fit` — the playground pane is half the page in a lesson and the whole screen in fullscreen, and an unfitted window hangs off the edge and clips whatever the step is highlighting. `FakeDesktop` deliberately does **not** use it: clamping would collapse its cascade.
 - **Multiple windows**: several apps can be open at once, cascaded so no window hides the one before it. Two lists drive this and they are deliberately separate: `openApps` fixes **DOM order** and is never re-sorted, `stack` holds **z-order**. Re-sorting the rendered list moves a window's element between mousedown and mouseup, which cancels the click — clicking Close on a background window raised it and swallowed the click. Raise windows by changing `stack` only. Every window body comes from `Desktop/AppBody.tsx`; `npm run desktop-check` guards the whole behavior.

@@ -656,3 +656,64 @@ beside the close.
 
 A harness is worth exactly what it tries. This one tries one thing, on 24
 lessons, and that one thing was worth eleven bugs.
+
+## Round nine (2026-07-29): a warning about a hazard that no longer existed
+
+Round eight ended by listing the wrong moves stray-check does not try. Escape
+was one. Before automating it, the obvious question: what does Escape actually
+do? Two lessons already carried a `warning` about it, which is a strong hint
+that somebody once found out.
+
+> `unit-2-assessment`: **"Do not press Escape during this activity — it will
+> exit the simulator."**
+>
+> `kb-escape`: **"Do not press Escape right now — it can close what you are
+> working on. Just read along and click Continue when you are ready."**
+
+Both are false. **There is no Fullscreen API anywhere in this product.** It was
+removed at some point and nothing was left that Escape could exit — verified by
+grep across `components/`, `app/` and `lib/`, and then by pressing the key in a
+running lesson: `document.fullscreenElement` was `false` before and after, and
+nothing on screen changed. The only Escape handler in the entire codebase is in
+`FileManager`, where it cancels an inline rename, which is exactly what Escape
+ought to do.
+
+So the course was telling a nervous beginner not to press a key, to protect them
+from a consequence that could not happen.
+
+### Why this is worse than a stale string
+
+The pitch's first differentiator, in `SALES_PLAYBOOK.md` §1:
+
+> *The simulated computer cannot be broken, so the fear that stops this audience
+> — "what if I press the wrong thing?" — is engineered out.*
+
+An amber warning banner saying *do not press this key* is that fear, engineered
+back in, on the product's own screen. And the worse of the two is `kb-escape` —
+**the lesson whose subject is the Escape key.** It taught what Escape does and
+then told the learner not to try it. For an audience whose whole problem is being
+frightened of the keyboard, that is the exact wrong instruction, in the exact
+wrong lesson.
+
+Both warnings are gone. `kb-escape` now ends with an invitation instead:
+
+> *Go ahead and press it right now if you like. On this page it does nothing at
+> all — like everything here, it is safe to try.*
+
+### The rest of the residue
+
+The removed feature left more behind, all of it now cleared: four dead
+`:fullscreen` CSS rules in `globals.css`; `CLAUDE.md` documenting *"`LessonPlaygroundPane`
+uses the native Fullscreen API"* as a Key Pattern and listing a "fullscreen
+toggle" in the file map; and three code comments describing a "shared fullscreen
+session". A reader of any of those would have believed the warnings.
+
+### The rule this earns
+
+**A warning is a claim, and claims rot.** When a `warning` says a key or action
+will do something, the hazard has to still be real — and nothing checks that,
+because a warning is prose. Round seven learned the same lesson about the sales
+material and got `pitch-check` out of it. This one is smaller: eight lessons
+carry a `warning`, they were read one by one, and the six that remain describe
+things that genuinely still happen (a screen going dark, a screen reader taking
+the keyboard, a scam popup, toolbar clicks not counting).

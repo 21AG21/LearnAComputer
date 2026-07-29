@@ -37,7 +37,7 @@ import type { PlaygroundTask } from "@/lib/lessons";
 
 interface LessonPlaygroundPaneProps {
   task: PlaygroundTask;
-  /** Whether the learner has started this sub-lesson's activity — owned by the parent so it can survive across the module's shared fullscreen session. */
+  /** Whether the learner has started this sub-lesson's activity — owned by the parent so it survives moving between sub-lessons. */
   started: boolean;
   onResult: (success: boolean, failMessage?: string) => void;
   /**
@@ -66,8 +66,8 @@ const HANDLED = new Set<PlaygroundTask["type"]>([
 /**
  * The right-hand playground pane on a lesson page. Idle, it's just the fake
  * desktop. Once `started`, it shows the current sub-lesson's activity. Both
- * the "start" trigger and the site's fullscreen session live one level up in
- * LessonModuleRunner, so switching between sub-lessons doesn't toggle fullscreen.
+ * The "start" trigger lives one level up in LessonModuleRunner, so moving
+ * between sub-lessons does not reset it.
  */
 export default function LessonPlaygroundPane({ task, started, onResult }: LessonPlaygroundPaneProps) {
   const [completed, setCompleted] = useState(false);

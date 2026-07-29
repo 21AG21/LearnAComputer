@@ -253,6 +253,19 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (a warning about a hazard that no longer existed):** Before
+  automating "press Escape" as a second stray move, asked what Escape actually
+  does. Two lessons warned against it — *"it will exit the simulator"* — and
+  both were **false**: there is no Fullscreen API left anywhere in the product,
+  verified by grep and then by pressing the key in a running lesson. The worse
+  of the two was `kb-escape`, **the lesson about the Escape key**, which taught
+  what it does and then told the learner not to try it. That is the product's
+  own pitch — *"the fear that stops this audience is engineered out"* —
+  engineered back in, on screen, in the keyboard unit. Both warnings gone;
+  `kb-escape` now invites the press. Also cleared the rest of the removed
+  feature's residue: dead `:fullscreen` CSS, a `CLAUDE.md` Key Pattern claiming
+  the API is in use, and three stale comments. The remaining six `warning`
+  fields were read one by one and all describe hazards that still happen.
 - **2026-07-29 (a harness that does the wrong thing):** Built the thing named as
   the honest next item two entries ago. `npm run stray-check` mounts each guided
   activity, closes the window the step depends on, and asserts the learner still

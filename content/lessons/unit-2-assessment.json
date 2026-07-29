@@ -40,6 +40,5 @@
     ]
   },
   "drDigitalSuccess": "You edited a document without touching the mouse once. Those same shortcuts work in email, in a browser, and in every writing app you will ever use.",
-  "drDigitalHint": "Hold Command (or Control) and press a letter. A for All, B for Bold, C for Copy, V for paste, Z for undo.",
-  "warning": "Do not press Escape during this activity — it will exit the simulator."
+  "drDigitalHint": "Hold Command (or Control) and press a letter. A for All, B for Bold, C for Copy, V for paste, Z for undo."
 }
