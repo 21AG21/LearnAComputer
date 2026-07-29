@@ -96,13 +96,19 @@ can — *is the pulsing ring on screen?* — because the solver reaches controls
 through the DOM and never has to see them. Two shipped bugs put a step's own
 target just below the fold and every check stayed green.
 
-**Its whole-course mode (`npm run ring-check`) is advisory and always exits 0.**
-It gave 8, 6 and 10 findings on three consecutive runs of identical code: the
-sims are almost never at rest during an automated run, so a ring is legitimately
-out of view for a frame here and there. Treat those as leads and confirm each
-one filtered to its own slug, which is repeatable. Do not add it to a gate list
-and do not tune it until the number looks green — see `docs/SAME_ICON_AUDIT.md`
-§ *Round four* for the four mechanisms already tried.
+**Its whole-course mode (`npm run ring-check`) is stable but still exits 0.**
+It used to give 8, 6 and 10 findings on identical code; since `SimulatorFrame`
+started publishing **`data-sim-settled`** (nothing changed inside the frame for
+400ms) and the record is written on that quiet tick, three consecutive runs give
+2, 2, 2. Those two are the scam popup's ✕ in `popups-ads` / `popup-accident`,
+undiagnosed. It stays exit-0 until they are resolved — flipping a gate onto
+known findings buys a red build or an exemption list, and an exemption list is
+where a check starts quietly not looking at things. See
+`docs/SAME_ICON_AUDIT.md` §§ *Round four* and *Round seventeen*.
+
+**Anything that measures geometry must wait for `data-sim-settled`.** Measuring
+a moving screen is how a check reports a race and calls it a defect — which
+happened four separate times in one session before the signal existed.
 
 **Whenever a capability is removed, run `pitch-check` in the same hour.**
 Deleting a feature is not done when the code is gone: accounts came out on

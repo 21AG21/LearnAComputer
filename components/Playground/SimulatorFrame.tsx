@@ -70,11 +70,30 @@ export default function SimulatorFrame({
    * also scroll the lesson page itself, which yanks the reading pane around for
    * a control that was never off the page to begin with.
    */
+  /**
+   * Has the simulated screen stopped moving?
+   *
+   * `ring-check` reads the ring's position, and a ring is legitimately off
+   * screen for a frame or two whenever a panel is mid-render or a window is
+   * opening. Sampling into that returned 6, 8 and 10 findings on three
+   * consecutive runs of identical code, which is why that check prints leads
+   * instead of failing a build. A checker cannot know when the sim is at rest;
+   * the sim can. This is that signal.
+   */
+  const [settled, setSettled] = useState(false);
+
   useEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
 
     let queued = 0;
+    let quiet: ReturnType<typeof setTimeout> | null = null;
+    const QUIET_MS = 400;
+    const markUnsettled = () => {
+      setSettled(false);
+      if (quiet) clearTimeout(quiet);
+      quiet = setTimeout(() => setSettled(true), QUIET_MS);
+    };
     /**
      * The control revealed last. Each one is brought into view **once**.
      *
@@ -118,12 +137,15 @@ export default function SimulatorFrame({
       // reveal, not measuring the product.
       //
       // The record is a MAP, and every reveal overwrites this control's entry:
-      // last observation wins. A ring is briefly out of view whenever a panel is
-      // mid-render, and reporting those made the count wobble between 6 and 8
-      // with the offending step changing each run. Only a control that is still
-      // clipped when the sim stops moving survives to the end of the run.
-      // `npm run ring-check` reads what is left.
+      // last observation wins. It is also only written once the screen has
+      // stopped moving (`data-sim-settled`), because a ring is briefly out of
+      // view whenever a panel is mid-render — reporting those made the count
+      // wobble between 6 and 10 on identical code. `npm run ring-check` reads
+      // what is left.
       if (process.env.NODE_ENV !== "production") {
+        // Re-measure after the quiet period rather than now: `reveal` runs on
+        // the mutation that started it, which is by definition mid-movement.
+        const record = () => {
         const w = window as unknown as { __ringClipped?: Map<string, unknown>; __ringLesson?: string };
         const lesson = w.__ringLesson ?? "(unknown)";
         const control =
@@ -148,10 +170,17 @@ export default function SimulatorFrame({
             return;
           }
         }
+        };
+        if (quiet) clearTimeout(quiet);
+        quiet = setTimeout(() => {
+          setSettled(true);
+          record();
+        }, QUIET_MS);
       }
     };
 
     const schedule = () => {
+      markUnsettled();
       if (queued) return;
       // Two frames: one for React's commit, one for any layout the sim does
       // after it (a window opening, a panel expanding).
@@ -165,6 +194,7 @@ export default function SimulatorFrame({
     obs.observe(frame, { attributes: true, attributeFilter: ["class"], subtree: true, childList: true });
     return () => {
       obs.disconnect();
+      if (quiet) clearTimeout(quiet);
       if (queued) cancelAnimationFrame(queued);
     };
   }, [stepIndex, done, instruction, goal]);
@@ -204,6 +234,10 @@ export default function SimulatorFrame({
       data-sim-progress={isAssessment ? doneCount : Math.min(stepIndex ?? 0, totalSteps ?? 0)}
       data-sim-total={isAssessment ? objTotal : (totalSteps ?? 0)}
       data-sim-mode={isAssessment ? "assessment" : "guided"}
+      // "1" once nothing inside the frame has changed for 400ms. Checks that
+      // measure geometry must wait for this; measuring a moving screen is how
+      // a check reports a race and calls it a defect.
+      data-sim-settled={settled ? "1" : "0"}
       // Which objectives are met, as a bitstring ("01100…"). The solver pursues
       // exactly the first unmet one; guessing blindly made it lap through
       // objectives and trample one objective's target while chasing another.

@@ -226,6 +226,20 @@ and § *Round three*.
 The next item is smaller and is written down rather than done, because it has
 only bitten twice and the stopgap holds:
 
+**Diagnose the scam popup's close button, then flip `ring-check` to a gate.**
+As of 2026-07-29 the sweep is **stable**: `SimulatorFrame` publishes
+`data-sim-settled` (quiet for 400ms) and the clipped-ring record is written on
+that tick, so three consecutive whole-course runs give **2, 2, 2** where they
+previously gave 8, 6, 10. The two survivors are `popups-ads` and
+`popup-accident` — the scam popup's ✕ — stable across every run before and
+after the change, which is the signature of a real finding rather than a race.
+They are not yet diagnosed. Do that, fix or dismiss with a reason, and only
+then make the check exit 1: flipping first buys either a red build nobody can
+green or an exemption list, and an exemption list is where a check starts
+quietly not looking at things.
+
+*Superseded — kept because the reasoning still applies to the next such check:*
+
 **A whole-course ring sweep worth gating on.** The product fix is done —
 `SimulatorFrame` now scrolls the highlighted control into view (once, so it
 never fights a learner who scrolled away), and `npm run ring-check -- <slug>`
@@ -254,6 +268,18 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the sim now says when it has stopped moving):** Round four
+  concluded "a checker cannot know when the sim is at rest" and made ring-check
+  advisory. The missing half of that sentence was that **the sim can**.
+  `SimulatorFrame` now publishes `data-sim-settled` — quiet for 400ms — and the
+  clipped-ring record is written on that tick instead of on the mutation that
+  started it. **Three whole-course runs: 2, 2, 2**, where they were 8, 6, 10.
+  Everything that vanished was the harness timing itself; the two that remain
+  (`popups-ads`, `popup-accident` — the scam popup's ✕) are the pair carried as
+  undiagnosed since round five, and being stable before *and* after the change
+  is what marks them real. Not diagnosed this round, and not claimed to be: a
+  measurement attempt failed to reach the popup and was abandoned rather than
+  guessed at. The gate stays unflipped until those two are resolved.
 - **2026-07-29 (the guard that needed a second edit):** `pitch-check` kept a
   hand-copy of the solver's `STEPLESS` set and it drifted inside one commit. It
   now reads `EXEMPT` and `STEPLESS` out of `lib/solve/solver.ts`, the way

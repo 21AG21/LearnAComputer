@@ -1100,3 +1100,52 @@ and only the negative control knew.** That is now three separate occasions this
 session where a check was written, looked right, and was proven wrong by
 deliberately breaking the thing it watches. The habit is the whole method; the
 scripts are just where it gets written down.
+
+## Round seventeen (2026-07-29): the sim now says when it has stopped moving
+
+Round four shipped `ring-check` and labelled its whole-course mode advisory,
+because three runs of identical code gave 8, 6 and 10 findings. The diagnosis
+then was correct and the conclusion honest: *"a checker cannot know when the sim
+is at rest"*. What was missing is the other half of that sentence — **the sim
+can**.
+
+`SimulatorFrame` now publishes `data-sim-settled`, flipped to `"1"` when nothing
+inside the frame has changed for 400ms. The MutationObserver that already drives
+the reveal restarts the timer; the clipped-ring record is written on the quiet
+tick rather than on the mutation that started it, which is by definition
+mid-movement.
+
+**Three consecutive whole-course runs: 2, 2, 2.** For the first time the number
+is the same twice, let alone three times.
+
+| run | before | after |
+|---|---|---|
+| 1 | 8 | **2** |
+| 2 | 6 | **2** |
+| 3 | 10 | **2** |
+
+### The two that survive are the two that always did
+
+`popups-ads` and `popup-accident` — the scam popup's ✕, the same pair carried as
+"reproducible but not diagnosed" since round five. Everything else in those
+earlier lists was the harness timing itself. These two are not: they are stable
+across every run, before and after the settled gate, which is exactly the
+signature of a real finding rather than a race.
+
+They are **not** yet diagnosed, and this round does not claim otherwise. An
+attempt to measure the ✕ against its scroll container did not reach the popup
+(the probe's URL entry did not take on a React-controlled input) and was
+abandoned rather than guessed at. What has changed is their status: they were
+two entries in a noisy list of six-to-ten, and they are now the entire list.
+
+### Why the gate is still not flipped
+
+With a stable, non-zero count, making `ring-check` exit 1 would fail the build
+on two known findings. The order has to be: diagnose those two, fix or dismiss
+them with a reason, *then* flip. Flipping first would mean either a red build
+nobody can green, or an exemption list — and an exemption list is where a check
+starts quietly not looking at things.
+
+**The remaining work is now one line long**, which it has not been at any point
+before: find out whether the scam popup's close button is genuinely out of
+reach, and if it is, fix it — then `ring-check` becomes the eleventh gate.
