@@ -80,6 +80,53 @@ for (const asset of ["/missions/messy-folder.zip", "/missions/Downloads-Practice
   if (!ok) problems.push(`mission download ${asset}: HTTP ${status}, ${size} bytes`);
 }
 
+/**
+ * Which capabilities are actually switched on today.
+ *
+ * The classroom feature ships as code plus a migration somebody has to run, so
+ * for a while the product's own answer to "can we see who's progressing?"
+ * depends on the state of a database, not on the code. Guessing that wrong in
+ * front of a buyer is the single most expensive mistake available: promise the
+ * roster, then open a page that says it is not switched on.
+ *
+ * A read-only probe with the public key. It reads no rows and changes nothing;
+ * it only asks whether the table is there.
+ */
+{
+  // Next loads .env.local for the app; a plain node script has to read it.
+  // Values are used, never printed.
+  const env = { ...process.env };
+  try {
+    const { readFileSync } = await import("node:fs");
+    for (const line of readFileSync(".env.local", "utf8").split("\n")) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+      if (m && !env[m[1]]) env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    }
+  } catch {
+    /* no local env file: handled below */
+  }
+
+  const url = env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) {
+    console.log("\n?     classrooms  — no Supabase env here, cannot tell. Check before you promise it.");
+  } else {
+    const res = await page.request
+      .get(`${url}/rest/v1/classes?select=id&limit=0`, { headers: { apikey: key, Authorization: `Bearer ${key}` } })
+      .catch(() => null);
+    const status = res?.status?.() ?? 0;
+    // 200 or 401/403 both mean the table exists (RLS simply refuses to answer).
+    // 404, or PostgREST's PGRST205, means the migration has not been applied.
+    const bodyText = res ? await res.text().catch(() => "") : "";
+    const live = status !== 0 && status !== 404 && !/PGRST205|does not exist|schema cache/i.test(bodyText);
+    console.log(
+      live
+        ? "ok    classrooms  — switched on. /instructor and /join are demo-safe."
+        : "note  classrooms  — NOT switched on. Do not promise the roster; say it is built and not live yet.",
+    );
+  }
+}
+
 await browser.close();
 
 if (problems.length) {

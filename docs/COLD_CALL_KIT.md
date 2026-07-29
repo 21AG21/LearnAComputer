@@ -203,7 +203,7 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 | "Talk to my boss." | "Glad to — would you introduce me, or should I use your name?" *(Always ask; a forwarded intro beats a cold call.)* |
 | "Call me next quarter." | "I'll do that. So I'm not wasting your time — what would need to be different by then?" |
 | "Is it secure? Private?" | "No ads, no trackers, nothing sold. We count page views through our host and that's it. Signed out, nothing leaves the machine. The privacy page says so in plain English." |
-| "Can we see who's progressing?" | **Check first** whether the classroom migration is applied (`docs/PROGRESS_MONITORING.md`). If not: "Not yet — it's built but not switched on, and I won't show you a screen I can't stand behind." |
+| "Can we see who's progressing?" | **Check first:** `npm run demo-check` prints a `classrooms` line saying whether it is switched on. If not: "Not yet — it's built but not switched on, and I won't show you a screen I can't stand behind." |
 
 ---
 

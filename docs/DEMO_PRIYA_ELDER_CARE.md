@@ -89,6 +89,11 @@ conversation afterwards?"* Their number beats yours, and now they said it.
 **Morning of**
 - Run `npm run demo-check`. It opens every stop in §4, plus both mission
   downloads, and fails if any one of them is not safe to show. Ninety seconds.
+  **Read its last line.** It reports whether classrooms are switched on:
+  *"ok classrooms — switched on"* means `/instructor` is demo-safe and you may
+  answer the progress question with a screen; *"note classrooms — NOT switched
+  on"* means the migration has not been applied and you must say it is built
+  and not live. Never promise the roster off memory — read the line.
   **If it is not green, do not demo that path.** (If *everything* fails with
   500s, the dev server is serving a wiped `.next` — restart `npm run dev`.)
 - Re-drive the first two minutes by hand (catches a bad deploy in 90 seconds).
