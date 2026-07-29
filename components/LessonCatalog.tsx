@@ -7,6 +7,11 @@ import { getCompletedSlugs, resetProgress } from "@/lib/progress";
 import { unitArt } from "@/lib/unitArt";
 import SiteFooter from "@/components/SiteFooter";
 import { CheckIcon } from "@/components/Playground/Icons";
+import {
+  COURSE_EVALUATION_URL,
+  EVALUATION_THRESHOLD,
+  OPENS_GOOGLE_FORMS,
+} from "@/lib/feedbackLinks";
 import type { ModuleRoute } from "@/lib/lessons";
 
 interface LessonCatalogProps {
@@ -31,6 +36,11 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
 
   const continueRoute = routes.find((r) => r.subLessons.some((l) => !completedSlugs.includes(l.slug)));
   const allComplete = totalCompleted === totalSubLessons && totalSubLessons > 0;
+  /**
+   * Far enough through to have an opinion worth hearing. Asking at 100% only
+   * ever reaches finishers, who are the least representative group there is.
+   */
+  const farEnoughToAsk = totalSubLessons > 0 && totalCompleted / totalSubLessons >= EVALUATION_THRESHOLD;
 
   const units = Array.from(new Set(routes.map((r) => r.unit)));
 
@@ -60,6 +70,33 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
           </div>
         )}
       </div>
+
+      {/* Course evaluation, offered once the learner is most of the way through.
+          Deliberately a quiet card and not a modal: it sits below the progress
+          they just earned, it never interrupts a lesson, and it says plainly
+          that it is optional and where the link goes. Nothing is sent anywhere
+          unless they click — it is a link, not an embedded form, which is also
+          what keeps `hostile-check` green. */}
+      {farEnoughToAsk && (
+        <div className="rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-900 dark:bg-blue-950/40">
+          <p className="font-bold text-blue-900 dark:text-blue-200">
+            You are {Math.round(overallPct)}% through the course.
+          </p>
+          <p className="mt-1 text-sm text-blue-900/80 dark:text-blue-200/80">
+            If you have a few minutes, we would like to know how it has gone — what helped, what
+            was confusing, what you would change. It is anonymous and completely optional.
+          </p>
+          <a
+            href={COURSE_EVALUATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-bold text-white hover:bg-blue-700"
+          >
+            Share your feedback
+          </a>
+          <p className="mt-2 text-xs text-blue-900/60 dark:text-blue-200/60">{OPENS_GOOGLE_FORMS}</p>
+        </div>
+      )}
 
       {/* Continue / all-complete card */}
       {allComplete ? (

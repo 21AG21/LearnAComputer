@@ -1,6 +1,7 @@
 "use client";
 
 import { Component, type ReactNode } from "react";
+import { REPORT_PROBLEM_URL, OPENS_GOOGLE_FORMS } from "@/lib/feedbackLinks";
 
 interface Props {
   /** Remounts the activity from scratch — the same reset the Restart button does. */
@@ -50,6 +51,21 @@ export default class ActivityErrorBoundary extends Component<Props, { failed: bo
           >
             Try again
           </button>
+          {/* The one moment a learner has something concrete to report. Second
+              in line to Try again, because getting on with the lesson matters
+              more than telling us — and it is a link, so nothing is sent
+              anywhere unless they choose to. */}
+          <p className="mt-4 text-sm text-gray-500">
+            <a
+              href={REPORT_PROBLEM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-gray-700"
+            >
+              Tell us what happened
+            </a>{" "}
+            — it helps, and it is optional. {OPENS_GOOGLE_FORMS}
+          </p>
         </div>
       </div>
     );

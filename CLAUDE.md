@@ -151,6 +151,7 @@ components/
   StrayCheck.tsx           # Dev-only harness behind /dev/stray-check — mounts one activity, script-driven
   ActivityErrorBoundary.tsx # One sim crash never blanks the lesson page
   StorageNotice.tsx        # One calm banner when localStorage cannot save
+  SiteFooter.tsx           # About/Privacy/Terms/Accessibility + Report a problem
   CookieNotice.tsx         # Disclosure, not consent: no cookies exist, so there is nothing to accept
   DrDigital.tsx            # Speech-bubble mascot (intro / success / hint moods)
   DrDigitalAvatar.tsx      # Reusable avatar image
@@ -209,6 +210,7 @@ components/
 content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
 
 lib/
+  feedbackLinks.ts         # The two Google Form URLs + the 75% threshold. Links only, never embeds
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
   progress.ts              # localStorage read/write for completed slugs (fires lac-progress-changed)
   chat.ts                  # localStorage read/write for messaging threads
@@ -748,6 +750,15 @@ page. Accounts, Supabase and cross-device sync were removed on 2026-07-28: the
 product collects nothing, sets no cookie, and contacts no third party. Keep it
 that way — `hostile-check` fails the build if any route sets a cookie or calls
 out to another host, because the whole privacy claim rests on it.
+
+**Links out are fine; embeds are not.** The two feedback forms
+(`lib/feedbackLinks.ts`) are Google Forms, and they are plain `<a target="_blank"
+rel="noopener noreferrer">` links. Nothing is loaded from Google and no request
+leaves the site until the learner clicks — which is why `hostile-check` stays
+green. An `<iframe>` of the same form would contact Google on page load, break
+the claim, and fail the build. That is the line for anything external added
+later: **the learner chooses to leave, or it does not go in.** Say where a link
+goes, too — every place these render carries "Opens Google Forms in a new tab.
 
 ### Sim State
 

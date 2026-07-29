@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { REPORT_PROBLEM_URL, OPENS_GOOGLE_FORMS } from "@/lib/feedbackLinks";
 
 const LINKS = [
   { href: "/about", label: "About" },
@@ -20,6 +21,17 @@ export default function SiteFooter() {
               {l.label}
             </Link>
           ))}
+          {/* An ordinary link, not an embed: nothing is sent anywhere until the
+              learner clicks, and the title says where it goes. */}
+          <a
+            href={REPORT_PROBLEM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={OPENS_GOOGLE_FORMS}
+            className="underline-offset-2 hover:underline"
+          >
+            Report a problem
+          </a>
         </nav>
       </div>
     </footer>

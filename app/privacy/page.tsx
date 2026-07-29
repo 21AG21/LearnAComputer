@@ -29,6 +29,19 @@ export default function PrivacyPage() {
         back in six months and carry on where you stopped.
       </p>
 
+      <h2>The two feedback links</h2>
+      <p>
+        Two places on this site link out to a Google Form: <strong>Report a problem</strong> in the
+        footer, and a course-evaluation card that appears once you are most of the way through the
+        lessons. Both are ordinary links. Nothing is loaded from Google, and nothing is sent
+        anywhere, unless <em>you</em> click one — at which point you are on a Google page and
+        Google&apos;s terms apply, not ours.
+      </p>
+      <p>
+        Both forms are optional and neither asks who you are. If you would rather not use Google at
+        all, simply do not click them; nothing on this site depends on it.
+      </p>
+
       <h2>What is stored on your device</h2>
       <p>
         Everything below is saved in your browser&apos;s local storage. It never leaves your

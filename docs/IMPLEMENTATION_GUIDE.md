@@ -99,9 +99,17 @@ can run a pilot from this document alone.
   unit? Name one lesson where hands went up — we fix confusing lessons
   within the week." *(And it is true: report it; the harness plus a fix
   lands in days.)*
-- **To us (bug intake):** lesson name, step number, what they expected,
-  what happened, photo of the screen if possible. Anything reproducible
-  gets fixed and confirmed back to you.
+- **To us (bug intake):** there is a **Report a problem** link in the footer of
+  every page, and on the card that appears if an activity ever breaks. It opens
+  a short Google Form in a new tab. Learners can use it themselves, but in a
+  supervised session the instructor usually gets better detail: lesson name,
+  step number, what they expected, what happened, photo of the screen if
+  possible. Anything reproducible gets fixed and confirmed back to you.
+- **Course feedback:** once a learner is three quarters of the way through, a
+  card appears on the Lessons page inviting them to fill in a short evaluation.
+  It is optional and anonymous, and it never interrupts a lesson. If you are
+  running a pilot, that form is the easiest way to get learner voice into your
+  end-of-pilot report — point people at it in session 3 or 4.
 - **End of pilot:** attendance, completion counts against the agreed
   metric, three learner quotes, instructor's one-paragraph verdict. That
   package is the renewal conversation.

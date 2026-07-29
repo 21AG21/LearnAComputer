@@ -140,6 +140,7 @@ is the moment skeptics convert; let it breathe.
 | "How do we know it's working?" (funder/outcomes) | Be straight: "You'd see it in the room, and on the certificate a learner prints when they finish a unit. There is no dashboard, and there's a trade-off behind that — reporting on people means collecting data about them, and we decided not to collect any. For a pilot, a check-in sheet and the unit certificates are the record." *(Do not promise a dashboard. There is no longer one on the roadmap.)* |
 | "What does it cost?" | "Nothing. The whole course is free — no paid tier, no trial, no per-seat fee, and no advertising paying for it behind your back." Do not invent a future price; if they ask how it is sustained, the honest answer is that it is free to use and that is the current plan. |
 | "Data privacy? Our board will ask." | "There is nothing to disclose, which is unusual enough that I'd rather you check it than take my word. No account, no email, no cookies at all, no analytics, no advertising, and the site contacts no other company. The only thing stored is a list of finished lessons, in the learner's own browser, which they can erase in two clicks. Open the developer tools during the demo and look at the cookie jar — it is empty." *(This is verifiable and tested on every build; invite the check.)* |
+| "What are those Google Form links?" | Volunteer this before they find it. "Two places link out to a Google Form — Report a problem in the footer, and a feedback card that appears once a learner is three quarters through. They are ordinary links: nothing loads from Google and nothing is sent anywhere unless the learner clicks, which is why the page still makes zero third-party requests. Both are optional and neither asks who anyone is. If your policy is no Google at all, nobody has to click them and nothing depends on it." |
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
 | "We're an elementary school" | Do not lean on the privacy story here, tempting as it is. Say: "We collect nothing from anyone, so there's no data question to answer — but I haven't had this reviewed against COPPA and I'm not going to imply I have. The bigger issue is fit: the writing and the examples are aimed at adults who missed computers, not at children. I'd rather tell you that than sell you something that doesn't land." |
 
@@ -267,6 +268,11 @@ accounts and sign-in, cross-device progress sync, and the classroom/instructor
 dashboard. All three required collecting something about a learner, and the
 product now collects nothing. If a buyer needs per-learner reporting, tell them
 plainly that this is not that product and why.
+
+Shipped 2026-07-29: a **course-evaluation link** that appears on the Lessons page
+once a learner is 75% through, and a **Report a problem** link in the footer and
+on the activity-error card. Both go to Google Forms, both are plain links, both
+are optional. Say so plainly if asked — see §5.
 
 Designed but NOT shipped (say "roadmap"):
 certificate verification codes · full third-party WCAG audit · Spanish ·

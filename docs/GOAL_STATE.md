@@ -279,6 +279,20 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (two feedback forms, wired as links):** The founder supplied a
+  course-evaluation form and a report-a-problem form. Both are Google Forms, and
+  the only interesting decision was **link, never embed**: an iframe would make
+  the page contact Google on load, break the one claim buyers are invited to
+  verify, and fail `hostile-check`. As plain `<a target="_blank">` links nothing
+  leaves the site until a learner clicks, and hostile-check is still green.
+  Evaluation appears on the Lessons page at **≥75%** of sub-lessons — verified
+  at the boundary: 148/198 (74.7%) shows nothing, 149/198 (75.3%) shows it.
+  Report-a-problem sits in the footer of every page **and on the activity-error
+  card**, which is the one moment a learner has something concrete to report.
+  Every placement says "Opens Google Forms in a new tab"; the privacy page has a
+  new section describing both, because "we contact no other company" needs to
+  stay exactly true. Sales playbook §5 gains a row so a caller volunteers this
+  rather than being caught by it.
 - **2026-07-29 (the scam popup's close button, and the eleventh gate):** The one
   named item, closed. The ✕ on Unit 10's scam popup sat twelve pixels *outside*
   the dialog, and the overlay is pinned to a page area that is both `relative`
