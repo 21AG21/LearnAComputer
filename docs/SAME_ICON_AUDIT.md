@@ -594,3 +594,65 @@ watching it fail on both patterns, then pass again on removal.
 Deleting a feature is not done when the code is gone. The pitch outlives the
 build, gets read under time pressure, and was the one artifact nobody ran a
 harness against. Now something does.
+
+## Round eight (2026-07-29): a harness that does the wrong thing
+
+Round six ended by naming a harness that did not exist: one that plays a lesson
+**wrongly on purpose** and checks the learner is never stranded. This is it.
+
+`npm run stray-check` mounts each guided activity, does the thing the lesson did
+not ask for — closes the window the step depends on — and asserts one invariant:
+
+> **After a stray click, the learner still has a way forward.** A ring to follow,
+> or words on screen saying what happened. Never nothing.
+
+Never nothing, because nothing is where a beginner concludes they broke it and
+stops. It runs against `/dev/stray-check`, a page whose only job is to mount one
+activity under script control — solve-check and mount-check both walk their own
+queue on a timer, and this needs to stop on a lesson while a script misbehaves.
+
+### What it found immediately
+
+**Ten more lessons with the Unit 1 bug — the entire accessibility unit.**
+
+`a11y-invert`, `a11y-contrast`, `a11y-bold-text`, `a11y-brightness`,
+`a11y-colour-filters`, `a11y-combining`, `a11y-larger-pointer`,
+`a11y-reduce-motion`, `a11y-spoken-descriptions`, `a11y-turning-it-back`. Every
+one is a `guided-settings` lesson: `FakeDesktop` with `autoOpenApp="settings"`.
+Close the Settings window and you get a bare desktop — no glow, no words, and a
+banner still naming the app.
+
+Round six fixed this shape in `GuidedDesktopTask`, one component. It never
+occurred to me that `FakeDesktop` had the same hole, and no amount of staring
+would have told me — the harness did, in one run.
+
+That it landed on **Unit 13** is worth sitting with. These are the lessons for
+learners who already find screens hard to read: low vision, tremor, colorblind,
+easily disoriented. A blank screen costs them the most, and they are exactly the
+learners least likely to guess that a dock icon brings it back.
+
+Fixed at the right level: `FakeDesktop` now shows the recovery line and glows the
+dock icon whenever its lesson's app is closed. One fix, eleven lessons, and every
+future sim that uses `autoOpenApp` inherits it.
+
+### The negative control is a real one
+
+Delete the "You closed the window" block from `GuidedDesktopTask` and run
+`npm run stray-check -- working-with-windows`: it fails, naming the lesson. Put
+it back: it passes. Both were run. That is the bug this was built for, and a
+check that cannot fail on the bug it was built for is decoration.
+
+### Result, and the size of the claim
+
+Whole course, after the fix: **24 guided lessons had a window to close and all
+24 leave the learner a way forward. 101 had no window to close and were skipped.**
+
+That second number is the honest measure of this harness, so it goes in the same
+sentence as the first. It exercises one stray action — closing the window — and
+only on the quarter of lessons that have one. It does not press Escape, click
+the dock mid-step, double-click what wants a single click, or work through every
+other control before the right one. Each is the same shape and would slot in
+beside the close.
+
+A harness is worth exactly what it tries. This one tries one thing, on 24
+lessons, and that one thing was worth eleven bugs.

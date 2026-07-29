@@ -20,6 +20,7 @@ npm run desktop-check # proves the practice desktop holds several windows at onc
 npm run demo-check   # proves every page on the sales demo path loads clean
 npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
 npm run recovery-check # deliberately FAILS a lesson, then proves the learner can carry on
+npm run stray-check   # does the WRONG thing on purpose; proves nobody is left with no way forward
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -49,6 +50,20 @@ device pixel ratio apart from each other. Keep it green at **18/18**.
 After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
 **desktop-check** — no guided lesson opens two apps at once, so solve-check
 cannot see a broken window stack, and multi-window is what Unit 1 teaches.
+
+**Every harness here except one does the moderate, correct thing.** solve-check
+performs exactly the current step's action and nothing else, so it has never
+clicked a control the lesson did not ask for. That blind spot shipped a real
+bug: on Unit 1's window lesson, a learner who clicked the red ✕ at step 1 got an
+empty desktop, no glow, and a banner naming a window that was gone.
+
+**`npm run stray-check` is the one that does the wrong thing.** It closes the
+window each guided step depends on and checks a single invariant: *after a stray
+click the learner still has a way forward* — a ring to follow, or words saying
+what happened. Never nothing, because nothing is where a beginner concludes they
+broke it and stops. Run it after touching any sim's open/close/window state.
+Its negative control is in the file header, and it is a real one: delete the
+"You closed the window" block from `GuidedDesktopTask` and it fails.
 
 After touching the failure channel — `onResult(false, …)`, the Try again card,
 or any sim that can report failure — run **recovery-check**. Solve-check only
@@ -104,10 +119,12 @@ app/
   dev/mount-check/        # Dev-only activity mount harness
   dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
   dev/mission-check/      # Dev-only: mounts one real-world mission for scripts/mission-check.mjs
+  dev/stray-check/        # Dev-only: mounts one activity under script control, for scripts/stray-check.mjs
 
 components/
   MountCheck.tsx           # Dev-only harness behind /dev/mount-check
   SolveCheck.tsx           # Dev-only harness behind /dev/solve-check (drives lib/solve/)
+  StrayCheck.tsx           # Dev-only harness behind /dev/stray-check — mounts one activity, script-driven
   ActivityErrorBoundary.tsx # One sim crash never blanks the lesson page
   StorageNotice.tsx        # One calm banner when localStorage cannot save
   CookieNotice.tsx         # Disclosure, not consent: no cookies exist, so there is nothing to accept

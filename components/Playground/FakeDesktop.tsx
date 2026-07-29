@@ -337,6 +337,25 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       >
         <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />
 
+        {/* The lesson's app, closed.
+            A learner closing the window a guided lesson is talking about is a
+            reasonable thing to try, and it used to leave a bare desktop: no
+            glow, no words, and a banner still naming the app. That shipped in
+            all ten of Unit 13's accessibility lessons, whose learners are the
+            least well served by a screen that goes blank. The dock reopens it
+            — this says so, and the icon below glows. */}
+        {autoOpenApp && !openApps.includes(autoOpenApp) && (
+          <div className="absolute inset-x-0 top-1/3 px-6 text-center z-20">
+            <p className={`text-sm font-semibold ${isDark ? "text-gray-100" : "text-gray-700"}`}>
+              You closed {APP_TITLES[autoOpenApp]}.
+            </p>
+            <p className={`mt-1 text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+              Nothing is broken — click <strong>{APP_TITLES[autoOpenApp]}</strong> in the row of icons
+              at the bottom to open it again.
+            </p>
+          </div>
+        )}
+
         {/* Apps as draggable windows, back to front */}
         {openApps.map((id) => (
           <DraggableWindow
@@ -394,7 +413,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
               id,
               label: APP_TITLES[id],
               running: openApps.includes(id),
-              highlighted: highlightApp === id,
+              // The way back, when the lesson's own app has been closed.
+              highlighted: highlightApp === id || (!!autoOpenApp && id === autoOpenApp && !openApps.includes(autoOpenApp)),
               bouncing: launchingApp === id,
             }))}
             onOpen={(id) => openApp(id as DesktopAppId)}

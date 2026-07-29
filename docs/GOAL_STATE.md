@@ -253,6 +253,21 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (a harness that does the wrong thing):** Built the thing named as
+  the honest next item two entries ago. `npm run stray-check` mounts each guided
+  activity, closes the window the step depends on, and asserts the learner still
+  has a way forward — a ring, or words. It found **ten more lessons with the
+  Unit 1 bug, the entire accessibility unit**, all `guided-settings` on
+  `FakeDesktop`. Round six had fixed that shape in one component and it never
+  occurred to me the other had the same hole; the harness said so in one run.
+  Landing on Unit 13 is the part worth remembering — those learners are the least
+  able to recover from a blank screen and the least likely to guess a dock icon
+  brings it back. Fixed in `FakeDesktop`, so every future `autoOpenApp` sim
+  inherits it. Whole course after the fix: 24 lessons had a window to close and
+  all 24 recover; **101 had no window to close and were skipped** — that number
+  belongs in the same sentence as the first, because a harness is worth what it
+  tries. Still only one stray action (close); Escape, stray dock clicks and
+  double-clicks are the same shape and are not built.
 - **2026-07-29 (the pitch was selling a deleted feature):** Read the four
   sales/demo documents end to end against the current product for the first
   time since accounts were removed. `SALES_PLAYBOOK.md` §8 — the section headed
