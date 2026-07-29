@@ -19,6 +19,7 @@ npm run mission-check # headless: PLAYS all 18 real-world missions on a real mac
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
 npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
+npm run recovery-check # deliberately FAILS a lesson, then proves the learner can carry on
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -45,6 +46,12 @@ device pixel ratio apart from each other. Keep it green at **18/18**.
 After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
 **desktop-check** — no guided lesson opens two apps at once, so solve-check
 cannot see a broken window stack, and multi-window is what Unit 1 teaches.
+
+After touching the failure channel — `onResult(false, …)`, the Try again card,
+or any sim that can report failure — run **recovery-check**. Solve-check only
+ever does the right thing, so a broken recovery looks perfectly healthy to
+every other harness while stranding the one learner who most needs help: the
+one who just made the mistake the lesson is about.
 
 Before any demo, and after touching site chrome or any page outside a lesson,
 run **hostile-check**. Every other harness proves the product works when it is

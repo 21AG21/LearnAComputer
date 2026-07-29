@@ -42,6 +42,7 @@ number, because everything outside it is assumption wearing the same clothes.
 | 18 real-world missions, on a real machine | `mission-check` |
 | Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
 | The sales demo path, stop by stop | `demo-check` |
+| Recovering from a deliberate mistake, end to end | `recovery-check` |
 | Multi-window desktop | `desktop-check` |
 | Lesson shape, step targets, reading level, dialect | `check-lessons.py`, `spelling-check.py` |
 | WCAG AA contrast, both themes | `contrast-check.mjs` |

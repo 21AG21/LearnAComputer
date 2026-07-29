@@ -82,6 +82,38 @@ that fast is the tail of a double-click, not a second intention. `handleNext`
 now ignores it, while a deliberate press a beat later still advances. Verified
 both ways.
 
+## Round two: what happens after a learner gets it wrong
+
+`npm run recovery-check`
+
+The course deliberately lets a learner fail — clicking **CLEAN NOW** in the
+scam popup, calling a safe message dangerous, clicking an ad during an
+assessment. That failure path is a shipped feature and **no other harness had
+ever touched it**, because solve-check only ever does the right thing. A broken
+recovery would have looked perfectly healthy to every check in this repo while
+stranding the one learner who most needs help: the one who just made the
+mistake the lesson is about. For a buyer, it is also the single most damaging
+thing to hit live, because the natural demo move is to click the wrong thing on
+purpose.
+
+So this probe reaches the scam-popup lesson (by skipping, the way a learner who
+gave up on an earlier activity would), opens the browser from the dock, visits
+the scam site, and **clicks CLEAN NOW on purpose**. It then asserts the whole
+way back:
+
+- failing shows an explanation, not just a red box
+- the explanation says what actually went wrong
+- **Try again** appears, and clears the failure card when pressed
+- the activity comes back and the step can be attempted again
+- closing the popup the right way now works
+- and the step **counts** — the lesson advances to step 3 of 4
+
+**Result: no defect. Every one of those passes.** Worth stating plainly rather
+than dressing up: this round found nothing wrong with the product. It found a
+bug in my own probe — matching the close button by its `×` glyph instead of its
+`aria-label` — which reported a broken popup that was never broken. The value
+is that a shipped, previously untested path is now guarded on every run.
+
 ## What this audit does not cover
 
 Honesty about the edges, so nobody mistakes a green run for proof of everything:

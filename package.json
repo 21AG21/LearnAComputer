@@ -11,7 +11,8 @@
     "desktop-check": "node scripts/desktop-check.mjs",
     "demo-check": "node scripts/demo-check.mjs",
     "mission-check": "node scripts/mission-check.mjs",
-    "hostile-check": "node scripts/hostile-check.mjs"
+    "hostile-check": "node scripts/hostile-check.mjs",
+    "recovery-check": "node scripts/recovery-check.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",
