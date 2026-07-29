@@ -16,7 +16,7 @@ what moved, what's proven, what's still a demo risk.
 
 | Area | State | Proof |
 |---|---|---|
-| Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 132 playable activities pass, zero failures**, including every guided lesson AND all assessments. (Earlier ledger entries said "of 166" — that denominator was an accounting error; the playable set has always been 132: 198 lessons − 28 explanation-only − 38 exempt, which are 18 real-world missions plus 20 stepless activity types.) The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 141 playable activities pass, zero failures**, including every guided lesson AND all assessments. Was 132 until 2026-07-29, when `solveStepless` taught the solver the five activity types that have no step list (typing a sentence, fixing text, typing a web address, opening every dock app, opening named files) — nine lessons that had been exempt since the harness was built, and which the sales material had been describing as un-scriptable trackpad gestures. Arithmetic, exactly: 170 queued = 141 played + 18 missions + 6 genuinely un-scriptable + 5 scriptable-but-not-yet. The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
 | Real-world missions provably finishable | **Done** — `npm run mission-check` plays **all 18 missions**, the last category no harness had ever touched (solve-check exempts them because their steps are satisfied outside the page). It drives the learner's *machine*: real PNGs whose real dimensions decide the landscape/portrait steps, real PDFs handed to the page's own file input, genuine paste events and key combinations, and CDP moving the screen, the window and the device pixel ratio independently. Proven honest by a negative control — feed the portrait step a wide photo and the run fails. This covered the four Unit 12 lessons converted from reading to missions that had never once been driven. | `scripts/mission-check.mjs` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
@@ -38,7 +38,7 @@ number, because everything outside it is assumption wearing the same clothes.
 
 | Proven every run | How |
 |---|---|
-| 132 simulated activities playable to the end | `solve-check` |
+| 141 simulated activities playable to the end | `solve-check` |
 | 18 real-world missions, on a real machine | `mission-check` |
 | Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
 | The sales demo path, stop by stop | `demo-check` |
@@ -51,7 +51,7 @@ number, because everything outside it is assumption wearing the same clothes.
 | **Not** proven by machine | Why, and what covers it instead |
 |---|---|
 | **6** reflex / trackpad-gesture activities | A script genuinely cannot pinch a trackpad or beat a falling-shapes game. Mount-checked, then driven by hand |
-| **14** ordinary click-and-type activities | `type-text` ×3, `edit-text` ×2, `url-navigator` ×2, and one each of `drag-sort-files`, `spot-the-fake`, `keyboard-shortcut`, `browser-right-click`, `edit-file`, `file-explorer-open`, `open-all-apps`. A script **could** play these — they predate the step-list architecture the solver walks, so it has nothing to follow. Mount-checked only. **This is the largest remaining coverage gap and it was mislabelled as "trackpad gestures" until 2026-07-29** |
+| **5** ordinary activities, scriptable but not yet scripted | `cloud-vs-computer` (drag-sort-files), `shopping-spot-fake` (spot-the-fake), `editing-copy-paste` (keyboard-shortcut — needs a real clipboard), `trackpad-right-click` (browser-right-click), `invitation-exercise` (edit-file — lives inside the Files app). Mount-checked only. Was 14 until 2026-07-29; nine were brought under `solveStepless`. Each of these five needs its own gesture, which is why they are last |
 | Whether the writing is *good* | Reading level is measured; persuasion is not |
 | Whether a real buyer says yes | No amount of harness output substitutes for a prospect's face |
 
@@ -69,7 +69,7 @@ Ranked, current worst first. Fixing the top item promotes the next.
    docs.google.com address. Module is now 7 hands-on / 2 walkthroughs.
    **Closed 2026-07-28:** all four are now played end to end by
    `npm run mission-check`, so the conversion is proven, not assumed.
-2. **A lesson failing mid-demo.** Mitigated by solve-check (132 simulated
+2. **A lesson failing mid-demo.** Mitigated by solve-check (141 simulated
    activities), mission-check (18 real-world missions) and the error boundary.
    The residual risk is the 20 stepless types — reflex games and real-trackpad
    gestures — which only mount-check covers, plus the intermittent below.
@@ -196,7 +196,7 @@ report 132/132 off a run that had other browser work competing with it.
 
 ## Handoff for the next session
 
-**Run these first** (dev server on :3000): `solve-check` (132/132),
+**Run these first** (dev server on :3000): `solve-check` (141/141),
 `mission-check` (18/18), `hostile-check`, `recovery-check`, `demo-check`,
 `desktop-check`, then `check-lessons.py`, `check-actions.py`,
 `spelling-check.py`. Nine gates; all green as of 2026-07-28.
@@ -254,6 +254,16 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (closing the gap instead of describing it):** Round twelve named
+  14 activities the pitch had wrongly called un-scriptable. **Nine are now
+  played.** `solveStepless()` teaches the solver the five activity types with no
+  step list — type-text, edit-text, url-navigator, open-all-apps,
+  file-explorer-open — and **solve-check went 132 → 141, zero failures**, with
+  no lesson content touched. Machine-proven is now **159 of 170**: 141 simulated
+  + 18 missions, against 6 genuinely un-scriptable and 5 scriptable-but-not-yet,
+  each named. And the number is now *derived*: `pitch-check` computes it from
+  the lesson files using the solver's own exempt/stepless sets and fails when
+  the prose disagrees — negative-controlled by restoring the stale "150".
 - **2026-07-29 (auditing the instruments, not the product):** Round eleven's
   lesson was that the returns now come from auditing the harnesses. So: do the
   denominators mean what they say? They reconcile — 170 queued = 24 exempt by

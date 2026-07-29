@@ -102,6 +102,116 @@ export const EXEMPT: Record<string, string> = {
 };
 
 /**
+ * Activities with no `steps[]` that the solver can still play.
+ *
+ * These predate the step-list architecture, so there is nothing for the ring
+ * walk to follow — which is why they sat in solve-check's exempt list for
+ * months, and why the sales playbook wrongly described them as reflex and
+ * trackpad-gesture lessons that "a script cannot play". A script can play
+ * these perfectly well; it just needed to be told how.
+ */
+export const STEPLESS = new Set([
+  "type-text",
+  "edit-text",
+  "url-navigator",
+  "open-all-apps",
+  "file-explorer-open",
+]);
+
+/** Set a React-controlled field's value so React itself notices. */
+function setFieldValue(el: HTMLInputElement | HTMLTextAreaElement, value: string) {
+  const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+  Object.getOwnPropertyDescriptor(proto, "value")!.set!.call(el, value);
+  el.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+/** Text a stepless task wants typed. */
+function steplessText(task: Record<string, unknown>): string | null {
+  if (typeof task.targetText === "string") return task.targetText;
+  if (typeof task.correctText === "string") return task.correctText;
+  if (typeof task.targetUrl === "string") return task.targetUrl;
+  // edit-text without a worked example: satisfy mustInclude, drop mustNotInclude.
+  if (Array.isArray(task.mustInclude) && task.mustInclude.length) return (task.mustInclude as string[]).join(" ");
+  return null;
+}
+
+/**
+ * Play an activity that has no step list.
+ *
+ * Success is read from the frame's own `data-sim-done`, the same contract the
+ * step walk uses — not from anything this function believes about the DOM.
+ */
+export async function solveStepless(root: HTMLElement, task: Record<string, unknown>): Promise<SolveOutcome> {
+  const started = performance.now();
+  const outcome = (ok: boolean, reason?: string): SolveOutcome => ({
+    ok, progress: ok ? 1 : 0, total: 1, reason,
+    elapsedMs: Math.round(performance.now() - started),
+    debug: ok ? undefined : describeScreen(root),
+  });
+  const isDone = () => readFrame(root)?.dataset.simDone === "1";
+
+  await settle(SLOW_SETTLE_MS);
+  const type = String(task.type);
+
+  if (type === "open-all-apps") {
+    // Click every dock icon; the activity finishes once enough are open.
+    for (const btn of Array.from(root.querySelectorAll<HTMLElement>("button"))) {
+      if (isDone()) break;
+      btn.click();
+      await settle();
+    }
+    return isDone() ? outcome(true) : outcome(false, "Opening every dock app did not finish it.");
+  }
+
+  if (type === "file-explorer-open") {
+    const names = Array.isArray(task.filesToOpen) ? (task.filesToOpen as string[]) : [];
+    const find = (name: string) =>
+      Array.from(root.querySelectorAll<HTMLElement>("*")).find((n) => isReachable(n) && textOf(n) === name);
+    for (const name of names) {
+      let target = find(name);
+      if (!target) {
+        // The activity starts on the desktop: the learner opens Files from the
+        // dock themselves, exactly as every guided lesson makes them.
+        const dock = Array.from(root.querySelectorAll<HTMLElement>("button")).find((b) => textOf(b) === "Files");
+        if (dock) {
+          dock.click();
+          await settle(SLOW_SETTLE_MS);
+          target = find(name);
+        }
+      }
+      if (!target) return outcome(false, `No file on screen called "${name}".`);
+      target.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+      await settle(SLOW_SETTLE_MS);
+    }
+    return isDone() ? outcome(true) : outcome(false, "Opened every named file, still not finished.");
+  }
+
+  // The typing family: put the wanted text in the box, then confirm.
+  const text = steplessText(task);
+  if (text == null) return outcome(false, `Nothing in the task says what to type (${type}).`);
+  const field = root.querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input[type='text'], input:not([type])");
+  if (!field) return outcome(false, "No box to type into.");
+  field.focus();
+  setFieldValue(field, text);
+  await settle();
+
+  if (type === "url-navigator") {
+    field.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await settle(SLOW_SETTLE_MS);
+    if (isDone()) return outcome(true);
+  }
+
+  for (const btn of Array.from(root.querySelectorAll<HTMLElement>("button"))) {
+    if (isDone()) break;
+    if (/check my work|go|save|submit|done/i.test(textOf(btn))) {
+      btn.click();
+      await settle(SLOW_SETTLE_MS);
+    }
+  }
+  return isDone() ? outcome(true) : outcome(false, `Typed the answer, activity did not report finished (${type}).`);
+}
+
+/**
  * A rolling trace of what the solver did, kept on `window` so the headless
  * runner can print it when a lesson fails. Costs nothing to leave on.
  */

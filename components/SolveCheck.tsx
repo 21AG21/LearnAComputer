@@ -2,7 +2,7 @@
 
 import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
-import { EXEMPT, solve, type AnyStep, type SolveOutcome } from "@/lib/solve/solver";
+import { EXEMPT, STEPLESS, solve, solveStepless, type AnyStep, type SolveOutcome } from "@/lib/solve/solver";
 import type { PlaygroundTask } from "@/lib/lessons";
 
 interface Item {
@@ -105,6 +105,26 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
       const base = { slug: current.slug, unit: current.unit, type: current.task.type };
       const exempt = EXEMPT[current.task.type];
       const steps = stepsOf(current.task);
+
+      // Stepless-but-playable: typing a sentence, typing a web address, opening
+      // every dock app, opening named files. These have no step list for the
+      // ring walk to follow, which is why they were exempt — not because a
+      // script cannot do them. It can, and now does.
+      if (!exempt && !steps && STEPLESS.has(current.task.type)) {
+        const root = hostRef.current;
+        if (!root) return;
+        (window as unknown as { __ringLesson?: string }).__ringLesson = current.slug;
+        const outcome = await solveStepless(root, current.task as unknown as Record<string, unknown>).catch(
+          (e: unknown): SolveOutcome => ({
+            ok: false, progress: 0, total: 1,
+            reason: `Solver threw: ${e instanceof Error ? e.message : String(e)}`,
+            elapsedMs: 0,
+          }),
+        );
+        if (cancelled) return;
+        record({ ...base, ...outcome });
+        return;
+      }
 
       if (exempt || !steps) {
         record({

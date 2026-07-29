@@ -908,3 +908,51 @@ It looks for phrases naming removed features and for counts that disagree with
 false was the *characterisation*, and no regex finds that. The guard against
 this class is not a script; it is the habit of reading a claim next to the thing
 it claims about. Which is the whole method of this document.
+
+## Round thirteen (2026-07-29): closing the gap instead of describing it
+
+Round twelve found the sales playbook calling 14 ordinary click-and-type
+activities "reflex and trackpad-gesture" lessons a script could not play, fixed
+the sentence, and named the real gap. Naming a gap is not closing it. **Nine of
+the fourteen are now played.**
+
+`lib/solve/solver.ts` gained `solveStepless()` — a player for activities that
+have no `steps[]` for the ring walk to follow:
+
+| type | what it does | lessons |
+|---|---|---|
+| `type-text` | types `targetText`, presses Check my work | 3 |
+| `edit-text` | types `correctText` (or satisfies `mustInclude`) | 2 |
+| `url-navigator` | types `targetUrl`, presses Enter | 2 |
+| `open-all-apps` | clicks dock icons until the activity reports done | 1 |
+| `file-explorer-open` | opens Files from the dock, double-clicks each named file | 1 |
+
+**solve-check: 132 → 141, zero failures.** No lesson content changed, so the
+132 that already passed could not regress — and did not.
+
+Success is read from the frame's own `data-sim-done`, the same contract the step
+walk uses, never from anything the player believes about the DOM. One lesson
+(`trackpad-double-click`) failed on the first run for a real reason: the activity
+opens on the desktop and the learner opens Files from the dock themselves. The
+player now does that too, which is the point — it should do what a learner does,
+not reach past the interface.
+
+### The honest remainder: five, named
+
+`cloud-vs-computer` (drag-sort), `shopping-spot-fake` (spot-the-fake),
+`editing-copy-paste` (needs a real clipboard), `trackpad-right-click`
+(context menu), `invitation-exercise` (edit a file inside the Files app). Each
+needs its own gesture, which is why they are last rather than lumped in. Plus
+the six that genuinely cannot be scripted. **159 of 170 machine-proven.**
+
+### The number is now derived, not typed
+
+"150 of the 170" sat in the playbook, stale, for months — because no one
+re-derives a sentence. `pitch-check` now computes the numerator and denominator
+from `content/lessons/` using the same two sets the solver uses, and fails when
+the prose disagrees. Negative-controlled: put "150" back and it reports
+*"says 150 machine-proven activities, there are 159"*.
+
+That is the difference between this round and round twelve. Twelve corrected a
+false claim by hand; thirteen made the claim impossible to get wrong again —
+and then made most of it moot by doing the work the excuse was covering for.

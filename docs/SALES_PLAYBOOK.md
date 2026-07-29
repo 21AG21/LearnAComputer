@@ -241,8 +241,8 @@ in-browser verification · printable per-unit and full-course certificates
 (`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
-grade-5 reading level, enforced at build · **150 of the 170 activities
-mechanically proven finishable, re-proven on every change** — 132 simulated
+grade-5 reading level, enforced at build · **159 of the 170 activities
+mechanically proven finishable, re-proven on every change** — 141 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
 pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to
@@ -250,24 +250,23 @@ use, with no account, no cookies, no analytics and no third-party requests** —
 asserted on every route by `npm run hostile-check` and verifiable by the buyer
 in their own developer tools.
 
-The honest footnote, if pressed — and it was wrong until 2026-07-29, so read
-it carefully. The 20 that are **not** auto-played break down as:
+The honest footnote, if pressed. The 11 that are **not** auto-played:
 
-- **6 are genuinely un-scriptable:** the falling-shapes reflex game, the Tab
-  focus game, drag-match-onto-an-image, pinch-zoom, and the scroll-for-a-code
-  lesson. A script cannot pinch a trackpad. These are mount-checked and driven
-  by hand.
-- **14 are ordinary click-and-type activities** — typing a sentence, fixing
-  text, typing a web address, sorting files, spotting the fake, copy-paste,
-  right-click, opening a file, opening every app. A script *could* play these;
-  they predate the step-list architecture the solver follows, so it has nothing
-  to walk. They are mount-checked, not played.
+- **6 genuinely cannot be:** the falling-shapes reflex game, the Tab focus game,
+  drag-match-onto-an-image, pinch-zoom, and the scroll-for-a-code lesson. A
+  script cannot pinch a trackpad or out-react a moving target. Mount-checked,
+  then driven by hand.
+- **5 could be and are not yet:** copy-paste, right-click-to-new-tab, the
+  drag-sort activity, spot-the-fake, and editing a file inside the Files app.
+  Mount-checked only. Named individually in `docs/GOAL_STATE.md`.
 
-The old wording called all 20 "reflex and trackpad-gesture activities", which
-was false for 14 of them and would not have survived a technical buyer reading
-the repo. If asked, say the true thing: 150 of 170 are machine-proven, 6 cannot
-be, and 14 could be but are not yet. The precision is what makes the 150
-believable, and only true precision does that.
+This footnote was wrong until 2026-07-29 — it called all 20 unplayed activities
+"reflex and trackpad-gesture activities… because a script cannot pinch a
+trackpad", when 14 of them were ordinary typing and clicking that simply
+predated the solver's step-list architecture. Nine of those fourteen are now
+played; the last five are a named to-do, not an excuse. If asked, say exactly
+that. The precision is what makes the number believable, and only true
+precision does that.
 
 **Removed on purpose, 2026-07-28 — do not offer to build them back on a call:**
 accounts and sign-in, cross-device progress sync, and the classroom/instructor

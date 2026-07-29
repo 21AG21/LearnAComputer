@@ -61,6 +61,36 @@ def excused(lines, i):
     return any(ALLOWED_CONTEXT.search(l) for l in window)
 
 
+# How many activities a machine actually plays. The playbook quotes this number
+# ("159 of the 170 activities mechanically proven finishable") and it went stale
+# for months as "150" — nobody re-derives a sentence. Derived here from the same
+# two sets the solver uses, so the pitch cannot drift from the harness again.
+SOLVER_EXEMPT = {
+    "real-world", "shape-click-game", "keyboard-nav-game",
+    "match-parts", "pinch-zoom", "browser-scroll-code", "none", "placeholder",
+}
+SOLVER_STEPLESS = {"type-text", "edit-text", "url-navigator", "open-all-apps", "file-explorer-open"}
+
+
+def proven():
+    """(machine-proven, queued) — the numerator and denominator the pitch quotes."""
+    import json
+    played = missions = 0
+    queued = 0
+    for f in (ROOT / "content" / "lessons").glob("*.json"):
+        t = json.loads(f.read_text())["playgroundTask"]
+        if t["type"] in ("none", "placeholder"):
+            continue
+        queued += 1
+        if t["type"] == "real-world":
+            missions += 1
+        elif t["type"] in SOLVER_EXEMPT:
+            pass
+        elif (isinstance(t.get("steps"), list) and t["steps"]) or t["type"] in SOLVER_STEPLESS:
+            played += 1
+    return played + missions, queued
+
+
 # Claims of scale that must match what is on disk.
 def counts():
     lessons = list((ROOT / "content" / "lessons").glob("*.json"))
@@ -96,10 +126,13 @@ def main() -> int:
             if not (ROOT / ref).exists():
                 errors.append(f"{rel}: points at {ref}, which does not exist")
         # Scale claims.
+        n_proven, n_queued = proven()
         for num, real, what in (
             (r"(\d+)\s+hands-on lessons", n_lessons, "lessons"),
             (r"(\d+)\s+units\b", n_units, "units"),
             (r"all\s+(\d+)\s+real-world missions", n_missions, "missions"),
+            (r"\*\*(\d+)\s+of the \d+ activities", n_proven, "machine-proven activities"),
+            (r"\*\*\d+\s+of the (\d+) activities", n_queued, "queued activities"),
         ):
             for m in re.finditer(num, text):
                 if int(m.group(1)) != real:
