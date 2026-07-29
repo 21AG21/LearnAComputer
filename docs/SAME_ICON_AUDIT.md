@@ -717,3 +717,65 @@ material and got `pitch-check` out of it. This one is smaller: eight lessons
 carry a `warning`, they were read one by one, and the six that remain describe
 things that genuinely still happen (a screen going dark, a screen reader taking
 the keyboard, a scam popup, toolbar clicks not counting).
+
+## Round ten (2026-07-29): the check that found nothing
+
+stray-check gained its second wrong move, and this round's honest headline is
+that **it found no bug.** Writing that down matters as much as the rounds that
+did, because a harness only ever reports one of two things and only one of them
+is ever celebrated.
+
+### Why double-click, specifically
+
+**Unit 1 teaches double-clicking.** Learners who have just been taught it
+double-click everything afterwards — and this repo has already shipped exactly
+that bug once, when double-pressing **Next** advanced two lessons and a whole
+page of teaching went by unseen. So the prior was strong: `STRAY=double
+npm run stray-check` double-clicks the highlighted control and asserts a single
+gesture never advances more than one step. A skipped step is worse than a dead
+end, because nothing on screen says it happened.
+
+### The first version was a check of step 1
+
+It reported all clear across 36 lessons, which was meaningless: it double-clicked
+only each lesson's **first** highlighted control, and for most lessons that is
+the dock icon that opens the app. It never reached the interesting steps.
+
+The interesting steps are findable in the content, so they were looked up rather
+than guessed: **67 places where two consecutive steps share an action and a
+target.** `a11y-turning-it-back` toggles `invert-colors` at step 2 and again at
+step 3; two lessons zoom twice in a row. Those are precisely where one gesture
+could satisfy two steps — and the first draft never got to any of them. It now
+walks the lesson, double-clicking each successive ring, which is also a truer
+model of the learner being simulated.
+
+### The result, and what actually protects it
+
+Whole course: **36 lessons walked by double-click, none skips a step.**
+
+The protection is real and already in the code — `useStepRunner.completeStep`:
+
+```ts
+if (last && last.idx === stepIndex && now - last.t < 150) return;
+```
+
+Two clicks in one tick both read the same `stepIndex`, and the second is
+refused. That guard was added after the earlier double-click bug; this round
+proves it holds everywhere, not just where it was first noticed.
+
+### Negative control, on the thing that does the work
+
+Removing that one line makes `a11y-turning-it-back` fail immediately —
+*"one double-click advanced 2 steps (0 → 2)"* — and restoring it passes. The
+control targets the guard rather than the symptom, which is the only version
+worth running: it answers "would this check notice if the protection regressed?"
+with a yes that was observed, not assumed.
+
+### The rule
+
+A green run is only worth the question it asked. This one asked a narrow
+question — 36 lessons, one gesture — and got a real answer. The first draft
+asked a question that sounded identical and answered nothing, and the only
+reason that was caught was checking the content for cases the check *should*
+have flagged. **When a new check comes back clean, go find what it should have
+caught before believing it.**

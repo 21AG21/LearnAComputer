@@ -57,13 +57,22 @@ clicked a control the lesson did not ask for. That blind spot shipped a real
 bug: on Unit 1's window lesson, a learner who clicked the red ✕ at step 1 got an
 empty desktop, no glow, and a banner naming a window that was gone.
 
-**`npm run stray-check` is the one that does the wrong thing.** It closes the
-window each guided step depends on and checks a single invariant: *after a stray
-click the learner still has a way forward* — a ring to follow, or words saying
-what happened. Never nothing, because nothing is where a beginner concludes they
-broke it and stops. Run it after touching any sim's open/close/window state.
-Its negative control is in the file header, and it is a real one: delete the
-"You closed the window" block from `GuidedDesktopTask` and it fails.
+**`npm run stray-check` is the one that does the wrong thing.** Two modes:
+
+- default — closes the window each guided step depends on, and checks *the
+  learner still has a way forward*: a ring to follow, or words saying what
+  happened. Never nothing, because nothing is where a beginner concludes they
+  broke it and stops. Run after touching any sim's open/close/window state.
+- `STRAY=double` — double-clicks its way through the lesson (Unit 1 **teaches**
+  double-clicking, so learners double-click everything afterwards) and checks
+  that one gesture never advances two steps. What protects this is the 150ms
+  same-step guard in `useStepRunner.completeStep`; do not remove it.
+
+Both negative controls are in the file header and both have been watched to
+fail. Note the trap recorded in `docs/SAME_ICON_AUDIT.md` § *Round ten*: the
+first draft of the double-click mode reported all-clear across 36 lessons while
+only ever clicking each lesson's *first* control. **When a new check comes back
+clean, go find what it should have caught before believing it.**
 
 After touching the failure channel — `onResult(false, …)`, the Try again card,
 or any sim that can report failure — run **recovery-check**. Solve-check only

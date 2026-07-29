@@ -253,6 +253,17 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the check that found nothing):** Added double-click as
+  stray-check's second wrong move — Unit 1 teaches double-clicking and this repo
+  already shipped one bug where a double-press skipped a whole lesson. Result:
+  **36 lessons walked, no bug.** The 150ms same-step guard in
+  `useStepRunner.completeStep` holds everywhere. Worth logging a clean result as
+  carefully as a dirty one — especially because the *first* draft also came back
+  clean and was worthless: it only double-clicked each lesson's first control,
+  which is usually the dock icon, and never reached the 67 places where two
+  consecutive steps share a target. Caught by looking up what the check should
+  have flagged. The negative control targets the guard itself: remove that one
+  line and `a11y-turning-it-back` fails at once.
 - **2026-07-29 (a warning about a hazard that no longer existed):** Before
   automating "press Escape" as a second stray move, asked what Escape actually
   does. Two lessons warned against it — *"it will exit the simulator"* — and
