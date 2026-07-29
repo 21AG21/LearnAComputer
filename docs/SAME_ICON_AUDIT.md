@@ -253,13 +253,13 @@ Recorded so the next pass does not redo it:
 
 ## Still open
 
-- **A ringed control can still land below the fold of a window.** Twice now, a
-  window sized by hand has cut off the exact button the step was highlighting —
-  and both times every automated check stayed green, because the solver scrolls
-  and a learner reads. The general fix is to scroll the ringed element into view
-  whenever it is outside its scroll container; the stopgap is that each window's
-  height was measured against its own tallest page. Worth doing properly the
-  next time a third one turns up.
+- **A whole-course ring audit that is stable enough to gate on.** Round four
+  below built the reveal that stops a ringed control hiding below the fold, and
+  a check that catches it reliably *for one named lesson*. What is still open is
+  the whole-course sweep: it reports 6–10 findings on identical code, because
+  the sims are almost never at rest during an automated run. Making that
+  trustworthy needs a notion of "the UI has settled" that this codebase does not
+  have yet. Until then the sweep prints leads and exits 0, on purpose.
 - **`open-btn` in `GuidedAppStoreTask`** is declared in the highlight switch and
   rendered nowhere. No lesson uses the `open-app` action, so nothing is broken.
 - **Two spellings of one word across two apps** — Settings says *Color
@@ -352,3 +352,70 @@ to "Photos is working again", *Using WiFi You Do Not Own* five steps through the
 café portal to Cross-Site Tracking off — then solve-check 132/132, mission-check
 18/18, desktop-check, recovery-check, hostile-check, demo-check, check-lessons
 198, check-actions, spelling, `tsc`, `lint`.
+
+## Round four (2026-07-29): the glow the learner cannot see
+
+The *Still open* item above — "a ringed control can still land below the fold" —
+is now half closed, and the honest half of that sentence is worth as much as the
+closed half.
+
+### The product fix, which works
+
+`SimulatorFrame` now brings the highlighted control into view. It walks up from
+the ring, scrolling any container **inside the frame** that can be scrolled.
+Deliberately not `scrollIntoView`, which would also scroll the lesson page and
+yank the reading pane around for a control that was never off the *page*.
+
+It reveals each control **once**. Without that, every mutation re-scrolled, so a
+learner who scrolled up to re-read something got dragged back on the next
+animation frame. The glow is a hint, not a leash.
+
+Measured, both directions, on the café portal with its window deliberately
+shrunk to 300px: reveal off → the ring is off screen and the check catches it
+3 runs out of 3; reveal on → clean 3 runs out of 3. That is the exact defect
+that shipped twice, cured.
+
+### The check, and what it is honestly worth
+
+`npm run ring-check` asks the question no other harness can: *is the pulsing
+ring actually on screen?* solve-check cannot — the solver reaches controls
+through the DOM and never needs to see them. A human tester cannot reliably —
+they scroll without noticing they did.
+
+**Filtered to one lesson it is a gate.** Clean 3/3, planted bug caught 3/3.
+
+**Across the whole course it is a lead generator, and it exits 0.** Three
+consecutive runs of identical code gave 8, then 6, then 10 findings, with the
+offending step changing between runs. The cause is inherent: a ring is
+legitimately out of view for a frame or two whenever a panel is mid-render or a
+window is opening, and across 170 lessons an automated run is almost never at
+rest.
+
+Four mechanisms were tried before accepting that:
+
+| Where the audit lived | Findings |
+|---|---|
+| Solver loop, 2 animation frames | 42 |
+| Solver loop, 150ms | 10 |
+| Solver loop, 600ms | 12 |
+| Inside the reveal, last-observation-wins | 6–10 |
+
+The first number is the instructive one. **42 lessons "failed" and not one was a
+real defect** — the audit was timing the reveal rather than measuring the
+product. A gate that reports 42 phantom failures is worse than no gate, and
+tuning the delay until the number looked green would have buried that rather
+than fixed it. So the whole-course mode prints leads, names the command to
+confirm each one, and returns success.
+
+### A flaw in the design, recorded because it is a trap
+
+The detector lives **inside** the thing it tests. The first negative control
+disabled the reveal and expected the check to fire — it did not, because the
+recording sits after the scrolling in the same function. A fixer cannot be
+falsified by switching the fixer off. The control that works instead makes the
+clipping **unfixable**: an `overflow: hidden` container the reveal cannot
+scroll. Anyone extending this must use that shape.
+
+**Verified**: solve-check 132/132, mission-check 18/18, desktop-check,
+recovery-check, hostile-check, demo-check, check-lessons 198, check-actions,
+spelling, `tsc`, `lint`.

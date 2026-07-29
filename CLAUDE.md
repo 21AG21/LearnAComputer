@@ -28,6 +28,7 @@ python3 scripts/check-actions.py  # every action a sim advertises must be one a 
 python3 scripts/spelling-check.py # one dialect: American English, plus a typo list
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
+npm run ring-check -- <slug>      # is the highlighted control actually ON SCREEN in that lesson?
 ```
 
 All the browser checks need `npm run dev` running on :3000 first.
@@ -53,6 +54,21 @@ or any sim that can report failure — run **recovery-check**. Solve-check only
 ever does the right thing, so a broken recovery looks perfectly healthy to
 every other harness while stranding the one learner who most needs help: the
 one who just made the mistake the lesson is about.
+
+After touching `SimulatorFrame`'s reveal, any window's `initial` height, or a
+sim's scrolling layout, run **ring-check on the affected lesson**
+(`npm run ring-check -- <slug>`). It asks the one question no other harness
+can — *is the pulsing ring on screen?* — because the solver reaches controls
+through the DOM and never has to see them. Two shipped bugs put a step's own
+target just below the fold and every check stayed green.
+
+**Its whole-course mode (`npm run ring-check`) is advisory and always exits 0.**
+It gave 8, 6 and 10 findings on three consecutive runs of identical code: the
+sims are almost never at rest during an automated run, so a ring is legitimately
+out of view for a frame here and there. Treat those as leads and confirm each
+one filtered to its own slug, which is repeatable. Do not add it to a gate list
+and do not tune it until the number looks green — see `docs/SAME_ICON_AUDIT.md`
+§ *Round four* for the four mechanisms already tried.
 
 Before any demo, and after touching site chrome or any page outside a lesson,
 run **hostile-check**. Every other harness proves the product works when it is

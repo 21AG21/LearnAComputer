@@ -55,6 +55,120 @@ export default function SimulatorFrame({
     ? objTotal > 0 ? (doneCount / objTotal) * 100 : 0
     : totalSteps ? (Math.min(stepIndex ?? 0, totalSteps) / totalSteps) * 100 : 0;
 
+  const frameRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Keep the highlighted control on screen.
+   *
+   * The course's promise to the learner is "look for the glow". Twice a window
+   * has been an inch too short and put the glow just below its own bottom edge —
+   * once on *Forgot password?*, once on the café portal's *Continue* — and both
+   * times the learner was told to click something they could not see. No harness
+   * noticed either, because the solver scrolls and a reader scrolls.
+   *
+   * Only containers **inside the frame** are scrolled. `scrollIntoView` would
+   * also scroll the lesson page itself, which yanks the reading pane around for
+   * a control that was never off the page to begin with.
+   */
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    let queued = 0;
+    /**
+     * The control revealed last. Each one is brought into view **once**.
+     *
+     * Without this, every mutation re-scrolls, so a learner who scrolls away to
+     * read something above the highlighted control gets yanked back on the next
+     * animation frame. The glow is a hint, not a leash.
+     */
+    let revealedFor: HTMLElement | null = null;
+    const reveal = () => {
+      queued = 0;
+      const rings = Array.from(
+        frame.querySelectorAll<HTMLElement>("[class*='ring-yellow'],[class*='animate-ring-pulse']"),
+      );
+      // Innermost wins: rings nest when a highlighted control sits in a
+      // highlighted row, and the inner one is the thing to click.
+      const el = rings.find((r) => !rings.some((o) => o !== r && r.contains(o)));
+      if (!el || el.offsetParent === null) return;
+      if (el === revealedFor) return;
+      revealedFor = el;
+
+      for (let node = el.parentElement; node && frame.contains(node); node = node.parentElement) {
+        const cs = getComputedStyle(node);
+        const box = node.getBoundingClientRect();
+        if (/(auto|scroll)/.test(cs.overflowY) && node.scrollHeight > node.clientHeight) {
+          const r = el.getBoundingClientRect();
+          if (r.top < box.top) node.scrollTop -= box.top - r.top + 8;
+          else if (r.bottom > box.bottom) node.scrollTop += r.bottom - box.bottom + 8;
+        }
+        if (/(auto|scroll)/.test(cs.overflowX) && node.scrollWidth > node.clientWidth) {
+          const r = el.getBoundingClientRect();
+          if (r.left < box.left) node.scrollLeft -= box.left - r.left + 8;
+          else if (r.right > box.right) node.scrollLeft += r.right - box.right + 8;
+        }
+      }
+
+      // Did it work?
+      //
+      // Reporting from right here removes the race an earlier version had, when
+      // the audit lived in the solver's loop and returned 42, then 12, then 10
+      // for the same course depending on how long it waited — it was timing the
+      // reveal, not measuring the product.
+      //
+      // The record is a MAP, and every reveal overwrites this control's entry:
+      // last observation wins. A ring is briefly out of view whenever a panel is
+      // mid-render, and reporting those made the count wobble between 6 and 8
+      // with the offending step changing each run. Only a control that is still
+      // clipped when the sim stops moving survives to the end of the run.
+      // `npm run ring-check` reads what is left.
+      if (process.env.NODE_ENV !== "production") {
+        const w = window as unknown as { __ringClipped?: Map<string, unknown>; __ringLesson?: string };
+        const lesson = w.__ringLesson ?? "(unknown)";
+        const control =
+          (el.textContent || "").trim().slice(0, 40) || el.getAttribute("aria-label") || el.tagName;
+        const key = `${lesson}|${control}`;
+        w.__ringClipped ??= new Map();
+        w.__ringClipped.delete(key);
+
+        const r = el.getBoundingClientRect();
+        for (let node = el.parentElement; node && frame.contains(node); node = node.parentElement) {
+          const cs = getComputedStyle(node);
+          if (!/(hidden|clip|auto|scroll)/.test(cs.overflowY + cs.overflowX)) continue;
+          const box = node.getBoundingClientRect();
+          if (r.bottom > box.bottom + 2 || r.top < box.top - 2 || r.right > box.right + 2 || r.left < box.left - 2) {
+            w.__ringClipped.set(key, {
+              lesson,
+              control,
+              say: (instruction ?? goal ?? "").slice(0, 90),
+              scrollable: node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1,
+              by: `${node.tagName.toLowerCase()}.${(node.className || "").toString().split(/\s+/).slice(0, 3).join(".")}`,
+            });
+            return;
+          }
+        }
+      }
+    };
+
+    const schedule = () => {
+      if (queued) return;
+      // Two frames: one for React's commit, one for any layout the sim does
+      // after it (a window opening, a panel expanding).
+      queued = requestAnimationFrame(() => requestAnimationFrame(reveal));
+    };
+
+    schedule();
+    // The ring moves between renders that this effect's deps cannot see —
+    // multi-phase steps re-target it without touching stepIndex.
+    const obs = new MutationObserver(schedule);
+    obs.observe(frame, { attributes: true, attributeFilter: ["class"], subtree: true, childList: true });
+    return () => {
+      obs.disconnect();
+      if (queued) cancelAnimationFrame(queued);
+    };
+  }, [stepIndex, done, instruction, goal]);
+
   const [expanded, setExpanded] = useState(false);
   const [hintOpen, setHintOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -80,6 +194,7 @@ export default function SimulatorFrame({
 
   return (
     <div
+      ref={frameRef}
       className="h-full flex flex-col bg-white overflow-hidden select-none relative"
       // Read by the solve-check harness (/dev/solve-check) to tell whether a gesture
       // advanced the activity. Parsing "Step 3 of 9" out of the banner text worked

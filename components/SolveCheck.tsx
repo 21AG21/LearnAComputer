@@ -118,6 +118,11 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
         return;
       }
 
+      // Which lesson a clipped-ring report belongs to. SimulatorFrame records the
+      // report itself (it is the thing that tries to reveal the ring), and has no
+      // other way to know what it is showing.
+      (window as unknown as { __ringLesson?: string }).__ringLesson = current.slug;
+
       const assessment = (current.task as { mode?: string }).mode === "assessment";
       const root = hostRef.current;
       if (!root) return;

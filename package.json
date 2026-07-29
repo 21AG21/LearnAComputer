@@ -12,7 +12,8 @@
     "demo-check": "node scripts/demo-check.mjs",
     "mission-check": "node scripts/mission-check.mjs",
     "hostile-check": "node scripts/hostile-check.mjs",
-    "recovery-check": "node scripts/recovery-check.mjs"
+    "recovery-check": "node scripts/recovery-check.mjs",
+    "ring-check": "node scripts/ring-check.mjs"
   },
   "dependencies": {
     "next": "^15.4.1",

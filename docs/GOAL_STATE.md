@@ -225,15 +225,24 @@ and § *Round three*.
 The next item is smaller and is written down rather than done, because it has
 only bitten twice and the stopgap holds:
 
-**Scroll the ringed control into view.** Twice now a window sized by hand has
-clipped the exact button the step was highlighting — *Forgot password?* in the
-password reset, **Continue** in the café portal. Both were caught by measuring
-the ringed element against the window rect in a live browser; **every automated
-check stayed green both times**, because the solver scrolls and a learner reads.
-The general fix belongs in `useStepRunner` or `SimulatorFrame`: when the element
-carrying the ring is outside its scroll container, bring it into view. Build it
-the third time this appears, and give it a negative control — break a window's
-height on purpose and watch the check fail.
+**A whole-course ring sweep worth gating on.** The product fix is done —
+`SimulatorFrame` now scrolls the highlighted control into view (once, so it
+never fights a learner who scrolled away), and `npm run ring-check -- <slug>`
+catches a planted clipping 3 runs out of 3 and passes clean 3 out of 3.
+
+What is not done is the sweep. Across all 170 lessons it reports 6–10 findings
+on identical code, because a ring is legitimately off screen for a frame or two
+whenever a panel is mid-render, and an automated run is almost never at rest.
+Four mechanisms were tried and none was stable (the first returned **42 findings,
+none of them real**). It therefore exits 0 and prints leads.
+
+Making it a gate needs something this codebase lacks: a reliable "the sim has
+settled" signal. If that ever exists — a quiet-period detector on the sim
+frame's mutations, say — this becomes a real gate. Until then, do not tune the
+delay until the number looks green; that hides the problem rather than fixing
+it. Note also the trap recorded in `docs/SAME_ICON_AUDIT.md` § *Round four*: the
+detector lives inside the reveal, so switching the reveal off does **not**
+falsify it — a negative control has to make the clipping unfixable instead.
 
 ### What is waiting on the founder, not on code
 
@@ -244,6 +253,17 @@ height on purpose and watch the check fail.
 
 ## Session log
 
+- **2026-07-29 (the glow you cannot see):** Closed the blind spot the last two
+  entries kept running into. `SimulatorFrame` now brings the highlighted control
+  into view — once per control, so it never drags back a learner who scrolled
+  away to re-read something. `npm run ring-check` asks the question no other
+  harness can, because the solver reaches controls through the DOM and never has
+  to see them. Filtered to one lesson it is a gate (clean 3/3, planted bug caught
+  3/3). Across the whole course it is **not**: three runs of identical code gave
+  8, 6 and 10, so it prints leads and exits 0. Worth stating plainly because the
+  temptation ran the other way — the first version of the audit reported **42
+  failing lessons and not one was real**, and the fix was to throw the mechanism
+  away, not to tune its delay until the number looked good.
 - **2026-07-29 (Stage C closed):** The last two hand-drawn browsers are gone.
   The error-code lesson's `support.example/help` used to swallow the whole
   desktop and wear a gray strip for an address bar; it is a window over the
