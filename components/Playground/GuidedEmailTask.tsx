@@ -21,10 +21,35 @@ export type GuidedEmailStep = {
   value?: string;
 };
 
+/** An extra message dropped into the Inbox on mount, optionally carrying a link. */
+export interface SeedInboxEmail {
+  id: string;
+  from: string;
+  subject: string;
+  body: string;
+  date?: string;
+  /** Renders a button at the foot of the body — a link inside an email. */
+  actionLabel?: string;
+}
+
 interface GuidedEmailTaskProps {
   goal: string;
   steps: GuidedEmailStep[];
   seedDraft?: { to: string; subject: string; body: string };
+  /**
+   * Extra Inbox messages. Unit 11's password reset needs a bank's reset email to
+   * be sitting in the *real* Mail app, because the dock icon that opens it is the
+   * same icon Unit 6 spent nine lessons teaching.
+   */
+  seedInbox?: SeedInboxEmail[];
+  /**
+   * Pulse an Inbox row by subject, and the open email's link. Hosts that drive
+   * this app from their own step list have no steps of their own to light up.
+   */
+  highlightEmail?: string;
+  highlightEmailAction?: boolean;
+  onOpenEmail?: (subject: string) => void;
+  onEmailAction?: (subject: string) => void;
   mode?: SimMode;
   hint?: string;
   freePlay?: boolean;
@@ -44,6 +69,8 @@ interface Email {
   date: string;
   folder: Folder;
   replies?: { from: string; body: string; date: string }[];
+  /** A link inside the message, rendered as a button under the body. */
+  actionLabel?: string;
 }
 
 const FOLDERS = ["Inbox", "Sent", "Drafts", "Spam", "Archive"] as const;
@@ -63,11 +90,25 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
 
 const ATTACH_FILES = ATTACHABLE_FILES.map((f) => f.name);
 
-export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, freePlay, onResult }: GuidedEmailTaskProps) {
+export default function GuidedEmailTask({
+  goal, steps, seedDraft, seedInbox, highlightEmail, highlightEmailAction,
+  onOpenEmail, onEmailAction, mode, hint, freePlay, onResult,
+}: GuidedEmailTaskProps) {
   const [emails, setEmails] = useState<Email[]>(() => {
-    if (!seedDraft) return INITIAL_EMAILS;
+    const seeded: Email[] = (seedInbox ?? []).map((e) => ({
+      id: e.id,
+      from: e.from,
+      subject: e.subject,
+      preview: e.body.slice(0, 50),
+      body: e.body,
+      date: e.date ?? "Just now",
+      folder: "Inbox" as Folder,
+      actionLabel: e.actionLabel,
+    }));
+    const base = [...seeded, ...INITIAL_EMAILS];
+    if (!seedDraft) return base;
     return [
-      ...INITIAL_EMAILS,
+      ...base,
       {
         id: "draft-seed",
         from: "Me (unsent)",
@@ -158,6 +199,7 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
   }
 
   function handleOpenEmail(email: Email) {
+    onOpenEmail?.(email.subject);
     if (email.folder === "Drafts") {
       setComposing(true);
       setSelectedEmail(null);
@@ -472,6 +514,16 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
               </div>
               <div className="p-4">
                 <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">{selectedEmail.body}</p>
+                {/* A link inside the message. Real reset emails carry one, and clicking
+                    it is the step the lesson is about. */}
+                {selectedEmail.actionLabel && (
+                  <button
+                    onClick={() => onEmailAction?.(selectedEmail.subject)}
+                    className={`mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-all ${highlightEmailAction ? pulse : ""}`}
+                  >
+                    {selectedEmail.actionLabel}
+                  </button>
+                )}
                 {/* Thread: replies */}
                 {selectedEmail.replies?.map((r, i) => (
                   <div key={i} className="mt-4 pt-3 border-t border-gray-200">
@@ -502,7 +554,9 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
                   <button
                     key={email.id}
                     onClick={() => handleOpenEmail(email)}
-                    className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 transition-all ${hl("email-row", email.subject) ? pulse : ""}`}
+                    className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 transition-all ${
+                      hl("email-row", email.subject) || highlightEmail === email.subject ? pulse : ""
+                    }`}
                   >
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-sm font-medium text-gray-800">{email.from}</span>

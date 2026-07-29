@@ -253,12 +253,15 @@ Recorded so the next pass does not redo it:
 
 ## Still open
 
-- **The troubleshooting sim still draws its own Mail and its own browser.** The
-  password-reset scenario needs a bank reset email that `GuidedEmailTask`'s inbox
-  does not contain, and the error-code scenario needs a support page that is not
-  one of the browser's fifteen sites. Both are bespoke cards rather than the real
-  apps. Settings was the one that could be collapsed cleanly; these two need
-  seeded data in the real apps first.
+- **The error-code scenario still draws its own browser.** `support.example/help`
+  is not one of the browser's fifteen sites, so the paste-the-error-code page is
+  still a bespoke card with a fake address bar — no tab strip, no lock icon, no
+  window frame. Same fix shape as the password reset below: give
+  `BrowserSimulator` the page as children and put it in a `DraggableWindow`.
+  Lower stakes than the Mail one was, because no unit teaches a support site the
+  way Unit 6 teaches Mail, but it is the last hand-drawn browser in the course.
+  *(The `public-wifi` captive portal is the same story and would come along with
+  it — a captive portal really is a web page and belongs in browser chrome.)*
 - **`open-btn` in `GuidedAppStoreTask`** is declared in the highlight switch and
   rendered nowhere. No lesson uses the `open-app` action, so nothing is broken.
 - **Two spellings of one word across two apps** — Settings says *Color
@@ -268,3 +271,48 @@ Recorded so the next pass does not redo it:
 - **`facetime-basics` and `facetime-features` are branded slugs.** Their titles
   and copy are clean; the slugs cannot be renamed because progress is stored by
   slug.
+
+---
+
+## Round two (2026-07-28): the password reset now uses the real apps
+
+The longest-standing entry on the list above is closed. Unit 11's
+*Recovering a Forgotten Password* used to draw its own Mail — a flat card
+captioned "Mail / Inbox" with one row in it — and its own browser, a card with a
+gray strip and a domain in it. Both floated on the wallpaper with no window
+frame. A learner reaches this lesson **after nine Unit 6 lessons in the real
+Mail app**, clicks the same dock icon, and gets something that shares only a
+name. That is the exact failure this audit exists to catch, and it was the last
+one on the main lesson path.
+
+**What it is now:** the real `GuidedEmailTask` — Compose, the
+Inbox/Sent/Drafts/Spam/Archive sidebar with counts, the real reading pane with
+Reply / Forward / Mark as spam / Move to Archive / Delete — and the real
+`BrowserSimulator` chrome, with the tab strip, the lock icon, and an address bar
+that changes from `firstbank.example` to `firstbank.example/reset?token=abc123`
+when the emailed link is followed. Both sit in the standard `DraggableWindow`.
+
+**How, without disturbing nine lessons.** `GuidedEmailTask` gained four purely
+additive props — `seedInbox`, `highlightEmail`, `highlightEmailAction`, and the
+`onOpenEmail` / `onEmailAction` callbacks. Nothing existing reads them, and the
+host drives the app from its own step list rather than the sim owning steps it
+does not have. `seedInbox` entries may carry an `actionLabel`, which renders as
+a button at the foot of the message body: a link inside an email, which is what
+the lesson is actually about. Reused by the next lesson that needs a message the
+default inbox does not have.
+
+**One real defect found on the way.** The first fitting put a 520px-wide window
+on a 435px-wide desktop. It hung off the right edge, produced a sideways
+scrollbar inside the sim, and cut off the bottom of the page — which on step 1
+is the ringed **Forgot password?** link the learner is being told to click. So
+`DraggableWindow` gained an opt-in `fit` prop that measures its desktop on mount
+and shrinks to it. Opt-in, not automatic: `FakeDesktop` cascades several windows
+deliberately, and clamping would collapse that cascade on a narrow pane. All
+five single-window frames in `GuidedTroubleshootingTask` now use it.
+
+**Verified** by playing the lesson end to end in the browser — six steps, a real
+Mail inbox with the bank's message ringed at the top, the link inside the body,
+the address bar carrying the reset token, through to "Signed in as
+you@example.com" and *Lesson complete*. Then the whole suite: solve-check
+132/132, mission-check 18/18, desktop-check, recovery-check, hostile-check,
+demo-check, check-lessons (198), check-actions, spelling, `tsc`, `lint`.

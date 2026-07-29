@@ -372,6 +372,15 @@ Without `seedDraft`, the task starts at the Inbox as normal:
 }
 ```
 
+**Seeding an inbox from a host component** (not from lesson JSON): `GuidedEmailTask`
+also takes `seedInbox` — extra Inbox messages, each optionally carrying an
+`actionLabel` that renders as a button at the foot of the body, i.e. a link inside
+an email. Pair it with `highlightEmail` (pulse a row by subject),
+`highlightEmailAction` (pulse that link), and the `onOpenEmail` / `onEmailAction`
+callbacks. This is how Unit 11's password-reset scenario puts a bank's reset email
+in the **real** Mail app instead of drawing its own; use it rather than hand-rolling
+an inbox anywhere else.
+
 Actions: `open-email` (`target`: the email's **subject**, in every folder), `compose`, `set-to`/`set-cc`/`set-bcc`/`set-subject`/`set-body` (`value`), `attach` (2-phase: click paperclip then pick file from picker; `target` is filename), `send`, `reply`, `forward`, `delete`, `mark-spam`, `archive` (each takes an optional `target` subject — without one, any open email satisfies the step), `go-to-folder` (`target`: Inbox/Sent/Spam/Archive), `unspam` (in Spam folder), `move-to-inbox` (in Archive). After sending a reply, a "Sent — Undo" pill appears with a 30-second countdown.
 
 #### `guided-photos` schema
@@ -511,7 +520,7 @@ Scenarios for common computer problems. Each lesson specifies a `scenario` that 
 
 The **`public-wifi` scenario** (inferred from `join-network` or `captive-portal-continue`): the desktop boots offline, the menu-bar WiFi list offers café networks, joining one shows "Connecting…" then drops the learner on a captive-portal sign-in page, and Continue puts them online. Settings in the dock then opens a Privacy panel with a cross-site-tracking toggle. Steps use: `open-wifi-panel`, `join-network`, `captive-portal-continue`, `open-settings-privacy`, `toggle-privacy-tracking`.
 
-The **`password-reset` scenario** (inferred from `click-forgot-link` or `open-mail-from-dock`): starts on a bank login form in the browser, spans to the Mail app in the dock for the reset email, and the link in that email hands control back to the browser for the new-password form. Finishing shows a signed-in account panel. Steps use: `click-forgot-link`, `open-mail-from-dock`, `open-reset-email`, `click-reset-link`, `type-new-password`, `confirm-login`.
+The **`password-reset` scenario** (inferred from `click-forgot-link` or `open-mail-from-dock`): starts on a bank login form in the browser, spans to the Mail app in the dock for the reset email, and the link in that email hands control back to the browser for the new-password form. Finishing shows a signed-in account panel. Steps use: `click-forgot-link`, `open-mail-from-dock`, `open-reset-email`, `click-reset-link`, `type-new-password`, `confirm-login`. Both halves are the **real** apps in a `DraggableWindow` — `GuidedEmailTask` seeded via `seedInbox`, and `BrowserSimulator` for the bank site. Closing either window is not a dead end: the desktop says so and the dock reopens it.
 
 The `error-restart` scenario: on mount a system error dialog appears ("Something went wrong"); learner clicks OK to dismiss → clicks Settings in the dock → clicks Restart button → confirms in a dialog → 1.5s black-screen animation → success desktop. Steps use: `dismiss-error`, `open-settings`, `click-restart`, `confirm-restart`.
 
@@ -690,6 +699,7 @@ After completing a module, the user can navigate to the next module or back to `
 - **Server vs Client**: Lesson data loading (`getAllLessons`, etc.) is server-only (uses `fs`). Progress, chat, and all playground components are `"use client"`.
 - **Fullscreen**: `LessonPlaygroundPane` uses the native Fullscreen API. Fullscreen state persists across sub-lesson navigation within a module.
 - **FakeDesktop**: A self-contained desktop environment with a **10-app dock**: Messages, Browser, Files, Mail, Settings, Photos, App Market, Calendar, Reminders, Notes. The menu bar has a working clock, battery indicator (real Battery API), WiFi panel, and optional Do Not Disturb indicator. The taskbar shows open-app indicators (green dots). Settings changes (dark mode, brightness, Night Shift, text scale) are live via `SimThemeContext`.
+- **Window sizing**: `DraggableWindow` takes a pixel `initial` geometry plus an opt-in `fit` prop that measures the desktop on mount and shrinks to it. Single-window lessons should pass `fit` — the playground pane is half the page in a lesson and the whole screen in fullscreen, and an unfitted window hangs off the edge and clips whatever the step is highlighting. `FakeDesktop` deliberately does **not** use it: clamping would collapse its cascade.
 - **Multiple windows**: several apps can be open at once, cascaded so no window hides the one before it. Two lists drive this and they are deliberately separate: `openApps` fixes **DOM order** and is never re-sorted, `stack` holds **z-order**. Re-sorting the rendered list moves a window's element between mousedown and mouseup, which cancels the click — clicking Close on a background window raised it and swallowed the click. Raise windows by changing `stack` only. Every window body comes from `Desktop/AppBody.tsx`; `npm run desktop-check` guards the whole behavior.
 - **Desktop-first launching**: Every guided lesson starts on the desktop — the learner opens the app from the dock themselves. `DesktopLaunch` wraps guided sims: it renders FakeDesktop with a highlighted dock icon and a dark banner ("Open Mail — click the glowing icon"), then swaps to the guided sim once the app is opened. No guided lesson should auto-open its app.
 - **SimulatorFrame**: Every playground activity is wrapped in `SimulatorFrame` — a dark `#1d2733` banner with instructions, optional step progress bar, and a two-stage completion (0.8s celebration overlay, then a slim persistent "lesson complete" banner that doesn't block interaction). Older Unit 1–2 tasks use single-activity mode (no step counter). Pass `chrome={false}` for sims that own a full-bleed desktop or browser. The duration constant `CELEBRATION_MS = 800` is exported from `SimulatorFrame.tsx` and imported by `KeyboardNavTask`.

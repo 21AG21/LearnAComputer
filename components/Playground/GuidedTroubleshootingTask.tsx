@@ -9,6 +9,21 @@ import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
 import DraggableWindow from "./Desktop/DraggableWindow";
 import AppBody, { type AppBodyId } from "./Desktop/AppBody";
 import SettingsApp from "./Desktop/SettingsApp";
+import BrowserSimulator from "./BrowserSimulator";
+import GuidedEmailTask from "./GuidedEmailTask";
+
+/** The bank's reset message, in the real Mail app's Inbox. */
+const PR_RESET_SUBJECT = "Reset your password";
+const PR_RESET_EMAIL = {
+  id: "pr-bank-reset",
+  from: "First National Bank",
+  subject: PR_RESET_SUBJECT,
+  date: "Just now",
+  body:
+    "We received a request to reset the password for your account. Use the button below within one hour.\n\n" +
+    "If this was not you, you can ignore this message — your password has not changed.",
+  actionLabel: "Reset my password",
+};
 
 /** The dock keys apps by label ("App Market"); AppBody keys them by id ("app-market"). */
 function toAppBodyId(label: string): AppBodyId {
@@ -100,9 +115,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const [portalStage, setPortalStage] = useState<"offline" | "portal" | "online">("offline");
   const [privacyOpen, setPrivacyOpen] = useState(false);
 
-  // password-reset state
-  const [prStage, setPrStage] = useState<"login" | "sent" | "mail" | "email" | "reset" | "done">("login");
-  const [prApp, setPrApp] = useState<"browser" | "mail">("browser");
+  // password-reset state. `prStage` is the *bank site's* stage only — the Mail
+  // half is the real Mail app now and owns its own reading state.
+  const [prStage, setPrStage] = useState<"login" | "sent" | "reset" | "done">("login");
+  const [prApp, setPrApp] = useState<"browser" | "mail" | null>("browser");
   const [prPassword, setPrPassword] = useState("");
   const [forgottenNetworks, setForgottenNetworks] = useState<string[]>([]);
   const [searchingNetwork, setSearchingNetwork] = useState<string | null>(null);
@@ -313,12 +329,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   function handleOpenMailFromDock() {
     setPrApp("mail");
-    setPrStage("mail");
     tryStep((s) => s.action === "open-mail-from-dock");
   }
 
   function handleOpenPrResetEmail() {
-    setPrStage("email");
     tryStep((s) => s.action === "open-reset-email");
   }
 
@@ -558,6 +572,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
               key={freeApp}
               title={ALL_DOCK_APPS.find((a) => toAppBodyId(a.id) === freeApp)?.label ?? "App"}
               initial={{ x: 24, y: 16, w: 520, h: 380 }}
+              fit
               onClose={() => setFreeApp(null)}
               onMinimize={() => setFreeApp(null)}
             >
@@ -736,6 +751,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
               title="Settings"
               icon={<GearIcon size={16} />}
               initial={{ x: 24, y: 16, w: 560, h: 400 }}
+              fit
               onClose={() => setPrivacyOpen(false)}
               onMinimize={() => setPrivacyOpen(false)}
             >
@@ -749,49 +765,62 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             </DraggableWindow>
           )}
 
-          {/* Password reset — browser login ▸ Mail ▸ back to the browser */}
-          {view === "desktop" && mode === "password-reset" && (
-            <div className="p-4">
-              {prApp === "mail" ? (
-                <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
-                  <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
-                    <MailIcon size={16} />
-                    <span className="font-bold text-sm">Mail</span>
-                    <span className="text-xs text-gray-500">/ Inbox</span>
-                  </div>
-                  {prStage === "mail" ? (
-                    <button
-                      onClick={handleOpenPrResetEmail}
-                      className={`w-full text-left px-4 py-3 border-b hover:bg-gray-50 ${hl("reset-email-row") ? pulse : ""}`}
-                    >
-                      <p className="text-sm font-semibold">First National Bank</p>
-                      <p className="text-xs text-gray-600">Reset your password</p>
-                      <p className="text-[10px] text-gray-400">Just now</p>
-                    </button>
-                  ) : (
-                    <div className="p-4">
-                      <h3 className="font-bold text-sm mb-0.5">Reset your password</h3>
-                      <p className="text-xs text-gray-500 mb-3">From First National Bank · Just now</p>
-                      <p className="text-sm mb-4">
-                        We received a request to reset the password for your account. Use the button below within one hour.
-                        If this was not you, you can ignore this message.
-                      </p>
-                      <button
-                        onClick={handleClickPrResetLink}
-                        className={`px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 ${hl("reset-email-link") ? pulse : ""}`}
-                      >
-                        Reset my password
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="max-w-sm mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
-                  <div className="bg-gray-100 border-b-2 border-gray-200 px-4 py-2 flex items-center gap-2">
-                    <GlobeIcon size={16} />
-                    <span className="font-mono text-xs text-gray-600">firstbank.example</span>
-                  </div>
-                  <div className="p-4">
+          {/* Password reset — browser login ▸ Mail ▸ back to the browser.
+              Both halves are the apps the rest of the course teaches: the real Mail
+              app from the dock, and the same browser chrome Units 1 and 4 use, each
+              in the standard window frame. This used to be two hand-drawn cards
+              floating on the wallpaper, so the Mail icon opened one thing in Unit 6
+              and something else entirely here. */}
+          {view === "desktop" && mode === "password-reset" && prApp === null && (
+            <div className="p-4 text-center py-10">
+              <p className="text-sm text-gray-600">Nothing is open.</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Click Browser in the dock to go back to the bank&apos;s sign-in page, or Mail to read your inbox.
+              </p>
+            </div>
+          )}
+
+          {view === "desktop" && mode === "password-reset" && prApp === "mail" && (
+            <DraggableWindow
+              title="Mail"
+              icon={<MailIcon size={16} />}
+              initial={{ x: 12, y: 12, w: 520, h: 470 }}
+              fit
+              onClose={() => setPrApp(null)}
+              onMinimize={() => setPrApp(null)}
+            >
+              <GuidedEmailTask
+                goal=""
+                steps={[]}
+                freePlay
+                seedInbox={[PR_RESET_EMAIL]}
+                highlightEmail={hl("reset-email-row") ? PR_RESET_SUBJECT : undefined}
+                highlightEmailAction={hl("reset-email-link")}
+                onOpenEmail={(subject) => { if (subject === PR_RESET_SUBJECT) handleOpenPrResetEmail(); }}
+                onEmailAction={handleClickPrResetLink}
+                onResult={() => {}}
+              />
+            </DraggableWindow>
+          )}
+
+          {view === "desktop" && mode === "password-reset" && prApp === "browser" && (
+            <DraggableWindow
+              title="Browser"
+              icon={<GlobeIcon size={16} />}
+              initial={{ x: 12, y: 12, w: 520, h: 470 }}
+              fit
+              onClose={() => setPrApp(null)}
+              onMinimize={() => setPrApp(null)}
+            >
+              <BrowserSimulator
+                bezel={false}
+                showControls={false}
+                tabTitle="First National Bank"
+                url={prStage === "reset" ? "firstbank.example/reset?token=abc123" : "firstbank.example"}
+                onExit={() => setPrApp(null)}
+              >
+                <div className="h-full overflow-y-auto bg-white">
+                  <div className="max-w-sm mx-auto p-4">
                     {prStage === "login" && (
                       <>
                         <h3 className="font-bold text-base mb-3 text-center">Sign in</h3>
@@ -818,7 +847,9 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     {prStage === "reset" && (
                       <>
                         <h3 className="font-bold text-base mb-1 text-center">Choose a new password</h3>
-                        <p className="text-[10px] text-gray-400 font-mono mb-3 text-center truncate">firstbank.example/reset?token=abc123</p>
+                        {/* The address bar carries the reset URL now, so the page
+                            does not have to spell it out a second time. */}
+                        <p className="text-xs text-gray-500 mb-3 text-center">This link came from your email and works once.</p>
                         <input
                           value={prPassword}
                           onChange={(e) => handleTypeNewPassword(e.target.value)}
@@ -846,8 +877,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     )}
                   </div>
                 </div>
-              )}
-            </div>
+              </BrowserSimulator>
+            </DraggableWindow>
           )}
 
           {view === "desktop" && mode === "frozen" && (
@@ -1078,6 +1109,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
               title="Settings"
               icon={<GearIcon size={16} />}
               initial={{ x: 24, y: 16, w: 560, h: 400 }}
+              fit
               onClose={() => setErSettingsOpen(false)}
               onMinimize={() => setErSettingsOpen(false)}
             >

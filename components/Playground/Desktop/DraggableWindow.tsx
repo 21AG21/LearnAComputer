@@ -13,6 +13,15 @@ export interface DraggableWindowProps {
   icon?: ReactNode;
   /** Starting position and size (used on first mount only). */
   initial: { x: number; y: number; w: number; h: number };
+  /**
+   * Shrink `initial` on mount so the window fits inside its desktop.
+   *
+   * Off by default: `FakeDesktop` cascades several windows on purpose and must
+   * keep its offsets. On by default would collapse that cascade on a narrow
+   * pane. Single-window lessons want it — a 520px window on a 435px pane hangs
+   * off the right edge and clips the very control the step is ringing.
+   */
+  fit?: boolean;
   /** When true, the window hides but children stay mounted (state preserved). */
   minimized?: boolean;
   onClose: () => void;
@@ -40,12 +49,13 @@ export interface DraggableWindowProps {
 }
 
 export default function DraggableWindow({
-  title, icon, initial, minimized, onClose, onMinimize, onMaximize,
+  title, icon, initial, fit, minimized, onClose, onMinimize, onMaximize,
   highlight, onMoved, onResized, className, z, onFocus, focused = true, children,
 }: DraggableWindowProps) {
   const [pos, setPos] = useState({ x: initial.x, y: initial.y });
   const [size, setSize] = useState({ w: initial.w, h: initial.h });
   const [isMaximized, setIsMaximized] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const dragRef = useRef<{ cx: number; cy: number; ix: number; iy: number; lastX: number; lastY: number } | null>(null);
   const resizeRef = useRef<{ cx: number; cy: number; iw: number; ih: number; lastW: number; lastH: number } | null>(null);
@@ -57,6 +67,25 @@ export default function DraggableWindow({
   onMovedRef.current = onMoved;
   const onResizedRef = useRef(onResized);
   onResizedRef.current = onResized;
+
+  // Fit to the desktop once, on mount. Measured rather than guessed, because the
+  // playground pane is half the page in a lesson and the whole screen in fullscreen.
+  useEffect(() => {
+    if (!fit) return;
+    const host = rootRef.current?.parentElement;
+    if (!host?.clientWidth || !host.clientHeight) return;
+    const margin = 8;
+    const w = Math.max(MIN_W, Math.min(initial.w, host.clientWidth - initial.x - margin));
+    const h = Math.max(MIN_H, Math.min(initial.h, host.clientHeight - initial.y - margin));
+    setSize({ w, h });
+    setPos({
+      x: Math.max(0, Math.min(initial.x, host.clientWidth - w - margin)),
+      y: Math.max(0, Math.min(initial.y, host.clientHeight - h - margin)),
+    });
+    // Geometry is a mount-time decision — re-running would yank a window the
+    // learner has since dragged.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fit]);
 
   useEffect(() => {
     function handleMove(e: MouseEvent) {
@@ -142,6 +171,7 @@ export default function DraggableWindow({
 
   return (
     <div
+      ref={rootRef}
       className={`absolute shadow-2xl border-2 rounded-lg overflow-hidden flex flex-col bg-white select-none ${
         focused ? "border-gray-700" : "border-gray-400"
       } ${className ?? ""}`}

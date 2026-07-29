@@ -218,16 +218,18 @@ hides one, and never conclude "flaky" from a re-run that happened to pass.
 
 ### The next engineering item
 
-**Stage C (task #123).** `GuidedTroubleshootingTask`'s `password-reset`
-scenario (~line 753) hand-draws a mini Mail panel and a mini browser instead of
-using the real apps. It violates "one app per icon", and a learner notices
-immediately after doing all of Unit 6 in the real Mail.
+**Stage C's password-reset half is done** (2026-07-28) — see the session log
+below and `docs/SAME_ICON_AUDIT.md` § *Round two*. What is left of task #123 is
+smaller and lower-stakes:
 
-Not a small change, which is why it is still here: `MailApp` is a thin wrapper
-around `GuidedEmailTask`, so doing it properly means teaching that sim to seed
-an extra inbox message **and** to render a clickable link inside an email body —
-a component nine Unit 6 lessons depend on. Do it at the start of a session, not
-the end, and re-run the full solve-check afterwards.
+**The error-code scenario's support page.** `GuidedTroubleshootingTask` still
+hand-draws `support.example/help` as a card with a fake address bar, and the
+`public-wifi` captive portal the same way. Both are web pages and belong in
+`BrowserSimulator` inside a `DraggableWindow`, exactly as the bank site now is —
+the pattern and the `fit` prop both exist, so this is an hour, not a day. Lower
+stakes than the Mail one was: no unit teaches a support site the way Unit 6
+teaches Mail, so no learner arrives with an expectation to violate. It is
+nonetheless the last hand-drawn browser in the course.
 
 ### What is waiting on the founder, not on code
 
@@ -238,6 +240,20 @@ the end, and re-run the full solve-check afterwards.
 
 ## Session log
 
+- **2026-07-28 (the last hand-drawn Mail):** Stage C's headline item, closed.
+  Unit 11's password-reset lesson drew its own Mail app — a flat card with one
+  row in it — behind the same dock icon Unit 6 spends nine lessons teaching, and
+  its own browser as a card with a gray strip for an address bar. Both are now
+  the real apps in the standard window frame: `GuidedEmailTask` with the full
+  sidebar and reading pane, and `BrowserSimulator` with a tab strip, a lock
+  icon, and an address bar that changes to the reset URL when the emailed link
+  is followed. Done with four additive props on the email sim (`seedInbox`,
+  `highlightEmail`, `highlightEmailAction`, `onOpenEmail`/`onEmailAction`), so
+  none of the nine Unit 6 lessons changed. Fitting it turned up a real defect —
+  a 520px window on a 435px desktop hung off the edge and clipped the very
+  control step 1 was ringing — fixed with an opt-in `fit` prop on
+  `DraggableWindow` that measures its desktop on mount. Played end to end in the
+  browser; every harness green. Details in `docs/SAME_ICON_AUDIT.md`.
 - **2026-07-28 (everything comes out):** The founder's call, and it makes the
   product simpler and the pitch stronger: **no login, no Supabase, no user data
   of any kind.** Deleted the sign-in page and magic-link callback, the auth
