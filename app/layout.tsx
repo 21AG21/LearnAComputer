@@ -17,8 +17,12 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "LearnAComputer",
-  description: "Basic computer literacy, taught step by step.",
+  // Says what the site is, not just what it is called: this is the fallback
+  // title for any page that does not set its own, and the one a search result
+  // shows. Pages that export their own title still win.
+  title: "LearnAComputer — learn to use a computer, step by step",
+  description:
+    "Hands-on computer lessons for complete beginners. Practice clicking, typing, email, video calls and staying safe online inside a computer you cannot break.",
 };
 
 const NAV = [

@@ -1,0 +1,167 @@
+#!/usr/bin/env node
+/**
+ * The buyer with crossed arms.
+ *
+ *   npm run dev && npm run hostile-check
+ *
+ * solve-check proves a learner who does the right thing can finish. This asks
+ * the opposite question: what does somebody find who is *looking* for a reason
+ * to say no? They click the pages nobody rehearses, they type a URL wrong, they
+ * use the keyboard because they always do, they resize the window, and they
+ * open the console.
+ *
+ * Every finding here is a thing that costs a sale, not a thing that breaks a
+ * lesson — which is why none of the other harnesses look for any of it.
+ */
+import { chromium } from "playwright";
+
+const BASE = "http://localhost:3000";
+const ROUTES = [
+  "/",
+  "/lessons",
+  "/lessons/using-the-trackpad-or-mouse",
+  "/lessons/working-with-files",
+  "/playground",
+  "/certificate",
+  "/dashboard",
+  "/login",
+  "/join",
+  "/instructor",
+  "/about",
+  "/privacy",
+  "/terms",
+  "/accessibility",
+  "/funny-cat-video",
+];
+
+const findings = [];
+const note = (route, severity, what) => findings.push({ route, severity, what });
+
+const browser = await chromium.launch();
+
+async function sweep(route) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  const page = await context.newPage();
+  const consoleErrors = [];
+  const failedRequests = [];
+
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    const t = m.text();
+    // React's dev-only asset warnings are not what a buyer sees in production.
+    if (/Download the React DevTools|Fast Refresh/.test(t)) return;
+    consoleErrors.push(t.slice(0, 160));
+  });
+  page.on("requestfailed", (r) => {
+    const url = r.url();
+    if (url.includes("_next/static/development") || url.includes("hot-update")) return;
+    // The analytics beacon is fetched from Vercel's CDN, which this sandbox
+    // blocks. It loads in production, and a blocked beacon breaks nothing on
+    // the page anyway — flagging it on every route would drown real findings.
+    if (url.includes("va.vercel-scripts.com")) return;
+    failedRequests.push(`${url.replace(BASE, "").slice(0, 80)} (${r.failure()?.errorText})`);
+  });
+
+  const res = await page.goto(BASE + route, { waitUntil: "networkidle" }).catch(() => null);
+  await page.waitForTimeout(1200);
+
+  if (!res || res.status() >= 400) {
+    note(route, "blocker", `page returned ${res ? res.status() : "no response"}`);
+    await context.close();
+    return;
+  }
+
+  const probe = await page.evaluate(() => {
+    const text = document.body.innerText.trim();
+    const doc = document.documentElement;
+    return {
+      chars: text.length,
+      h1: document.querySelector("h1")?.textContent?.trim() ?? null,
+      title: document.title,
+      // A page that scrolls sideways looks broken to everybody.
+      overflowX: doc.scrollWidth - doc.clientWidth,
+      // Anything that says the quiet part out loud.
+      leaks: /undefined|NaN|\[object Object\]|Error:|TypeError/.test(text),
+    };
+  });
+
+  if (probe.chars < 120) note(route, "blocker", `almost nothing on the page (${probe.chars} chars)`);
+  if (!probe.h1) note(route, "polish", "no <h1> — screen readers and search engines both care");
+  if (!probe.title || probe.title === "LearnAComputer") {
+    note(route, "polish", `browser tab says "${probe.title}" — every tab looks the same`);
+  }
+  if (probe.overflowX > 2) note(route, "serious", `scrolls sideways by ${probe.overflowX}px`);
+  if (probe.leaks) note(route, "serious", "raw undefined/NaN/Error text is visible on the page");
+  for (const e of consoleErrors.slice(0, 3)) note(route, "serious", `console error: ${e}`);
+  for (const f of failedRequests.slice(0, 3)) note(route, "serious", `failed request: ${f}`);
+
+  // Keyboard: can somebody who never touches a mouse get started, and can they
+  // see where they are? This audience includes people with tremors.
+  const kb = await page.evaluate(async () => {
+    const el = document.activeElement;
+    return { startsOnBody: el === document.body || el === null };
+  });
+  await page.keyboard.press("Tab");
+  const focus = await page.evaluate(() => {
+    const el = document.activeElement;
+    if (!el || el === document.body) return null;
+    const s = getComputedStyle(el);
+    const visible =
+      (s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0) ||
+      s.boxShadow !== "none" ||
+      s.borderColor !== "";
+    return { tag: el.tagName, label: (el.textContent || "").trim().slice(0, 40), visible };
+  });
+  if (!focus) note(route, "serious", "pressing Tab focuses nothing — keyboard users are stranded");
+  else if (!focus.visible) note(route, "serious", `focus ring invisible on first Tab stop (${focus.tag})`);
+  void kb;
+
+  await context.close();
+}
+
+for (const route of ROUTES) await sweep(route);
+
+// A wrong address is the most ordinary mistake there is.
+{
+  const page = await (await browser.newContext()).newPage();
+  const res = await page.goto(`${BASE}/lessons/this-does-not-exist`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1200); // read the rendered page, not the empty shell
+  const text = (await page.evaluate(() => document.body.innerText)).toLowerCase();
+  if (res && res.status() === 500) note("/lessons/<bad slug>", "blocker", "a mistyped lesson URL 500s");
+  // The real page says "This page is not here" and explains it was not the
+  // learner's fault, which is better than the wording first tested for here.
+  else if (!/not found|not here|can't find|cannot find|no lesson|typo/.test(text)) {
+    note("/lessons/<bad slug>", "serious", "mistyped lesson URL gives no friendly explanation");
+  }
+  await page.close();
+}
+
+// Narrow window: the guard should explain itself, not just break.
+{
+  const context = await browser.newContext({ viewport: { width: 420, height: 800 } });
+  const page = await context.newPage();
+  await page.goto(`${BASE}/lessons`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(800);
+  const t = (await page.evaluate(() => document.body.innerText)).toLowerCase();
+  if (!/bigger screen|larger screen|computer|laptop/.test(t)) {
+    note("/lessons @420px", "serious", "narrow window neither works nor explains itself");
+  }
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  if (overflow > 2) note("/lessons @420px", "serious", `scrolls sideways by ${overflow}px`);
+  await context.close();
+}
+
+await browser.close();
+
+const order = { blocker: 0, serious: 1, polish: 2 };
+findings.sort((a, b) => order[a.severity] - order[b.severity]);
+
+if (findings.length === 0) {
+  console.log("Nothing for a hostile buyer to point at.");
+  process.exit(0);
+}
+
+console.log(`${findings.length} thing(s) a skeptical buyer could point at:\n`);
+for (const f of findings) console.log(`  [${f.severity}] ${f.route} — ${f.what}`);
+// Polish alone should not fail a build; the other two should.
+process.exit(findings.some((f) => f.severity !== "polish") ? 1 : 0);

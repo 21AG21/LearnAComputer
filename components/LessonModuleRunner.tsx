@@ -77,6 +77,9 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.moduleSlug, searchParams]);
 
+  /** When the lesson last moved on — see the guard in handleNext. */
+  const lastAdvanceRef = useRef(0);
+
   function handleStart() {
     setStarted(true);
   }
@@ -92,6 +95,15 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   }
 
   function handleNext() {
+    // This course teaches double-clicking, and its learners double-click
+    // everything — including Next. Two presses used to advance two lessons, so
+    // a page of teaching went by unseen and unread, with nothing on screen to
+    // say it had. Nobody reads a lesson in a fifth of a second, so a second
+    // press that fast is the tail of a double-click, not a second intention.
+    const now = performance.now();
+    if (now - lastAdvanceRef.current < 500) return;
+    lastAdvanceRef.current = now;
+
     if (!hasGate) markComplete(subLesson.slug);
     if (!isLastSubLesson) {
       setIndex((i) => i + 1);

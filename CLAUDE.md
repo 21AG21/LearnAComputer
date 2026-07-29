@@ -18,6 +18,7 @@ npm run solve-check  # headless: PLAYS all 132 playable activities to the end (c
 npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
+npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -27,7 +28,7 @@ python3 scripts/audit-order.py    # curriculum-shape report: order, module size,
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 ```
 
-All three browser checks need `npm run dev` running on :3000 first.
+All the browser checks need `npm run dev` running on :3000 first.
 
 After touching any sim component or lesson steps, run **solve-check as well as
 mount-check** — mounting proves an activity renders; solving proves a learner can
@@ -44,6 +45,12 @@ device pixel ratio apart from each other. Keep it green at **18/18**.
 After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
 **desktop-check** — no guided lesson opens two apps at once, so solve-check
 cannot see a broken window stack, and multi-window is what Unit 1 teaches.
+
+Before any demo, and after touching site chrome or any page outside a lesson,
+run **hostile-check**. Every other harness proves the product works when it is
+used correctly; this one asks what a buyer finds who is hunting for a reason to
+say no — console errors, sideways scrolling, a page with no heading, a mistyped
+URL, a keyboard user with no visible focus. See `docs/HOSTILE_BUYER_AUDIT.md`.
 
 ## Project Structure
 

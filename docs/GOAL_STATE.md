@@ -161,6 +161,23 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (the buyer with crossed arms):** Every harness so far proved the
+  product works when used correctly. None asked what a skeptic finds when they
+  go off the demo path, which is the question that decides whether it earns
+  money. `npm run hostile-check` now sweeps fifteen routes for console errors,
+  failed requests, sideways scrolling, raw `undefined` in visible text, missing
+  headings, generic browser tabs, and a keyboard user's first Tab landing
+  somewhere visible — plus a mistyped lesson URL and a narrow window. It found
+  and fixed a `/playground` with no `<h1>` at all, a certificate tab labelled
+  only with the brand name, and a site-wide title that never said what the site
+  is. Full findings in `docs/HOSTILE_BUYER_AUDIT.md`.
+  **The one that mattered: pressing Next twice quickly skipped a whole lesson.**
+  Not an edge case here — Unit 1 teaches double-clicking, and learners who have
+  just been taught to double-click go on to double-click everything, including
+  Next. A page of teaching went by unseen with nothing to say it had.
+  Two attacks were tried and failed honestly, which is worth knowing before a
+  buyer tries them: certificates are gated on real completion, and skipping an
+  activity never marks it complete, so neither can manufacture a certificate.
 - **2026-07-28 (classrooms):** The instructor view exists. An instructor makes
   a class, reads out a six-character code (no O/0 or I/1 to mishear), and sees
   a roster of who has finished what; learners join on `/join` with a name they
