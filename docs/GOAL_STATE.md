@@ -50,7 +50,8 @@ number, because everything outside it is assumption wearing the same clothes.
 
 | **Not** proven by machine | Why, and what covers it instead |
 |---|---|
-| 20 reflex / trackpad-gesture activities | A script cannot pinch a trackpad. Mount-checked, then driven by hand |
+| **6** reflex / trackpad-gesture activities | A script genuinely cannot pinch a trackpad or beat a falling-shapes game. Mount-checked, then driven by hand |
+| **14** ordinary click-and-type activities | `type-text` ×3, `edit-text` ×2, `url-navigator` ×2, and one each of `drag-sort-files`, `spot-the-fake`, `keyboard-shortcut`, `browser-right-click`, `edit-file`, `file-explorer-open`, `open-all-apps`. A script **could** play these — they predate the step-list architecture the solver walks, so it has nothing to follow. Mount-checked only. **This is the largest remaining coverage gap and it was mislabelled as "trackpad gestures" until 2026-07-29** |
 | Whether the writing is *good* | Reading level is measured; persuasion is not |
 | Whether a real buyer says yes | No amount of harness output substitutes for a prospect's face |
 
@@ -253,6 +254,19 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (auditing the instruments, not the product):** Round eleven's
+  lesson was that the returns now come from auditing the harnesses. So: do the
+  denominators mean what they say? They reconcile — 170 queued = 24 exempt by
+  type + 14 with no step list + 132 played — but the **sales playbook's footnote
+  did not.** It called all 20 unplayed activities "reflex and trackpad-gesture
+  activities… because a script cannot pinch a trackpad". True of 6. False of the
+  other **14**, which are typing a sentence, fixing text, typing a web address,
+  sorting files, spot-the-fake, copy-paste, right-click, opening a file, opening
+  every app — all perfectly scriptable, unplayed only because they predate the
+  step-list architecture. That is the **fourth** false claim found in the
+  customer-facing material this session, and the one most likely to be caught by
+  a technical buyer reading the repo. Corrected, and the real gap is now named in
+  the table above rather than dressed as a limitation of physics.
 - **2026-07-29 (the harness was skipping most of the course):** Chased the one
   contradiction left open — ring-check and stray-check disagreeing about
   `photos-app` — and stray-check was wrong, about most of the course. It waited

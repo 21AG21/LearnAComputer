@@ -250,10 +250,24 @@ use, with no account, no cookies, no analytics and no third-party requests** —
 asserted on every route by `npm run hostile-check` and verifiable by the buyer
 in their own developer tools.
 
-The honest footnote, if pressed: the remaining 20 are reflex and trackpad-
-gesture activities that are proven to render but are not auto-played, because
-a script cannot pinch a trackpad. Say that plainly — the precision is what
-makes the 150 believable.
+The honest footnote, if pressed — and it was wrong until 2026-07-29, so read
+it carefully. The 20 that are **not** auto-played break down as:
+
+- **6 are genuinely un-scriptable:** the falling-shapes reflex game, the Tab
+  focus game, drag-match-onto-an-image, pinch-zoom, and the scroll-for-a-code
+  lesson. A script cannot pinch a trackpad. These are mount-checked and driven
+  by hand.
+- **14 are ordinary click-and-type activities** — typing a sentence, fixing
+  text, typing a web address, sorting files, spotting the fake, copy-paste,
+  right-click, opening a file, opening every app. A script *could* play these;
+  they predate the step-list architecture the solver follows, so it has nothing
+  to walk. They are mount-checked, not played.
+
+The old wording called all 20 "reflex and trackpad-gesture activities", which
+was false for 14 of them and would not have survived a technical buyer reading
+the repo. If asked, say the true thing: 150 of 170 are machine-proven, 6 cannot
+be, and 14 could be but are not yet. The precision is what makes the 150
+believable, and only true precision does that.
 
 **Removed on purpose, 2026-07-28 — do not offer to build them back on a call:**
 accounts and sign-in, cross-device progress sync, and the classroom/instructor

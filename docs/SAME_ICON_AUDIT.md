@@ -857,3 +857,54 @@ Two harnesses disagreeing about the same lesson is information, and it is the
 only reason any of this was found. Neither was reporting an error. Both were
 confidently reporting different worlds. **When two checks disagree, one of them
 is lying — go and find out which before trusting either.**
+
+## Round twelve (2026-07-29): the number in the pitch was dressed up
+
+Round eleven's finding was that a harness silently skipped most of the course
+while printing a confident count. The obvious follow-up: **do the other checks'
+numbers mean what they say?**
+
+They reconcile. `solve-check` queues 170 lessons (198 minus 28 explanation-only)
+and the arithmetic is exact:
+
+| | |
+|---|---|
+| exempt by type (reflex, gesture, real-world) | 24 |
+| exempt because the lesson has no step list | 14 |
+| **actually played** | **132** |
+
+What did **not** reconcile is how the sales playbook described the shortfall:
+
+> *"the remaining 20 are reflex and trackpad-gesture activities that are proven
+> to render but are not auto-played, because a script cannot pinch a trackpad.
+> Say that plainly — the precision is what makes the 150 believable."*
+
+That is true of **six**. The other **fourteen** are `type-text` ×3, `edit-text`
+×2, `url-navigator` ×2, and one each of `drag-sort-files`, `spot-the-fake`,
+`keyboard-shortcut`, `browser-right-click`, `edit-file`, `file-explorer-open`,
+`open-all-apps` — typing a sentence, fixing a typo, typing a web address,
+sorting files by clicking, spotting a scam, copy-paste, right-click, opening a
+file, opening every app. **A script could play every one of them.** They are
+unplayed because they predate the step-list architecture the solver walks, so
+there is nothing for it to follow.
+
+The sentence was written to make the number credible, and the credibility was
+counterfeit. Worse than a plain overstatement: it is a *technical* excuse, aimed
+at exactly the buyer most likely to open the repo and check it. This is the
+fourth false claim found in the customer-facing material this session — after
+sign-in, cross-machine progress, and the COPPA answer.
+
+Corrected in the playbook, and the real gap now sits in `GOAL_STATE.md`'s
+"not proven by machine" table as what it is: **the largest remaining coverage
+gap, and a fixable one.** Fourteen activities could be brought under
+solve-check by giving them step lists or teaching the solver their shapes. That
+is a real engineering item, and naming it honestly is what makes it get done
+instead of explained away.
+
+### Why `pitch-check` did not catch this
+
+It looks for phrases naming removed features and for counts that disagree with
+`content/lessons/`. Every number in that sentence was right — 20 is 20. What was
+false was the *characterisation*, and no regex finds that. The guard against
+this class is not a script; it is the habit of reading a claim next to the thing
+it claims about. Which is the whole method of this document.
