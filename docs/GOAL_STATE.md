@@ -80,6 +80,23 @@ have stranded a real learner mid-lesson:
     two objective completions in one tick silently dropped the first — any
     handler proving two objectives at once lost one.
 
+## The gate itself was lying about filtered runs (fixed 2026-07-28)
+
+`npm run solve-check -- some-slug` did **not** reliably play that lesson. The
+queue was derived live from the filter box, so a script that typed a slug and
+pressed Run in the same tick started on the filtered list and then wandered
+into the unfiltered one: a one-lesson filter played 28 lessons and reported
+"14 playable", a number matching neither the filter nor the course. Fixed in
+two places — `SolveCheck` now freezes the queue when Run is pressed, and the
+script waits for the queue to shrink before pressing it. The runner also
+**prints the slugs it played** on any filtered run, so the tool states its own
+scope instead of leaving it to be inferred.
+
+Unfiltered full-course runs were never affected, so every "132/132" in this
+ledger stands. But any *single-lesson* conclusion recorded before this date was
+weaker than it looked, including the first round of evidence about the flake
+below — that evidence was re-gathered after the fix.
+
 ## Known flake in the gate (do not confuse with a bug)
 
 `unit-6-assessment` failed a full-course run twice on 2026-07-28 (SolveCheck
@@ -111,6 +128,17 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (empty Notes, lying filter):** Opening all ten dock apps at
+  once on `/playground` — the founder's "full functionality" check — showed
+  nine apps with real content and **Notes as a blank white rectangle** with
+  three toolbar letters and no invitation to type. Nothing was broken, which
+  is why no harness had ever complained; it simply looked dead, on the screen
+  the demo lingers on. Notes now opens with a short shopping-list note on the
+  practice desktop, and the editor shows a placeholder whenever it is empty
+  (in lessons too, where an empty box was equally mute). Seeding is written
+  straight to the DOM so React does not own the contentEditable and no input
+  event fires — a seeded note must never satisfy a lesson's "type something"
+  step. Verifying that fix then exposed the filtered-run bug above.
 - **2026-07-28 (missions):** The last unproven category in the course is
   proven. Eighteen real-world missions — one per unit, plus the capstone —
   were exempt from solve-check by construction: their steps are satisfied by

@@ -21,12 +21,33 @@ interface GuidedNotesTaskProps {
   mode?: SimMode;
   hint?: string;
   freePlay?: boolean;
+  /** Starting contents, for the practice desktop. Never set during a lesson. */
+  initialHtml?: string;
   onResult: (success: boolean) => void;
 }
 
-export default function GuidedNotesTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedNotesTaskProps) {
+export default function GuidedNotesTask({
+  goal,
+  steps,
+  mode,
+  hint,
+  freePlay,
+  initialHtml,
+  onResult,
+}: GuidedNotesTaskProps) {
   const [toolbarNudge, setToolbarNudge] = useState<string | null>(null);
+  const [empty, setEmpty] = useState(!initialHtml);
   const editorRef = useRef<HTMLDivElement>(null);
+
+  // Seeded straight into the DOM rather than as children: this is a
+  // contentEditable, so React must not own what is inside it. Writing it here
+  // also means no input event fires, which keeps a seeded note from satisfying
+  // a lesson's "type something" step on mount.
+  useEffect(() => {
+    if (initialHtml && editorRef.current && !editorRef.current.innerHTML) {
+      editorRef.current.innerHTML = initialHtml;
+    }
+  }, [initialHtml]);
 
   const { step, stepIndex, finished, done, flash, tryStep, wanted, wants, objectives } =
     useStepRunner({ steps, mode, onResult, flashMs: 900, finishDelayMs: 1400 });
@@ -59,6 +80,7 @@ export default function GuidedNotesTask({ goal, steps, mode, hint, freePlay, onR
 
   function handleInput() {
     const text = editorRef.current?.textContent ?? "";
+    setEmpty(text.trim().length === 0);
     tryStep((s) => s.action === "type" && !!s.value && (s.value === "any" ? text.trim().length > 0 : text.includes(s.value)));
   }
 
@@ -113,16 +135,24 @@ export default function GuidedNotesTask({ goal, steps, mode, hint, freePlay, onR
             )}
           </div>
 
-          {/* Editor */}
-          <div
-            ref={editorRef}
-            contentEditable
-            suppressContentEditableWarning
-            onKeyDown={handleKeyDown}
-            onInput={handleInput}
-            className="flex-1 p-4 text-base leading-relaxed outline-none overflow-y-auto"
-            aria-label="Notes editor"
-          />
+          {/* Editor. An empty white rectangle tells a beginner nothing, so it
+              says what it is until there is something in it. */}
+          <div className="relative flex-1 min-h-0">
+            {empty && (
+              <p className="pointer-events-none absolute left-4 top-4 select-none text-base text-gray-400">
+                Start typing your note here.
+              </p>
+            )}
+            <div
+              ref={editorRef}
+              contentEditable
+              suppressContentEditableWarning
+              onKeyDown={handleKeyDown}
+              onInput={handleInput}
+              className="h-full p-4 text-base leading-relaxed outline-none overflow-y-auto"
+              aria-label="Notes editor"
+            />
+          </div>
         </div>
       </AppWindow>
     </SimulatorFrame>

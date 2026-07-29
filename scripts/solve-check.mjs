@@ -37,6 +37,20 @@ try {
 
 if (filter) {
   await page.getByPlaceholder("Filter by slug or unit").fill(filter);
+  // Wait for the queue to actually shrink before pressing Run. Filling and
+  // clicking in the same tick started the run against the *unfiltered* queue,
+  // so "npm run solve-check -- some-slug" quietly played a different set of
+  // lessons than the one named and reported a count that matched neither.
+  // Every filtered run before this fix proved less than it claimed.
+  await page.waitForFunction(
+    () => {
+      const el = [...document.querySelectorAll("span")].find((s) => /^\d+ \/ \d+$/.test(s.textContent?.trim() ?? ""));
+      const total = Number(el?.textContent?.trim().split("/")[1] ?? 0);
+      return total > 0 && total < 170;
+    },
+    undefined,
+    { timeout: 10_000 },
+  );
 }
 await page.getByRole("button", { name: /^(Run|Restart)$/ }).click();
 
@@ -84,7 +98,15 @@ const summary = await page.locator("#solve-check-result > p").first().textConten
 // Only the failure list — the exemption catalog lives in a <details> below it.
 const realFailures = await page.locator("#solve-check-result > ul > li").allTextContents();
 
+// A harness has to say what it actually played. A filtered run once reported a
+// count that matched neither the filter nor the full course, and every
+// conclusion drawn from it was worth nothing. Name the lessons.
+const playedSlugs = await page.$$eval("td.font-mono", (tds) => tds.map((td) => td.textContent?.trim() ?? ""));
+
 console.log(`\n${summary?.trim()}`);
+if (filter) {
+  console.log(`Filter "${filter}" played ${playedSlugs.length}: ${playedSlugs.join(", ")}`);
+}
 for (const f of realFailures) console.log(`\n- ${f.replace(/\s+/g, " ").trim()}`);
 
 // The solver's own trace of its last lesson — only worth reading on a failure,

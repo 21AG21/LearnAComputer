@@ -49,8 +49,21 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const threwRef = useRef<string | undefined>(undefined);
 
+  /**
+   * The list this run is walking, frozen when Run was pressed.
+   *
+   * It used to be derived live from the filter box, so anything that changed
+   * the filter after the run started swapped the queue out from under the
+   * walk. A script that typed a slug and pressed Run in the same tick began on
+   * one lesson and then wandered through the rest of the course, reporting a
+   * total that matched neither the filter nor the full run — a harness quietly
+   * proving something other than what it was asked to prove.
+   */
+  const [frozen, setFrozen] = useState<Item[] | null>(null);
+
   const filtered = only ? lessons.filter((l) => l.slug.includes(only) || l.unit.includes(only)) : lessons;
-  const queue = retryIds ? filtered.filter((l) => retryIds.includes(l.slug)) : filtered;
+  const base = frozen ?? filtered;
+  const queue = retryIds ? base.filter((l) => retryIds.includes(l.slug)) : base;
   const current = running ? queue[index] : undefined;
   const passDone = running && index >= queue.length;
 
@@ -157,6 +170,7 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
             setRows([]);
             setRetryIds(null);
             setIndex(0);
+            setFrozen(filtered);
             setRunning(true);
           }}
           className="rounded bg-gray-900 px-4 py-2 font-semibold text-white"

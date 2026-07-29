@@ -77,6 +77,17 @@ unit substring, press Run. Full course takes a few minutes with the window
 focused. Run it after touching any sim component or lesson steps, alongside
 mount-check.
 
+Headless is canonical: `npm run solve-check`, or `npm run solve-check -- slug`
+for one lesson or unit.
+
+**A filtered run names the lessons it played** — read that line rather than
+assuming. The queue is frozen when Run is pressed, because it used to be read
+live from the filter box: a script that typed a slug and pressed Run in the
+same tick began on the filtered list and then walked into the unfiltered one,
+so a one-lesson filter played 28 lessons and reported a count belonging to
+neither. Any debugging conclusion is only as good as the set that was actually
+played, so the harness now says so out loud.
+
 ## Current status
 
 See the latest run results at the bottom of this file's companion audit
