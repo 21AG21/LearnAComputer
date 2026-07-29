@@ -218,18 +218,22 @@ hides one, and never conclude "flaky" from a re-run that happened to pass.
 
 ### The next engineering item
 
-**Stage C's password-reset half is done** (2026-07-28) — see the session log
-below and `docs/SAME_ICON_AUDIT.md` § *Round two*. What is left of task #123 is
-smaller and lower-stakes:
+**Stage C is done** (task #123, closed 2026-07-29). No dock icon in the course
+opens a hand-drawn stand-in any more. See `docs/SAME_ICON_AUDIT.md` § *Round two*
+and § *Round three*.
 
-**The error-code scenario's support page.** `GuidedTroubleshootingTask` still
-hand-draws `support.example/help` as a card with a fake address bar, and the
-`public-wifi` captive portal the same way. Both are web pages and belong in
-`BrowserSimulator` inside a `DraggableWindow`, exactly as the bank site now is —
-the pattern and the `fit` prop both exist, so this is an hour, not a day. Lower
-stakes than the Mail one was: no unit teaches a support site the way Unit 6
-teaches Mail, so no learner arrives with an expectation to violate. It is
-nonetheless the last hand-drawn browser in the course.
+The next item is smaller and is written down rather than done, because it has
+only bitten twice and the stopgap holds:
+
+**Scroll the ringed control into view.** Twice now a window sized by hand has
+clipped the exact button the step was highlighting — *Forgot password?* in the
+password reset, **Continue** in the café portal. Both were caught by measuring
+the ringed element against the window rect in a live browser; **every automated
+check stayed green both times**, because the solver scrolls and a learner reads.
+The general fix belongs in `useStepRunner` or `SimulatorFrame`: when the element
+carrying the ring is outside its scroll container, bring it into view. Build it
+the third time this appears, and give it a negative control — break a window's
+height on purpose and watch the check fail.
 
 ### What is waiting on the founder, not on code
 
@@ -240,6 +244,17 @@ nonetheless the last hand-drawn browser in the course.
 
 ## Session log
 
+- **2026-07-29 (Stage C closed):** The last two hand-drawn browsers are gone.
+  The error-code lesson's `support.example/help` used to swallow the whole
+  desktop and wear a gray strip for an address bar; it is a window over the
+  crashed app now, in the real browser chrome. The café captive portal was a bare
+  card on the wallpaper; it is a browser window at `cornercafe.example/wifi`,
+  which makes the lesson's own line — *"That page is called a captive portal"* —
+  actually land. Both windows are closable without stranding anybody: the desktop
+  says what is open and the dock brings it back, verified by closing the support
+  page mid-lesson. Found the ringed-control-below-the-fold defect a second time
+  (the portal's **Continue**, 2px under the window edge) — fixed by height, and
+  the general fix is now the named next item above.
 - **2026-07-28 (the last hand-drawn Mail):** Stage C's headline item, closed.
   Unit 11's password-reset lesson drew its own Mail app — a flat card with one
   row in it — behind the same dock icon Unit 6 spends nine lessons teaching, and

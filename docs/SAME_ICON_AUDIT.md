@@ -253,15 +253,13 @@ Recorded so the next pass does not redo it:
 
 ## Still open
 
-- **The error-code scenario still draws its own browser.** `support.example/help`
-  is not one of the browser's fifteen sites, so the paste-the-error-code page is
-  still a bespoke card with a fake address bar — no tab strip, no lock icon, no
-  window frame. Same fix shape as the password reset below: give
-  `BrowserSimulator` the page as children and put it in a `DraggableWindow`.
-  Lower stakes than the Mail one was, because no unit teaches a support site the
-  way Unit 6 teaches Mail, but it is the last hand-drawn browser in the course.
-  *(The `public-wifi` captive portal is the same story and would come along with
-  it — a captive portal really is a web page and belongs in browser chrome.)*
+- **A ringed control can still land below the fold of a window.** Twice now, a
+  window sized by hand has cut off the exact button the step was highlighting —
+  and both times every automated check stayed green, because the solver scrolls
+  and a learner reads. The general fix is to scroll the ringed element into view
+  whenever it is outside its scroll container; the stopgap is that each window's
+  height was measured against its own tallest page. Worth doing properly the
+  next time a third one turns up.
 - **`open-btn` in `GuidedAppStoreTask`** is declared in the highlight switch and
   rendered nowhere. No lesson uses the `open-app` action, so nothing is broken.
 - **Two spellings of one word across two apps** — Settings says *Color
@@ -316,3 +314,41 @@ the address bar carrying the reset token, through to "Signed in as
 you@example.com" and *Lesson complete*. Then the whole suite: solve-check
 132/132, mission-check 18/18, desktop-check, recovery-check, hostile-check,
 demo-check, check-lessons (198), check-actions, spelling, `tsc`, `lint`.
+
+## Round three (2026-07-29): no hand-drawn browsers left
+
+The other two entries are closed, and with them the whole "a dock icon opens
+something the course does not teach" category.
+
+**`support.example/help`** — the error-code lesson's support site — swallowed the
+entire desktop (`view === "browser-support"`) and wore a gray strip with a domain
+in it for an address bar. Opening a browser does not make your desktop vanish, so
+it is a window now, over the crashed app, in the real browser chrome: tab, lock
+icon, `support.example/help` in the address bar. The `View` union lost a member;
+a `supportOpen` boolean replaced it.
+
+**The café captive portal** was a bare card on the wallpaper. It is now a browser
+window at `cornercafe.example/wifi`, which also makes the lesson's own sentence
+land — *"That page is called a captive portal"* reads very differently when the
+learner can see it is a web page with an address, in the browser they already
+know, rather than a mystery panel the computer produced.
+
+**Both windows can be closed without stranding anybody.** Closing the portal or
+the support page leaves a desktop that says *"Nothing is open"* and names the dock
+icon that brings it back; the dock handler reopens it. Verified by closing the
+support window mid-lesson and reopening it — the step banner was still on step 4
+and the pasted state survived.
+
+**The same defect, a second time.** The café portal's ringed **Continue** button
+finished 2px below the bottom edge of its window. Same class as the
+*Forgot password?* clipping in round two, found the same way — by measuring the
+ringed element against the window rect in a live browser, not by any harness.
+Both are fixed by height, but the honest note is in *Still open* above: the
+general answer is to scroll the ringed control into view, and it is worth
+building the third time this appears rather than the fourth.
+
+**Verified** by playing both lessons end to end — *Finding Help Online* six steps
+to "Photos is working again", *Using WiFi You Do Not Own* five steps through the
+café portal to Cross-Site Tracking off — then solve-check 132/132, mission-check
+18/18, desktop-check, recovery-check, hostile-check, demo-check, check-lessons
+198, check-actions, spelling, `tsc`, `lint`.

@@ -55,7 +55,7 @@ interface Props {
   onResult: (success: boolean) => void;
 }
 
-type View = "desktop" | "force-quit" | "browser-support" | "app-market";
+type View = "desktop" | "force-quit" | "app-market";
 
 interface FrozenApp {
   name: string;
@@ -113,6 +113,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   // public-wifi state
   const [portalStage, setPortalStage] = useState<"offline" | "portal" | "online">("offline");
+  /** The café portal's browser window. Closing it is recoverable from the dock. */
+  const [portalWinOpen, setPortalWinOpen] = useState(true);
   const [privacyOpen, setPrivacyOpen] = useState(false);
 
   // password-reset state. `prStage` is the *bank site's* stage only — the Mail
@@ -137,6 +139,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const [codeCopied, setCodeCopied] = useState(false);
   const [pastedCode, setPastedCode] = useState("");
   const [supportSubmitted, setSupportSubmitted] = useState(false);
+  /** The support site's browser window. Not a `view` — the desktop stays behind it. */
+  const [supportOpen, setSupportOpen] = useState(false);
   const [appReopened, setAppReopened] = useState(false);
 
   // error-restart state
@@ -395,7 +399,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   }
 
   function handleOpenBrowser() {
-    setView("browser-support");
+    setSupportOpen(true);
     tryStep((s) => s.action === "open-browser");
   }
 
@@ -475,7 +479,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
         {/* Menu Bar */}
         <div className="relative shrink-0">
           <DesktopMenuBar
-            title={view === "browser-support" ? "Browser" : view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
+            title={view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
             leading={
               <button
                 onClick={handleOpenForceQuit}
@@ -638,109 +642,153 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             </div>
           )}
 
-          {/* Browser Support Page */}
-          {view === "browser-support" && (
-            <div className="h-full flex flex-col bg-white">
-              <div className="bg-gray-100 border-b px-3 py-2 flex items-center gap-2">
-                <div className="flex-1 bg-white border rounded-lg px-3 py-1.5 text-xs text-gray-500">
-                  support.example/help
-                </div>
-              </div>
-              <div className="flex-1 p-4 overflow-y-auto">
-                <h2 className="text-base font-bold mb-1">Computer Support</h2>
-                <p className="text-xs text-gray-500 mb-4">Paste your error code below and we&apos;ll help you fix it.</p>
-                <div className="mb-3">
-                  <label className="text-xs font-medium text-gray-700 block mb-1">Error code</label>
-                  <div className="flex gap-2">
-                    <input
-                      value={pastedCode}
-                      readOnly
-                      placeholder="Paste error code here..."
-                      className={`flex-1 px-3 py-2 text-sm border rounded-lg bg-gray-50 ${hl("paste-input") ? pulse : ""}`}
-                    />
-                    <button
-                      onClick={handlePasteCode}
-                      className={`px-3 py-2 text-xs bg-gray-200 hover:bg-gray-300 rounded-lg font-medium ${hl("paste-input") ? pulse : ""}`}
-                    >
-                      Paste
-                    </button>
+          {/* The support site, in the browser the rest of the course teaches. It used
+              to swallow the whole desktop and wear a gray strip for an address bar —
+              no tab, no lock icon, no window. Opening a browser does not make your
+              desktop disappear, so it is a window now, over the crashed app. */}
+          {view === "desktop" && supportOpen && (
+            <DraggableWindow
+              title="Browser"
+              icon={<GlobeIcon size={16} />}
+              initial={{ x: 12, y: 12, w: 520, h: 470 }}
+              fit
+              onClose={() => setSupportOpen(false)}
+              onMinimize={() => setSupportOpen(false)}
+            >
+              <BrowserSimulator
+                bezel={false}
+                showControls={false}
+                tabTitle="Computer Support"
+                url="support.example/help"
+                onExit={() => setSupportOpen(false)}
+              >
+                <div className="h-full overflow-y-auto bg-white">
+                  <div className="p-4">
+                    <h2 className="text-base font-bold mb-1">Computer Support</h2>
+                    <p className="text-xs text-gray-500 mb-4">Paste your error code below and we&apos;ll help you fix it.</p>
+                    <div className="mb-3">
+                      <label className="text-xs font-medium text-gray-700 block mb-1">Error code</label>
+                      <div className="flex gap-2">
+                        <input
+                          value={pastedCode}
+                          readOnly
+                          placeholder="Paste error code here..."
+                          className={`flex-1 px-3 py-2 text-sm border rounded-lg bg-gray-50 ${hl("paste-input") ? pulse : ""}`}
+                        />
+                        <button
+                          onClick={handlePasteCode}
+                          className={`px-3 py-2 text-xs bg-gray-200 hover:bg-gray-300 rounded-lg font-medium ${hl("paste-input") ? pulse : ""}`}
+                        >
+                          Paste
+                        </button>
+                      </div>
+                    </div>
+                    {pastedCode && !supportSubmitted && (
+                      <button
+                        onClick={handleSubmitSupport}
+                        className={`w-full py-2.5 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 ${hl("submit-btn") ? pulse : ""}`}
+                      >
+                        Submit
+                      </button>
+                    )}
+                    {supportSubmitted && (
+                      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-xl">
+                        <p className="text-sm font-medium text-green-800 mb-1">Solution found!</p>
+                        <p className="text-xs text-green-700">Error {errorCode}: This is usually a temporary problem. Try closing and reopening {errorApp} from your dock.</p>
+                      </div>
+                    )}
                   </div>
                 </div>
-                {pastedCode && !supportSubmitted && (
-                  <button
-                    onClick={handleSubmitSupport}
-                    className={`w-full py-2.5 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 ${hl("submit-btn") ? pulse : ""}`}
-                  >
-                    Submit
-                  </button>
-                )}
-                {supportSubmitted && (
-                  <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-                    <p className="text-sm font-medium text-green-800 mb-1">Solution found!</p>
-                    <p className="text-xs text-green-700">Error {errorCode}: This is usually a temporary problem. Try closing and reopening {errorApp} from your dock.</p>
-                  </div>
-                )}
-              </div>
+              </BrowserSimulator>
+            </DraggableWindow>
+          )}
+
+          {/* Public WiFi — the desktop is offline until a network is joined. */}
+          {view === "desktop" && mode === "public-wifi" && !privacyOpen && portalStage === "offline" && (
+            <div className="p-4 py-10 text-center">
+              <svg viewBox="0 0 24 24" className="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
+              </svg>
+              <p className="text-sm font-medium text-gray-500 mb-1">You are not connected to the internet</p>
+              <p className="text-xs text-gray-400">There is a café network nearby. The WiFi icon is in the bar above.</p>
             </div>
           )}
 
-          {/* Desktop View - Frozen App Window */}
-          {/* Public WiFi — browser goes offline → café portal → online, then Settings ▸ Privacy */}
-          {view === "desktop" && mode === "public-wifi" && !privacyOpen && (
-            <div className="p-4">
-              {portalStage === "offline" && (
-                <div className="py-10 text-center">
-                  <svg viewBox="0 0 24 24" className="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
-                  </svg>
-                  <p className="text-sm font-medium text-gray-500 mb-1">You are not connected to the internet</p>
-                  <p className="text-xs text-gray-400">There is a café network nearby. The WiFi icon is in the bar above.</p>
-                </div>
-              )}
+          {/* Closing the portal must not strand anybody — the dock brings it back. */}
+          {view === "desktop" && mode === "public-wifi" && !privacyOpen && portalStage !== "offline" && !portalWinOpen && (
+            <div className="p-4 text-center py-10">
+              <p className="text-sm text-gray-600">Nothing is open.</p>
+              <p className="text-xs text-gray-500 mt-1">Click Browser in the dock to bring the café&apos;s page back.</p>
+            </div>
+          )}
 
-              {portalStage === "portal" && (
-                <div className="max-w-md mx-auto border-2 border-gray-200 rounded-xl overflow-hidden">
-                  <div className="bg-amber-800 text-amber-50 px-4 py-3 text-center">
-                    <p className="text-lg font-bold tracking-wide">The Corner Café</p>
-                    <p className="text-xs text-amber-200">Guest WiFi sign-in</p>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-sm text-gray-700 mb-3">Enter your email address to get online. It is free.</p>
-                    <label className="block text-xs font-semibold text-gray-500 mb-1">Email address</label>
-                    <input
-                      readOnly
-                      value="you@example.com"
-                      aria-label="Email address"
-                      className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 bg-gray-50"
-                    />
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-3">
-                      <p className="text-xs text-blue-800">
-                        This page wants your <strong>email</strong> — that is normal for café WiFi. It must never ask for a
-                        password you use anywhere else. If it does, close the page and stay off that network.
+          {/* The café sign-in page is a web page, so it lives in the browser, in a
+              window — not the bare card on the wallpaper it used to be. */}
+          {view === "desktop" && mode === "public-wifi" && !privacyOpen && portalStage !== "offline" && portalWinOpen && (
+            <DraggableWindow
+              title="Browser"
+              icon={<GlobeIcon size={16} />}
+              // Taller than the other two: the portal card carries a header, a
+              // field and a paragraph of advice above its Continue button, and
+              // Continue is what the step rings.
+              initial={{ x: 12, y: 12, w: 520, h: 560 }}
+              fit
+              onClose={() => setPortalWinOpen(false)}
+              onMinimize={() => setPortalWinOpen(false)}
+            >
+              <BrowserSimulator
+                bezel={false}
+                showControls={false}
+                tabTitle="The Corner Café"
+                url={portalStage === "portal" ? "cornercafe.example/wifi" : "cornercafe.example/connected"}
+                onExit={() => setPortalWinOpen(false)}
+              >
+                <div className="h-full overflow-y-auto bg-white">
+                  {portalStage === "portal" && (
+                    <div className="max-w-md mx-auto m-3 border-2 border-gray-200 rounded-xl overflow-hidden">
+                      <div className="bg-amber-800 text-amber-50 px-4 py-3 text-center">
+                        <p className="text-lg font-bold tracking-wide">The Corner Café</p>
+                        <p className="text-xs text-amber-200">Guest WiFi sign-in</p>
+                      </div>
+                      <div className="p-4">
+                        <p className="text-sm text-gray-700 mb-3">Enter your email address to get online. It is free.</p>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Email address</label>
+                        <input
+                          readOnly
+                          value="you@example.com"
+                          aria-label="Email address"
+                          className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 bg-gray-50"
+                        />
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-3">
+                          <p className="text-xs text-blue-800">
+                            This page wants your <strong>email</strong> — that is normal for café WiFi. It must never ask for a
+                            password you use anywhere else. If it does, close the page and stay off that network.
+                          </p>
+                        </div>
+                        <button
+                          onClick={handlePortalContinue}
+                          className={`w-full py-2 bg-amber-700 text-white font-bold rounded-lg hover:bg-amber-800 ${hl("portal-continue") ? pulse : ""}`}
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {portalStage === "online" && (
+                    <div className="py-10 text-center">
+                      <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-green-500 mb-3" fill="currentColor">
+                        <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
+                      </svg>
+                      <p className="text-sm font-medium text-green-600 mb-1">Connected to Coffee Shop Free WiFi</p>
+                      <p className="text-xs text-gray-500 max-w-sm mx-auto px-4">
+                        You are online — but this is somebody else&apos;s network. Tighten your privacy settings before you browse.
                       </p>
                     </div>
-                    <button
-                      onClick={handlePortalContinue}
-                      className={`w-full py-2 bg-amber-700 text-white font-bold rounded-lg hover:bg-amber-800 ${hl("portal-continue") ? pulse : ""}`}
-                    >
-                      Continue
-                    </button>
-                  </div>
+                  )}
                 </div>
-              )}
-
-              {portalStage === "online" && (
-                <div className="py-10 text-center">
-                  <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-green-500 mb-3" fill="currentColor">
-                    <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
-                  </svg>
-                  <p className="text-sm font-medium text-green-600 mb-1">Connected to Coffee Shop Free WiFi</p>
-                  <p className="text-xs text-gray-500 max-w-sm mx-auto">
-                    You are online — but this is somebody else&apos;s network. Tighten your privacy settings before you browse.
-                  </p>
-                </div>
-              )}
-            </div>
+              </BrowserSimulator>
+            </DraggableWindow>
           )}
 
           {/* Public WiFi — Privacy, in the same Settings app Unit 9 teaches. This used to be
@@ -1171,6 +1219,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 handleOpenSettingsPrivacy();
               } else if (mode === "public-wifi" && id === "Browser") {
                 setPrivacyOpen(false);
+                setPortalWinOpen(true);
               } else if (mode === "password-reset" && id === "Mail") {
                 handleOpenMailFromDock();
               } else if (mode === "password-reset" && id === "Browser") {
