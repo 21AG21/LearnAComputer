@@ -121,7 +121,13 @@ let navSpin = 0;
  */
 const NAV_LABELS = [
   "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Favorites", "Recently Deleted", "Store", "My Apps", "App Market", "Contacts",
-  "Sent", "Drafts",
+  // Mail's folder names. Safe to exclude from the action-button hunt now that
+  // the reading pane's verbs say what they do ("Move to Archive", "Mark as
+  // spam") instead of repeating the folder name. An earlier attempt at this
+  // list broke mark-spam, because back then the button really was called
+  // "Spam" and excluding the word excluded the only control that worked.
+  // `go-to-folder` still reaches these — nav labels are allowed for go-to.
+  "Sent", "Drafts", "Spam", "Archive",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
   // Security sim sections — the phishing inbox and password tester live behind these.

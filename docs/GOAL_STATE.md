@@ -146,14 +146,17 @@ both turned out to be defects rather than noise:
     what its trace said. Mail's folder names are now excluded from the
     action-button hunt (`go-to-folder` still reaches them).
 
-**Still not fully fixed (2026-07-28):** the `archive` case recurred once in a
-full run after both fixes above, then passed three runs in a row. So the
-document-order preference reduced it but did not eliminate it. It is a solver
-disambiguation problem, not a learner-facing one — a person reading "file it
-away" opens the email and presses Archive in the reading pane — but it means
-**a full run can still fail on unit-6-assessment**. Do not report 132/132 off a
-single run; re-run, and if it recurs, the fix is to make the compound gesture
-require the target to be *open* before hunting for the action button.
+**Fixed properly (2026-07-28), in the product rather than the solver.** Two
+attempts at this from the solver side each half-worked: excluding the folder
+names broke `mark-spam` outright, and preferring document order reduced the
+recurrence without ending it. The actual problem was in the sim: the reading
+pane's buttons were called **"Archive"** and **"Spam"** — the same words as the
+sidebar folders — so *nothing* could tell them apart, including a screen
+reader, which announced two identical "Archive" buttons doing different things.
+They now say what they do: **"Move to Archive"** and **"Mark as spam"**. That
+also drops jargon a beginner would not know, which is the course's own rule.
+With the collision gone, excluding the folder names from the action hunt is
+finally safe, and three consecutive full runs pass.
 
 The lesson for the next session: an intermittent failure in this harness has so
 far *always* been a real defect wearing a disguise. Reproduce it by running the

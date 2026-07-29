@@ -460,12 +460,12 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
                   {currentFolder === "Spam" ? (
                     <button onClick={handleUnspam} className={`px-2 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded transition-all ${hl("unspam-btn") ? pulse : ""}`}>Not spam</button>
                   ) : (
-                    <button onClick={handleMarkSpam} className={`px-2 py-1 text-xs bg-orange-50 text-orange-600 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("spam-btn") ? pulse : ""}`}><SpamIcon size={12} /> Spam</button>
+                    <button onClick={handleMarkSpam} className={`px-2 py-1 text-xs bg-orange-50 text-orange-600 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("spam-btn") ? pulse : ""}`}><SpamIcon size={12} /> Mark as spam</button>
                   )}
                   {currentFolder === "Archive" ? (
                     <button onClick={handleMoveToInbox} className={`px-2 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded transition-all inline-flex items-center gap-1 ${hl("move-inbox-btn") ? pulse : ""}`}><InboxIcon size={12} /> Move to Inbox</button>
                   ) : (
-                    <button onClick={handleArchive} className={`px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 rounded transition-all inline-flex items-center gap-1 ${hl("archive-btn") ? pulse : ""}`}><ArchiveIcon size={12} /> Archive</button>
+                    <button onClick={handleArchive} className={`px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 rounded transition-all inline-flex items-center gap-1 ${hl("archive-btn") ? pulse : ""}`}><ArchiveIcon size={12} /> Move to Archive</button>
                   )}
                   <button onClick={handleDelete} className={`px-2 py-1 text-xs bg-red-50 text-red-600 hover:bg-red-100 rounded transition-all inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 </div>
