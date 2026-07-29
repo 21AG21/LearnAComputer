@@ -40,6 +40,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You updated an app! Keeping apps updated protects you from security vulnerabilities and gives you new features.",
+  "drDigitalSuccess": "The app is up to date. Most updates are security fixes, which is why they are worth doing even when nothing looks wrong.",
   "drDigitalHint": "Install the app first, then go to My Apps and look for the Update button."
 }

@@ -26,6 +26,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You freed up 4 GB! Remember: deleting files moves them to Trash. Empty the Trash to actually reclaim the space.",
+  "drDigitalSuccess": "Four gigabytes back. Deleting only moves things to the Trash, so the space does not return until you empty it.",
   "drDigitalHint": "Go to Storage, click Delete next to Old Videos, then click Empty Trash."
 }

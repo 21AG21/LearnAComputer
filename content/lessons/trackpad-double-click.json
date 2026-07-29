@@ -5,7 +5,7 @@
   "order": 2,
   "title": "Double click",
   "videoUrl": "",
-  "drDigitalIntro": "A double click is two quick clicks in a row.\n\u2022 Tap the trackpad twice quickly with one finger \u2014 or click the left mouse button twice fast.\n\u2022 The two taps must happen fast, like a quick knock-knock.\n\u2022 It is how you open files and folders.\n\u2022 Try it: double-click the files below to open them.",
+  "drDigitalIntro": "A double click is two quick clicks in a row.\n• Tap the trackpad twice quickly with one finger — or click the left mouse button twice fast.\n• The two taps must happen fast, like a quick knock-knock.\n• It is how you open files and folders.\n• Try it: double-click the files below to open them.",
   "playgroundTask": {
     "type": "file-explorer-open",
     "instructions": "Double-click to open \"GroceryList.txt\" and \"Budget.xlsx\".",
@@ -14,6 +14,6 @@
       "Budget.xlsx"
     ]
   },
-  "drDigitalSuccess": "Perfect double-clicking! You opened exactly the right files.",
-  "drDigitalHint": "Tap twice quickly \u2014 or left-click twice fast. If a single file name gets highlighted but does not open, try again a little faster."
+  "drDigitalSuccess": "Two clicks, close together, on the file you meant. That is what opens things.",
+  "drDigitalHint": "Tap twice quickly — or left-click twice fast. If a single file name gets highlighted but does not open, try again a little faster."
 }

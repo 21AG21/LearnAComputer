@@ -5,7 +5,7 @@
   "order": 41,
   "title": "Closing apps",
   "videoUrl": "",
-  "drDigitalIntro": "To close an app window, click the X button at the top-right corner of the window.\n• This removes the window from your screen.\n• Warning: on a real computer, Ctrl+Q or Cmd+Q quits the app immediately. Do not press those keys right now.\n• The yellow minus button is different — it minimizes the window (hides it without closing it).\n• Let's practice: close the window below using the X button.",
+  "drDigitalIntro": "To close an app window, click the X button at the top-right corner of the window.\n• This removes the window from your screen.\n• Warning: on a real computer, Ctrl+Q or Cmd+Q quits the app immediately. Do not press those keys right now.\n• The yellow minus button is different — it minimizes the window (hides it without closing it).\n• Close the window below with the X button.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Close an app window",
@@ -16,6 +16,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Perfect — the X button to close the window. You've got it!",
+  "drDigitalSuccess": "The X closes the window. It sits in the same corner of every window you will ever meet.",
   "drDigitalHint": "Look for the X at the top-right corner of the window. It turns red when you point at it."
 }

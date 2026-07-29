@@ -5,11 +5,11 @@
   "order": 3,
   "title": "Right click",
   "videoUrl": "",
-  "drDigitalIntro": "A right click opens a hidden menu of extra options.\n\u2022 On a trackpad: tap with two fingers at the same time.\n\u2022 On a mouse: press the right mouse button (the right side of the mouse).\n\u2022 A small pop-up menu will appear with extra choices.\n\u2022 Try it below: right-click the link to open it in a new tab.",
+  "drDigitalIntro": "A right click opens a hidden menu of extra options.\n• On a trackpad: tap with two fingers at the same time.\n• On a mouse: press the right mouse button (the right side of the mouse).\n• A small pop-up menu will appear with extra choices.\n• Try it below: right-click the link to open it in a new tab.",
   "playgroundTask": {
     "type": "browser-right-click",
     "instructions": "Right-click the link below, then choose \"Open link in new tab\"."
   },
-  "drDigitalSuccess": "Great right-clicking! See how it opened a whole menu of options?",
-  "drDigitalHint": "Two fingers at once on the trackpad \u2014 or press the right side of your mouse. A menu should pop up. Then choose Open in new tab."
+  "drDigitalSuccess": "Right-clicking opened a menu of things you can do with whatever you clicked on. It works on almost everything.",
+  "drDigitalHint": "Two fingers at once on the trackpad — or press the right side of your mouse. A menu should pop up. Then choose Open in new tab."
 }

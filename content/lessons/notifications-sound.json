@@ -16,12 +16,12 @@
         "target": "notifications"
       },
       {
-        "say": "Turn on Do Not Disturb — look for the crossed-bell icon in the menu bar!",
+        "say": "Turn on Do Not Disturb — look for the crossed-bell icon in the menu bar.",
         "action": "toggle",
         "target": "do-not-disturb"
       }
     ]
   },
-  "drDigitalSuccess": "Do Not Disturb is on! See the crossed-bell icon in the menu bar? That means no interruptions until you turn it off.",
+  "drDigitalSuccess": "Do Not Disturb is on, and the crossed-out bell in the menu bar is how you know. Nothing will interrupt you until you turn it off.",
   "drDigitalHint": "Open Notifications in Settings and flip the Do Not Disturb toggle."
 }

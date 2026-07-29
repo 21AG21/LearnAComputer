@@ -21,6 +21,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You signed in with a passkey! No password was typed or sent — your fingerprint stays on your device, so there's nothing for hackers to steal.",
+  "drDigitalSuccess": "You signed in without typing a password. The fingerprint never left the device, so nothing worth stealing was ever sent anywhere.",
   "drDigitalHint": "Look below the Log In button for the 'Sign in with Passkey' option."
 }

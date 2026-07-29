@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You connected and disconnected a Bluetooth device! Now you know how to pair wireless accessories with your computer.",
+  "drDigitalSuccess": "You connected a wireless device and disconnected it again. Headphones, keyboards and mice all pair that same way.",
   "drDigitalHint": "Open Settings on the left, click Bluetooth, then use the Connect and Disconnect buttons next to Wireless Headphones."
 }

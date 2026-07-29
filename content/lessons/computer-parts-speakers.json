@@ -5,10 +5,10 @@
   "order": 13,
   "title": "Speakers",
   "videoUrl": "",
-  "drDigitalIntro": "Your speakers let you hear sound.\n\u2022 They play music, videos, voice messages, and alerts.\n\u2022 Sound comes out of small grilles on the sides or bottom of the laptop.\n\u2022 No headphones needed \u2014 the sound goes straight into the room.\n\u2022 If you want private audio, plug headphones into the headphone jack or connect them wirelessly via Bluetooth.",
+  "drDigitalIntro": "Your speakers let you hear sound.\n• They play music, videos, voice messages, and alerts.\n• Sound comes out of small grilles on the sides or bottom of the laptop.\n• No headphones needed — the sound goes straight into the room.\n• If you want private audio, plug headphones into the headphone jack or connect them wirelessly via Bluetooth.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's your speakers! Now you know where the sound is coming from.",
+  "drDigitalSuccess": "Those are the speakers. Now you know where the sound is coming from.",
   "drDigitalHint": "Take a look at your laptop, then click Continue whenever you're ready."
 }

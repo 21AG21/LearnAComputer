@@ -5,7 +5,7 @@
   "order": 31,
   "title": "Dock",
   "videoUrl": "",
-  "drDigitalIntro": "The dock is the row of icons at the bottom of the screen.\n• Each icon is a shortcut to open an app.\n• Click an icon once to open that app.\n• When an app is open, a small green dot appears on its icon.\n• You can also minimize a window here to tuck it away without closing it.\n• Let's practice: open Notes from the dock, then close it.",
+  "drDigitalIntro": "The dock is the row of icons at the bottom of the screen.\n• Each icon is a shortcut to open an app.\n• Click an icon once to open that app.\n• When an app is open, a small green dot appears on its icon.\n• You can also minimize a window here to tuck it away without closing it.\n• Open Notes from the dock below, then close it again.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Open and close an app from the dock",
@@ -30,6 +30,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You opened and closed apps from the dock — you're getting the hang of it!",
+  "drDigitalSuccess": "You opened apps from the dock and closed them again. That is the loop you will repeat all day.",
   "drDigitalHint": "Find the dock at the bottom of the playground. Click a glowing icon to open the app, then close it with the X at the top of the window."
 }

@@ -20,11 +20,11 @@
         "action": "start-call"
       },
       {
-        "say": "Great! You're connected. Now end the call by clicking the wide red End call button.",
+        "say": "You're connected. Now end the call by clicking the wide red End call button.",
         "action": "end-call"
       }
     ]
   },
-  "drDigitalSuccess": "You made a video call! The green button starts it, the red button ends it. That's all there is to it.",
+  "drDigitalSuccess": "You made a video call. Green starts it, red ends it, and that is most of what there is to know.",
   "drDigitalHint": "Select Grandma first, then click the green Video Call button at the top of the chat."
 }

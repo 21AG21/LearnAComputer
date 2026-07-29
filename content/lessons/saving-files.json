@@ -5,7 +5,7 @@
   "order": 330,
   "title": "Saving Files",
   "videoUrl": "",
-  "drDigitalIntro": "When you make something, it disappears when you close the app — unless you SAVE it.\n• Saving keeps a copy as a file.\n• You give the file a name and pick a folder for it.\n• Let's save a note.",
+  "drDigitalIntro": "When you make something, it disappears when you close the app — unless you SAVE it.\n• Saving keeps a copy as a file.\n• You give the file a name and pick a folder for it.\n• Save a note below, somewhere you will find it again.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Save your note into a folder",
@@ -18,6 +18,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You saved your note as shopping-list in the Documents folder. Now you can find it again any time!",
+  "drDigitalSuccess": "You saved your note as shopping-list in the Documents folder. A file you named and put somewhere on purpose is a file you can find again.",
   "drDigitalHint": "Do it in order: click the glowing Save button, type shopping-list, click Documents, then click Save."
 }

@@ -5,7 +5,7 @@
   "order": 900,
   "title": "System Settings Overview",
   "videoUrl": "",
-  "drDigitalIntro": "Settings is where you customize how your computer works.\n• Open the Settings app from the dock.\n• Change things like brightness, dark mode, text size, and notifications.\n• Think of it like your home — set it up the way you like.",
+  "drDigitalIntro": "Settings is where you customize how your computer works.\n• Open the Settings app from the dock.\n• Change things like brightness, dark mode, text size, and notifications.\n• Nothing in there is permanent. Set it up the way you like it.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "You explored Settings and turned on Dark Mode",
@@ -16,12 +16,12 @@
         "target": "appearance"
       },
       {
-        "say": "Turn on Dark Mode — watch the whole screen change!",
+        "say": "Turn on Dark Mode — watch the whole screen change.",
         "action": "toggle",
         "target": "dark-mode"
       }
     ]
   },
-  "drDigitalSuccess": "Dark Mode on! Notice how the menu bar, dock, and background all changed. You can always come back to Settings and switch it off.",
+  "drDigitalSuccess": "Dark mode is on, and the menu bar, dock and background all followed. Settings is also where you turn it off again.",
   "drDigitalHint": "Click Appearance in the left sidebar, then flip the Dark Mode toggle."
 }

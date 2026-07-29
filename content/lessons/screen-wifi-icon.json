@@ -5,7 +5,7 @@
   "order": 34,
   "title": "WiFi Icon",
   "videoUrl": "",
-  "drDigitalIntro": "The WiFi icon in the menu bar shows whether you are connected to the internet.\n\u2022 A solid icon means you are connected. A faded or crossed-out icon means you are not.\n\u2022 Click it to see a list of nearby networks and which one you are connected to (shown with a checkmark).\n\u2022 If you ever lose internet, this is the first place to look.\n\u2022 On a real computer, you can also turn WiFi on and off from this panel.",
+  "drDigitalIntro": "The WiFi icon in the menu bar shows whether you are connected to the internet.\n• A solid icon means you are connected. A faded or crossed-out icon means you are not.\n• Click it to see a list of nearby networks and which one you are connected to (shown with a checkmark).\n• If you ever lose internet, this is the first place to look.\n• On a real computer, you can also turn WiFi on and off from this panel.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Use the WiFi panel to disconnect and reconnect",
@@ -28,6 +28,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You opened the WiFi panel, disconnected, and reconnected. Now you know how to manage your WiFi connection!",
+  "drDigitalSuccess": "You opened the WiFi panel, disconnected, and connected again. That panel is where you go when a page will not load.",
   "drDigitalHint": "Look in the top-right of the menu bar for the WiFi icon (it looks like curved lines). Click it to open the panel."
 }

@@ -40,6 +40,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You attached a file and sent it! Click the Attach button whenever you need to add a photo or document.",
+  "drDigitalSuccess": "You attached a file and sent it. The Attach button does that same job in every email program there is.",
   "drDigitalHint": "Click Compose, fill in To and Subject, then click the Attach button and pick VacationPhoto.png from the list."
 }

@@ -25,6 +25,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the WiFi! Toggling WiFi off and on refreshes the connection — it's the first thing to try when the internet stops working.",
+  "drDigitalSuccess": "You fixed it by turning WiFi off and on again. It sounds too simple to be the answer, and it usually is the answer.",
   "drDigitalHint": "Click the WiFi icon in the menu bar, toggle WiFi on, then join your network."
 }

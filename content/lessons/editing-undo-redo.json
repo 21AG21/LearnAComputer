@@ -20,11 +20,11 @@
         "action": "undo"
       },
       {
-        "say": "Press Ctrl+Shift+Z (or Command+Shift+Z) to redo — bring it back!",
+        "say": "Press Ctrl+Shift+Z (or Command+Shift+Z) to redo and bring it back.",
         "action": "redo"
       }
     ]
   },
-  "drDigitalSuccess": "Remember: Ctrl+Z is your safety net. Made a mess? Undo it!",
+  "drDigitalSuccess": "Ctrl+Z is the safety net under everything you type. Made a mess of something? Undo it and start that bit again.",
   "drDigitalHint": "Type something first, then use the Undo and Redo shortcuts. Hold Ctrl (or Command) and press Z to undo, or Shift+Z to redo."
 }

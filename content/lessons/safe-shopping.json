@@ -30,6 +30,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You know how to check before buying! A padlock and a recognized domain means it is safe to shop. No padlock — close the tab.",
+  "drDigitalSuccess": "A padlock, and an address you actually recognize, before you type a card number. The padlock on its own is not enough, which is why you read the address too.",
   "drDigitalHint": "Navigate to each site, then click the padlock (or warning icon) in the address bar to see its security status."
 }

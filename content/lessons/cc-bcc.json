@@ -45,6 +45,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "CC = visible copy, BCC = secret copy. Now you can share emails with the right people!",
+  "drDigitalSuccess": "CC copies somebody in where everyone can see it. BCC copies them in where nobody can. That is the whole difference.",
   "drDigitalHint": "Fill in each field one at a time. Press Tab to jump to the next box, or click it directly."
 }

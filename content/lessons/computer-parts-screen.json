@@ -5,10 +5,10 @@
   "order": 10,
   "title": "Screen",
   "videoUrl": "",
-  "drDigitalIntro": "Let's meet your laptop's parts, starting with the screen.\n\u2022 The screen is the part you're looking at right now.\n\u2022 It's made of millions of tiny colored lights called pixels.\n\u2022 Together they show everything \u2014 words, pictures, and videos.",
+  "drDigitalIntro": "We will go through the laptop a part at a time, starting with the screen.\n• The screen is the part you're looking at right now.\n• It's made of millions of tiny colored lights called pixels.\n• Together they show everything — words, pictures, and videos.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's your screen! Every single thing on your laptop shows up there. Let's look at the next part.",
-  "drDigitalHint": "No rush \u2014 just take a look at your own screen, then click Continue whenever you're ready."
+  "drDigitalSuccess": "That is the screen. Everything the laptop does, it does where you can see it.",
+  "drDigitalHint": "Take a look at your own screen, then click Continue whenever you are ready."
 }

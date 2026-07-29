@@ -12,6 +12,6 @@
     "sourceText": "Hello, computer!",
     "successCondition": "pasted-matches-source"
   },
-  "drDigitalSuccess": "Copy and paste will save you so much time from here on out. Remember: copy first, then paste.",
+  "drDigitalSuccess": "Copy and paste will save you more time than any other pair of keys. Copy first, then paste. Always that order.",
   "drDigitalHint": "Select the text by clicking and dragging across it. Then Ctrl+C to copy, click the empty box below, and Ctrl+V to paste."
 }

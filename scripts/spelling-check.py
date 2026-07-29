@@ -36,6 +36,10 @@ BRITISH = [
     ("practises", "practices"), ("practise", "practice"),
     ("greyscale", "grayscale"), ("grey", "gray"),
     ("travelling", "traveling"), ("cancelling", "canceling"),
+    # Found in the Terms page, which no earlier sweep had read closely.
+    ("unauthorised", "unauthorized"), ("authorised", "authorized"),
+    ("prioritise", "prioritize"), ("minimise", "minimize"), ("maximise", "maximize"),
+    ("summarise", "summarize"), ("emphasise", "emphasize"), ("apologised", "apologized"),
 ]
 
 # Real misspellings worth a permanent guard.

@@ -21,6 +21,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You read the lock info and clicked Got it. The lock means your connection is encrypted — but remember, even scam sites can have a lock. It protects the pipe, not the site.",
+  "drDigitalSuccess": "The lock means the connection is encrypted. It says nothing about who is at the other end, and scam sites can have one too. It protects the pipe, not the site.",
   "drDigitalHint": "Click the lock icon in the address bar, read the explanation, then click Got it."
 }

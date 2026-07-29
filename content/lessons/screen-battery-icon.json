@@ -5,7 +5,7 @@
   "order": 35,
   "title": "Battery Icon",
   "videoUrl": "",
-  "drDigitalIntro": "The battery icon shows how much power is left in your laptop.\n\u2022 A full icon means plenty of charge. A nearly empty icon means plug in soon.\n\u2022 Click the battery icon to see the exact percentage.\n\u2022 When your laptop is plugged in, you may see a lightning bolt on the icon, meaning it is charging.\n\u2022 Most laptops warn you when the battery gets below 20%, so you have time to find a charger.",
+  "drDigitalIntro": "The battery icon shows how much power is left in your laptop.\n• A full icon means plenty of charge. A nearly empty icon means plug in soon.\n• Click the battery icon to see the exact percentage.\n• When your laptop is plugged in, you may see a lightning bolt on the icon, meaning it is charging.\n• Most laptops warn you when the battery gets below 20%, so you have time to find a charger.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Open the battery panel and read the percentage",
@@ -20,6 +20,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You checked the battery \u2014 that's how you know when to plug in!",
+  "drDigitalSuccess": "You read the battery. That number is how you know whether to go and find the charger.",
   "drDigitalHint": "Look for the battery icon (a small rectangle) in the top-right menu bar area. Click it."
 }

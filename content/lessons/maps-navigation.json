@@ -5,10 +5,10 @@
   "order": 1211,
   "title": "Using Maps Online",
   "videoUrl": "",
-  "drDigitalIntro": "Online maps help you find places and get directions — try it right now on your own computer!\n\n1. Open your web browser.\n2. Go to maps.google.com (type it in the address bar and press Enter).\n3. In the search box, type \"library near me\" and press Enter.\n4. Click the library closest to you on the map.\n5. Click Directions.\n6. Click the walking icon (the little person).\n7. Read how many minutes the walk would take.\n\nRemember the walk time — we'll ask about it!",
+  "drDigitalIntro": "Online maps help you find places and get directions — try it right now on your own computer.\n\n1. Open your web browser.\n2. Go to maps.google.com (type it in the address bar and press Enter).\n3. In the search box, type \"library near me\" and press Enter.\n4. Click the library closest to you on the map.\n5. Click Directions.\n6. Click the walking icon (the little person).\n7. Read how many minutes the walk would take.\n\nRemember the walk time, because we will ask about it.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "You used Google Maps to find your nearest library and get walking directions! Maps work with any address, business name, or even just a category like \"pizza near me.\"",
+  "drDigitalSuccess": "You found the nearest library and got directions to walk there. A map site takes an address, a business name, or something as vague as \"pizza near me\".",
   "drDigitalHint": "Open your browser, go to maps.google.com, and search for \"library near me.\" Click the result, then Directions, then the walking icon."
 }

@@ -5,7 +5,7 @@
   "order": 340,
   "title": "Naming Files Well",
   "videoUrl": "",
-  "drDigitalIntro": "A good file name tells you what's inside without opening it.\n• \"Beach-Vacation-2025.jpg\" is clear.\n• \"img_20250104_FINAL(2).jpg\" is confusing.\n• Let's rename a messy file to something useful.",
+  "drDigitalIntro": "A good file name tells you what's inside without opening it.\n• \"Beach-Vacation-2025.jpg\" is clear.\n• \"img_20250104_FINAL(2).jpg\" is confusing.\n• There is a badly named file below. Give it a name that means something.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Rename a messy file to something clear",
@@ -23,6 +23,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Much better! 'Beach-Vacation-2025.jpg' tells you exactly what the file is. Good names save you time.",
+  "drDigitalSuccess": "'Beach-Vacation-2025.jpg' tells you what it is without opening it. That is the only test a file name has to pass.",
   "drDigitalHint": "First click the file once to select it, then click the glowing Rename button, then type the new name and press Enter."
 }

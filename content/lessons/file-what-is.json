@@ -5,7 +5,7 @@
   "order": 300,
   "title": "What is a File?",
   "videoUrl": "",
-  "drDigitalIntro": "Everything you keep on a computer is stored as a file.\n• A photo is a file. A typed letter is a file. A song is a file.\n• Each file has a name and holds one piece of your stuff.\n• When you open a file, a window appears with the file's name in the title bar.\n• The X in the corner closes the window — it does not delete the file.\n• Let's open a couple of files and see what's inside.",
+  "drDigitalIntro": "Everything you keep on a computer is stored as a file.\n• A photo is a file. A typed letter is a file. A song is a file.\n• Each file has a name and holds one piece of your stuff.\n• When you open a file, a window appears with the file's name in the title bar.\n• The X in the corner closes the window. It does not delete the file.\n• Open a couple below and see what is in them.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Open two files to see what a file is",
@@ -22,6 +22,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You opened two files! One held words, one held a picture. Closing the window does not delete anything — the file is always safe.",
+  "drDigitalSuccess": "You opened two files. One held words, one held a picture. Closing the window does not delete anything; the file stays where it was.",
   "drDigitalHint": "Double-click means two quick clicks on the same file. Look for the file with a yellow glow. After it opens, read the contents and then click Got it — Close."
 }

@@ -5,7 +5,7 @@
   "order": 310,
   "title": "What is a Folder?",
   "videoUrl": "",
-  "drDigitalIntro": "A folder is a container that holds files.\n• It's like a paper folder in a filing cabinet.\n• Folders keep related files together.\n• That stops your computer becoming one messy pile. Let's look inside one.",
+  "drDigitalIntro": "A folder is a container that holds files.\n• It's like a paper folder in a filing cabinet.\n• Folders keep related files together.\n• That stops your computer becoming one messy pile. Open one below and look inside.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Look inside a folder and come back out",
@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You opened a folder, looked at a file inside, and came back out. Folders keep your files organized!",
+  "drDigitalSuccess": "You opened a folder, looked at a file inside, and came back out. A folder is a box with things in it, nothing more.",
   "drDigitalHint": "Follow the yellow glow — double-click folders and files, but single-click the Home button in the sidebar."
 }

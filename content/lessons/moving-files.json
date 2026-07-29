@@ -5,7 +5,7 @@
   "order": 360,
   "title": "Moving Files",
   "videoUrl": "",
-  "drDigitalIntro": "Moving a file puts it in a different folder.\n• Drag a file onto a folder to drop it inside.\n• The folder will light up when you hover over it.\n• This is how you tidy up. Let's move a file.",
+  "drDigitalIntro": "Moving a file puts it in a different folder.\n• Drag a file onto a folder to drop it inside.\n• The folder will light up when you hover over it.\n• This is how you tidy up. Move one below.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Move a file into the Documents folder",
@@ -23,6 +23,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You moved Budget.xlsx into Documents and checked it landed there. That's how you organize files into folders.",
+  "drDigitalSuccess": "You moved Budget.xlsx into Documents and checked that it landed there. Checking is the half most people skip.",
   "drDigitalHint": "Drag the glowing file onto the folder. The folder turns blue when you hover over it — that's when you drop."
 }

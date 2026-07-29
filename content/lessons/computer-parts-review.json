@@ -10,6 +10,6 @@
     "type": "match-parts",
     "instructions": "Click a dot on the laptop, then click the name it belongs to."
   },
-  "drDigitalSuccess": "Wonderful — you know your laptop inside and out!",
-  "drDigitalHint": "Click a dot on the laptop first, then click the name you think it is. Green means you got it!"
+  "drDigitalSuccess": "You named every part. Nothing on the outside of that laptop is a mystery now.",
+  "drDigitalHint": "Click a dot on the laptop first, then click the name you think it is. Green means you got it."
 }

@@ -10,7 +10,7 @@ import { photoSrc } from "@/lib/photoAssets";
 const HOW_IT_WORKS = [
   {
     title: "Practice first",
-    body: "Every lesson comes with a simulated computer. Click it, break it, start it over — none of it is your real machine.",
+    body: "Every lesson comes with a simulated computer. Click anything you like in it. None of it is your real machine, so nothing you do is a mistake.",
   },
   {
     title: "Then do it for real",
@@ -63,8 +63,8 @@ export default function Home() {
           <div className="mx-auto w-full max-w-[1400px] px-6 pb-6 sm:px-8">
             <h1 className="text-3xl font-bold text-white sm:text-4xl">Welcome to LearnAComputer</h1>
             <p className="mt-1 max-w-2xl text-sm text-white/80">
-              {totalLessons} lessons across {units.length} units — a playground for learning, and
-              for making mistakes.
+              {totalLessons} lessons across {units.length} units, on a practice computer you
+              cannot break.
             </p>
           </div>
         </div>

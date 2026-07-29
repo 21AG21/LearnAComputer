@@ -5,15 +5,15 @@
   "order": 15,
   "title": "Power button",
   "videoUrl": "",
-  "drDigitalIntro": "The power button turns your laptop on and off.\n\u2022 It is usually the blank key in the top-right corner of the keyboard, or a button on the side of the laptop.\n\u2022 Press it briefly to turn the laptop on or wake it from sleep.\n\u2022 Hold it for several seconds to force the laptop off if it is completely frozen.\n\u2022 On many laptops it also has a fingerprint reader built in, so pressing it logs you in automatically.\n\u2022 When in doubt, this is the first button to try.",
+  "drDigitalIntro": "The power button turns your laptop on and off.\n• It is usually the blank key in the top-right corner of the keyboard, or a button on the side of the laptop.\n• Press it briefly to turn the laptop on or wake it from sleep.\n• Hold it for several seconds to force the laptop off if it is completely frozen.\n• On many laptops it also has a fingerprint reader built in, so pressing it logs you in automatically.\n• When in doubt, this is the first button to try.",
   "media": {
     "src": "/playgrounds/power-button.png",
-    "alt": "A classic power symbol \u2014 a circle with a vertical line at the top",
+    "alt": "A classic power symbol — a circle with a vertical line at the top",
     "caption": "The power symbol looks the same on nearly every device."
   },
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's the power button! One of the most important buttons on the whole laptop.",
+  "drDigitalSuccess": "That is the power button. It is the one button that still works when nothing else does.",
   "drDigitalHint": "Find the power button on your own laptop, then click Continue when you're ready."
 }

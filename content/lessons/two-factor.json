@@ -5,7 +5,7 @@
   "order": 1020,
   "title": "Two-Factor Authentication",
   "videoUrl": "",
-  "drDigitalIntro": "Two-factor authentication (2FA) adds a second check after your password.\n\u2022 Usually a one-time code sent to your phone.\n\u2022 Even a stolen password won't get someone in without your phone.\n\u2022 Turn it on for email, banking, and social media.",
+  "drDigitalIntro": "Two-factor authentication (2FA) adds a second check after your password.\n• Usually a one-time code sent to your phone.\n• Even a stolen password won't get someone in without your phone.\n• Turn it on for email, banking, and social media.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You logged in with two-factor authentication",
@@ -21,7 +21,7 @@
         "value": "Secure#2025!"
       },
       {
-        "say": "Click Login \u2014 a 2FA code will be sent to your phone.",
+        "say": "Click Login — a 2FA code will be sent to your phone.",
         "action": "login"
       },
       {
@@ -35,6 +35,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You used two-factor authentication! Even with your password, hackers need your phone too.",
+  "drDigitalSuccess": "Now somebody who steals the password still cannot get in without the phone in your pocket.",
   "drDigitalHint": "Log in first, then enter the code that appears on the 2FA screen."
 }

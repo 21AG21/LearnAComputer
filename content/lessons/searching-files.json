@@ -5,7 +5,7 @@
   "order": 370,
   "title": "Searching for Files",
   "videoUrl": "",
-  "drDigitalIntro": "With lots of files, you can search instead of hunting.\n• The search box is in the top-right corner.\n• Type part of a file's name.\n• Only matching files show up. Let's find one.",
+  "drDigitalIntro": "With lots of files, you can search instead of hunting.\n• The search box is in the top-right corner.\n• Type part of a file's name.\n• Only matching files show up. Find one below.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Find a file using search",

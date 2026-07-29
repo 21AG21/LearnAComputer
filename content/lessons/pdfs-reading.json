@@ -5,7 +5,7 @@
   "order": 1241,
   "title": "Reading and Saving PDFs",
   "videoUrl": "",
-  "drDigitalIntro": "PDFs are one of the most common things you will download. A PDF looks the same on every device, which makes it perfect for forms, receipts, and instruction manuals.\n\nTo open one from the internet:\n1. Click a PDF link — the browser usually opens it right away in its built-in viewer.\n2. Use the + and - buttons at the top to enlarge small print.\n3. Scroll through the pages like a web page.\n\nTo save one:\n1. Click the download arrow in the viewer's toolbar.\n2. The file lands in your Downloads folder.\n3. To read it later, open your file manager — Finder on a Mac, File Explorer on Windows — go to Downloads, and double-click it.\n\nTo turn anything printable into a PDF:\n1. Press Ctrl+P (Command+P on a Mac) to open the Print window.\n2. Under Printer, choose 'Save as PDF'.\n3. Click Save and pick where to put it.\n\nTip: PDFs from your bank or doctor matter — save them in a named folder so you can find them again.",
+  "drDigitalIntro": "PDFs are one of the most common things you will download. A PDF looks the same on every device, which makes it perfect for forms, receipts, and instruction manuals.\n\nTo open one from the internet:\n1. Click a PDF link. The browser usually opens it right away in its built-in viewer.\n2. Use the + and - buttons at the top to enlarge small print.\n3. Scroll through the pages like a web page.\n\nTo save one:\n1. Click the download arrow in the viewer's toolbar.\n2. The file lands in your Downloads folder.\n3. To read it later, open your file manager (Finder on a Mac, File Explorer on Windows), go to Downloads, and double-click it.\n\nTo turn anything printable into a PDF:\n1. Press Ctrl+P (Command+P on a Mac) to open the Print window.\n2. Under Printer, choose 'Save as PDF'.\n3. Click Save and pick where to put it.\n\nTip: PDFs from your bank or doctor matter. Save them in a named folder so you can find them again.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You found, saved, and showed me a real PDF",
@@ -13,12 +13,12 @@
       {
         "say": "Find a PDF on the internet and open it.",
         "check": "confirm",
-        "detail": "An easy way: search for any recipe or user manual followed by the letters PDF. Click a result that opens right in the browser — you will see pages, like paper on the screen."
+        "detail": "An easy way: search for any recipe or user manual followed by the letters PDF. Click a result that opens right in the browser. You will see pages, like paper on the screen."
       },
       {
         "say": "Save it to your computer.",
         "check": "confirm",
-        "detail": "Look for the download arrow in the viewer's toolbar (usually top-right). Click it — the file lands in your Downloads folder."
+        "detail": "Look for the download arrow in the viewer's toolbar (usually top-right). Click it and the file lands in your Downloads folder."
       },
       {
         "say": "Show me the PDF you just saved.",
@@ -27,10 +27,10 @@
           "kind": "pdf",
           "recentMinutes": 60
         },
-        "detail": "Click the button and pick the file from your Downloads folder. I check two things: it is really a PDF, and it was saved in the last hour — so it has to be the one you just downloaded. I never upload it anywhere."
+        "detail": "Click the button and pick the file from your Downloads folder. I check two things: it is really a PDF, and it was saved in the last hour, so it has to be the one you just downloaded. I never upload it anywhere."
       }
     ]
   },
-  "drDigitalSuccess": "That is the whole journey — find, save, and find it again on your own computer. Forms, receipts, and manuals all travel as PDFs, and now they are all yours to keep.",
+  "drDigitalSuccess": "Found, saved, and found again on your own computer. Forms, receipts, and manuals all travel as PDFs, and now they are all yours to keep.",
   "drDigitalHint": "Stuck finding one? Search for 'apple pie recipe pdf'. The download arrow is in the PDF viewer's own toolbar, not the browser's menu."
 }

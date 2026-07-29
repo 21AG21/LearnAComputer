@@ -39,6 +39,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You found help by copying the error code and searching for it! That is a real-world skill — tech support works best when you give the exact error.",
+  "drDigitalSuccess": "You copied the exact error and searched for it. Anybody helping you, paid or not, can do far more with the exact words than with \"it broke\".",
   "drDigitalHint": "Copy the error code, close the dialog, open Browser, paste the code, submit, then reopen Photos."
 }

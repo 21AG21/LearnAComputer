@@ -5,7 +5,7 @@
   "order": 712,
   "title": "Deleted Photos",
   "videoUrl": "",
-  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n• It goes to a Recently Deleted folder for 30 days.\n• You can recover it there if you change your mind.\n• After 30 days it's deleted for good. Let's delete and recover one.",
+  "drDigitalIntro": "Deleting a photo doesn't erase it right away.\n• It goes to a Recently Deleted folder for 30 days.\n• You can recover it there if you change your mind.\n• After 30 days it's deleted for good. Delete one below, then get it back.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You deleted and recovered a photo",
@@ -32,6 +32,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You deleted and recovered a photo! Recently Deleted gives you 30 days to change your mind.",
+  "drDigitalSuccess": "You deleted a photo and got it back. Recently Deleted holds one for 30 days before anything becomes final.",
   "drDigitalHint": "Delete a photo first, then go to Recently Deleted in the sidebar to recover it."
 }

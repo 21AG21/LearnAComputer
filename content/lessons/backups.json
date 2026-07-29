@@ -22,6 +22,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Automatic backups are on! Your files will be saved regularly — if anything goes wrong, you can restore them.",
+  "drDigitalSuccess": "Automatic backups are on. From now on the copies make themselves, and the day something breaks you will have one to go back to.",
   "drDigitalHint": "Find the Storage section, then flip the Automatic Backups switch to On."
 }

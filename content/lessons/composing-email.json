@@ -35,6 +35,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Email sent! You filled in To, Subject, and the body — the three things every email needs. From now on you can write to anyone.",
+  "drDigitalSuccess": "Email sent. To, subject, body: every email you write needs those three, and nothing else is required.",
   "drDigitalHint": "Work through each field from top to bottom: To → Subject → body → Send."
 }

@@ -5,11 +5,11 @@
   "order": 5,
   "title": "Zoom In and Out",
   "videoUrl": "",
-  "drDigitalIntro": "Zooming makes text and images bigger or smaller so they are easier to see.\n\u2022 On a trackpad: spread two fingers apart to zoom in, and pinch them together to zoom out.\n\u2022 On a keyboard: hold the Control key and press Plus (+) to zoom in, or Minus (-) to zoom out.\n\u2022 You can zoom in on any web page, photo, or document.\n\u2022 Press Control and Zero (0) to jump back to the normal size.\n\u2022 In the activity, zoom in until you can read a tiny promo code, then type it in.",
+  "drDigitalIntro": "Zooming makes text and images bigger or smaller so they are easier to see.\n• On a trackpad: spread two fingers apart to zoom in, and pinch them together to zoom out.\n• On a keyboard: hold the Control key and press Plus (+) to zoom in, or Minus (-) to zoom out.\n• You can zoom in on any web page, photo, or document.\n• Press Control and Zero (0) to jump back to the normal size.\n• In the activity, zoom in until you can read a tiny promo code, then type it in.",
   "playgroundTask": {
     "type": "pinch-zoom",
     "instructions": "Open the browser. Pinch two fingers apart on the trackpad to zoom in (or tap the + button). Read the tiny promo code, then type it in the box."
   },
-  "drDigitalSuccess": "You zoomed in and read the tiny code \u2014 great detective work!",
-  "drDigitalHint": "Put two fingers on the trackpad and spread them apart to zoom in \u2014 or click the + button. Keep zooming until the little promo code is easy to read, then type it in."
+  "drDigitalSuccess": "You zoomed in far enough to read it. Nothing on a screen is too small to deal with.",
+  "drDigitalHint": "Put two fingers on the trackpad and spread them apart to zoom in — or click the + button. Keep zooming until the little promo code is easy to read, then type it in."
 }

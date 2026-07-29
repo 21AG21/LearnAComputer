@@ -5,7 +5,7 @@
   "order": 1160,
   "title": "Slow Computer and Full Storage",
   "videoUrl": "",
-  "drDigitalIntro": "A slow computer often has too many apps open or full storage.\n• Performance suffers when storage is over 90% full.\n• Delete files you don't need and empty the trash.\n• Close apps you're not using to free up memory.\n• Let's fix a slow computer by cleaning up storage.",
+  "drDigitalIntro": "A slow computer often has too many apps open or full storage.\n• Performance suffers when storage is over 90% full.\n• Delete files you don't need and empty the trash.\n• Close apps you're not using to free up memory.\n• The computer below has a full disk. Clear it out.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "You freed up storage and your computer feels faster",
@@ -26,6 +26,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You freed up storage! The bar dropped and your computer feels faster. Keep at least 10% of your storage free.",
+  "drDigitalSuccess": "The bar dropped. A computer with no room left on it slows down, so leave yourself roughly a tenth of the disk free.",
   "drDigitalHint": "Click Storage in the sidebar, delete Old Videos, then empty the Trash."
 }

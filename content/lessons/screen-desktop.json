@@ -5,10 +5,10 @@
   "order": 30,
   "title": "Desktop",
   "videoUrl": "",
-  "drDigitalIntro": "The desktop is the main screen you see when your computer turns on.\n\u2022 It is your starting point for everything.\n\u2022 Along the bottom is the dock \u2014 a row of icons for your most-used apps.\n\u2022 You can put folders and files right on the desktop for quick access.\n\u2022 Now look at your own screen. Can you see the dock at the bottom or the menu bar at the top? Take a moment to find them before you continue.",
+  "drDigitalIntro": "The desktop is the main screen you see when your computer turns on.\n• It is your starting point for everything.\n• Along the bottom is the dock — a row of icons for your most-used apps.\n• You can put folders and files right on the desktop for quick access.\n• Now look at your own screen. Can you see the dock at the bottom or the menu bar at the top? Take a moment to find them before you continue.",
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "That's your desktop \u2014 home base for everything you do!",
+  "drDigitalSuccess": "That is the desktop. Everything else on the computer opens on top of it.",
   "drDigitalHint": "Take a look around the playground desktop on the right, then click Continue whenever you're ready."
 }

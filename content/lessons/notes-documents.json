@@ -5,7 +5,7 @@
   "order": 1231,
   "title": "Notes and Documents",
   "videoUrl": "",
-  "drDigitalIntro": "Your computer comes with a notes app — perfect for quick lists and ideas, and it saves by itself.\n• Find it: it is called Notes on a Mac, Notepad on Windows. Search your apps for it.\n• Make a new note (look for a + or a New button) and type a short list of your own — three things you actually need this week.\n• Notice there is no Save button to press. It keeps your words on its own.\n• Then use two skills from Unit 2: select your list and copy it (Ctrl+A then Ctrl+C), come back here, and paste it.\n• I can tell the difference between pasted text and typed text — so the paste is the proof.",
+  "drDigitalIntro": "Your computer comes with a notes app. It is good for quick lists and ideas, and it saves by itself.\n• Find it: it is called Notes on a Mac, Notepad on Windows. Search your apps for it.\n• Make a new note (look for a + or a New button) and type a short list of your own: three things you actually need this week.\n• Notice there is no Save button to press. It keeps your words on its own.\n• Then use two skills from Unit 2: select your list and copy it (Ctrl+A then Ctrl+C), come back here, and paste it.\n• I can tell the difference between pasted text and typed text, so the paste is the proof.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You wrote a real note in your own notes app and copied it out",
@@ -16,7 +16,7 @@
         "detail": "Notes on a Mac, Notepad on Windows. Search your apps if you do not see it."
       },
       {
-        "say": "Type a list of three things you need this week — your own words.",
+        "say": "Type a list of three things you need this week, in your own words.",
         "check": "confirm",
         "detail": "Anything real: groceries, errands, birthdays. Three lines is plenty."
       },
@@ -24,10 +24,10 @@
         "say": "Copy your list there, then paste it in the box below.",
         "check": "paste",
         "minChars": 10,
-        "detail": "In the notes app: Ctrl+A to select all, Ctrl+C to copy (Command on a Mac). Click the box, then Ctrl+V. Typing it out by hand will not count — it has to arrive as a paste."
+        "detail": "In the notes app: Ctrl+A to select all, Ctrl+C to copy (Command on a Mac). Click the box, then Ctrl+V. Typing it out by hand will not count; it has to arrive as a paste."
       }
     ]
   },
-  "drDigitalSuccess": "A real note, in your real notes app, copied between two programs — that is everyday computing, done. Your list is still sitting in the notes app whenever you need it.",
-  "drDigitalHint": "The copy happens in the notes app; the paste happens here. Ctrl+A, Ctrl+C over there — click the box here — Ctrl+V."
+  "drDigitalSuccess": "A real note, in your real notes app, copied between two programs. That is everyday computing, done. Your list is still sitting in the notes app whenever you need it.",
+  "drDigitalHint": "The copy happens in the notes app; the paste happens here. Ctrl+A then Ctrl+C over there. Click the box here, then Ctrl+V."
 }

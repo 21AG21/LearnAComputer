@@ -30,11 +30,11 @@
         "target": "Zen Garden"
       },
       {
-        "say": "Notice the green 'No ads' tag and the $4.99 price. Install whichever you prefer — there's no wrong answer!",
+        "say": "Notice the green 'No ads' tag and the $4.99 price. Install whichever you prefer. There is no wrong answer here.",
         "action": "install"
       }
     ]
   },
-  "drDigitalSuccess": "You compared a free app with ads to a paid app without ads. Both are valid choices — now you know what to look for!",
+  "drDigitalSuccess": "You compared a free app carrying ads with a paid one without them. Neither is the wrong choice. Now you know what you are trading.",
   "drDigitalHint": "Open each app listing to read the tags. 'Contains ads' means you'll see advertisements. 'No ads' means a clean experience."
 }

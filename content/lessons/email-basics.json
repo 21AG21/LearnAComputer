@@ -5,7 +5,7 @@
   "order": 600,
   "title": "Your Inbox",
   "videoUrl": "",
-  "drDigitalIntro": "Email is like sending a letter, but instantly.\n• Your Inbox is where emails arrive; Sent holds emails you've sent.\n• Drafts are emails you started but haven't sent.\n• Spam is junk mail; Archive stores emails out of your Inbox. Let's explore!",
+  "drDigitalIntro": "Email is like sending a letter, but instantly.\n• Your Inbox is where emails arrive; Sent holds emails you've sent.\n• Drafts are emails you started but haven't sent.\n• Spam is junk mail; Archive stores emails out of your Inbox.",
   "playgroundTask": {
     "type": "guided-email",
     "goal": "You explored your inbox and read emails",
@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You opened and read emails like a pro! Your Inbox is the starting point for all email communication.",
+  "drDigitalSuccess": "You opened your mail and read it. The Inbox is where everything lands before you decide what to do with it.",
   "drDigitalHint": "Click on an email in the list to open and read it. Then click Inbox in the left sidebar."
 }

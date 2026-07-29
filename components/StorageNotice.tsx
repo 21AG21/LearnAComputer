@@ -32,8 +32,9 @@ export default function StorageNotice() {
     >
       <p>
         <strong>Heads up:</strong> this browser is not saving your progress. Everything you finish
-        still counts while this window is open — it just will not be here tomorrow. Signing in
-        saves it for good.
+        still counts while this window is open, but it will not be here tomorrow. A private window
+        or a locked-down computer is the usual cause; an ordinary window on your own machine will
+        remember.
       </p>
       <button
         onClick={() => setDismissed(true)}

@@ -105,8 +105,11 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
             <CheckIcon size={20} />
           </div>
           <div>
-            <p className="font-bold text-green-700">Course complete!</p>
-            <p className="text-sm text-green-700">You finished every lesson. Amazing work.</p>
+            <p className="font-bold text-green-700">Course complete</p>
+            <p className="text-sm text-green-700">
+              All {totalSubLessons} lessons, all {units.length} units. Come back to any of them
+              whenever you want the practice.
+            </p>
           </div>
         </div>
       ) : continueRoute ? (

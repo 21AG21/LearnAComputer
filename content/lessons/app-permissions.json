@@ -5,7 +5,7 @@
   "order": 830,
   "title": "App Permissions",
   "videoUrl": "",
-  "drDigitalIntro": "Apps ask for permissions when they need access to something on your device.\n• Common permissions: Camera, Microphone, Location.\n• Ask yourself: does this app actually need this?\n• A puzzle game asking for your camera is suspicious — a photo-sharing app is not.\n• You can always say no. You can change permissions later in Settings.",
+  "drDigitalIntro": "Apps ask for permissions when they need access to something on your device.\n• Common permissions: Camera, Microphone, Location.\n• Ask yourself: does this app actually need this?\n• A puzzle game asking for your camera is suspicious. A photo-sharing app asking is not.\n• You can always say no. You can change permissions later in Settings.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You evaluated and responded to app permission requests",
@@ -21,16 +21,16 @@
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click Install. It asks for Camera access — a puzzle game has no reason to need that!",
+        "say": "Click Install. It asks for Camera access, and a puzzle game has no reason to need that.",
         "action": "install",
         "target": "Puzzle Quest"
       },
       {
-        "say": "Click Don't Allow — this permission is suspicious for a puzzle game.",
+        "say": "Click Don't Allow. That permission makes no sense for a puzzle game.",
         "action": "deny-permission"
       },
       {
-        "say": "Good. Now search for 'PhotoFun' — a photo-sharing app that genuinely needs your camera.",
+        "say": "Good. Now search for 'PhotoFun', a photo-sharing app that genuinely does need your camera.",
         "action": "search",
         "value": "PhotoFun"
       },
@@ -45,11 +45,11 @@
         "target": "PhotoFun"
       },
       {
-        "say": "PhotoFun needs Camera access to take and share photos — that makes sense. Click Allow.",
+        "say": "PhotoFun needs Camera access to take and share photos, which is what it is for. Click Allow.",
         "action": "allow-permission"
       }
     ]
   },
-  "drDigitalSuccess": "You evaluated permissions like a pro! Always ask: does this app actually need what it is asking for?",
+  "drDigitalSuccess": "You read what each app was asking for before agreeing to it. The question is always the same one: does it actually need that to do its job?",
   "drDigitalHint": "Read what each app is asking for. Deny anything that does not make sense for what the app does."
 }

@@ -5,7 +5,7 @@
   "order": 380,
   "title": "Trash: Delete and Recover",
   "videoUrl": "",
-  "drDigitalIntro": "When you don't need a file, move it to the Trash.\n• Deleting sends it to the Trash, where it waits.\n• Delete something by accident? You can put it back.\n• Let's delete a file, then rescue it.",
+  "drDigitalIntro": "When you don't need a file, move it to the Trash.\n• Deleting sends it to the Trash, where it waits.\n• Delete something by accident? You can put it back.\n• Delete a file below, then rescue it.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Delete a file, then recover it from the Trash",
@@ -16,12 +16,12 @@
         "target": "TaxReturn.pdf"
       },
       {
-        "say": "Oops — we still need it! Click Trash in the sidebar, click TaxReturn.pdf, then click Put Back.",
+        "say": "Oops, we still need that one. Click Trash in the sidebar, click TaxReturn.pdf, then click Put Back.",
         "action": "restore",
         "target": "TaxReturn.pdf"
       }
     ]
   },
-  "drDigitalSuccess": "You deleted a file AND rescued it from the Trash. Now you'll never panic about deleting something by accident!",
+  "drDigitalSuccess": "You deleted a file and got it back out of the Trash. Deleting is almost never final, which is worth knowing before it matters.",
   "drDigitalHint": "First select the file and click Move to Trash. Then open Trash in the sidebar, select the file, and click Put Back."
 }

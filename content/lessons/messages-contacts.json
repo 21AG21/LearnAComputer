@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You just browsed three different conversations without sending anything. The contact list is your address book — click any name to pick up where you left off.",
+  "drDigitalSuccess": "You looked through three conversations without sending anything. The contact list is an address book: click a name and the conversation is where you left it.",
   "drDigitalHint": "Click a name in the left sidebar to open that conversation. You can switch between contacts any time."
 }

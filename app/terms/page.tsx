@@ -23,7 +23,7 @@ export default function TermsPage() {
 
       <h2>What you may not do</h2>
       <ul>
-        <li>Attempt to break, overload, or gain unauthorised access to the site or its host.</li>
+        <li>Attempt to break, overload, or gain unauthorized access to the site or its host.</li>
         <li>Copy the lesson content and present it as your own.</li>
         <li>Use the site to store or transmit anything unlawful.</li>
       </ul>

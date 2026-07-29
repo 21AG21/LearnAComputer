@@ -5,18 +5,18 @@
   "order": 1110,
   "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Computers act up sometimes — and that is completely normal. Here is how to stay calm and fix it.\n• If an app freezes (stops responding), do not keep clicking — that makes things worse. The spinning indicator means the computer is struggling.\n• Force-quit the frozen app: click the system menu and choose Force Quit. This closes the stuck app without affecting the rest of your computer.\n• Reopen it fresh from the dock. Most freezes are temporary — the app starts normally again.\n• Once the app is back, test that it really works by typing or clicking inside it before moving on.\n• If force-quitting does not help, the next step is a full restart (covered in the next lesson).",
+  "drDigitalIntro": "Computers act up sometimes, and that is completely normal. Here is how to stay calm and fix it.\n• If an app freezes (stops responding), do not keep clicking. That makes it worse. The spinning indicator means the computer is struggling.\n• Force-quit the frozen app: click the system menu and choose Force Quit. This closes the stuck app without affecting the rest of your computer.\n• Reopen it fresh from the dock. Most freezes are temporary and the app starts normally again.\n• Once the app is back, test that it really works by typing or clicking inside it before moving on.\n• If force-quitting does not help, the next step is a full restart (covered in the next lesson).",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You fixed a frozen app and confirmed it is working",
     "scenario": "Notes is frozen and not responding",
     "steps": [
       {
-        "say": "Notes is frozen — it shows 'Not Responding.' Try clicking on it to see what happens.",
+        "say": "Notes is frozen and shows 'Not Responding.' Try clicking on it to see what happens.",
         "action": "click-frozen"
       },
       {
-        "say": "Nothing happened — the app is stuck. Click the system menu (three dots) in the menu bar to open Force Quit.",
+        "say": "Nothing happened, because the app is stuck. Click the system menu (three dots) in the menu bar to open Force Quit.",
         "action": "open-force-quit"
       },
       {
@@ -30,11 +30,11 @@
         "target": "Notes"
       },
       {
-        "say": "Notes is back! Type something in it to confirm it is working.",
+        "say": "Notes is back. Type something in it to confirm it is working.",
         "action": "type-in-app"
       }
     ]
   },
-  "drDigitalSuccess": "You fixed the frozen app and confirmed it works! Force Quit + reopen solves most temporary freezes.",
+  "drDigitalSuccess": "You forced it to quit, opened it again, and checked that it works. That sequence handles most freezes.",
   "drDigitalHint": "Click the frozen window, then use the system menu to Force Quit, reopen from the dock, and type something in Notes."
 }

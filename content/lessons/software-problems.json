@@ -40,6 +40,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You deleted and reinstalled Browser to fix it! This is the right move when force-quitting does not solve the problem.",
+  "drDigitalSuccess": "You deleted the broken app and installed it again. That is the next thing to try when force quitting has not helped.",
   "drDigitalHint": "Open App Market, go to My Apps, delete Browser, switch to Store, install it again, then open it from the dock."
 }

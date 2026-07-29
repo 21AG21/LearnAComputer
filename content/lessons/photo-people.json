@@ -5,7 +5,7 @@
   "order": 711,
   "title": "Finding a photo by searching",
   "videoUrl": "",
-  "drDigitalIntro": "When you have hundreds of photos, Search is the fastest way to find what you need.\n• Type a word like 'dog' or 'beach' and matching photos appear instantly.\n• Real photo apps also recognize faces — name someone once, and the app finds every photo of them.\n• Let's practice searching to find a specific photo.",
+  "drDigitalIntro": "When you have hundreds of photos, Search is the fastest way to find what you need.\n• Type a word like 'dog' or 'beach' and matching photos appear instantly.\n• Real photo apps also recognize faces — name someone once, and the app finds every photo of them.\n• Find one photo below by searching for it.",
   "playgroundTask": {
     "type": "guided-photos",
     "goal": "You found a photo by searching",
@@ -30,6 +30,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You searched, found, and favorited a photo! Search works by name, place, or even what is in the photo — try it on your own computer's Photos app.",
+  "drDigitalSuccess": "You found it by searching instead of scrolling. Photo search reads names, places, and often what is actually in the picture.",
   "drDigitalHint": "Click the search icon in the sidebar, type 'dog', then open the photo and mark it as a favorite."
 }

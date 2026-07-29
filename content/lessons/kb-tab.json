@@ -9,6 +9,6 @@
   "playgroundTask": {
     "type": "keyboard-nav-game"
   },
-  "drDigitalSuccess": "You navigated the whole form using only Tab and Enter — no mouse needed!",
+  "drDigitalSuccess": "You filled in the whole form with Tab and Enter. The mouse stayed where it was.",
   "drDigitalHint": "Press Tab to move to the next button, Shift+Tab to go back, and Enter to click the highlighted one."
 }

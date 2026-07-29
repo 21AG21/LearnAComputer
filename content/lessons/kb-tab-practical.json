@@ -22,6 +22,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You completed the whole color sequence using only the keyboard — Tab and Enter are a powerful pair!",
+  "drDigitalSuccess": "You finished the whole sequence from the keyboard. Tab moves, Enter chooses, and between them they can work most of a screen.",
   "drDigitalHint": "Click the address bar, type pickacolor.example and press Enter. Then press Tab to move the focus ring between the circles, and press Enter when the right color is highlighted."
 }

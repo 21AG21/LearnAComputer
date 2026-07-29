@@ -5,7 +5,7 @@
   "order": 1242,
   "title": "Printing from Your Computer",
   "videoUrl": "",
-  "drDigitalIntro": "Printing puts what is on your screen onto paper — and one shortcut opens the Print window almost anywhere.\n• The shortcut is Ctrl+P. On a Mac it is Command+P. P for Print.\n• The Print window shows a preview, lets you pick a printer, and choose how many copies.\n• No printer? The same window can save the page as a PDF instead — pick 'Save as PDF' where the printer name goes.\n• The common mistake: hunting through menus for a Print button. The shortcut works even when there is no button.\n• Prove it to me below — this page can tell when you really press it.",
+  "drDigitalIntro": "Printing puts what is on your screen onto paper, and one shortcut opens the Print window almost anywhere.\n• The shortcut is Ctrl+P. On a Mac it is Command+P. P for Print.\n• The Print window shows a preview, lets you pick a printer, and choose how many copies.\n• No printer? The same window can save the page as a PDF instead: pick 'Save as PDF' where the printer name goes.\n• The common mistake: hunting through menus for a Print button. The shortcut works even when there is no button.\n• Prove it to me below. This page can tell when you really press it.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You know the shortcut that prints from almost any program",
@@ -14,7 +14,7 @@
         "say": "Press Ctrl+P right now (Command+P on a Mac).",
         "check": "keys",
         "keys": "ctrl+p",
-        "detail": "Press it while you are on this page. I will catch it before the Print window opens — this one is just practice."
+        "detail": "Press it while you are on this page. I will catch it before the Print window opens, so this one is only practice."
       },
       {
         "say": "Now do it for real: open any web page you like in another tab and press the same shortcut there.",
@@ -23,6 +23,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "That shortcut works in nearly every program you will ever use. You can put anything on paper now — or save it as a PDF when there is no printer around.",
+  "drDigitalSuccess": "That shortcut works in nearly every program you will ever use. You can put anything on paper now, or save it as a PDF when there is no printer around.",
   "drDigitalHint": "Hold the Ctrl key (or Command on a Mac) and tap the letter P once."
 }

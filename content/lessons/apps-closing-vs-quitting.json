@@ -5,7 +5,7 @@
   "order": 42,
   "title": "Closing a window vs. quitting",
   "videoUrl": "",
-  "drDigitalIntro": "Closing a window and quitting an app are two different things.\n• The yellow minus button minimizes the window — it hides it, but the app is still running. You can see it is still open because a green dot appears on the dock icon.\n• The X button closes the window completely. On some apps, this also quits the app.\n• Let's see the difference: minimize the window, then bring it back, then close it.",
+  "drDigitalIntro": "Closing a window and quitting an app are two different things.\n• The yellow minus button minimizes the window — it hides it, but the app is still running. You can see it is still open because a green dot appears on the dock icon.\n• The X button closes the window completely. On some apps, this also quits the app.\n• Try both below: minimize the window, bring it back, then close it.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Practice minimize and close",
@@ -24,6 +24,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Now you know the difference — minimize hides, close removes. Great work!",
+  "drDigitalSuccess": "Minimize hides a window. Close puts the app away. Now you can tell which one you just did.",
   "drDigitalHint": "Use the yellow minus to minimize, then click the icon in the dock to restore, then the X button to close."
 }

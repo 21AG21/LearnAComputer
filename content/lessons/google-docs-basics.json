@@ -5,29 +5,29 @@
   "order": 1233,
   "title": "Writing a Document Online",
   "videoUrl": "",
-  "drDigitalIntro": "Google Docs is a free word processor that runs in your web browser — no software to install.\n\nTry it now on your own computer:\n\n1. Open your web browser.\n2. Go to docs.google.com (you'll need to sign in with a Google account — if you don't have one, you can create one for free).\n3. Click the + Blank button to create a new document.\n4. Type a short paragraph about anything you like — your favorite meal, a memory, what you did today.\n5. Watch the top of the page: it says \"Saving...\" then \"All changes saved.\" Your work is saved automatically — no need to click Save!\n\nThat's it — you just created a document that lives in the cloud and can be opened from any device.",
+  "drDigitalIntro": "Google Docs is a free word processor that runs in your web browser. There is no software to install.\n\nTry it now on your own computer:\n\n1. Open your web browser.\n2. Go to docs.google.com (you'll need to sign in with a Google account; if you don't have one, you can create one for free).\n3. Click the + Blank button to create a new document.\n4. Type a short paragraph about anything you like: your favorite meal, a memory, what you did today.\n5. Watch the top of the page: it says \"Saving...\" then \"All changes saved.\" Your work is saved automatically. There is no Save button to press.\n\nYou have just created a document that lives in the cloud and can be opened from any device.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You created a real document online and brought back its address",
     "steps": [
       {
-        "say": "Open a new tab and go to docs.google.com — sign in if it asks.",
+        "say": "Open a new tab and go to docs.google.com. Sign in if it asks.",
         "check": "confirm",
-        "detail": "You need a Google account for this one. If you do not have one and do not want one today, that is fine — use Skip and come back later. Nothing after this lesson depends on it."
+        "detail": "You need a Google account for this one. If you do not have one and do not want one today, that is fine: use Skip and come back later. Nothing after this lesson depends on it."
       },
       {
         "say": "Click the + Blank page to start a new document, and type one sentence.",
         "check": "confirm",
-        "detail": "Anything — 'This is my first online document' is perfect. Notice you never press Save; it saves as you type."
+        "detail": "Anything. 'This is my first online document' will do. Notice you never press Save; it saves as you type."
       },
       {
         "say": "Copy the document's address and paste it below.",
         "check": "paste",
         "minChars": 25,
-        "detail": "Click once in the address bar at the top — the whole address highlights. Ctrl+C to copy, come back here, Ctrl+V in the box. That address IS your document — anyone you share it with later uses it."
+        "detail": "Click once in the address bar at the top and the whole address highlights. Ctrl+C to copy, come back here, Ctrl+V in the box. That address IS your document; anyone you share it with later uses it."
       }
     ]
   },
-  "drDigitalSuccess": "You just made a document that lives on the internet — you can open it from any computer in the world by signing in. The next lesson shows you how to share it.",
+  "drDigitalSuccess": "That document lives on the internet rather than on this computer. Sign in from any other machine and it will be there. The next lesson is about letting somebody else see it.",
   "drDigitalHint": "The address bar is the long box at the very top of the browser. One click selects the whole address; Ctrl+C copies it."
 }

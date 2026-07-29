@@ -9,6 +9,6 @@
   "playgroundTask": {
     "type": "none"
   },
-  "drDigitalSuccess": "Now you know the steps: check the connection, unplug/replug, restart. Most peripheral problems are that simple!",
+  "drDigitalSuccess": "Check the connection, unplug it and plug it back in, then restart. Most trouble with a plugged-in device gives up somewhere in that list.",
   "drDigitalHint": "Just read along and click Continue when you're ready."
 }

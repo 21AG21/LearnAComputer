@@ -40,6 +40,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You moved, resized, minimized, maximized, and closed a window — you're a window expert!",
+  "drDigitalSuccess": "Moved, resized, hidden, filled the screen, and closed. There is nothing else a window does.",
   "drDigitalHint": "Look for the pulsing yellow ring — it shows exactly what to click or drag next."
 }

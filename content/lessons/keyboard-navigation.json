@@ -9,6 +9,6 @@
   "playgroundTask": {
     "type": "keyboard-nav-game"
   },
-  "drDigitalSuccess": "Excellent! You navigated a whole form using only the keyboard — no mouse needed!",
+  "drDigitalSuccess": "A whole form filled in from the keyboard. Some people work this way all day because it is faster than reaching for the mouse.",
   "drDigitalHint": "Click 'Start keyboard navigation', then use Tab to move forward through the fields and buttons, Shift+Tab to go back, and Enter to click a button."
 }

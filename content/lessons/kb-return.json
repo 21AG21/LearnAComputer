@@ -12,6 +12,6 @@
     "targetText": "Dear Dr. Digital,\nThank you for teaching me!",
     "exact": false
   },
-  "drDigitalSuccess": "You used Return to start a new line — that is exactly how paragraphs and new lines work everywhere.",
+  "drDigitalSuccess": "You used Return to start a new line. Paragraphs work that way in every program on the machine.",
   "drDigitalHint": "Type the first line, then press Return (or Enter) to move down, then type the second line."
 }

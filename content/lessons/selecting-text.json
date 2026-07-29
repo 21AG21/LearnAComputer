@@ -21,6 +21,6 @@
       "THIS PART DOES NOT BELONG HERE"
     ]
   },
-  "drDigitalSuccess": "You selected and deleted whole sentences — that's the power of selecting text!",
+  "drDigitalSuccess": "You deleted whole sentences at once. Selecting first is what makes that possible.",
   "drDigitalHint": "The two ALL-CAPS sentences don't belong. Click at the start of one, hold Shift, and click at the end to select it all, then press Delete. Don't forget to remove the extra space left behind too."
 }

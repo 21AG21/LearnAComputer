@@ -31,6 +31,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You installed an app! It is now in My Apps. Next we will learn about permission requests.",
+  "drDigitalSuccess": "The app is installed and sitting in My Apps. Next comes the part most people click straight past: what it is asking permission to do.",
   "drDigitalHint": "Search for the app, click its name, then click the Install button."
 }

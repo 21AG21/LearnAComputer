@@ -21,12 +21,12 @@
         "target": "Downloads"
       },
       {
-        "say": "Click Home to return to your main files. That's how you get around in the file manager!",
+        "say": "Click Home to return to your main files. That's how you get around in the file manager.",
         "action": "go-to",
         "target": "Home"
       }
     ]
   },
-  "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. That's how you navigate everywhere in the file manager.",
+  "drDigitalSuccess": "You used the sidebar to visit Pictures, Downloads, and Home. The sidebar is how you get anywhere in the file manager.",
   "drDigitalHint": "Single-click the glowing place in the sidebar on the left."
 }

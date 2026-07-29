@@ -5,7 +5,7 @@
   "order": 1050,
   "title": "Protecting Your Identity",
   "videoUrl": "",
-  "drDigitalIntro": "Identity theft is when a thief uses your details to pretend to be you. They might open a bank account, buy things, or get into your email \u2014 all in your name.\n\u2022 Never type your ID number, passport number, or bank details into a website unless you went there yourself and you are sure it is the real one.\n\u2022 Guard your email and your bank the hardest. A thief who gets into your email can reset the password on everything else.\n\u2022 Read your bank statement once a month. A small charge you do not recognize is often the first sign, long before anything big happens.\n\u2022 Websites can follow you from site to site. Your computer has a setting to stop that. It is called Cross-Site Tracking, and turning it off is safe.\n\u2022 If it does happen: call your bank first, then change your passwords, then report it. Acting the same day is what keeps the damage small.",
+  "drDigitalIntro": "Identity theft is when a thief uses your details to pretend to be you. They might open a bank account, buy things, or get into your email — all in your name.\n• Never type your ID number, passport number, or bank details into a website unless you went there yourself and you are sure it is the real one.\n• Guard your email and your bank the hardest. A thief who gets into your email can reset the password on everything else.\n• Read your bank statement once a month. A small charge you do not recognize is often the first sign, long before anything big happens.\n• Websites can follow you from site to site. Your computer has a setting to stop that. It is called Cross-Site Tracking, and turning it off is safe.\n• If it does happen: call your bank first, then change your passwords, then report it. Acting the same day is what keeps the damage small.",
   "playgroundTask": {
     "type": "guided-settings",
     "goal": "Tighten your privacy settings to reduce tracking",
@@ -16,7 +16,7 @@
         "target": "privacy"
       },
       {
-        "say": "Turn off Cross-Site Tracking \u2014 this stops websites following you across the web.",
+        "say": "Turn off Cross-Site Tracking — this stops websites following you across the web.",
         "action": "toggle",
         "target": "cross-site-tracking"
       },
@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Your privacy settings are tighter! Turning off tracking makes it harder for data collectors to build a profile about you.",
+  "drDigitalSuccess": "Tracking is off. That does not make you invisible, but it does make you much harder to follow from site to site.",
   "drDigitalHint": "Open Privacy in the Settings sidebar, then click the toggles to turn off Cross-Site Tracking and Location Sharing."
 }

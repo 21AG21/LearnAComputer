@@ -5,7 +5,7 @@
   "order": 21,
   "title": "Restarting your laptop",
   "videoUrl": "",
-  "drDigitalIntro": "Restarting your computer means turning it off and back on again. It is one of the most useful fixes in computing.\n\u2022 When something is acting strange, a restart often clears the problem.\n\u2022 Open Settings, find the About or System section, and look for a Restart button.\n\u2022 When you click Restart, your computer will warn you that unsaved work will be lost \u2014 save first if you can.\n\u2022 The computer goes dark for a moment, then starts up fresh. That's normal.\n\u2022 Note: restarting is different from Sleep. Sleep saves your work and wakes up quickly. Restart closes everything and starts clean.",
+  "drDigitalIntro": "Restarting your computer means turning it off and back on again. It is one of the most useful fixes in computing.\n• When something is acting strange, a restart often clears the problem.\n• Open Settings, find the About or System section, and look for a Restart button.\n• When you click Restart, your computer will warn you that unsaved work will be lost — save first if you can.\n• The computer goes dark for a moment, then starts up fresh. That's normal.\n• Note: restarting is different from Sleep. Sleep saves your work and wakes up quickly. Restart closes everything and starts clean.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "Restart the computer to fix the error",
@@ -29,6 +29,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You restarted the computer! The error is gone. Remember: when something's wrong, try restarting first.",
+  "drDigitalSuccess": "The error is gone. Restarting is not a joke answer: it clears a surprising amount without your having to understand any of it.",
   "drDigitalHint": "First dismiss the error dialog by clicking OK. Then open Settings from the dock and find the Restart button."
 }

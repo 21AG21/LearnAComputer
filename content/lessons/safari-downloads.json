@@ -30,6 +30,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You downloaded a PDF and opened it right in your browser! The file stays in your Downloads folder whenever you need it again.",
+  "drDigitalSuccess": "You downloaded a PDF and read it without leaving the browser. The file is in Downloads for the next time you want it.",
   "drDigitalHint": "Go to recipebox.example, click Download, open the Downloads panel, then click the Open button next to the PDF file."
 }

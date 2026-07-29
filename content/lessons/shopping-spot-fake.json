@@ -12,17 +12,17 @@
     "items": [
       {
         "label": "Shop",
-        "preview": "https://shop.example — Kettle, £24.99 — free returns within 30 days",
+        "preview": "https://shop.example — Kettle, $24.99 — free returns within 30 days",
         "isFake": false
       },
       {
         "label": "Sh0p Deals",
-        "preview": "http://sh0p-deals.xyz — Kettle, £4.99 — PAY NOW, no returns",
+        "preview": "http://sh0p-deals.xyz — Kettle, $4.99 — PAY NOW, no returns",
         "isFake": true
       },
       {
         "label": "Book Shop",
-        "preview": "https://bookshop.example — Paperbacks from £6.50 — delivery in 3 days",
+        "preview": "https://bookshop.example — Paperbacks from $6.50 — delivery in 3 days",
         "isFake": false
       }
     ],

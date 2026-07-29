@@ -5,7 +5,7 @@
   "order": 214,
   "title": "Typing challenge: reply to Doggo",
   "videoUrl": "",
-  "drDigitalIntro": "You have learned the whole keyboard — now let's put it to work!\n• Doggo is hungry and sent you a message in the Messages app.\n• Open Messages from the dock, find Doggo in the contacts list, and type a reply.\n• You will need letters, numbers, spaces, punctuation, and the Shift key for capitals.\n• This is exactly how you send a message on a real computer — the same steps work in any messaging app.\n• Messages gets its own unit later (Unit 5) — today the highlights show you where to click, and the typing is the lesson.",
+  "drDigitalIntro": "You have learned the whole keyboard — now put it to work.\n• Doggo is hungry and sent you a message in the Messages app.\n• Open Messages from the dock, find Doggo in the contacts list, and type a reply.\n• You will need letters, numbers, spaces, punctuation, and the Shift key for capitals.\n• This is exactly how you send a message on a real computer — the same steps work in any messaging app.\n• Messages gets its own unit later (Unit 5) — today the highlights show you where to click, and the typing is the lesson.",
   "playgroundTask": {
     "type": "guided-messaging",
     "goal": "Reply to Doggo's message",
@@ -22,6 +22,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "Doggo is thrilled — and your typing skills are impressive! You used capitals, numbers, commas, and a question mark all in one go.",
+  "drDigitalSuccess": "Doggo has his pebbles. Capitals, numbers, a comma and a question mark, all in one message.",
   "drDigitalHint": "Click Doggo's name in the list on the left. Then click the text box at the bottom, type the message, and press Enter or click Send."
 }

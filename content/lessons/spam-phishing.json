@@ -27,6 +27,6 @@
       }
     ]
   },
-  "drDigitalSuccess": "You spotted and reported the phishing email! Urgency + suspicious content = scam. Always mark these as spam.",
+  "drDigitalSuccess": "You spotted it and reported it. Urgency is the tell: a real company does not need an answer in the next ten minutes.",
   "drDigitalHint": "Open the suspicious email, then click the Spam button to report it and move it to the Spam folder."
 }
