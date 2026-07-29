@@ -528,3 +528,69 @@ honest next item rather than a claim of coverage.
 **Verified**: solve-check 132/132, desktop-check, recovery-check, hostile-check,
 demo-check, mission-check 18/18, ring-check on the lesson, check-lessons 198,
 check-actions, spelling, `tsc`, `lint`.
+
+## Round seven (2026-07-29): the pitch was selling a feature we deleted
+
+Not a code defect. Worse, for a product whose job is to make money.
+
+Accounts, sign-in and cross-device sync were removed on 2026-07-28. The sales
+material was rewritten the same day — but not completely, and nobody had read it
+end to end since. What was left:
+
+| Where | What it told a salesperson to say |
+|---|---|
+| `SALES_PLAYBOOK.md` §8, under **"Shipped and demo-safe"** | *"accounts with email-code sign-in and cross-machine progress"* |
+| §5, locked-down computers | *"signing in (an email and a code, no passwords) saves their progress across machines"* |
+| §7, machine checklist | *"learners should **sign in** … sign-out cleans a machine between learners"* |
+| §5, elementary schools | *"our accounts require an email, which isn't COPPA-appropriate"* |
+| `COLD_CALL_KIT.md` §11 | listed *"under-13 accounts"* and an instructor dashboard *"until the migration is applied"* as roadmap |
+| `DEMO_PRIYA_ELDER_CARE.md`, the HIPAA answer | *"The whole data model is an email address and a list of finished lesson names"* |
+
+**The section titled "Ground truth — never claim what isn't shipped" contained a
+claim that isn't shipped**, contradicted eighteen lines further down by
+*"Removed on purpose, 2026-07-28 — do not offer to build them back on a call."*
+The same page told a caller both things.
+
+This is the most expensive kind of error this project can make, and it is worth
+being blunt about why. The privacy story **is** the pitch — §1 says so, and
+invites the buyer to open their developer tools and check. A salesperson who
+promises sign-in from §5 and then hands over a product with no sign-in has not
+just lost a feature argument; they have broken the one claim the buyer was told
+to verify. On the exact axis the whole sale rests on.
+
+All of it is corrected. The demo-safe list no longer mentions accounts; the
+locked-down answer describes what actually happens (a calm banner, finish the
+unit in the session); the shared-machine step is "Reset all progress" instead of
+sign-out; the elementary-school answer says plainly that nothing is collected
+from anyone, refuses to imply a COPPA review that has not happened, and gives
+the real reason for the poor fit (the writing is aimed at adults). The cancelled
+classroom build in `MASTER_PLAN.md` is now headed **CANCELLED** with the reason,
+kept only as a record of what was rejected.
+
+Also fixed: the playbook's header pointed at `PROGRESS_MONITORING.md`, deleted
+with the feature, and a qualifying question still framed reporting needs as
+setting up "the instructor-dashboard conversation" — it now says to ask that
+question in order to **disqualify**, because finding out on call one beats
+finding out in month two of a pilot.
+
+**Checked and correct:** 198 lesson files, 14 units, 18 real-world missions —
+every count the playbook quotes matches what is on disk.
+
+### The guard, so it cannot come back
+
+Grepping by hand the same hour is the advice, and advice is not a guard. So
+`python3 scripts/pitch-check.py` now reads the four sales-facing documents and
+fails when one of them promises a capability the code no longer contains, points
+at a doc that has been deleted, or quotes a lesson/unit/mission count that does
+not match `content/lessons/`. A removal note is explicitly allowed — "Removed on
+purpose … accounts and sign-in" is the sentence that stops a caller offering to
+build it back, so the check excuses a forbidden phrase when the surrounding
+lines frame it as gone.
+
+Negative-controlled by restoring the exact sentence that shipped —
+*"signing in with an email and a code gives them cross-machine progress"* — and
+watching it fail on both patterns, then pass again on removal.
+
+Deleting a feature is not done when the code is gone. The pitch outlives the
+build, gets read under time pressure, and was the one artifact nobody ran a
+harness against. Now something does.

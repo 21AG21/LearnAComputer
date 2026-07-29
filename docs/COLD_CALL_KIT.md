@@ -222,8 +222,13 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 - Any number you have not personally sourced this week, especially about elder
   fraud.
 - "Studies show", "everyone is using", "the leading platform". All unearned.
-- Anything on the roadmap said as though it exists. Instructor dashboard until
-  the migration is applied, Spanish, under-13 accounts, third-party WCAG audit.
+- Anything on the roadmap said as though it exists: Spanish, a third-party WCAG
+  audit, certificate verification codes, a phone/tablet guidance page.
+- **Accounts, sign-in, or progress that follows a learner between machines.**
+  None of it exists — it was removed on 2026-07-28 and is not coming back.
+  Progress lives in one browser on one machine. Say that plainly; it is the
+  other side of the privacy claim that wins these calls, not a gap to apologize
+  for.
 - A future price. The course is free; do not hint at a paid tier that does not
   exist, and do not promise it will always be free in writing.
 - Any per-learner reporting. There is no dashboard and no plan for one, because

@@ -3,7 +3,8 @@
 Everything a human (or an agent) needs to sell, demo, and implement this
 product. Written to be read cold, five minutes before a call. Companion files:
 `docs/GOAL_STATE.md` (what's demo-safe right now), `docs/MASTER_PLAN.md`
-(what's coming), `docs/PROGRESS_MONITORING.md` (the classroom feature design).
+(what's coming), `docs/COLD_CALL_KIT.md` (the words, for dialing),
+`docs/IMPLEMENTATION_GUIDE.md` (running a pilot once they say yes).
 
 ---
 
@@ -47,8 +48,10 @@ final-assessment "trip" capstone. 198 lessons, 14 units.
 | **Senior centers / aging services** | Members isolated by the digital world; classes too fast, too jargon-heavy | Written at 5th-grade reading level, no time pressure anywhere, mistakes impossible in the sim, video-calling and messaging units reconnect them with family |
 | **Adult children of aging parents (B2C)** | "I set up Mom's laptop and now I'm tech support forever" | Hand them the course instead of your weekends; the troubleshooting unit answers the panicked calls |
 
-**Not yet the buyer:** elementary schools (COPPA-compliant accounts not built;
-say "on the roadmap" honestly).
+**Not yet the buyer:** elementary schools — not for data reasons (the course
+collects nothing from anybody), but because the writing and examples are aimed
+at adults who missed computers. Say that, rather than implying a child version
+is coming.
 
 ## 3. The cold call
 
@@ -69,8 +72,10 @@ computer. If they remember one thing, make it that.
 - "What happens when twenty people need help clicking at once?"
 - "What do your learners struggle with most — the mouse itself? Email? Scams?"
   (Whatever they name, we have a unit for it — name it back.)
-- "Do you need to report outcomes to anyone — funders, a board?" (Sets up the
-  instructor-dashboard conversation.)
+- "Do you need to report outcomes to anyone — funders, a board?" **Ask this to
+  disqualify, not to set up a feature.** If they need per-learner reporting,
+  there is no dashboard and there is not going to be one — see §5. Better to
+  find that out on the first call than in month two of a pilot.
 
 **Close of call:** get a demo scheduled or send the link + one-pager. Never
 end without a named next step and date.
@@ -131,12 +136,12 @@ is the moment skeptics convert; let it breathe.
 |---|---|
 | "We already use YouTube videos / handouts" | "Videos are watching; this is doing. A learner can watch someone double-click all day and still not be able to. Here they double-click two hundred times before Unit 3 ends — and the course *checks* they can do it on their own machine." |
 | "Our learners are too old / too far behind for software" | "This course assumes zero — lesson one is literally learning to click. Reading level is measured at 5th grade course-wide, nothing is timed, and every activity forgives every mistake. It was designed for exactly the person you're picturing." |
-| "What about our locked-down computers?" | "Nothing to install — it's a website. It even keeps working when the machine blocks saving; the learner sees one calm note and keeps going, and signing in (an email and a code, no passwords) saves their progress across machines." |
+| "What about our locked-down computers?" | "Nothing to install — it's a website, and there is nothing to sign in to. It even keeps working when the machine blocks saving: the learner sees one calm note explaining that progress will last until the tab closes, and every lesson still teaches. On those machines, plan to finish a unit within a session." |
 | "How do we know it's working?" (funder/outcomes) | Be straight: "You'd see it in the room, and on the certificate a learner prints when they finish a unit. There is no dashboard, and there's a trade-off behind that — reporting on people means collecting data about them, and we decided not to collect any. For a pilot, a check-in sheet and the unit certificates are the record." *(Do not promise a dashboard. There is no longer one on the roadmap.)* |
 | "What does it cost?" | "Nothing. The whole course is free — no paid tier, no trial, no per-seat fee, and no advertising paying for it behind your back." Do not invent a future price; if they ask how it is sustained, the honest answer is that it is free to use and that is the current plan. |
 | "Data privacy? Our board will ask." | "There is nothing to disclose, which is unusual enough that I'd rather you check it than take my word. No account, no email, no cookies at all, no analytics, no advertising, and the site contacts no other company. The only thing stored is a list of finished lessons, in the learner's own browser, which they can erase in two clicks. Open the developer tools during the demo and look at the cookie jar — it is empty." *(This is verifiable and tested on every build; invite the check.)* |
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
-| "We're an elementary school" | "The course reads at the right level, but our accounts require an email, which isn't COPPA-appropriate for under-13s yet. Classroom accounts without child emails are on the roadmap — can I keep you posted?" |
+| "We're an elementary school" | Do not lean on the privacy story here, tempting as it is. Say: "We collect nothing from anyone, so there's no data question to answer — but I haven't had this reviewed against COPPA and I'm not going to imply I have. The bigger issue is fit: the writing and the examples are aimed at adults who missed computers, not at children. I'd rather tell you that than sell you something that doesn't land." |
 
 ## 5b. The competition, honestly — and the objection that actually kills deals
 
@@ -184,9 +189,10 @@ each completes the Unit 3 real-folder mission unaided."
 1. Any modern browser (Chrome, Edge, Firefox, Safari) on a desktop or laptop —
    not tablets/phones for the core course.
 2. Open the site, click Start — if the homepage loads, the course works.
-3. Shared machines: learners should **sign in** (email + 6-digit code — no
-   passwords to forget) so progress follows them; "Reset all progress" +
-   sign-out cleans a machine between learners.
+3. Shared machines: there is nothing to sign in to, so progress belongs to the
+   browser, not the person. Use **"Reset all progress"** on the Lessons page
+   between learners to leave the machine clean for the next one. Say this
+   plainly when asked — it is the flip side of collecting nothing.
 4. Sound is optional; nothing requires audio.
 
 **Instructor prep (one hour):** do Unit 1 yourself end-to-end, including the
@@ -231,8 +237,8 @@ support — say so, and give them your email.
 
 Shipped and demo-safe: 198 hands-on lessons across 14 units · guided
 highlighting everywhere · assessments with hints · real-world missions with
-in-browser verification · accounts with email-code sign-in and cross-machine
-progress · printable per-unit and full-course certificates (`/certificate`) ·
+in-browser verification · printable per-unit and full-course certificates
+(`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
 grade-5 reading level, enforced at build · **150 of the 170 activities
@@ -257,7 +263,7 @@ plainly that this is not that product and why.
 
 Designed but NOT shipped (say "roadmap"):
 certificate verification codes · full third-party WCAG audit · Spanish ·
-under-13 accounts · phone/tablet guidance page. The full sequence is
+phone/tablet guidance page. The full sequence is
 `docs/MASTER_PLAN.md`.
 
 The fastest way to lose these buyers permanently is one overclaim. The

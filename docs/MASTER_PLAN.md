@@ -83,9 +83,11 @@ execution order at the end interleaves them — do not run them 1→6.
   — genuinely good. **10 lessons sit above grade 8**, worst `identity-theft` at 11.4.
   Median intro is 80 words; the longest is 216.
 - **Step counts:** median 4, maximum 10 (`calendar-reminders`). Nothing pathological.
-- **Accounts:** passwordless email + code via Supabase, progress pulled/merged/pushed
-  (`docs/ACCOUNTS_AND_SYNC.md`). The site builds and every lesson stays reachable
-  with no env vars set.
+- **Accounts:** none. Passwordless sign-in, Supabase and cross-device sync were
+  **removed on 2026-07-28** at the founder's direction, along with the classroom
+  dashboard and analytics. Progress lives in `localStorage` and nowhere else. Do
+  not resurrect any of it from the sections below without checking that decision
+  still stands — the privacy claim is now the product's main differentiator.
 - **Open items inherited from previous audits** (all folded into workstreams below):
   - The troubleshooting sim still draws its own Mail and its own browser support page
     (`SAME_ICON_AUDIT.md` → Workstream 3).
@@ -96,8 +98,8 @@ execution order at the end interleaves them — do not run them 1→6.
   - No automated test suite beyond validator/tsc/lint/mount harness → Workstream 1.
   - `open-btn` dead highlight in the App Market; Color/Color split across two apps
     (deliberate); `facetime-*` slugs are branded and frozen → Workstream 3.
-  - `docs/PROGRESS_MONITORING.md` designs a supervisor view — **designed, not built**
-    → Workstream 6.
+  - The supervisor view was designed, built, and then **deleted on 2026-07-28**
+    along with its design doc. It is not a roadmap item; it is a decision.
 
 ---
 
@@ -535,10 +537,18 @@ seeing their learners' progress, and certifying it.
 | **Adults teaching their parents (B2C)** | A "set it up for Mom" flow, remote progress viewing, printable quick-start, gifting | Second — same product, the supervisor view is the feature |
 | **Elementary schools** | COPPA-compliant accounts (no child emails), FERPA posture, teacher controls, ISTE mapping | **Real but later.** The blockers are legal-infrastructural, not content (median grade-5 reading + read-aloud from 1.5 actually suits ~4th grade). Do not gate the first two segments on this |
 
-## 6.2 The supervisor/classroom build (the paid feature)
+## 6.2 The supervisor/classroom build — CANCELLED 2026-07-28
 
-`docs/PROGRESS_MONITORING.md` already designs the schema and privacy posture —
-extend and implement it:
+> **Do not build this, and do not offer it on a call.** It was designed, built,
+> and removed the same day, because every version of it requires collecting
+> something about a learner and the product now collects nothing. That is not a
+> gap waiting to be filled — it is the differentiator the whole pitch rests on.
+> The design below is kept only as a record of what was rejected and why.
+>
+> If a buyer needs per-learner reporting, say plainly that this is not that
+> product. `docs/SALES_PLAYBOOK.md` §5 has the words.
+
+The cancelled design, for the record:
 
 - **Entities:** organization → class → learner-membership. A class has a **join
   code**; a learner enters it once (on `/login` or a `/join` page) and their existing

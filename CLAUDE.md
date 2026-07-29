@@ -26,6 +26,7 @@ npx tsc --noEmit     # type-check without emitting
 python3 scripts/check-lessons.py  # lesson validation (targets, capitalization, reading level)
 python3 scripts/check-actions.py  # every action a sim advertises must be one a learner can finish
 python3 scripts/spelling-check.py # one dialect: American English, plus a typo list
+python3 scripts/pitch-check.py    # does the sales material describe the product that exists?
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 npm run ring-check -- <slug>      # is the highlighted control actually ON SCREEN in that lesson?
@@ -69,6 +70,18 @@ out of view for a frame here and there. Treat those as leads and confirm each
 one filtered to its own slug, which is repeatable. Do not add it to a gate list
 and do not tune it until the number looks green — see `docs/SAME_ICON_AUDIT.md`
 § *Round four* for the four mechanisms already tried.
+
+**Whenever a capability is removed, run `pitch-check` in the same hour.**
+Deleting a feature is not done when the code is gone: accounts came out on
+2026-07-28 and the sales material still told callers to promise sign-in in five
+places — including the section headed *"never claim what isn't shipped"*, which
+listed accounts under *Shipped and demo-safe* and contradicted itself eighteen
+lines later. No other harness reads prose. This one fails when
+`docs/SALES_PLAYBOOK.md`, `COLD_CALL_KIT.md`, `DEMO_PRIYA_ELDER_CARE.md` or
+`IMPLEMENTATION_GUIDE.md` promises something the code no longer contains, points
+at a deleted doc, or quotes a lesson/unit/mission count that does not match
+`content/lessons/`. Those documents may still *say* a feature is gone — a
+removal note is allowed and expected.
 
 Before any demo, and after touching site chrome or any page outside a lesson,
 run **hostile-check**. Every other harness proves the product works when it is

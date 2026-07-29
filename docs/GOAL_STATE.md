@@ -253,6 +253,17 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the pitch was selling a deleted feature):** Read the four
+  sales/demo documents end to end against the current product for the first
+  time since accounts were removed. `SALES_PLAYBOOK.md` §8 — the section headed
+  *"never claim what isn't shipped"* — listed **"accounts with email-code
+  sign-in and cross-machine progress"** under *Shipped and demo-safe*, and
+  contradicted itself eighteen lines later. Four more places told a caller to
+  promise sign-in, plus a stale COPPA answer, a stale roadmap line in the cold-
+  call kit, and a HIPAA answer claiming the data model is "an email address".
+  All corrected. The standing lesson, written into `SAME_ICON_AUDIT.md` § *Round
+  seven*: **deleting a feature is not done when the code is gone** — the pitch
+  outlives the build and no harness runs against it.
 - **2026-07-29 (the learner who clicks the wrong thing):** Every harness in this
   repo does the moderate, correct thing — that sentence was written about
   over-dragging and it generalizes. Asked the opposite question of Unit 1 lesson
