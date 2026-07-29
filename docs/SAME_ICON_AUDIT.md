@@ -419,3 +419,61 @@ scroll. Anyone extending this must use that shape.
 **Verified**: solve-check 132/132, mission-check 18/18, desktop-check,
 recovery-check, hostile-check, demo-check, check-lessons 198, check-actions,
 spelling, `tsc`, `lint`.
+
+## Round five (2026-07-29): the check earns its keep
+
+Round four shipped a whole-course ring sweep and labelled it advisory. Advisory
+output is worthless unless somebody actually works it, so this is that pass:
+every lead re-run filtered to its own slug, which is the mode that is
+repeatable.
+
+### One real bug, in Unit 1
+
+**Dragging a window could throw away the control the next step asks for.**
+
+*Working with windows* is lesson 6 of Unit 1. Step 1 says drag the window by its
+title bar. Step 2 says drag the striped corner handle at the bottom-right to
+resize it. `DraggableWindow` clamped a drag to `y >= 0` and nothing else, and the
+desktop it lives in is `overflow-hidden`. So a learner who dragged the window
+down and right — doing exactly what step 1 asked, just further than the author
+imagined — pushed the resize handle out through the desktop's edge, where it was
+clipped out of existence. Step 2 then put its pulsing ring on a control that was
+not on screen at all.
+
+Measured before the fix, at a 1400x760 window: desktop bottom `740`, resize
+handle at `792`. Gone. The title bar stayed visible, so a learner *could* drag
+the window back up and recover — but nothing says so, and this is the audience
+for whom "the thing I was told to click isn't there" ends the session.
+
+Fixed by clamping both drag and resize to the desktop, with the bounds measured
+at mousedown (the move handler is bound once with `[]` deps and would otherwise
+close over a stale size). The window now pins at the edge: after dragging +900px
+in both directions it sits at exactly `(maxX, maxY)` and the handle is still
+inside. `ring-check -- working-with-windows` went from FINDING to CLEAR.
+
+**This is the check paying for itself.** Nothing else in the repo could see it:
+solve-check drags by a fixed small delta and never over-drags, so it has always
+passed this lesson and always will.
+
+### Leads that are reproducible but not yet diagnosed
+
+Recorded honestly rather than left implied:
+
+- `popups-ads` and `popup-accident` — the scam popup's ✕. The dialog carries
+  `animate-pop-in`, a scale animation, so the reveal may simply be measuring it
+  mid-flight; that would make these artifacts, not defects. Not confirmed either
+  way. Both lessons pass solve-check and recovery-check, so the button is
+  reachable.
+- The Photos grid (`photos-app`, `photo-favorites`, `recently-deleted`, and
+  others) — a photo below the fold of a scrolling grid that the reveal did not
+  reach.
+- The accessibility panel (`a11y-invert` and siblings) looked clean when
+  measured by hand at a tall viewport, but a screenshot at a **short** one shows
+  *Invert Colors* genuinely cut off at the bottom of the Settings window. Height,
+  not the reveal, is the variable to chase there.
+
+None of these blocks a lesson. All deserve the same treatment the window bug
+got: reproduce filtered, measure the rect by hand, fix the cause.
+
+**Verified**: solve-check 132/132, desktop-check, recovery-check, hostile-check,
+demo-check, mission-check 18/18, check-lessons 198, `tsc`, `lint`.

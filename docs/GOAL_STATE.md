@@ -253,6 +253,17 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (working the leads):** Ran every advisory lead from the ring
+  sweep back through the filtered mode, which is the point of producing leads.
+  One is a real bug and it is in **Unit 1, lesson 6**: `DraggableWindow` clamped
+  a drag to `y >= 0` and nothing else, so a learner who dragged the window down
+  and right — exactly what step 1 asks, just further — pushed its resize handle
+  out through the desktop's `overflow-hidden` edge. Step 2 then rang a control
+  that was not on screen. Desktop bottom 740, handle at 792. Drag and resize are
+  now clamped to the desktop, bounds measured at mousedown. solve-check could
+  never have caught this: it drags by a fixed small delta and never over-drags.
+  Remaining leads (the scam popup's ✕, the Photos grid, the accessibility panel
+  at short viewports) are reproducible but undiagnosed, and written up as such.
 - **2026-07-29 (the glow you cannot see):** Closed the blind spot the last two
   entries kept running into. `SimulatorFrame` now brings the highlighted control
   into view — once per control, so it never drags back a learner who scrolled

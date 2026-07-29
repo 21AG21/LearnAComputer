@@ -57,8 +57,8 @@ export default function DraggableWindow({
   const [isMaximized, setIsMaximized] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const dragRef = useRef<{ cx: number; cy: number; ix: number; iy: number; lastX: number; lastY: number } | null>(null);
-  const resizeRef = useRef<{ cx: number; cy: number; iw: number; ih: number; lastW: number; lastH: number } | null>(null);
+  const dragRef = useRef<{ cx: number; cy: number; ix: number; iy: number; lastX: number; lastY: number; maxX: number; maxY: number } | null>(null);
+  const resizeRef = useRef<{ cx: number; cy: number; iw: number; ih: number; lastW: number; lastH: number; maxW: number; maxH: number } | null>(null);
   const dragStartRef = useRef({ x: initial.x, y: initial.y });
   const resizeStartRef = useRef({ w: initial.w, h: initial.h });
   const savedRef = useRef({ x: initial.x, y: initial.y, w: initial.w, h: initial.h });
@@ -90,17 +90,24 @@ export default function DraggableWindow({
   useEffect(() => {
     function handleMove(e: MouseEvent) {
       if (dragRef.current) {
-        const { cx, cy, ix, iy } = dragRef.current;
-        const nx = ix + e.clientX - cx;
-        const ny = Math.max(0, iy + e.clientY - cy);
+        const { cx, cy, ix, iy, maxX, maxY } = dragRef.current;
+        // Clamped to the desktop. Unclamped, a learner who dragged the window
+        // down — which is exactly what step 1 of Unit 1's window lesson asks
+        // for — pushed its bottom-right resize handle out through the
+        // desktop's `overflow-hidden` edge, and step 2 then highlighted a
+        // corner handle that was no longer on screen at all.
+        const nx = Math.min(Math.max(0, ix + e.clientX - cx), maxX);
+        const ny = Math.min(Math.max(0, iy + e.clientY - cy), maxY);
         dragRef.current.lastX = nx;
         dragRef.current.lastY = ny;
         setPos({ x: nx, y: ny });
       }
       if (resizeRef.current) {
-        const { cx, cy, iw, ih } = resizeRef.current;
-        const nw = Math.max(MIN_W, iw + e.clientX - cx);
-        const nh = Math.max(MIN_H, ih + e.clientY - cy);
+        const { cx, cy, iw, ih, maxW, maxH } = resizeRef.current;
+        // Same reason: growing the window past the desktop takes the handle
+        // the learner is dragging out of view from under their own cursor.
+        const nw = Math.min(Math.max(MIN_W, iw + e.clientX - cx), maxW);
+        const nh = Math.min(Math.max(MIN_H, ih + e.clientY - cy), maxH);
         resizeRef.current.lastW = nw;
         resizeRef.current.lastH = nh;
         setSize({ w: nw, h: nh });
@@ -130,11 +137,24 @@ export default function DraggableWindow({
     };
   }, []);
 
+  /** The desktop this window lives in, measured when a gesture starts. */
+  function hostBox() {
+    const host = rootRef.current?.parentElement;
+    return { w: host?.clientWidth ?? 0, h: host?.clientHeight ?? 0 };
+  }
+
   function onTitleDown(e: React.MouseEvent) {
     if (isMaximized) return;
     e.preventDefault();
     dragStartRef.current = { ...pos };
-    dragRef.current = { cx: e.clientX, cy: e.clientY, ix: pos.x, iy: pos.y, lastX: pos.x, lastY: pos.y };
+    const host = hostBox();
+    dragRef.current = {
+      cx: e.clientX, cy: e.clientY, ix: pos.x, iy: pos.y, lastX: pos.x, lastY: pos.y,
+      // Measured at mousedown rather than read from state: the move handler is
+      // bound once with [] deps and would close over a stale size.
+      maxX: host.w ? Math.max(0, host.w - size.w) : Infinity,
+      maxY: host.h ? Math.max(0, host.h - size.h) : Infinity,
+    };
   }
 
   function onResizeDown(e: React.MouseEvent) {
@@ -142,7 +162,12 @@ export default function DraggableWindow({
     e.preventDefault();
     e.stopPropagation();
     resizeStartRef.current = { ...size };
-    resizeRef.current = { cx: e.clientX, cy: e.clientY, iw: size.w, ih: size.h, lastW: size.w, lastH: size.h };
+    const host = hostBox();
+    resizeRef.current = {
+      cx: e.clientX, cy: e.clientY, iw: size.w, ih: size.h, lastW: size.w, lastH: size.h,
+      maxW: host.w ? Math.max(MIN_W, host.w - pos.x) : Infinity,
+      maxH: host.h ? Math.max(MIN_H, host.h - pos.y) : Infinity,
+    };
   }
 
   function handleMaximize() {
