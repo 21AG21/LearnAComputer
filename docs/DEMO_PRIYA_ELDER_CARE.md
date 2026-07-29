@@ -15,6 +15,11 @@ Nothing below this line invents a fact about Priya Elder Care. **Do not walk in
 having guessed.** Fifteen minutes of research changes the whole demo, because
 which of the three framings in §2 you lead with depends entirely on it.
 
+**This table is no longer a blocker.** If it is still empty an hour before the
+meeting, use the two questions further down — they get you the same answer in
+the room, out loud, from them. An empty table is a reason to ask better
+questions, not a reason to postpone.
+
 | Question | Why it changes the demo | Answer |
 |---|---|---|
 | Residential facility, adult day programme, or in-home care agency? | Residential → group sessions on a shared machine, lead with the activities calendar. In-home → one caregiver, one client, lead with the family-contact story. | |
@@ -23,6 +28,38 @@ which of the three framings in §2 you lead with depends entirely on it.
 | Do clients have their own devices, or facility machines? | Decides whether "works on locked-down machines" is a headline or a footnote. | |
 | Have they had a scam incident? | If yes, Unit 10 is the entire demo. Do not ask this coldly in the room — find out beforehand if you can. | |
 | What did they say on the cold call that got this meeting? | Lead the demo with their sentence, not yours. | |
+
+### If you have fifteen minutes: the research script
+
+1. Search the exact name in quotes, then the name plus the city. **A web search
+   for "Priya Elder Care" alone does not confirm anything** — it mostly returns
+   *Priya Living*, an independent-living operator in the Bay Area, and
+   *Priyashraya* in India. Neither has been confirmed as this account. Do not
+   walk in having assumed either one.
+2. Their own website: the **Services** page tells you residential vs in-home,
+   and the **Activities** or **Life Enrichment** page tells you who owns the
+   calendar — that person is usually your champion.
+3. State licensing lookup: confirms the license type and bed count, which is
+   your pilot size.
+4. LinkedIn for whoever took the cold call, and their title.
+5. Google reviews, last twelve months: complaints about "activities" or
+   "isolation" are your opening; complaints about staffing are not.
+
+### If you have none of that: two questions that decide it in the room
+
+You can run this demo cold. Ask these before you open the laptop, then pick the
+framing in §2 from the answer:
+
+> **"Before I show you anything — do people here live on site, or do your staff
+> go out to them?"** (Residential → framing A. In-home → framing B.)
+>
+> **"And who decides what a Tuesday afternoon looks like for a resident?"**
+> (Whoever they name is who you are actually selling to. If they say "the
+> family asks for it", that is framing B even in a building.)
+
+Then, once: **"Has anyone here been caught by a scam call or a fake email?"**
+Ask it plainly, without a statistic attached. If the answer is yes, stop and
+switch to framing C — Unit 10 becomes the whole demo.
 
 **On statistics:** elder financial fraud numbers are persuasive and they are
 also the fastest way to get caught out. Do not quote a figure you have not
@@ -202,7 +239,7 @@ ones it does not cover.
 | "What if a resident actually gets scammed using this?" | "Nothing inside the course can reach the real world. The email, the browser, the shop, the bank — all simulated, no message can be sent, no purchase can be made. The only real thing is the practice folder they download, and that stays on their machine." |
 | "Is any of this HIPAA-relevant?" | "We never ask for, store, or transmit anything about health, care, or a client's identity. The whole data model is an email address and a list of finished lesson names — and it works with no account at all. Nothing about it touches a care record." |
 | "Families will ask what we're doing with this." | "Give them the certificate and the unit list. And point them at the privacy page — it's in plain language and it's honest, including that we count page views." |
-| "Can we see who's progressing?" | **Do not overclaim.** "Not yet as a dashboard — that's designed and next on the roadmap. Today a pilot runs on a check-in sheet, and pilots shape what that dashboard becomes. I'd rather tell you that than show you a screen that doesn't exist." |
+| "Can we see who's progressing?" | **Check before the meeting whether the classroom migration has been applied** (`docs/PROGRESS_MONITORING.md` says). If it has: "Yes — you make a class, read out a six-character code, and each resident types it once. You see their first name and which lessons they've finished. Not how long they took, not what they got wrong — we don't collect that." If it has not, the old answer stands and you must give it: "Not yet as a dashboard — it's built but not switched on, and I won't show you a screen I can't stand behind. Today a pilot runs on a check-in sheet." |
 
 ---
 

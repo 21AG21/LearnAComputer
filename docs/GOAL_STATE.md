@@ -26,7 +26,7 @@ what moved, what's proven, what's still a demo risk.
 | Sales playbook (cold call, demo, objections) | **Done, v1** | `docs/SALES_PLAYBOOK.md` |
 | Implementation runbook (setup, pilot plan, session scripts, troubleshooting matrix, all operator prompts) | **Done, v1** | `docs/IMPLEMENTATION_GUIDE.md` |
 | Accounts + progress sync (multi-machine demo) | **Done** — email + code sign-in, merge-on-signin | `docs/ACCOUNTS_AND_SYNC.md` |
-| Instructor visibility (the paid feature) | **Designed, not built** — Stage J of the master plan | `docs/PROGRESS_MONITORING.md` |
+| Instructor visibility (the paid feature) | **Built, not switched on** — classes, join-by-code, and a roster showing each learner's finished lessons (`/instructor`, `/join`, `lib/classes.ts`). Blocked on one thing: the migration that creates the tables and their row-level security has **not been applied** to the Supabase project, so the feature is inert until somebody runs it. Deliberately narrow: finished lessons and a learner-chosen name, never an email, never time-spent or failure counts, because none of that is collected. | `supabase/migrations/20260728_classes_and_instructor_visibility.sql` |
 | Certificates | **Done, v1** — printable per-unit and full-course at /certificate, name asked at print time and never stored; verification codes still roadmap | `app/certificate/page.tsx` |
 | WCAG/contrast measured | **Done** — scripts/contrast-check.mjs samples every text node on core pages in both themes; 14 real AA failures found and fixed (muted grays, dark-mode reds/blues); remaining 4 reports are false positives (hero text over the background image) | `scripts/contrast-check.mjs` |
 | Wrong-device (phone) handling | **Done** — under 900px, a kind full-screen note with the live address and a continue-anyway escape | `components/SmallScreenGuard.tsx` |
@@ -51,7 +51,9 @@ Ranked, current worst first. Fixing the top item promotes the next.
    gestures — which only mount-check covers, plus the intermittent below.
 3. **The dashboard/catalog wrapper pages** — functional but plainer than the
    lesson experience (Stage F site-chrome pass).
-4. **No instructor view yet** — for a school buyer, "how do I see my class?"
+4. ~~**No instructor view yet**~~ — built on 2026-07-28, inert until the
+   migration is applied. Until then the honest answer in the room is unchanged.
+   Superseded text: for a school buyer, "how do I see my class?"
    currently has a design doc for an answer, not a screen.
 
 ## Real learner-stranding bugs found by solve-check (running tally)
@@ -79,6 +81,11 @@ have stranded a real learner mid-lesson:
 10. `useStepRunner.markComplete` rebuilt its set from the state closure, so
     two objective completions in one tick silently dropped the first — any
     handler proving two objectives at once lost one.
+11. Email assessments credited a compose field only on a keystroke, so anyone
+    who replied or forwarded — where the address arrives pre-filled — was never
+    credited for it. (Detail in the section above.)
+12. The solver could not tell Mail's "Archive" folder from its "Archive"
+    button. Harness-side, but it masqueraded as an unfinishable lesson twice.
 
 ## The gate itself was lying about filtered runs (fixed 2026-07-28)
 
@@ -97,7 +104,33 @@ ledger stands. But any *single-lesson* conclusion recorded before this date was
 weaker than it looked, including the first round of evidence about the flake
 below — that evidence was re-gathered after the fix.
 
-## Known flake in the gate (do not confuse with a bug)
+## The "flake" was two real bugs (found 2026-07-28)
+
+Chasing it properly — three full runs in a row, rather than re-running until
+green — reproduced it twice, in two *different* guided-email assessments, and
+both turned out to be defects rather than noise:
+
+11. **A field only counted if you typed in it.** `set-to`, `set-subject` and
+    friends were satisfied from the keystroke handler alone, so a learner who
+    **replied or forwarded** — where the address is already filled in for them —
+    did exactly what the objective asked and got no credit. After pressing Send
+    the compose was gone and the objective looked impossible. Assessments now
+    credit a field for *holding* the right value, not merely for changing.
+    Guided mode is untouched: there the instructions say what to type, and
+    crediting a pre-filled "Re: …" would tick a step the learner never reached.
+12. **"Archive" the folder and "Archive" the action are the same word.** The
+    solver's compound gesture clicked the sidebar folder instead of the reading
+    pane's button — the screen changed, the objective did not, which is exactly
+    what its trace said. Mail's folder names are now excluded from the
+    action-button hunt (`go-to-folder` still reaches them).
+
+The lesson for the next session: an intermittent failure in this harness has so
+far *always* been a real defect wearing a disguise. Reproduce it by running the
+full course several times, and read which objective is outstanding — that
+sentence has named the bug every time. Never conclude "flaky" from a re-run
+that happened to pass.
+
+## Older note: environment-sensitivity in the gate
 
 `unit-6-assessment` failed a full-course run twice on 2026-07-28 (SolveCheck
 retries first-pass failures and only reports a lesson that fails **twice**, so
@@ -128,6 +161,20 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (classrooms):** The instructor view exists. An instructor makes
+  a class, reads out a six-character code (no O/0 or I/1 to mishear), and sees
+  a roster of who has finished what; learners join on `/join` with a name they
+  choose and can leave whenever they like. Scope was decided rather than
+  deferred, and deliberately narrow: finished lessons and a chosen name, never
+  an email address, never time-spent or failure counts — none of which the
+  product collects. Every rule is enforced in the database by row-level
+  security, so a mistake in the client cannot show one instructor another's
+  learners, and joining goes through a `security definer` function so nobody
+  can list classes they were not given a code for. The privacy page now
+  describes this flow, because it is the first time anything a learner does can
+  be seen by somebody else. **Not live:** applying the migration was blocked by
+  a permission gate, so it ships as a migration file for the founder to run,
+  and every sales doc says the feature does not exist until then.
 - **2026-07-28 (empty Notes, lying filter):** Opening all ten dock apps at
   once on `/playground` — the founder's "full functionality" check — showed
   nine apps with real content and **Notes as a blank white rectangle** with

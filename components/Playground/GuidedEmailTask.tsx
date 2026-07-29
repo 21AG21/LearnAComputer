@@ -194,6 +194,28 @@ export default function GuidedEmailTask({ goal, steps, seedDraft, mode, hint, fr
     });
   }
 
+  /**
+   * Assessments credit a field for *holding* the right value, not only for
+   * being typed into.
+   *
+   * `handleFieldChange` fires on keystrokes, so a learner who replied or
+   * forwarded — where the address, and sometimes the subject, are filled in for
+   * them — did the thing the objective asked for and was never credited. Once
+   * they pressed Send the compose was gone and the objective looked impossible.
+   * Guided mode is left alone: there the instructions say what to type, and
+   * crediting a pre-filled "Re: …" could tick a step the learner never reached.
+   */
+  useEffect(() => {
+    if (mode !== "assessment") return;
+    for (const [field, action] of Object.entries(FIELD_ACTION) as Array<
+      [keyof typeof FIELD_ACTION, string]
+    >) {
+      const val = draft[field];
+      if (!val) continue;
+      tryStep((s) => s.action === action && (!s.value || val.toLowerCase().includes(s.value.toLowerCase())));
+    }
+  }, [draft, mode, tryStep]);
+
   function handleAttachClick() {
     setFilePicker(true);
     tryStep((s) => s.action === "attach" && !s.target);

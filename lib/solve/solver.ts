@@ -121,6 +121,7 @@ let navSpin = 0;
  */
 const NAV_LABELS = [
   "Home", "Documents", "Pictures", "Downloads", "Trash", "Inbox", "All Photos", "Favorites", "Recently Deleted", "Store", "My Apps", "App Market", "Contacts",
+  "Sent", "Drafts",
   // Settings sections — a toggle lives behind its section, so the hunt must open them.
   "Appearance", "Display", "Accessibility", "WiFi", "Bluetooth", "Notifications", "Storage", "Privacy", "About",
   // Security sim sections — the phishing inbox and password tester live behind these.
@@ -530,6 +531,16 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
         const words = actionWords.split(" ").filter((w) => !["go", "to", "app", "add"].includes(w));
         return words.some((w) => w.length > 2 && label.includes(w));
       });
+      // Mail's sidebar holds a "Spam" folder and a "Archive" folder whose names
+      // are exactly the actions that move mail into them, and the sidebar comes
+      // first in the document — so the first candidate was the folder, and
+      // clicking it changed the screen without satisfying anything. Whatever
+      // sits AFTER the target row (the reading pane's own buttons) is tried
+      // first. Excluding those names outright is not an option: for mark-spam
+      // the button really is called "Spam".
+      const after = (el: HTMLElement) =>
+        (targetEl.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+      candidates.sort((a, b) => Number(after(b)) - Number(after(a)));
       for (const b of candidates.slice(0, 3)) {
         out.push(async () => {
           targetEl.scrollIntoView({ block: "center" });

@@ -57,6 +57,8 @@ app/
   funny-cat-video/        # Easter-egg page opened by the right-click playground
   playground/page.tsx     # Standalone playground sandbox
   login/, auth/callback/  # Passwordless sign-in (email + code) and the magic-link landing
+  instructor/page.tsx     # Classroom roster: make a class, share the code, see finished lessons
+  join/page.tsx           # Learner joins a class with a six-character code
   error.tsx, not-found.tsx # Friendly failure pages — never a blank screen or a bare 404
   dev/mount-check/        # Dev-only activity mount harness
   dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
@@ -129,6 +131,7 @@ lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
   progress.ts              # localStorage read/write for completed slugs (fires lac-progress-changed)
   cloudProgress.ts         # Pull/merge/push that same list to Supabase for signed-in learners
+  classes.ts               # Classrooms: make/join by code, roster reads (RLS-enforced server side)
   supabase.ts              # Browser client, or null when the env vars are absent
   chat.ts                  # localStorage read/write for messaging threads
   simState.ts              # localStorage read/write for persistent sim state (lac-sim)

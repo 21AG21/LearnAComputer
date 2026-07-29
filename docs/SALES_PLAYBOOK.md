@@ -203,7 +203,15 @@ gesture activities that are proven to render but are not auto-played, because
 a script cannot pinch a trackpad. Say that plainly — the precision is what
 makes the 150 believable.
 
-Designed but NOT shipped (say "roadmap"): instructor/classroom dashboard ·
+**Built but not switched on: the classroom dashboard.** An instructor makes a
+class, reads out a six-character code, and sees each learner's finished
+lessons; learners join on `/join` and can leave whenever they like. The code is
+in the product — but it needs one database migration applied
+(`supabase/migrations/20260728_...sql`) before it does anything. Until that is
+run, **it does not exist for a buyer**: keep answering the "how do we know it's
+working?" question with the pilot check-in sheet. Once it is run, demo it.
+
+Designed but NOT shipped (say "roadmap"): time-spent and "stuck here" reporting ·
 certificate verification codes · full third-party WCAG audit · Spanish ·
 under-13 accounts · phone/tablet guidance page. The full sequence is
 `docs/MASTER_PLAN.md`.

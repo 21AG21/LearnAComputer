@@ -65,7 +65,26 @@ export default function PrivacyPage() {
         it follows you to another computer. That list is the only thing stored: no lesson answers,
         nothing you typed into the practice apps, and nothing from the missions that read your own
         files. Other learners cannot see it — the database allows each account to read and write
-        only its own row.
+        only its own row, unless you join a class, which is described next.
+      </p>
+
+      <h2>Classes</h2>
+      <p>
+        If you are learning with a teacher, a librarian or a helper, they can make a class and give
+        you a six-character code. Typing that code on the{" "}
+        <Link href="/join">Join a class</Link> page is the only way anybody else is ever allowed to
+        see your progress. Nothing is shared until you do it.
+      </p>
+      <p>
+        Once you have joined, the person who made that class can see two things: the name you chose
+        to be shown as, and which lessons you have finished. They cannot see your email address, how
+        long you took, how many tries anything needed, what you typed inside a lesson, or anything
+        from the missions that look at your own files — none of that is recorded anywhere, for
+        anyone. They cannot see any other class, and no other learner in the class can see you.
+      </p>
+      <p>
+        You can leave a class at any time on the same page. Leaving stops the sharing at once and
+        does not touch your own progress.
       </p>
       <p>
         <strong>Reset all progress</strong> on the Lessons page clears the account copy as well as

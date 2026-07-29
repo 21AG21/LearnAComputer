@@ -93,6 +93,32 @@ can run a pilot from this document alone.
 | Learner closed the tab mid-lesson | Nothing is lost except the current activity's steps | Reopen the site — it resumes at the right lesson; the activity restarts cleanly |
 | Wants to redo a finished lesson | Supported | Catalog → the lesson → Redo |
 
+## 4b. Setting up a class (only once the migration is applied)
+
+Check `docs/PROGRESS_MONITORING.md` first: if the classroom migration has not
+been run against the Supabase project, none of this exists yet and the pilot
+runs on a paper check-in sheet as described above. Say so plainly rather than
+promising it.
+
+Once it is live:
+
+1. The instructor signs in (email address, six-digit code, no password) and
+   opens **For instructors** in the footer, or `/instructor`.
+2. They name the class — "Tuesday morning group" — and get a six-character
+   code. Write it on the whiteboard; the code avoids O/0 and I/1 on purpose,
+   because it gets read aloud.
+3. Each learner signs in, opens **Join a class** in the footer, types the code
+   and the name they want shown. Once, on any machine.
+4. The roster then shows each learner's name, how much of the course they have
+   finished, and the furthest unit they have reached.
+
+What an instructor can see is deliberately small, and it is worth saying this
+out loud to a room of learners, because it is the difference between a tool and
+surveillance: **finished lessons and the name they chose. Not their email, not
+how long anything took, not how many tries it needed, not one word they typed
+inside a lesson.** None of that is recorded anywhere. A learner can leave a
+class from the same page at any time, and their progress stays theirs.
+
 ## 5. Weekly pilot cadence (coordinator prompts)
 
 - **To the instructor, weekly:** "How many attended? How many finished the

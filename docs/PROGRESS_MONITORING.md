@@ -1,6 +1,26 @@
 # Progress Monitoring Design Document
 
-**Status: Design only — nothing in this document is implemented. Do not add code based on this document without a separate implementation plan approved by the user.**
+**Status (2026-07-28): partly built, and not live until one migration is run.**
+
+What now exists in the codebase:
+
+- `supabase/migrations/20260728_classes_and_instructor_visibility.sql` — two new
+  tables (`classes`, `class_members`), their row-level security, a `join_class`
+  function, and one extra SELECT policy on `learner_progress` so an instructor
+  can read the progress of learners who joined their class. Additive only.
+- `lib/classes.ts`, `/instructor` (roster) and `/join` (learner joins by code).
+- The privacy page now describes the class data flow in plain language.
+
+**The migration has not been applied.** Until somebody runs it against the
+Supabase project, `/instructor` and `/join` render and refuse gracefully, and
+the feature does not exist for buyers. Do not describe it as shipped in any
+sales conversation before then — see `SALES_PLAYBOOK.md §8`.
+
+Deliberately **not** built, and still design-only below: `lesson_events`,
+time-spent, failed-attempt counts, the "stuck here" list, and the
+supervisor↔learner 1:1 link. The roster shows finished lessons and nothing
+else, because nothing else is collected. Sections 2 and 3 describe a richer
+model that remains a proposal.
 
 ---
 
