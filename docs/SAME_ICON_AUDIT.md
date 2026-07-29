@@ -1008,3 +1008,60 @@ activities, there are 159"*. The check keeps its own copy of the solver's
 exactly its job — one commit after being built, it stopped a number going stale
 the same way "150" had. The duplication is noted in the script as a thing to
 unify.
+
+## Round fifteen (2026-07-29): the copy-paste lesson did not check the copy
+
+The last unplayed activity was `editing-copy-paste`, and the reason recorded in
+round fourteen was *"needs a real clipboard"*. **That was wrong**, and being
+wrong about it turned up the more interesting thing.
+
+`CopyPasteTask` was a plain controlled textarea validating `pasted ===
+sourceText`. No paste listener. No clipboard. Nothing about copying at all. Its
+instructions read:
+
+> *"Select the text below, press Ctrl+C (or Command+C) to copy it, click the
+> box, then press Ctrl+V (or Command+V) to paste."*
+
+…and a learner who carefully **retyped the sentence** passed it. In a lesson
+called *Copy, Cut, and Paste*, in the unit about the keyboard. They would have
+practiced typing and been told they had learned copy-paste.
+
+This is the same class as § 3 above — *checks that accepted the wrong answer* —
+and the standard was already set elsewhere in this repo. The real-world missions
+have a `paste` check kind defined as *"a `paste` event carrying text they did
+not type"*. The mission version of this skill enforces it; the simulated lesson
+that teaches the shortcut did not.
+
+### The fix, and the tone of it
+
+The box now requires a real `paste` event. Typing the right words is **not**
+failed — it is answered:
+
+> *"Those are the right words — but they were typed, and this lesson is about
+> copying. Select the sentence above, press Ctrl+C (or Command+C), click the
+> box, then press Ctrl+V (or Command+V)."*
+
+A red failure card would be wrong here. The learner did something reasonable and
+got the words right; they just practiced the wrong skill. This audience reads a
+hard failure as evidence they are no good at computers, and the course's whole
+posture is that mistakes cost nothing.
+
+### And the solver does it properly
+
+`solveStepless` now selects the sentence, calls the browser's own
+`document.execCommand("copy")`, and delivers **what the selection actually
+holds** to the box as a `paste` event — not a string the function happened to
+know. **solve-check: 145 → 146.**
+
+**Negative-controlled on the product change, not the harness:** remove the paste
+event from the player so it only types, and the lesson refuses — *"activity did
+not finish"*. Put it back and it passes. That is the check confirming the
+product now tests what it teaches, which is the only version of this control
+worth running.
+
+### Where the count lands
+
+**146 of 170 simulated + 18 missions = 164 machine-proven.** The remaining six
+are the genuinely un-scriptable reflex and trackpad activities. **The
+"scriptable but not scripted" column is empty for the first time** — it read 20
+this morning, before anyone checked what those 20 actually were.

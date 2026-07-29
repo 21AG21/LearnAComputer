@@ -16,7 +16,7 @@ what moved, what's proven, what's still a demo risk.
 
 | Area | State | Proof |
 |---|---|---|
-| Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 145 playable activities pass, zero failures**, including every guided lesson AND all assessments. Was 132 until 2026-07-29, when `solveStepless` taught the solver the five activity types that have no step list (typing a sentence, fixing text, typing a web address, opening every dock app, opening named files) — nine lessons that had been exempt since the harness was built, and which the sales material had been describing as un-scriptable trackpad gestures. Arithmetic, exactly: 170 queued = 145 played + 18 missions + 6 genuinely un-scriptable + 1 scriptable-but-not-yet (the clipboard one). The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
+| Every lesson completable, mechanically proven | **Done** — headless `npm run solve-check` is canonical; **all 146 playable activities pass, zero failures**, including every guided lesson AND all assessments. Was 132 until 2026-07-29, when `solveStepless` taught the solver the five activity types that have no step list (typing a sentence, fixing text, typing a web address, opening every dock app, opening named files) — nine lessons that had been exempt since the harness was built, and which the sales material had been describing as un-scriptable trackpad gestures. Arithmetic, exactly: 170 queued = 146 played + 18 missions + 6 genuinely un-scriptable. Nothing scriptable is unplayed. The final rounds surfaced four real product bugs invisible to every other check: WeatherNow's missing permission prompt made final-apps' allow-permission objective impossible; persistent installs stranded relearners on targetless install objectives; force-quitting the frozen app never satisfied "work out which app is stuck" once its window was gone; and markComplete dropped one of two same-tick objective completions. | `docs/SOLVE_CHECK.md`, `docs/HARDENING_ROUND_1.md` |
 | Real-world missions provably finishable | **Done** — `npm run mission-check` plays **all 18 missions**, the last category no harness had ever touched (solve-check exempts them because their steps are satisfied outside the page). It drives the learner's *machine*: real PNGs whose real dimensions decide the landscape/portrait steps, real PDFs handed to the page's own file input, genuine paste events and key combinations, and CDP moving the screen, the window and the device pixel ratio independently. Proven honest by a negative control — feed the portrait step a wide photo and the run fails. This covered the four Unit 12 lessons converted from reading to missions that had never once been driven. | `scripts/mission-check.mjs` |
 | Crash containment (no blank screens, ever) | **Done** — per-activity error boundary, friendly error/404 pages | `components/ActivityErrorBoundary.tsx` |
 | Storage failure (library machines, private browsing) | **Done** — in-memory fallback + one calm banner | `lib/safeStorage.ts` |
@@ -38,7 +38,7 @@ number, because everything outside it is assumption wearing the same clothes.
 
 | Proven every run | How |
 |---|---|
-| 145 simulated activities playable to the end | `solve-check` |
+| 146 simulated activities playable to the end | `solve-check` |
 | 18 real-world missions, on a real machine | `mission-check` |
 | Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
 | The sales demo path, stop by stop | `demo-check` |
@@ -51,7 +51,7 @@ number, because everything outside it is assumption wearing the same clothes.
 | **Not** proven by machine | Why, and what covers it instead |
 |---|---|
 | **6** reflex / trackpad-gesture activities | A script genuinely cannot pinch a trackpad or beat a falling-shapes game. Mount-checked, then driven by hand |
-| **1** activity, scriptable but not yet scripted | `editing-copy-paste` (`keyboard-shortcut`) — needs a real clipboard, which headless Chromium will do only with a permissions grant the other harnesses do not need. Mount-checked only. **Was 14 on the morning of 2026-07-29 and is now 1**: `solveStepless` took nine, then drag-sort, spot-the-fake, right-click-to-new-tab and edit-a-file-in-Files took four more |
+| ~~activities scriptable but not scripted~~ | **None.** This column read 20 on the morning of 2026-07-29, before anyone checked what those 20 actually were. Nine fell to `solveStepless`, four more to per-type players, and the last — `editing-copy-paste` — turned out not to need a clipboard at all: the lesson was not checking the copy. It does now, and the solver performs a real `execCommand("copy")` and pastes what the selection holds |
 | Whether the writing is *good* | Reading level is measured; persuasion is not |
 | Whether a real buyer says yes | No amount of harness output substitutes for a prospect's face |
 
@@ -69,7 +69,7 @@ Ranked, current worst first. Fixing the top item promotes the next.
    docs.google.com address. Module is now 7 hands-on / 2 walkthroughs.
    **Closed 2026-07-28:** all four are now played end to end by
    `npm run mission-check`, so the conversion is proven, not assumed.
-2. **A lesson failing mid-demo.** Mitigated by solve-check (145 simulated
+2. **A lesson failing mid-demo.** Mitigated by solve-check (146 simulated
    activities), mission-check (18 real-world missions) and the error boundary.
    The residual risk is the 20 stepless types — reflex games and real-trackpad
    gestures — which only mount-check covers, plus the intermittent below.
@@ -196,7 +196,7 @@ report 132/132 off a run that had other browser work competing with it.
 
 ## Handoff for the next session
 
-**Run these first** (dev server on :3000): `solve-check` (145/145),
+**Run these first** (dev server on :3000): `solve-check` (146/146),
 `mission-check` (18/18), `hostile-check`, `recovery-check`, `demo-check`,
 `desktop-check`, then `check-lessons.py`, `check-actions.py`,
 `spelling-check.py`. Nine gates; all green as of 2026-07-28.
@@ -254,6 +254,19 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the copy-paste lesson did not check the copy):** The last
+  unplayed activity, and my stated reason — "needs a real clipboard" — was
+  wrong. `CopyPasteTask` was a plain textarea checking `pasted === sourceText`:
+  **no paste listener, no clipboard, nothing about copying.** A learner who
+  retyped the sentence passed a lesson called *Copy, Cut, and Paste*, in the
+  keyboard unit, whose own instructions say to press Ctrl+C and Ctrl+V. The
+  repo's real-world missions already hold the right standard ("a paste event
+  carrying text they did not type"); the simulated lesson teaching the shortcut
+  did not. It requires a real paste now, and typing the right words gets a kind
+  nudge rather than a red failure. The solver does a genuine
+  `execCommand("copy")` and pastes what the selection holds. **solve-check
+  145 → 146; machine-proven 164 of 170; the "scriptable but not scripted" column
+  is empty for the first time** — it read 20 this morning.
 - **2026-07-29 (fourteen down to one):** The five remaining "afternoon's work"
   activities: four done in one afternoon. Drag-sort, spot-the-fake,
   right-click-to-new-tab and edit-a-file-in-Files now play. **solve-check

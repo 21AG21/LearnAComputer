@@ -120,6 +120,7 @@ export const STEPLESS = new Set([
   "spot-the-fake",
   "browser-right-click",
   "edit-file",
+  "keyboard-shortcut",
 ]);
 
 /** Set a React-controlled field's value so React itself notices. */
@@ -273,6 +274,43 @@ export async function solveStepless(root: HTMLElement, task: Record<string, unkn
     save?.click();
     await settle(SLOW_SETTLE_MS);
     return (await waitDone()) ? outcome(true) : outcome(false, "Saved the corrected file, activity did not finish.");
+  }
+
+  if (type === "keyboard-shortcut") {
+    // A real copy, then a real paste. The lesson now refuses typed text (see
+    // CopyPasteTask), so the solver has to do what it asks: select the sentence,
+    // copy it with the browser's own copy command, and deliver it to the box as
+    // a paste event carrying what the clipboard actually holds — not a string
+    // this function happens to know.
+    const source = String(task.sourceText ?? "");
+    const para = Array.from(root.querySelectorAll<HTMLElement>("p")).find((n) => textOf(n) === source);
+    if (!para) return outcome(false, "The sentence to copy is not on screen.");
+    const range = document.createRange();
+    range.selectNodeContents(para);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+    const copied = document.execCommand("copy");
+    if (!copied) return outcome(false, "The browser refused the copy command.");
+    const carried = sel?.toString() ?? "";
+    sel?.removeAllRanges();
+
+    const box = root.querySelector<HTMLTextAreaElement>("textarea");
+    if (!box) return outcome(false, "No box to paste into.");
+    box.focus();
+    const dt = new DataTransfer();
+    dt.setData("text/plain", carried);
+    box.dispatchEvent(new ClipboardEvent("paste", { bubbles: true, cancelable: true, clipboardData: dt }));
+    // The component keeps its text in React state, so the value has to arrive
+    // through an input event as well — the paste event is what marks it pasted.
+    setFieldValue(box, carried);
+    await settle();
+
+    const check = Array.from(root.querySelectorAll<HTMLElement>("button")).find((b) =>
+      /check my work/i.test(textOf(b)),
+    );
+    check?.click();
+    return (await waitDone()) ? outcome(true) : outcome(false, "Copied and pasted, activity did not finish.");
   }
 
   if (type === "open-all-apps") {

@@ -72,6 +72,7 @@ SOLVER_EXEMPT = {
 SOLVER_STEPLESS = {
     "type-text", "edit-text", "url-navigator", "open-all-apps", "file-explorer-open",
     "drag-sort-files", "spot-the-fake", "browser-right-click", "edit-file",
+    "keyboard-shortcut",
 }
 # NOTE: this list is a copy of `STEPLESS` in lib/solve/solver.ts. It caught its
 # own drift the first time the solver grew — the check said 159 while the

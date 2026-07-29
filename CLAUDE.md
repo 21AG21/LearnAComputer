@@ -14,7 +14,7 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 npm run dev          # dev server on :3000
 # /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
 # /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
-npm run solve-check  # headless: PLAYS all 145 playable activities to the end (canonical)
+npm run solve-check  # headless: PLAYS all 146 playable activities to the end (canonical)
 npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
@@ -38,10 +38,10 @@ All the browser checks need `npm run dev` running on :3000 first.
 After touching any sim component or lesson steps, run **solve-check as well as
 mount-check** — mounting proves an activity renders; solving proves a learner can
 finish it, and the two unfinishable-lesson bugs were invisible to everything else.
-`solve-check` is currently green at **145/145**; keep it there. It grew from 132 on
-2026-07-29 when `solveStepless` taught it the nine activity types that have no
-step list. **One** stepless type is left — `keyboard-shortcut`, which needs a
-real clipboard — and it is named in `docs/GOAL_STATE.md`.
+`solve-check` is currently green at **146/146**; keep it there. It grew from 132 on 2026-07-29, when
+`solveStepless` taught it every activity type that has no step list. **Nothing
+scriptable is left unplayed** — only six reflex and trackpad activities a script
+genuinely cannot perform.
 
 After touching `RealWorldMission`, `RealWorldChecks` or any `real-world` lesson,
 run **mission-check** — solve-check exempts all 18 missions, so nothing else

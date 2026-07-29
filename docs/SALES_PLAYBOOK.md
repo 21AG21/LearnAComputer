@@ -241,8 +241,8 @@ in-browser verification · printable per-unit and full-course certificates
 (`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
-grade-5 reading level, enforced at build · **163 of the 170 activities
-mechanically proven finishable, re-proven on every change** — 145 simulated
+grade-5 reading level, enforced at build · **164 of the 170 activities
+mechanically proven finishable, re-proven on every change** — 146 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
 pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to
@@ -250,23 +250,17 @@ use, with no account, no cookies, no analytics and no third-party requests** —
 asserted on every route by `npm run hostile-check` and verifiable by the buyer
 in their own developer tools.
 
-The honest footnote, if pressed. The 11 that are **not** auto-played:
+The honest footnote, if pressed. The **6** that are not auto-played all have the
+same reason: a script cannot perform the gesture. The falling-shapes reflex
+game, the Tab focus game, drag-match-onto-an-image, pinch-zoom, and the
+scroll-for-a-code lesson. Mount-checked, then driven by hand before any demo.
 
-- **6 genuinely cannot be:** the falling-shapes reflex game, the Tab focus game,
-  drag-match-onto-an-image, pinch-zoom, and the scroll-for-a-code lesson. A
-  script cannot pinch a trackpad or out-react a moving target. Mount-checked,
-  then driven by hand.
-- **5 could be and are not yet:** copy-paste, right-click-to-new-tab, the
-  drag-sort activity, spot-the-fake, and editing a file inside the Files app.
-  Mount-checked only. Named individually in `docs/GOAL_STATE.md`.
-
-This footnote was wrong until 2026-07-29 — it called all 20 unplayed activities
-"reflex and trackpad-gesture activities… because a script cannot pinch a
-trackpad", when 14 of them were ordinary typing and clicking that simply
-predated the solver's step-list architecture. Nine of those fourteen are now
-played; the last five are a named to-do, not an excuse. If asked, say exactly
-that. The precision is what makes the number believable, and only true
-precision does that.
+That is now the *whole* list, and it was not always. On the morning of
+2026-07-29 this footnote claimed **20** activities were un-scriptable "because a
+script cannot pinch a trackpad". Fourteen of them were ordinary typing and
+clicking that simply predated the solver's architecture; all fourteen are now
+played. If a buyer asks what changed, that story is worth telling — it is the
+difference between a number that sounds good and one that is true.
 
 **Removed on purpose, 2026-07-28 — do not offer to build them back on a call:**
 accounts and sign-in, cross-device progress sync, and the classroom/instructor
