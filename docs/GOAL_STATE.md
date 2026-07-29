@@ -253,6 +253,16 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the learner who clicks the wrong thing):** Every harness in this
+  repo does the moderate, correct thing — that sentence was written about
+  over-dragging and it generalizes. Asked the opposite question of Unit 1 lesson
+  6: step 1 says drag the window, so what if the learner clicks the red ✕? The
+  window vanishes, the banner still names it, and there is no glow anywhere. It
+  was recoverable from the dock, but the dock is what **step 4** teaches. The
+  desktop now says so and the dock icon glows. See `docs/SAME_ICON_AUDIT.md`
+  § *Round six*, which also names the harness that does not exist yet: one that
+  plays each lesson **wrongly on purpose** and asserts the learner is never left
+  with no ring and no way back.
 - **2026-07-29 (working the leads):** Ran every advisory lead from the ring
   sweep back through the filtered mode, which is the point of producing leads.
   One is a real bug and it is in **Unit 1, lesson 6**: `DraggableWindow` clamped

@@ -477,3 +477,54 @@ got: reproduce filtered, measure the rect by hand, fix the cause.
 
 **Verified**: solve-check 132/132, desktop-check, recovery-check, hostile-check,
 demo-check, mission-check 18/18, check-lessons 198, `tsc`, `lint`.
+
+## Round six (2026-07-29): the learner who clicks the wrong thing
+
+Round five's commit message contained the lead for this one, in a sentence
+written about a different bug: *"solve-check drags by a fixed small delta and
+never over-drags."* Generalize that and it is the standing weakness of every
+harness here — **they all do the moderate, correct thing.** Nothing in the repo
+has ever asked what happens when a learner does the reasonable-but-wrong thing.
+
+So: *Working with windows*, Unit 1 lesson 6, step 1 — *"Drag the strip at the top
+of the window to move the window."* A learner clicks the red ✕ instead.
+
+**Everything disappears.** The window is gone, the banner still says drag the
+strip at the top of the window, and there is no glow anywhere on screen. The
+learner is looking at an empty desktop being told to manipulate a window that is
+not there, six lessons into their first unit.
+
+It was *recoverable* — clicking Notes in the dock brings it back — but that is
+what **step 4** teaches. A learner who closes it at step 1 has not been told, and
+has no reason to guess. "Recoverable if you already know the thing this lesson
+has not taught you yet" is not recoverable.
+
+Now the desktop says so, and the dock icon glows:
+
+> **You closed the window.**
+> Nothing is broken — click **Notes** in the row of icons at the bottom to open
+> it again.
+
+The glow matters more than the sentence: "look for the glow" is the one
+instruction this course gives a learner who is lost, so when the way forward is a
+dock icon, that is where the glow goes. Verified end to end — close at step 1,
+follow the glow, window returns, still on step 1 of 7 — and the hint correctly
+stays away when the learner closes the window at step 7, where closing is the
+step.
+
+**No harness could have found this.** solve-check only ever performs the current
+step's action, so it never clicks ✕ out of turn; recovery-check tests the one
+failure path the sims deliberately model (the scam popup). This came from asking
+a question none of them asks.
+
+### What this suggests, and is not yet built
+
+The generalizable version is a harness that plays each lesson **wrongly on
+purpose** — press every other control before the right one, close what the step
+needs, over-drag, double-click what wants one click — and asserts the learner is
+never left with no ring and no way back. That is a real gap, and it is the
+honest next item rather than a claim of coverage.
+
+**Verified**: solve-check 132/132, desktop-check, recovery-check, hostile-check,
+demo-check, mission-check 18/18, ring-check on the lesson, check-lessons 198,
+check-actions, spelling, `tsc`, `lint`.

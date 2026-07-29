@@ -31,6 +31,13 @@ export interface DesktopStep {
 
 const HIDE_WINDOW_ACTIONS: StepAction[] = ["open-app", "open-clock", "open-wifi-panel", "open-battery-panel"];
 
+/**
+ * Steps that do not need a window on screen. Anything else, with the window
+ * closed, means the learner is looking at an empty desktop while the banner
+ * names a window — so they get told how to get it back.
+ */
+const NO_WINDOW_NEEDED: StepAction[] = [...HIDE_WINDOW_ACTIONS, "close", "close-app", "close-panel"];
+
 const DOCK_APPS: { id: DesktopAppId; label: string }[] = BUILT_IN_APPS.map((id) => ({
   id,
   label: APP_TITLES[id],
@@ -263,6 +270,22 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
             </DraggableWindow>
           )}
 
+          {/* Closed the window on a step that still needs it.
+              Clicking the red ✕ on step 1 is a completely reasonable thing for a
+              learner to try — and it left an empty desktop under a banner saying
+              "Drag the strip at the top of the window". The window IS recoverable
+              from the dock, but that is what step 4 teaches, so a learner who
+              closes it at step 1 has no way of knowing. */}
+          {(!windowVisible || isClosed) && step && !NO_WINDOW_NEEDED.includes(step.action) && (
+            <div className="absolute inset-x-0 top-1/3 px-6 text-center">
+              <p className="text-sm font-semibold text-gray-700">You closed the window.</p>
+              <p className="mt-1 text-xs text-gray-600">
+                Nothing is broken — click <strong>{openedAppLabel}</strong> in the row of icons at the
+                bottom to open it again.
+              </p>
+            </div>
+          )}
+
           {/* Dock */}
           <div className="absolute bottom-4 inset-x-2 flex justify-center z-10">
             <Dock
@@ -273,7 +296,11 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                 running: app.id === openedAppId && (minimized || (windowVisible && !isClosed)),
                 highlighted:
                   (step?.action === "open-app" && step.target === app.id) ||
-                  (minimized && step?.action === "restore" && app.id === openedAppId),
+                  (minimized && step?.action === "restore" && app.id === openedAppId) ||
+                  // Window closed but still needed: put the glow on the way back,
+                  // because "look for the glow" is the one instruction this course
+                  // gives a learner who is lost.
+                  (!windowVisible && !!step && !NO_WINDOW_NEEDED.includes(step.action) && app.id === openedAppId),
               }))}
               onOpen={(id) => {
                 if (minimized && id === openedAppId) {
