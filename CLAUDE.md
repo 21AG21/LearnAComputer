@@ -68,8 +68,13 @@ empty desktop, no glow, and a banner naming a window that was gone.
   that one gesture never advances two steps. What protects this is the 150ms
   same-step guard in `useStepRunner.completeStep`; do not remove it.
 
+It clicks through `DesktopLaunch`'s "open the app" gate first — without that it
+silently skipped most of the course, reporting a coverage number that was not
+true (see `docs/SAME_ICON_AUDIT.md` § *Round eleven*).
+
 Both negative controls are in the file header and both have been watched to
-fail. Note the trap recorded in `docs/SAME_ICON_AUDIT.md` § *Round ten*: the
+fail — and re-watched after any change to what the check can *see*, because
+widening its vision is exactly the edit that can blind it. Note the trap recorded in `docs/SAME_ICON_AUDIT.md` § *Round ten*: the
 first draft of the double-click mode reported all-clear across 36 lessons while
 only ever clicking each lesson's *first* control. **When a new check comes back
 clean, go find what it should have caught before believing it.**

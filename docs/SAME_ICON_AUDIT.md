@@ -779,3 +779,81 @@ asked a question that sounded identical and answered nothing, and the only
 reason that was caught was checking the content for cases the check *should*
 have flagged. **When a new check comes back clean, go find what it should have
 caught before believing it.**
+
+## Round eleven (2026-07-29): the harness was skipping most of the course
+
+Round ten ended with two harnesses disagreeing about `photos-app` — ring-check
+reporting a clipped ring, stray-check reporting no ring at all — and that
+disagreement written down as undiagnosed. This is the diagnosis, and the answer
+was that **stray-check was wrong, about most of the course.**
+
+### The gate it never opened
+
+Most guided lessons open behind `DesktopLaunch`: a dark banner reading *"Open
+Notes — click the glowing icon in the dock"*, with **no `SimulatorFrame` until
+the learner clicks**. stray-check waited eight seconds for a frame that could
+never appear, gave up, and skipped — 8 seconds wasted per lesson, and the skip
+reported under a label that read like a property of the lesson.
+
+Two commits ago this file said *"24 guided lessons had a window to close and all
+24 recover; 101 had no window to close."* The second half was not true. Many of
+those 101 were never opened. The honest version of that sentence was
+"this harness never got past the front door of most of the course", and it took
+a contradiction with another harness to notice.
+
+It now clicks the gate, the way a learner does. Coverage, same run, same day:
+
+| Mode | Before | After |
+|---|---|---|
+| double-click | 36 lessons | **104** |
+| close-the-window | 24 | 27, with 71 lessons now actually opened |
+
+### What the new coverage found: dead window controls
+
+Three Unit 2 lessons — `editing-undo-redo`, `text-formatting`,
+`keyboard-shortcuts-pattern` — failed immediately. The cause was not the dead end
+this harness was built for. It was worse:
+
+```tsx
+<AppWindow title="Notes" onClose={() => {}} onMinimize={() => {}}>
+```
+
+**The ✕ and the − were drawn, clickable, and did nothing at all.** Not a dead
+end — a dead control, which this repo already has a rule about, written when the
+dock icons were fixed: *"A control that does nothing teaches nothing, and this
+course's audience reads 'nothing happened' as 'I broke it'."*
+
+`DesktopLaunch` had always passed an `exit` callback for exactly this — *"for
+sims with a closable window"* — and nothing had ever used it. Now
+`GuidedNotesTask` takes `onExit` and both buttons call it, returning the learner
+to the desktop with the dock icon glowing and the banner naming the app. Two more
+of the same class went with it: `EditFileTask` and `FakeDesktop`'s file viewer
+each had a live ✕ and a dead −. Minimize now puts the window away and the list or
+the dock is the way back, which is honest in a sim with no taskbar.
+
+The only surviving `onClose={() => {}}` is `AppBody`'s Files instance, which
+renders with `showHeader={false}` — no buttons drawn, so no dead control.
+
+### And a false positive in the same check
+
+With the sims fixed, the three lessons still failed — because `readState` only
+looked **inside `[data-sim-frame]`**, and closing a DesktopLaunch window removes
+the frame. The recovery it should have seen — the glowing dock icon and the
+banner — lives outside it. The check was calling three now-correct lessons
+broken.
+
+`readState` now reads the whole activity host, and treats the launch gate as
+what it is: a way forward. **A harness that cannot see the fix is worse than no
+harness, because it sends you to repair what is already right.**
+
+The negative control was re-run *after* that change, not before — widening what
+the check can see is exactly the edit that could make it blind to real failures.
+Removing the recovery block from `GuidedDesktopTask` still fails; restoring it
+still passes.
+
+### The rule
+
+Two harnesses disagreeing about the same lesson is information, and it is the
+only reason any of this was found. Neither was reporting an error. Both were
+confidently reporting different worlds. **When two checks disagree, one of them
+is lying — go and find out which before trusting either.**

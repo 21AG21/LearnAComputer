@@ -23,6 +23,14 @@ interface GuidedNotesTaskProps {
   freePlay?: boolean;
   /** Starting contents, for the practice desktop. Never set during a lesson. */
   initialHtml?: string;
+  /**
+   * Puts the learner back on the desktop, where the dock icon glows again.
+   *
+   * Without it the window's ✕ and − were wired to `() => {}`: drawn, clickable,
+   * and doing nothing at all. This course's audience reads "nothing happened" as
+   * "I broke it" — the same reason the dead dock icons were fixed.
+   */
+  onExit?: () => void;
   onResult: (success: boolean) => void;
 }
 
@@ -33,6 +41,7 @@ export default function GuidedNotesTask({
   hint,
   freePlay,
   initialHtml,
+  onExit,
   onResult,
 }: GuidedNotesTaskProps) {
   const [toolbarNudge, setToolbarNudge] = useState<string | null>(null);
@@ -103,8 +112,11 @@ export default function GuidedNotesTask({
       <AppWindow
         title="Notes"
         icon={<NoteIcon size={18} />}
-        onClose={() => {}}
-        onMinimize={() => {}}
+        // Minimize does what close does: this sim has no taskbar to restore
+        // from, and the honest behavior is "the window goes away, the glowing
+        // dock icon brings it back" — which is what both buttons now do.
+        onClose={() => onExit?.()}
+        onMinimize={() => onExit?.()}
         showHeader={!freePlay}
       >
         <div className="h-full flex flex-col">

@@ -61,7 +61,9 @@ export default function EditFileTask({
           title={fileName}
           icon={<FileDocIcon size={18} />}
           onClose={() => setPhase("files")}
-          onMinimize={() => {}}
+          // No taskbar here either: minimize puts the file away, and the file
+          // list is the way back. A button that did nothing read as breakage.
+          onMinimize={() => setPhase("files")}
         >
           <div className="h-full flex flex-col overflow-hidden">
             <div className="flex-1 flex min-h-0 gap-0">

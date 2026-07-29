@@ -256,7 +256,16 @@ export default function LessonPlaygroundPane({ task, started, onResult }: Lesson
           )}
           {task.type === "notes-shortcut" && (
             <DesktopLaunch app="notes">
-              <GuidedNotesTask goal={task.goal} steps={task.steps} mode={task.mode} hint={task.hint} onResult={onResult} />
+              {(exit) => (
+                <GuidedNotesTask
+                  goal={task.goal}
+                  steps={task.steps}
+                  mode={task.mode}
+                  hint={task.hint}
+                  onExit={exit}
+                  onResult={onResult}
+                />
+              )}
             </DesktopLaunch>
           )}
         </div>

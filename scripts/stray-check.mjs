@@ -75,25 +75,36 @@ if (slugs.length === 0) {
   process.exit(2);
 }
 
-/** Is there a way forward on screen? A ring to follow, or words explaining. */
+/**
+ * Is there a way forward on screen? A ring to follow, or words explaining.
+ *
+ * Deliberately NOT scoped to `[data-sim-frame]`. Closing the window in a
+ * DesktopLaunch lesson returns the learner to "Open Notes — click the glowing
+ * icon in the dock", which is a perfectly good way forward and lives *outside*
+ * the frame. An earlier version read only inside the frame, so the moment the
+ * frame went away it reported "no ring, nothing explains" and called three
+ * correct lessons broken. A harness that cannot see the fix is worse than no
+ * harness, because it sends you to fix what is already right.
+ */
 const readState = () =>
   page.evaluate(() => {
     const frame = document.querySelector("[data-sim-frame]");
-    if (!frame) return { mounted: false };
-    const rings = [...frame.querySelectorAll("*")].filter((e) => {
+    const scope = document.querySelector("[data-stray-host]") ?? document.body;
+    const rings = [...scope.querySelectorAll("*")].filter((e) => {
       const c = (e.className || "").toString();
       return /ring-yellow|animate-ring-pulse/.test(c) && e.offsetParent !== null;
     });
-    // The banner always says something; only text inside the simulated screen
-    // counts as telling the learner what just happened to it.
-    const body = frame.lastElementChild?.textContent ?? "";
+    const words = scope.textContent ?? "";
     return {
-      mounted: true,
-      done: frame.getAttribute("data-sim-done") === "1",
+      mounted: !!frame,
+      done: frame?.getAttribute("data-sim-done") === "1",
       rings: rings.length,
-      explains: /closed|nothing is broken|open it again|click .* in the (row|dock)|reopen/i.test(body),
-      closeButtons: frame.querySelectorAll('[aria-label="Close"]').length,
-      progress: Number(frame.getAttribute("data-sim-progress") ?? 0),
+      explains:
+        /you closed|nothing is broken|open it again|click .* in the (row|dock)|reopen/i.test(words) ||
+        // DesktopLaunch's own gate: the app is shut and the dock icon glows.
+        /click the glowing icon in the dock/i.test(words),
+      closeButtons: frame ? frame.querySelectorAll('[aria-label="Close"]').length : 0,
+      progress: Number(frame?.getAttribute("data-sim-progress") ?? 0),
       // Innermost ring: the control the step is actually pointing at.
       hasRing: rings.some((r) => !rings.some((o) => o !== r && r.contains(o))),
     };
@@ -102,6 +113,8 @@ const readState = () =>
 const stranded = [];
 const skipped = [];
 let checked = 0;
+/** Lessons reached only by clicking through the "open the app" gate first. */
+let launched = 0;
 const started = Date.now();
 
 for (let i = 0; i < slugs.length; i++) {
@@ -109,13 +122,43 @@ for (let i = 0; i < slugs.length; i++) {
   const idx = all.indexOf(slug);
   await page.evaluate((n) => window.__strayShow(n), idx);
 
-  try {
-    await page.waitForFunction(() => !!document.querySelector("[data-sim-frame]"), undefined, { timeout: 8000 });
-  } catch {
+  // Most guided lessons open behind DesktopLaunch: a dark banner reading "Open
+  // Mail — click the glowing icon in the dock", with no SimulatorFrame until the
+  // learner clicks. The first version of this harness waited 8s for a frame that
+  // could never appear, then skipped — silently reporting a large share of the
+  // course as "no window to close" when the truth was "never opened". Click the
+  // gate, the way a learner does, and the lesson is actually reachable.
+  let framed = await page
+    .waitForFunction(() => !!document.querySelector("[data-sim-frame]"), undefined, { timeout: 2500 })
+    .then(() => true)
+    .catch(() => false);
+
+  if (!framed) {
+    const gate = await page.evaluate(() => {
+      if (!/click the glowing icon in the dock/i.test(document.body.innerText)) return false;
+      const ringed = [...document.querySelectorAll("*")].filter(
+        (e) => /ring-yellow|animate-ring-pulse/.test((e.className || "").toString()) && e.offsetParent !== null,
+      );
+      const el = ringed.find((r) => !ringed.some((o) => o !== r && r.contains(o)));
+      const btn = el?.closest("button") ?? el;
+      if (!btn) return false;
+      btn.click();
+      return true;
+    });
+    if (gate) {
+      launched++;
+      framed = await page
+        .waitForFunction(() => !!document.querySelector("[data-sim-frame]"), undefined, { timeout: 6000 })
+        .then(() => true)
+        .catch(() => false);
+    }
+  }
+
+  if (!framed) {
     skipped.push({ slug, why: "no sim frame (full-bleed activity)" });
     continue;
   }
-  await page.waitForTimeout(700); // launch animation, desktop settling
+  await page.waitForTimeout(900); // launch animation, desktop settling
 
   const before = await readState();
 
@@ -193,8 +236,12 @@ for (let i = 0; i < slugs.length; i++) {
 await browser.close();
 
 const what = ACTION === "double" ? "Double-clicked the highlighted control on" : "Closed the window on";
-const why = ACTION === "double" ? "had nothing highlighted" : "had no window to close";
-console.log(`\n${what} ${checked} guided lesson(s); ${skipped.length} ${why}.`);
+console.log(`\n${what} ${checked} guided lesson(s) (${launched} reached by opening the app first).`);
+// Skips broken out by reason, because "skipped" hid three different things and
+// one of them was "this harness never opened the lesson".
+const reasons = {};
+for (const s of skipped) reasons[s.why] = (reasons[s.why] ?? 0) + 1;
+for (const [why, n] of Object.entries(reasons)) console.log(`  skipped ${n}: ${why}`);
 
 if (stranded.length === 0) {
   console.log(

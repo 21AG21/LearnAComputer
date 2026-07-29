@@ -72,7 +72,7 @@ export default function StrayCheck({ lessons }: { lessons: Item[] }) {
         {current ? `${current.slug}` : "idle"}
       </p>
       {current && (
-        <div className="mt-2 h-[520px] w-full">
+        <div data-stray-host="" className="mt-2 h-[520px] w-full">
           <Boundary key={current.slug} onError={(e) => setThrew(e.message)}>
             <LessonPlaygroundPane task={current.task} started onResult={() => {}} onExit={() => {}} />
           </Boundary>

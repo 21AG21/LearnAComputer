@@ -398,7 +398,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
             initial={{ x: 80 + i * 28, y: 60 + i * 28, w: 460, h: 380 }}
             z={BUILT_IN_APPS.length + i + 1}
             onClose={() => closeFileViewer(fv.uid)}
-            onMinimize={() => {}}
+            // A file viewer has nothing to minimize into; putting it away and
+            // reopening from the file list is the honest behavior.
+            onMinimize={() => closeFileViewer(fv.uid)}
             className="animate-window-open"
           >
             <FileViewer item={fv.item} />

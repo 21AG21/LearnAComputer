@@ -253,6 +253,21 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the harness was skipping most of the course):** Chased the one
+  contradiction left open — ring-check and stray-check disagreeing about
+  `photos-app` — and stray-check was wrong, about most of the course. It waited
+  for a `SimulatorFrame` that never appears until the learner clicks through
+  `DesktopLaunch`'s "click the glowing icon in the dock" gate, then skipped.
+  **My own claim two commits earlier — "101 had no window to close" — was
+  false**; most were never opened. Fixed: coverage went 36 → **104** lessons in
+  double-click mode. That immediately found three Unit 2 lessons whose window
+  ✕ *and* − were wired to `() => {}` — drawn, clickable, doing nothing, which
+  this repo has a standing rule against. Fixed in three sims via the `exit`
+  callback `DesktopLaunch` had always offered and nothing used. Then found a
+  false positive in the same check (it read only inside the frame, so it could
+  not see the recovery it had just been given) and re-ran the negative control
+  *after* widening it. Standing lesson: **when two checks disagree, one is
+  lying — find out which before trusting either.**
 - **2026-07-29 (the check that found nothing):** Added double-click as
   stray-check's second wrong move — Unit 1 teaches double-clicking and this repo
   already shipped one bug where a double-press skipped a whole lesson. Result:
