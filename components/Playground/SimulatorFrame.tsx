@@ -220,7 +220,19 @@ export default function SimulatorFrame({
     };
   }, [done]);
 
-  if (freePlay) return <div className="h-full w-full overflow-hidden">{children}</div>;
+  /**
+   * Free play: no banner, no progress bar — the app fills the window.
+   *
+   * This must be a flex column, not a plain block. Every sim's body is a
+   * `flex-1` pane that scrolls internally, and `flex-1` against a block parent
+   * sizes to *content* rather than to the window: Photos grew to 1605px inside
+   * a 514px window and the `overflow-hidden` here silently ate the other 1091.
+   * Two thirds of the photo library was on screen for nobody. Same bug in App
+   * Market and the browser. `min-h-0` is what stops a flex item refusing to
+   * shrink below its content.
+   */
+  if (freePlay)
+    return <div className="h-full w-full min-h-0 flex flex-col overflow-hidden">{children}</div>;
 
   return (
     <div

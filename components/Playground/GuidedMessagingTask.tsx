@@ -54,11 +54,11 @@ interface GroupInfo {
 }
 
 const CONTACTS: Contact[] = [
-  { id: "alex", name: "Alex", avatar: "/playgrounds/Dog.png", status: "Hey! What's up?" },
-  { id: "jordan", name: "Jordan", avatar: "/playgrounds/Cat1.png", status: "Free to chat" },
-  { id: "sam", name: "Sam", avatar: "/playgrounds/Bird.png", status: "At work" },
-  { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png", status: "Miss you!" },
-  { id: "doggo", name: "Doggo", avatar: "/playgrounds/animal-dog.png", status: "Woof!" },
+  { id: "alex", name: "Alex", avatar: "/site/avatar-alex.webp", status: "Hey! What's up?" },
+  { id: "jordan", name: "Jordan", avatar: "/site/avatar-jordan.webp", status: "Free to chat" },
+  { id: "sam", name: "Sam", avatar: "/site/avatar-sam.webp", status: "At work" },
+  { id: "grandma", name: "Grandma", avatar: "/site/avatar-grandma.webp", status: "Miss you!" },
+  { id: "doggo", name: "Doggo", avatar: "/site/avatar-doggo.webp", status: "Woof!" },
 ];
 
 const PHOTO_OPTIONS = [

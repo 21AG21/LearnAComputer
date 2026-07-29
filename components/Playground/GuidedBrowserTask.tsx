@@ -106,6 +106,35 @@ const FAVORITES: PageId[] = [
   "library", "bookshop", "transit", "garden", "petnews", "bank", "support",
 ];
 
+/**
+ * A picture on a practice web page.
+ *
+ * Every site in here used to be a heading and a paragraph, with the occasional
+ * icon in a pastel box standing in for a photograph. Real sites are mostly
+ * pictures, and a learner practicing "read the address, not the design" should
+ * be looking at something that resembles what they will actually meet.
+ *
+ * All of it is drawn by `scripts/generate-photos.mjs` and served from this
+ * origin — nothing here reaches out to another host, which is the claim
+ * `hostile-check` exists to defend.
+ */
+function SiteImg({
+  src, alt = "", w, h, fit = "cover", className = "",
+}: { src: string; alt?: string; w: number; h: number; fit?: "cover" | "contain"; className?: string }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={w}
+      height={h}
+      className={`${fit === "cover" ? "object-cover" : "object-contain"} ${className}`}
+      // Decorative page furniture: it must never delay the control the step
+      // is asking the learner to click.
+      loading="lazy"
+    />
+  );
+}
+
 /** Rich page bodies — rendered instead of the plain {title + body} block. */
 const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
   petnews: (
@@ -119,16 +148,25 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         </nav>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-2 border border-gray-200 rounded-lg p-3">
-          <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
-          <h2 className="text-base font-bold mt-1 leading-tight">Dog Wins National Frisbee Championship for Third Year Running</h2>
-          <p className="text-xs text-gray-500 mt-1">By our Sports Correspondent · 2 hours ago</p>
-          <p className="text-sm text-gray-700 mt-2 leading-relaxed">Biscuit, a four-year-old Golden Retriever from Maplewood, leapt twenty feet and caught the disc before it cleared the fence. The crowd erupted.</p>
+        <div className="col-span-2 border border-gray-200 rounded-lg overflow-hidden">
+          <div className="p-3">
+            {/* Width-capped, not height-cropped. The dog stands in the lower
+                third of this photo: a letterbox band gives you an empty field,
+                and anchoring it low gives you four legs. */}
+            <SiteImg src="/photos/dog-field.webp" w={450} h={300} className="w-full max-w-[300px] h-auto rounded-lg mb-2" />
+            <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
+            <h2 className="text-base font-bold mt-1 leading-tight">Dog Wins National Frisbee Championship for Third Year Running</h2>
+            <p className="text-xs text-gray-500 mt-1">By our Sports Correspondent · 2 hours ago</p>
+            <p className="text-sm text-gray-700 mt-2 leading-relaxed">Biscuit, a four-year-old Golden Retriever from Maplewood, leapt twenty feet and caught the disc before it cleared the fence. The crowd erupted.</p>
+          </div>
         </div>
         <div className="space-y-2">
-          <div className="border border-gray-200 rounded-lg p-2">
-            <h3 className="text-xs font-bold leading-tight">Scientists Confirm Cats Nap 16 Hours a Day</h3>
-            <p className="text-xs text-gray-500 mt-0.5">4 hours ago</p>
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <SiteImg src="/photos/cat-sleeping.webp" w={320} h={214} className="w-full h-20" />
+            <div className="p-2">
+              <h3 className="text-xs font-bold leading-tight">Scientists Confirm Cats Nap 16 Hours a Day</h3>
+              <p className="text-xs text-gray-500 mt-0.5">4 hours ago</p>
+            </div>
           </div>
           <div className="border border-gray-200 rounded-lg p-2">
             <h3 className="text-xs font-bold leading-tight">Local Shelter Adopts Out 200 Animals This Month</h3>
@@ -155,21 +193,24 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       </div>
       <div className="grid grid-cols-2 gap-2">
         {[
-          { name: "Laptops", sub: "Starting at $299", bg: "bg-blue-50", border: "border-blue-100" },
-          { name: "Tablets", sub: "Starting at $199", bg: "bg-green-50", border: "border-green-100" },
-          { name: "Phones", sub: "Starting at $399", bg: "bg-pink-50", border: "border-pink-100" },
-          { name: "Headphones", sub: "Starting at $49", bg: "bg-yellow-50", border: "border-yellow-100" },
+          { name: "Laptops", sub: "Starting at $299", img: "/site/product-laptop.webp", border: "border-blue-100" },
+          { name: "Tablets", sub: "Starting at $199", img: "/site/product-tablet.webp", border: "border-green-100" },
+          { name: "Phones", sub: "Starting at $399", img: "/site/product-phone.webp", border: "border-pink-100" },
+          { name: "Headphones", sub: "Starting at $49", img: "/site/product-headphones.webp", border: "border-yellow-100" },
         ].map((cat) => (
-          <div key={cat.name} className={`${cat.bg} border ${cat.border} rounded-lg p-3 cursor-pointer hover:brightness-95`}>
-            <p className="font-bold text-sm">{cat.name}</p>
-            <p className="text-xs text-gray-600">{cat.sub}</p>
+          <div key={cat.name} className={`flex items-center gap-2 border ${cat.border} rounded-lg p-2 cursor-pointer hover:brightness-95`}>
+            <SiteImg src={cat.img} w={180} h={120} fit="contain" className="w-16 h-16 rounded shrink-0 bg-white/60" />
+            <div className="min-w-0">
+              <p className="font-bold text-sm">{cat.name}</p>
+              <p className="text-xs text-gray-600">{cat.sub}</p>
+            </div>
           </div>
         ))}
       </div>
       <div className="border border-gray-200 rounded-lg p-3">
         <p className="text-xs font-semibold text-gray-400 mb-2">FEATURED PRODUCT</p>
         <div className="flex gap-3 items-center">
-          <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center shrink-0"><CartIcon size={24} /></div>
+          <SiteImg src="/site/product-laptop.webp" w={168} h={112} fit="contain" className="w-14 h-14 rounded-lg shrink-0 bg-gray-50" />
           <div className="min-w-0">
             <p className="font-bold text-sm">UltraBook Pro 14</p>
             <p className="text-xs text-gray-500">8 GB RAM · 256 GB SSD · All-day battery</p>
@@ -188,6 +229,11 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       </div>
       <h1 className="text-2xl font-bold">Computer</h1>
       <p className="text-xs text-gray-500 italic mb-1">From Wikipedia, the free encyclopedia</p>
+      {/* The infobox picture, floated the way an encyclopedia article floats it. */}
+      <figure className="float-right ml-3 mb-2 w-32 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+        <SiteImg src="/photos/desk.webp" w={256} h={170} className="w-full h-20" />
+        <figcaption className="text-[10px] text-gray-500 px-1.5 py-1 leading-tight">A desktop computer in a home office</figcaption>
+      </figure>
       <p className="text-sm text-gray-700 leading-relaxed">A <strong>computer</strong> is an electronic device that processes information according to a set of instructions called a program. Modern computers can perform billions of operations per second and are used in nearly every field of human activity.</p>
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs">
         <p className="font-semibold mb-1">Contents</p>
@@ -250,6 +296,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         <span className="text-xs bg-red-100 text-red-700 font-semibold px-1.5 py-0.5 rounded">TOP STORY</span>
         <h2 className="text-lg font-bold mt-1 leading-tight">10 Easy Soup Recipes for a Cozy Winter</h2>
         <p className="text-xs text-gray-500 mt-0.5">By J. Andrews, Food Editor · Today</p>
+        <SiteImg src="/site/soup-bowl.webp" w={450} h={300} className="w-full max-w-[260px] h-auto rounded-lg mt-2" />
         <p className="text-sm text-gray-700 mt-2 leading-relaxed">As temperatures drop, there is nothing more comforting than a bowl of homemade soup. We have tested dozens of recipes so you don&apos;t have to. From a classic tomato to a hearty minestrone, every one of these takes under an hour.</p>
       </div>
       <div className="grid grid-cols-2 gap-2 text-xs">
@@ -274,6 +321,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         <span className="text-xs font-semibold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">FEATURED RECIPE</span>
         <h2 className="text-lg font-bold mt-1">Grandma&apos;s Classic Apple Pie</h2>
         <p className="text-xs text-gray-500">By R. Thompson · Prep: 30 min · Bake: 55 min · Serves 8</p>
+        <SiteImg src="/site/apple-pie.webp" w={450} h={300} className="w-full max-w-[260px] h-auto rounded-lg mt-2" />
         <p className="text-sm text-gray-700 mt-2 leading-relaxed">The flakiest crust you will ever make, filled with warm cinnamon apples. This recipe has been in the family for over sixty years.</p>
         <div className="mt-2 text-xs">
           <p className="font-semibold mb-1 text-gray-700">Ingredients (partial):</p>
@@ -306,9 +354,14 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
   ),
   library: (
     <div className="space-y-3">
-      <div className="rounded-lg p-3 text-white" style={{ background: "#92400e" }}>
-        <h1 className="font-black text-lg">City Library</h1>
-        <p className="text-xs opacity-90">citylibrary.example</p>
+      <div className="rounded-lg overflow-hidden">
+        <div className="relative">
+          <SiteImg src="/photos/bookshelf.webp" w={720} h={200} className="w-full h-20" />
+          <div className="absolute inset-0 flex flex-col justify-center px-3" style={{ background: "linear-gradient(90deg,rgba(69,26,3,0.88),rgba(69,26,3,0.35))" }}>
+            <h1 className="font-black text-lg text-white">City Library</h1>
+            <p className="text-xs text-white/90">citylibrary.example</p>
+          </div>
+        </div>
       </div>
       <div className="flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1.5">
         <SearchIcon size={14} />
@@ -337,9 +390,14 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
   ),
   transit: (
     <div className="space-y-3">
-      <div className="rounded-lg p-3 text-white" style={{ background: "#1d4ed8" }}>
-        <h1 className="font-black text-lg">City Transit</h1>
-        <p className="text-xs opacity-80">citytransit.example · Live schedules</p>
+      <div className="rounded-lg overflow-hidden">
+        <div className="relative">
+          <SiteImg src="/site/city-bus.webp" w={720} h={200} className="w-full h-20" />
+          <div className="absolute inset-0 flex flex-col justify-center px-3" style={{ background: "linear-gradient(90deg,rgba(15,40,95,0.9),rgba(15,40,95,0.25))" }}>
+            <h1 className="font-black text-lg text-white">City Transit</h1>
+            <p className="text-xs text-white/90">citytransit.example · Live schedules</p>
+          </div>
+        </div>
       </div>
       <div>
         <h2 className="font-bold text-sm mb-1">Route 12 — Downtown to Airport</h2>
@@ -370,8 +428,9 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       <article className="space-y-2.5">
         <h2 className="text-xl font-bold">When to Plant Tomatoes</h2>
         <p className="text-xs text-gray-500">By M. Chen, Gardening Editor · 15 min read</p>
+        <SiteImg src="/site/tomato-plant.webp" w={450} h={300} className="w-full max-w-[260px] h-auto rounded-lg" />
         <p className="text-sm text-gray-700 leading-relaxed">Tomatoes are the most rewarding vegetables a home gardener can grow — but also the most common source of frustration when planted too early or in the wrong spot.</p>
-        <p className="text-sm text-gray-700 leading-relaxed"><strong>Wait for the last frost.</strong> Do not put tomato seedlings outside until all risk of frost has passed and the soil is above 15°C. In most gardens this means late spring.</p>
+        <p className="text-sm text-gray-700 leading-relaxed"><strong>Wait for the last frost.</strong> Do not put tomato seedlings outside until all risk of frost has passed and the soil is above 60°F. In most gardens this means late spring.</p>
         <p className="text-sm text-gray-700 leading-relaxed"><strong>Choose a sunny spot.</strong> Tomatoes need at least six hours of direct sun per day. Less than that and you will get leaves, not fruit.</p>
         <p className="text-sm text-gray-700 leading-relaxed"><strong>Water deeply, not often.</strong> Water twice a week and let the top inch of soil dry out between sessions. The most common mistake is overwatering in cool weather.</p>
         <p className="text-sm text-gray-700 leading-relaxed"><strong>Stake early.</strong> Put the stake in at planting time, before the roots establish, to avoid damaging them later.</p>
@@ -418,13 +477,13 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">New Arrivals</p>
       <div className="grid grid-cols-2 gap-2">
         {[
-          { title: "The Maplewood Gardener", author: "M. Chen", price: "$16.99", bg: "bg-green-100" },
-          { title: "Understanding Your Computer", author: "Dr. D.", price: "$24.99", bg: "bg-blue-100" },
-          { title: "101 Soup Recipes", author: "J. Andrews", price: "$22.99", bg: "bg-red-100" },
-          { title: "Walks Around the World", author: "P. Rivera", price: "$19.99", bg: "bg-yellow-100" },
+          { title: "The Maplewood Gardener", author: "M. Chen", price: "$16.99", cover: "/site/cover-garden.webp" },
+          { title: "Understanding Your Computer", author: "Dr. D.", price: "$24.99", cover: "/site/cover-computer.webp" },
+          { title: "101 Soup Recipes", author: "J. Andrews", price: "$22.99", cover: "/site/cover-soup.webp" },
+          { title: "Walks Around the World", author: "P. Rivera", price: "$19.99", cover: "/site/cover-walks.webp" },
         ].map((b) => (
           <div key={b.title} className="border border-gray-200 rounded-lg p-2 hover:bg-gray-50 cursor-pointer">
-            <div className={`${b.bg} rounded-lg h-14 mb-2 flex items-center justify-center`}><BookClosedIcon size={24} /></div>
+            <SiteImg src={b.cover} w={126} h={186} className="h-20 w-auto rounded shadow-sm mx-auto mb-2" />
             <p className="text-xs font-bold leading-tight">{b.title}</p>
             <p className="text-xs text-gray-500">{b.author}</p>
             <p className="text-xs font-black text-blue-700 mt-0.5">{b.price}</p>

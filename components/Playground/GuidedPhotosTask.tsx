@@ -81,10 +81,10 @@ const CROP_PRESETS = ["Original", "Square", "Wide"] as const;
 type CropPreset = (typeof CROP_PRESETS)[number];
 
 const CONTACTS = [
-  { id: "alex", name: "Alex", avatar: "/playgrounds/Dog.png" },
-  { id: "jordan", name: "Jordan", avatar: "/playgrounds/Cat1.png" },
-  { id: "sam", name: "Sam", avatar: "/playgrounds/Bird.png" },
-  { id: "grandma", name: "Grandma", avatar: "/playgrounds/Cow.png" },
+  { id: "alex", name: "Alex", avatar: "/site/avatar-alex.webp" },
+  { id: "jordan", name: "Jordan", avatar: "/site/avatar-jordan.webp" },
+  { id: "sam", name: "Sam", avatar: "/site/avatar-sam.webp" },
+  { id: "grandma", name: "Grandma", avatar: "/site/avatar-grandma.webp" },
 ];
 
 export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedPhotosTaskProps) {

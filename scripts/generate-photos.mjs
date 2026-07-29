@@ -1421,6 +1421,283 @@ S["terrazzo"] = (w, h, rng) => {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Site art — avatars and the pictures the practice websites hang on
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Contact portraits.
+ *
+ * The messaging app used to hand out the pinch-zoom lesson's animals as
+ * profile pictures: Alex was a dog, Jordan a cat, Sam a bird, Grandma a cow.
+ * Two of the five were then brown dogs at 28px, which is what a learner is
+ * actually asked to tell apart in the contact list.
+ *
+ * Faces, drawn to differ on the things that survive being shrunk — hair
+ * silhouette and background hue — rather than on detail nobody can see.
+ */
+function portrait(w, h, o) {
+  const cx = w * 0.5, cy = h * 0.54, R = Math.min(w, h) * 0.3;
+  const bg = radial([["0", tint(o.bg, 0.35)], ["1", o.bg]], { r: 0.75 });
+  let s = `<defs>${bg.def}</defs><rect width="${w}" height="${h}" fill="url(#${bg.gid})"/>`;
+
+  // Neck first, then shoulders over it — the other way round leaves a pale stub
+  // hanging below the collar, which is what the first render did.
+  s += `<path d="M ${(cx - R * 0.4).toFixed(1)} ${(cy + R * 0.62).toFixed(1)} q ${(R * 0.4).toFixed(1)} ${(R * 0.5).toFixed(1)} ${(R * 0.8).toFixed(1)} 0 l 0 ${(R * 0.7).toFixed(1)} l ${(-R * 0.8).toFixed(1)} 0 Z" fill="${shade(o.skin, 0.14)}"/>`;
+  s += `<ellipse cx="${cx}" cy="${(cy + R * 2.05).toFixed(1)}" rx="${(R * 1.72).toFixed(1)}" ry="${(R * 1.2).toFixed(1)}" fill="${o.shirt}"/>`;
+  // Collar: a shallow scoop of shirt cutting across the base of the neck.
+  s += `<path d="M ${(cx - R * 0.62).toFixed(1)} ${(cy + R * 1.02).toFixed(1)} q ${(R * 0.62).toFixed(1)} ${(R * 0.42).toFixed(1)} ${(R * 1.24).toFixed(1)} 0 l 0 ${(R * 0.6).toFixed(1)} l ${(-R * 1.24).toFixed(1)} 0 Z" fill="${shade(o.shirt, 0.18)}"/>`;
+
+  // Long hair sits behind the face; everything else in front.
+  if (o.hair === "long") {
+    s += `<path d="M ${(cx - R * 1.02).toFixed(1)} ${(cy - R * 0.15).toFixed(1)} q ${(-R * 0.1).toFixed(1)} ${(R * 1.5).toFixed(1)} ${(R * 0.2).toFixed(1)} ${(R * 1.85).toFixed(1)} l ${(R * 1.64).toFixed(1)} 0 q ${(R * 0.3).toFixed(1)} ${(-R * 0.35).toFixed(1)} ${(R * 0.2).toFixed(1)} ${(-R * 1.85).toFixed(1)} Z" fill="${o.hairColor}"/>`;
+  }
+
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${(R * 0.82).toFixed(1)}" ry="${(R * 0.98).toFixed(1)}" fill="${o.skin}"/>`;
+  // Ears
+  [-1, 1].forEach((d) => {
+    s += `<ellipse cx="${(cx + d * R * 0.82).toFixed(1)}" cy="${(cy + R * 0.08).toFixed(1)}" rx="${(R * 0.13).toFixed(1)}" ry="${(R * 0.2).toFixed(1)}" fill="${shade(o.skin, 0.08)}"/>`;
+  });
+
+  // Hair front
+  const hc = o.hairColor;
+  if (o.hair === "short") {
+    s += `<path d="M ${(cx - R * 0.84).toFixed(1)} ${(cy - R * 0.28).toFixed(1)} q ${(R * 0.06).toFixed(1)} ${(-R * 1.05).toFixed(1)} ${(R * 0.84).toFixed(1)} ${(-R * 1.02).toFixed(1)} q ${(R * 0.8).toFixed(1)} ${(-R * 0.03).toFixed(1)} ${(R * 0.84).toFixed(1)} ${(R * 1.02).toFixed(1)} q ${(-R * 0.3).toFixed(1)} ${(-R * 0.5).toFixed(1)} ${(-R * 0.86).toFixed(1)} ${(-R * 0.42).toFixed(1)} q ${(-R * 0.56).toFixed(1)} ${(-R * 0.08).toFixed(1)} ${(-R * 0.82).toFixed(1)} ${(R * 0.42).toFixed(1)} Z" fill="${hc}"/>`;
+  } else if (o.hair === "curly") {
+    for (let i = 0; i < 13; i++) {
+      const a = Math.PI * (1.06 + (i / 12) * 0.88);
+      s += `<circle cx="${(cx + Math.cos(a) * R * 0.86).toFixed(1)}" cy="${(cy + Math.sin(a) * R * 0.98).toFixed(1)}" r="${(R * 0.29).toFixed(1)}" fill="${hc}"/>`;
+    }
+  } else if (o.hair === "long") {
+    s += `<path d="M ${(cx - R * 0.88).toFixed(1)} ${(cy - R * 0.2).toFixed(1)} q ${(R * 0.1).toFixed(1)} ${(-R * 1.1).toFixed(1)} ${(R * 0.88).toFixed(1)} ${(-R * 1.06).toFixed(1)} q ${(R * 0.84).toFixed(1)} ${(-R * 0.04).toFixed(1)} ${(R * 0.88).toFixed(1)} ${(R * 1.06).toFixed(1)} q ${(-R * 0.24).toFixed(1)} ${(-R * 0.62).toFixed(1)} ${(-R * 0.9).toFixed(1)} ${(-R * 0.54).toFixed(1)} q ${(-R * 0.62).toFixed(1)} ${(R * 0.06).toFixed(1)} ${(-R * 0.86).toFixed(1)} ${(R * 0.54).toFixed(1)} Z" fill="${hc}"/>`;
+  } else if (o.hair === "bun") {
+    s += `<circle cx="${cx}" cy="${(cy - R * 1.16).toFixed(1)}" r="${(R * 0.36).toFixed(1)}" fill="${hc}"/>`;
+    s += `<path d="M ${(cx - R * 0.86).toFixed(1)} ${(cy - R * 0.16).toFixed(1)} q ${(R * 0.08).toFixed(1)} ${(-R * 1.0).toFixed(1)} ${(R * 0.86).toFixed(1)} ${(-R * 0.98).toFixed(1)} q ${(R * 0.82).toFixed(1)} ${(-R * 0.02).toFixed(1)} ${(R * 0.86).toFixed(1)} ${(R * 0.98).toFixed(1)} q ${(-R * 0.26).toFixed(1)} ${(-R * 0.56).toFixed(1)} ${(-R * 0.88).toFixed(1)} ${(-R * 0.5).toFixed(1)} q ${(-R * 0.6).toFixed(1)} ${(R * 0.05).toFixed(1)} ${(-R * 0.84).toFixed(1)} ${(R * 0.5).toFixed(1)} Z" fill="${hc}"/>`;
+  }
+
+  // Eyes, brows, nose, mouth
+  [-1, 1].forEach((d) => {
+    const ex = cx + d * R * 0.31, ey = cy - R * 0.04;
+    s += `<ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="${(R * 0.1).toFixed(1)}" ry="${(R * 0.115).toFixed(1)}" fill="#fdfbf7"/>`;
+    s += `<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(R * 0.058).toFixed(1)}" fill="${o.eyes}"/>`;
+    s += `<path d="M ${(ex - R * 0.13).toFixed(1)} ${(ey - R * 0.23).toFixed(1)} q ${(R * 0.13).toFixed(1)} ${(-R * 0.09).toFixed(1)} ${(R * 0.26).toFixed(1)} 0" stroke="${shade(hc, 0.25)}" stroke-width="${(R * 0.045).toFixed(1)}" fill="none" stroke-linecap="round"/>`;
+  });
+  s += `<path d="M ${cx.toFixed(1)} ${(cy + R * 0.06).toFixed(1)} q ${(-R * 0.07).toFixed(1)} ${(R * 0.18).toFixed(1)} ${(R * 0.04).toFixed(1)} ${(R * 0.21).toFixed(1)}" stroke="${shade(o.skin, 0.2)}" stroke-width="${(R * 0.04).toFixed(1)}" fill="none" stroke-linecap="round"/>`;
+  s += `<path d="M ${(cx - R * 0.2).toFixed(1)} ${(cy + R * 0.42).toFixed(1)} q ${(R * 0.2).toFixed(1)} ${(R * 0.19).toFixed(1)} ${(R * 0.4).toFixed(1)} 0" stroke="${shade("#c4635f", 0.1)}" stroke-width="${(R * 0.05).toFixed(1)}" fill="none" stroke-linecap="round"/>`;
+
+  if (o.glasses) {
+    [-1, 1].forEach((d) => {
+      s += `<circle cx="${(cx + d * R * 0.31).toFixed(1)}" cy="${(cy - R * 0.04).toFixed(1)}" r="${(R * 0.23).toFixed(1)}" fill="#fff" fill-opacity="0.12" stroke="${o.frames}" stroke-width="${(R * 0.045).toFixed(1)}"/>`;
+    });
+    s += `<line x1="${(cx - R * 0.08).toFixed(1)}" y1="${(cy - R * 0.04).toFixed(1)}" x2="${(cx + R * 0.08).toFixed(1)}" y2="${(cy - R * 0.04).toFixed(1)}" stroke="${o.frames}" stroke-width="${(R * 0.045).toFixed(1)}"/>`;
+  }
+  if (o.beard) {
+    s += `<path d="M ${(cx - R * 0.72).toFixed(1)} ${(cy + R * 0.12).toFixed(1)} q ${(R * 0.1).toFixed(1)} ${(R * 0.92).toFixed(1)} ${(R * 0.72).toFixed(1)} ${(R * 0.9).toFixed(1)} q ${(R * 0.62).toFixed(1)} ${(R * 0.02).toFixed(1)} ${(R * 0.72).toFixed(1)} ${(-R * 0.9).toFixed(1)} q ${(-R * 0.24).toFixed(1)} ${(R * 0.66).toFixed(1)} ${(-R * 0.72).toFixed(1)} ${(R * 0.64).toFixed(1)} q ${(-R * 0.48).toFixed(1)} ${(R * 0.02).toFixed(1)} ${(-R * 0.72).toFixed(1)} ${(-R * 0.64).toFixed(1)} Z" fill="${hc}" opacity="0.92"/>`;
+  }
+  return s;
+}
+
+S["avatar-alex"] = (w, h) => portrait(w, h, { bg: "#3f7f8f", skin: "#d8a077", hair: "short", hairColor: "#2f2018", eyes: "#3a2a1e", shirt: "#2d5f6b", frames: "#2f2f2f", beard: true });
+S["avatar-jordan"] = (w, h) => portrait(w, h, { bg: "#c47f3f", skin: "#8a5a3c", hair: "curly", hairColor: "#241812", eyes: "#3a281c", shirt: "#8f4f2f", frames: "#2f2f2f" });
+S["avatar-sam"] = (w, h) => portrait(w, h, { bg: "#5f5f9f", skin: "#f0c9a4", hair: "long", hairColor: "#7f4a28", eyes: "#3f5f4f", shirt: "#43436f", frames: "#3f3f4f", glasses: true });
+S["avatar-grandma"] = (w, h) => portrait(w, h, { bg: "#c47f8f", skin: "#eec4a8", hair: "bun", hairColor: "#c8c4bc", eyes: "#4f5a5f", shirt: "#9f5f6f", frames: "#8f6f4f", glasses: true });
+
+S["avatar-doggo"] = (w, h) => {
+  const cx = w * 0.5, cy = h * 0.55, R = Math.min(w, h) * 0.3;
+  const bg = radial([["0", "#9fc47f"], ["1", "#5f8f4f"]], { r: 0.75 });
+  let s = `<defs>${bg.def}</defs><rect width="${w}" height="${h}" fill="url(#${bg.gid})"/>`;
+  const fur = "#c98f4f";
+  s += `<ellipse cx="${cx}" cy="${(cy + R * 2.0).toFixed(1)}" rx="${(R * 1.6).toFixed(1)}" ry="${(R * 1.15).toFixed(1)}" fill="${shade(fur, 0.18)}"/>`;
+  // Ears behind the head
+  [-1, 1].forEach((d) => {
+    s += `<ellipse cx="${(cx + d * R * 0.82).toFixed(1)}" cy="${(cy - R * 0.1).toFixed(1)}" rx="${(R * 0.26).toFixed(1)}" ry="${(R * 0.56).toFixed(1)}" fill="${shade(fur, 0.22)}" transform="rotate(${d * 16} ${(cx + d * R * 0.82).toFixed(1)} ${(cy - R * 0.1).toFixed(1)})"/>`;
+  });
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${(R * 0.86).toFixed(1)}" ry="${(R * 0.8).toFixed(1)}" fill="${fur}"/>`;
+  s += `<ellipse cx="${cx}" cy="${(cy + R * 0.36).toFixed(1)}" rx="${(R * 0.46).toFixed(1)}" ry="${(R * 0.38).toFixed(1)}" fill="${tint(fur, 0.35)}"/>`;
+  [-1, 1].forEach((d) => {
+    const ex = cx + d * R * 0.3, ey = cy - R * 0.14;
+    s += `<ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="${(R * 0.1).toFixed(1)}" ry="${(R * 0.11).toFixed(1)}" fill="#fdfbf7"/>`;
+    s += `<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(R * 0.062).toFixed(1)}" fill="#33241a"/>`;
+  });
+  s += `<ellipse cx="${cx}" cy="${(cy + R * 0.28).toFixed(1)}" rx="${(R * 0.14).toFixed(1)}" ry="${(R * 0.1).toFixed(1)}" fill="#33241a"/>`;
+  s += `<path d="M ${cx.toFixed(1)} ${(cy + R * 0.38).toFixed(1)} q ${(-R * 0.16).toFixed(1)} ${(R * 0.2).toFixed(1)} ${(-R * 0.3).toFixed(1)} ${(R * 0.02).toFixed(1)} M ${cx.toFixed(1)} ${(cy + R * 0.38).toFixed(1)} q ${(R * 0.16).toFixed(1)} ${(R * 0.2).toFixed(1)} ${(R * 0.3).toFixed(1)} ${(R * 0.02).toFixed(1)}" stroke="#33241a" stroke-width="${(R * 0.05).toFixed(1)}" fill="none" stroke-linecap="round"/>`;
+  s += `<path d="M ${(cx - R * 0.1).toFixed(1)} ${(cy + R * 0.5).toFixed(1)} q ${(R * 0.1).toFixed(1)} ${(R * 0.16).toFixed(1)} ${(R * 0.2).toFixed(1)} 0" fill="#d9707a"/>`;
+  return s;
+};
+
+/** A soft studio backdrop — the neutral ground every product shot sits on. */
+function studio(w, h, top, bot) {
+  const g = linear([["0", top], ["1", bot]]);
+  return `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+}
+const drop = (cx, cy, rx, ry, op = 0.16) =>
+  `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="#000" opacity="${op}"/>`;
+
+S["product-laptop"] = (w, h) => {
+  let s = studio(w, h, "#eaf0f6", "#c6d4e2");
+  const cx = w * 0.5, by = h * 0.72, bw = w * 0.62, bh = h * 0.05;
+  s += drop(cx, by + bh * 1.4, bw * 0.62, bh * 1.1);
+  // Lid
+  s += `<path d="M ${(cx - bw * 0.42).toFixed(1)} ${by.toFixed(1)} L ${(cx - bw * 0.34).toFixed(1)} ${(by - h * 0.36).toFixed(1)} L ${(cx + bw * 0.34).toFixed(1)} ${(by - h * 0.36).toFixed(1)} L ${(cx + bw * 0.42).toFixed(1)} ${by.toFixed(1)} Z" fill="#3f4c5a"/>`;
+  s += `<path d="M ${(cx - bw * 0.38).toFixed(1)} ${(by - h * 0.015).toFixed(1)} L ${(cx - bw * 0.31).toFixed(1)} ${(by - h * 0.335).toFixed(1)} L ${(cx + bw * 0.31).toFixed(1)} ${(by - h * 0.335).toFixed(1)} L ${(cx + bw * 0.38).toFixed(1)} ${(by - h * 0.015).toFixed(1)} Z" fill="#1d2733"/>`;
+  const scr = linear([["0", "#4f7fbf"], ["1", "#2f4f7f"]]);
+  s += `<defs>${scr.def}</defs><path d="M ${(cx - bw * 0.365).toFixed(1)} ${(by - h * 0.028).toFixed(1)} L ${(cx - bw * 0.3).toFixed(1)} ${(by - h * 0.322).toFixed(1)} L ${(cx + bw * 0.3).toFixed(1)} ${(by - h * 0.322).toFixed(1)} L ${(cx + bw * 0.365).toFixed(1)} ${(by - h * 0.028).toFixed(1)} Z" fill="url(#${scr.gid})"/>`;
+  // Base + keys
+  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.35).toFixed(1)}" fill="#8f9baa"/>`;
+  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${(bh * 0.42).toFixed(1)}" rx="${(bh * 0.3).toFixed(1)}" fill="#b4bfcc"/>`;
+  s += `<rect x="${(cx - bw * 0.12).toFixed(1)}" y="${(by + bh * 0.55).toFixed(1)}" width="${(bw * 0.24).toFixed(1)}" height="${(bh * 0.22).toFixed(1)}" rx="${(bh * 0.1).toFixed(1)}" fill="#7f8b99"/>`;
+  return s;
+};
+
+S["product-tablet"] = (w, h) => {
+  let s = studio(w, h, "#eaf6ee", "#c2ddcc");
+  const cx = w * 0.5, cy = h * 0.5, tw = w * 0.42, th = h * 0.6;
+  s += drop(cx, cy + th * 0.56, tw * 0.6, th * 0.06);
+  s += `<rect x="${(cx - tw / 2).toFixed(1)}" y="${(cy - th / 2).toFixed(1)}" width="${tw.toFixed(1)}" height="${th.toFixed(1)}" rx="${(tw * 0.07).toFixed(1)}" fill="#2f3a45"/>`;
+  const scr = linear([["0", "#7fc4b4"], ["1", "#3f8f9f"]]);
+  s += `<defs>${scr.def}</defs><rect x="${(cx - tw / 2 + tw * 0.045).toFixed(1)}" y="${(cy - th / 2 + tw * 0.045).toFixed(1)}" width="${(tw - tw * 0.09).toFixed(1)}" height="${(th - tw * 0.09).toFixed(1)}" rx="${(tw * 0.035).toFixed(1)}" fill="url(#${scr.gid})"/>`;
+  for (let i = 0; i < 9; i++) {
+    const gx = cx - tw * 0.3 + (i % 3) * tw * 0.3, gy = cy - th * 0.28 + Math.floor(i / 3) * th * 0.19;
+    s += `<rect x="${gx.toFixed(1)}" y="${gy.toFixed(1)}" width="${(tw * 0.16).toFixed(1)}" height="${(tw * 0.16).toFixed(1)}" rx="${(tw * 0.04).toFixed(1)}" fill="#fff" opacity="0.5"/>`;
+  }
+  return s;
+};
+
+S["product-phone"] = (w, h) => {
+  let s = studio(w, h, "#fdeef2", "#e6c2d0");
+  const cx = w * 0.5, cy = h * 0.5, pw = w * 0.26, ph = h * 0.62;
+  s += drop(cx, cy + ph * 0.55, pw * 0.75, ph * 0.05);
+  s += `<rect x="${(cx - pw / 2).toFixed(1)}" y="${(cy - ph / 2).toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="${(pw * 0.18).toFixed(1)}" fill="#2b2b33"/>`;
+  const scr = linear([["0", "#c47f9f"], ["1", "#6f4f8f"]]);
+  s += `<defs>${scr.def}</defs><rect x="${(cx - pw / 2 + pw * 0.05).toFixed(1)}" y="${(cy - ph / 2 + pw * 0.05).toFixed(1)}" width="${(pw * 0.9).toFixed(1)}" height="${(ph - pw * 0.1).toFixed(1)}" rx="${(pw * 0.14).toFixed(1)}" fill="url(#${scr.gid})"/>`;
+  s += `<rect x="${(cx - pw * 0.14).toFixed(1)}" y="${(cy - ph / 2 + pw * 0.09).toFixed(1)}" width="${(pw * 0.28).toFixed(1)}" height="${(pw * 0.07).toFixed(1)}" rx="${(pw * 0.035).toFixed(1)}" fill="#2b2b33"/>`;
+  return s;
+};
+
+S["product-headphones"] = (w, h) => {
+  let s = studio(w, h, "#fdf6e4", "#e4d3ac");
+  const cx = w * 0.5, cy = h * 0.52, R = Math.min(w, h) * 0.3;
+  s += drop(cx, cy + R * 1.35, R * 1.15, R * 0.16);
+  s += `<path d="M ${(cx - R).toFixed(1)} ${(cy + R * 0.2).toFixed(1)} a ${R.toFixed(1)} ${(R * 1.05).toFixed(1)} 0 0 1 ${(R * 2).toFixed(1)} 0" stroke="#3f4550" stroke-width="${(R * 0.19).toFixed(1)}" fill="none" stroke-linecap="round"/>`;
+  [-1, 1].forEach((d) => {
+    s += `<rect x="${(cx + d * R - R * 0.26).toFixed(1)}" y="${(cy + R * 0.12).toFixed(1)}" width="${(R * 0.52).toFixed(1)}" height="${(R * 0.86).toFixed(1)}" rx="${(R * 0.24).toFixed(1)}" fill="#2f3540"/>`;
+    s += `<rect x="${(cx + d * R - R * 0.17).toFixed(1)}" y="${(cy + R * 0.24).toFixed(1)}" width="${(R * 0.34).toFixed(1)}" height="${(R * 0.6).toFixed(1)}" rx="${(R * 0.17).toFixed(1)}" fill="#5f6874"/>`;
+  });
+  return s;
+};
+
+S["apple-pie"] = (w, h, rng) => {
+  let s = studio(w, h, "#f6ece0", "#dcc7ab");
+  const cx = w * 0.5, cy = h * 0.56, R = Math.min(w, h) * 0.33;
+  s += drop(cx, cy + R * 0.5, R * 1.15, R * 0.24, 0.14);
+  s += `<ellipse cx="${cx}" cy="${(cy + R * 0.16).toFixed(1)}" rx="${(R * 1.08).toFixed(1)}" ry="${(R * 0.5).toFixed(1)}" fill="#c9a06a"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy.toFixed(1)}" rx="${(R * 1.08).toFixed(1)}" ry="${(R * 0.5).toFixed(1)}" fill="#e0b87f"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy.toFixed(1)}" rx="${(R * 0.88).toFixed(1)}" ry="${(R * 0.4).toFixed(1)}" fill="#d9a463"/>`;
+  // Lattice
+  for (let i = -3; i <= 3; i++) {
+    const off = (i / 3.4) * R * 0.85;
+    s += `<ellipse cx="${(cx + off).toFixed(1)}" cy="${cy.toFixed(1)}" rx="${(R * 0.055).toFixed(1)}" ry="${(R * 0.4 * Math.sqrt(Math.max(0.05, 1 - (off / (R * 0.9)) ** 2))).toFixed(1)}" fill="#eec98c"/>`;
+    s += `<ellipse cx="${cx}" cy="${(cy + off * 0.46).toFixed(1)}" rx="${(R * 0.88 * Math.sqrt(Math.max(0.05, 1 - (off / (R * 0.95)) ** 2))).toFixed(1)}" ry="${(R * 0.03).toFixed(1)}" fill="#e5bd80"/>`;
+  }
+  // Crimped edge
+  for (let i = 0; i < 26; i++) {
+    const a = (i / 26) * Math.PI * 2;
+    s += `<ellipse cx="${(cx + Math.cos(a) * R * 1.02).toFixed(1)}" cy="${(cy + Math.sin(a) * R * 0.47).toFixed(1)}" rx="${(R * 0.09).toFixed(1)}" ry="${(R * 0.07).toFixed(1)}" fill="#e8c48b"/>`;
+  }
+  for (let i = 0; i < 30; i++) {
+    s += `<circle cx="${(cx + rng.range(-R * 0.8, R * 0.8)).toFixed(1)}" cy="${(cy + rng.range(-R * 0.3, R * 0.3)).toFixed(1)}" r="${rng.range(1, 3).toFixed(1)}" fill="#a5713c" opacity="0.4"/>`;
+  }
+  return s;
+};
+
+S["soup-bowl"] = (w, h, rng) => {
+  let s = studio(w, h, "#f0efe6", "#cfd0c2");
+  const cx = w * 0.5, cy = h * 0.56, R = Math.min(w, h) * 0.31;
+  s += drop(cx, cy + R * 0.62, R * 1.1, R * 0.2, 0.14);
+  s += `<path d="M ${(cx - R * 1.02).toFixed(1)} ${cy.toFixed(1)} a ${(R * 1.02).toFixed(1)} ${(R * 0.78).toFixed(1)} 0 0 0 ${(R * 2.04).toFixed(1)} 0 Z" fill="#e8e2d6"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy.toFixed(1)}" rx="${(R * 1.02).toFixed(1)}" ry="${(R * 0.34).toFixed(1)}" fill="#f4efe4"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy.toFixed(1)}" rx="${(R * 0.88).toFixed(1)}" ry="${(R * 0.29).toFixed(1)}" fill="#d4813f"/>`;
+  for (let i = 0; i < 22; i++) {
+    const a = rng.range(0, Math.PI * 2), rr = Math.sqrt(rng.f()) * R * 0.78;
+    s += `<ellipse cx="${(cx + Math.cos(a) * rr).toFixed(1)}" cy="${(cy + Math.sin(a) * rr * 0.32).toFixed(1)}" rx="${rng.range(R * 0.04, R * 0.08).toFixed(1)}" ry="${rng.range(R * 0.02, R * 0.035).toFixed(1)}" fill="${rng.pick(["#e8a24f", "#7f9f4f", "#c45f3f", "#f0c98c"])}"/>`;
+  }
+  for (let i = 0; i < 3; i++) {
+    const x = cx - R * 0.3 + i * R * 0.3;
+    s += `<path d="M ${x.toFixed(1)} ${(cy - R * 0.2).toFixed(1)} q ${(R * 0.16).toFixed(1)} ${(-R * 0.28).toFixed(1)} 0 ${(-R * 0.52).toFixed(1)} q ${(-R * 0.16).toFixed(1)} ${(-R * 0.24).toFixed(1)} 0 ${(-R * 0.44).toFixed(1)}" stroke="#fff" stroke-width="${(R * 0.05).toFixed(1)}" fill="none" opacity="0.35" stroke-linecap="round"/>`;
+  }
+  return s;
+};
+
+S["tomato-plant"] = (w, h, rng) => {
+  const sky = linear([["0", "#bfe0f0"], ["1", "#e8f0d8"]]);
+  let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
+  s += `<rect x="0" y="${(h * 0.78).toFixed(1)}" width="${w}" height="${(h * 0.22).toFixed(1)}" fill="#8a6a4a"/>`;
+  const cx = w * 0.5, baseY = h * 0.8;
+  s += `<rect x="${(cx - w * 0.008).toFixed(1)}" y="${(h * 0.22).toFixed(1)}" width="${(w * 0.016).toFixed(1)}" height="${(baseY - h * 0.22).toFixed(1)}" fill="#4f7f3f"/>`;
+  s += `<rect x="${(cx + w * 0.05).toFixed(1)}" y="${(h * 0.2).toFixed(1)}" width="${(w * 0.012).toFixed(1)}" height="${(baseY - h * 0.2).toFixed(1)}" rx="${(w * 0.006).toFixed(1)}" fill="#a5825c"/>`;
+  for (let i = 0; i < 12; i++) {
+    const y = h * (0.28 + i * 0.042), d = i % 2 ? 1 : -1;
+    s += `<ellipse cx="${(cx + d * w * 0.075).toFixed(1)}" cy="${y.toFixed(1)}" rx="${(w * 0.075).toFixed(1)}" ry="${(h * 0.028).toFixed(1)}" fill="${i % 3 ? "#4f8f3f" : "#3f7f33"}" transform="rotate(${d * 14} ${(cx + d * w * 0.075).toFixed(1)} ${y.toFixed(1)})"/>`;
+  }
+  for (let i = 0; i < 7; i++) {
+    const d = i % 2 ? 1 : -1;
+    const tx = cx + d * w * rng.range(0.04, 0.11), ty = h * rng.range(0.38, 0.72);
+    const r = w * rng.range(0.032, 0.05);
+    s += `<circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="${r.toFixed(1)}" fill="#cf3f2f"/>`;
+    s += `<circle cx="${(tx - r * 0.3).toFixed(1)}" cy="${(ty - r * 0.35).toFixed(1)}" r="${(r * 0.3).toFixed(1)}" fill="#fff" opacity="0.3"/>`;
+    s += `<path d="M ${tx.toFixed(1)} ${(ty - r).toFixed(1)} l ${(-r * 0.4).toFixed(1)} ${(-r * 0.3).toFixed(1)} M ${tx.toFixed(1)} ${(ty - r).toFixed(1)} l ${(r * 0.4).toFixed(1)} ${(-r * 0.3).toFixed(1)}" stroke="#3f7f33" stroke-width="${(r * 0.22).toFixed(1)}" stroke-linecap="round"/>`;
+  }
+  return s;
+};
+
+S["city-bus"] = (w, h) => {
+  const sky = linear([["0", "#a8c8e4"], ["1", "#dfe8ef"]]);
+  let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
+  s += `<rect x="0" y="${(h * 0.72).toFixed(1)}" width="${w}" height="${(h * 0.28).toFixed(1)}" fill="#7f8590"/>`;
+  s += `<rect x="0" y="${(h * 0.83).toFixed(1)}" width="${w}" height="${(h * 0.01).toFixed(1)}" fill="#e8e4d8" opacity="0.7"/>`;
+  const bx = w * 0.1, by = h * 0.3, bw = w * 0.8, bh = h * 0.42;
+  s += drop(w * 0.5, by + bh + h * 0.03, bw * 0.52, h * 0.02, 0.2);
+  s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.16).toFixed(1)}" fill="#2f6f9f"/>`;
+  s += `<rect x="${bx.toFixed(1)}" y="${(by + bh * 0.62).toFixed(1)}" width="${bw.toFixed(1)}" height="${(bh * 0.14).toFixed(1)}" fill="#e8c94f"/>`;
+  s += `<rect x="${(bx + bw * 0.04).toFixed(1)}" y="${(by + bh * 0.08).toFixed(1)}" width="${(bw * 0.34).toFixed(1)}" height="${(bh * 0.1).toFixed(1)}" rx="${(bh * 0.03).toFixed(1)}" fill="#1d2733"/>`;
+  for (let i = 0; i < 5; i++) {
+    s += `<rect x="${(bx + bw * (0.06 + i * 0.18)).toFixed(1)}" y="${(by + bh * 0.24).toFixed(1)}" width="${(bw * 0.14).toFixed(1)}" height="${(bh * 0.3).toFixed(1)}" rx="${(bh * 0.03).toFixed(1)}" fill="#bfd8e8"/>`;
+  }
+  [0.26, 0.74].forEach((t) => {
+    s += `<circle cx="${(bx + bw * t).toFixed(1)}" cy="${(by + bh).toFixed(1)}" r="${(bh * 0.15).toFixed(1)}" fill="#2b2b33"/>`;
+    s += `<circle cx="${(bx + bw * t).toFixed(1)}" cy="${(by + bh).toFixed(1)}" r="${(bh * 0.07).toFixed(1)}" fill="#9fa5ae"/>`;
+  });
+  return s;
+};
+
+/** Book covers: banded artwork, no lettering — the title sits in the HTML beside it. */
+function bookCover(w, h, top, bot, motif) {
+  const g = linear([["0", top], ["1", bot]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  if (motif === "leaves") {
+    for (let i = 0; i < 9; i++) {
+      const x = w * (0.16 + (i % 3) * 0.34), y = h * (0.24 + Math.floor(i / 3) * 0.26);
+      s += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(w * 0.11).toFixed(1)}" ry="${(h * 0.045).toFixed(1)}" fill="#fff" opacity="0.28" transform="rotate(${i * 40} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+    }
+  } else if (motif === "screen") {
+    s += `<rect x="${(w * 0.2).toFixed(1)}" y="${(h * 0.28).toFixed(1)}" width="${(w * 0.6).toFixed(1)}" height="${(h * 0.3).toFixed(1)}" rx="${(w * 0.04).toFixed(1)}" fill="#fff" opacity="0.3"/>`;
+    s += `<rect x="${(w * 0.3).toFixed(1)}" y="${(h * 0.6).toFixed(1)}" width="${(w * 0.4).toFixed(1)}" height="${(h * 0.04).toFixed(1)}" rx="${(h * 0.02).toFixed(1)}" fill="#fff" opacity="0.3"/>`;
+  } else if (motif === "bowl") {
+    s += `<path d="M ${(w * 0.25).toFixed(1)} ${(h * 0.46).toFixed(1)} a ${(w * 0.25).toFixed(1)} ${(h * 0.16).toFixed(1)} 0 0 0 ${(w * 0.5).toFixed(1)} 0 Z" fill="#fff" opacity="0.32"/>`;
+    s += `<ellipse cx="${(w * 0.5).toFixed(1)}" cy="${(h * 0.46).toFixed(1)}" rx="${(w * 0.25).toFixed(1)}" ry="${(h * 0.05).toFixed(1)}" fill="#fff" opacity="0.45"/>`;
+  } else {
+    for (let i = 0; i < 5; i++) {
+      s += `<path d="M ${(w * 0.1).toFixed(1)} ${(h * (0.3 + i * 0.1)).toFixed(1)} q ${(w * 0.4).toFixed(1)} ${(h * (i % 2 ? -0.08 : 0.08)).toFixed(1)} ${(w * 0.8).toFixed(1)} 0" stroke="#fff" stroke-width="${(h * 0.012).toFixed(1)}" fill="none" opacity="0.3"/>`;
+    }
+  }
+  s += `<rect x="0" y="0" width="${(w * 0.06).toFixed(1)}" height="${h}" fill="#000" opacity="0.14"/>`;
+  return s;
+}
+S["cover-garden"] = (w, h) => bookCover(w, h, "#5f9f5f", "#2f6f4f", "leaves");
+S["cover-computer"] = (w, h) => bookCover(w, h, "#4f7fbf", "#2f4f8f", "screen");
+S["cover-soup"] = (w, h) => bookCover(w, h, "#d9713f", "#a5432f", "bowl");
+S["cover-walks"] = (w, h) => bookCover(w, h, "#e0a83f", "#a56f2f", "path");
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Manifest
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1484,7 +1761,56 @@ const MANIFEST = [
   ["terrazzo",          "terrazzo",          "Terrazzo",              Q],
 ];
 
+/**
+ * Site art — everything that is *not* a photo in the practice Photos library:
+ * contact portraits, and the pictures the practice websites hang on.
+ *
+ * Kept in a second manifest and a second folder because the Photos app renders
+ * PHOTO_ASSETS wholesale. An avatar landing in the learner's photo library
+ * would be a bug, not a bonus.
+ */
+const A = [400, 400];    // avatar / square thumb
+const W = [900, 600];    // web hero, 3:2
+const C = [420, 620];    // book cover
+
+const SITE_MANIFEST = [
+  ["avatar-alex",       "avatar-alex",       "Alex",              A],
+  ["avatar-jordan",     "avatar-jordan",     "Jordan",            A],
+  ["avatar-sam",        "avatar-sam",        "Sam",               A],
+  ["avatar-grandma",    "avatar-grandma",    "Grandma",           A],
+  ["avatar-doggo",      "avatar-doggo",      "Doggo",             A],
+  ["product-laptop",    "product-laptop",    "Laptop",            W],
+  ["product-tablet",    "product-tablet",    "Tablet",            W],
+  ["product-phone",     "product-phone",     "Phone",             W],
+  ["product-headphones","product-headphones","Headphones",        W],
+  ["apple-pie",         "apple-pie",         "Apple pie",         W],
+  ["soup-bowl",         "soup-bowl",         "Bowl of soup",      W],
+  ["tomato-plant",      "tomato-plant",      "Tomato plant",      W],
+  ["city-bus",          "city-bus",          "City bus",          W],
+  ["cover-garden",      "cover-garden",      "The Maplewood Gardener",   C],
+  ["cover-computer",    "cover-computer",    "Understanding Your Computer", C],
+  ["cover-soup",        "cover-soup",        "101 Soup Recipes",  C],
+  ["cover-walks",       "cover-walks",       "Walks Around the World",   C],
+];
+
 // ── Render ───────────────────────────────────────────────────────────────────
+
+async function render(manifest, dir) {
+  mkdirSync(dir, { recursive: true });
+  const meta = [];
+  for (const [file, sceneName, label, [w, h]] of manifest) {
+    const scene = S[sceneName];
+    if (!scene) throw new Error(`No scene named ${sceneName}`);
+    uid = 0;
+    const rng = makeRng(file);
+    const body = scene(w, h, rng);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${body}${finish(w, h)}</svg>`;
+    await sharp(Buffer.from(svg)).webp({ quality: 82, effort: 5 }).toFile(join(dir, `${file}.webp`));
+    meta.push({ file, label, w, h });
+    process.stdout.write(`  ${file}.webp\n`);
+  }
+  return meta;
+}
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
@@ -1510,7 +1836,18 @@ async function main() {
     `\n];\n\nexport const photoSrc = (id: string) =>\n  PHOTO_ASSETS.find((p) => p.id === id)?.src ?? PHOTO_ASSETS[0].src;\n`;
   writeFileSync(join(ROOT, "lib", "photoAssets.ts"), ts);
 
-  console.log(`\n${meta.length} images → public/photos, manifest → lib/photoAssets.ts`);
+  const siteMeta = await render(SITE_MANIFEST, join(ROOT, "public", "site"));
+  const siteTs = `// Generated by scripts/generate-photos.mjs — do not edit by hand.\n\n` +
+    `export interface SiteArt {\n  /** Basename, no extension. */\n  id: string;\n  src: string;\n  /** Alt text. Empty string means the picture is decorative.  */\n  label: string;\n  w: number;\n  h: number;\n}\n\n` +
+    `export const SITE_ART: SiteArt[] = [\n` +
+    siteMeta.map((m) => `  { id: ${JSON.stringify(m.file)}, src: ${JSON.stringify(`/site/${m.file}.webp`)}, label: ${JSON.stringify(m.label)}, w: ${m.w}, h: ${m.h} },`).join("\n") +
+    `\n];\n\nexport const siteArt = (id: string) =>\n  SITE_ART.find((a) => a.id === id)?.src ?? SITE_ART[0].src;\n`;
+  writeFileSync(join(ROOT, "lib", "siteArt.ts"), siteTs);
+
+  console.log(
+    `\n${meta.length} images → public/photos, manifest → lib/photoAssets.ts` +
+    `\n${siteMeta.length} images → public/site, manifest → lib/siteArt.ts`
+  );
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
