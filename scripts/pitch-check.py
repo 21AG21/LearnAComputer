@@ -69,7 +69,14 @@ SOLVER_EXEMPT = {
     "real-world", "shape-click-game", "keyboard-nav-game",
     "match-parts", "pinch-zoom", "browser-scroll-code", "none", "placeholder",
 }
-SOLVER_STEPLESS = {"type-text", "edit-text", "url-navigator", "open-all-apps", "file-explorer-open"}
+SOLVER_STEPLESS = {
+    "type-text", "edit-text", "url-navigator", "open-all-apps", "file-explorer-open",
+    "drag-sort-files", "spot-the-fake", "browser-right-click", "edit-file",
+}
+# NOTE: this list is a copy of `STEPLESS` in lib/solve/solver.ts. It caught its
+# own drift the first time the solver grew — the check said 159 while the
+# playbook said 163 — which is the behaviour wanted, but a shared source would
+# be better. Until then: change one, change the other.
 
 
 def proven():

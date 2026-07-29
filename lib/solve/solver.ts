@@ -116,6 +116,10 @@ export const STEPLESS = new Set([
   "url-navigator",
   "open-all-apps",
   "file-explorer-open",
+  "drag-sort-files",
+  "spot-the-fake",
+  "browser-right-click",
+  "edit-file",
 ]);
 
 /** Set a React-controlled field's value so React itself notices. */
@@ -149,9 +153,127 @@ export async function solveStepless(root: HTMLElement, task: Record<string, unkn
     debug: ok ? undefined : describeScreen(root),
   });
   const isDone = () => readFrame(root)?.dataset.simDone === "1";
+  /**
+   * Wait for the activity to *report* finished, rather than assuming a fixed
+   * settle is long enough. Several of these call `onResult` behind a timer —
+   * spot-the-fake holds its reveal for 2.8 seconds so the learner can read the
+   * explanation — and a fixed wait declared three correctly-solved activities
+   * broken. Ask the frame, do not guess.
+   */
+  const waitDone = async (ms = 4000) => {
+    const until = performance.now() + ms;
+    while (performance.now() < until) {
+      if (isDone()) return true;
+      await settle();
+    }
+    return isDone();
+  };
 
   await settle(SLOW_SETTLE_MS);
   const type = String(task.type);
+
+  if (type === "drag-sort-files") {
+    // Click the item, then click the bucket the lesson says it belongs in.
+    const items = (task.items ?? []) as { label: string; category: string }[];
+    for (const it of items) {
+      const pick = (label: string) =>
+        Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).find(
+          (n) => isReachable(n) && textOf(n) === label,
+        );
+      const item = pick(it.label);
+      if (!item) return outcome(false, `No item on screen called "${it.label}".`);
+      item.click();
+      await settle();
+      // A bucket's text grows as items land in it ("In the cloud" becomes
+      // "In the cloudA file in Google Drive…"), so match the label at the start.
+      const buckets = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter(
+        (n) => isReachable(n) && textOf(n).startsWith(it.category),
+      );
+      const bucket = buckets.sort((a, b) => textOf(a).length - textOf(b).length)[0];
+      if (!bucket) return outcome(false, `No bucket on screen called "${it.category}".`);
+      bucket.click();
+      await settle();
+    }
+    return (await waitDone()) ? outcome(true) : outcome(false, "Sorted every item, still not finished.");
+  }
+
+  if (type === "spot-the-fake") {
+    // The lesson says which one is the scam; click that, not a guess.
+    const items = (task.items ?? []) as { label: string; isFake?: boolean }[];
+    const idx = items.findIndex((i) => i.isFake);
+    if (idx < 0) return outcome(false, "No item in this task is marked isFake.");
+    // By position, not by text: the cards render in the task's own order, and a
+    // label can appear inside another card's copy ("Shop" inside "Book Shop").
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("button")).filter((n) => isReachable(n));
+    const card = cards[idx];
+    if (!card) return outcome(false, `No card on screen at position ${idx + 1}.`);
+    card.click();
+    await settle(SLOW_SETTLE_MS);
+    return (await waitDone()) ? outcome(true) : outcome(false, "Clicked the scam, activity did not finish.");
+  }
+
+  if (type === "browser-right-click") {
+    const findLink = () =>
+      Array.from(root.querySelectorAll<HTMLElement>("button, a")).find(
+        (n) => isReachable(n) && /cat/i.test(textOf(n)) && !/browser|files|mail|photos/i.test(textOf(n)),
+      );
+    let link = findLink();
+    if (!link) {
+      // Opens on the desktop: the learner clicks Browser in the dock first.
+      const dock = Array.from(root.querySelectorAll<HTMLElement>("button")).find((b) => textOf(b) === "Browser");
+      if (dock) {
+        dock.click();
+        await settle(SLOW_SETTLE_MS);
+        link = findLink();
+      }
+    }
+    if (!link) return outcome(false, "No link on screen to right-click.");
+    link.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    await settle(SLOW_SETTLE_MS);
+    const menuItem = Array.from(root.querySelectorAll<HTMLElement>("button")).find(
+      (n) => isReachable(n) && /open .*new tab/i.test(textOf(n)),
+    );
+    if (!menuItem) return outcome(false, "The right-click menu has no 'open in new tab'.");
+    menuItem.click();
+    await settle(SLOW_SETTLE_MS);
+    // Opening the tab is half the lesson; the learner then switches to it, which
+    // is the whole point of "open in a new tab" rather than "open".
+    const tab = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).find(
+      (n) => isReachable(n) && /cat/i.test(textOf(n)) && !/browser|files|mail|photos|open .*new tab/i.test(textOf(n)),
+    );
+    tab?.click();
+    await settle(SLOW_SETTLE_MS);
+    return (await waitDone()) ? outcome(true) : outcome(false, "Opened the new tab and switched to it, activity did not finish.");
+  }
+
+  if (type === "edit-file") {
+    // Desktop → Files from the dock → Documents → double-click the file → edit → Save.
+    const byText = (t: string) =>
+      Array.from(root.querySelectorAll<HTMLElement>("*")).find((n) => isReachable(n) && textOf(n) === t);
+    const name = String(task.fileName ?? "");
+    for (const label of ["Files", "Documents"]) {
+      const el = byText(label);
+      if (el) {
+        el.click();
+        await settle(SLOW_SETTLE_MS);
+      }
+    }
+    const file = byText(name);
+    if (!file) return outcome(false, `No file on screen called "${name}".`);
+    file.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    await settle(SLOW_SETTLE_MS);
+    const box = root.querySelector<HTMLTextAreaElement>("textarea");
+    if (!box) return outcome(false, "The file opened but there is nothing to type in.");
+    const wanted = steplessText(task);
+    if (wanted == null) return outcome(false, "The task does not say what the corrected file should say.");
+    box.focus();
+    setFieldValue(box, wanted);
+    await settle();
+    const save = Array.from(root.querySelectorAll<HTMLElement>("button")).find((b) => /^save$/i.test(textOf(b)));
+    save?.click();
+    await settle(SLOW_SETTLE_MS);
+    return (await waitDone()) ? outcome(true) : outcome(false, "Saved the corrected file, activity did not finish.");
+  }
 
   if (type === "open-all-apps") {
     // Click every dock icon; the activity finishes once enough are open.
@@ -160,7 +282,7 @@ export async function solveStepless(root: HTMLElement, task: Record<string, unkn
       btn.click();
       await settle();
     }
-    return isDone() ? outcome(true) : outcome(false, "Opening every dock app did not finish it.");
+    return (await waitDone()) ? outcome(true) : outcome(false, "Opening every dock app did not finish it.");
   }
 
   if (type === "file-explorer-open") {
@@ -183,7 +305,7 @@ export async function solveStepless(root: HTMLElement, task: Record<string, unkn
       target.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
       await settle(SLOW_SETTLE_MS);
     }
-    return isDone() ? outcome(true) : outcome(false, "Opened every named file, still not finished.");
+    return (await waitDone()) ? outcome(true) : outcome(false, "Opened every named file, still not finished.");
   }
 
   // The typing family: put the wanted text in the box, then confirm.
@@ -208,7 +330,7 @@ export async function solveStepless(root: HTMLElement, task: Record<string, unkn
       await settle(SLOW_SETTLE_MS);
     }
   }
-  return isDone() ? outcome(true) : outcome(false, `Typed the answer, activity did not report finished (${type}).`);
+  return (await waitDone()) ? outcome(true) : outcome(false, `Typed the answer, activity did not report finished (${type}).`);
 }
 
 /**

@@ -241,8 +241,8 @@ in-browser verification · printable per-unit and full-course certificates
 (`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
-grade-5 reading level, enforced at build · **159 of the 170 activities
-mechanically proven finishable, re-proven on every change** — 141 simulated
+grade-5 reading level, enforced at build · **163 of the 170 activities
+mechanically proven finishable, re-proven on every change** — 145 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
 pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to

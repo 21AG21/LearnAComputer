@@ -956,3 +956,55 @@ the prose disagrees. Negative-controlled: put "150" back and it reports
 That is the difference between this round and round twelve. Twelve corrected a
 false claim by hand; thirteen made the claim impossible to get wrong again —
 and then made most of it moot by doing the work the excuse was covering for.
+
+## Round fourteen (2026-07-29): fourteen down to one
+
+Round thirteen brought nine of the fourteen mislabelled activities under
+solve-check and left five, each described as "a specific afternoon's work".
+Four of them took one afternoon between them.
+
+| lesson | type | what the player does |
+|---|---|---|
+| `cloud-vs-computer` | drag-sort-files | clicks each item, then the bucket the task says it belongs in |
+| `shopping-spot-fake` | spot-the-fake | clicks the card the task marks `isFake` |
+| `trackpad-right-click` | browser-right-click | opens Browser from the dock, right-clicks the link, opens it in a new tab, **then switches to that tab** |
+| `invitation-exercise` | edit-file | opens Files from the dock, goes to Documents, double-clicks the file, types the correction, saves |
+
+**solve-check: 141 → 145.** Machine-proven is now **163 of 170**.
+
+### Three of the four failed first, and every failure was mine
+
+- **The buckets.** A bucket's text grows as items land in it — "In the cloud"
+  becomes "In the cloudA file in Google Drive…" — so matching the label exactly
+  found nothing after the first placement. Match the prefix, take the shortest.
+- **The scam card.** Matching by label text is wrong when one label contains
+  another ("Shop" inside "Book Shop"). The cards render in the task's own order,
+  so pick by position.
+- **The timers.** `spot-the-fake` holds its reveal for **2.8 seconds** so the
+  learner can read why the shop was fake, and `drag-sort` waits 600ms. A fixed
+  settle sampled `data-sim-done` too early and reported two correctly-solved
+  activities as broken. There is now a `waitDone()` that polls the frame instead
+  of assuming. **This is the fourth time this session a check has measured a
+  race and called it a defect** — it is the characteristic failure of this kind
+  of harness and it will happen again to whoever extends it.
+- **The tab.** Opening a link in a new tab was not enough: the lesson completes
+  when the learner *switches to* that tab, which is the entire point of "open in
+  a new tab" rather than "open". The player was doing half the lesson. Fixing
+  that made the check match what the lesson teaches, not just what it accepts.
+
+### The one that is left, and why
+
+`editing-copy-paste` needs a **real clipboard**. Headless Chromium will grant
+it, but only with a permissions grant none of the other harnesses require, and
+the activity's whole point is that the learner's own Cmd+C/Cmd+V worked. Faking
+it would prove nothing. Left undone deliberately, with the reason recorded,
+rather than papered over — which is the mistake round twelve found in the pitch.
+
+### pitch-check caught its own drift, immediately
+
+Updating the playbook to 163 made `pitch-check` fail: *"says 163 machine-proven
+activities, there are 159"*. The check keeps its own copy of the solver's
+`STEPLESS` set and I had updated only the solver. That is the guard doing
+exactly its job — one commit after being built, it stopped a number going stale
+the same way "150" had. The duplication is noted in the script as a thing to
+unify.
