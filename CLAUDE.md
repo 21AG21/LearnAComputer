@@ -28,6 +28,7 @@ python3 scripts/check-lessons.py  # lesson validation (targets, capitalization, 
 python3 scripts/check-actions.py  # every action a sim advertises must be one a learner can finish
 python3 scripts/spelling-check.py # one dialect: American English, plus a typo list
 python3 scripts/pitch-check.py    # does the sales material describe the product that exists?
+                                  # (reads EXEMPT/STEPLESS out of lib/solve/solver.ts — never copy them)
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 npm run ring-check -- <slug>      # is the highlighted control actually ON SCREEN in that lesson?

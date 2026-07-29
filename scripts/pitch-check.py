@@ -65,19 +65,39 @@ def excused(lines, i):
 # ("159 of the 170 activities mechanically proven finishable") and it went stale
 # for months as "150" — nobody re-derives a sentence. Derived here from the same
 # two sets the solver uses, so the pitch cannot drift from the harness again.
-SOLVER_EXEMPT = {
-    "real-world", "shape-click-game", "keyboard-nav-game",
-    "match-parts", "pinch-zoom", "browser-scroll-code", "none", "placeholder",
-}
-SOLVER_STEPLESS = {
-    "type-text", "edit-text", "url-navigator", "open-all-apps", "file-explorer-open",
-    "drag-sort-files", "spot-the-fake", "browser-right-click", "edit-file",
-    "keyboard-shortcut",
-}
-# NOTE: this list is a copy of `STEPLESS` in lib/solve/solver.ts. It caught its
-# own drift the first time the solver grew — the check said 159 while the
-# playbook said 163 — which is the behaviour wanted, but a shared source would
-# be better. Until then: change one, change the other.
+def _solver_set(name: str) -> set:
+    """Read a set literal out of lib/solve/solver.ts.
+
+    Hand-copied here first, and it drifted inside a single commit: the solver
+    grew a type, the copy did not, and the check reported 159 while the playbook
+    said 163. A guard that needs a second edit to stay honest is a guard that
+    will one day lie. `check-lessons.py` already reads photo labels and app names
+    straight out of the components for the same reason — this follows it.
+
+    The `\b` matters. Without it, `STEPLESS` also matched `STEPLESS_RENAMED`,
+    so renaming the constant in the solver left this reading the renamed one and
+    reporting success — which the rename control caught, one minute after this
+    function was written.
+    """
+    src = (ROOT / "lib" / "solve" / "solver.ts").read_text()
+    m = re.search(rf"(?:const|export const)\s+{name}\b[^=]*=\s*(?:new Set\()?\[(.*?)\]", src, re.S)
+    if not m:
+        raise SystemExit(f"pitch-check: cannot find {name} in lib/solve/solver.ts — did it move?")
+    return set(re.findall(r'"([^"]+)"', m.group(1)))
+
+
+def _solver_exempt_keys() -> set:
+    """EXEMPT is an object literal, not an array: read its keys."""
+    src = (ROOT / "lib" / "solve" / "solver.ts").read_text()
+    m = re.search(r"export const EXEMPT: Record<string, string> = \{(.*?)\n\};", src, re.S)
+    if not m:
+        raise SystemExit("pitch-check: cannot find EXEMPT in lib/solve/solver.ts — did it move?")
+    body = m.group(1)
+    return set(re.findall(r'^\s*"?([a-z-]+)"?\s*:', body, re.M))
+
+
+SOLVER_EXEMPT = _solver_exempt_keys()
+SOLVER_STEPLESS = _solver_set("STEPLESS")
 
 
 def proven():

@@ -1065,3 +1065,38 @@ worth running.
 are the genuinely un-scriptable reflex and trackpad activities. **The
 "scriptable but not scripted" column is empty for the first time** — it read 20
 this morning, before anyone checked what those 20 actually were.
+
+## Round sixteen (2026-07-29): the guard that needed a second edit
+
+`pitch-check` kept a hand-copy of the solver's `STEPLESS` set, and last round it
+drifted **inside a single commit**: the solver grew a type, the copy did not,
+and the check reported 159 machine-proven while the playbook said 163. It caught
+its own drift, which is the behavior wanted — but a guard that needs a second
+edit to stay honest is a guard that will one day lie quietly instead.
+
+It now reads both `EXEMPT` and `STEPLESS` straight out of `lib/solve/solver.ts`.
+That is the pattern already established here: `check-lessons.py` reads photo
+labels, app names, contact ids and WiFi networks out of the components rather
+than duplicating them.
+
+### The control caught a flaw one minute after the fix
+
+Two directions had to be tested, and the second is the dangerous one:
+
+1. **Solver grows a type, check is not edited** → the check follows on its own.
+   Verified by adding a type to `STEPLESS` and re-running without touching the
+   script.
+2. **Solver renames the set** → the check must fail *loudly*, never compute a
+   number from nothing.
+
+Direction 2 failed. Renaming `STEPLESS` to `STEPLESS_RENAMED` left the check
+**passing**, because the regex `\s+STEPLESS[^=]*=` happily let `[^=]*` swallow
+`_RENAMED` and matched the renamed constant. A word boundary fixes it, and both
+renames — one similar, one unrelated — now stop the run with
+*"cannot find STEPLESS in lib/solve/solver.ts — did it move?"*
+
+Worth stating plainly: **the guard was wrong for the first minute of its life,
+and only the negative control knew.** That is now three separate occasions this
+session where a check was written, looked right, and was proven wrong by
+deliberately breaking the thing it watches. The habit is the whole method; the
+scripts are just where it gets written down.

@@ -254,6 +254,15 @@ falsify it — a negative control has to make the clipping unfixable instead.
 
 ## Session log
 
+- **2026-07-29 (the guard that needed a second edit):** `pitch-check` kept a
+  hand-copy of the solver's `STEPLESS` set and it drifted inside one commit. It
+  now reads `EXEMPT` and `STEPLESS` out of `lib/solve/solver.ts`, the way
+  `check-lessons.py` already reads component data. **The control caught a flaw
+  one minute after the fix**: renaming `STEPLESS` to `STEPLESS_RENAMED` left the
+  check passing, because `[^=]*` swallowed the suffix and matched the renamed
+  constant. A word boundary fixes it; both a similar and an unrelated rename now
+  stop the run. Third time this session a check looked right and was proven
+  wrong only by deliberately breaking what it watches.
 - **2026-07-29 (the copy-paste lesson did not check the copy):** The last
   unplayed activity, and my stated reason — "needs a real clipboard" — was
   wrong. `CopyPasteTask` was a plain textarea checking `pasted === sourceText`:

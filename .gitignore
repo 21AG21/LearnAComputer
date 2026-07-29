@@ -30,3 +30,7 @@ next-env.d.ts
 
 # claude code local settings
 .claude/settings.local.json
+
+# Python bytecode from importing a check script directly
+__pycache__/
+*.pyc
