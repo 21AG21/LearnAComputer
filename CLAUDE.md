@@ -5,7 +5,7 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 ## Stack
 
 - **Next.js 15** App Router, React 19, TypeScript, Tailwind CSS 3
-- No database — all progress in `localStorage`
+- **No database, no accounts, no cookies, no analytics** — progress lives in `localStorage` only
 - Deployed via Vercel
 
 ## Commands
@@ -71,21 +71,17 @@ app/
   lessons/[slug]/page.tsx # Dynamic route — renders one module (multiple sub-lessons)
   funny-cat-video/        # Easter-egg page opened by the right-click playground
   playground/page.tsx     # Standalone playground sandbox
-  login/, auth/callback/  # Passwordless sign-in (email + code) and the magic-link landing
-  instructor/page.tsx     # Classroom roster: make a class, share the code, see finished lessons
-  join/page.tsx           # Learner joins a class with a six-character code
   error.tsx, not-found.tsx # Friendly failure pages — never a blank screen or a bare 404
   dev/mount-check/        # Dev-only activity mount harness
   dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
   dev/mission-check/      # Dev-only: mounts one real-world mission for scripts/mission-check.mjs
 
 components/
-  AuthProvider.tsx         # Supabase session + progress sync (pull/merge on sign-in, debounced push)
-  AccountNav.tsx           # Nav account corner: email, sync state, sign out
   MountCheck.tsx           # Dev-only harness behind /dev/mount-check
   SolveCheck.tsx           # Dev-only harness behind /dev/solve-check (drives lib/solve/)
   ActivityErrorBoundary.tsx # One sim crash never blanks the lesson page
   StorageNotice.tsx        # One calm banner when localStorage cannot save
+  CookieNotice.tsx         # Disclosure, not consent: no cookies exist, so there is nothing to accept
   DrDigital.tsx            # Speech-bubble mascot (intro / success / hint moods)
   DrDigitalAvatar.tsx      # Reusable avatar image
   HomeGreeting.tsx         # Client component for progress-aware homepage message
@@ -145,9 +141,6 @@ content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
 lib/
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
   progress.ts              # localStorage read/write for completed slugs (fires lac-progress-changed)
-  cloudProgress.ts         # Pull/merge/push that same list to Supabase for signed-in learners
-  classes.ts               # Classrooms: make/join by code, roster reads (RLS-enforced server side)
-  supabase.ts              # Browser client, or null when the env vars are absent
   chat.ts                  # localStorage read/write for messaging threads
   simState.ts              # localStorage read/write for persistent sim state (lac-sim)
   safeStorage.ts           # localStorage wrapper all three stores go through: in-memory
@@ -670,10 +663,12 @@ Stored in `localStorage` under key `"lac-progress"`:
 `LessonModuleRunner` calls `markComplete(slug)` when a sub-lesson's playground is finished.
 Sub-lessons with `type: "none"` or `"placeholder"` auto-advance (no gate).
 
-When somebody is signed in, `AuthProvider` mirrors that list to Supabase: pulled and
-merged on sign-in, pushed 1.5s after a change, deleted on reset. localStorage stays
-the working copy because lesson pages read progress synchronously. See
-`docs/ACCOUNTS_AND_SYNC.md`.
+**There is no account and no server copy.** Progress lives in localStorage on the
+learner's own device, never expires, and is theirs to erase from the Lessons
+page. Accounts, Supabase and cross-device sync were removed on 2026-07-28: the
+product collects nothing, sets no cookie, and contacts no third party. Keep it
+that way — `hostile-check` fails the build if any route sets a cookie or calls
+out to another host, because the whole privacy claim rests on it.
 
 ### Sim State
 

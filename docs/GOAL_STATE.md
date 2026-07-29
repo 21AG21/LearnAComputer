@@ -25,8 +25,8 @@ what moved, what's proven, what's still a demo risk.
 | Demo deployment | **Existing** — Vercel deploy from `main`; every push updates it | `CLAUDE.md` |
 | Sales playbook (cold call, demo, objections) | **Done, v1** | `docs/SALES_PLAYBOOK.md` |
 | Implementation runbook (setup, pilot plan, session scripts, troubleshooting matrix, all operator prompts) | **Done, v1** | `docs/IMPLEMENTATION_GUIDE.md` |
-| Accounts + progress sync (multi-machine demo) | **Done** — email + code sign-in, merge-on-signin | `docs/ACCOUNTS_AND_SYNC.md` |
-| Instructor visibility (the paid feature) | **Built, not switched on** — classes, join-by-code, and a roster showing each learner's finished lessons (`/instructor`, `/join`, `lib/classes.ts`). Blocked on one thing: the migration that creates the tables and their row-level security has **not been applied** to the Supabase project, so the feature is inert until somebody runs it. Deliberately narrow: finished lessons and a learner-chosen name, never an email, never time-spent or failure counts, because none of that is collected. | `supabase/migrations/20260728_classes_and_instructor_visibility.sql` |
+| Accounts + progress sync | **Removed 2026-07-28, deliberately.** The founder's call: no login, no Supabase, no user data at all. Progress is localStorage on one device, never expires. This trades cross-device sync for a privacy claim a buyer can verify in their own developer tools in thirty seconds. | `app/privacy/page.tsx` |
+| Instructor visibility | **Removed 2026-07-28 and not coming back.** Built, then cut with accounts: a roster means collecting data about learners, and the product now collects none. Sales material says so plainly rather than promising a roadmap item that will not arrive. | `docs/SALES_PLAYBOOK.md §8` |
 | Certificates | **Done, v1** — printable per-unit and full-course at /certificate, name asked at print time and never stored; verification codes still roadmap | `app/certificate/page.tsx` |
 | WCAG/contrast measured | **Done** — scripts/contrast-check.mjs samples every text node on core pages in both themes; 14 real AA failures found and fixed (muted grays, dark-mode reds/blues); remaining 4 reports are false positives (hero text over the background image) | `scripts/contrast-check.mjs` |
 | Wrong-device (phone) handling | **Done** — under 900px, a kind full-screen note with the live address and a continue-anyway escape | `components/SmallScreenGuard.tsx` |
@@ -43,13 +43,13 @@ number, because everything outside it is assumption wearing the same clothes.
 | Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
 | The sales demo path, stop by stop | `demo-check` |
 | Recovering from a deliberate mistake, end to end | `recovery-check` |
+| **No cookies and no third-party requests, on every route** | `hostile-check` |
 | Multi-window desktop | `desktop-check` |
 | Lesson shape, step targets, reading level, dialect | `check-lessons.py`, `spelling-check.py` |
 | WCAG AA contrast, both themes | `contrast-check.mjs` |
 
 | **Not** proven by machine | Why, and what covers it instead |
 |---|---|
-| Sign-in, progress sync, classes | Needs a one-time code in a real inbox; an agent cannot and should not do that. `docs/SIGNED_IN_VERIFICATION.md` is a ten-minute manual script plus SQL that proves the security boundary without signing in |
 | 20 reflex / trackpad-gesture activities | A script cannot pinch a trackpad. Mount-checked, then driven by hand |
 | Whether the writing is *good* | Reading level is measured; persuasion is not |
 | Whether a real buyer says yes | No amount of harness output substitutes for a prospect's face |
@@ -74,10 +74,9 @@ Ranked, current worst first. Fixing the top item promotes the next.
    gestures — which only mount-check covers, plus the intermittent below.
 3. **The dashboard/catalog wrapper pages** — functional but plainer than the
    lesson experience (Stage F site-chrome pass).
-4. ~~**No instructor view yet**~~ — built on 2026-07-28, inert until the
-   migration is applied. Until then the honest answer in the room is unchanged.
-   Superseded text: for a school buyer, "how do I see my class?"
-   currently has a design doc for an answer, not a screen.
+4. ~~**No instructor view**~~ — removed with accounts on 2026-07-28. The
+   answer in the room is now a straight "no, and here is why", which is a
+   better position than an unfinished screen.
 
 ## Real learner-stranding bugs found by solve-check (running tally)
 
@@ -147,6 +146,15 @@ both turned out to be defects rather than noise:
     what its trace said. Mail's folder names are now excluded from the
     action-button hunt (`go-to-folder` still reaches them).
 
+**Still not fully fixed (2026-07-28):** the `archive` case recurred once in a
+full run after both fixes above, then passed three runs in a row. So the
+document-order preference reduced it but did not eliminate it. It is a solver
+disambiguation problem, not a learner-facing one — a person reading "file it
+away" opens the email and presses Archive in the reading pane — but it means
+**a full run can still fail on unit-6-assessment**. Do not report 132/132 off a
+single run; re-run, and if it recurs, the fix is to make the compound gesture
+require the target to be *open* before hunting for the action button.
+
 The lesson for the next session: an intermittent failure in this harness has so
 far *always* been a real defect wearing a disguise. Reproduce it by running the
 full course several times, and read which objective is outstanding — that
@@ -208,15 +216,34 @@ the end, and re-run the full solve-check afterwards.
 
 ### What is waiting on the founder, not on code
 
-- **`supabase db push`** — the classroom migration. Until it runs, `/instructor`
-  and `/join` correctly say "not switched on", `demo-check` prints
-  `classrooms — NOT switched on`, and no sales document may claim the feature.
-- **`docs/SIGNED_IN_VERIFICATION.md`** — ten minutes in two browsers, plus SQL
-  that proves the security boundary without signing in.
 - **A conversation with a real buyer.** No harness substitutes for it, and
-  nothing further in this repo can produce it.
+  nothing further in this repo can produce it. The migration and signed-in
+  verification that used to sit here are gone: accounts were removed, so there
+  is nothing left to switch on. Everything the product does is live.
 
 ## Session log
+
+- **2026-07-28 (everything comes out):** The founder's call, and it makes the
+  product simpler and the pitch stronger: **no login, no Supabase, no user data
+  of any kind.** Deleted the sign-in page and magic-link callback, the auth
+  provider and account nav, the cloud-progress sync, the classroom feature built
+  earlier the same day (`/instructor`, `/join`, `lib/classes.ts`, its migration),
+  three npm dependencies, and **Vercel Analytics** — because "we count page
+  views" is not compatible with "we track only your session progress".
+  Progress stays exactly where it always was: localStorage, on the learner's own
+  device, with no expiry, erasable in two clicks.
+  A storage notice now sits under the nav — a *disclosure*, not a consent gate,
+  because there is nothing to consent to: no accept-all button, nothing blocked,
+  and it never returns once acknowledged.
+  Verified against a production build, not just dev: **zero cookies, zero
+  third-party hosts contacted, empty localStorage until the learner acts.** The
+  one cookie visible in development is Next's own `__next_hmr_refresh_hash__`,
+  which no production build sets. `hostile-check` now asserts both on every
+  route, because this claim is one careless `npm install` away from becoming a
+  lie — and it is the claim the whole product now leads with.
+  All sales material rewritten: free with no paid tier, no per-learner
+  reporting now or later, and the privacy answer reframed as an invitation to
+  check rather than a promise to trust.
 
 - **2026-07-28 (a trap laid for the next author):** `open-app` was a
   **documented** App Market action that could never be satisfied. Its highlight

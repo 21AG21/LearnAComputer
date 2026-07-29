@@ -89,11 +89,7 @@ conversation afterwards?"* Their number beats yours, and now they said it.
 **Morning of**
 - Run `npm run demo-check`. It opens every stop in §4, plus both mission
   downloads, and fails if any one of them is not safe to show. Ninety seconds.
-  **Read its last line.** It reports whether classrooms are switched on:
-  *"ok classrooms — switched on"* means `/instructor` is demo-safe and you may
-  answer the progress question with a screen; *"note classrooms — NOT switched
-  on"* means the migration has not been applied and you must say it is built
-  and not live. Never promise the roster off memory — read the line.
+
   **If it is not green, do not demo that path.** (If *everything* fails with
   500s, the dev server is serving a wiped `.next` — restart `npm run dev`.)
 - Re-drive the first two minutes by hand (catches a bad deploy in 90 seconds).
@@ -243,8 +239,8 @@ ones it does not cover.
 | "Staff don't have time to teach computers." | "That's the design. The instructor doesn't teach — the course teaches, and a staff member sits nearby for reassurance. `docs/IMPLEMENTATION_GUIDE.md` has the session sheets; the staff role is about twenty minutes of setup, once." |
 | "What if a resident actually gets scammed using this?" | "Nothing inside the course can reach the real world. The email, the browser, the shop, the bank — all simulated, no message can be sent, no purchase can be made. The only real thing is the practice folder they download, and that stays on their machine." |
 | "Is any of this HIPAA-relevant?" | "We never ask for, store, or transmit anything about health, care, or a client's identity. The whole data model is an email address and a list of finished lesson names — and it works with no account at all. Nothing about it touches a care record." |
-| "Families will ask what we're doing with this." | "Give them the certificate and the unit list. And point them at the privacy page — it's in plain language and it's honest, including that we count page views." |
-| "Can we see who's progressing?" | **Check before the meeting whether the classroom migration has been applied** (`docs/PROGRESS_MONITORING.md` says). If it has: "Yes — you make a class, read out a six-character code, and each resident types it once. You see their first name and which lessons they've finished. Not how long they took, not what they got wrong — we don't collect that." If it has not, the old answer stands and you must give it: "Not yet as a dashboard — it's built but not switched on, and I won't show you a screen I can't stand behind. Today a pilot runs on a check-in sheet." |
+| "Families will ask what we're doing with this." | "Give them the certificate and the unit list, and point them at the privacy page — it is plain language and it is short, because there is nothing to disclose. No account, no cookies, nothing collected, free to use." |
+| "Can we see who's progressing?" | "No — and I'd rather explain why than dress it up. Watching progress means collecting data about residents, and this course collects nothing: no account, no email, no cookies, no analytics. What you get is the certificate they print at the end of a unit, and what you see in the room. If per-resident reporting is a requirement, this isn't the right tool and I'll say so." |
 
 ---
 
@@ -279,8 +275,9 @@ becomes a promise.
 ## 8. Hard rules
 
 - **Never demo an unrehearsed path.** The course is honest; the demo has to be.
-- **Never claim the instructor dashboard, a third-party WCAG audit, Spanish, or
-  under-13 accounts.** All roadmap. See `SALES_PLAYBOOK.md §8`.
+- **Never claim an instructor dashboard, per-learner reporting, accounts, or a
+  third-party WCAG audit.** The first three were removed on purpose; the course
+  collects nothing. See `SALES_PLAYBOOK.md §8`.
 - **Never quote a fraud statistic you have not sourced this week.**
 - If something breaks live: *"Let me show you that on another lesson — and
   I'll have an answer for you tomorrow."* Then actually answer tomorrow.

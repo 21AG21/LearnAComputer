@@ -46,9 +46,6 @@ const ROUTES = [
   "/playground",
   "/certificate",
   "/dashboard",
-  "/login",
-  "/join",
-  "/instructor",
   "/about",
   "/privacy",
   "/terms",
@@ -66,6 +63,19 @@ async function sweep(route) {
   const page = await context.newPage();
   const consoleErrors = [];
   const failedRequests = [];
+  const thirdParty = new Set();
+
+  // The whole privacy claim now rests on this: no cookies, nothing phoning
+  // home. It is one npm install away from quietly becoming false, so it is
+  // asserted on every route rather than trusted.
+  page.on("request", (r) => {
+    try {
+      const host = new URL(r.url()).host;
+      if (!host.includes("localhost") && !host.startsWith("127.")) thirdParty.add(host);
+    } catch {
+      /* data: and blob: URLs have no host */
+    }
+  });
 
   page.on("console", (m) => {
     if (m.type() !== "error") return;
@@ -77,10 +87,6 @@ async function sweep(route) {
   page.on("requestfailed", (r) => {
     const url = r.url();
     if (url.includes("_next/static/development") || url.includes("hot-update")) return;
-    // The analytics beacon is fetched from Vercel's CDN, which this sandbox
-    // blocks. It loads in production, and a blocked beacon breaks nothing on
-    // the page anyway — flagging it on every route would drown real findings.
-    if (url.includes("va.vercel-scripts.com")) return;
     failedRequests.push(`${url.replace(BASE, "").slice(0, 80)} (${r.failure()?.errorText})`);
   });
 
@@ -114,6 +120,16 @@ async function sweep(route) {
   }
   if (probe.overflowX > 2) note(route, "serious", `scrolls sideways by ${probe.overflowX}px`);
   if (probe.leaks) note(route, "serious", "raw undefined/NaN/Error text is visible on the page");
+  for (const host of thirdParty) {
+    note(route, "blocker", `contacted a third party: ${host} — the site claims it phones nobody`);
+  }
+  // `__next_hmr_refresh_hash__` is Next's hot-reload cookie and exists only in
+  // dev; a production build sets nothing. Verified against `next start`.
+  const cookies = (await context.cookies()).filter((c) => c.name !== "__next_hmr_refresh_hash__");
+  for (const c of cookies) {
+    note(route, "blocker", `set a cookie: ${c.name} — the site claims it sets none`);
+  }
+
   for (const e of consoleErrors.slice(0, 3)) note(route, "serious", `console error: ${e}`);
   for (const f of failedRequests.slice(0, 3)) note(route, "serious", `failed request: ${f}`);
 

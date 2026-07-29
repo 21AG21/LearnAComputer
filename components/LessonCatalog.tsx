@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getCompletedSlugs, resetProgress } from "@/lib/progress";
-import { useAuth } from "@/components/AuthProvider";
 import { unitArt } from "@/lib/unitArt";
 import SiteFooter from "@/components/SiteFooter";
 import { CheckIcon } from "@/components/Playground/Icons";
@@ -16,7 +15,6 @@ interface LessonCatalogProps {
 
 export default function LessonCatalog({ routes }: LessonCatalogProps) {
   const [completedSlugs, setCompletedSlugs] = useState<string[] | null>(null);
-  const { email, forgetAccountProgress } = useAuth();
 
   useEffect(() => {
     setCompletedSlugs(getCompletedSlugs());
@@ -156,28 +154,15 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
       {/* Footer */}
       <div className="border-t border-gray-200 pt-6 space-y-3 dark:border-gray-800">
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {email ? (
-            <>
-              Progress is saved to <strong>{email}</strong> as well as on this device, so it follows you to any computer
-              you sign in on.
-            </>
-          ) : (
-            <>
-              Progress is saved on this device. Clearing your browser data or switching to a different device will reset
-              it — <Link href="/login" className="underline">add your email</Link> to keep it.
-            </>
-          )}
+          Your progress is saved on this device and does not expire, so you can close the page and pick up
+          where you left off whenever you like. There is no account and nothing to sign in to. Clearing your
+          browser data, or using a different computer, starts you fresh.
         </p>
         <button
-          onClick={async () => {
-            const scope = email
-              ? "Reset all progress? This clears it on this device and in your account, and can't be undone."
-              : "Reset all progress? This can't be undone.";
-            if (window.confirm(scope)) {
+          onClick={() => {
+            if (window.confirm("Reset all progress? This can't be undone.")) {
               resetProgress();
               setCompletedSlugs([]);
-              // Without this the next sign-in would pull it all straight back.
-              await forgetAccountProgress();
             }
           }}
           className="text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"

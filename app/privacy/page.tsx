@@ -9,10 +9,24 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy" updated="27 July 2026">
+    <LegalPage title="Privacy" updated="28 July 2026">
       <p>
-        The short version: this site keeps your lesson progress in your own browser and sends
+        The short version: there are no accounts, no cookies, no tracking, and no server storing
+        anything about you. This site keeps your lesson progress in your own browser, and sends
         nothing about it anywhere. You can erase all of it from inside the site in two clicks.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        This site sets <strong>no cookies at all</strong> — not for advertising, not for analytics,
+        not even for signing in, because there is nothing to sign in to. That is why you are not
+        asked to accept anything.
+      </p>
+      <p>
+        What it does use is your browser&apos;s local storage, which is the same idea kept entirely
+        on your own machine: it is never attached to a request, never sent to us, and never shared
+        with another site. Everything it holds is listed below. It does not expire, so you can come
+        back in six months and carry on where you stopped.
       </p>
 
       <h2>What is stored on your device</h2>
@@ -36,6 +50,10 @@ export default function PrivacyPage() {
         <li>
           <strong>lac-theme</strong> — whether you chose light or dark mode.
         </li>
+        <li>
+          <strong>lac-notice-seen</strong> — that you have read the notice at the top of the page, so
+          it does not greet you again every time.
+        </li>
       </ul>
       <p>
         None of this is a cookie in the tracking sense. It is not shared between sites, and it is not
@@ -53,57 +71,15 @@ export default function PrivacyPage() {
         to a different computer, a different browser, or a private browsing window.
       </p>
 
-      <h2>Accounts</h2>
-      <p>
-        Accounts are optional and there is no password. If the operator of this installation has
-        enabled them, the sign-in page asks for an email address and sends a one-time code to it.
-        Sign-in is handled by Supabase, a third-party service, which stores your email address on
-        its own servers under its own privacy policy.
-      </p>
-      <p>
-        While you are signed in, the list of lessons you have finished is copied to your account so
-        it follows you to another computer. That list is the only thing stored: no lesson answers,
-        nothing you typed into the practice apps, and nothing from the missions that read your own
-        files. Other learners cannot see it — the database allows each account to read and write
-        only its own row, unless you join a class, which is described next.
-      </p>
-
-      <h2>Classes</h2>
-      <p>
-        If you are learning with a teacher, a librarian or a helper, they can make a class and give
-        you a six-character code. Typing that code on the{" "}
-        <Link href="/join">Join a class</Link> page is the only way anybody else is ever allowed to
-        see your progress. Nothing is shared until you do it.
-      </p>
-      <p>
-        Once you have joined, the person who made that class can see two things: the name you chose
-        to be shown as, and which lessons you have finished. They cannot see your email address, how
-        long you took, how many tries anything needed, what you typed inside a lesson, or anything
-        from the missions that look at your own files — none of that is recorded anywhere, for
-        anyone. They cannot see any other class, and no other learner in the class can see you.
-      </p>
-      <p>
-        You can leave a class at any time on the same page. Leaving stops the sharing at once and
-        does not touch your own progress.
-      </p>
-      <p>
-        <strong>Reset all progress</strong> on the Lessons page clears the account copy as well as
-        the device copy. If accounts have not been enabled, the sign-in page will say so, and the
-        whole course works without one.
-      </p>
-
       <h2>Analytics and advertising</h2>
       <p>
-        There is no advertising network, no social media pixel, and nothing that follows you to
-        other websites. We do count page views, using the measurement built into Vercel, the
-        company that hosts this site. It records which page was opened, roughly where in the world
-        the request came from, and what kind of device and browser it was. It sets no cookie, gives
-        you no identifier, and cannot tell one visitor from another or link a visit to a person.
+        There is none. No advertising network, no social media pixel, no analytics script, and
+        nothing that follows you to other websites. We do not count page views and we do not know
+        who visits or which lessons are opened.
       </p>
       <p>
-        It never sees anything from inside a lesson: not your progress, not your answers, not
-        anything you type into the practice apps. We use it to know which lessons are being opened
-        and whether pages are working, and for nothing else.
+        The company that hosts the site keeps ordinary server logs, as every web host does, and we
+        do not use them to build any picture of you.
       </p>
 
       <h2>What the practice simulator is</h2>
@@ -137,9 +113,8 @@ export default function PrivacyPage() {
 
       <h2>Children</h2>
       <p>
-        The site does not knowingly collect personal information from anyone, including children. If
-        accounts are enabled on this installation, an email address is the only personal detail
-        involved.
+        The site collects no personal information from anyone, including children. There is no
+        account, no name, no email address, and no way for us to know who a learner is.
       </p>
 
       <h2>Changes</h2>

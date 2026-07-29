@@ -27,6 +27,8 @@ Run it: `npm run hostile-check` (dev server on :3000).
 | Browser tab is not the bare brand name | Twelve identical tabs during a demo is a papercut. |
 | First Tab reaches something, visibly | This buyer's learners include people who cannot use a mouse. |
 | Mistyped lesson URL explains itself | An old link in an email must not look like a dead product. |
+| **No cookie is set, on any route** | The site claims it sets none. A buyer can check in one click, so this must never be aspirational. |
+| **No request leaves for another host** | Same claim, same one-click check. One careless dependency turns it into a lie. |
 | Narrow window explains itself | Somebody *will* open it on a laptop with a small window. |
 
 Severity is `blocker` / `serious` / `polish`; polish alone does not fail the
@@ -47,10 +49,12 @@ run, the other two do.
 - The site-wide fallback title said only the brand name. It now says what the
   site *is*, which is what a search result shows.
 
-**Two harness lies, fixed in the harness:** the analytics beacon is fetched
-from Vercel's CDN, which this sandbox blocks — it works in production and a
-blocked beacon breaks nothing, so flagging it on all fifteen routes drowned
-real findings. And the 404 check read the page before it rendered, then
+**Two harness lies, fixed in the harness:** the analytics beacon was fetched
+from Vercel's CDN, which this sandbox blocks — it worked in production and a
+blocked beacon broke nothing, so flagging it on all fifteen routes drowned real
+findings. (That exclusion is gone now: analytics was removed from the product
+entirely, and the check asserts the opposite — that *no* host is contacted.)
+And the 404 check read the page before it rendered, then
 complained about wording ("This page is not here") that is better than the
 wording it was looking for.
 
@@ -121,8 +125,8 @@ Honesty about the edges, so nobody mistakes a green run for proof of everything:
 - It does not judge **taste**. A page can pass every check here and still look
   plain. The catalog and dashboard chrome remain on the worst-screen watchlist
   in `GOAL_STATE.md`.
-- It does not test **signed-in** journeys. Sign-in needs a real email round
-  trip, so accounts, classes and sync are verified by hand, not here.
+- There are no **signed-in** journeys left to test. Accounts, sync and classes
+  were removed on 2026-07-28; the site has no login at all.
 - It does not replace the **contrast** pass (`scripts/contrast-check.mjs`) or
   the reading-level gate in `check-lessons.py`.
 - A green run means *nothing cheap is visibly wrong*. It is a floor, not a

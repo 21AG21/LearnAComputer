@@ -28,6 +28,13 @@ export default function TermsPage() {
         <li>Use the site to store or transmit anything unlawful.</li>
       </ul>
 
+      <h2>What this costs</h2>
+      <p>
+        Nothing. The whole course is free to use, there is no paid tier, no trial that ends, and
+        nothing to buy. We do not ask for a card, an email address, or an account, and there is no
+        advertising paying for it behind your back.
+      </p>
+
       <h2>The teaching is general, not advice</h2>
       <p>
         The lessons describe how computers usually behave. Your own computer may differ — buttons

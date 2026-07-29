@@ -197,13 +197,13 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 | "Send me some information." | "Happy to — one link or a one-pager?" Then: "So I send the right one, are you thinking group sessions or one-to-one?" *(Gets you the discovery you lost.)* |
 | "We already do this." | "Good — most places that say that mean a volunteer once a month. How's it going when they're away?" |
 | "AARP does this for free." | "They do, and they're good — if the person can make a Tuesday at 2pm and get one of the twelve seats. How many of yours does that describe?" |
-| "No budget." | "Then let's not talk about money. The pilot costs a room and an hour. If it doesn't work you've lost an hour; if it does, you'll know what it's worth." |
+| "No budget." | "You don't need one — it's free. No paid tier, no per-seat fee, nothing to sign. The only cost is a room and an hour of somebody's time." |
 | "Our residents aren't interested." | "Some aren't. The ones who are usually want one specific thing — seeing grandchildren, or not being caught by another scam call. Is either of those live for you?" |
 | "They can't learn this." | "That's the assumption the whole thing is built against. Lesson one is learning to click, nothing is timed, and nothing can be broken. Pick the six you think are most likely and prove me wrong." |
 | "Talk to my boss." | "Glad to — would you introduce me, or should I use your name?" *(Always ask; a forwarded intro beats a cold call.)* |
 | "Call me next quarter." | "I'll do that. So I'm not wasting your time — what would need to be different by then?" |
-| "Is it secure? Private?" | "No ads, no trackers, nothing sold. We count page views through our host and that's it. Signed out, nothing leaves the machine. The privacy page says so in plain English." |
-| "Can we see who's progressing?" | **Check first:** `npm run demo-check` prints a `classrooms` line saying whether it is switched on. If not: "Not yet — it's built but not switched on, and I won't show you a screen I can't stand behind." |
+| "Is it secure? Private?" | "There's nothing to secure — no account, no email, no cookies, no analytics, and the site doesn't contact any other company. The only thing kept is a list of finished lessons in their own browser. Open the developer tools and check; the cookie jar is empty." |
+| "Can we see who's progressing?" | "No, and that's deliberate. Watching people's progress means collecting data about them, and this course collects nothing at all — no account, no cookies, no analytics. What you get instead is the certificate they print at the end of a unit, and what you can see in the room." |
 
 ---
 
@@ -224,5 +224,7 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 - "Studies show", "everyone is using", "the leading platform". All unearned.
 - Anything on the roadmap said as though it exists. Instructor dashboard until
   the migration is applied, Spanish, under-13 accounts, third-party WCAG audit.
-- A price you have not been given. Pricing is the founder's call, and improvising
-  one destroys the real conversation later.
+- A future price. The course is free; do not hint at a paid tier that does not
+  exist, and do not promise it will always be free in writing.
+- Any per-learner reporting. There is no dashboard and no plan for one, because
+  the product deliberately collects nothing.

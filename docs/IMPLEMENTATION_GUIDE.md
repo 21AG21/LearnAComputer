@@ -18,14 +18,15 @@ can run a pilot from this document alone.
    activity (the falling shapes) → open Unit 3's first lesson and finish it.
    Two minutes per machine. If those work, everything works.
 3. **Locked-down machines:** the course works even where saving is blocked —
-   learners see one calm banner saying progress lasts until the tab closes
-   and that signing in saves it for good. On such machines, have learners
-   sign in (step 4) at the start of every session.
-4. **Accounts (recommended for multi-session programs):** learner clicks
-   Sign in → types their email → types the 6-digit code from their inbox.
-   No passwords, nothing to forget. Progress then follows them to any machine.
-5. **Shared machines between learners:** previous learner signs out, then
-   Dashboard → "Reset all progress" leaves the machine clean.
+   learners see one calm banner explaining that progress will last until the
+   tab closes. Everything still teaches; only the remembering is lost. On such
+   machines, plan to finish a unit within a session.
+4. **No accounts, by design.** Nobody signs in, nobody gives an email address,
+   and the site sets no cookies. Progress is kept in that browser on that
+   machine, does not expire, and follows nobody to another computer. Tell
+   learners this plainly — for many of them it is the reassuring part.
+5. **Shared machines between learners:** Lessons page → "Reset all progress"
+   leaves the machine clean for the next person. Do it between learners.
 
 ## 2. The pilot shape (recommended)
 
@@ -83,41 +84,14 @@ can run a pilot from this document alone.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| "It says my progress won't be saved" (amber banner) | The machine blocks browser storage | Expected on locked-down machines — have them sign in; progress then saves to their account |
-| Learner's progress "disappeared" | Different machine or browser profile, not signed in | Sign in with the same email — progress merges, nothing is lost |
+| "It says my progress won't be saved" (amber banner) | The machine blocks browser storage | Expected on locked-down machines. The lessons all still work; only the remembering is lost, so aim to finish a unit in the session |
+| Learner's progress "disappeared" | A different machine, a different browser, or private browsing — progress lives on one device and there is no account to restore it from | Explain it once, kindly, and use the same machine next session. Finished lessons can be redone quickly |
 | "This activity hit a problem" card | The activity crashed and contained itself | Press Try again — the lesson page and progress are unaffected. Note the lesson name and report it |
 | Full-screen "needs a bigger screen" page | They opened it on a phone/small window | Use a computer, or widen the window past ~900px; "Continue here anyway" exists for capable tablets |
 | Typed the sentence "right" but it won't pass | A stray word — the target now highlights the first wrong word | Point at the highlighted word: "compare just that one" |
-| Sign-in code never arrives | Typo in email, or slow mail | Re-send; check spam; codes expire — request a fresh one |
 | The activity seems to ignore clicks | They're clicking near, not on — targets are generous but real | "Put the arrow's very tip inside the glow, then click once" |
 | Learner closed the tab mid-lesson | Nothing is lost except the current activity's steps | Reopen the site — it resumes at the right lesson; the activity restarts cleanly |
 | Wants to redo a finished lesson | Supported | Catalog → the lesson → Redo |
-
-## 4b. Setting up a class (only once the migration is applied)
-
-Check `docs/PROGRESS_MONITORING.md` first: if the classroom migration has not
-been run against the Supabase project, none of this exists yet and the pilot
-runs on a paper check-in sheet as described above. Say so plainly rather than
-promising it.
-
-Once it is live:
-
-1. The instructor signs in (email address, six-digit code, no password) and
-   opens **For instructors** in the footer, or `/instructor`.
-2. They name the class — "Tuesday morning group" — and get a six-character
-   code. Write it on the whiteboard; the code avoids O/0 and I/1 on purpose,
-   because it gets read aloud.
-3. Each learner signs in, opens **Join a class** in the footer, types the code
-   and the name they want shown. Once, on any machine.
-4. The roster then shows each learner's name, how much of the course they have
-   finished, and the furthest unit they have reached.
-
-What an instructor can see is deliberately small, and it is worth saying this
-out loud to a room of learners, because it is the difference between a tool and
-surveillance: **finished lessons and the name they chose. Not their email, not
-how long anything took, not how many tries it needed, not one word they typed
-inside a lesson.** None of that is recorded anywhere. A learner can leave a
-class from the same page at any time, and their progress stays theirs.
 
 ## 5. Weekly pilot cadence (coordinator prompts)
 
@@ -134,6 +108,8 @@ class from the same page at any time, and their progress stays theirs.
 
 ## 6. What not to promise during implementation
 
-Same ground truth as the sales playbook §8: no instructor dashboard yet
-(track with a paper sheet or the learners' own dashboards over shoulders),
-no certificates yet, no Spanish yet. Say "on the roadmap," never dates.
+Same ground truth as the sales playbook §8. There is **no instructor dashboard
+and none is coming** — per-learner reporting means collecting data about
+learners, and this course deliberately collects none. Track a pilot with a
+paper check-in sheet and the unit certificates learners print. No Spanish yet;
+say "not yet," never a date. The course is free, so never imply a future price.

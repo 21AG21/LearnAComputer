@@ -24,11 +24,13 @@ every unit ends with a checked task on the learner's **own** machine.
    mission on the learner's actual computer — organize a real folder, change
    real settings, copy between real programs — verified in the browser with
    nothing uploaded. No other beginner course closes the sim-to-real gap.
-3. **Nothing to install, nothing tracked.** It runs in a browser. Progress is
-   a list of finished lessons. No ads, no analytics, no data leaves the
-   machine unless the learner signs in — and then it's an email address and
-   that same list. For libraries and schools, the privacy story *is* a
-   feature.
+3. **Nothing to install, nothing collected, and it's free.** It runs in a
+   browser. There is no account, no sign-in, no cookie, no analytics script,
+   and nothing that contacts another company. The list of finished lessons
+   lives in the learner's own browser and never expires, so they close the tab
+   and pick up where they stopped. For libraries, care homes and schools the
+   privacy story *is* the product — and it is the one claim a buyer can verify
+   themselves in thirty seconds with their browser's developer tools.
 
 **The curriculum in one breath:** mouse and keyboard → typing → files → the
 internet → messaging and video calls → email → photos → apps → settings →
@@ -130,23 +132,23 @@ is the moment skeptics convert; let it breathe.
 | "We already use YouTube videos / handouts" | "Videos are watching; this is doing. A learner can watch someone double-click all day and still not be able to. Here they double-click two hundred times before Unit 3 ends — and the course *checks* they can do it on their own machine." |
 | "Our learners are too old / too far behind for software" | "This course assumes zero — lesson one is literally learning to click. Reading level is measured at 5th grade course-wide, nothing is timed, and every activity forgives every mistake. It was designed for exactly the person you're picturing." |
 | "What about our locked-down computers?" | "Nothing to install — it's a website. It even keeps working when the machine blocks saving; the learner sees one calm note and keeps going, and signing in (an email and a code, no passwords) saves their progress across machines." |
-| "How do we know it's working?" (funder/outcomes) | "Learners' progress syncs to their account, and the classroom dashboard for instructors is in development — today we support pilots with a simple check-in sheet, and pilot programs shape what that dashboard becomes." *(Do not oversell: the instructor view is designed, not shipped — `docs/PROGRESS_MONITORING.md`.)* |
-| "What does it cost?" | Pricing is not published; the model under consideration is free for individuals with paid institutional visibility and certification. In a pilot conversation: "The pilot costs you nothing but a classroom hour. Let's earn the pricing conversation." *(Numbers are the founder's call — never improvise them.)* |
-| "Data privacy? Our board will ask." | "No ads, no trackers, no behavioral profiling, and nothing sold or shared. We count page views through our host — cookieless, no visitor identifier, and it never sees a single thing from inside a lesson. Signed out, nothing else leaves the machine. Signed in, we store an email and a list of finished lessons; that is the entire data model, and deleting the account deletes it." *(Say "we count page views" — the privacy page says so, and a buyer who checks and finds a contradiction is lost.)* |
+| "How do we know it's working?" (funder/outcomes) | Be straight: "You'd see it in the room, and on the certificate a learner prints when they finish a unit. There is no dashboard, and there's a trade-off behind that — reporting on people means collecting data about them, and we decided not to collect any. For a pilot, a check-in sheet and the unit certificates are the record." *(Do not promise a dashboard. There is no longer one on the roadmap.)* |
+| "What does it cost?" | "Nothing. The whole course is free — no paid tier, no trial, no per-seat fee, and no advertising paying for it behind your back." Do not invent a future price; if they ask how it is sustained, the honest answer is that it is free to use and that is the current plan. |
+| "Data privacy? Our board will ask." | "There is nothing to disclose, which is unusual enough that I'd rather you check it than take my word. No account, no email, no cookies at all, no analytics, no advertising, and the site contacts no other company. The only thing stored is a list of finished lessons, in the learner's own browser, which they can erase in two clicks. Open the developer tools during the demo and look at the cookie jar — it is empty." *(This is verifiable and tested on every build; invite the check.)* |
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
 | "We're an elementary school" | "The course reads at the right level, but our accounts require an email, which isn't COPPA-appropriate for under-13s yet. Classroom accounts without child emails are on the roadmap — can I keep you posted?" |
 
 ## 5b. The competition, honestly — and the objection that actually kills deals
 
-The hardest thing about this market is not that the alternatives are bad. It is
-that **the good ones are free**, and a buyer who does ten minutes of searching
-finds them. Know them before they name them.
+The good alternatives are free. **So are we**, which takes price off the table
+entirely and turns the conversation into what it should be: which one actually
+teaches the skill. Know them before they name them, and never rubbish them.
 
 | What they will find | What it really is | Where we genuinely win | Where we do not |
 |---|---|---|---|
-| **Senior Planet (AARP)** — free live classes | Scheduled sessions, small groups of roughly 12–15, 45–90 minutes, plus a phone helpline | Runs any hour, any pace, unlimited seats, repeats forever, no waiting list, no fixed timetable | It is free, and a live human being teaches it. If what a program actually needs is company and a teacher, say so |
+| **Senior Planet (AARP)** — free live classes | Scheduled sessions, small groups of roughly 12–15, 45–90 minutes, plus a phone helpline | Runs any hour, any pace, unlimited seats, repeats forever, no waiting list, no fixed timetable | A live human being teaches it, and that is genuinely better for some people. If what a program needs is company as much as skill, say so |
 | **GCFLearnFree** — 2,000+ free tutorials | A very large library of read-and-watch tutorials, much of it Office and software topics | Doing beats reading: our learner clicks, types and drags in nearly every lesson, and every unit ends with a checked task on their own machine | They have roughly ten times the page count. If a buyer counts lessons, we lose that count |
-| **The public library down the road** | Free classes, free machines, a person to ask | Their staff cannot sit with one patron for an hour; this is what fills that gap, and it runs on the library's own locked-down machines | Free, local, human, already trusted |
+| **The public library down the road** | Free classes, free machines, a person to ask | Their staff cannot sit with one patron for an hour; this is what fills that gap, and it runs on the library's own locked-down machines | Local, human, already trusted — and they may simply prefer sending people there |
 
 **The objection to rehearse, because it is coming:**
 
@@ -237,22 +239,23 @@ grade-5 reading level, enforced at build · **150 of the 170 activities
 mechanically proven finishable, re-proven on every change** — 132 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
-pages learners read, in both themes (`scripts/contrast-check.mjs`).
+pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to
+use, with no account, no cookies, no analytics and no third-party requests** —
+asserted on every route by `npm run hostile-check` and verifiable by the buyer
+in their own developer tools.
 
 The honest footnote, if pressed: the remaining 20 are reflex and trackpad-
 gesture activities that are proven to render but are not auto-played, because
 a script cannot pinch a trackpad. Say that plainly — the precision is what
 makes the 150 believable.
 
-**Built but not switched on: the classroom dashboard.** An instructor makes a
-class, reads out a six-character code, and sees each learner's finished
-lessons; learners join on `/join` and can leave whenever they like. The code is
-in the product — but it needs one database migration applied
-(`supabase/migrations/20260728_...sql`) before it does anything. Until that is
-run, **it does not exist for a buyer**: keep answering the "how do we know it's
-working?" question with the pilot check-in sheet. Once it is run, demo it.
+**Removed on purpose, 2026-07-28 — do not offer to build them back on a call:**
+accounts and sign-in, cross-device progress sync, and the classroom/instructor
+dashboard. All three required collecting something about a learner, and the
+product now collects nothing. If a buyer needs per-learner reporting, tell them
+plainly that this is not that product and why.
 
-Designed but NOT shipped (say "roadmap"): time-spent and "stuck here" reporting ·
+Designed but NOT shipped (say "roadmap"):
 certificate verification codes · full third-party WCAG audit · Spanish ·
 under-13 accounts · phone/tablet guidance page. The full sequence is
 `docs/MASTER_PLAN.md`.
