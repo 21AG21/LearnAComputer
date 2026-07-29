@@ -31,6 +31,28 @@ what moved, what's proven, what's still a demo risk.
 | WCAG/contrast measured | **Done** — scripts/contrast-check.mjs samples every text node on core pages in both themes; 14 real AA failures found and fixed (muted grays, dark-mode reds/blues); remaining 4 reports are false positives (hero text over the background image) | `scripts/contrast-check.mjs` |
 | Wrong-device (phone) handling | **Done** — under 900px, a kind full-screen note with the live address and a continue-anyway escape | `components/SmallScreenGuard.tsx` |
 
+## What is proven by machine, and what is not
+
+Being straight about the boundary matters more than the size of the green
+number, because everything outside it is assumption wearing the same clothes.
+
+| Proven every run | How |
+|---|---|
+| 132 simulated activities playable to the end | `solve-check` |
+| 18 real-world missions, on a real machine | `mission-check` |
+| Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
+| The sales demo path, stop by stop | `demo-check` |
+| Multi-window desktop | `desktop-check` |
+| Lesson shape, step targets, reading level, dialect | `check-lessons.py`, `spelling-check.py` |
+| WCAG AA contrast, both themes | `contrast-check.mjs` |
+
+| **Not** proven by machine | Why, and what covers it instead |
+|---|---|
+| Sign-in, progress sync, classes | Needs a one-time code in a real inbox; an agent cannot and should not do that. `docs/SIGNED_IN_VERIFICATION.md` is a ten-minute manual script plus SQL that proves the security boundary without signing in |
+| 20 reflex / trackpad-gesture activities | A script cannot pinch a trackpad. Mount-checked, then driven by hand |
+| Whether the writing is *good* | Reading level is measured; persuasion is not |
+| Whether a real buyer says yes | No amount of harness output substitutes for a prospect's face |
+
 ## The "worst screen" watchlist
 
 The buyer-with-crossed-arms test: what is the weakest thing they could land on?
@@ -161,6 +183,23 @@ the worst-screen watchlist above (instructor view, site chrome) and Stage C
 
 ## Session log
 
+- **2026-07-28 (widening the sweep, and naming the competition):**
+  `hostile-check` now sweeps **every module page** — roughly forty, derived
+  from the lesson files rather than hand-picked — not the fifteen chrome routes
+  it started with. All clean. Added §5b to the sales playbook: the real
+  competitive picture, which is that **the good alternatives are free**. Senior
+  Planet (AARP) runs free live classes in groups of 12–15 with a helpline;
+  GCFLearnFree has 2,000+ free tutorials, roughly ten times our page count; the
+  local library is free, human and already trusted. The playbook now rehearses
+  the objection that actually kills deals — *"AARP does this for free"* — and
+  answers it with a question rather than a rebuttal, plus the one thing no free
+  option does: check the skill on the learner's own machine. It also says
+  plainly never to claim those tools are bad or that we have more content.
+  Wrote `docs/SIGNED_IN_VERIFICATION.md`, because the signed-in half of the
+  product is the one part no harness touches: a ten-minute two-browser script
+  for sync and classes, and SQL that proves the row-level-security boundary by
+  impersonating two learners — no sign-in required, and it will catch a data
+  leak before a buyer does.
 - **2026-07-28 (the buyer with crossed arms):** Every harness so far proved the
   product works when used correctly. None asked what a skeptic finds when they
   go off the demo path, which is the question that decides whether it earns

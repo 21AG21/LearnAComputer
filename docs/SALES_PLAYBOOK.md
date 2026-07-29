@@ -131,6 +131,42 @@ is the moment skeptics convert; let it breathe.
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
 | "We're an elementary school" | "The course reads at the right level, but our accounts require an email, which isn't COPPA-appropriate for under-13s yet. Classroom accounts without child emails are on the roadmap — can I keep you posted?" |
 
+## 5b. The competition, honestly — and the objection that actually kills deals
+
+The hardest thing about this market is not that the alternatives are bad. It is
+that **the good ones are free**, and a buyer who does ten minutes of searching
+finds them. Know them before they name them.
+
+| What they will find | What it really is | Where we genuinely win | Where we do not |
+|---|---|---|---|
+| **Senior Planet (AARP)** — free live classes | Scheduled sessions, small groups of roughly 12–15, 45–90 minutes, plus a phone helpline | Runs any hour, any pace, unlimited seats, repeats forever, no waiting list, no fixed timetable | It is free, and a live human being teaches it. If what a program actually needs is company and a teacher, say so |
+| **GCFLearnFree** — 2,000+ free tutorials | A very large library of read-and-watch tutorials, much of it Office and software topics | Doing beats reading: our learner clicks, types and drags in nearly every lesson, and every unit ends with a checked task on their own machine | They have roughly ten times the page count. If a buyer counts lessons, we lose that count |
+| **The public library down the road** | Free classes, free machines, a person to ask | Their staff cannot sit with one patron for an hour; this is what fills that gap, and it runs on the library's own locked-down machines | Free, local, human, already trusted |
+
+**The objection to rehearse, because it is coming:**
+
+> *"AARP does this for free."*
+
+The answer that works is not a rebuttal, it is a question:
+
+> "They do, and honestly they're good — if the person can make a Tuesday at
+> 2pm, get one of the twelve seats, and keep up with the group. How many of
+> your residents does that describe? This is for the other ones: any hour, any
+> pace, the same lesson repeated ten times if that is what it takes, and nobody
+> watching them get it wrong."
+
+Then the differentiator no free option has:
+
+> "And none of them check anything. At the end of a unit, this course makes the
+> learner do it on their *own* computer, and the page verifies they actually
+> did — the folder they sorted, the PDF they saved, the setting they changed.
+> Watching a video and being able to do it are not the same thing, and only one
+> of them is worth reporting to a funder."
+
+**Never** claim these tools are bad, or that we have more content. A buyer who
+catches one exaggeration stops believing the rest, and this whole product's
+edge is that its claims survive checking.
+
 ## 6. Implementation guide (what happens after yes)
 
 **Pilot shape (recommended):** 8–12 learners, 4 sessions, Units 1–3.

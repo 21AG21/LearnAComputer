@@ -14,13 +14,35 @@
  * lesson — which is why none of the other harnesses look for any of it.
  */
 import { chromium } from "playwright";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = "http://localhost:3000";
+
+/**
+ * Every module page, not a hand-picked few. Fifteen routes proved the site
+ * chrome was sound and said nothing about the other forty pages a learner
+ * actually spends their time on — and the buyer clicks whichever one they
+ * please. Mirrors `slugifyModule` in lib/lessons.ts.
+ */
+const moduleRoutes = () => {
+  const slugify = (m) => m.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  const dir = path.join(ROOT, "content/lessons");
+  const modules = new Set(
+    fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")).module),
+  );
+  return [...modules].map((m) => `/lessons/${slugify(m)}`);
+};
+
 const ROUTES = [
   "/",
   "/lessons",
-  "/lessons/using-the-trackpad-or-mouse",
-  "/lessons/working-with-files",
+  ...moduleRoutes(),
   "/playground",
   "/certificate",
   "/dashboard",
