@@ -56,7 +56,9 @@ export default function WindowControls({
             onClick={on}
             aria-label={label}
             className={`w-7 h-6 flex items-center justify-center rounded transition-colors ${
-              kind === "close" ? "text-gray-600 hover:bg-red-500 hover:text-white" : "text-gray-600 hover:bg-gray-200"
+              kind === "close"
+                ? "text-gray-600 sim-dark:text-gray-300 hover:bg-red-500 hover:text-white"
+                : "text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700"
             } ${highlight === kind ? pulse : ""}`}
           >
             <Glyph kind={kind} />

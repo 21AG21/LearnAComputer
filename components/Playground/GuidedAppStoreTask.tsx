@@ -357,7 +357,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
     return (
       <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
         <div className="flex-1 flex items-center justify-center p-6">
-          <div className="bg-white border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
+          <div className="bg-white sim-dark:bg-gray-800 border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-16 h-16 ${denied.app.color} rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3`}>{denied.app.icon}</div>
             <h3 className="font-bold text-base mb-2">{denied.app.name}</h3>
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
@@ -369,7 +369,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                 learner is told to search a store they cannot see. */}
             <button
               onClick={handleDismissDenied}
-              className={`w-full py-2.5 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 ${step && !finished ? pulse : ""}`}
+              className={`w-full py-2.5 bg-gray-100 sim-dark:bg-gray-700 text-gray-700 sim-dark:text-gray-200 font-medium text-sm rounded-xl hover:bg-gray-200 sim-dark:hover:bg-gray-600 ${step && !finished ? pulse : ""}`}
             >
               Back to Store
             </button>
@@ -384,17 +384,17 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
     return (
       <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
         <div className="flex-1 flex items-center justify-center p-6">
-          <div className="bg-white border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
+          <div className="bg-white sim-dark:bg-gray-800 border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-14 h-14 ${permDialog.app.color} rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3`}>{permDialog.app.icon}</div>
             <h3 className="font-bold text-sm mb-1">&ldquo;{permDialog.app.name}&rdquo; would like to access your:</h3>
-            <div className="bg-gray-50 rounded-xl p-4 my-3">
-              <div className="flex justify-center mb-1 text-gray-600">{permIcon(perm)}</div>
+            <div className="bg-gray-50 sim-dark:bg-gray-700 rounded-xl p-4 my-3">
+              <div className="flex justify-center mb-1 text-gray-600 sim-dark:text-gray-300">{permIcon(perm)}</div>
               <p className="font-semibold text-sm">{perm}</p>
             </div>
             <div className="flex gap-3">
               <button
                 onClick={handleDenyPermission}
-                className={`flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 transition-all ${hl("perm-deny") ? pulse : ""}`}
+                className={`flex-1 py-2.5 rounded-xl bg-gray-100 sim-dark:bg-gray-700 text-gray-700 sim-dark:text-gray-200 font-medium text-sm hover:bg-gray-200 sim-dark:hover:bg-gray-600 transition-all ${hl("perm-deny") ? pulse : ""}`}
               >
                 Don&apos;t Allow
               </button>
@@ -418,13 +418,13 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
       <div className="flex border-b flex-shrink-0">
         <button
           onClick={() => { setTab("store"); setSelectedApp(null); tryStep((s) => s.action === "go-to-store"); }}
-          className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "store" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("tab-store") ? pulse : ""}`}
+          className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "store" ? "border-b-2 border-blue-500 text-blue-600 sim-dark:text-blue-400" : "text-gray-500 sim-dark:text-gray-400 hover:text-gray-700 sim-dark:hover:text-gray-200"} ${hl("tab-store") ? pulse : ""}`}
         >
           <span className="inline-flex items-center gap-1"><CartIcon size={14} /> App Market</span>
         </button>
         <button
           onClick={() => { setTab("installed"); setSelectedApp(null); tryStep((s) => s.action === "go-to-installed"); }}
-          className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "installed" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-500 hover:text-gray-700"} ${hl("tab-installed") ? pulse : ""}`}
+          className={`flex-1 py-2.5 text-sm font-medium transition-all ${tab === "installed" ? "border-b-2 border-blue-500 text-blue-600 sim-dark:text-blue-400" : "text-gray-500 sim-dark:text-gray-400 hover:text-gray-700 sim-dark:hover:text-gray-200"} ${hl("tab-installed") ? pulse : ""}`}
         >
           <span className="inline-flex items-center gap-1"><SmartphoneIcon size={14} /> My Apps</span>
         </button>
@@ -437,7 +437,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder="Search apps..."
-              className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("search-bar") ? pulse : ""}`}
+              className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl("search-bar") ? pulse : ""}`}
             />
           </div>
           <div className="flex gap-1.5 px-3 py-2 border-b overflow-x-auto flex-shrink-0">
@@ -445,7 +445,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <button
                 key={cat}
                 onClick={() => { setCategory(cat); setSearchQuery(""); tryStep((s) => s.action === "go-to-category" && s.target === cat); }}
-                className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all ${category === cat ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"} ${hl("category-btn", cat) ? pulse : ""}`}
+                className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all ${category === cat ? "bg-blue-500 text-white" : "bg-gray-100 sim-dark:bg-gray-700 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-600"} ${hl("category-btn", cat) ? pulse : ""}`}
               >
                 {cat}
               </button>
@@ -456,12 +456,12 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <button
                 key={app.id}
                 onClick={() => handleSelectApp(app)}
-                className={`flex items-center gap-3 p-3 border rounded-xl hover:bg-gray-50 text-left transition-all ${hl("app-card", app.name) ? pulse : ""}`}
+                className={`flex items-center gap-3 p-3 border rounded-xl hover:bg-gray-50 sim-dark:hover:bg-gray-800 text-left transition-all ${hl("app-card", app.name) ? pulse : ""}`}
               >
                 <div className={`w-11 h-11 ${app.color} rounded-xl flex items-center justify-center text-xl flex-shrink-0`}>{app.icon}</div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm">{app.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{app.description}</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">{app.description}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className="text-xs text-yellow-500">{starDisplay(app.rating)}</span>
                     <span className="text-xs text-gray-400">{app.price}</span>
@@ -484,10 +484,10 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
             <div className={`w-16 h-16 ${selectedApp.color} rounded-2xl flex items-center justify-center text-3xl flex-shrink-0`}>{selectedApp.icon}</div>
             <div className="min-w-0">
               <h2 className="font-bold text-base leading-tight">{selectedApp.name}</h2>
-              <p className="text-xs text-gray-500">{selectedApp.category}</p>
+              <p className="text-xs text-gray-500 sim-dark:text-gray-400">{selectedApp.category}</p>
               <div className="flex items-center gap-2 mt-0.5">
                 <span className="text-xs text-yellow-500">{starDisplay(selectedApp.rating)}</span>
-                <span className="text-xs text-gray-600 font-medium">{selectedApp.rating}</span>
+                <span className="text-xs text-gray-600 sim-dark:text-gray-300 font-medium">{selectedApp.rating}</span>
                 <span className="text-xs text-gray-400">· {selectedApp.downloads} downloads</span>
               </div>
             </div>
@@ -502,15 +502,15 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
             </div>
           )}
 
-          <p className="text-sm text-gray-700 mb-3 leading-relaxed">{selectedApp.description}</p>
+          <p className="text-sm text-gray-700 sim-dark:text-gray-200 mb-3 leading-relaxed">{selectedApp.description}</p>
 
           {/* Permissions preview */}
           {selectedApp.permissions.length > 0 && (
-            <div className="mb-3 p-2.5 bg-gray-50 rounded-xl">
-              <p className="text-[10px] font-semibold text-gray-500 uppercase mb-1.5">Requires access to</p>
+            <div className="mb-3 p-2.5 bg-gray-50 sim-dark:bg-gray-800 rounded-xl">
+              <p className="text-[10px] font-semibold text-gray-500 sim-dark:text-gray-400 uppercase mb-1.5">Requires access to</p>
               <div className="flex flex-wrap gap-1.5">
                 {selectedApp.permissions.map((p) => (
-                  <span key={p} className="text-xs bg-white border rounded-full px-2 py-0.5 flex items-center gap-1">{permIcon(p)} {p}</span>
+                  <span key={p} className="text-xs bg-white sim-dark:bg-gray-700 border rounded-full px-2 py-0.5 flex items-center gap-1">{permIcon(p)} {p}</span>
                 ))}
               </div>
             </div>
@@ -518,7 +518,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
 
           {/* Install button */}
           {installedIds.includes(selectedApp.id) ? (
-            <button className="w-full py-2.5 bg-gray-200 text-gray-600 font-semibold rounded-xl text-sm">Installed ✓</button>
+            <button className="w-full py-2.5 bg-gray-200 sim-dark:bg-gray-700 text-gray-600 sim-dark:text-gray-300 font-semibold rounded-xl text-sm">Installed ✓</button>
           ) : (
             <button
               onClick={handleInstall}
@@ -530,10 +530,10 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
 
           {/* Screenshots placeholder */}
           <div className="mt-4">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase mb-2">Screenshots</p>
+            <p className="text-[10px] font-semibold text-gray-500 sim-dark:text-gray-400 uppercase mb-2">Screenshots</p>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="w-20 h-36 bg-gray-100 rounded-lg border flex-shrink-0 flex items-center justify-center">
+                <div key={i} className="w-20 h-36 bg-gray-100 sim-dark:bg-gray-700 rounded-lg border flex-shrink-0 flex items-center justify-center">
                   <span className="text-2xl opacity-30">{selectedApp.icon}</span>
                 </div>
               ))}
@@ -543,15 +543,15 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
           {/* Reviews */}
           {selectedApp.reviews.length > 0 && (
             <div className="mt-4">
-              <p className="text-[10px] font-semibold text-gray-500 uppercase mb-2">Reviews</p>
+              <p className="text-[10px] font-semibold text-gray-500 sim-dark:text-gray-400 uppercase mb-2">Reviews</p>
               <div className="flex flex-col gap-2">
                 {selectedApp.reviews.map((r, i) => (
-                  <div key={i} className="p-2.5 bg-gray-50 rounded-lg">
+                  <div key={i} className="p-2.5 bg-gray-50 sim-dark:bg-gray-800 rounded-lg">
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs font-semibold text-gray-700">{r.name}</span>
+                      <span className="text-xs font-semibold text-gray-700 sim-dark:text-gray-200">{r.name}</span>
                       <span className="text-[10px] text-yellow-500">{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</span>
                     </div>
-                    <p className="text-xs text-gray-600">{r.text}</p>
+                    <p className="text-xs text-gray-600 sim-dark:text-gray-300">{r.text}</p>
                   </div>
                 ))}
               </div>

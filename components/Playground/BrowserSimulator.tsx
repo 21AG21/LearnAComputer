@@ -68,26 +68,33 @@ export default function BrowserSimulator({
   const [showLockInfo, setShowLockInfo] = useState(false);
   const hasZoom = !!(onZoomIn || onZoomOut);
   return (
-    <div className={`h-full w-full ${bezel ? "bg-gray-200 p-3 sm:p-5" : ""}`} onClick={() => setShowLockInfo(false)}>
+    <div className={`h-full w-full ${bezel ? "bg-gray-200 sim-dark:bg-gray-900 p-3 sm:p-5" : ""}`} onClick={() => setShowLockInfo(false)}>
       <div
+        /**
+         * No `sim-dark:` on this white — deliberately. Everything above the page
+         * slot is browser chrome and follows the practice computer's Dark Mode;
+         * the page area does not, because a real browser in dark mode does not
+         * repaint the websites you visit. This white is the paper a page that
+         * paints no background of its own sits on.
+         */
         className={`relative h-full w-full bg-white overflow-hidden flex flex-col ${bezel ? "rounded-lg shadow" : ""}`}
       >
         {/* Tab strip */}
-        <div className="shrink-0 flex items-stretch gap-1 px-2 pt-2 bg-gray-200 border-b-2 border-gray-300">
+        <div className="shrink-0 flex items-stretch gap-1 px-2 pt-2 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700">
           <div className="flex items-stretch gap-1">
             <div
               role={onTabClick ? "button" : undefined}
               onClick={!tabActive && onTabClick ? onTabClick : undefined}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-t-lg border-2 border-b-0 max-w-44 min-w-36 ${
-                tabActive ? "bg-white border-black" : "bg-gray-100 border-gray-400 cursor-pointer"
+                tabActive ? "bg-white border-black sim-dark:bg-gray-800 sim-dark:border-gray-400" : "bg-gray-100 sim-dark:bg-gray-900 border-gray-400 sim-dark:border-gray-600 cursor-pointer"
               }`}
             >
-              <GlobeIcon size={14} className="shrink-0 text-gray-600" />
+              <GlobeIcon size={14} className="shrink-0 text-gray-600 sim-dark:text-gray-300" />
               <span className="text-sm font-semibold truncate flex-1">{tabTitle}</span>
               <button
                 onClick={onTabClose ?? onExit}
                 aria-label="Close tab"
-                className="shrink-0 w-5 h-5 rounded flex items-center justify-center text-gray-600 hover:bg-gray-300"
+                className="shrink-0 w-5 h-5 rounded flex items-center justify-center text-gray-600 sim-dark:text-gray-300 hover:bg-gray-300 sim-dark:hover:bg-gray-700"
               >
                 <span className="text-xs font-bold">&times;</span>
               </button>
@@ -97,10 +104,10 @@ export default function BrowserSimulator({
                 key={i}
                 onClick={tab.onClick}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-t-lg border-2 border-b-0 max-w-44 animate-slide-down ${
-                  tab.active ? "bg-white border-black" : "bg-gray-100 border-gray-400"
+                  tab.active ? "bg-white border-black sim-dark:bg-gray-800 sim-dark:border-gray-400" : "bg-gray-100 sim-dark:bg-gray-900 border-gray-400 sim-dark:border-gray-600"
                 }`}
               >
-                <GlobeIcon size={14} className="shrink-0 text-gray-600" />
+                <GlobeIcon size={14} className="shrink-0 text-gray-600 sim-dark:text-gray-300" />
                 <span className="text-sm font-semibold truncate">{tab.title}</span>
               </button>
             ))}
@@ -114,11 +121,11 @@ export default function BrowserSimulator({
         </div>
 
         {/* Toolbar */}
-        <div className="shrink-0 bg-gray-100 border-b-2 border-black flex items-center gap-2 px-3 py-2">
-          <span aria-hidden className="text-xl px-1 text-gray-300">‹</span>
-          <span aria-hidden className="text-xl px-1 text-gray-300">›</span>
+        <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-black sim-dark:border-gray-600 flex items-center gap-2 px-3 py-2">
+          <span aria-hidden className="text-xl px-1 text-gray-300 sim-dark:text-gray-600">‹</span>
+          <span aria-hidden className="text-xl px-1 text-gray-300 sim-dark:text-gray-600">›</span>
           <span aria-hidden className="px-1 text-gray-400"><ReloadIcon size={18} /></span>
-          <div className="flex-1 flex items-center gap-2 bg-white border-2 border-gray-400 rounded-lg px-3 py-1.5">
+          <div className="flex-1 flex items-center gap-2 bg-white sim-dark:bg-gray-900 border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg px-3 py-1.5">
             <button
               onClick={(e) => { e.stopPropagation(); setShowLockInfo((s) => !s); }}
               aria-label="Site security"
@@ -132,33 +139,33 @@ export default function BrowserSimulator({
         </div>
         {showLockInfo && (
           <div
-            className="absolute left-6 top-28 z-30 w-64 border-2 border-black bg-white shadow-lg p-3 animate-slide-down"
+            className="absolute left-6 top-28 z-30 w-64 border-2 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-800 shadow-lg p-3 animate-slide-down"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-sm font-semibold">This site is secure</p>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className="text-xs text-gray-600 sim-dark:text-gray-300 mt-1">
               The lock means your connection to this page is private. Look for it before typing anything personal into a website.
             </p>
           </div>
         )}
 
         {/* Action bar — the same row Unit 4 uses, with only the zoom control live here. */}
-        <div className="shrink-0 bg-gray-50 border-b-2 border-gray-300 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm">
+        <div className="shrink-0 bg-gray-50 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm">
           <DeadActionBtn label="Reading List" icon={<BookIcon size={14} />} />
           <DeadActionBtn label="History" icon={<ClockIcon size={14} />} />
           <DeadActionBtn label="Downloads" icon={<DownloadIcon size={14} />} />
           <div className="flex-1" />
           {hasZoom && (
-            <div className="flex items-center border-2 border-gray-400 rounded-lg overflow-hidden">
-              <button onClick={onZoomOut} aria-label="Zoom out" className="px-2 text-gray-600 hover:bg-gray-200">−</button>
-              <span className="px-2 border-x-2 border-gray-300 font-semibold tabular-nums">{zoomLabel ?? "100%"}</span>
-              <button onClick={onZoomIn} aria-label="Zoom in" className="px-2 font-bold hover:bg-gray-200">+</button>
+            <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">
+              <button onClick={onZoomOut} aria-label="Zoom out" className="px-2 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700">−</button>
+              <span className="px-2 border-x-2 border-gray-300 sim-dark:border-gray-600 font-semibold tabular-nums">{zoomLabel ?? "100%"}</span>
+              <button onClick={onZoomIn} aria-label="Zoom in" className="px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700">+</button>
             </div>
           )}
         </div>
 
         {/* Page content */}
-        <div className="flex-1 overflow-hidden">{children}</div>
+        <div data-sim-paper className="flex-1 overflow-hidden">{children}</div>
       </div>
     </div>
   );
@@ -189,7 +196,7 @@ export function OrangeDash({ className }: { className?: string }) {
 /** A control that exists in the real browser but does nothing in these focused lessons. */
 function DeadActionBtn({ label, icon }: { label: string; icon: React.ReactNode }) {
   return (
-    <span className="flex items-center gap-1 px-2 py-1 rounded-md border-2 border-gray-300 bg-white font-medium text-gray-400 select-none">
+    <span className="flex items-center gap-1 px-2 py-1 rounded-md border-2 border-gray-300 sim-dark:border-gray-700 bg-white sim-dark:bg-gray-800 font-medium text-gray-400 select-none">
       {icon} {label}
     </span>
   );

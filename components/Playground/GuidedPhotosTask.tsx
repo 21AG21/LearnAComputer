@@ -334,7 +334,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
-        <div className="w-36 bg-gray-50 border-r flex flex-col flex-shrink-0 overflow-y-auto">
+        <div className="w-36 bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto">
           <div className="p-2 border-b flex items-center gap-1">
             {searchOpen ? (
               <input
@@ -356,7 +356,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   setSearchOpen(true);
                   tryStep((s) => s.action === "search" && !s.value);
                 }}
-                className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 border rounded w-full hover:bg-gray-100 ${hl("search-icon") ? pulse : ""}`}
+                className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 sim-dark:text-gray-400 border rounded w-full hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${hl("search-icon") ? pulse : ""}`}
               >
                 <SearchIcon size={12} /> Search
               </button>
@@ -366,8 +366,8 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
             <button
               key={s}
               onClick={() => handleGoToAlbum(s)}
-              className={`px-3 py-2 text-left text-xs border-b transition-all hover:bg-gray-100 ${
-                section === s ? "bg-blue-100 font-medium text-blue-700" : "text-gray-700"
+              className={`px-3 py-2 text-left text-xs border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+                section === s ? "bg-blue-100 sim-dark:bg-blue-900 font-medium text-blue-700 sim-dark:text-blue-100" : "text-gray-700 sim-dark:text-gray-200"
               } ${hl("sidebar-item", s) ? pulse : ""}`}
             >
               <span className="inline-flex items-center gap-1.5">{s === "All Photos" ? <ImageIcon size={14} /> : s === "Favorites" ? <HeartFilledIcon size={14} className="text-red-500" /> : s === "Recently Deleted" ? <TrashIcon size={14} /> : <FolderIcon size={14} />} {s}</span>
@@ -393,7 +393,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
           ) : (
             <button
               onClick={handleCreateAlbum}
-              className={`px-3 py-2 text-left text-xs text-blue-600 border-b hover:bg-gray-100 ${hl("new-album-btn") ? pulse : ""}`}
+              className={`px-3 py-2 text-left text-xs text-blue-600 sim-dark:text-blue-300 border-b hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${hl("new-album-btn") ? pulse : ""}`}
             >
               + New Album
             </button>
@@ -412,19 +412,19 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 >
                   ← Back
                 </button>
-                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 hover:bg-gray-50"} ${hl("fav-btn") ? pulse : ""}`}>
+                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("fav-btn") ? pulse : ""}`}>
                   {selectedPhoto.favorite ? <HeartFilledIcon size={12} /> : <HeartIcon size={12} />} Fav
                 </button>
-                <button onClick={handleShareClick} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 inline-flex items-center gap-1 ${hl("share-btn") ? pulse : ""}`}><ShareIcon size={12} /> Share</button>
-                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 inline-flex items-center gap-1 ${hl("add-album-btn") ? pulse : ""}`}><FolderIcon size={12} /> Album</button>
+                <button onClick={handleShareClick} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("share-btn") ? pulse : ""}`}><ShareIcon size={12} /> Share</button>
+                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("add-album-btn") ? pulse : ""}`}><FolderIcon size={12} /> Album</button>
                 {section !== "Recently Deleted" && (
                   <button onClick={handleDelete} className={`px-2 py-1 text-xs rounded border border-red-200 text-red-600 hover:bg-red-50 inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 )}
               </div>
 
               {albumPickerShown && (
-                <div className="mx-4 mt-2 p-3 bg-white border rounded-lg shadow-lg z-30 relative">
-                  <p className="text-xs font-medium text-gray-500 mb-2">Add to album:</p>
+                <div className="mx-4 mt-2 p-3 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-lg z-30 relative">
+                  <p className="text-xs font-medium text-gray-500 sim-dark:text-gray-400 mb-2">Add to album:</p>
                   {albums.map((a) => (
                     <button key={a} onClick={() => handlePickAlbum(a)} className={`block w-full text-left px-2 py-1.5 text-sm hover:bg-blue-50 rounded ${hl("album-choice", a) ? pulse : ""}`}><span className="inline-flex items-center gap-1"><FolderIcon size={12} /> {a}</span></button>
                   ))}
@@ -433,24 +433,24 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
 
               {/* Share sheet */}
               {sharePhase === "channel" && (
-                <div className="mx-4 mt-2 p-3 bg-gray-50 border rounded-lg">
-                  <p className="text-xs font-medium text-gray-500 mb-2">Share via:</p>
+                <div className="mx-4 mt-2 p-3 bg-gray-50 sim-dark:bg-gray-800 border rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 sim-dark:text-gray-400 mb-2">Share via:</p>
                   <div className="flex gap-3">
-                    <button onClick={() => handleShareChannel("mail")} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-channel", "mail") ? pulse : ""}`}>
+                    <button onClick={() => handleShareChannel("mail")} className={`flex items-center gap-1.5 text-xs bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 border rounded px-3 py-2 hover:bg-gray-50 sim-dark:hover:bg-gray-600 ${hl("share-channel", "mail") ? pulse : ""}`}>
                       <MailIcon size={16} /> Mail
                     </button>
-                    <button onClick={() => handleShareChannel("messages")} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-channel", "messages") ? pulse : ""}`}>
+                    <button onClick={() => handleShareChannel("messages")} className={`flex items-center gap-1.5 text-xs bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 border rounded px-3 py-2 hover:bg-gray-50 sim-dark:hover:bg-gray-600 ${hl("share-channel", "messages") ? pulse : ""}`}>
                       <ChatIcon size={16} /> Messages
                     </button>
                   </div>
                 </div>
               )}
               {sharePhase === "contact" && (
-                <div className="mx-4 mt-2 p-3 bg-gray-50 border rounded-lg">
-                  <p className="text-xs font-medium text-gray-500 mb-2">Send to:</p>
+                <div className="mx-4 mt-2 p-3 bg-gray-50 sim-dark:bg-gray-800 border rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 sim-dark:text-gray-400 mb-2">Send to:</p>
                   <div className="flex gap-2 flex-wrap">
                     {CONTACTS.map((c) => (
-                      <button key={c.id} onClick={() => handleShareContact(c.id)} className={`flex items-center gap-1.5 text-xs bg-white border rounded px-3 py-2 hover:bg-gray-50 ${hl("share-contact", c.id) ? pulse : ""}`}>
+                      <button key={c.id} onClick={() => handleShareContact(c.id)} className={`flex items-center gap-1.5 text-xs bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 border rounded px-3 py-2 hover:bg-gray-50 sim-dark:hover:bg-gray-600 ${hl("share-contact", c.id) ? pulse : ""}`}>
                         <div className="w-5 h-5 rounded-full overflow-hidden relative flex-shrink-0">
                           <Image src={c.avatar} alt={c.name} fill sizes="20px" className="object-cover" />
                         </div>
@@ -488,7 +488,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   <Image src={selectedPhoto.src} alt={selectedPhoto.label} fill sizes="200px" className="object-cover" />
                 </div>
               </div>
-              <p className="text-center text-sm font-medium text-gray-700 mb-2">{selectedPhoto.label}</p>
+              <p className="text-center text-sm font-medium text-gray-700 sim-dark:text-gray-200 mb-2">{selectedPhoto.label}</p>
 
               {/* Edit controls */}
               <div className="px-4 pb-4 flex flex-col gap-3">
@@ -497,16 +497,16 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={p}
                       onClick={() => handleCropPreset(p)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 hover:bg-gray-50"} ${hl("crop-preset", p) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("crop-preset", p) ? pulse : ""}`}
                     >
                       <span className="inline-flex items-center gap-1">{p === "Original" ? <CropIcon size={12} /> : p === "Square" ? <SquareIcon size={12} /> : <RectangleIcon size={12} />} {p}</span>
                     </button>
                   ))}
-                  <button onClick={handleRotate} className={`px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 transition-all inline-flex items-center gap-1 ${hl("rotate-btn") ? pulse : ""}`}><RotateIcon size={12} /> Rotate</button>
+                  <button onClick={handleRotate} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 transition-all inline-flex items-center gap-1 ${hl("rotate-btn") ? pulse : ""}`}><RotateIcon size={12} /> Rotate</button>
                   <button onClick={handleRevert} className={`px-2 py-1 text-xs bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("revert-btn") ? pulse : ""}`}><UndoIcon size={12} /> Revert</button>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Brightness ({brightness}%)</label>
+                  <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Brightness ({brightness}%)</label>
                   <input
                     type="range" min={20} max={200} value={brightness}
                     onChange={(e) => handleBrightnessChange(Number(e.target.value))}
@@ -514,7 +514,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Contrast ({contrast}%)</label>
+                  <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Contrast ({contrast}%)</label>
                   <input
                     type="range" min={20} max={200} value={contrast}
                     onChange={(e) => handleContrastChange(Number(e.target.value))}
@@ -526,7 +526,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={f}
                       onClick={() => handleApplyFilter(f)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 hover:bg-gray-50"} ${hl("filter-btn", f) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("filter-btn", f) ? pulse : ""}`}
                     >
                       {f}
                     </button>
@@ -536,14 +536,14 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
             </div>
           ) : section === "Recently Deleted" ? (
             <div className="flex-1 overflow-y-auto">
-              <div className="px-3 py-2 bg-gray-50 border-b text-xs text-gray-500">Photos are deleted permanently after 30 days.</div>
+              <div className="px-3 py-2 bg-gray-50 sim-dark:bg-gray-800 border-b text-xs text-gray-500 sim-dark:text-gray-400">Photos are deleted permanently after 30 days.</div>
               <div className="p-3 grid grid-cols-3 gap-2">
                 {photos.filter((p) => p.deleted).map((photo) => (
                   <div key={photo.id} className="flex flex-col items-center gap-1">
                     <div className="w-full aspect-square rounded-lg overflow-hidden relative opacity-60">
                       <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
                     </div>
-                    <p className="text-xs text-gray-500 text-center truncate w-full">{photo.label}</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center truncate w-full">{photo.label}</p>
                     <button
                       onClick={() => handleRecover(photo)}
                       className={`text-xs px-2 py-0.5 bg-blue-500 text-white rounded hover:bg-blue-600 ${hl("recover-btn", photo.label) ? pulse : ""}`}

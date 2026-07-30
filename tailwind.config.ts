@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   darkMode: "class",
@@ -96,7 +97,42 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    /**
+     * `sim-dark:` — dark mode *inside the simulated computer*, which is a different
+     * thing from `dark:` and must not be confused with it.
+     *
+     * `dark:` follows the learner's own browser and the site's theme toggle. The
+     * practice desktop has its own Dark Mode switch in its own Settings app, and
+     * Unit 9 teaches the learner to flip it. The two are independent in both
+     * directions: a learner reading the site in light mode can put the practice
+     * computer in dark mode, and someone reading in dark mode still gets a light
+     * practice computer until they change that setting themselves. Anything else
+     * and the lesson's own toggle appears to do nothing.
+     *
+     * So this cannot be Tailwind's `dark:`, and the sim root cannot just carry the
+     * `dark` class: `html.dark` is an ancestor of everything, and the class
+     * strategy has no way to switch dark back off for a subtree.
+     *
+     * Kept additive on purpose. Every use is a `sim-dark:` class *added* beside the
+     * light one, never a replacement, so the light-mode stylesheet is byte-identical
+     * to before and the reskin cannot regress the 99% of the course that never
+     * touches this setting.
+     */
+    plugin(({ addVariant }) => {
+      /**
+       * Both halves are needed. `.sim-dark &` covers descendants, which is almost
+       * everything — but `.sim-dark` also lands on the desktop root itself, and a
+       * descendant selector does not match the element carrying the class. So
+       * `FakeDesktop`'s own root had `text-gray-900 sim-dark:text-gray-100`, only
+       * the first of those ever applied, and every app that inherited its text
+       * color drew gray-900 words on a gray-900 window: invisible. `&.sim-dark`
+       * matches the element itself and fixes it. Found by `simdark-check`, which
+       * caught the bug in this very plumbing before it shipped.
+       */
+      addVariant("sim-dark", ["&.sim-dark", ".sim-dark &"]);
+    }),
+  ],
 };
 
 export default config;

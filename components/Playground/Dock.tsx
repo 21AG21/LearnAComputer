@@ -104,6 +104,14 @@ export default function Dock({ items, onOpen, tone = "light", size = "md", showL
             }`}
           >
             <span
+              /**
+               * `data-sim-paper` because an app icon is artwork, not a surface:
+               * these pastel tiles are how ten black-line drawings stay
+               * distinguishable, and no real desktop recolors its app icons when
+               * you turn on dark mode. Without the marker, simdark-check counts
+               * all ten as light surfaces left unpainted, in every app.
+               */
+              data-sim-paper
               className={`relative block ${tile} ${pad} rounded-2xl transition-transform group-hover:-translate-y-1 group-active:scale-95 ${
                 highlighted ? "animate-ring-pulse" : ""
               }`}

@@ -21,6 +21,7 @@ npm run demo-check   # proves every page on the sales demo path loads clean
 npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
 npm run recovery-check # deliberately FAILS a lesson, then proves the learner can carry on
 npm run stray-check   # does the WRONG thing on purpose; proves nobody is left with no way forward
+npm run simdark-check # is the practice computer's Dark Mode actually painted, in every dock app?
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -109,6 +110,60 @@ stopped moving. See `docs/SAME_ICON_AUDIT.md` §§ *Round four*, *Seventeen* and
 **Anything that measures geometry must wait for `data-sim-settled`.** Measuring
 a moving screen is how a check reports a race and calls it a defect — which
 happened four separate times in one session before the signal existed.
+
+**The practice computer has its own dark mode, and it is `sim-dark:`, not
+`dark:`.** `dark:` follows the learner's browser and the site's theme toggle;
+`sim-dark:` follows the Dark Mode switch inside the simulated Settings app, which
+Unit 9 teaches the learner to flip. The two are independent in both directions, so
+the sim root cannot just carry the `dark` class — `html.dark` is an ancestor of
+everything and the class strategy cannot switch dark back *off* for a subtree.
+`FakeDesktop`'s root carries `sim-dark`; the variant is registered in
+`tailwind.config.ts` as **both** `&.sim-dark` and `.sim-dark &`, because the
+descendant half alone does not match the root itself and that shipped invisible
+gray-900-on-gray-900 text in five apps.
+
+Every use is **additive** — a `sim-dark:` class beside the light one, never
+replacing it — so the light-mode stylesheet is byte-identical and this cannot
+regress the 99% of the course that never touches the setting. Colorless borders
+(`border-b` with no color) are handled once, in `globals.css`, by a `@layer base`
+rule; the layer is load-bearing, since a utility that names its own color must
+still win.
+
+**Chrome follows the setting; paper does not.** A real browser in dark mode
+darkens its tabs and address bar and leaves websites looking how their authors
+made them, and a PDF viewer leaves the page white. Surfaces that stay light on
+purpose are marked `data-sim-paper` — web pages, PDF pages, rendered documents,
+and the dock's icon tiles. The marker is what separates "light because nobody got
+to it" from "light because that is what the thing is".
+
+After touching `SimThemeContext`, any `sim-dark:` class, that base-layer rule, a
+`data-sim-paper` marker, or any app reachable from the dock, run **`npm run
+simdark-check`**. It turns Dark Mode on through the real Settings UI, opens all
+nine other dock apps, and reports light neutral surfaces and text under WCAG AA.
+Twelve gates were green on a dark mode that painted only the wallpaper, dock, menu
+bar and Settings — every other harness drives the DOM or measures the *site*, and
+none of them looks at the simulated computer's colors. Dr. Digital's own success
+line had been written around the gap: *"the menu bar, dock and background all
+followed."*
+
+Three traps in that check, all of which hid real findings:
+
+- **`data-sim-paper` is dangerous when too broad.** Marking the browser's whole
+  page area also covered its *own* new-tab page, which kept a white ground while
+  its text went light — white-on-white tiles — and the marker made the check skip
+  exactly that region and call the browser clean. A screenshot caught it. Every
+  output line now prints how many elements it skipped, so an over-broad marker is
+  a number rather than silence. **Use `SIMDARK_SHOTS=<dir>` and look**; measuring
+  did not find this one.
+- The neutrality threshold is **32**, not 20. Tailwind's grays are blue-tinted —
+  gray-900 spreads 22 channels — so 20 classified gray-900 as an *accent* and
+  filed every "1:1 invisible text" result under advisory.
+- Faint text moves **lighter** on a dark ground. The bulk pass mapped
+  `text-gray-400` down to gray-500 in 35 places, i.e. made the dimmest text on
+  screen dimmer, all under AA.
+
+`SIMDARK_NEGATIVE=1` is the negative control and has been watched to fail (69
+findings, all nine apps). See `docs/SIM_DARK_MODE.md`.
 
 **Whenever a capability is removed, run `pitch-check` in the same hour.**
 Deleting a feature is not done when the code is gone: accounts came out on

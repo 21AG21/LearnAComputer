@@ -75,7 +75,7 @@ export default function FileViewer({ item }: { item: Item }) {
   if (ext === "pdf")            return <PdfViewer item={item} />;
   if (ext === "mp3")            return <MusicViewer item={item} />;
   return (
-    <div className="h-full flex items-center justify-center text-gray-500 text-sm p-8 text-center">
+    <div className="h-full flex items-center justify-center text-gray-500 sim-dark:text-gray-400 sim-dark:bg-gray-900 text-sm p-8 text-center">
       No preview available for this file type.
     </div>
   );
@@ -95,8 +95,8 @@ function TextViewer({ item, editable }: { item: Item; editable: boolean }) {
   return (
     <div className="h-full flex flex-col">
       {editable && (
-        <div className="shrink-0 bg-gray-100 border-b-2 border-gray-300 px-3 py-1.5 flex items-center justify-between">
-          <span className="text-xs text-gray-500 font-medium">{item.name}</span>
+        <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 px-3 py-1.5 flex items-center justify-between">
+          <span className="text-xs text-gray-500 sim-dark:text-gray-400 font-medium">{item.name}</span>
           <button
             onClick={handleSave}
             className="px-3 py-1 text-xs font-bold bg-blue-600 text-white rounded border border-blue-800 hover:bg-blue-700 transition-colors"
@@ -106,7 +106,7 @@ function TextViewer({ item, editable }: { item: Item; editable: boolean }) {
         </div>
       )}
       <textarea
-        className="flex-1 w-full p-4 font-mono text-sm resize-none outline-none bg-white leading-relaxed"
+        className="flex-1 w-full p-4 font-mono text-sm resize-none outline-none bg-white sim-dark:bg-gray-900 sim-dark:text-gray-100 leading-relaxed"
         value={text}
         onChange={(e) => { if (editable) setText(e.target.value); }}
         readOnly={!editable}
@@ -122,14 +122,14 @@ function ImageViewer({ item }: { item: Item }) {
   const src = IMAGE_SRC[item.name];
   if (!src) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-gray-100 gap-3 text-gray-500">
+      <div className="h-full flex flex-col items-center justify-center bg-gray-100 sim-dark:bg-gray-800 gap-3 text-gray-500 sim-dark:text-gray-400">
         <ImageIcon size={48} />
         <p className="text-sm font-medium">{item.name}</p>
       </div>
     );
   }
   return (
-    <div className="h-full flex items-center justify-center bg-gray-100 p-3">
+    <div className="h-full flex items-center justify-center bg-gray-100 sim-dark:bg-gray-800 p-3">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={item.name} className="max-h-full max-w-full object-contain rounded shadow-md" />
     </div>
@@ -141,9 +141,10 @@ function ImageViewer({ item }: { item: Item }) {
 function SheetViewer() {
   const total = BUDGET_ROWS.reduce((s, r) => s + r.amount, 0);
   return (
-    <div className="h-full overflow-auto bg-gray-50 p-4">
-      <p className="text-xs text-gray-500 font-semibold mb-3 uppercase tracking-wide">Monthly Budget</p>
-      <table className="w-full border-collapse text-sm">
+    <div className="h-full overflow-auto bg-gray-50 sim-dark:bg-gray-800 p-4">
+      <p className="text-xs text-gray-500 sim-dark:text-gray-300 font-semibold mb-3 uppercase tracking-wide">Monthly Budget</p>
+      {/* A rendered document keeps its own colors — see `data-sim-paper`. */}
+      <table data-sim-paper className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-green-700 text-white">
             <th className="border border-green-900 px-3 py-1.5 text-left font-semibold">Category</th>
@@ -181,20 +182,21 @@ function PdfViewer({ item }: { item: Item }) {
   };
   return (
     <div className="h-full flex flex-col">
-      <div className="shrink-0 bg-gray-100 border-b border-gray-300 flex items-center justify-between px-4 py-1.5">
-        <span className="text-xs font-semibold text-gray-600">Page 1 of 1</span>
+      <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b border-gray-300 sim-dark:border-gray-700 flex items-center justify-between px-4 py-1.5">
+        <span className="text-xs font-semibold text-gray-600 sim-dark:text-gray-300">Page 1 of 1</span>
         <div className="flex items-center gap-1">
-          <button onClick={() => setZoom(z => Math.max(z - 25, 50))} className="w-7 h-7 border border-gray-300 rounded bg-white font-bold hover:bg-gray-200 text-sm">
+          <button onClick={() => setZoom(z => Math.max(z - 25, 50))} className="w-7 h-7 border border-gray-300 sim-dark:border-gray-600 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm">
             −
           </button>
           <span className="text-xs font-semibold tabular-nums w-12 text-center">{zoom}%</span>
-          <button onClick={() => setZoom(z => Math.min(z + 25, 200))} className="w-7 h-7 border border-gray-300 rounded bg-white font-bold hover:bg-gray-200 text-sm">
+          <button onClick={() => setZoom(z => Math.min(z + 25, 200))} className="w-7 h-7 border border-gray-300 sim-dark:border-gray-600 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm">
             +
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-auto bg-gray-200 p-4">
+      <div className="flex-1 overflow-auto bg-gray-200 sim-dark:bg-gray-900 p-4">
         <div
+          data-sim-paper
           className="bg-white shadow-md rounded p-6 mx-auto"
           style={{ fontSize: `${zoom}%`, maxWidth: 480 }}
         >

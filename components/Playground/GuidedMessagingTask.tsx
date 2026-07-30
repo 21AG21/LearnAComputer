@@ -491,13 +491,13 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Contacts / group picker sidebar */}
-        <div className="w-48 border-r bg-gray-50 flex flex-col overflow-y-auto">
+        <div className="w-48 border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col overflow-y-auto">
           {creatingGroup ? (
             /* Group creation picker */
             <>
-              <div className="p-3 border-b bg-gray-100">
-                <p className="font-bold text-sm text-gray-700">New Group Chat</p>
-                <p className="text-xs text-gray-500 mt-0.5">Pick people to add</p>
+              <div className="p-3 border-b bg-gray-100 sim-dark:bg-gray-700">
+                <p className="font-bold text-sm text-gray-700 sim-dark:text-gray-100">New Group Chat</p>
+                <p className="text-xs text-gray-500 sim-dark:text-gray-300 mt-0.5">Pick people to add</p>
               </div>
               {CONTACTS.map((c) => {
                 const picked = groupPicks.includes(c.id);
@@ -509,12 +509,12 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       picked ? "bg-blue-50" : ""
                     } ${hl("group-pick-contact", c.id) ? pulse : ""}`}
                   >
-                    <span className="relative w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                    <span className="relative w-8 h-8 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">
                       <Image src={c.avatar} alt={c.name} fill sizes="32px" className="object-cover" />
                     </span>
                     <span className="flex-1 font-medium text-sm truncate">{c.name}</span>
                     <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                      picked ? "bg-blue-500 border-blue-500" : "border-gray-400"
+                      picked ? "bg-blue-500 border-blue-500" : "border-gray-400 sim-dark:border-gray-500"
                     }`}>
                       {picked && <span className="text-white text-[10px] font-bold">✓</span>}
                     </span>
@@ -528,7 +528,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   className={`w-full py-2 rounded-lg text-sm font-semibold transition-all ${
                     groupPicks.length > 0
                       ? "bg-blue-500 text-white hover:bg-blue-600"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-200 sim-dark:bg-gray-700 text-gray-400 cursor-not-allowed"
                   } ${hl("start-chat-btn") ? pulse : ""}`}
                 >
                   Start Chat
@@ -538,8 +538,8 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           ) : (
             /* Normal contacts list */
             <>
-              <div className="p-3 border-b bg-gray-100 flex items-center justify-between">
-                <p className="font-bold text-sm text-gray-600">Contacts</p>
+              <div className="p-3 border-b bg-gray-100 sim-dark:bg-gray-700 flex items-center justify-between">
+                <p className="font-bold text-sm text-gray-600 sim-dark:text-gray-100">Contacts</p>
                 <button
                   onClick={handleNewGroupBtn}
                   title="New group chat"
@@ -559,20 +559,20 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     activeContact === c.id ? "bg-blue-100" : ""
                   } ${hl("contact", c.id) ? pulse : ""}`}
                 >
-                  <span className="relative w-9 h-9 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                  <span className="relative w-9 h-9 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">
                     <Image src={c.avatar} alt={c.name} fill sizes="36px" className="object-cover" />
                   </span>
                   <div className="min-w-0">
                     <p className="font-medium text-sm truncate">{c.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{c.status}</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">{c.status}</p>
                   </div>
                 </button>
               ))}
               {/* Groups section */}
               {groups.length > 0 && (
                 <>
-                  <div className="px-3 py-2 bg-gray-100 border-t border-b">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Groups</p>
+                  <div className="px-3 py-2 bg-gray-100 sim-dark:bg-gray-700 border-t border-b">
+                    <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-200 uppercase tracking-wide">Groups</p>
                   </div>
                   {groups.map((g) => (
                     <button
@@ -587,7 +587,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       </span>
                       <div className="min-w-0">
                         <p className="font-medium text-sm truncate">{g.name}</p>
-                        <p className="text-xs text-gray-500 truncate">
+                        <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">
                           {g.memberIds
                             .map((id) => CONTACTS.find((c) => c.id === id)?.name ?? id)
                             .join(", ")}
@@ -607,12 +607,12 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
             /* Group chat view */
             <>
               {/* Group header */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b bg-gray-50">
+              <div className="flex items-center gap-2 px-4 py-3 border-b bg-gray-50 sim-dark:bg-gray-800">
                 <div className="flex -space-x-2">
                   {currentGroupObj.memberIds.slice(0, 3).map((id) => {
                     const contact = CONTACTS.find((c) => c.id === id);
                     return contact ? (
-                      <span key={id} className="relative w-7 h-7 rounded-full bg-gray-200 overflow-hidden border-2 border-white shrink-0">
+                      <span key={id} className="relative w-7 h-7 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden border-2 border-white shrink-0">
                         <Image src={contact.avatar} alt={contact.name} fill sizes="28px" className="object-cover" />
                       </span>
                     ) : null;
@@ -620,7 +620,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 </div>
                 <div>
                   <p className="font-medium text-sm">{currentGroupObj.name}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">
                     {currentGroupObj.memberIds
                       .map((id) => CONTACTS.find((c) => c.id === id)?.name ?? id)
                       .join(", ")}
@@ -636,16 +636,16 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     <div key={i} className={`flex flex-col max-w-[75%] ${msg.from === "me" ? "self-end items-end" : "self-start items-start"}`}>
                       {msg.from === "contact" && sender && (
                         <div className="flex items-center gap-1.5 mb-1">
-                          <span className="relative w-5 h-5 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                          <span className="relative w-5 h-5 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">
                             <Image src={sender.avatar} alt={sender.name} fill sizes="20px" className="object-cover" />
                           </span>
-                          <span className="text-xs text-gray-500 font-medium">{sender.name}</span>
+                          <span className="text-xs text-gray-500 sim-dark:text-gray-400 font-medium">{sender.name}</span>
                         </div>
                       )}
                       <div className={`px-4 py-2 rounded-2xl text-sm ${
                         msg.from === "me"
                           ? "bg-blue-500 text-white rounded-br-md"
-                          : "bg-gray-200 text-gray-900 rounded-bl-md"
+                          : "bg-gray-200 sim-dark:bg-gray-700 text-gray-900 sim-dark:text-gray-100 rounded-bl-md"
                       }`}>
                         {msg.text}
                       </div>
@@ -656,11 +656,11 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
               </div>
 
               {/* Group compose bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 relative">
+              <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 sim-dark:bg-gray-800 relative">
                 {/* Emoji picker overlay */}
                 {emojiPickerOpen && (
-                  <div className={`absolute bottom-14 left-4 bg-white border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
-                    <p className="text-xs text-gray-500 mb-2 font-medium">Pick an emoji:</p>
+                  <div className={`absolute bottom-14 left-4 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-300 mb-2 font-medium">Pick an emoji:</p>
                     <div className="grid grid-cols-6 gap-1.5">
                       {EMOJI_OPTIONS.map((emoji) => (
                         <button
@@ -676,7 +676,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 )}
                 <button
                   onClick={handleEmojiBtn}
-                  className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-lg hover:bg-gray-300 transition-all ${
+                  className={`w-9 h-9 rounded-full bg-gray-200 sim-dark:bg-gray-700 sim-dark:text-gray-100 flex items-center justify-center text-lg hover:bg-gray-300 sim-dark:hover:bg-gray-600 transition-all ${
                     hl("emoji-btn") ? pulse : ""
                   }`}
                   title="Emoji"
@@ -689,7 +689,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   onChange={(e) => setGroupDraft(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGroupSend()}
                   placeholder="Type a message..."
-                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 transition-all ${
+                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
                     hl("group-message-input") ? pulse : ""
                   }`}
                 />
@@ -707,9 +707,9 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
             /* 1-to-1 chat view */
             <>
               {/* Chat header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
+              <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50 sim-dark:bg-gray-800">
                 <div className="flex items-center gap-2">
-                  <span className="relative w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                  <span className="relative w-8 h-8 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">
                     <Image src={currentContactObj!.avatar} alt={currentContactObj!.name} fill sizes="32px" className="object-cover" />
                   </span>
                   <span className="font-medium">{currentContactObj?.name}</span>
@@ -739,7 +739,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       className={`px-4 py-2 rounded-2xl text-sm select-none transition-all ${
                         msg.from === "me"
                           ? "bg-blue-500 text-white rounded-br-md"
-                          : "bg-gray-200 text-gray-900 rounded-bl-md cursor-pointer"
+                          : "bg-gray-200 sim-dark:bg-gray-700 text-gray-900 sim-dark:text-gray-100 rounded-bl-md cursor-pointer"
                       } ${hl("message-bubble") && msg.from === "contact" && i === lastContactIdx ? pulse : ""}`}
                     >
                       {msg.photoSrc ? (
@@ -753,12 +753,12 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     {msg.reactions && msg.reactions.length > 0 && (
                       <div className="flex gap-1 mt-1">
                         {msg.reactions.map((r, ri) => (
-                          <span key={ri} className="text-sm bg-gray-100 rounded-full px-1.5 py-0.5 border">{r}</span>
+                          <span key={ri} className="text-sm bg-gray-100 sim-dark:bg-gray-700 rounded-full px-1.5 py-0.5 border">{r}</span>
                         ))}
                       </div>
                     )}
                     {reactionTarget === i && msg.from === "contact" && (
-                      <div className={`flex gap-2 mt-2 p-2 bg-white border rounded-lg shadow-lg ${hl("reaction-picker") ? pulse : ""}`}>
+                      <div className={`flex gap-2 mt-2 p-2 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-lg ${hl("reaction-picker") ? pulse : ""}`}>
                         {["👍", "❤️", "😂", "😮", "😢"].map((emoji) => (
                           <button key={emoji} onClick={() => handleReactionPick(emoji, i)} className="text-xl hover:scale-125 transition-transform">
                             {emoji}
@@ -778,11 +778,11 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
               )}
 
               {/* Compose bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 relative">
+              <div className="flex items-center gap-2 px-4 py-3 border-t bg-gray-50 sim-dark:bg-gray-800 relative">
                 <button
                   onClick={handleAttachBtn}
                   aria-label="Attach"
-                  className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-lg hover:bg-gray-300 transition-all ${
+                  className={`w-9 h-9 rounded-full bg-gray-200 sim-dark:bg-gray-700 sim-dark:text-gray-100 flex items-center justify-center text-lg hover:bg-gray-300 sim-dark:hover:bg-gray-600 transition-all ${
                     hl("attach-btn") ? pulse : ""
                   }`}
                 >
@@ -791,11 +791,11 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
 
                 {/* Attachment menu */}
                 {attachMenu && (
-                  <div className="absolute bottom-14 left-4 bg-white border rounded-lg shadow-xl py-1 z-30 w-48">
+                  <div className="absolute bottom-14 left-4 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-xl py-1 z-30 w-48">
                     <button
                       onClick={handleAttachPhotosRow}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-blue-50 transition-colors ${
-                        hl("attach-photos-row") ? "bg-yellow-50 ring-2 ring-yellow-400" : ""
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-blue-50 sim-dark:hover:bg-gray-700 transition-colors ${
+                        hl("attach-photos-row") ? "bg-yellow-50 text-gray-900 ring-2 ring-yellow-400" : ""
                       }`}
                     >
                       <svg className="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
@@ -803,21 +803,21 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg>
                       Files
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
                       Camera
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
                     >
                       <MicIcon className="w-5 h-5" />
                       Voice memo
@@ -827,14 +827,14 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
 
                 {/* Photo picker */}
                 {photoPicker && (
-                  <div className={`absolute bottom-14 left-4 bg-white border rounded-lg shadow-xl p-3 z-30 ${hl("photo-pick") ? pulse : ""}`}>
-                    <p className="text-xs text-gray-500 mb-2 font-medium">Choose a photo:</p>
+                  <div className={`absolute bottom-14 left-4 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-xl p-3 z-30 ${hl("photo-pick") ? pulse : ""}`}>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-300 mb-2 font-medium">Choose a photo:</p>
                     <div className="grid grid-cols-3 gap-2">
                       {PHOTO_OPTIONS.map((p) => (
                         <button
                           key={p.src}
                           onClick={() => handlePhotoPick(p.src)}
-                          className="w-16 h-16 bg-gray-100 rounded overflow-hidden relative hover:ring-2 hover:ring-blue-400 transition-all group"
+                          className="w-16 h-16 bg-gray-100 sim-dark:bg-gray-700 rounded overflow-hidden relative hover:ring-2 hover:ring-blue-400 transition-all group"
                         >
                           <Image src={p.src} alt={p.label} fill sizes="64px" className="object-cover" />
                           <span className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-[10px] text-center py-0.5">
@@ -848,8 +848,8 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
 
                 {/* Emoji picker */}
                 {emojiPickerOpen && (
-                  <div className={`absolute bottom-14 left-14 bg-white border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
-                    <p className="text-xs text-gray-500 mb-2 font-medium">Pick an emoji:</p>
+                  <div className={`absolute bottom-14 left-14 bg-white sim-dark:bg-gray-800 border rounded-lg shadow-xl p-3 z-30 ${hl("emoji-item") ? pulse : ""}`}>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-300 mb-2 font-medium">Pick an emoji:</p>
                     <div className="grid grid-cols-6 gap-1.5">
                       {EMOJI_OPTIONS.map((emoji) => (
                         <button
@@ -866,7 +866,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
 
                 <button
                   onClick={handleEmojiBtn}
-                  className={`w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-all ${
+                  className={`w-9 h-9 rounded-full bg-gray-200 sim-dark:bg-gray-700 sim-dark:text-gray-100 flex items-center justify-center hover:bg-gray-300 sim-dark:hover:bg-gray-600 transition-all ${
                     hl("emoji-btn") ? pulse : ""
                   }`}
                   title="Emoji"
@@ -879,7 +879,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   onChange={(e) => { setDraft(e.target.value); setSendNudge(null); }}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Type a message..."
-                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 transition-all ${
+                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
                     hl("message-input") ? pulse : ""
                   }`}
                 />

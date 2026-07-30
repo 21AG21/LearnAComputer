@@ -190,14 +190,14 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar */}
-        <div className="w-36 border-r bg-gray-50 flex flex-col flex-shrink-0">
+        <div className="w-36 border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col flex-shrink-0">
           {/* View switcher */}
           <div className="p-2 border-b flex flex-col gap-1">
             {(["month", "day", "reminders"] as const).map((v) => (
               <button
                 key={v}
                 onClick={() => handleSwitchView(v)}
-                className={`px-2 py-2 text-xs rounded-lg text-left capitalize transition-all ${view === v ? "bg-blue-500 text-white" : "hover:bg-gray-100 text-gray-600"} ${hl("view-btn", v) ? pulse : ""}`}
+                className={`px-2 py-2 text-xs rounded-lg text-left capitalize transition-all ${view === v ? "bg-blue-500 text-white" : "hover:bg-gray-100 sim-dark:hover:bg-gray-700 text-gray-600 sim-dark:text-gray-300"} ${hl("view-btn", v) ? pulse : ""}`}
               >
                 <span className="inline-flex items-center gap-1">{v === "month" ? <CalendarIcon size={12} /> : v === "day" ? <CalendarIcon size={12} /> : <CheckIcon size={12} />} {v === "reminders" ? "Reminders" : v.charAt(0).toUpperCase() + v.slice(1)}</span>
               </button>
@@ -205,12 +205,12 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
           </div>
           {/* Calendars */}
           <div className="p-2 border-b">
-            <p className="text-xs font-semibold text-gray-500 mb-1.5">Calendars</p>
+            <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1.5">Calendars</p>
             {CALENDARS.map((cal) => (
               <button
                 key={cal}
                 onClick={() => handleToggleCalendar(cal)}
-                className={`flex items-center gap-2 w-full px-1 py-1 text-xs rounded transition-all hover:bg-gray-100 ${hl("calendar-toggle", cal) ? pulse : ""}`}
+                className={`flex items-center gap-2 w-full px-1 py-1 text-xs rounded transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${hl("calendar-toggle", cal) ? pulse : ""}`}
               >
                 <span className={`w-3 h-3 rounded-sm flex-shrink-0 ${cal === "Personal" ? "bg-blue-500" : "bg-green-500"} ${!activeCalendars.includes(cal) ? "opacity-30" : ""}`} />
                 {cal}
@@ -278,7 +278,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                   >
                     Save
                   </button>
-                  <button onClick={() => setCreatingEvent(false)} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">Cancel</button>
+                  <button onClick={() => setCreatingEvent(false)} className="px-4 py-2 bg-gray-100 sim-dark:bg-gray-700 text-gray-700 sim-dark:text-gray-200 text-sm rounded-lg hover:bg-gray-200 sim-dark:hover:bg-gray-600">Cancel</button>
                 </div>
               </div>
             </div>
@@ -304,7 +304,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                 >
                   Save
                 </button>
-                <button onClick={() => setCreatingReminder(false)} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200">Cancel</button>
+                <button onClick={() => setCreatingReminder(false)} className="px-4 py-2 bg-gray-100 sim-dark:bg-gray-700 text-gray-700 sim-dark:text-gray-200 text-sm rounded-lg hover:bg-gray-200 sim-dark:hover:bg-gray-600">Cancel</button>
               </div>
             </div>
           )}
@@ -312,7 +312,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
           {/* Month view */}
           {view === "month" && (
             <div className="flex-1 overflow-y-auto">
-              <div className="px-3 pt-3 pb-1 font-semibold text-sm text-gray-700">{MONTH_NAME}</div>
+              <div className="px-3 pt-3 pb-1 font-semibold text-sm text-gray-700 sim-dark:text-gray-200">{MONTH_NAME}</div>
               {/* Day headers */}
               <div className="grid grid-cols-7 px-2 pb-1">
                 {/* Three letters, not one — "T" and "S" each stood for two different days. */}
@@ -332,7 +332,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                       key={day}
                       onClick={() => handleSelectDay(day)}
                       className={`aspect-square flex flex-col items-center justify-start pt-1 rounded-lg text-xs transition-all hover:bg-blue-50 ${
-                        isSelected ? "bg-blue-500 text-white" : isToday ? "bg-blue-100 font-bold" : ""
+                        isSelected ? "bg-blue-500 text-white" : isToday ? "bg-blue-100 text-gray-900 font-bold" : ""
                       } ${hl("day-cell", String(day)) ? pulse : ""}`}
                     >
                       <span>{day}</span>
@@ -346,7 +346,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
               {/* Selected day events */}
               {selectedDay && (
                 <div className="border-t px-3 py-2">
-                  <p className="text-xs font-semibold text-gray-500 mb-1">July {selectedDay}</p>
+                  <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1">July {selectedDay}</p>
                   {dayEvents(selectedDay).length === 0 ? (
                     <p className="text-xs text-gray-400">No events</p>
                   ) : dayEvents(selectedDay).map((e) => (
@@ -364,7 +364,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
           {/* Day view */}
           {view === "day" && (
             <div className="flex-1 overflow-y-auto p-3">
-              <p className="text-sm font-semibold text-gray-700 mb-3">Today — July 18, 2026</p>
+              <p className="text-sm font-semibold text-gray-700 sim-dark:text-gray-200 mb-3">Today — July 18, 2026</p>
               {["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"].map((time) => {
                 const ev = events.find((e) => e.day === 18 && e.time === time && activeCalendars.includes(e.calendar));
                 return (
@@ -382,13 +382,13 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
           {/* Reminders view */}
           {view === "reminders" && (
             <div className="flex-1 overflow-y-auto p-3">
-              <p className="text-sm font-semibold text-gray-700 mb-3">Reminders</p>
+              <p className="text-sm font-semibold text-gray-700 sim-dark:text-gray-200 mb-3">Reminders</p>
               <div className="flex flex-col gap-2">
                 {reminders.map((r) => (
                   <div key={r.id} className={`flex items-center gap-3 p-3 border rounded-xl ${r.done ? "opacity-50" : ""}`}>
                     <button
                       onClick={() => !r.done && handleCompleteReminder(r.id, r.text)}
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${r.done ? "bg-green-500 border-green-500" : "border-gray-300 hover:border-blue-400"} ${hl("reminder-check", r.text) ? pulse : ""}`}
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${r.done ? "bg-green-500 border-green-500" : "border-gray-300 sim-dark:border-gray-700 hover:border-blue-400"} ${hl("reminder-check", r.text) ? pulse : ""}`}
                     >
                       {r.done && <span className="text-white text-xs">✓</span>}
                     </button>

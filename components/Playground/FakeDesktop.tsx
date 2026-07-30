@@ -271,8 +271,21 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
   const isDark = theme.dark;
 
   return (
+    /**
+     * `sim-dark` is what carries this setting into the apps. Everything the learner
+     * can open lives inside this element, so one class on the root reskins the
+     * windows, their title bars and the apps themselves — see the variant's note in
+     * `tailwind.config.ts` for why it is not Tailwind's `dark:`.
+     *
+     * The baseline `text-gray-900` matters as much as the dark half. Plenty of text
+     * in these apps sets no color of its own and inherits one, and what it used to
+     * inherit was the *page's* — so a learner reading the site in dark mode got the
+     * site's near-white body color inside a light practice computer. `gray-900` is
+     * the value `<body>` already resolves to in light mode, so this changes nothing
+     * there; it just stops the sim borrowing a color from outside itself.
+     */
     <div
-      className={`h-full w-full flex flex-col overflow-hidden relative ${isDark ? "bg-gray-900" : "bg-white"} ${theme.reduceMotion ? "reduce-motion" : ""}`}
+      className={`h-full w-full flex flex-col overflow-hidden relative text-gray-900 sim-dark:text-gray-100 ${isDark ? "sim-dark bg-gray-900" : "bg-white"} ${theme.reduceMotion ? "reduce-motion" : ""}`}
       style={{
         fontSize: `${theme.textScale / 100}em`,
         fontWeight: theme.boldText ? 600 : 400,
@@ -293,9 +306,9 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
         />
 
         {(openPanel === "wifi" || closingPanel === "wifi") && (
-          <StatusPanel color="#2451e0" tint="#cfe3fb" onClose={dismissPanel} title="WiFi Networks" closing={closingPanel === "wifi"}>
+          <StatusPanel color="#2451e0" tint="#cfe3fb" darkTint="#1e3a8a" onClose={dismissPanel} title="WiFi Networks" closing={closingPanel === "wifi"}>
             {!connectedNetwork && !searchingNetwork && (
-              <p className="px-3 py-2 text-center text-red-600 font-semibold text-sm">No WiFi connection. Pick a network below.</p>
+              <p className="px-3 py-2 text-center text-red-600 sim-dark:text-red-400 font-semibold text-sm">No WiFi connection. Pick a network below.</p>
             )}
             {WIFI_NETWORKS.map((network) => {
               const isConnected = network.name === connectedNetwork;
@@ -305,8 +318,12 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
                   key={network.name}
                   onClick={() => handleNetworkClick(network)}
                   disabled={!!searchingNetwork}
-                  className={`w-full text-left px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 ${
-                    isConnected ? "bg-green-400 cursor-default" : isSearching ? "bg-yellow-100 animate-pulse" : "bg-white hover:bg-blue-50"
+                  className={`w-full text-left px-3 py-2 font-bold border-b last:border-b-0 border-blue-200 sim-dark:border-gray-700 ${
+                    isConnected
+                      ? "bg-green-400 text-gray-900 cursor-default"
+                      : isSearching
+                        ? "bg-yellow-100 text-gray-900 animate-pulse"
+                        : "bg-white hover:bg-blue-50 sim-dark:bg-gray-800 sim-dark:hover:bg-gray-700"
                   }`}
                 >
                   {isSearching ? `Connecting to ${network.name}…` : isConnected ? `${network.name} ✓` : network.name}
@@ -316,8 +333,8 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
           </StatusPanel>
         )}
         {(openPanel === "battery" || closingPanel === "battery") && (
-          <StatusPanel color="#0f9b6c" tint="#c3f3dd" onClose={dismissPanel} title="Your Battery" closing={closingPanel === "battery"}>
-            <p className="border-2 border-green-400 p-3 text-center">
+          <StatusPanel color="#0f9b6c" tint="#c3f3dd" darkTint="#12603f" onClose={dismissPanel} title="Your Battery" closing={closingPanel === "battery"}>
+            <p className="border-2 border-green-400 sim-dark:border-green-700 p-3 text-center">
               {batteryPercent !== null
                 ? `You have ${batteryPercent}% battery left.`
                 : "Your browser won't share the real battery level, but you can check it in your computer's own status bar."}
@@ -441,6 +458,7 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
 function StatusPanel({
   color,
   tint,
+  darkTint,
   title,
   onClose,
   closing,
@@ -448,17 +466,26 @@ function StatusPanel({
 }: {
   color: string;
   tint: string;
+  /**
+   * The header tint for the practice computer's dark mode. The light tints are pale
+   * washes meant to carry black text; on a dark panel they read as a bright strip
+   * pasted onto it. Each one is the same hue taken down to a shade that carries
+   * white text instead, so the panel stays recognizably the WiFi / battery /
+   * calendar panel either way.
+   */
+  darkTint: string;
   title: string;
   onClose: () => void;
   closing?: boolean;
   children: React.ReactNode;
 }) {
+  const { dark } = useSimTheme();
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`absolute top-10 right-2 z-50 w-72 border-4 border-black bg-white shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
+      className={`absolute top-10 right-2 z-50 w-72 border-4 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-900 sim-dark:text-gray-100 shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
     >
-      <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: tint }}>
+      <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: dark ? darkTint : tint }}>
         <p className="text-lg font-bold">{title}</p>
         <button
           onClick={onClose}
@@ -501,14 +528,14 @@ function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: bo
   const monthName = MONTH_NAMES[now.getMonth()];
   const dateOrdinal = ordinal(now.getDate());
   return (
-    <StatusPanel color="#c0392b" tint="#fde8e6" onClose={onClose} title="Calendar" closing={closing}>
-      <p className="px-2 py-1 font-semibold text-sm text-gray-700">
+    <StatusPanel color="#c0392b" tint="#fde8e6" darkTint="#7f2019" onClose={onClose} title="Calendar" closing={closing}>
+      <p className="px-2 py-1 font-semibold text-sm text-gray-700 sim-dark:text-gray-200">
         Today is {dayName}, {monthName} {dateOrdinal}
       </p>
       <div className="mt-1 space-y-1">
         {CALENDAR_EVENTS.map((ev) => (
-          <div key={ev.label} className="flex gap-2 items-baseline px-2 py-1 border-t border-red-100">
-            <span className="text-xs text-gray-500 w-16 shrink-0">{ev.time}</span>
+          <div key={ev.label} className="flex gap-2 items-baseline px-2 py-1 border-t border-red-100 sim-dark:border-gray-700">
+            <span className="text-xs text-gray-500 sim-dark:text-gray-400 w-16 shrink-0">{ev.time}</span>
             <span className="text-sm font-medium">{ev.label}</span>
           </div>
         ))}

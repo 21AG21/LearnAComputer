@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * The default divider color inside the practice computer's dark mode.
+ *
+ * The simulated apps carry ~190 colorless border utilities — plain `border-b`,
+ * `border-r`, `border` — because a divider that just wants "the usual gray" says
+ * so by leaving the color off. Tailwind's preflight then paints all of them
+ * `#e5e7eb`, which on a gray-900 window is a bright white hairline. Pairing each
+ * one by hand would be 190 edits and a permanent invitation to forget the 191st.
+ *
+ * `@layer base` is what makes this safe, and the layer is the whole trick:
+ *   - it lands after preflight, so colorless borders pick this up;
+ *   - it lands *before* utilities, and a `.border-blue-200` class has the same
+ *     specificity, so anything that names its own color still wins.
+ * Move this out of the base layer and it starts overriding deliberate colors.
+ */
+@layer base {
+  .sim-dark *,
+  .sim-dark ::before,
+  .sim-dark ::after {
+    border-color: #374151; /* gray-700 */
+  }
+}
+
 /* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
 .reduce-motion,
 .reduce-motion * {

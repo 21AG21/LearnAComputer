@@ -14,7 +14,8 @@
     "hostile-check": "node scripts/hostile-check.mjs",
     "recovery-check": "node scripts/recovery-check.mjs",
     "ring-check": "node scripts/ring-check.mjs",
-    "stray-check": "node scripts/stray-check.mjs"
+    "stray-check": "node scripts/stray-check.mjs",
+    "simdark-check": "node scripts/simdark-check.mjs"
   },
   "dependencies": {
     "next": "^15.4.1",

@@ -121,7 +121,7 @@ export default function GuidedNotesTask({
       >
         <div className="h-full flex flex-col">
           {/* Formatting toolbar */}
-          <div className="shrink-0 border-b-2 border-gray-200 px-3 py-2 flex items-center gap-1 bg-gray-50">
+          <div className="shrink-0 border-b-2 border-gray-200 sim-dark:border-gray-700 px-3 py-2 flex items-center gap-1 bg-gray-50 sim-dark:bg-gray-800">
             {(["bold", "italic", "underline"] as const).map((fmt) => (
               <button
                 key={fmt}
@@ -134,7 +134,7 @@ export default function GuidedNotesTask({
                     editorRef.current?.focus();
                   }
                 }}
-                className={`w-8 h-8 rounded border-2 border-gray-300 font-semibold text-sm hover:bg-gray-200 ${
+                className={`w-8 h-8 rounded border-2 border-gray-300 sim-dark:border-gray-600 sim-dark:text-gray-100 font-semibold text-sm hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${
                   fmt === "bold" ? "font-black" : fmt === "italic" ? "italic" : "underline"
                 } ${step?.action === fmt ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
                 aria-label={fmt}
@@ -143,7 +143,7 @@ export default function GuidedNotesTask({
               </button>
             ))}
             {toolbarNudge && (
-              <span className="ml-3 text-xs text-orange-700 font-semibold">{toolbarNudge}</span>
+              <span className="ml-3 text-xs text-orange-700 sim-dark:text-orange-300 font-semibold">{toolbarNudge}</span>
             )}
           </div>
 
@@ -161,7 +161,7 @@ export default function GuidedNotesTask({
               suppressContentEditableWarning
               onKeyDown={handleKeyDown}
               onInput={handleInput}
-              className="h-full p-4 text-base leading-relaxed outline-none overflow-y-auto"
+              className="h-full p-4 text-base leading-relaxed outline-none overflow-y-auto sim-dark:text-gray-100"
               aria-label="Notes editor"
             />
           </div>

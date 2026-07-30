@@ -197,8 +197,8 @@ export default function DraggableWindow({
   return (
     <div
       ref={rootRef}
-      className={`absolute shadow-2xl border-2 rounded-lg overflow-hidden flex flex-col bg-white select-none ${
-        focused ? "border-gray-700" : "border-gray-400"
+      className={`absolute shadow-2xl border-2 rounded-lg overflow-hidden flex flex-col bg-white sim-dark:bg-gray-900 select-none ${
+        focused ? "border-gray-700 sim-dark:border-gray-500" : "border-gray-400 sim-dark:border-gray-700"
       } ${className ?? ""}`}
       style={
         isMaximized
@@ -211,15 +211,19 @@ export default function DraggableWindow({
     >
       {/* Title bar */}
       <div
-        className={`shrink-0 border-b-2 px-3 py-2 flex items-center gap-2 ${
-          focused ? "bg-gray-100 border-gray-700" : "bg-gray-200/70 border-gray-400"
+        // The app glyph draws in `currentColor`, so the bar sets a color for it to
+        // inherit — without one it picked up whatever the page outside the sim had.
+        className={`shrink-0 border-b-2 px-3 py-2 flex items-center gap-2 text-gray-700 sim-dark:text-gray-200 ${
+          focused
+            ? "bg-gray-100 border-gray-700 sim-dark:bg-gray-800 sim-dark:border-gray-500"
+            : "bg-gray-200/70 border-gray-400 sim-dark:bg-gray-800/60 sim-dark:border-gray-700"
         } ${!isMaximized ? "cursor-grab active:cursor-grabbing" : "cursor-default"} ${
           highlight === "titlebar" ? "ring-4 ring-yellow-400 ring-inset animate-pulse" : ""
         }`}
         onMouseDown={onTitleDown}
       >
         {icon && <span className="flex items-center" aria-hidden="true">{icon}</span>}
-        <span className={`font-bold text-sm font-[var(--font-app-title)] ${focused ? "text-gray-700" : "text-gray-500"}`}>{title}</span>
+        <span className={`font-bold text-sm font-[var(--font-app-title)] ${focused ? "text-gray-700 sim-dark:text-gray-100" : "text-gray-500 sim-dark:text-gray-400"}`}>{title}</span>
         <div className="flex-1" />
         <WindowControls
           onMinimize={onMinimize}

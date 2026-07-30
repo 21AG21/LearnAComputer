@@ -409,7 +409,7 @@ export default function GuidedEmailTask({
     >
       <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
-        <div className="w-32 bg-gray-50 border-r flex flex-col flex-shrink-0">
+        <div className="w-32 bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0">
           <div className="p-2 border-b">
             <button
               onClick={handleCompose}
@@ -422,13 +422,13 @@ export default function GuidedEmailTask({
             <button
               key={f}
               onClick={() => handleGoToFolder(f)}
-              className={`flex items-center justify-between px-2 py-2.5 text-xs text-left border-b transition-all hover:bg-gray-100 ${
-                currentFolder === f ? "bg-blue-100 font-medium text-blue-700" : "text-gray-700"
+              className={`flex items-center justify-between px-2 py-2.5 text-xs text-left border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+                currentFolder === f ? "bg-blue-100 sim-dark:bg-blue-900 font-medium text-blue-700 sim-dark:text-blue-100" : "text-gray-700 sim-dark:text-gray-300"
               } ${hl("folder", f) ? pulse : ""}`}
             >
               <span className="inline-flex items-center gap-1.5">{FOLDER_ICONS[f]} {f}</span>
               {folderCount(f) > 0 && (
-                <span className="text-xs bg-gray-200 rounded-full px-1 leading-4">{folderCount(f)}</span>
+                <span className="text-xs bg-gray-200 sim-dark:bg-gray-600 sim-dark:text-gray-100 rounded-full px-1 leading-4">{folderCount(f)}</span>
               )}
             </button>
           ))}
@@ -440,7 +440,7 @@ export default function GuidedEmailTask({
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="font-semibold text-sm">{replyTo ? `Reply to ${replyTo.from}` : "New Message"}</h3>
-                <button onClick={() => { setComposing(false); setReplyTo(null); }} className="text-gray-400 hover:text-gray-600">&times;</button>
+                <button onClick={() => { setComposing(false); setReplyTo(null); }} className="text-gray-400 hover:text-gray-600 sim-dark:hover:text-gray-200">&times;</button>
               </div>
               {(["to", "cc", "bcc", "subject"] as const).map((field) => (
                 <input
@@ -448,7 +448,7 @@ export default function GuidedEmailTask({
                   value={draft[field]}
                   onChange={(e) => { setDraft((d) => ({ ...d, [field]: e.target.value })); handleFieldChange(field, e.target.value); }}
                   placeholder={field === "to" ? "TO" : field === "cc" ? "CC" : field === "bcc" ? "BCC" : "SUBJECT"}
-                  className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 ${hl(`field-${field}`) ? pulse : ""}`}
+                  className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl(`field-${field}`) ? pulse : ""}`}
                 />
               ))}
               <textarea
@@ -456,7 +456,7 @@ export default function GuidedEmailTask({
                 onChange={(e) => { setDraft((d) => ({ ...d, body: e.target.value })); handleFieldChange("body", e.target.value); }}
                 placeholder="Write your message..."
                 rows={5}
-                className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 resize-none ${hl("field-body") ? pulse : ""}`}
+                className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 resize-none ${hl("field-body") ? pulse : ""}`}
               />
               <p className="text-[10px] text-gray-400 -mt-1">Tip: press Tab to jump to the next box, Shift+Tab to go back.</p>
               {attachedFile && (
@@ -474,7 +474,7 @@ export default function GuidedEmailTask({
                 </button>
                 <button
                   onClick={handleAttachClick}
-                  className={`px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200 transition-all ${hl("attach-btn") ? pulse : ""}`}
+                  className={`px-3 py-2 bg-gray-100 sim-dark:bg-gray-700 text-gray-700 sim-dark:text-gray-100 text-sm rounded hover:bg-gray-200 sim-dark:hover:bg-gray-600 transition-all ${hl("attach-btn") ? pulse : ""}`}
                 >
                   <span className="inline-flex items-center gap-1"><PaperclipIcon size={12} /> Attach</span>
                 </button>
@@ -486,19 +486,19 @@ export default function GuidedEmailTask({
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div>
                     <h3 className="font-semibold text-sm">{selectedEmail.subject}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">From: {selectedEmail.from} · {selectedEmail.date}</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-0.5">From: {selectedEmail.from} · {selectedEmail.date}</p>
                   </div>
                   <button
                     onClick={() => setSelectedEmail(null)}
                     aria-label="Close email"
-                    className={`text-gray-400 hover:text-gray-600 flex-shrink-0 rounded px-1 ${hl("close-reading") ? pulse : ""}`}
+                    className={`text-gray-400 hover:text-gray-600 sim-dark:hover:text-gray-200 flex-shrink-0 rounded px-1 ${hl("close-reading") ? pulse : ""}`}
                   >
                     ✕
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <button onClick={handleReply} className={`px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-all inline-flex items-center gap-1 ${hl("reply-btn") ? pulse : ""}`}><ReplyIcon size={12} /> Reply</button>
-                  <button onClick={handleForward} className={`px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-all inline-flex items-center gap-1 ${hl("forward-btn") ? pulse : ""}`}><ForwardIcon size={12} /> Forward</button>
+                  <button onClick={handleReply} className={`px-2 py-1 text-xs bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-200 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("reply-btn") ? pulse : ""}`}><ReplyIcon size={12} /> Reply</button>
+                  <button onClick={handleForward} className={`px-2 py-1 text-xs bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-200 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("forward-btn") ? pulse : ""}`}><ForwardIcon size={12} /> Forward</button>
                   {currentFolder === "Spam" ? (
                     <button onClick={handleUnspam} className={`px-2 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded transition-all ${hl("unspam-btn") ? pulse : ""}`}>Not spam</button>
                   ) : (
@@ -507,13 +507,13 @@ export default function GuidedEmailTask({
                   {currentFolder === "Archive" ? (
                     <button onClick={handleMoveToInbox} className={`px-2 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded transition-all inline-flex items-center gap-1 ${hl("move-inbox-btn") ? pulse : ""}`}><InboxIcon size={12} /> Move to Inbox</button>
                   ) : (
-                    <button onClick={handleArchive} className={`px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 rounded transition-all inline-flex items-center gap-1 ${hl("archive-btn") ? pulse : ""}`}><ArchiveIcon size={12} /> Move to Archive</button>
+                    <button onClick={handleArchive} className={`px-2 py-1 text-xs bg-gray-50 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-100 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("archive-btn") ? pulse : ""}`}><ArchiveIcon size={12} /> Move to Archive</button>
                   )}
                   <button onClick={handleDelete} className={`px-2 py-1 text-xs bg-red-50 text-red-600 hover:bg-red-100 rounded transition-all inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 </div>
               </div>
               <div className="p-4">
-                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">{selectedEmail.body}</p>
+                <p className="text-sm text-gray-800 sim-dark:text-gray-200 leading-relaxed whitespace-pre-line">{selectedEmail.body}</p>
                 {/* A link inside the message. Real reset emails carry one, and clicking
                     it is the step the lesson is about. */}
                 {selectedEmail.actionLabel && (
@@ -526,9 +526,9 @@ export default function GuidedEmailTask({
                 )}
                 {/* Thread: replies */}
                 {selectedEmail.replies?.map((r, i) => (
-                  <div key={i} className="mt-4 pt-3 border-t border-gray-200">
-                    <p className="text-xs text-gray-500 mb-1 font-medium">{r.from} · {r.date}</p>
-                    <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">{r.body}</p>
+                  <div key={i} className="mt-4 pt-3 border-t border-gray-200 sim-dark:border-gray-700">
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 mb-1 font-medium">{r.from} · {r.date}</p>
+                    <p className="text-sm text-gray-800 sim-dark:text-gray-200 leading-relaxed whitespace-pre-line">{r.body}</p>
                   </div>
                 ))}
               </div>
@@ -544,7 +544,7 @@ export default function GuidedEmailTask({
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto">
-              <div className="px-3 py-2 border-b bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
+              <div className="px-3 py-2 border-b bg-gray-50 sim-dark:bg-gray-800 text-xs font-medium text-gray-500 sim-dark:text-gray-300 uppercase tracking-wide">
                 {currentFolder}
               </div>
               {visibleEmails.length === 0 ? (
@@ -554,15 +554,15 @@ export default function GuidedEmailTask({
                   <button
                     key={email.id}
                     onClick={() => handleOpenEmail(email)}
-                    className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 transition-all ${
+                    className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 sim-dark:hover:bg-gray-800 transition-all ${
                       hl("email-row", email.subject) || highlightEmail === email.subject ? pulse : ""
                     }`}
                   >
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-sm font-medium text-gray-800">{email.from}</span>
+                      <span className="text-sm font-medium text-gray-800 sim-dark:text-gray-100">{email.from}</span>
                       <span className="text-xs text-gray-400">{email.date}</span>
                     </div>
-                    <p className="text-xs text-gray-700 truncate">{email.subject}</p>
+                    <p className="text-xs text-gray-700 sim-dark:text-gray-300 truncate">{email.subject}</p>
                     <p className="text-xs text-gray-400 truncate">{email.preview}</p>
                   </button>
                 ))
@@ -574,17 +574,17 @@ export default function GuidedEmailTask({
         {/* File picker modal */}
         {filePicker && (
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-20">
-            <div className="bg-white rounded-lg shadow-xl w-56 overflow-hidden">
-              <div className="flex items-center justify-between px-3 py-2 border-b bg-gray-50">
-                <span className="text-xs font-semibold text-gray-700">Choose a file</span>
-                <button onClick={() => setFilePicker(false)} className="text-gray-400 hover:text-gray-600 text-sm">✕</button>
+            <div className="bg-white sim-dark:bg-gray-900 rounded-lg shadow-xl w-56 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b bg-gray-50 sim-dark:bg-gray-800">
+                <span className="text-xs font-semibold text-gray-700 sim-dark:text-gray-200">Choose a file</span>
+                <button onClick={() => setFilePicker(false)} className="text-gray-400 hover:text-gray-600 sim-dark:hover:text-gray-200 text-sm">✕</button>
               </div>
               <div className="max-h-48 overflow-y-auto">
                 {ATTACH_FILES.map((name) => (
                   <button
                     key={name}
                     onClick={() => handlePickFile(name)}
-                    className={`w-full text-left px-3 py-2 text-xs hover:bg-blue-50 border-b last:border-0 flex items-center gap-2 transition-all ${hl("file-pick", name) ? pulse : ""}`}
+                    className={`w-full text-left px-3 py-2 text-xs hover:bg-blue-50 sim-dark:hover:bg-gray-700 border-b last:border-0 flex items-center gap-2 transition-all ${hl("file-pick", name) ? pulse : ""}`}
                   >
                     <span>{extIcon(name)}</span>
                     <span className="truncate">{name}</span>

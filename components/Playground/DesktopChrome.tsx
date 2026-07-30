@@ -67,9 +67,12 @@ export function DesktopMenuBar({
   onTogglePanel,
   highlight = null,
 }: MenuBarProps) {
+  // `sim-dark:`, not `dark:` — these follow the practice computer's own Dark Mode
+  // setting, not the learner's site theme. As `dark:` they lit up white-on-white
+  // whenever someone read the site in dark mode with the sim still light.
   const btn = (panel: StatusPanelId, extra = "") =>
-    `rounded px-1.5 py-1 transition-colors hover:bg-black/10 dark:hover:bg-white/15 ${
-      openPanel === panel ? "bg-black/10 dark:bg-white/15" : ""
+    `rounded px-1.5 py-1 transition-colors hover:bg-black/10 sim-dark:hover:bg-white/15 ${
+      openPanel === panel ? "bg-black/10 sim-dark:bg-white/15" : ""
     } ${highlight === panel ? "animate-ring-pulse" : ""} ${extra}`;
 
   return (

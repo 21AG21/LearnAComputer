@@ -260,8 +260,8 @@ export default function FileManager({
   return (
     <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="shrink-0 bg-gray-100 border-b-2 border-gray-300 px-3 py-2 flex items-center gap-2 flex-wrap">
-        <span className="font-bold text-gray-600 text-sm mr-1">{LOC_TITLE[location]}</span>
+      <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 px-3 py-2 flex items-center gap-2 flex-wrap">
+        <span className="font-bold text-gray-600 sim-dark:text-gray-300 text-sm mr-1">{LOC_TITLE[location]}</span>
 
         {!inTrash && (
           <>
@@ -295,16 +295,16 @@ export default function FileManager({
         )}
 
         <div
-          className={`ml-auto flex items-center bg-white border-2 rounded-md px-2 py-1 ${
-            hl("search") ? `border-yellow-400 ${pulse}` : "border-gray-400"
+          className={`ml-auto flex items-center bg-white sim-dark:bg-gray-700 border-2 rounded-md px-2 py-1 ${
+            hl("search") ? `border-yellow-400 ${pulse}` : "border-gray-400 sim-dark:border-gray-600"
           }`}
         >
-          <span className="text-gray-400 mr-1"><SearchIcon size={16} /></span>
+          <span className="text-gray-400 sim-dark:text-gray-300 mr-1"><SearchIcon size={16} /></span>
           <input
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search"
-            className="w-28 outline-none text-sm bg-transparent"
+            className="w-28 outline-none text-sm bg-transparent sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
           />
         </div>
       </div>
@@ -312,7 +312,7 @@ export default function FileManager({
       {/* Body: sidebar + file grid */}
       <div className="flex-1 min-h-0 flex">
         {/* Sidebar */}
-        <div className="w-40 shrink-0 bg-[#eef1f5] border-r-2 border-gray-300 py-2 overflow-auto">
+        <div className="w-40 shrink-0 bg-[#eef1f5] sim-dark:bg-gray-800 border-r-2 border-gray-300 sim-dark:border-gray-700 py-2 overflow-auto">
           {SIDEBAR.map((s) => {
             const droppable = s.id !== "home" && s.id !== "trash";
             const isDropOver = dropTarget === `sidebar-${s.id}`;
@@ -324,7 +324,7 @@ export default function FileManager({
                 onDragLeave={droppable ? () => { setDropTarget((p) => p === `sidebar-${s.id}` ? null : p); } : undefined}
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
-                  location === s.id ? "bg-blue-500 text-white" : "hover:bg-blue-100 text-gray-800"
+                  location === s.id ? "bg-blue-500 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
                 } ${hl("sidebar", s.label) ? `ring-4 ring-inset ring-yellow-400 ${pulse}` : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
@@ -338,7 +338,7 @@ export default function FileManager({
 
         {/* File grid */}
         <div
-          className="flex-1 min-h-0 overflow-auto p-4 bg-white relative"
+          className="flex-1 min-h-0 overflow-auto p-4 bg-white sim-dark:bg-gray-900 relative"
           tabIndex={keyboardNav ? 0 : undefined}
           onKeyDown={keyboardNav ? handleGridKeyDown : undefined}
         >
@@ -365,12 +365,12 @@ export default function FileManager({
                   onClick={() => handleItemClick(item)}
                   onDoubleClick={() => handleItemDoubleClick(item)}
                   className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all ${
-                    selected === item.id ? "bg-blue-100 border-blue-500" : "border-transparent hover:bg-gray-100"
+                    selected === item.id ? "bg-blue-100 sim-dark:bg-blue-900 border-blue-500 sim-dark:border-blue-400" : "border-transparent hover:bg-gray-100 sim-dark:hover:bg-gray-800"
                   } ${hl("item", item.name) ? `ring-4 ring-yellow-400 ${pulse} border-yellow-400` : ""} ${
                     isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                   } ${draggedFile === item.name ? "opacity-50" : ""}`}
                 >
-                  <span className="text-gray-500">{iconFor(item)}</span>
+                  <span className="text-gray-500 sim-dark:text-gray-300">{iconFor(item)}</span>
                   {isNaming ? (
                     <input
                       autoFocus
@@ -405,15 +405,15 @@ export default function FileManager({
         <FileModal onClose={handlePreviewClose}>
           {/* Same viewer the desktop opens, so a file looks identical in every unit. */}
           <div className="flex h-[26rem] w-[34rem] max-w-full flex-col">
-            <div className="flex shrink-0 items-center justify-between gap-3 border-b-2 border-gray-300 bg-gray-100 px-3 py-2">
-              <span className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                <span className="text-gray-500">{iconFor(preview, 18)}</span>
+            <div className="flex shrink-0 items-center justify-between gap-3 border-b-2 border-gray-300 sim-dark:border-gray-700 bg-gray-100 sim-dark:bg-gray-800 px-3 py-2">
+              <span className="flex items-center gap-2 text-sm font-bold text-gray-700 sim-dark:text-gray-200">
+                <span className="text-gray-500 sim-dark:text-gray-300">{iconFor(preview, 18)}</span>
                 {preview.name}
               </span>
               <button
                 onClick={handlePreviewClose}
                 aria-label={`Close ${preview.name}`}
-                className={`flex h-7 w-7 items-center justify-center rounded-md border-2 border-black bg-white text-sm font-bold hover:bg-gray-200 ${
+                className={`flex h-7 w-7 items-center justify-center rounded-md border-2 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 text-sm font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 ${
                   pendingPreviewClose ? `ring-4 ring-yellow-400 ${pulse}` : ""
                 }`}
               >
@@ -437,8 +437,8 @@ function ToolbarBtn({ label, onClick, disabled, highlight }: { label: string; on
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-3 py-1.5 rounded-md border-2 border-black font-semibold text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed ${
-        highlight ? "ring-4 ring-yellow-400 animate-pulse bg-yellow-50" : "hover:bg-gray-100"
+      className={`px-3 py-1.5 rounded-md border-2 border-black sim-dark:border-gray-500 font-semibold text-sm bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 disabled:opacity-30 disabled:cursor-not-allowed ${
+        highlight ? "ring-4 ring-yellow-400 animate-pulse bg-yellow-50 text-gray-900" : "hover:bg-gray-100 sim-dark:hover:bg-gray-600"
       }`}
     >
       {label}
@@ -454,7 +454,7 @@ export function FileModal({ children, onClose }: { children: React.ReactNode; on
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white border-4 border-black rounded-xl shadow-2xl animate-slide-down"
+        className="bg-white sim-dark:bg-gray-900 border-4 border-black sim-dark:border-gray-500 rounded-xl shadow-2xl animate-slide-down"
       >
         {children}
       </div>
@@ -484,7 +484,7 @@ export function SaveDialog({ stage, highlight, saveName, saveFolder, onSaveClick
       <FileModal>
         <div className="flex flex-col gap-3 p-6 w-80">
           <p className="text-sm font-bold uppercase text-gray-400">TextEdit — Untitled</p>
-          <div className="border-2 border-gray-300 rounded p-3 text-gray-700 h-24">Milk, eggs, bread, apples…</div>
+          <div className="border-2 border-gray-300 sim-dark:border-gray-700 rounded p-3 text-gray-700 sim-dark:text-gray-200 h-24">Milk, eggs, bread, apples…</div>
           <button
             onClick={onSaveClick}
             className={`self-end px-5 py-2 bg-blue-600 text-white font-bold rounded-lg border-2 border-black ${
@@ -502,24 +502,24 @@ export function SaveDialog({ stage, highlight, saveName, saveFolder, onSaveClick
     <FileModal>
       <div className="flex flex-col gap-3 p-6 w-96">
         <p className="text-lg font-black">Save As</p>
-        <label className="text-sm font-semibold text-gray-600">File name:</label>
+        <label className="text-sm font-semibold text-gray-600 sim-dark:text-gray-300">File name:</label>
         <input
           autoFocus
           value={saveName}
           onChange={(e) => onNameChange(e.target.value)}
           placeholder="Type a name"
-          className={`border-2 rounded px-3 py-2 outline-none ${
-            hl("save-name") ? `border-yellow-400 ${pulse}` : "border-gray-400"
+          className={`border-2 rounded px-3 py-2 outline-none sim-dark:bg-gray-800 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${
+            hl("save-name") ? `border-yellow-400 ${pulse}` : "border-gray-400 sim-dark:border-gray-600"
           }`}
         />
-        <label className="text-sm font-semibold text-gray-600">Where:</label>
+        <label className="text-sm font-semibold text-gray-600 sim-dark:text-gray-300">Where:</label>
         <div className="flex gap-2">
           {(["documents", "pictures", "downloads"] as Loc[]).map((loc) => (
             <button
               key={loc}
               onClick={() => onFolderSelect(loc)}
               className={`flex-1 px-2 py-2 rounded border-2 font-semibold text-sm ${
-                saveFolder === loc ? "bg-blue-500 text-white border-blue-700" : "bg-gray-100 border-gray-400"
+                saveFolder === loc ? "bg-blue-500 text-white border-blue-700" : "bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 border-gray-400 sim-dark:border-gray-600"
               } ${hl("save-folder", LOC_TITLE[loc]) ? pulse : ""}`}
             >
               <span className="inline-flex items-center gap-1"><FolderIcon size={14} /> {LOC_TITLE[loc]}</span>

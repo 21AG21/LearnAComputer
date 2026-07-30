@@ -17,10 +17,10 @@ interface AppWindowProps {
  *  generalized minimize/close controls on the right (matching every guided simulator). */
 export default function AppWindow({ title, icon, onClose, onMinimize, showHeader = true, children }: AppWindowProps) {
   return (
-    <div className="h-full w-full bg-white flex flex-col">
+    <div className="h-full w-full bg-white sim-dark:bg-gray-900 flex flex-col">
       {showHeader && (
-        <div className="shrink-0 bg-gray-100 border-b-2 border-gray-800 px-3 py-2 flex items-center gap-2">
-          <span className="text-xl font-bold text-gray-700 flex items-center gap-1.5 font-[var(--font-app-title)]">
+        <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-800 sim-dark:border-gray-600 px-3 py-2 flex items-center gap-2">
+          <span className="text-xl font-bold text-gray-700 sim-dark:text-gray-200 flex items-center gap-1.5 font-[var(--font-app-title)]">
             {icon && <span aria-hidden="true">{icon}</span>}
             {title}
           </span>
