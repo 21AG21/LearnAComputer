@@ -28,6 +28,7 @@ const NAV = [
   { href: "/lessons", label: "Lessons" },
   { href: "/playground", label: "Playground" },
   { href: "/certificate", label: "Certificates" },
+  { href: "/feedback", label: "Feedback" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -40,7 +41,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`flex h-screen flex-col bg-white text-gray-900 dark:bg-[#10151b] dark:text-gray-100 ${roboto.variable}`}
       >
-        <nav className="flex shrink-0 items-center gap-4 border-b border-gray-200 p-4 dark:border-gray-800">
+        {/* flex-wrap, not a fixed row: with five links the bar overran a 420px
+            phone and scrolled the whole page sideways (hostile-check caught it).
+            Wrapping keeps every link reachable and the body from scrolling. */}
+        <nav className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-gray-200 p-4 dark:border-gray-800">
           {NAV.map((item) => (
             <Link
               key={item.href}
