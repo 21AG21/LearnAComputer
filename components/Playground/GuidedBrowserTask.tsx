@@ -987,7 +987,10 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">
           <button onClick={zoomOut} aria-label="Zoom out" className="px-2 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700">−</button>
           <span className="px-2 border-x-2 border-gray-300 sim-dark:border-gray-700 font-semibold tabular-nums">{activeTab.zoom}%</span>
-          <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
+          {/* When the PDF viewer is open it sits in an overlay above the page, and this
+              toolbar zooms the page BEHIND it — so the ring belongs on the PDF's own +
+              (below), not here, or the learner zooms something they cannot see. */}
+          <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
         </div>
       </div>
 
@@ -1052,7 +1055,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
            */
           <div
             data-sim-paper={activePage.kind === "newtab" ? undefined : true}
-            style={{ fontSize: `${activeTab.zoom}%` }}
+            // Real browser zoom, not a percentage font-size: the page bodies below are
+            // built almost entirely from Tailwind text-* classes, and those are rem-based
+            // (root-relative), so a parent `font-size: 150%` scaled nothing a learner was
+            // told to read — the bus timetable stayed 12px while the control said 150%.
+            // CSS `zoom` scales the rendered box like a browser does, rem text included.
+            style={{ zoom: activeTab.zoom / 100 }}
             className={`p-6 ${activePage.kind === "newtab" ? "" : "min-h-full bg-white text-gray-900"}`}
           >
             {activePage.kind === "newtab" && (
@@ -1312,9 +1320,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b border-gray-300 sim-dark:border-gray-700 flex items-center justify-between px-4 py-1.5">
               <span className="text-xs font-semibold text-gray-600 sim-dark:text-gray-300">Page 1 of 2</span>
               <div className="flex items-center gap-1">
-                <button onClick={() => setPdfZoom(z => Math.max(z - 25, 50))} className="w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm">−</button>
+                <button onClick={() => setPdfZoom(z => Math.max(z - 25, 50))} aria-label="Zoom out" className="w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm">−</button>
                 <span className="text-xs font-semibold tabular-nums w-12 text-center">{pdfZoom}%</span>
-                <button onClick={() => setPdfZoom(z => Math.min(z + 25, 200))} className="w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm">+</button>
+                {/* This is the zoom control a learner viewing the PDF actually sees, so it
+                    both carries the zoom-in highlight and satisfies the step — the toolbar
+                    button above only zooms the page hidden behind this overlay. */}
+                <button onClick={() => { const nz = Math.min(pdfZoom + 25, 200); setPdfZoom(nz); if (nz >= 150) tryStep((s) => s.action === "zoom-in"); }} aria-label="Zoom in" className={`w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm ${hl("zoomin-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
               </div>
             </div>
             {/* Content */}
@@ -1322,7 +1333,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
               {/* The page itself: paper, and paper does not follow Dark Mode. The frame,
                   toolbar and tray around it do — same split a real PDF viewer makes.
                   Do not add `sim-dark:` colors in here; the ground stays white. */}
-              <div data-sim-paper className="bg-white shadow-md rounded p-6 mx-auto" style={{ fontSize: `${pdfZoom}%`, maxWidth: "520px" }}>
+              <div data-sim-paper className="bg-white shadow-md rounded p-6 mx-auto" style={{ zoom: pdfZoom / 100, maxWidth: "520px" }}>
                 <h1 className="text-xl font-black mb-0.5">Grandma&apos;s Classic Apple Pie</h1>
                 <p className="text-xs text-gray-500 mb-4 border-b border-gray-200 pb-3">Recipe Box — recipebox.example</p>
 

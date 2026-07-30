@@ -198,7 +198,7 @@ function PdfViewer({ item }: { item: Item }) {
         <div
           data-sim-paper
           className="bg-white shadow-md rounded p-6 mx-auto"
-          style={{ fontSize: `${zoom}%`, maxWidth: 480 }}
+          style={{ zoom: zoom / 100, maxWidth: 480 }}
         >
           <h1 className="text-xl font-black mb-4 border-b pb-3">{content.title}</h1>
           <div className="space-y-0.5 text-sm text-gray-800 leading-relaxed font-mono">
