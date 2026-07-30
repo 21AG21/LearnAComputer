@@ -218,6 +218,16 @@ used correctly; this one asks what a buyer finds who is hunting for a reason to
 say no — console errors, sideways scrolling, a page with no heading, a mistyped
 URL, a keyboard user with no visible focus. See `docs/HOSTILE_BUYER_AUDIT.md`.
 
+It also asserts, by **reading the files rather than fetching the routes**, that
+every page under `app/dev/` calls `notFound()` on `NODE_ENV === "production"`.
+`/dev/solve-check` auto-plays the whole course and `/dev/mount-check` lists every
+activity that throws; either one live is a screenshot a buyer never forgets. It
+has to be a static check because the harness runs against a *dev* server, where
+those pages are supposed to work — the failure being prevented is the fifth dev
+page, added later by someone who did not know the rule. All four are guarded
+today, and a real `next build` + `next start` was used to confirm they 404 in
+production while the real routes return 200.
+
 **`contrast-check` measures two ways, and the second one is the point.** Walking
 the ancestors for a solid `background-color` answers almost every text node on the
 site. It cannot answer the ones that sit on a photo: the homepage hero and the

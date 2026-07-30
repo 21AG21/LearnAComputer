@@ -56,6 +56,33 @@ const ROUTES = [
 const findings = [];
 const note = (route, severity, what) => findings.push({ route, severity, what });
 
+/**
+ * The maintenance harnesses must 404 in production.
+ *
+ * `/dev/solve-check` auto-plays the whole course; `/dev/mount-check` lists every
+ * activity that throws. Either one, reachable on the live site, is a screenshot a
+ * buyer takes and never forgets — an internal test rig with the product's name on
+ * it. Each page guards itself with `notFound()` on `NODE_ENV === "production"`,
+ * and every one of them has it today.
+ *
+ * This is checked by reading the files rather than by fetching the routes, because
+ * the harness runs against a *dev* server where those pages are supposed to work.
+ * The failure mode being prevented is the fifth dev page, added later by someone
+ * who did not know the rule — which no amount of browsing this server can catch.
+ */
+const devPages = fs
+  .readdirSync(path.join(ROOT, "app/dev"), { withFileTypes: true })
+  .filter((d) => d.isDirectory())
+  .map((d) => path.join("app/dev", d.name, "page.tsx"));
+
+for (const rel of devPages) {
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) continue;
+  if (!/NODE_ENV\s*===\s*["']production["']/.test(fs.readFileSync(abs, "utf8"))) {
+    note(`/${rel}`, "high", "dev-only harness page has no production guard — it would ship live");
+  }
+}
+
 const browser = await chromium.launch();
 
 async function sweep(route) {
