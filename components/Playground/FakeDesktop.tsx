@@ -292,7 +292,17 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       data-sim-desktop
       className={`h-full w-full flex flex-col overflow-hidden relative text-gray-900 sim-dark:text-gray-100 ${isDark ? "sim-dark bg-gray-900" : "bg-white"} ${theme.reduceMotion ? "reduce-motion" : ""}`}
       style={{
-        fontSize: `${theme.textScale / 100}em`,
+        // "Text Size" is supposed to enlarge the whole computer — the lesson
+        // promises "every menu, label and message grows together". A percentage
+        // font-size could not: the dock, the menu bar and every Tailwind `text-*`
+        // class are rem-based (root-relative) and ignore an ancestor's font-size,
+        // so they stayed put while only inherited text grew. CSS `zoom` scales the
+        // rendered box, rem and all; width/height are pre-divided by the same
+        // factor so the zoomed desktop still fills its frame exactly. At 100% both
+        // are the identity (zoom 1, size 100%), so no other lesson is affected.
+        zoom: theme.textScale / 100,
+        width: `${1e4 / theme.textScale}%`,
+        height: `${1e4 / theme.textScale}%`,
         fontWeight: theme.boldText ? 600 : 400,
         filter: themeFilter(theme),
         cursor: themeCursor(theme),

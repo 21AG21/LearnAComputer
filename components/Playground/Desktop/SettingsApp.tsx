@@ -115,8 +115,12 @@ export default function SettingsApp({
     onEmptyTrash?.();
   }
 
+  // Text Size and Bold Text are applied once, on the FakeDesktop root that wraps this
+  // app (via CSS zoom). Re-applying them here as an `em` font-size stacked a second
+  // scale on top — 140% rendered Settings at ~196% while the rest of the computer was
+  // at 140%.
   return (
-    <div className={`h-full flex ${bg} ${text} text-sm`} style={{ fontSize: `${theme.textScale / 100}em`, fontWeight: theme.boldText ? 600 : 400 }}>
+    <div className={`h-full flex ${bg} ${text} text-sm`}>
       {/* Sidebar */}
       <div className={`w-44 shrink-0 border-r ${sidebar} overflow-y-auto`}>
         <div className={`p-3 font-semibold text-base ${muted} select-none`} aria-hidden="true" />
