@@ -41,12 +41,12 @@ const STEPS: Step[] = [
     expectedFocus: "email",
   },
   {
-    instruction: "Press Tab twice to jump to the Submit button.",
+    instruction: "Press Tab to move forward to the Age field.",
     key: "Tab",
     expectedFocus: "age",
   },
   {
-    instruction: "Press Tab once more to land on Submit.",
+    instruction: "Press Tab once more to land on the Submit button.",
     key: "Tab",
     expectedFocus: "submit",
   },
