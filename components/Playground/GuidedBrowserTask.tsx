@@ -32,8 +32,7 @@ export type GuidedBrowserStep = {
     | "open-downloads"
     | "open-result"
     | "delete-download"
-    | "open-download"
-    | "tab-sequence";
+    | "open-download";
   url?: string;
   title?: string;
   query?: string;
@@ -52,7 +51,7 @@ interface GuidedBrowserTaskProps {
   onResult: (success: boolean, failMessage?: string) => void;
 }
 
-type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames" | "pickacolor"
+type PageId = "newtab" | "shop" | "google" | "wikipedia" | "weather" | "news" | "recipes" | "freegames"
   | "library" | "transit" | "garden" | "petnews" | "bank" | "bookshop" | "support";
 
 interface Page {
@@ -60,7 +59,7 @@ interface Page {
   url: string;
   secure: boolean;
   icon: ReactNode;
-  kind: "newtab" | "site" | "search" | "game";
+  kind: "newtab" | "site" | "search";
   body?: string;
   cookie?: boolean;
   popup?: boolean;
@@ -77,7 +76,6 @@ const PAGES: Record<PageId, Page> = {
   news: { title: "Daily News", url: "dailynews.example", secure: true, icon: <FileDocIcon size={16} />, kind: "site", body: "10 Easy Soup Recipes for a Cozy Winter — a warming article worth saving to read after dinner." },
   recipes: { title: "Recipe Box", url: "recipebox.example", secure: true, icon: <BookIcon size={16} />, kind: "site", body: "Grandma's Classic Apple Pie — the flakiest crust you'll ever make.", download: "ApplePieRecipe.pdf" },
   freegames: { title: "Free Games!!!", url: "freegames.example", secure: false, icon: <GlobeIcon size={16} />, kind: "site", body: "Play 1000s of FREE games now! No download needed!", popup: true, ads: true },
-  pickacolor: { title: "Pick a Color", url: "pickacolor.example", secure: true, icon: <GlobeIcon size={16} />, kind: "game" },
   library: { title: "City Library", url: "citylibrary.example", secure: true, icon: <BookClosedIcon size={16} />, kind: "site", body: "Search our catalog, reserve books, renew loans, and find upcoming events. Open Monday–Saturday, 9 am–6 pm. Over 80,000 titles available online." },
   transit: { title: "City Transit", url: "citytransit.example", secure: true, icon: <ClockIcon size={16} />, kind: "site", body: "Route 12 — Downtown to Airport: 7:00 am · 8:15 am · 9:30 am · 10:45 am · 12:00 pm · 1:15 pm · 2:30 pm · 3:45 pm · 5:00 pm · Last bus 10:00 pm. Tickets: Adult $2.50 · Senior/Student $1.25 · Children under 5 free." },
   garden: { title: "Gardening Tips", url: "gardeningtips.example", secure: true, icon: <GlobeIcon size={16} />, kind: "site", body: "How to Grow Tomatoes at Home — plant in full sun, water deeply twice a week, and stake tall varieties. Most common mistake: overwatering in cool weather. Check back daily for seasonal guides." },
@@ -99,8 +97,8 @@ for (const id of Object.keys(PAGES) as PageId[]) {
 // Every legitimate site is reachable from the new-tab page. A learner asked to put
 // "the bus timetable on screen" must be able to FIND citytransit.example, not recall
 // it — an assessment that hides a fictional domain tests memory, not browsing.
-// freegames (the scam site) and pickacolor (an activity page) stay off deliberately:
-// lessons navigate to those on purpose, and neither belongs in a list of favorites.
+// freegames (the scam site) stays off deliberately: lessons navigate to it on
+// purpose, and it does not belong in a list of favorites.
 const FAVORITES: PageId[] = [
   "shop", "google", "wikipedia", "weather", "news", "recipes",
   "library", "bookshop", "transit", "garden", "petnews", "bank", "support",
@@ -526,9 +524,6 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
   ),
 };
 
-const PICK_SEQ = ["red", "green", "blue", "green", "red", "blue", "green", "red", "blue", "red"] as const;
-type PickColor = (typeof PICK_SEQ)[number];
-
 function normUrl(raw: string): string {
   return raw.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
 }
@@ -574,9 +569,6 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const [cookieNudge, setCookieNudge] = useState(false);
   const [reloading, setReloading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [tabSeqPos, setTabSeqPos] = useState(0);
-  const [tabSeqWrong, setTabSeqWrong] = useState(false);
-  const [tabFocused, setTabFocused] = useState<PickColor>("red");
   const [pdfViewer, setPdfViewer] = useState<string | null>(null);
   const [pdfZoom, setPdfZoom] = useState(100);
   const [adNudge, setAdNudge] = useState(false);
@@ -885,19 +877,6 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
     }
   }
 
-  function handlePickColor(color: PickColor) {
-    if (tabSeqPos >= PICK_SEQ.length) return;
-    if (PICK_SEQ[tabSeqPos] === color) {
-      const next = tabSeqPos + 1;
-      setTabSeqPos(next);
-      setTabSeqWrong(false);
-      if (next >= PICK_SEQ.length) tryStep((s) => s.action === "tab-sequence");
-    } else {
-      setTabSeqWrong(true);
-      setTimeout(() => setTabSeqWrong(false), 2000);
-    }
-  }
-
   const showBookmarksBar = bookmarks.length > 0;
   const isBroken = brokenPages.has(activeTab.pageId);
 
@@ -1156,51 +1135,6 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                     </button>
                   </div>
                 )}
-              </div>
-            )}
-
-            {activePage.kind === "game" && activeTab.pageId === "pickacolor" && (
-              <div className="flex flex-col items-center gap-6 pt-4">
-                <div className="text-center">
-                  <h1 className="text-2xl font-black mb-1">Pick a Color</h1>
-                  <p className="text-gray-600 text-sm">Use <b>Tab</b> or <b>Shift+Tab</b> to move between the circles, then press <b>Enter</b> to select one.</p>
-                </div>
-                <div className="flex gap-10">
-                  {(["red", "green", "blue"] as PickColor[]).map((color) => {
-                    const bg = color === "red" ? "bg-red-500 hover:bg-red-600" : color === "green" ? "bg-green-500 hover:bg-green-600" : "bg-blue-500 hover:bg-blue-600";
-                    const focused = tabFocused === color;
-                    return (
-                      <button
-                        key={color}
-                        id={`btn-${color}`}
-                        tabIndex={0}
-                        onFocus={() => setTabFocused(color)}
-                        onClick={() => { setTabFocused(color); handlePickColor(color); }}
-                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handlePickColor(color); } }}
-                        aria-label={color}
-                        style={focused ? { outline: "4px solid #1d2733", outlineOffset: "3px" } : {}}
-                        className={`w-24 h-24 rounded-full transition-transform active:scale-95 ${bg}`}
-                      />
-                    );
-                  })}
-                </div>
-                <div className="text-center space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Sequence to complete</p>
-                  <div className="flex flex-wrap gap-1.5 justify-center max-w-xs">
-                    {PICK_SEQ.map((c, i) => {
-                      const done = i < tabSeqPos;
-                      const current = i === tabSeqPos;
-                      const dotColor = c === "red" ? (done ? "bg-red-200 text-red-400" : current ? "bg-red-500 text-white" : "bg-red-100 text-red-500") : c === "green" ? (done ? "bg-green-200 text-green-400" : current ? "bg-green-500 text-white" : "bg-green-100 text-green-600") : (done ? "bg-blue-200 text-blue-400" : current ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-600");
-                      return (
-                        <span key={i} className={`px-2 py-0.5 rounded-full text-xs font-semibold ${dotColor} ${current ? "scale-110 shadow" : ""} ${done ? "line-through opacity-50" : ""} transition-all`}>
-                          {c}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  {tabSeqWrong && <p className="text-red-700 sim-dark:text-red-400 font-semibold text-sm">Not that one — check the sequence above!</p>}
-                  {tabSeqPos >= PICK_SEQ.length && <p className="text-green-700 font-bold">Sequence complete!</p>}
-                </div>
               </div>
             )}
 

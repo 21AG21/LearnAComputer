@@ -604,7 +604,14 @@ function gesturesFor(step: AnyStep, el: HTMLElement, root: HTMLElement): Gesture
     const editor = root.querySelector<HTMLElement>("[contenteditable='true']") ?? el;
     out.push(() => {
       editor.focus();
-      key(editor, shortcut.k, { ctrlKey: true, metaKey: true, ...shortcut.mods });
+      // Dispatch the *real* key a browser would send: with Shift held, a letter
+      // arrives uppercased (`"Z"`, not `"z"`). The solver used to send a literal
+      // lowercase key regardless, which let a case-sensitivity bug in the redo
+      // checker pass here while stranding every human on the lesson's last step.
+      // Send what a keyboard actually sends, so the harness feels what a learner
+      // feels.
+      const k = shortcut.mods?.shiftKey ? shortcut.k.toUpperCase() : shortcut.k;
+      key(editor, k, { ctrlKey: true, metaKey: true, ...shortcut.mods });
     });
   }
 
@@ -743,7 +750,11 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   const shortcut = SHORTCUT_KEYS[action];
   if (shortcut) {
     const editor = root.querySelector<HTMLElement>("[contenteditable='true']");
-    if (editor) out.push(() => { editor.focus(); key(editor, shortcut.k, { ctrlKey: true, metaKey: true, ...shortcut.mods }); });
+    if (editor) out.push(() => {
+      editor.focus();
+      const k = shortcut.mods?.shiftKey ? shortcut.k.toUpperCase() : shortcut.k;
+      key(editor, k, { ctrlKey: true, metaKey: true, ...shortcut.mods });
+    });
   }
 
   // The action's own words name its control more often than not: `new-folder` is
@@ -1346,28 +1357,6 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
 }
 
 /**
- * The pick-a-color page: three focusable circles, a ten-item sequence, and the
- * current item marked in the tracker. A learner reads which color is next and
- * picks it; so does the solver — the tracker chip for the current item carries a
- * scale/shadow emphasis and its text is the color's name.
- */
-async function solveTabSequence(root: HTMLElement, isDone: () => boolean): Promise<boolean> {
-  for (let i = 0; i < 14; i++) {
-    if (isDone()) return true;
-    const current = Array.from(root.querySelectorAll<HTMLElement>("span[class*='scale-110']")).find((el) =>
-      ["red", "green", "blue"].includes(textOf(el)),
-    );
-    if (!current) return isDone();
-    const color = textOf(current);
-    const btn = root.querySelector<HTMLElement>(`button[aria-label='${color}']`);
-    if (!btn || !isReachable(btn)) return false;
-    click(btn);
-    await settle();
-  }
-  return isDone();
-}
-
-/**
  * `move` is the one step whose two halves are a drag. Both sims that use it also
  * accept click-source-then-click-destination, which the ring path already covers;
  * this is the fallback when the destination never lights up.
@@ -1540,18 +1529,6 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
       trace(
         `iter step=${step.action ?? "?"}${step.target ? `:${step.target}` : ""} prog=${before.progress} objdone=${before.objdone} spin=${spinning} addr="${addr.slice(0, 28)}" results=${results} ring=[${before.ring.slice(0, 48)}]`,
       );
-    }
-
-    // The color-sequence game runs on its own loop: the spin guard would cut off
-    // a sequence that legitimately takes ten picks.
-    if (step.action === "tab-sequence") {
-      const before2 = snapshot(root);
-      const ok = await solveTabSequence(root, () => snapshot(root).progress !== before2.progress || snapshot(root).done);
-      await settle();
-      if (ok || changed(before, snapshot(root))) {
-        spinning = 0;
-        continue;
-      }
     }
 
     // A learner whose cursor is already blinking in a box types in the box. They

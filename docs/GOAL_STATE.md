@@ -38,7 +38,7 @@ number, because everything outside it is assumption wearing the same clothes.
 
 | Proven every run | How |
 |---|---|
-| 146 simulated activities playable to the end | `solve-check` |
+| 145 simulated activities playable to the end | `solve-check` |
 | 18 real-world missions, on a real machine | `mission-check` |
 | Every page a buyer might open, incl. all ~40 module pages | `hostile-check` |
 | The sales demo path, stop by stop | `demo-check` |
@@ -72,7 +72,7 @@ Ranked, current worst first. Fixing the top item promotes the next.
    docs.google.com address. Module is now 7 hands-on / 2 walkthroughs.
    **Closed 2026-07-28:** all four are now played end to end by
    `npm run mission-check`, so the conversion is proven, not assumed.
-2. **A lesson failing mid-demo.** Mitigated by solve-check (146 simulated
+2. **A lesson failing mid-demo.** Mitigated by solve-check (145 simulated
    activities), mission-check (18 real-world missions) and the error boundary.
    The residual risk is the 20 stepless types — reflex games and real-trackpad
    gestures — which only mount-check covers, plus the intermittent below.
@@ -199,7 +199,7 @@ report 132/132 off a run that had other browser work competing with it.
 
 ## Handoff for the next session
 
-**Run these first** (dev server on :3000): `solve-check` (146/146),
+**Run these first** (dev server on :3000): `solve-check` (145/145),
 `mission-check` (18/18), `hostile-check`, `recovery-check`, `demo-check`,
 `desktop-check`, then `check-lessons.py`, `check-actions.py`,
 `spelling-check.py`. Nine gates; all green as of 2026-07-28.

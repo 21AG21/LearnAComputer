@@ -101,16 +101,23 @@ type KbEvent = { metaKey: boolean; ctrlKey: boolean; shiftKey: boolean; key: str
 
 export function checkNotesShortcut(action: string, e: KbEvent): boolean {
   const mod = e.metaKey || e.ctrlKey;
+  // Hold Shift and a browser reports the *character*, not the base key: Shift+Z
+  // arrives as `e.key === "Z"`, not `"z"`. So redo (Ctrl+Shift+Z) compared against
+  // a lowercase "z" never matched, and the last step of the Undo-and-Redo lesson
+  // could not be finished. The solver dispatched a literal lowercase "z", so
+  // solve-check stayed green while every real learner was stuck. Lowercase the key
+  // once and every shortcut is immune to Shift and Caps Lock alike.
+  const k = e.key.toLowerCase();
   switch (action) {
-    case "bold":       return mod && e.key === "b";
-    case "italic":     return mod && e.key === "i";
-    case "underline":  return mod && e.key === "u";
-    case "select-all": return mod && e.key === "a";
-    case "copy":       return mod && e.key === "c";
-    case "cut":        return mod && e.key === "x";
-    case "paste":      return mod && e.key === "v";
-    case "undo":       return mod && !e.shiftKey && e.key === "z";
-    case "redo":       return mod && e.shiftKey && e.key === "z";
+    case "bold":       return mod && k === "b";
+    case "italic":     return mod && k === "i";
+    case "underline":  return mod && k === "u";
+    case "select-all": return mod && k === "a";
+    case "copy":       return mod && k === "c";
+    case "cut":        return mod && k === "x";
+    case "paste":      return mod && k === "v";
+    case "undo":       return mod && !e.shiftKey && k === "z";
+    case "redo":       return mod && e.shiftKey && k === "z";
     default:           return false;
   }
 }

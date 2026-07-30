@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FolderIcon, SaveIcon, SearchIcon } from "../Icons";
 import { iconFor, Item, Loc, LOC_TITLE, makeItems, SIDEBAR } from "./filesData";
 import FileViewer from "./FileViewer";
@@ -74,12 +74,40 @@ export default function FileManager({
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [draggedFile, setDraggedFile] = useState<string | null>(null);
   const [kbNudge, setKbNudge]       = useState<string | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!kbNudge) return;
     const t = setTimeout(() => setKbNudge(null), 2000);
     return () => clearTimeout(t);
   }, [kbNudge]);
+
+  /**
+   * In keyboard-only lessons the arrow keys have to land somewhere, and clicking
+   * to focus the grid is exactly what those lessons forbid (a click gets the "use
+   * the arrow keys" nudge). So the grid focuses itself on mount, otherwise a
+   * learner presses Down, nothing happens, and the lesson looks broken. The solver
+   * only ever passed because it calls `.focus()` itself; a human never got that.
+   *
+   * The refocus only fires when focus falls to *nothing* — `relatedTarget` null,
+   * which is what happens when a blocked click lets focus drop to `<body>`. When
+   * focus moves to a real control (the file-preview's Close button, a text box in
+   * an opened file) it is left alone; yanking it back would make that dialog
+   * impossible to use.
+   *
+   * `preventScroll` so grabbing focus does not jerk the lesson pane around.
+   */
+  useEffect(() => {
+    if (!keyboardNav) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    grid.focus({ preventScroll: true });
+    const onFocusOut = (e: FocusEvent) => {
+      if (e.relatedTarget === null) grid.focus({ preventScroll: true });
+    };
+    grid.addEventListener("focusout", onFocusOut);
+    return () => grid.removeEventListener("focusout", onFocusOut);
+  }, [keyboardNav]);
 
   // Notify parent whenever items change so it can auto-complete precondition-already-met steps.
   useEffect(() => { onItemsChange?.(items); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -338,7 +366,8 @@ export default function FileManager({
 
         {/* File grid */}
         <div
-          className="flex-1 min-h-0 overflow-auto p-4 bg-white sim-dark:bg-gray-900 relative"
+          ref={gridRef}
+          className="flex-1 min-h-0 overflow-auto p-4 bg-white sim-dark:bg-gray-900 relative outline-none"
           tabIndex={keyboardNav ? 0 : undefined}
           onKeyDown={keyboardNav ? handleGridKeyDown : undefined}
         >

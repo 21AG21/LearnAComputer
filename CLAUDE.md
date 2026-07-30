@@ -14,7 +14,7 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 npm run dev          # dev server on :3000
 # /dev/mount-check   # dev-only page: mounts every lesson's activity and reports throws
 # /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
-npm run solve-check  # headless: PLAYS all 146 playable activities to the end (canonical)
+npm run solve-check  # headless: PLAYS all 145 playable activities to the end (canonical)
 npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
@@ -41,7 +41,7 @@ All the browser checks need `npm run dev` running on :3000 first.
 After touching any sim component or lesson steps, run **solve-check as well as
 mount-check** — mounting proves an activity renders; solving proves a learner can
 finish it, and the two unfinishable-lesson bugs were invisible to everything else.
-`solve-check` is currently green at **146/146**; keep it there. It grew from 132 on 2026-07-29, when
+`solve-check` is currently green at **145/145**; keep it there. It grew from 132 on 2026-07-29, when
 `solveStepless` taught it every activity type that has no step list. **Nothing
 scriptable is left unplayed** — only six reflex and trackpad activities a script
 genuinely cannot perform.
@@ -489,7 +489,6 @@ A self-contained simulated browser. The JSON provides a `goal` and `steps`; each
 | `petnews` | `petnews.example` | — | Pet news |
 | `bank` | `firstbank.example` | secure | Bank — secure-site lessons |
 | `bookshop` | `bookshop.example` | ads | Second shop — history lessons |
-| `pickacolor` | `pickacolor.example` | — | Tab/keyboard navigation activity |
 
 Entering an unknown URL shows a friendly "not in the practice browser" fallback page. Clicking an ad in `mode: "guided"` shows a nudge banner; in `mode: "assessment"` it reports failure.
 
@@ -517,8 +516,7 @@ Entering an unknown URL shows a friendly "not in the practice browser" fallback 
     { "say": "Decline the cookie banner.", "action": "cookie-decline" },
     { "say": "Close the scam popup.", "action": "close-popup" },
     { "say": "Reload the page.", "action": "reload" },
-    { "say": "Zoom in twice.", "action": "zoom-in" },
-    { "say": "Use Tab and Enter to complete the color sequence.", "action": "tab-sequence", "page": "pickacolor.example" }
+    { "say": "Zoom in twice.", "action": "zoom-in" }
   ]
 }
 ```
@@ -527,7 +525,11 @@ Entering an unknown URL shows a friendly "not in the practice browser" fallback 
 
 **`open-download` action**: requires `file` field (filename string, e.g. `"ApplePieRecipe.pdf"`). Only PDF files show an Open button in the Downloads panel. Clicking it opens an in-browser PDF viewer window showing the Apple Pie Recipe (title, ingredients, numbered steps, page 1 of 2, working zoom controls). The step completes when the matching file is opened. Must be preceded by `download` and `open-downloads` steps.
 
-**`tab-sequence` action**: requires the learner to navigate to `pickacolor.example` first (preceding `navigate` step). The page shows three focusable color circles (red, green, blue) and a 10-item sequence tracker. The learner uses Tab/Shift+Tab to move focus and Enter (or click) to select. Wrong picks show a nudge; completing all 10 items in order completes the step. Only `pickacolor.example` supports this action.
+Keyboard-navigation practice lives in the **`keyboard-nav-game`** type
+(`KeyboardNavTask`), a real Tab-through-a-Contact-Form activity — not in the
+browser. An earlier `pickacolor.example` page with a `tab-sequence` action taught
+the same skill on colored circles; it was removed because the form is the honest
+version and duplicating the lesson only split it.
 
 #### `guided-messaging` schema
 

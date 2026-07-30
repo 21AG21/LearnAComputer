@@ -18,7 +18,7 @@ every unit ends with a checked task on the learner's **own** machine.
 **The three differentiators (memorize these):**
 
 1. **No quizzes, ever.** Quizzes test recognition; this course builds skill.
-   198 lessons, and the learner is clicking, typing, and dragging in nearly
+   197 lessons, and the learner is clicking, typing, and dragging in nearly
    every one. The simulated computer cannot be broken, so the fear that stops
    this audience — "what if I press the wrong thing?" — is engineered out.
 2. **It checks real skills on the real machine.** Every unit ends with a
@@ -37,7 +37,7 @@ every unit ends with a checked task on the learner's **own** machine.
 internet → messaging and video calls → email → photos → apps → settings →
 online safety → troubleshooting → everyday life (shopping, documents,
 printing) → making the computer easier to use (accessibility) → a full
-final-assessment "trip" capstone. 198 lessons, 14 units.
+final-assessment "trip" capstone. 197 lessons, 14 units.
 
 ## 2. Who buys it and why
 
@@ -236,14 +236,14 @@ support — say so, and give them your email.
 
 ## 8. Ground truth — never claim what isn't shipped
 
-Shipped and demo-safe: 198 hands-on lessons across 14 units · guided
+Shipped and demo-safe: 197 hands-on lessons across 14 units · guided
 highlighting everywhere · assessments with hints · real-world missions with
 in-browser verification · printable per-unit and full-course certificates
 (`/certificate`) ·
 a practice desktop that holds several windows at once (`/playground`) · dark
 mode · crash containment (no blank screens) · locked-down machine tolerance ·
-grade-5 reading level, enforced at build · **164 of the 170 activities
-mechanically proven finishable, re-proven on every change** — 146 simulated
+grade-5 reading level, enforced at build · **163 of the 169 activities
+mechanically proven finishable, re-proven on every change** — 145 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
 pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to
