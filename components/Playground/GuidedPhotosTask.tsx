@@ -385,7 +385,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               />
               <button
                 onClick={handleConfirmAlbum}
-                className={`w-full py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 ${hl("new-album-confirm") ? pulse : ""}`}
+                className={`w-full py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 ${hl("new-album-confirm") ? pulse : ""}`}
               >
                 Add
               </button>
@@ -408,7 +408,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               <div className="p-3 border-b flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => { setSelectedPhoto(null); resetEdits(); }}
-                  className={`text-gray-400 hover:text-gray-600 mr-1 rounded px-1 ${hl("back-btn") ? pulse : ""}`}
+                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 mr-1 rounded px-1 ${hl("back-btn") ? pulse : ""}`}
                 >
                   ← Back
                 </button>
@@ -471,7 +471,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   {!showMeConfirmed && (
                     <button
                       onClick={handleShowMe}
-                      className="shrink-0 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
+                      className="shrink-0 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium"
                     >
                       Show me
                     </button>
@@ -497,7 +497,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={p}
                       onClick={() => handleCropPreset(p)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("crop-preset", p) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-600 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("crop-preset", p) ? pulse : ""}`}
                     >
                       <span className="inline-flex items-center gap-1">{p === "Original" ? <CropIcon size={12} /> : p === "Square" ? <SquareIcon size={12} /> : <RectangleIcon size={12} />} {p}</span>
                     </button>
@@ -526,7 +526,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={f}
                       onClick={() => handleApplyFilter(f)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-500 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("filter-btn", f) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-600 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("filter-btn", f) ? pulse : ""}`}
                     >
                       {f}
                     </button>
@@ -546,14 +546,14 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center truncate w-full">{photo.label}</p>
                     <button
                       onClick={() => handleRecover(photo)}
-                      className={`text-xs px-2 py-0.5 bg-blue-500 text-white rounded hover:bg-blue-600 ${hl("recover-btn", photo.label) ? pulse : ""}`}
+                      className={`text-xs px-2 py-0.5 bg-blue-600 text-white rounded hover:bg-blue-700 ${hl("recover-btn", photo.label) ? pulse : ""}`}
                     >
                       Recover
                     </button>
                   </div>
                 ))}
                 {photos.filter((p) => p.deleted).length === 0 && (
-                  <div className="col-span-3 flex items-center justify-center h-24 text-gray-400 text-sm">Empty</div>
+                  <div className="col-span-3 flex items-center justify-center h-24 text-gray-500 sim-dark:text-gray-400 text-sm">Empty</div>
                 )}
               </div>
             </div>
@@ -571,7 +571,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   </button>
                 ))}
                 {getVisiblePhotos().length === 0 && (
-                  <div className="col-span-3 flex items-center justify-center h-24 text-gray-400 text-sm">No photos</div>
+                  <div className="col-span-3 flex items-center justify-center h-24 text-gray-500 sim-dark:text-gray-400 text-sm">No photos</div>
                 )}
               </div>
             </div>

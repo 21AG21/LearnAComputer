@@ -37,7 +37,13 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             Back to the lessons
           </Link>
         </div>
-        {error.digest && <p className="mt-6 font-mono text-xs text-gray-400">Reference: {error.digest}</p>}
+        {/* gray-500, not gray-400: this is the string a learner reads out to whoever
+            is helping them, and gray-400 on white is 2.54:1. No check reaches this
+            page — `contrast-check` cannot route to /error — so it is fixed by the
+            same rule the sweep applied everywhere it *could* reach. */}
+        {error.digest && (
+          <p className="mt-6 font-mono text-xs text-gray-500 dark:text-gray-400">Reference: {error.digest}</p>
+        )}
       </div>
     </main>
   );

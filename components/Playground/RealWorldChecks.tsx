@@ -25,7 +25,7 @@ function Readout({ label, value, good }: { label: string; value: string; good?: 
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-gray-100 py-2 last:border-0">
       <span className="text-sm text-gray-500">{label}</span>
-      <span className={`font-mono text-sm font-semibold tabular-nums ${good ? "text-green-600" : "text-gray-900"}`}>
+      <span className={`font-mono text-sm font-semibold tabular-nums ${good ? "text-green-700" : "text-gray-900"}`}>
         {value}
       </span>
     </div>
@@ -251,7 +251,7 @@ export function FileCheck({ step, onPass }: CheckProps) {
 
       {facts && (
         <div className="mt-5 rounded-lg border border-gray-200 p-4">
-          <p className="mb-1 text-xs font-bold uppercase tracking-widest text-gray-400">What this file really is</p>
+          <p className="mb-1 text-xs font-bold uppercase tracking-widest text-gray-500 sim-dark:text-gray-400">What this file really is</p>
           {facts.map(([k, v]) => (
             <Readout key={k} label={k} value={v} />
           ))}

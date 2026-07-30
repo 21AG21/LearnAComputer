@@ -82,7 +82,7 @@ export default function RealWorldMission({ goal, download, steps, onResult }: Re
               <li
                 key={i}
                 className={`flex gap-2 rounded px-2 py-1.5 text-sm leading-snug ${
-                  isNow ? "bg-white font-semibold text-gray-900 shadow-sm" : isDone ? "text-green-700" : "text-gray-400"
+                  isNow ? "bg-white font-semibold text-gray-900 shadow-sm" : isDone ? "text-green-700" : "text-gray-500 sim-dark:text-gray-400"
                 }`}
               >
                 <span className="mt-0.5 w-4 shrink-0 text-center">

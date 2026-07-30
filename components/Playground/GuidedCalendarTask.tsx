@@ -197,7 +197,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
               <button
                 key={v}
                 onClick={() => handleSwitchView(v)}
-                className={`px-2 py-2 text-xs rounded-lg text-left capitalize transition-all ${view === v ? "bg-blue-500 text-white" : "hover:bg-gray-100 sim-dark:hover:bg-gray-700 text-gray-600 sim-dark:text-gray-300"} ${hl("view-btn", v) ? pulse : ""}`}
+                className={`px-2 py-2 text-xs rounded-lg text-left capitalize transition-all ${view === v ? "bg-blue-600 text-white" : "hover:bg-gray-100 sim-dark:hover:bg-gray-700 text-gray-600 sim-dark:text-gray-300"} ${hl("view-btn", v) ? pulse : ""}`}
               >
                 <span className="inline-flex items-center gap-1">{v === "month" ? <CalendarIcon size={12} /> : v === "day" ? <CalendarIcon size={12} /> : <CheckIcon size={12} />} {v === "reminders" ? "Reminders" : v.charAt(0).toUpperCase() + v.slice(1)}</span>
               </button>
@@ -221,14 +221,14 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
           {view !== "reminders" ? (
             <button
               onClick={handleCreateEvent}
-              className={`mx-2 mt-2 px-2 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-all ${hl("new-event-btn") ? pulse : ""}`}
+              className={`mx-2 mt-2 px-2 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-all ${hl("new-event-btn") ? pulse : ""}`}
             >
               + New Event
             </button>
           ) : (
             <button
               onClick={handleCreateReminder}
-              className={`mx-2 mt-2 px-2 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-all ${hl("new-reminder-btn") ? pulse : ""}`}
+              className={`mx-2 mt-2 px-2 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-all ${hl("new-reminder-btn") ? pulse : ""}`}
             >
               + New Reminder
             </button>
@@ -274,7 +274,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                 <div className="flex gap-2">
                   <button
                     onClick={handleSaveEvent}
-                    className={`flex-1 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 ${hl("save-event-btn") ? pulse : ""}`}
+                    className={`flex-1 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 ${hl("save-event-btn") ? pulse : ""}`}
                   >
                     Save
                   </button>
@@ -317,7 +317,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
               <div className="grid grid-cols-7 px-2 pb-1">
                 {/* Three letters, not one — "T" and "S" each stood for two different days. */}
                 {WEEKDAYS.map((d) => (
-                  <div key={d} className="text-center text-xs text-gray-400 font-medium py-1">{d.slice(0, 3)}</div>
+                  <div key={d} className="text-center text-xs text-gray-500 sim-dark:text-gray-400 font-medium py-1">{d.slice(0, 3)}</div>
                 ))}
               </div>
               {/* Calendar grid */}
@@ -332,7 +332,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                       key={day}
                       onClick={() => handleSelectDay(day)}
                       className={`aspect-square flex flex-col items-center justify-start pt-1 rounded-lg text-xs transition-all hover:bg-blue-50 ${
-                        isSelected ? "bg-blue-500 text-white" : isToday ? "bg-blue-100 text-gray-900 font-bold" : ""
+                        isSelected ? "bg-blue-600 text-white" : isToday ? "bg-blue-100 text-gray-900 font-bold" : ""
                       } ${hl("day-cell", String(day)) ? pulse : ""}`}
                     >
                       <span>{day}</span>
@@ -348,12 +348,12 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                 <div className="border-t px-3 py-2">
                   <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1">July {selectedDay}</p>
                   {dayEvents(selectedDay).length === 0 ? (
-                    <p className="text-xs text-gray-400">No events</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400">No events</p>
                   ) : dayEvents(selectedDay).map((e) => (
                     <div key={e.id} className="flex items-center gap-2 py-1">
                       <span className={`w-2 h-2 rounded-full ${e.calendar === "Personal" ? "bg-blue-500" : "bg-green-500"}`} />
                       <span className="text-xs font-medium">{e.title}</span>
-                      <span className="text-xs text-gray-400">{e.time}</span>
+                      <span className="text-xs text-gray-500 sim-dark:text-gray-400">{e.time}</span>
                     </div>
                   ))}
                 </div>
@@ -369,9 +369,9 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                 const ev = events.find((e) => e.day === 18 && e.time === time && activeCalendars.includes(e.calendar));
                 return (
                   <div key={time} className="flex gap-2 border-t py-1.5 min-h-[36px]">
-                    <span className="text-xs text-gray-400 w-14 flex-shrink-0">{time}</span>
+                    <span className="text-xs text-gray-500 sim-dark:text-gray-400 w-14 flex-shrink-0">{time}</span>
                     {ev && (
-                      <div className={`flex-1 px-2 py-0.5 rounded text-xs text-white ${ev.calendar === "Personal" ? "bg-blue-500" : "bg-green-500"}`}>{ev.title}</div>
+                      <div className={`flex-1 px-2 py-0.5 rounded text-xs text-white ${ev.calendar === "Personal" ? "bg-blue-600" : "bg-green-500"}`}>{ev.title}</div>
                     )}
                   </div>
                 );
@@ -392,11 +392,11 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                     >
                       {r.done && <span className="text-white text-xs">✓</span>}
                     </button>
-                    <span className={`text-sm ${r.done ? "line-through text-gray-400" : ""}`}>{r.text}</span>
+                    <span className={`text-sm ${r.done ? "line-through text-gray-500 sim-dark:text-gray-400" : ""}`}>{r.text}</span>
                   </div>
                 ))}
                 {reminders.length === 0 && (
-                  <p className="text-sm text-gray-400 text-center py-8">No reminders</p>
+                  <p className="text-sm text-gray-500 sim-dark:text-gray-400 text-center py-8">No reminders</p>
                 )}
               </div>
             </div>

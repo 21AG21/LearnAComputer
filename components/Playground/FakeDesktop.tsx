@@ -285,6 +285,11 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
      * there; it just stops the sim borrowing a color from outside itself.
      */
     <div
+      // Lets `simdark-check` scope to the desktop in *light* mode, where there is
+      // no `.sim-dark` class to find. Without it the light pass had nothing to
+      // anchor to, and the light pass is the only contrast measurement that reaches
+      // inside the simulator at all.
+      data-sim-desktop
       className={`h-full w-full flex flex-col overflow-hidden relative text-gray-900 sim-dark:text-gray-100 ${isDark ? "sim-dark bg-gray-900" : "bg-white"} ${theme.reduceMotion ? "reduce-motion" : ""}`}
       style={{
         fontSize: `${theme.textScale / 100}em`,

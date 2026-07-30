@@ -71,7 +71,7 @@ export default function DragSortTask({ instructions, categories, items, onResult
           </button>
         ))}
         {unplaced.length === 0 && (
-          <p className="text-gray-400 italic text-base self-center">All items placed!</p>
+          <p className="text-gray-500 sim-dark:text-gray-400 italic text-base self-center">All items placed!</p>
         )}
       </div>
 

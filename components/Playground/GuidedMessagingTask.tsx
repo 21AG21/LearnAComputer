@@ -527,8 +527,8 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   disabled={groupPicks.length < 1}
                   className={`w-full py-2 rounded-lg text-sm font-semibold transition-all ${
                     groupPicks.length > 0
-                      ? "bg-blue-500 text-white hover:bg-blue-600"
-                      : "bg-gray-200 sim-dark:bg-gray-700 text-gray-400 cursor-not-allowed"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-gray-200 sim-dark:bg-gray-700 text-gray-500 sim-dark:text-gray-400 cursor-not-allowed"
                   } ${hl("start-chat-btn") ? pulse : ""}`}
                 >
                   Start Chat
@@ -644,7 +644,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       )}
                       <div className={`px-4 py-2 rounded-2xl text-sm ${
                         msg.from === "me"
-                          ? "bg-blue-500 text-white rounded-br-md"
+                          ? "bg-blue-600 text-white rounded-br-md"
                           : "bg-gray-200 sim-dark:bg-gray-700 text-gray-900 sim-dark:text-gray-100 rounded-bl-md"
                       }`}>
                         {msg.text}
@@ -695,7 +695,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 />
                 <button
                   onClick={handleGroupSend}
-                  className={`px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-all ${
+                  className={`px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all ${
                     hl("group-send-btn") ? pulse : ""
                   }`}
                 >
@@ -738,7 +738,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       onPointerLeave={handleReactionPointerUp}
                       className={`px-4 py-2 rounded-2xl text-sm select-none transition-all ${
                         msg.from === "me"
-                          ? "bg-blue-500 text-white rounded-br-md"
+                          ? "bg-blue-600 text-white rounded-br-md"
                           : "bg-gray-200 sim-dark:bg-gray-700 text-gray-900 sim-dark:text-gray-100 rounded-bl-md cursor-pointer"
                       } ${hl("message-bubble") && msg.from === "contact" && i === lastContactIdx ? pulse : ""}`}
                     >
@@ -803,21 +803,21 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-500 sim-dark:text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg>
                       Files
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-500 sim-dark:text-gray-400"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
                       Camera
                     </button>
                     <button
                       onClick={() => handleAttachOtherRow()}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-400"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 sim-dark:hover:bg-gray-700 text-gray-500 sim-dark:text-gray-400"
                     >
                       <MicIcon className="w-5 h-5" />
                       Voice memo
@@ -885,7 +885,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 />
                 <button
                   onClick={handleSend}
-                  className={`px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-all ${
+                  className={`px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all ${
                     hl("send-btn") ? pulse : ""
                   }`}
                 >
@@ -895,7 +895,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
             </>
           ) : (
             /* Empty state */
-            <div className="flex-1 flex items-center justify-center text-gray-400">
+            <div className="flex-1 flex items-center justify-center text-gray-500 sim-dark:text-gray-400">
               <p>Select a contact to start chatting</p>
             </div>
           )}

@@ -299,7 +299,7 @@ export default function FileManager({
             hl("search") ? `border-yellow-400 ${pulse}` : "border-gray-400 sim-dark:border-gray-600"
           }`}
         >
-          <span className="text-gray-400 sim-dark:text-gray-300 mr-1"><SearchIcon size={16} /></span>
+          <span className="text-gray-500 sim-dark:text-gray-400 sim-dark:text-gray-300 mr-1"><SearchIcon size={16} /></span>
           <input
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -324,7 +324,7 @@ export default function FileManager({
                 onDragLeave={droppable ? () => { setDropTarget((p) => p === `sidebar-${s.id}` ? null : p); } : undefined}
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
-                  location === s.id ? "bg-blue-500 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
+                  location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
                 } ${hl("sidebar", s.label) ? `ring-4 ring-inset ring-yellow-400 ${pulse}` : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
@@ -343,7 +343,7 @@ export default function FileManager({
           onKeyDown={keyboardNav ? handleGridKeyDown : undefined}
         >
           {visible.length === 0 && (
-            <p className="text-gray-400 text-center mt-10 text-lg">
+            <p className="text-gray-500 sim-dark:text-gray-400 text-center mt-10 text-lg">
               {inTrash ? "The Trash is empty." : search ? "No files match your search." : "This folder is empty."}
             </p>
           )}
@@ -483,7 +483,7 @@ export function SaveDialog({ stage, highlight, saveName, saveFolder, onSaveClick
     return (
       <FileModal>
         <div className="flex flex-col gap-3 p-6 w-80">
-          <p className="text-sm font-bold uppercase text-gray-400">TextEdit — Untitled</p>
+          <p className="text-sm font-bold uppercase text-gray-500 sim-dark:text-gray-400">TextEdit — Untitled</p>
           <div className="border-2 border-gray-300 sim-dark:border-gray-700 rounded p-3 text-gray-700 sim-dark:text-gray-200 h-24">Milk, eggs, bread, apples…</div>
           <button
             onClick={onSaveClick}
@@ -519,7 +519,7 @@ export function SaveDialog({ stage, highlight, saveName, saveFolder, onSaveClick
               key={loc}
               onClick={() => onFolderSelect(loc)}
               className={`flex-1 px-2 py-2 rounded border-2 font-semibold text-sm ${
-                saveFolder === loc ? "bg-blue-500 text-white border-blue-700" : "bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 border-gray-400 sim-dark:border-gray-600"
+                saveFolder === loc ? "bg-blue-600 text-white border-blue-700" : "bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 border-gray-400 sim-dark:border-gray-600"
               } ${hl("save-folder", LOC_TITLE[loc]) ? pulse : ""}`}
             >
               <span className="inline-flex items-center gap-1"><FolderIcon size={14} /> {LOC_TITLE[loc]}</span>

@@ -165,7 +165,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                 </span>
                 <button
                   onClick={handleClosePanel}
-                  className={`text-gray-400 hover:text-gray-600 text-sm leading-none ${step?.action === "close-panel" ? "ring-2 ring-yellow-400 rounded animate-pulse" : ""}`}
+                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 text-sm leading-none ${step?.action === "close-panel" ? "ring-2 ring-yellow-400 rounded animate-pulse" : ""}`}
                   aria-label="Close panel"
                 >
                   &times;
@@ -186,11 +186,11 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                       <div
                         key={net}
                         className={`flex items-center justify-between text-xs px-2 py-1.5 rounded-lg ${
-                          isConnected ? "bg-blue-50 border border-blue-200" : "text-gray-400 hover:bg-gray-50 cursor-pointer"
+                          isConnected ? "bg-blue-50 border border-blue-200" : "text-gray-500 sim-dark:text-gray-400 hover:bg-gray-50 cursor-pointer"
                         }`}
                       >
                         <button
-                          className={`font-medium text-left flex-1 ${isConnected ? "text-gray-700 cursor-default" : "text-gray-400"} ${
+                          className={`font-medium text-left flex-1 ${isConnected ? "text-gray-700 cursor-default" : "text-gray-500 sim-dark:text-gray-400"} ${
                             !isConnected && step?.action === "reconnect-wifi" && net === "CoolKids Network" ? pulse2 : ""
                           }`}
                           onClick={(e) => {

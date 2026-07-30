@@ -400,12 +400,12 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               </button>
               <button
                 onClick={handleAllowPermission}
-                className={`flex-1 py-2.5 rounded-xl bg-blue-500 text-white font-medium text-sm hover:bg-blue-600 transition-all ${hl("perm-allow") ? pulse : ""}`}
+                className={`flex-1 py-2.5 rounded-xl bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-all ${hl("perm-allow") ? pulse : ""}`}
               >
                 Allow
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-3">{permDialog.permIdx + 1} of {permDialog.app.permissions.length} permissions</p>
+            <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-3">{permDialog.permIdx + 1} of {permDialog.app.permissions.length} permissions</p>
           </div>
         </div>
       </SimulatorFrame>
@@ -445,7 +445,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <button
                 key={cat}
                 onClick={() => { setCategory(cat); setSearchQuery(""); tryStep((s) => s.action === "go-to-category" && s.target === cat); }}
-                className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all ${category === cat ? "bg-blue-500 text-white" : "bg-gray-100 sim-dark:bg-gray-700 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-600"} ${hl("category-btn", cat) ? pulse : ""}`}
+                className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all ${category === cat ? "bg-blue-600 text-white" : "bg-gray-100 sim-dark:bg-gray-700 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-600"} ${hl("category-btn", cat) ? pulse : ""}`}
               >
                 {cat}
               </button>
@@ -463,15 +463,15 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                   <p className="font-semibold text-sm">{app.name}</p>
                   <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">{app.description}</p>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-xs text-yellow-500">{starDisplay(app.rating)}</span>
-                    <span className="text-xs text-gray-400">{app.price}</span>
-                    {app.tags?.includes("Contains ads") && <span className="text-[10px] bg-orange-100 text-orange-600 px-1.5 rounded">Ads</span>}
+                    <span className="text-xs text-amber-700 sim-dark:text-yellow-400">{starDisplay(app.rating)}</span>
+                    <span className="text-xs text-gray-500 sim-dark:text-gray-400">{app.price}</span>
+                    {app.tags?.includes("Contains ads") && <span className="text-[10px] bg-orange-100 text-orange-800 px-1.5 rounded">Ads</span>}
                   </div>
                 </div>
               </button>
             ))}
             {storeApps.length === 0 && (
-              <div className="flex items-center justify-center h-20 text-gray-400 text-sm">No apps found</div>
+              <div className="flex items-center justify-center h-20 text-gray-500 sim-dark:text-gray-400 text-sm">No apps found</div>
             )}
           </div>
         </div>
@@ -486,9 +486,9 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <h2 className="font-bold text-base leading-tight">{selectedApp.name}</h2>
               <p className="text-xs text-gray-500 sim-dark:text-gray-400">{selectedApp.category}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-xs text-yellow-500">{starDisplay(selectedApp.rating)}</span>
+                <span className="text-xs text-amber-700 sim-dark:text-yellow-400">{starDisplay(selectedApp.rating)}</span>
                 <span className="text-xs text-gray-600 sim-dark:text-gray-300 font-medium">{selectedApp.rating}</span>
-                <span className="text-xs text-gray-400">· {selectedApp.downloads} downloads</span>
+                <span className="text-xs text-gray-500 sim-dark:text-gray-400">· {selectedApp.downloads} downloads</span>
               </div>
             </div>
           </div>
@@ -522,7 +522,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
           ) : (
             <button
               onClick={handleInstall}
-              className={`w-full py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-600 transition-all ${hl("install-btn") ? pulse : ""}`}
+              className={`w-full py-2.5 bg-blue-600 text-white font-semibold rounded-xl text-sm hover:bg-blue-700 transition-all ${hl("install-btn") ? pulse : ""}`}
             >
               {selectedApp.price === "Free" ? "Get (Free)" : `Buy — ${selectedApp.price}`}
             </button>
@@ -567,8 +567,8 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <div className={`w-10 h-10 ${app.color} rounded-xl flex items-center justify-center text-lg flex-shrink-0`}>{app.icon}</div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm leading-tight">{app.name}</p>
-                {app.preInstalled && <span className="text-[10px] text-gray-400 font-medium">Built-in</span>}
-                {!app.preInstalled && !app.hasUpdate && <span className="text-[10px] text-gray-400">Installed</span>}
+                {app.preInstalled && <span className="text-[10px] text-gray-500 sim-dark:text-gray-400 font-medium">Built-in</span>}
+                {!app.preInstalled && !app.hasUpdate && <span className="text-[10px] text-gray-500 sim-dark:text-gray-400">Installed</span>}
                 {app.hasUpdate && !updatedIds.includes(app.id) && (
                   <span className="text-[10px] text-orange-500 font-medium">Update available</span>
                 )}
@@ -580,7 +580,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                 {app.hasUpdate && !updatedIds.includes(app.id) && !app.preInstalled && (
                   <button
                     onClick={() => handleUpdate(app.name)}
-                    className={`px-2.5 py-1 text-[11px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${hl("update-btn", app.name) ? pulse : ""}`}
+                    className={`px-2.5 py-1 text-[11px] bg-blue-600 text-white rounded-lg hover:bg-blue-700 ${hl("update-btn", app.name) ? pulse : ""}`}
                   >
                     Update
                   </button>

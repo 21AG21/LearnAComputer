@@ -243,7 +243,7 @@ function Slider({ value, min, max, label, highlight, onChange, isDark }: { value
     <div className={`py-2 ${highlight ? "ring-2 ring-yellow-400 animate-pulse rounded px-2" : ""}`}>
       <div className="flex items-center justify-between mb-1">
         <span>{label}</span>
-        <span className={isDark ? "text-gray-400" : "text-gray-500"}>{value}{label.includes("Text") ? "%" : ""}</span>
+        <span className={isDark ? "text-gray-500 sim-dark:text-gray-400" : "text-gray-500"}>{value}{label.includes("Text") ? "%" : ""}</span>
       </div>
       <input
         type="range"
@@ -462,7 +462,7 @@ function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onD
                   ) : (
                     <button
                       onClick={() => connectDevice(d.name)}
-                      className={`text-xs px-2 py-1 rounded bg-blue-500 hover:bg-blue-600 text-white ${hlConnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                      className={`text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white ${hlConnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
                     >
                       Connect
                     </button>

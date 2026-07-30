@@ -46,7 +46,7 @@ export default function WindowControls({
 
   return (
     <div
-      className={`flex items-center gap-1.5 shrink-0 ${anyInteractive ? "" : "text-gray-400"}`}
+      className={`flex items-center gap-1.5 shrink-0 ${anyInteractive ? "" : "text-gray-500 sim-dark:text-gray-400"}`}
       aria-hidden={anyInteractive ? undefined : true}
     >
       {items.map(({ kind, on, label }) =>

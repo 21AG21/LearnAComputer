@@ -149,7 +149,7 @@ export default function DesktopBrowserScrollTask({ onExit, onResult }: DesktopBr
                 />
               </div>
             ) : (
-              <div className="border-4 border-dashed border-gray-300 p-4 bg-gray-50 text-center text-gray-400 select-none">
+              <div className="border-4 border-dashed border-gray-300 p-4 bg-gray-50 text-center text-gray-500 sim-dark:text-gray-400 select-none">
                 Keep scrolling to reveal the secret code
               </div>
             )}

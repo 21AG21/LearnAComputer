@@ -173,7 +173,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
             <p className="text-xs text-gray-500 mt-0.5">Yesterday</p>
           </div>
           <div className="border border-gray-100 rounded-lg p-2 bg-gray-50">
-            <p className="text-xs font-semibold text-gray-400 mb-1">MOST READ</p>
+            <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1">MOST READ</p>
             <ol className="text-xs text-blue-700 space-y-0.5 list-decimal list-inside">
               <li>Why dogs tilt their head</li>
               <li>Hamster wins obstacle course</li>
@@ -182,7 +182,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
           </div>
         </div>
       </div>
-      <p className="text-xs text-gray-400 border-t border-gray-100 pt-2">petnews.example · All content fictional · Subscribe for daily updates</p>
+      <p className="text-xs text-gray-500 sim-dark:text-gray-400 border-t border-gray-100 pt-2">petnews.example · All content fictional · Subscribe for daily updates</p>
     </div>
   ),
   shop: (
@@ -208,13 +208,13 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         ))}
       </div>
       <div className="border border-gray-200 rounded-lg p-3">
-        <p className="text-xs font-semibold text-gray-400 mb-2">FEATURED PRODUCT</p>
+        <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-2">FEATURED PRODUCT</p>
         <div className="flex gap-3 items-center">
           <SiteImg src="/site/product-laptop.webp" w={168} h={112} fit="contain" className="w-14 h-14 rounded-lg shrink-0 bg-gray-50" />
           <div className="min-w-0">
             <p className="font-bold text-sm">UltraBook Pro 14</p>
             <p className="text-xs text-gray-500">8 GB RAM · 256 GB SSD · All-day battery</p>
-            <p className="font-black text-blue-600 text-sm mt-0.5">$349 <span className="line-through text-gray-400 font-normal text-xs">$499</span></p>
+            <p className="font-black text-blue-600 text-sm mt-0.5">$349 <span className="line-through text-gray-500 sim-dark:text-gray-400 font-normal text-xs">$499</span></p>
           </div>
           <div className="shrink-0 bg-blue-600 text-white text-xs font-bold rounded-lg px-2 py-1">Add</div>
         </div>
@@ -245,7 +245,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         </ol>
       </div>
       <p className="text-sm text-gray-700 leading-relaxed">The word &quot;computer&quot; originally referred to a person who performed calculations by hand. The first programmable electronic computer, ENIAC, was completed in 1945 and filled an entire room.</p>
-      <p className="text-xs text-gray-400 border-t pt-2">Content available under CC BY-SA 4.0 · wikipedia.org · 6,782,345 articles in English</p>
+      <p className="text-xs text-gray-500 sim-dark:text-gray-400 border-t pt-2">Content available under CC BY-SA 4.0 · wikipedia.org · 6,782,345 articles in English</p>
     </div>
   ),
   weather: (
@@ -262,7 +262,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         <p className="text-xs mt-2 opacity-70">H: 76° · L: 58° · Wind: 8 mph W · Humidity: 42%</p>
       </div>
       <div>
-        <p className="text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">Hourly Forecast</p>
+        <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1.5 uppercase tracking-wide">Hourly Forecast</p>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {[["9 AM","70°"],["10 AM","72°"],["11 AM","74°"],["12 PM","76°"],["1 PM","75°"],["2 PM","73°"]].map(([h, t]) => (
             <div key={h} className="flex flex-col items-center shrink-0 text-xs bg-blue-50 border border-blue-100 rounded-lg px-2 py-1.5">
@@ -273,13 +273,13 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">This Week</p>
+        <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 mb-1.5 uppercase tracking-wide">This Week</p>
         <div className="grid grid-cols-5 gap-1 text-xs text-center">
           {[["Mon","74°","58°"],["Tue","68°","55°"],["Wed","63°","52°"],["Thu","70°","57°"],["Fri","75°","60°"]].map(([d, h, l]) => (
             <div key={d} className="bg-gray-50 border border-gray-100 rounded-lg p-1.5">
               <p className="font-semibold text-gray-500">{d}</p>
               <p className="font-bold text-gray-800">{h}</p>
-              <p className="text-gray-400">{l}</p>
+              <p className="text-gray-500 sim-dark:text-gray-400">{l}</p>
             </div>
           ))}
         </div>
@@ -365,7 +365,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       </div>
       <div className="flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1.5">
         <SearchIcon size={14} />
-        <span className="text-sm text-gray-400 flex-1">Search by title, author, or keyword…</span>
+        <span className="text-sm text-gray-500 sim-dark:text-gray-400 flex-1">Search by title, author, or keyword…</span>
       </div>
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5">
@@ -385,7 +385,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
           </ul>
         </div>
       </div>
-      <p className="text-xs text-gray-400 text-center">Over 80,000 titles · Free membership · citylibrary.example</p>
+      <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center">Over 80,000 titles · Free membership · citylibrary.example</p>
     </div>
   ),
   transit: (
@@ -415,7 +415,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs">
         <p className="font-semibold mb-0.5">Fares</p>
         <p className="text-gray-700">Adult: $2.50 · Senior/Student: $1.25 · Children under 5: Free</p>
-        <p className="text-gray-400 mt-1">Buy a 10-trip book and save 20%</p>
+        <p className="text-gray-500 sim-dark:text-gray-400 mt-1">Buy a 10-trip book and save 20%</p>
       </div>
     </div>
   ),
@@ -435,7 +435,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         <p className="text-sm text-gray-700 leading-relaxed"><strong>Water deeply, not often.</strong> Water twice a week and let the top inch of soil dry out between sessions. The most common mistake is overwatering in cool weather.</p>
         <p className="text-sm text-gray-700 leading-relaxed"><strong>Stake early.</strong> Put the stake in at planting time, before the roots establish, to avoid damaging them later.</p>
       </article>
-      <p className="text-xs text-gray-400 border-t pt-2">gardeningtips.example · Check back daily for seasonal guides</p>
+      <p className="text-xs text-gray-500 sim-dark:text-gray-400 border-t pt-2">gardeningtips.example · Check back daily for seasonal guides</p>
     </div>
   ),
   bank: (
@@ -452,11 +452,11 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
         <div className="space-y-2">
           <div>
             <p className="text-xs font-semibold text-gray-500 mb-0.5">Username</p>
-            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-400">Enter username</div>
+            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 sim-dark:text-gray-400">Enter username</div>
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 mb-0.5">Password</p>
-            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-400">••••••••</div>
+            <div className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 sim-dark:text-gray-400">••••••••</div>
           </div>
           <div className="w-full bg-blue-700 text-white text-center rounded-lg py-2 font-bold text-sm cursor-pointer hover:bg-blue-800">Sign In</div>
         </div>
@@ -472,9 +472,9 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       <div className="flex items-center gap-2 border-b pb-2">
         <BookClosedIcon size={20} />
         <h1 className="font-black text-lg">Book Shop</h1>
-        <span className="ml-auto text-xs text-gray-400">Free shipping over $35</span>
+        <span className="ml-auto text-xs text-gray-500 sim-dark:text-gray-400">Free shipping over $35</span>
       </div>
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">New Arrivals</p>
+      <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 uppercase tracking-wide">New Arrivals</p>
       <div className="grid grid-cols-2 gap-2">
         {[
           { title: "The Maplewood Gardener", author: "M. Chen", price: "$16.99", cover: "/site/cover-garden.webp" },
@@ -500,10 +500,10 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
       </div>
       <div className="flex items-center gap-2 border-2 border-gray-300 rounded-full px-3 py-1.5 focus-within:border-blue-500">
         <SearchIcon size={14} />
-        <span className="text-sm text-gray-400 flex-1">Enter an error code or describe the problem…</span>
+        <span className="text-sm text-gray-500 sim-dark:text-gray-400 flex-1">Enter an error code or describe the problem…</span>
       </div>
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Common Solutions</p>
+        <p className="text-xs font-semibold text-gray-500 sim-dark:text-gray-400 uppercase tracking-wide mb-1.5">Common Solutions</p>
         <div className="space-y-1.5">
           {[
             { code: "ERR_04", desc: "App not responding — force quit and reopen" },
@@ -987,7 +987,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
               <button onClick={(e) => { e.stopPropagation(); submitAddress(); }} className="shrink-0 px-3 py-0.5 bg-blue-600 text-white text-sm font-bold rounded-md border border-black sim-dark:border-gray-500">Go →</button>
             </>
           ) : (
-            <span className={`flex-1 text-base ${activePage.url ? "" : "text-gray-400"}`}>
+            <span className={`flex-1 text-base ${activePage.url ? "" : "text-gray-500 sim-dark:text-gray-400"}`}>
               {activePage.url || "Type a website address"}
               {!activePage.secure && activePage.url && <span className="text-red-600 font-semibold text-sm ml-2">Not Secure</span>}
             </span>
@@ -1099,7 +1099,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                   <span className="text-green-500">l</span><span className="text-red-500">e</span>
                 </p>
                 <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"}`}>
-                  <span className="text-gray-400"><SearchIcon size={16} /></span>
+                  <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
                   <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }} placeholder="Search Google" className="flex-1 outline-none" />
                 </div>
                 <button onClick={submitSearch} className="px-4 py-2 bg-gray-100 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-200">Google Search</button>
@@ -1140,7 +1140,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 )}
                 {activeTab.pageId === "news" && (
                   <div className="mt-6 border-t border-gray-200 pt-3">
-                    <p style={{ fontSize: "8px" }} className="text-gray-400 leading-tight max-w-md">
+                    <p style={{ fontSize: "8px" }} className="text-gray-500 sim-dark:text-gray-400 leading-tight max-w-md">
                       Special offer details: Subscribe today and get 50% off your first 3 months. Use code NEWREADER at checkout. Offer valid for new subscribers only. Terms and conditions apply. See full details at dailynews.example/terms.
                       {activeTab.zoom >= 150 && <span className="text-green-600 font-bold"> Now you can read this!</span>}
                     </p>
@@ -1190,7 +1190,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                     {PICK_SEQ.map((c, i) => {
                       const done = i < tabSeqPos;
                       const current = i === tabSeqPos;
-                      const dotColor = c === "red" ? (done ? "bg-red-200 text-red-400" : current ? "bg-red-500 text-white" : "bg-red-100 text-red-500") : c === "green" ? (done ? "bg-green-200 text-green-400" : current ? "bg-green-500 text-white" : "bg-green-100 text-green-600") : (done ? "bg-blue-200 text-blue-400" : current ? "bg-blue-500 text-white" : "bg-blue-100 text-blue-600");
+                      const dotColor = c === "red" ? (done ? "bg-red-200 text-red-400" : current ? "bg-red-500 text-white" : "bg-red-100 text-red-500") : c === "green" ? (done ? "bg-green-200 text-green-400" : current ? "bg-green-500 text-white" : "bg-green-100 text-green-600") : (done ? "bg-blue-200 text-blue-400" : current ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-600");
                       return (
                         <span key={i} className={`px-2 py-0.5 rounded-full text-xs font-semibold ${dotColor} ${current ? "scale-110 shadow" : ""} ${done ? "line-through opacity-50" : ""} transition-all`}>
                           {c}
@@ -1207,10 +1207,10 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             {activePage.kind === "site" && isBroken && (
               <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
                 <div className="w-24 h-24 bg-gray-200 rounded-xl flex items-center justify-center">
-                  <span className="text-gray-400"><ImageIcon size={40} /></span>
+                  <span className="text-gray-500 sim-dark:text-gray-400"><ImageIcon size={40} /></span>
                 </div>
-                <p className="text-gray-400 font-bold text-lg">This page didn&apos;t load correctly.</p>
-                <p className="text-gray-400 text-sm max-w-xs">Try clicking the reload button in the toolbar.</p>
+                <p className="text-gray-500 sim-dark:text-gray-400 font-bold text-lg">This page didn&apos;t load correctly.</p>
+                <p className="text-gray-500 sim-dark:text-gray-400 text-sm max-w-xs">Try clicking the reload button in the toolbar.</p>
               </div>
             )}
           </div>
@@ -1295,7 +1295,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             </p>
             <div className="max-h-56 overflow-auto">
               {menu === "history" && (uniqueHistory.length === 0
-                ? <p className="px-3 py-3 text-gray-400 text-sm">No history yet.</p>
+                ? <p className="px-3 py-3 text-gray-500 sim-dark:text-gray-400 text-sm">No history yet.</p>
                 : uniqueHistory.map((h) => (
                     <button
                       key={h}
@@ -1303,11 +1303,11 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                       className={`w-full text-left px-3 py-2 flex items-center gap-2 text-sm hover:bg-blue-50 border-b border-gray-100 ${hl("history-item", PAGES[h].title) ? "ring-4 ring-inset ring-yellow-400 animate-pulse" : ""}`}
                     >
                       <span>{PAGES[h].icon}</span><span className="font-medium">{PAGES[h].title}</span>
-                      <span className="text-gray-400 ml-auto">{PAGES[h].url}</span>
+                      <span className="text-gray-500 sim-dark:text-gray-400 ml-auto">{PAGES[h].url}</span>
                     </button>
                   )))}
               {menu === "downloads" && (downloads.length === 0
-                ? <p className="px-3 py-3 text-gray-400 text-sm">No downloads yet.</p>
+                ? <p className="px-3 py-3 text-gray-500 sim-dark:text-gray-400 text-sm">No downloads yet.</p>
                 : downloads.map((d) => (
                     <div key={d} className="px-3 py-2 flex items-center gap-2 text-sm border-b border-gray-100">
                       <span><FileDocIcon size={14} /></span>
@@ -1335,7 +1335,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                     </div>
                   )))}
               {menu === "readinglist" && (readingList.length === 0
-                ? <p className="px-3 py-3 text-gray-400 text-sm">Nothing saved yet.</p>
+                ? <p className="px-3 py-3 text-gray-500 sim-dark:text-gray-400 text-sm">Nothing saved yet.</p>
                 : readingList.map((r) => (
                     <div key={r} className="px-3 py-2 flex items-center gap-2 text-sm border-b border-gray-100">
                       <span>{PAGES[r].icon}</span><span className="font-medium">{PAGES[r].title}</span>
@@ -1416,7 +1416,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                   <li>Fill with the apple mixture, mounding it in the center.</li>
                 </ol>
 
-                <p className="mt-5 text-xs text-gray-400 border-t border-gray-200 pt-3 text-center">Page 1 of 2 — continued on next page</p>
+                <p className="mt-5 text-xs text-gray-500 sim-dark:text-gray-400 border-t border-gray-200 pt-3 text-center">Page 1 of 2 — continued on next page</p>
               </div>
             </div>
           </div>

@@ -202,7 +202,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
                           {isFocused ? (
                             <span className="text-blue-700 font-medium">▶ Focused</span>
                           ) : (
-                            <span className="text-gray-400">—</span>
+                            <span className="text-gray-500 sim-dark:text-gray-400">—</span>
                           )}
                         </div>
                       </div>
@@ -213,7 +213,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
                           item.id === "submit"
                             ? isFocused
                               ? "bg-blue-600 text-white ring-4 ring-blue-300 scale-105"
-                              : "bg-blue-500 text-white hover:bg-blue-600"
+                              : "bg-blue-600 text-white hover:bg-blue-700"
                             : isFocused
                               ? "bg-gray-200 text-gray-800 ring-4 ring-gray-300 scale-105"
                               : "bg-gray-100 text-gray-700 hover:bg-gray-200"

@@ -1,6 +1,11 @@
 # Demo runbook — Priya Elder Care
 
-**Meeting: two days out. Owner: Arjun.**
+**Owner: Arjun. Meeting date: `____________` — write it in when you book it.**
+
+§1 is a two-day run-up counted backwards from that date, so "Today" and
+"Tomorrow" below mean the two days before the meeting, whenever you are reading
+this. The header used to say "two days out", which was true on the morning it was
+written and quietly wrong every day after.
 
 This is the account-specific sheet. The general material lives in
 `docs/SALES_PLAYBOOK.md` (cold call, objections, pricing posture) and
@@ -71,12 +76,14 @@ conversation afterwards?"* Their number beats yours, and now they said it.
 
 ## 1. Two-day prep timeline
 
-**Today**
+Counted backwards from the meeting date in the header, not from any fixed day.
+
+**Two days before**
 - Fill in §0. Confirm attendees, format (in person / video), and who drives.
 - Read §4 aloud once, timed. If it runs past 15 minutes, cut Unit 7, not Unit 10.
 - Confirm the production URL is live and the deploy is current.
 
-**Tomorrow (dress rehearsal — this is not optional)**
+**The day before (dress rehearsal — this is not optional)**
 - Fresh browser profile, no saved progress. Drive the entire §4 path end to
   end, out loud, at demo pace.
 - Deliberately make the two mistakes in §4 (wrong dock icon; wrong phishing

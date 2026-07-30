@@ -522,14 +522,14 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                   <div key={network} className={`flex items-center justify-between p-2 rounded-lg text-xs ${connectedNetwork === network ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"}`}>
                     <span className="flex items-center gap-1.5">
                       {connectedNetwork === network && <span className="text-blue-500">&#10003;</span>}
-                      {searchingNetwork === network && <span className="animate-spin text-gray-400">&#9696;</span>}
+                      {searchingNetwork === network && <span className="animate-spin text-gray-500 sim-dark:text-gray-400">&#9696;</span>}
                       {network}
                     </span>
                     <div className="flex gap-1">
                       {connectedNetwork !== network && !searchingNetwork && (
                         <button
                           onClick={() => (mode === "public-wifi" ? handleJoinNetwork(network) : handleReconnect(network))}
-                          className={`px-1.5 py-0.5 bg-blue-500 text-white rounded text-[10px] ${
+                          className={`px-1.5 py-0.5 bg-blue-600 text-white rounded text-[10px] ${
                             hl("reconnect-btn") || hl("network-row", network) ? pulse : ""
                           }`}
                         >
@@ -555,14 +555,14 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 {forgottenNetworks.includes("CoolKids Network") && !connectedNetwork && (
                   <button
                     onClick={() => handleReconnect("CoolKids Network")}
-                    className={`w-full py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${hl("reconnect-btn") ? pulse : ""}`}
+                    className={`w-full py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 ${hl("reconnect-btn") ? pulse : ""}`}
                   >
                     Reconnect to CoolKids Network
                   </button>
                 )}
               </div>
             )}
-            {!wifiOn && <p className="text-xs text-gray-400 text-center py-2">WiFi is off</p>}
+            {!wifiOn && <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center py-2">WiFi is off</p>}
           </div>
         )}
         </div>{/* end menu bar container */}
@@ -593,7 +593,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <h3 className="font-bold text-base text-center mb-1">{errorApp} can&apos;t open</h3>
                 <p className="text-xs text-gray-500 text-center mb-3">An unexpected error occurred.</p>
                 <div className={`flex items-center justify-between bg-gray-100 rounded-lg px-3 py-2 mb-3 ${hl("copy-btn") ? pulse : ""}`}>
-                  <code className="text-sm font-mono font-bold text-red-600 select-all">{errorCode}</code>
+                  <code className="text-sm font-mono font-bold text-red-700 sim-dark:text-red-300 select-all">{errorCode}</code>
                   <button
                     onClick={handleCopyCode}
                     className="ml-2 px-2 py-1 text-xs bg-gray-200 hover:bg-gray-300 rounded font-medium"
@@ -603,7 +603,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 </div>
                 <button
                   onClick={handleDismissError}
-                  className={`w-full py-2 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 ${hl("error-dismiss") ? pulse : ""}`}
+                  className={`w-full py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 ${hl("error-dismiss") ? pulse : ""}`}
                 >
                   OK
                 </button>
@@ -686,7 +686,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     {pastedCode && !supportSubmitted && (
                       <button
                         onClick={handleSubmitSupport}
-                        className={`w-full py-2.5 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 ${hl("submit-btn") ? pulse : ""}`}
+                        className={`w-full py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 ${hl("submit-btn") ? pulse : ""}`}
                       >
                         Submit
                       </button>
@@ -710,7 +710,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
               </svg>
               <p className="text-sm font-medium text-gray-500 mb-1">You are not connected to the internet</p>
-              <p className="text-xs text-gray-400">There is a café network nearby. The WiFi icon is in the bar above.</p>
+              <p className="text-xs text-gray-500 sim-dark:text-gray-400">There is a café network nearby. The WiFi icon is in the bar above.</p>
             </div>
           )}
 
@@ -920,7 +920,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                         <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-2 text-2xl">&#10003;</div>
                         <p className="text-sm font-semibold mb-0.5">Signed in as you@example.com</p>
                         <p className="text-xs text-gray-500">First National Bank · Personal account</p>
-                        <p className="text-xs text-gray-400 mt-2">Your new password is saved. Keep it in a password manager.</p>
+                        <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-2">Your new password is saved. Keep it in a password manager.</p>
                       </div>
                     )}
                   </div>
@@ -937,7 +937,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                   className={`bg-white rounded-xl shadow-lg border overflow-hidden max-w-sm mx-auto cursor-pointer ${hl("frozen-window") ? pulse : ""}`}
                 >
                   <div className="bg-gray-100 border-b px-3 py-2 flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-500">{frozenTarget.name} (Not Responding)</span>
+                    <span className="text-sm font-medium text-gray-600 sim-dark:text-gray-300">{frozenTarget.name} (Not Responding)</span>
                     <span className="text-xs text-red-500 animate-spin">&#9696;</span>
                   </div>
                   <div className="p-6 opacity-40 select-none">
@@ -957,7 +957,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <div className="text-center py-8">
                   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
                   <p className="text-sm text-gray-600">{frozenTarget.name} has been force quit.</p>
-                  <p className="text-xs text-gray-400 mt-1">Click {frozenTarget.name} in the dock below to reopen it.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">Click {frozenTarget.name} in the dock below to reopen it.</p>
                 </div>
               )}
               {appReopened && (
@@ -985,7 +985,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
                   </svg>
                   <p className="text-sm font-medium text-gray-500 mb-1">No Internet Connection</p>
-                  <p className="text-xs text-gray-400">Click the WiFi icon in the menu bar to fix this.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">Click the WiFi icon in the menu bar to fix this.</p>
                 </div>
               ) : (
                 <div className="py-8">
@@ -993,7 +993,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
                   </svg>
                   <p className="text-sm font-medium text-green-600 mb-1">Connected to {connectedNetwork}</p>
-                  <p className="text-xs text-gray-400">Your internet is working.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">Your internet is working.</p>
                 </div>
               )}
             </div>
@@ -1047,13 +1047,13 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <>
                   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-red-400 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
                   <p className="text-sm font-medium text-gray-600">{arBrokenTarget} keeps crashing.</p>
-                  <p className="text-xs text-gray-400 mt-1">Open App Market from the dock to fix it.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">Open App Market from the dock to fix it.</p>
                 </>
               ) : (
                 <>
                   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
                   <p className="text-sm font-medium text-green-700">{arBrokenTarget} is working again!</p>
-                  <p className="text-xs text-gray-400 mt-1">The fresh install fixed the problem.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">The fresh install fixed the problem.</p>
                 </>
               )}
             </div>
@@ -1063,7 +1063,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
           {view === "app-market" && mode === "app-reinstall" && (
             <div className="h-full flex flex-col bg-white">
               <div className="bg-gray-100 border-b px-4 py-2.5 flex items-center">
-                <button onClick={() => setView("desktop")} className="text-gray-400 hover:text-gray-600 mr-2 text-lg">&larr;</button>
+                <button onClick={() => setView("desktop")} className="text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 mr-2 text-lg">&larr;</button>
                 <span className="text-sm font-semibold text-gray-700">App Market</span>
               </div>
               <div className="flex border-b">
@@ -1099,7 +1099,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                       </button>
                     </div>
                   ) : (
-                    <p className="text-xs text-gray-400 text-center py-6">No apps installed. Go to Store to reinstall.</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center py-6">No apps installed. Go to Store to reinstall.</p>
                   )}
                 </div>
               )}
@@ -1113,7 +1113,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     {!arAppInstalled ? (
                       <button
                         onClick={handleReinstallApp}
-                        className={`px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium ${hl("install-btn") ? pulse : ""}`}
+                        className={`px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium ${hl("install-btn") ? pulse : ""}`}
                       >
                         Install
                       </button>
@@ -1135,7 +1135,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <p className="text-xs text-gray-500 mb-4">Restarting your computer usually fixes this.</p>
                 <button
                   onClick={handleErDismiss}
-                  className={`w-full py-2 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 ${hl("er-dismiss") ? pulse : ""}`}
+                  className={`w-full py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 ${hl("er-dismiss") ? pulse : ""}`}
                 >
                   OK
                 </button>
@@ -1200,7 +1200,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             <div className="p-4 text-center py-8">
               <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
               <p className="text-sm font-medium text-green-700">Your computer restarted successfully.</p>
-              <p className="text-xs text-gray-400 mt-1">The error is gone.</p>
+              <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">The error is gone.</p>
             </div>
           )}
         </div>

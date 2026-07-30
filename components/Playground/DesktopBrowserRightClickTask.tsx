@@ -79,7 +79,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                     <Image src="/playgrounds/Cat2.png" alt="Judgmental cat" fill sizes="176px" className="object-contain rounded-lg" />
                   </div>
                 </div>
-                <p className="text-xs text-gray-400 italic -mt-2">Pictured: the cat in question. No comment was forthcoming.</p>
+                <p className="text-xs text-gray-500 sim-dark:text-gray-400 italic -mt-2">Pictured: the cat in question. No comment was forthcoming.</p>
                 <p className="text-sm text-gray-700 leading-relaxed">A local cat, known only as &quot;Whiskers&quot; by neighbors who have not been formally introduced, spent approximately forty-five minutes on a windowsill yesterday, studying a passing cyclist with an expression that implied serious reservations.</p>
                 <p className="text-sm text-gray-700 leading-relaxed">&quot;I waved,&quot; confirmed the cyclist, who asked to remain anonymous. &quot;The cat did not wave back. The cat has never waved back.&quot;</p>
                 <p className="text-sm text-gray-700 leading-relaxed">The incident follows a series of similar events spanning three years, including the Great Staring Episode of 2023 and what sources describe as &quot;a very pointed tail-flick&quot; directed at a delivery driver in February.</p>
@@ -88,7 +88,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                   <div className="flex gap-3">
                     <div className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">D</div>
                     <div>
-                      <p className="text-sm font-semibold">GoodDog1 <span className="text-gray-400 font-normal text-xs">· 2 hours ago</span></p>
+                      <p className="text-sm font-semibold">GoodDog1 <span className="text-gray-500 sim-dark:text-gray-400 font-normal text-xs">· 2 hours ago</span></p>
                       <p className="text-sm text-gray-700">I also waved and was also ignored. I choose to believe the cat is simply very busy.</p>
                     </div>
                   </div>
@@ -146,10 +146,10 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                     >
                       Open link in new tab
                     </button>
-                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-400 border-b border-gray-200 whitespace-nowrap">
+                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-500 sim-dark:text-gray-400 border-b border-gray-200 whitespace-nowrap">
                       Open link in new window
                     </button>
-                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-400 whitespace-nowrap">
+                    <button className="block w-full text-left px-4 py-2.5 text-base text-gray-500 sim-dark:text-gray-400 whitespace-nowrap">
                       Copy link address
                     </button>
                   </div>

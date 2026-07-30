@@ -111,7 +111,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
         </div>
         <h3 className="font-bold text-xl mb-1">Signed In</h3>
         <p className="text-sm text-gray-500 mb-1">{username || "drdigital@example.com"}</p>
-        <p className="text-xs text-gray-400 mb-6">Signed in with {method}</p>
+        <p className="text-xs text-gray-500 sim-dark:text-gray-400 mb-6">Signed in with {method}</p>
         <div className="bg-gray-50 border rounded-xl p-4 text-left mb-6 text-sm">
           <div className="flex justify-between py-1 border-b border-gray-100">
             <span className="text-gray-500">Account</span>
@@ -360,11 +360,11 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
               {/* Message thread */}
               <div className="bg-white flex-1 p-3 space-y-2">
                 <div className="flex flex-col items-start">
-                  <span className="text-[8px] text-gray-400 mb-0.5 ml-1">ExampleBank</span>
+                  <span className="text-[8px] text-gray-500 sim-dark:text-gray-400 mb-0.5 ml-1">ExampleBank</span>
                   <div className="bg-gray-200 rounded-2xl rounded-tl-sm px-3 py-2 max-w-[85%]">
                     <p className="text-[10px] text-gray-700 leading-tight">Your verification code is:</p>
                     <p className="text-[22px] font-black text-blue-700 tracking-widest leading-tight mt-0.5 font-mono">{twoFaExpectedCode}</p>
-                    <p className="text-[8px] text-gray-400 leading-tight mt-1">Valid for 10 minutes. Never share this code.</p>
+                    <p className="text-[8px] text-gray-500 sim-dark:text-gray-400 leading-tight mt-1">Valid for 10 minutes. Never share this code.</p>
                   </div>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
             />
             <button
               onClick={handleVerify2fa}
-              className={`w-full py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-all ${hl("verify-btn") ? pulse : ""}`}
+              className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all ${hl("verify-btn") ? pulse : ""}`}
             >
               Verify
             </button>
@@ -495,7 +495,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
               />
               <button
                 onClick={handleLogin}
-                className={`w-full py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-all ${hl("login-btn") ? pulse : ""}`}
+                className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all ${hl("login-btn") ? pulse : ""}`}
               >
                 Log In
               </button>
@@ -508,7 +508,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 <>
                   <div className="flex items-center gap-2 my-4">
                     <div className="flex-1 h-px bg-gray-300" />
-                    <span className="text-xs text-gray-400">or</span>
+                    <span className="text-xs text-gray-500 sim-dark:text-gray-400">or</span>
                     <div className="flex-1 h-px bg-gray-300" />
                   </div>
                   {passkeyDone ? (
@@ -540,7 +540,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
               <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-green-500 mx-auto mb-4"><MailIcon size={28} /></div>
               <h3 className="font-bold text-lg mb-2">Check Your Email</h3>
               <p className="text-sm text-gray-500 mb-6">We sent a password reset link to <strong>{username || "your email"}</strong>.</p>
-              <button onClick={handleOpenResetEmail} className={`w-full py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-all ${hl("reset-email") ? pulse : ""}`}>
+              <button onClick={handleOpenResetEmail} className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all ${hl("reset-email") ? pulse : ""}`}>
                 Open Mail
               </button>
             </div>
@@ -554,10 +554,10 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 </div>
                 <div className="p-4">
                   <div className="border rounded-lg p-4 bg-blue-50">
-                    <p className="text-xs text-gray-400 mb-1">From: no-reply@examplebank.com</p>
+                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 mb-1">From: no-reply@examplebank.com</p>
                     <p className="font-semibold text-sm mb-2">Reset Your Password</p>
                     <p className="text-sm text-gray-600 mb-4">Hi! You requested a password reset. Click the button below to choose a new password. This link expires in 1 hour.</p>
-                    <button onClick={handleClickResetLink} className={`w-full py-2.5 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all text-sm ${hl("reset-link") ? pulse : ""}`}>
+                    <button onClick={handleClickResetLink} className={`w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all text-sm ${hl("reset-link") ? pulse : ""}`}>
                       Reset My Password
                     </button>
                   </div>
@@ -580,7 +580,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 placeholder="New password"
                 className={`w-full px-4 py-3 border rounded-xl text-sm outline-none focus:border-blue-400 mb-4 ${hl("login-pw-input") ? pulse : ""}`}
               />
-              <button onClick={handleLogin} className={`w-full py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-all ${hl("login-btn") ? pulse : ""}`}>
+              <button onClick={handleLogin} className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all ${hl("login-btn") ? pulse : ""}`}>
                 Save & Log In
               </button>
             </div>
@@ -613,12 +613,12 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                     {verdict === "dangerous" && <XCircleIcon size={12} className="text-red-500 shrink-0" />}
                   </div>
                   {!isThread && <p className="text-xs text-gray-600 truncate">{item?.subject}</p>}
-                  <p className="text-[10px] text-gray-400">{item?.when}</p>
+                  <p className="text-[10px] text-gray-500 sim-dark:text-gray-400">{item?.when}</p>
                 </button>
               );
             })}
             {phishingLinks.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-8 px-2">No messages in this activity.</p>
+              <p className="text-sm text-gray-500 sim-dark:text-gray-400 text-center py-8 px-2">No messages in this activity.</p>
             )}
           </div>
 
@@ -626,7 +626,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
           <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
             {!openMessage ? (
               <div className="flex-1 flex items-center justify-center p-6 text-center">
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-500 sim-dark:text-gray-400">
                   {isThread ? "Pick a conversation to read it." : "Pick a message to read it."}
                 </p>
               </div>
@@ -711,7 +711,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
               <div key={name} className={`flex items-center justify-between p-3 border rounded-xl ${hl("privacy-toggle", name) ? pulse : ""}`}>
                 <div>
                   <p className="text-sm font-medium">{name}</p>
-                  <p className="text-xs text-gray-400">{val ? "On — apps can access this" : "Off — access blocked"}</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">{val ? "On — apps can access this" : "Off — access blocked"}</p>
                 </div>
                 <button
                   onClick={() => handleToggleSetting(name)}

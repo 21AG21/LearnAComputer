@@ -124,7 +124,7 @@ export default function BrowserSimulator({
         <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-black sim-dark:border-gray-600 flex items-center gap-2 px-3 py-2">
           <span aria-hidden className="text-xl px-1 text-gray-300 sim-dark:text-gray-600">‹</span>
           <span aria-hidden className="text-xl px-1 text-gray-300 sim-dark:text-gray-600">›</span>
-          <span aria-hidden className="px-1 text-gray-400"><ReloadIcon size={18} /></span>
+          <span aria-hidden className="px-1 text-gray-500 sim-dark:text-gray-400"><ReloadIcon size={18} /></span>
           <div className="flex-1 flex items-center gap-2 bg-white sim-dark:bg-gray-900 border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg px-3 py-1.5">
             <button
               onClick={(e) => { e.stopPropagation(); setShowLockInfo((s) => !s); }}
@@ -135,7 +135,7 @@ export default function BrowserSimulator({
             </button>
             <span className="flex-1 text-base truncate">{url}</span>
           </div>
-          <span aria-hidden className="px-1 text-gray-400"><StarIcon size={18} /></span>
+          <span aria-hidden className="px-1 text-gray-500 sim-dark:text-gray-400"><StarIcon size={18} /></span>
         </div>
         {showLockInfo && (
           <div
@@ -196,7 +196,7 @@ export function OrangeDash({ className }: { className?: string }) {
 /** A control that exists in the real browser but does nothing in these focused lessons. */
 function DeadActionBtn({ label, icon }: { label: string; icon: React.ReactNode }) {
   return (
-    <span className="flex items-center gap-1 px-2 py-1 rounded-md border-2 border-gray-300 sim-dark:border-gray-700 bg-white sim-dark:bg-gray-800 font-medium text-gray-400 select-none">
+    <span className="flex items-center gap-1 px-2 py-1 rounded-md border-2 border-gray-300 sim-dark:border-gray-700 bg-white sim-dark:bg-gray-800 font-medium text-gray-500 sim-dark:text-gray-400 select-none">
       {icon} {label}
     </span>
   );

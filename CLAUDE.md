@@ -22,6 +22,7 @@ npm run hostile-check # the buyer with crossed arms: what a skeptic finds off th
 npm run recovery-check # deliberately FAILS a lesson, then proves the learner can carry on
 npm run stray-check   # does the WRONG thing on purpose; proves nobody is left with no way forward
 npm run simdark-check # is the practice computer's Dark Mode actually painted, in every dock app?
+npm run sim-contrast-check # WCAG AA inside every one of the 170 activities (a gate)
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -164,6 +165,40 @@ Three traps in that check, all of which hid real findings:
 
 `SIMDARK_NEGATIVE=1` is the negative control and has been watched to fail (69
 findings, all nine apps). See `docs/SIM_DARK_MODE.md`.
+
+**`npm run sim-contrast-check` measures WCAG AA inside all 170 activities, and it
+exists because `contrast-check` never clicks "Start activity".** That check visits
+site *pages*; every other harness drives the DOM without reading a color. So the
+entire playground — every button and label a learner spends the course pressing —
+was unmeasured, and four defect classes were sitting in it, none of them
+dark-mode-related:
+
+- `text-gray-400` on white at **2.54:1**, 104 call sites — every email timestamp
+  and preview, the calendar's weekday headers, App Market prices, the browser's
+  address placeholder.
+- white on `bg-blue-500` at **3.68:1** — the primary button, 38 call sites.
+- a yellow-500 star rating at **1.92:1**, and an orange-600 chip at **3.11:1**.
+
+The rule that came out of it: **`text-gray-400` is a dark-mode color only.** On
+white it is 2.54:1; the pair is `text-gray-500 sim-dark:text-gray-400` (4.83:1
+light, 7:1 dark). Five regions are genuinely dark in *light* mode too — the video
+call, the music player, the undo pill, the Force Quit title bar, and Settings'
+own `muted` — and keep bare gray-400. White text needs `bg-blue-600`, not
+`bg-blue-500`.
+
+It reaches every activity through `window.__strayShow`, the same script-controlled
+mount `stray-check` uses, clicking the "open the app" gate as a learner does —
+without that most of the course silently never mounts. The measurement is shared
+with `simdark-check` via `scripts/lib/sim-contrast.mjs`; two copies of the same
+maths is how you get two answers. `SIMCONTRAST_NEGATIVE=1` is the negative control
+and has been watched to fail. Green at **2966 text runs over 125 activities**.
+
+**`simdark-check` now measures both themes,** and that retired a piece of
+self-deception. It used to file any shortfall on a saturated ground under
+"advisory", reasoning that it looked the same with Dark Mode off so it was not the
+reskin's fault — true, and beside the point, since a button nobody can read is a
+defect in whichever theme it appears. Measuring light *and* dark answers the
+question the excuse was dodging.
 
 **Whenever a capability is removed, run `pitch-check` in the same hour.**
 Deleting a feature is not done when the code is gone: accounts came out on

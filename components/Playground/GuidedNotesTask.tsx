@@ -151,7 +151,7 @@ export default function GuidedNotesTask({
               says what it is until there is something in it. */}
           <div className="relative flex-1 min-h-0">
             {empty && (
-              <p className="pointer-events-none absolute left-4 top-4 select-none text-base text-gray-400">
+              <p className="pointer-events-none absolute left-4 top-4 select-none text-base text-gray-500 sim-dark:text-gray-400">
                 Start typing your note here.
               </p>
             )}

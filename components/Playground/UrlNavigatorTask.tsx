@@ -66,7 +66,7 @@ export default function UrlNavigatorTask({
         {/* Address bar */}
         <div className="flex-1 flex items-center gap-2">
           <div className="flex-1 flex items-center bg-white border-4 border-black rounded-lg overflow-hidden">
-            <span className="px-2 text-gray-400 select-none"><SearchIcon size={18} /></span>
+            <span className="px-2 text-gray-500 sim-dark:text-gray-400 select-none"><SearchIcon size={18} /></span>
             <input
               type="text"
               value={typed}
@@ -94,10 +94,10 @@ export default function UrlNavigatorTask({
         {!loaded && !error && (
           <div className="text-center flex flex-col items-center gap-4">
             <GlobeIcon size={56} className="text-gray-300" />
-            <p className="text-2xl font-bold text-gray-400">
+            <p className="text-2xl font-bold text-gray-500 sim-dark:text-gray-400">
               Type a web address above and press Enter or Go
             </p>
-            <p className="text-lg text-gray-400 font-mono border-2 border-dashed border-gray-300 px-4 py-2 rounded-lg">
+            <p className="text-lg text-gray-500 sim-dark:text-gray-400 font-mono border-2 border-dashed border-gray-300 px-4 py-2 rounded-lg">
               Example: {targetUrl}
             </p>
           </div>
