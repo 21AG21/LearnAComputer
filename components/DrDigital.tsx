@@ -86,7 +86,7 @@ export default function DrDigital({ message, mood = "neutral" }: DrDigitalProps)
       data-mood={mood}
       className={`flex gap-3 items-start border-2 rounded p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
     >
-      <DrDigitalAvatar className="w-14 h-14 shrink-0" />
+      <DrDigitalAvatar className="w-14 h-14 shrink-0" mood={mood} />
       <div>
         <p className="text-base font-semibold">Dr. Digital</p>
         <MessageBody message={message} />

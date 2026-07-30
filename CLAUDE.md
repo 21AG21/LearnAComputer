@@ -128,6 +128,39 @@ used correctly; this one asks what a buyer finds who is hunting for a reason to
 say no — console errors, sideways scrolling, a page with no heading, a mistyped
 URL, a keyboard user with no visible focus. See `docs/HOSTILE_BUYER_AUDIT.md`.
 
+**`contrast-check` measures two ways, and the second one is the point.** Walking
+the ancestors for a solid `background-color` answers almost every text node on the
+site. It cannot answer the ones that sit on a photo: the homepage hero and the
+unit cards put white text over an absolutely-positioned `<img>` under a dark
+scrim, and every element in the text's own ancestor chain is transparent — so the
+walk sailed past the photo, reached `<body>`, and reported its genuinely white
+background for the wrong layer. Four "1:1 white on white" failures against text
+that is perfectly legible. **A real white-on-white bug prints those same four
+lines**, so the noise was hiding the only signal this check exists to give. When a
+painter (absolutely-positioned media, or any `background-image`) overlaps the
+text, the glyphs are now made transparent, the element is screenshotted, and the
+backdrop is scored off real pixels — worst realistic patch, not average, because
+a photo is not one color.
+
+Three flags matter when touching it:
+
+- `CONTRAST_NEGATIVE=1` is the negative control, and it has been watched to fail.
+  It recolors the hero and unit-card titles to a near-scrim gray; those go down
+  the *pixel* path, so a clean run under this flag means that path has gone blind.
+- `CONTRAST_VERBOSE=1` lists every pixel-sampled measurement, passes included.
+  Without it a clean run is indistinguishable from one where every screenshot came
+  back empty and all the hard cases were skipped.
+- Anything the pixel path cannot capture is printed in its own "could not
+  measure" bucket and does **not** count as a failure. A check that says "I don't
+  know" is useful; one that guesses and calls it a measurement is what this was.
+
+It also throws on any page in `PAGES` that does not return 200. `/login` sat in
+that list from the 2026-07-28 account removal onward — `page.goto` does not throw
+on a 404, so the check spent months measuring the not-found page and filing the
+results under `/login`.
+
+Still advisory, not a gate. It is now trustworthy enough to promote; nobody has.
+
 ## Project Structure
 
 ```
