@@ -17,10 +17,23 @@ interface DrDigitalAvatarProps {
  *    a 56px box — small enough that the whole character was an unreadable smear of
  *    red, green and blue. Head-and-shoulders at 1:1 fills the box it was given.
  *
- * 2. **The outline is `currentColor`.** The old art stroked `#111` on a bubble
- *    whose dark-mode background is `#111827`. In dark mode the outline simply
- *    vanished and the shapes floated apart. The colors below are set on the `<svg>`
- *    so it is correct wherever it is dropped, and a caller's `className` still wins.
+ * 2. **The outline is black in both themes, except on the antenna.** The old art
+ *    stroked `#111` on a bubble whose dark-mode background is `#111827`, and in
+ *    dark mode the outline vanished and the shapes floated apart. That was a
+ *    consequence of filling the shapes with saturated red/green/blue: the rim was
+ *    the only thing separating them, so losing it lost the drawing.
+ *
+ *    This shell is filled `#e9eef4`, which changes the problem. A black rim on a
+ *    light shell is high contrast from the inside no matter what is behind it, and
+ *    the silhouette comes from light-shell-against-dark-bubble rather than from the
+ *    rim. So he keeps his black outline in dark mode and looks like the same
+ *    character in both themes.
+ *
+ *    The antenna is the exception, and the reason is worth keeping: its stalk and
+ *    bulb rim are the only strokes drawn on the page background instead of on top
+ *    of a fill. Black there really would disappear on a dark bubble, leaving a
+ *    colored dot floating above the head with no visible stem. Those two use
+ *    `currentColor`, which the `<svg>`'s own classes resolve per theme.
  *
  * 3. **He has a face.** The old art's aria-label promised "a friendly striped
  *    robot" and drew three abstract blobs with no eyes. This is a course for people
@@ -51,12 +64,17 @@ export default function DrDigitalAvatar({ className, mood = "neutral" }: DrDigit
         </clipPath>
       </defs>
 
-      {/* Shell: one group so the whole robot shares one outline weight. */}
+      {/* The antenna, stroked in currentColor because it is the only part drawn
+          against the page rather than against a fill of its own. The bulb is the
+          quietest place to carry mood — it echoes the speech bubble's own border
+          color without restyling his face. */}
       <g stroke="currentColor" strokeWidth={8} strokeLinejoin="round">
         <line x1="100" y1="30" x2="100" y2="18" strokeLinecap="round" />
-        {/* The antenna light is the quietest place to carry mood — it echoes the
-            speech bubble's own border color without restyling his face. */}
         <circle cx="100" cy="12" r="8" fill={BULB[mood]} />
+      </g>
+
+      {/* Shell: one group so the whole robot shares one outline weight. */}
+      <g stroke={INK} strokeWidth={8} strokeLinejoin="round">
         <rect x="16" y="70" width="16" height="34" rx="8" fill="#e9eef4" />
         <rect x="168" y="70" width="16" height="34" rx="8" fill="#e9eef4" />
         <rect x="90" y="134" width="20" height="22" fill="#e9eef4" />
@@ -76,6 +94,9 @@ export default function DrDigitalAvatar({ className, mood = "neutral" }: DrDigit
     </svg>
   );
 }
+
+/** The outline. Fixed, not `currentColor` — see note 2 in the header. */
+const INK = "#12212e";
 
 const BULB: Record<DrDigitalMood, string> = {
   neutral: "#3a7bd5",

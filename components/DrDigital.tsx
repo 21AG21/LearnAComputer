@@ -79,16 +79,31 @@ function MessageBody({ message }: { message: string }) {
   );
 }
 
+/**
+ * Avatar and name on one short line, message full width underneath.
+ *
+ * The avatar used to sit *beside* the message in a `flex items-start` row, which
+ * left a 56px column of dead space running down the left for the whole height of
+ * the text — on a four-bullet lesson that is a quarter of the bubble empty, and
+ * the message paid for it twice: once in the wasted area, and again in a reading
+ * measure so narrow that "Two skills to practice here" wrapped onto two lines.
+ *
+ * A header row costs one row of height and gives the text the full width back.
+ * The avatar is deliberately smaller here than the 56px it was — it reads fine
+ * down to 40px, and a shorter header row is the whole point of the change.
+ */
 export default function DrDigital({ message, mood = "neutral" }: DrDigitalProps) {
   return (
     <div
       key={mood}
       data-mood={mood}
-      className={`flex gap-3 items-start border-2 rounded p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
+      className={`border-2 rounded p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
     >
-      <DrDigitalAvatar className="w-14 h-14 shrink-0" mood={mood} />
-      <div>
+      <div className="flex items-center gap-2">
+        <DrDigitalAvatar className="w-10 h-10 shrink-0" mood={mood} />
         <p className="text-base font-semibold">Dr. Digital</p>
+      </div>
+      <div className="mt-2">
         <MessageBody message={message} />
       </div>
     </div>
