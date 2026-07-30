@@ -521,7 +521,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 {(mode === "public-wifi" ? PUBLIC_NETWORKS : NETWORKS).filter((n) => !forgottenNetworks.includes(n)).map((network) => (
                   <div key={network} className={`flex items-center justify-between p-2 rounded-lg text-xs ${connectedNetwork === network ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"}`}>
                     <span className="flex items-center gap-1.5">
-                      {connectedNetwork === network && <span className="text-blue-500">&#10003;</span>}
+                      {connectedNetwork === network && <span className="text-blue-700 sim-dark:text-blue-400">&#10003;</span>}
                       {searchingNetwork === network && <span className="animate-spin text-gray-500 sim-dark:text-gray-400">&#9696;</span>}
                       {network}
                     </span>
@@ -588,7 +588,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
               <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs">
                 <div className="text-center mb-3">
-                  <svg viewBox="0 0 24 24" className="w-10 h-10 mx-auto text-red-500" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
+                  <svg viewBox="0 0 24 24" className="w-10 h-10 mx-auto text-red-700 sim-dark:text-red-400" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
                 </div>
                 <h3 className="font-bold text-base text-center mb-1">{errorApp} can&apos;t open</h3>
                 <p className="text-xs text-gray-500 text-center mb-3">An unexpected error occurred.</p>
@@ -624,11 +624,11 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     <div key={app.name} className={`flex items-center justify-between p-2.5 rounded-lg ${app.frozen ? "bg-red-50 border border-red-200" : "bg-gray-50"}`}>
                       <span className="text-sm">
                         {app.name}
-                        {app.frozen && <span className="text-xs text-red-500 ml-1.5">(Not Responding)</span>}
+                        {app.frozen && <span className="text-xs text-red-700 sim-dark:text-red-400 ml-1.5">(Not Responding)</span>}
                       </span>
                       <button
                         onClick={() => handleForceQuit(app.name)}
-                        className={`px-3 py-1 text-xs font-medium rounded-lg ${app.frozen ? "bg-red-500 text-white hover:bg-red-600" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} ${hl("fq-btn", app.name) ? pulse : ""}`}
+                        className={`px-3 py-1 text-xs font-medium rounded-lg ${app.frozen ? "bg-red-600 text-white hover:bg-red-700" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} ${hl("fq-btn", app.name) ? pulse : ""}`}
                       >
                         Force Quit
                       </button>
@@ -673,7 +673,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                           value={pastedCode}
                           readOnly
                           placeholder="Paste error code here..."
-                          className={`flex-1 px-3 py-2 text-sm border rounded-lg bg-gray-50 ${hl("paste-input") ? pulse : ""}`}
+                          className={`flex-1 px-3 py-2 text-sm border border-gray-500 rounded-lg bg-gray-50 ${hl("paste-input") ? pulse : ""}`}
                         />
                         <button
                           onClick={handlePasteCode}
@@ -780,7 +780,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                       <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-green-500 mb-3" fill="currentColor">
                         <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
                       </svg>
-                      <p className="text-sm font-medium text-green-600 mb-1">Connected to Coffee Shop Free WiFi</p>
+                      <p className="text-sm font-medium text-green-700 sim-dark:text-green-400 mb-1">Connected to Coffee Shop Free WiFi</p>
                       <p className="text-xs text-gray-500 max-w-sm mx-auto px-4">
                         You are online — but this is somebody else&apos;s network. Tighten your privacy settings before you browse.
                       </p>
@@ -874,7 +874,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                         <h3 className="font-bold text-base mb-3 text-center">Sign in</h3>
                         <input readOnly value="you@example.com" aria-label="Email" className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-2 bg-gray-50" />
                         <input readOnly type="password" value="......" aria-label="Password" className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-sm mb-2 bg-gray-50" />
-                        <p className="text-xs text-red-600 mb-3">That password is not right.</p>
+                        <p className="text-xs text-red-700 sim-dark:text-red-400 mb-3">That password is not right.</p>
                         <button
                           onClick={handleForgotPasswordLink}
                           className={`text-sm text-blue-600 underline rounded ${hl("forgot-link") ? pulse : ""}`}
@@ -885,9 +885,9 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     )}
                     {prStage === "sent" && (
                       <div className="text-center py-4">
-                        <MailIcon size={32} className="mx-auto text-blue-500 mb-2" />
+                        <MailIcon size={32} className="mx-auto text-blue-700 sim-dark:text-blue-400 mb-2" />
                         <p className="text-sm font-semibold mb-1">Check your email</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-600 sim-dark:text-gray-400">
                           We sent a reset link to you@example.com. Open the Mail app in the dock below to read it.
                         </p>
                       </div>
@@ -917,7 +917,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     )}
                     {prStage === "done" && (
                       <div className="text-center py-4">
-                        <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-2 text-2xl">&#10003;</div>
+                        <div className="w-12 h-12 rounded-full bg-green-100 text-green-700 sim-dark:text-green-400 flex items-center justify-center mx-auto mb-2 text-2xl">&#10003;</div>
                         <p className="text-sm font-semibold mb-0.5">Signed in as you@example.com</p>
                         <p className="text-xs text-gray-500">First National Bank · Personal account</p>
                         <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-2">Your new password is saved. Keep it in a password manager.</p>
@@ -938,7 +938,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 >
                   <div className="bg-gray-100 border-b px-3 py-2 flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-600 sim-dark:text-gray-300">{frozenTarget.name} (Not Responding)</span>
-                    <span className="text-xs text-red-500 animate-spin">&#9696;</span>
+                    <span className="text-xs text-red-700 sim-dark:text-red-400 animate-spin">&#9696;</span>
                   </div>
                   <div className="p-6 opacity-40 select-none">
                     <div className="h-3 bg-gray-200 rounded w-3/4 mb-2" />
@@ -969,7 +969,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     <div className="h-3 bg-gray-300 rounded w-3/4 mb-2" />
                     <div className="h-3 bg-gray-300 rounded w-1/2 mb-2" />
                     <div className="h-3 bg-gray-300 rounded w-5/6" />
-                    <p className="text-xs text-green-600 mt-3">{frozenTarget?.name} is working normally again.</p>
+                    <p className="text-xs text-green-700 sim-dark:text-green-400 mt-3">{frozenTarget?.name} is working normally again.</p>
                   </div>
                 </div>
               )}
@@ -989,10 +989,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 </div>
               ) : (
                 <div className="py-8">
-                  <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-blue-500 mb-3" fill="currentColor">
+                  <svg viewBox="0 0 20 16" className="w-16 h-12 mx-auto text-blue-700 sim-dark:text-blue-400 mb-3" fill="currentColor">
                     <path d="M10 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-3.5-4.3a5 5 0 017 0l-1 1.1a3.3 3.3 0 00-5 0l-1-1.1zm-2.8-2.8a8.3 8.3 0 0112.6 0l-1 1a7 7 0 00-10.6 0l-1-1z"/>
                   </svg>
-                  <p className="text-sm font-medium text-green-600 mb-1">Connected to {connectedNetwork}</p>
+                  <p className="text-sm font-medium text-green-700 sim-dark:text-green-400 mb-1">Connected to {connectedNetwork}</p>
                   <p className="text-xs text-gray-500 sim-dark:text-gray-400">Your internet is working.</p>
                 </div>
               )}
@@ -1003,14 +1003,14 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
           {view === "desktop" && mode === "error-code" && errorDismissed && !appReopened && (
             <div className="p-4 text-center py-8">
               <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-red-400 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
-              <p className="text-sm text-gray-600 mb-1">{errorApp} crashed with error <code className="font-mono font-bold text-red-600">{errorCode}</code></p>
-              {codeCopied && <p className="text-xs text-green-600">Error code copied to clipboard.</p>}
+              <p className="text-sm text-gray-600 mb-1">{errorApp} crashed with error <code className="font-mono font-bold text-red-700 sim-dark:text-red-400">{errorCode}</code></p>
+              {codeCopied && <p className="text-xs text-green-700 sim-dark:text-green-400">Error code copied to clipboard.</p>}
             </div>
           )}
           {view === "desktop" && mode === "error-code" && appReopened && (
             <div className="p-4 text-center py-8">
               <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
-              <p className="text-sm text-green-600 font-medium">{errorApp} is working again!</p>
+              <p className="text-sm text-green-700 sim-dark:text-green-400 font-medium">{errorApp} is working again!</p>
             </div>
           )}
 
@@ -1022,7 +1022,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                   <span className="text-sm font-medium">{frozenApps[0]?.name ?? "Notes"}</span>
                 </div>
                 <div className="p-3">
-                  <p className="text-xs text-green-600 mb-2">{frozenApps[0]?.name ?? "Notes"} is working normally again.</p>
+                  <p className="text-xs text-green-700 sim-dark:text-green-400 mb-2">{frozenApps[0]?.name ?? "Notes"} is working normally again.</p>
                   <textarea
                     value={typedInApp}
                     onChange={(e) => {
@@ -1033,7 +1033,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                       }
                     }}
                     placeholder="Type something here..."
-                    className={`w-full h-24 p-2 text-sm border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 ${hl("notes-input") ? pulse : ""}`}
+                    className={`w-full h-24 p-2 text-sm border border-gray-500 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 ${hl("notes-input") ? pulse : ""}`}
                   />
                 </div>
               </div>
@@ -1088,12 +1088,12 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                         <GlobeIcon size={20} />
                         <div>
                           <span className="text-sm font-medium">{arBrokenTarget}</span>
-                          <span className="text-xs text-red-500 block">Not working</span>
+                          <span className="text-xs text-red-700 sim-dark:text-red-400 block">Not working</span>
                         </div>
                       </div>
                       <button
                         onClick={handleDeleteBrokenApp}
-                        className={`px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium ${hl("delete-app-btn") ? pulse : ""}`}
+                        className={`px-3 py-1.5 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium ${hl("delete-app-btn") ? pulse : ""}`}
                       >
                         Delete
                       </button>
@@ -1118,7 +1118,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                         Install
                       </button>
                     ) : (
-                      <span className="text-xs text-green-600 font-semibold">Installed ✓</span>
+                      <span className="text-xs text-green-700 sim-dark:text-green-400 font-semibold">Installed ✓</span>
                     )}
                   </div>
                 </div>
@@ -1176,10 +1176,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <h3 className="font-bold text-base mb-1">Restart your computer?</h3>
                 <p className="text-xs text-gray-500 mb-4">All unsaved work will be lost.</p>
                 <div className="flex gap-2">
-                  <button onClick={() => setErRestartConfirm(false)} className="flex-1 py-2 border border-gray-300 rounded-xl text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
+                  <button onClick={() => setErRestartConfirm(false)} className="flex-1 py-2 border border-gray-500 rounded-xl text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
                   <button
                     onClick={handleErConfirmRestart}
-                    className={`flex-1 py-2 bg-amber-500 text-white font-medium rounded-xl hover:bg-amber-600 ${hl("confirm-btn") ? pulse : ""}`}
+                    className={`flex-1 py-2 bg-amber-700 text-white font-medium rounded-xl hover:bg-amber-800 ${hl("confirm-btn") ? pulse : ""}`}
                   >
                     Restart
                   </button>

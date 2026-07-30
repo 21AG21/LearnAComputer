@@ -97,7 +97,7 @@ export default function RealWorldMission({ goal, download, steps, onResult }: Re
         <div className="flex flex-1 flex-col items-center justify-center overflow-y-auto p-6">
           {done ? (
             <div className="max-w-lg text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-700 text-white">
                 <CheckIcon size={28} />
               </div>
               <p className="text-xl font-bold">{goal}</p>

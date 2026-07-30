@@ -75,7 +75,7 @@ export default function UrlNavigatorTask({
               placeholder={prompt}
               disabled={loaded}
               className={`flex-1 py-2 pr-3 text-lg font-mono outline-none bg-transparent ${
-                error ? "text-red-500" : "text-gray-900"
+                error ? "text-red-700 sim-dark:text-red-400" : "text-gray-900"
               }`}
             />
           </div>
@@ -105,7 +105,7 @@ export default function UrlNavigatorTask({
         {error && (
           <div className="text-center flex flex-col items-center gap-4">
             <XCircleIcon size={56} className="text-red-400" />
-            <p className="text-2xl font-bold text-red-500">
+            <p className="text-2xl font-bold text-red-700 sim-dark:text-red-400">
               That address didn&apos;t work.
             </p>
             <p className="text-lg text-gray-600">
@@ -120,7 +120,7 @@ export default function UrlNavigatorTask({
             <p className="text-xl text-gray-500 font-mono">
               {normalizeUrl(targetUrl)}
             </p>
-            <p className="text-2xl font-bold text-green-600 mt-2">
+            <p className="text-2xl font-bold text-green-700 sim-dark:text-green-400 mt-2">
               Page loaded successfully!
             </p>
           </div>

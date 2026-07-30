@@ -55,15 +55,44 @@ export const MEASURE = (wantDark) => {
     return r.width > 2 && r.height > 2;
   };
 
-  /** The first ancestor background that is actually opaque enough to be the ground. */
+  /**
+   * The ground actually behind this text, compositing translucent layers.
+   *
+   * Taking the first ancestor with alpha ≥ 0.85 and ignoring everything thinner
+   * gets scrims exactly wrong. The celebration overlay is `bg-black/30` over the
+   * app, and skipping it reported the white congratulation text as white-on-white
+   * at 1:1 — the same wrong-layer mistake `contrast-check` made over the homepage
+   * photos, in a different disguise.
+   *
+   * So: collect every painted layer up to the first opaque one, then composite
+   * them back down. If nothing opaque is found, assume the page's white beneath,
+   * which is what `<body>` actually is.
+   */
   const groundOf = (el) => {
+    const layers = [];
     let n = el;
     while (n && n !== document.documentElement) {
       const c = parse(getComputedStyle(n).backgroundColor);
-      if (c && c.a >= 0.85) return { color: c, on: n };
+      if (c && c.a > 0.001) {
+        layers.push(c);
+        if (c.a >= 0.999) break;
+      }
       n = n.parentElement;
     }
-    return null;
+    if (!layers.length) return null;
+    let out = layers[layers.length - 1];
+    if (out.a < 0.999) out = { r: 255, g: 255, b: 255, a: 1 };
+    for (let i = layers.length - 1; i >= 0; i--) {
+      const t = layers[i];
+      if (t.a >= 0.999) { out = t; continue; }
+      out = {
+        r: t.r * t.a + out.r * (1 - t.a),
+        g: t.g * t.a + out.g * (1 - t.a),
+        b: t.b * t.a + out.b * (1 - t.a),
+        a: 1,
+      };
+    }
+    return { color: { r: Math.round(out.r), g: Math.round(out.g), b: Math.round(out.b), a: 1 }, on: el };
   };
 
   /**
@@ -95,6 +124,8 @@ export const MEASURE = (wantDark) => {
   const lightSurfaces = [];
   const badText = [];
   const okText = [];
+  const badUi = [];
+  let okUi = 0;
   let skipped = 0;
 
   for (const el of scope.querySelectorAll("*")) {
@@ -137,6 +168,16 @@ export const MEASURE = (wantDark) => {
      */
     const t0 = el.textContent.trim();
     if (t0 && !/[\p{L}\p{N}]/u.test(t0) && /\p{Extended_Pictographic}/u.test(t0)) continue;
+
+    /**
+     * Disabled controls are exempt, and this is WCAG's own carve-out rather than a
+     * convenience: 1.4.3 does not apply to "text or images of text that are part of
+     * an inactive user interface component". The messaging app's "Start Chat" is
+     * gray-500 on gray-200 until you tick somebody — 3.9:1, and *looking* muted is
+     * the entire point. Darkening it to satisfy a checker would make a disabled
+     * button look enabled, which is a worse bug than the one being fixed.
+     */
+    if (el.closest("[disabled],[aria-disabled='true']")) continue;
     const cs = getComputedStyle(el);
     const fg = parse(cs.color);
     const ground = groundOf(el);
@@ -158,5 +199,78 @@ export const MEASURE = (wantDark) => {
     else badText.push(rec);
   }
 
-  return { lightSurfaces, badText, okCount: okText.length, skipped };
+  /**
+   * WCAG 1.4.11, non-text contrast: the visual information needed to identify a
+   * user-interface component must reach 3:1 against what is adjacent to it.
+   *
+   * In practice, for this product, that means the *border* of an interactive
+   * control — the thing that says "this is a box you can type in" as opposed to a
+   * sentence. Nothing has ever scored these. Scoped to real controls rather than
+   * every bordered div, because a decorative hairline between two paragraphs is
+   * not a component boundary and treating it as one produces noise instead of
+   * findings.
+   *
+   * Disabled controls are exempt, same carve-out as 1.4.3.
+   */
+  const FIELDS = "input, select, textarea, [contenteditable='true']";
+  const BUTTONS = "button, [role='button'], [role='checkbox'], [role='switch']";
+  for (const el of scope.querySelectorAll(`${FIELDS}, ${BUTTONS}`)) {
+    if (el.closest("[data-sim-paper]")) continue;
+    if (!visible(el)) continue;
+    if (el.closest("[disabled],[aria-disabled='true']")) continue;
+    const cs = getComputedStyle(el);
+    const sides = [
+      parseFloat(cs.borderTopWidth) || 0, parseFloat(cs.borderBottomWidth) || 0,
+      parseFloat(cs.borderLeftWidth) || 0, parseFloat(cs.borderRightWidth) || 0,
+    ];
+    const w = Math.max(...sides);
+    if (w < 1) continue; // no border is a design choice, not a failing border
+
+    /**
+     * Which borders actually carry 1.4.11, and which are furniture.
+     *
+     * A **form field's** border is the affordance: it is the only thing saying
+     * "you can type here", and for an audience that struggles to find the text box
+     * that matters more than it does anywhere else. Always scored.
+     *
+     * A **button's** border only matters when it is the sole boundary. A filled
+     * button is identified by its fill; the outline is decoration. And a button
+     * with only a *bottom* border is a list row — Mail's inbox, the folder list —
+     * where the hairline separates rows rather than identifying a control. The
+     * first version scored those too and reported every list separator in the
+     * course as a failure, which would have meant drawing hard dark rules through
+     * every list to satisfy a checker.
+     */
+    const isField = el.matches(FIELDS);
+    if (!isField) {
+      const boxed = sides.every((x) => x >= 1);
+      if (!boxed) continue;
+      const ownBg = parse(cs.backgroundColor);
+      const parentGround = el.parentElement ? groundOf(el.parentElement) : null;
+      const filled =
+        ownBg && ownBg.a >= 0.85 && parentGround &&
+        (ownBg.r !== parentGround.color.r || ownBg.g !== parentGround.color.g || ownBg.b !== parentGround.color.b);
+      if (filled) continue;
+    }
+    const bc = parse(cs.borderTopColor);
+    if (!bc || bc.a < 0.85) continue;
+
+    // Adjacent means what is *outside* the control, which is the parent's ground —
+    // scoring a border against its own fill answers a different question.
+    const outside = el.parentElement ? groundOf(el.parentElement) : null;
+    if (!outside) continue;
+    const cr2 = ratio(lum(bc.r, bc.g, bc.b), lum(outside.color.r, outside.color.g, outside.color.b));
+    if (cr2 >= 3) { okUi++; continue; }
+    badUi.push({
+      tag: el.tagName.toLowerCase(),
+      ratio: Math.round(cr2 * 100) / 100,
+      need: 3,
+      fg: `${bc.r},${bc.g},${bc.b}`,
+      bg: `${outside.color.r},${outside.color.g},${outside.color.b}`,
+      text: (el.textContent || "").trim().slice(0, 40) || el.getAttribute("aria-label") || el.tagName,
+      cls: (el.getAttribute("class") || "").slice(0, 110),
+    });
+  }
+
+  return { lightSurfaces, badText, badUi, okCount: okText.length, okUiCount: okUi, skipped };
 };

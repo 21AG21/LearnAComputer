@@ -80,6 +80,8 @@ const byDefect = new Map();
 let measured = 0;
 let mounted = 0;
 let launched = 0;
+let stepsWalked = 0;
+let uiMeasured = 0;
 const skipped = [];
 const started = Date.now();
 
@@ -124,25 +126,85 @@ for (let i = 0; i < slugs.length; i++) {
   await page.waitForTimeout(650); // launch animation, desktop settling
 
   if (NEGATIVE) {
-    await page.addStyleTag({ content: `.text-gray-500 { color: #f4f4f5 !important; }` });
+    // Both halves, or the flag only proves half the sweep can see. Text washes out
+    // to near-white; every control border goes back to a hairline no one can find.
+    await page.addStyleTag({
+      content:
+        `.text-gray-500 { color: #f4f4f5 !important; }` +
+        `input, textarea, select, [contenteditable='true'] { border-color: #f3f4f6 !important; }`,
+    });
   }
+
+  const record = (res) => {
+    measured += res.badText.length + res.okCount;
+    uiMeasured += (res.badUi?.length ?? 0) + (res.okUiCount ?? 0);
+    const rows = [
+      ...res.badText.map((t) => ({ ...t, kind: "text" })),
+      ...(res.badUi ?? []).map((t) => ({ ...t, kind: "border" })),
+    ];
+    for (const t of rows) {
+      const key = `${t.kind}|${t.fg}|${t.bg}|${t.cls}`;
+      const hit = byDefect.get(key) ?? { ...t, slugs: new Set(), samples: new Set() };
+      hit.slugs.add(slug);
+      hit.samples.add(t.text);
+      byDefect.set(key, hit);
+    }
+  };
 
   // Scope to the activity host rather than the desktop: this page has no
   // FakeDesktop of its own, and full-bleed activities render straight into it.
-  const res = await page.evaluate(MEASURE, false);
-  if (res.error) {
-    skipped.push(`${slug} (${res.error})`);
+  const first = await page.evaluate(MEASURE, false);
+  if (first.error) {
+    skipped.push(`${slug} (${first.error})`);
     continue;
   }
-  measured += res.badText.length + res.okCount;
+  record(first);
 
-  for (const t of res.badText) {
-    const key = `${t.fg}|${t.bg}|${t.cls}`;
-    const hit = byDefect.get(key) ?? { ...t, slugs: new Set(), samples: new Set() };
-    hit.slugs.add(slug);
-    hit.samples.add(t.text);
-    byDefect.set(key, hit);
+  /**
+   * Then walk the lesson forward and measure again after every step.
+   *
+   * Measuring only the mounted state is measuring the first screen. Everything a
+   * guided lesson is actually *about* lives past it: the compose pane, the file
+   * picker, the share sheet, the reading pane, the 2FA form, the crop tools, the
+   * downloads panel. The first version of this sweep stopped at mount and called
+   * 125 activities covered, which was true of 125 first screens.
+   *
+   * Clicking the innermost pulsing ring is how the solver and stray-check both
+   * advance, and it is what the learner is being told to do. Stops as soon as a
+   * click stops advancing the step counter, so a control that is not what the
+   * step wants ends the walk instead of hammering it.
+   */
+  let steps = 0;
+  for (let hop = 0; hop < 14; hop++) {
+    const progressed = await page.evaluate(() => {
+      const frame = document.querySelector("[data-sim-frame]");
+      if (!frame || frame.getAttribute("data-sim-done") === "1") return null;
+      const before = Number(frame.getAttribute("data-sim-progress") ?? 0);
+      const rings = [...frame.querySelectorAll("*")].filter((e) => {
+        const c = (e.className || "").toString();
+        return /ring-yellow|animate-ring-pulse/.test(c) && e.offsetParent !== null;
+      });
+      const el = rings.find((r) => !rings.some((o) => o !== r && r.contains(o)));
+      const target = el?.closest("button") ?? el;
+      if (!target) return null;
+      target.click();
+      return before;
+    });
+    if (progressed === null) break;
+    await page.waitForTimeout(600);
+
+    const after = await page.evaluate(() => {
+      const frame = document.querySelector("[data-sim-frame]");
+      return frame ? Number(frame.getAttribute("data-sim-progress") ?? 0) : -1;
+    });
+    if (after <= progressed) break; // that control was not the step's; stop here
+
+    const res = await page.evaluate(MEASURE, false);
+    if (res.error) break;
+    record(res);
+    steps++;
   }
+  stepsWalked += steps;
 
   if ((i + 1) % 25 === 0 || i === slugs.length - 1) {
     const secs = Math.round((Date.now() - started) / 1000);
@@ -154,7 +216,8 @@ await browser.close();
 
 console.log(
   `\nMeasured ${measured} text run(s) across ${mounted} activity/activities ` +
-    `(${launched} reached by opening the app first).`,
+    `(${launched} reached by opening the app first), walking ${stepsWalked} step(s) past mount.\n` +
+    `Also scored ${uiMeasured} control border(s) for non-text contrast (WCAG 1.4.11).`,
 );
 if (skipped.length) {
   console.log(`  skipped ${skipped.length}: no sim frame (full-bleed or unmountable)`);
@@ -165,7 +228,7 @@ if (byDefect.size) {
   console.log(`\n${rows.length} distinct contrast defect(s), worst reach first:\n`);
   for (const d of rows) {
     console.log(
-      `  ${d.ratio}:1 (needs ${d.need})  fg(${d.fg}) on bg(${d.bg})  in ${d.slugs.size} lesson(s)`,
+      `  [${d.kind}] ${d.ratio}:1 (needs ${d.need})  ${d.fg} on ${d.bg}  in ${d.slugs.size} lesson(s)`,
     );
     console.log(`     e.g. "${[...d.samples][0]}"`);
     console.log(`     class="${d.cls}"`);
@@ -181,4 +244,4 @@ if (NEGATIVE) {
   console.log("SIMCONTRAST_NEGATIVE=1 produced no findings — the sweep is blind. Fix the check.");
   process.exit(1);
 }
-console.log("Every text run in every activity meets WCAG AA.");
+console.log("Every text run and control border in every activity meets WCAG AA.");

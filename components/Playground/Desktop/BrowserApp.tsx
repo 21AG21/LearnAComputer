@@ -9,7 +9,7 @@ export default function BrowserApp({ noWifi = false }: { noWifi?: boolean }) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-2 bg-gray-50">
         <NoConnectionIcon size={40} className="text-gray-500 sim-dark:text-gray-400" />
-        <p className="text-xl font-bold text-red-600">No WiFi</p>
+        <p className="text-xl font-bold text-red-700 sim-dark:text-red-400">No WiFi</p>
         <p className="text-gray-500 text-sm">Connect to a network to browse.</p>
       </div>
     );

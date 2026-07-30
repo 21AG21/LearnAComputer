@@ -346,7 +346,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
           <div key={g} className="border-2 border-dashed border-yellow-400 rounded-lg p-2 bg-yellow-50">
             <p className="font-bold text-sm">{g}</p>
             <p className="text-xs text-gray-500">Free · Rated 4.9 stars</p>
-            <div className="mt-1.5 bg-green-500 text-white text-xs font-black text-center rounded py-0.5">PLAY NOW</div>
+            <div className="mt-1.5 bg-green-700 text-white text-xs font-black text-center rounded py-0.5">PLAY NOW</div>
           </div>
         ))}
       </div>
@@ -512,7 +512,7 @@ const PAGE_CONTENT: Partial<Record<PageId, ReactNode>> = {
             { code: "ERR_19", desc: "Printer offline — restart the printer" },
           ].map((e) => (
             <div key={e.code} className="flex items-start gap-2 border border-gray-200 rounded-lg p-2 text-xs hover:bg-gray-50">
-              <span className="font-black text-red-600 shrink-0">{e.code}</span>
+              <span className="font-black text-red-700 sim-dark:text-red-400 shrink-0">{e.code}</span>
               <span className="text-gray-700">{e.desc}</span>
             </div>
           ))}
@@ -970,7 +970,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             aria-label="Site security"
             className={`shrink-0 ${hl("lock-btn") ? "ring-4 ring-yellow-400 animate-pulse rounded" : ""}`}
           >
-            {activePage.url ? (activePage.secure ? <LockIcon size={16} /> : <WarningIcon size={16} className="text-red-500" />) : null}
+            {activePage.url ? (activePage.secure ? <LockIcon size={16} /> : <WarningIcon size={16} className="text-red-700 sim-dark:text-red-400" />) : null}
           </button>
           {editing ? (
             <>
@@ -989,12 +989,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           ) : (
             <span className={`flex-1 text-base ${activePage.url ? "" : "text-gray-500 sim-dark:text-gray-400"}`}>
               {activePage.url || "Type a website address"}
-              {!activePage.secure && activePage.url && <span className="text-red-600 font-semibold text-sm ml-2">Not Secure</span>}
+              {!activePage.secure && activePage.url && <span className="text-red-700 sim-dark:text-red-400 font-semibold text-sm ml-2">Not Secure</span>}
             </span>
           )}
         </div>
         <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`text-lg px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>
-          {bookmarks.includes(activeTab.pageId) ? <StarFilledIcon size={18} className="text-yellow-500" /> : <StarIcon size={18} />}
+          {bookmarks.includes(activeTab.pageId) ? <StarFilledIcon size={18} className="text-amber-700 sim-dark:text-yellow-400" /> : <StarIcon size={18} />}
         </button>
       </div>
 
@@ -1081,7 +1081,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 <p className="text-gray-500 sim-dark:text-gray-400 font-semibold mb-3">Favorites</p>
                 <div className="grid grid-cols-4 gap-3 max-w-2xl">
                   {FAVORITES.map((f) => (
-                    <button key={f} onClick={() => navigate(f)} className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50">
+                    <button key={f} onClick={() => navigate(f)} className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50">
                       <span className="text-gray-600 sim-dark:text-gray-300">{PAGES[f].icon}</span>
                       <span className="text-xs font-semibold text-center leading-tight">{PAGES[f].title}</span>
                       <span className="text-[10px] text-gray-500 sim-dark:text-gray-400 text-center leading-tight">{PAGES[f].url}</span>
@@ -1094,9 +1094,9 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             {activePage.kind === "search" && (
               <div className="flex flex-col items-center gap-4 pt-6">
                 <p className="text-5xl font-black tracking-tight">
-                  <span className="text-blue-500">G</span><span className="text-red-500">o</span>
-                  <span className="text-yellow-500">o</span><span className="text-blue-500">g</span>
-                  <span className="text-green-500">l</span><span className="text-red-500">e</span>
+                  <span className="text-blue-700 sim-dark:text-blue-400">G</span><span className="text-red-700 sim-dark:text-red-400">o</span>
+                  <span className="text-amber-700 sim-dark:text-yellow-400">o</span><span className="text-blue-700 sim-dark:text-blue-400">g</span>
+                  <span className="text-green-500">l</span><span className="text-red-700 sim-dark:text-red-400">e</span>
                 </p>
                 <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"}`}>
                   <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
@@ -1142,13 +1142,13 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                   <div className="mt-6 border-t border-gray-200 pt-3">
                     <p style={{ fontSize: "8px" }} className="text-gray-500 sim-dark:text-gray-400 leading-tight max-w-md">
                       Special offer details: Subscribe today and get 50% off your first 3 months. Use code NEWREADER at checkout. Offer valid for new subscribers only. Terms and conditions apply. See full details at dailynews.example/terms.
-                      {activeTab.zoom >= 150 && <span className="text-green-600 font-bold"> Now you can read this!</span>}
+                      {activeTab.zoom >= 150 && <span className="text-green-700 sim-dark:text-green-400 font-bold"> Now you can read this!</span>}
                     </p>
                   </div>
                 )}
                 {activePage.ads && (
                   <div className="mt-4 flex flex-col gap-3">
-                    <button onClick={clickAd} className="w-full bg-green-500 text-white font-black text-center py-3 rounded-lg border-2 border-green-700 hover:bg-green-600 animate-pulse">
+                    <button onClick={clickAd} className="w-full bg-green-700 text-white font-black text-center py-3 rounded-lg border-2 border-green-700 hover:bg-green-800 animate-pulse">
                       ▶ DOWNLOAD NOW — FREE!!!
                     </button>
                     <button onClick={clickAd} className="w-full bg-yellow-400 text-black font-black text-center py-2 rounded-lg border-2 border-yellow-600 hover:bg-yellow-300">
@@ -1198,7 +1198,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                       );
                     })}
                   </div>
-                  {tabSeqWrong && <p className="text-red-600 font-semibold text-sm">Not that one — check the sequence above!</p>}
+                  {tabSeqWrong && <p className="text-red-700 sim-dark:text-red-400 font-semibold text-sm">Not that one — check the sequence above!</p>}
                   {tabSeqPos >= PICK_SEQ.length && <p className="text-green-700 font-bold">Sequence complete!</p>}
                 </div>
               </div>
@@ -1254,10 +1254,10 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-2">
             <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
               <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-8 h-8 bg-white border-2 border-black rounded-full font-bold flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
-              <p className="text-red-500 mb-2"><WarningIcon size={40} /></p>
-              <p className="font-black text-red-600 text-lg">VIRUS DETECTED!!!</p>
+              <p className="text-red-700 sim-dark:text-red-400 mb-2"><WarningIcon size={40} /></p>
+              <p className="font-black text-red-700 sim-dark:text-red-400 text-lg">VIRUS DETECTED!!!</p>
               <p className="text-sm text-gray-700 my-2">Your computer is infected! Click below to clean it NOW!</p>
-              <button onClick={clickCleanNow} className="px-4 py-2 bg-red-500 text-white font-bold rounded-lg w-full hover:bg-red-600">CLEAN NOW</button>
+              <button onClick={clickCleanNow} className="px-4 py-2 bg-red-600 text-white font-bold rounded-lg w-full hover:bg-red-700">CLEAN NOW</button>
             </div>
           </div>
         )}
@@ -1277,7 +1277,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
               </>
             ) : (
               <>
-                <p className="font-bold text-red-600 flex items-center gap-2"><WarningIcon size={18} /> This connection is NOT secure.</p>
+                <p className="font-bold text-red-700 sim-dark:text-red-400 flex items-center gap-2"><WarningIcon size={18} /> This connection is NOT secure.</p>
                 <p className="text-sm text-gray-700 sim-dark:text-gray-200 mt-2 leading-relaxed">
                   Anything you type here could be read by others on the network. <b>Never enter passwords or card numbers on a page without the lock.</b>
                 </p>

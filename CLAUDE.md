@@ -188,10 +188,32 @@ own `muted` — and keep bare gray-400. White text needs `bg-blue-600`, not
 
 It reaches every activity through `window.__strayShow`, the same script-controlled
 mount `stray-check` uses, clicking the "open the app" gate as a learner does —
-without that most of the course silently never mounts. The measurement is shared
-with `simdark-check` via `scripts/lib/sim-contrast.mjs`; two copies of the same
-maths is how you get two answers. `SIMCONTRAST_NEGATIVE=1` is the negative control
-and has been watched to fail. Green at **2966 text runs over 125 activities**.
+without that most of the course silently never mounts. **It also walks each lesson
+forward**, clicking the highlighted control and re-measuring after every step,
+because measuring on mount is measuring the first screen and everything a guided
+lesson is *about* lives past it. That walk more than doubled coverage and found a
+whole class the mount-only sweep never saw: semantic colours at the -500/-600 step
+do not clear AA on white or on their own pale tint (green-600 3.3:1, red-500
+3.44:1, blue-500 3.68:1, yellow-500 1.84:1). 69 text tokens and 13 fills moved one
+step darker, each with a light dark-mode partner.
+
+**It enforces WCAG 1.4.11 too**, scoped on purpose: a form field's border is always
+scored (it is the only thing saying "type here"), a button's only when it is the
+sole boundary — boxed on four sides and unfilled. A bottom-border-only button is a
+list row, not a control outline; scoring those reported every list separator in the
+course. Disabled controls are exempt, WCAG's own carve-out. Tailwind's default
+border is gray-200, **1.24:1** on white, so every form field in the course had an
+invisible boundary; the floor is `border-gray-500`, which is 4.83:1 on white and
+3.58:1 on a gray-900 window, so one value serves both themes.
+
+The measurement is shared with `simdark-check` via `scripts/lib/sim-contrast.mjs`;
+two copies of the same maths is how you get two answers. It composites translucent
+layers when resolving a ground — skipping anything under 0.85 alpha made the
+celebration overlay's white congratulation read as white-on-white at 1:1, the same
+wrong-layer mistake `contrast-check` once made over the homepage photos.
+`SIMCONTRAST_NEGATIVE=1` is the negative control, covers both halves, and has been
+watched to fail. Green at **7099 text runs and 640 control borders over 125
+activities, walking 155 steps past mount**.
 
 **`simdark-check` now measures both themes,** and that retired a piece of
 self-deception. It used to file any shortfall on a saturated ground under
@@ -254,10 +276,15 @@ Three flags matter when touching it:
   measure" bucket and does **not** count as a failure. A check that says "I don't
   know" is useful; one that guesses and calls it a measurement is what this was.
 
-It also throws on any page in `PAGES` that does not return 200. `/login` sat in
-that list from the 2026-07-28 account removal onward — `page.goto` does not throw
-on a 404, so the check spent months measuring the not-found page and filing the
-results under `/login`.
+`PAGES` entries may declare an expected status, so the two pages a learner only
+meets on their worst visit are finally measured: a wrong URL for `not-found.tsx`,
+and `/dev/boom` for `error.tsx`. That page throws **after mount** on purpose — a
+first-render throw throws on the server too, so Next serves its own 500 document
+and `error.tsx` never renders inside the root layout, leaving the check measuring a
+page the product does not own. Anything else that does not return its declared
+status still fails: `/login` sat in this list from the 2026-07-28 account removal
+onward, and because `page.goto` does not throw on a 404, the check spent months
+measuring the not-found page and filing the results under `/login`.
 
 Still advisory, not a gate. It is now trustworthy enough to promote; nobody has.
 

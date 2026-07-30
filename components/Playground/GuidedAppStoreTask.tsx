@@ -362,7 +362,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
             <h3 className="font-bold text-base mb-2">{denied.app.name}</h3>
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
               <p className="text-sm text-red-700 font-medium mb-1">Installation canceled</p>
-              <p className="text-xs text-red-600">{denied.app.name} needs these permissions to work.</p>
+              <p className="text-xs text-red-700 sim-dark:text-red-400">{denied.app.name} needs these permissions to work.</p>
             </div>
             {/* This card replaces the whole store, so while a next step is waiting
                 the only way forward is this button — it gets the glow, or the
@@ -437,7 +437,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder="Search apps..."
-              className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl("search-bar") ? pulse : ""}`}
+              className={`w-full px-3 py-2 text-sm border border-gray-500 rounded-lg outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl("search-bar") ? pulse : ""}`}
             />
           </div>
           <div className="flex gap-1.5 px-3 py-2 border-b overflow-x-auto flex-shrink-0">
@@ -456,7 +456,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
               <button
                 key={app.id}
                 onClick={() => handleSelectApp(app)}
-                className={`flex items-center gap-3 p-3 border rounded-xl hover:bg-gray-50 sim-dark:hover:bg-gray-800 text-left transition-all ${hl("app-card", app.name) ? pulse : ""}`}
+                className={`flex items-center gap-3 p-3 border border-gray-500 rounded-xl hover:bg-gray-50 sim-dark:hover:bg-gray-800 text-left transition-all ${hl("app-card", app.name) ? pulse : ""}`}
               >
                 <div className={`w-11 h-11 ${app.color} rounded-xl flex items-center justify-center text-xl flex-shrink-0`}>{app.icon}</div>
                 <div className="flex-1 min-w-0">
@@ -479,7 +479,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
 
       {tab === "store" && selectedApp && (
         <div className="flex-1 overflow-y-auto p-4">
-          <button onClick={() => setSelectedApp(null)} className="text-blue-500 text-sm mb-3 hover:underline">← Back</button>
+          <button onClick={() => setSelectedApp(null)} className="text-blue-700 sim-dark:text-blue-400 text-sm mb-3 hover:underline">← Back</button>
           <div className="flex items-start gap-3 mb-3">
             <div className={`w-16 h-16 ${selectedApp.color} rounded-2xl flex items-center justify-center text-3xl flex-shrink-0`}>{selectedApp.icon}</div>
             <div className="min-w-0">
@@ -549,7 +549,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                   <div key={i} className="p-2.5 bg-gray-50 sim-dark:bg-gray-800 rounded-lg">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-xs font-semibold text-gray-700 sim-dark:text-gray-200">{r.name}</span>
-                      <span className="text-[10px] text-yellow-500">{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</span>
+                      <span className="text-[10px] text-amber-700 sim-dark:text-yellow-400">{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</span>
                     </div>
                     <p className="text-xs text-gray-600 sim-dark:text-gray-300">{r.text}</p>
                   </div>
@@ -573,7 +573,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                   <span className="text-[10px] text-orange-500 font-medium">Update available</span>
                 )}
                 {updatedIds.includes(app.id) && (
-                  <span className="text-[10px] text-green-600 font-medium">Up to date ✓</span>
+                  <span className="text-[10px] text-green-700 sim-dark:text-green-400 font-medium">Up to date ✓</span>
                 )}
               </div>
               <div className="flex flex-col gap-1 flex-shrink-0">
@@ -588,7 +588,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
                 {!app.preInstalled && !deletedIds.includes(app.id) && (
                   <button
                     onClick={() => handleDelete(app.name)}
-                    className={`px-2.5 py-1 text-[11px] bg-red-50 text-red-600 rounded-lg hover:bg-red-100 ${hl("delete-btn", app.name) ? pulse : ""}`}
+                    className={`px-2.5 py-1 text-[11px] bg-red-50 text-red-700 sim-dark:text-red-400 rounded-lg hover:bg-red-100 ${hl("delete-btn", app.name) ? pulse : ""}`}
                   >
                     Delete
                   </button>

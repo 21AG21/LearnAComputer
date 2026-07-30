@@ -53,7 +53,7 @@ export function ConfirmCheck({ step, onPass }: CheckProps) {
 
 export function DownloadCheck({ step, download, onPass }: CheckProps) {
   const [clicked, setClicked] = useState(false);
-  if (!download) return <p className="text-red-600">This step needs a download, but the lesson did not name one.</p>;
+  if (!download) return <p className="text-red-700 sim-dark:text-red-400">This step needs a download, but the lesson did not name one.</p>;
 
   return (
     <div className={CARD}>
@@ -577,7 +577,7 @@ export function AnswerCheck({ step, onPass }: CheckProps) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && submit()}
-          className="min-w-0 flex-1 rounded-lg border-2 border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="min-w-0 flex-1 rounded-lg border-2 border-gray-500 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
           placeholder="Type what you see"
         />
         <button onClick={submit} className={BTN}>

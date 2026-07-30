@@ -127,12 +127,15 @@ async function pass(mode) {
     for (const s of res.lightSurfaces) {
       note(app, mode, "light surface", `<${s.tag}> rgb(${s.rgb}) ${s.area}px²  "${s.text}"  class="${s.cls}"`);
     }
+    for (const t of res.badUi ?? []) {
+      note(app, mode, "control border", `${t.ratio}:1 (needs 3) ${t.fg} on ${t.bg}  "${t.text}"  class="${t.cls}"`);
+    }
     for (const t of res.badText) {
       note(app, mode, "unreadable text", `${t.ratio}:1 (needs ${t.need}) fg(${t.fg}) on bg(${t.bg})  "${t.text}"  class="${t.cls}"`);
       seenText.set(`${t.fg}|${t.bg}|${t.text}`, (seenText.get(`${t.fg}|${t.bg}|${t.text}`) ?? new Set()).add(mode));
     }
 
-    const bad = res.lightSurfaces.length + res.badText.length;
+    const bad = res.lightSurfaces.length + res.badText.length + (res.badUi?.length ?? 0);
     // The skipped count is printed on every line, passes included, and that is
     // deliberate. A `data-sim-paper` marker placed on a container that also holds
     // chrome makes this check skip real defects and still say "ok" — which is exactly
@@ -141,7 +144,7 @@ async function pass(mode) {
     console.log(
       `  ${bad ? "FAIL" : "ok  "}  ${app.padEnd(11)} ` +
         `${res.lightSurfaces.length} light surface(s), ${res.badText.length} unreadable of ${res.badText.length + res.okCount} text node(s)` +
-        `, ${res.skipped} skipped as paper`,
+        `, ${(res.badUi ?? []).length} border(s) under 3:1, ${res.skipped} skipped as paper`,
     );
     if (VERBOSE && bad) {
       for (const s of res.lightSurfaces) console.log(`          light: ${s.cls}`);

@@ -106,7 +106,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
   return (
     <div className="flex-1 flex items-center justify-center p-6">
       <div className="w-full max-w-xs text-center">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-600 mx-auto mb-4">
+        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-700 sim-dark:text-green-400 mx-auto mb-4">
           <CheckCircleIcon size={36} />
         </div>
         <h3 className="font-bold text-xl mb-1">Signed In</h3>
@@ -123,7 +123,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
           </div>
           <div className="flex justify-between py-1">
             <span className="text-gray-500">Security</span>
-            <span className="text-green-600 font-medium">Protected</span>
+            <span className="text-green-700 sim-dark:text-green-400 font-medium">Protected</span>
           </div>
         </div>
         <button onClick={onSignOut} className="w-full py-2.5 border-2 border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all">
@@ -434,7 +434,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
             onChange={(e) => handleTypePassword(e.target.value)}
             type="text"
             placeholder="Type a password..."
-            className={`w-full px-4 py-3 border-2 rounded-xl text-sm outline-none focus:border-blue-400 mb-3 font-mono ${hl("pw-input") ? pulse : ""}`}
+            className={`w-full px-4 py-3 border-2 border-gray-500 rounded-xl text-sm outline-none focus:border-blue-600 mb-3 font-mono ${hl("pw-input") ? pulse : ""}`}
           />
           {/* Strength meter — always visible while typing */}
           {passwordInput && (
@@ -443,7 +443,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
                   <div className={`h-full rounded-full transition-all duration-300 ${strength.color}`} style={{ width: `${(strength.level / 5) * 100}%` }} />
                 </div>
-                <span className={`text-xs font-bold ${strength.level >= 4 ? "text-green-600" : strength.level >= 3 ? "text-yellow-600" : "text-red-500"}`}>{strength.label}</span>
+                <span className={`text-xs font-bold ${strength.level >= 4 ? "text-green-700 sim-dark:text-green-400" : strength.level >= 3 ? "text-yellow-600" : "text-red-700 sim-dark:text-red-400"}`}>{strength.label}</span>
               </div>
               {/* Criteria checklist — always visible */}
               <div className={`p-4 rounded-xl border ${strength.level >= 4 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200"}`}>
@@ -472,7 +472,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
         <div className="flex-1 overflow-y-auto flex items-center justify-center p-5">
           {resetView === "none" && (
             <div className="w-full max-w-xs">
-              <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mx-auto mb-4"><KeyIcon size={28} /></div>
+              <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 sim-dark:text-blue-400 mx-auto mb-4"><KeyIcon size={28} /></div>
               <h3 className="font-bold text-lg text-center mb-4">Sign In</h3>
               <input
                 value={username}
@@ -481,7 +481,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "type-username" && v.includes((s.value ?? "").toLowerCase())); }
                 }}
                 placeholder="Email address"
-                className={`w-full px-4 py-3 border rounded-xl text-sm outline-none focus:border-blue-400 mb-3 ${hl("username-input") ? pulse : ""}`}
+                className={`w-full px-4 py-3 border border-gray-500 rounded-xl text-sm outline-none focus:border-blue-600 mb-3 ${hl("username-input") ? pulse : ""}`}
               />
               <input
                 value={loginPassword}
@@ -491,7 +491,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 }}
                 type="password"
                 placeholder="Password"
-                className={`w-full px-4 py-3 border rounded-xl text-sm outline-none focus:border-blue-400 mb-4 ${hl("login-pw-input") ? pulse : ""}`}
+                className={`w-full px-4 py-3 border border-gray-500 rounded-xl text-sm outline-none focus:border-blue-600 mb-4 ${hl("login-pw-input") ? pulse : ""}`}
               />
               <button
                 onClick={handleLogin}
@@ -500,7 +500,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 Log In
               </button>
               {steps.some((s) => s.action === "forgot-link") && (
-                <button onClick={handleForgotLink} className={`w-full text-center text-sm text-blue-500 hover:underline mt-3 ${hl("forgot-link") ? pulse + " rounded px-2 py-1" : ""}`}>
+                <button onClick={handleForgotLink} className={`w-full text-center text-sm text-blue-700 sim-dark:text-blue-400 hover:underline mt-3 ${hl("forgot-link") ? pulse + " rounded px-2 py-1" : ""}`}>
                   Forgot password?
                 </button>
               )}
@@ -513,11 +513,11 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   </div>
                   {passkeyDone ? (
                     <div className="text-center py-3 bg-green-50 border border-green-200 rounded-xl">
-                      <span className="text-green-600 font-semibold">Signed in with passkey</span>
+                      <span className="text-green-700 sim-dark:text-green-400 font-semibold">Signed in with passkey</span>
                     </div>
                   ) : passkeyScanning ? (
                     <div className="text-center py-4">
-                      <div className="w-16 h-16 mx-auto mb-2 rounded-full border-4 border-blue-400 flex items-center justify-center animate-pulse text-blue-500">
+                      <div className="w-16 h-16 mx-auto mb-2 rounded-full border-4 border-blue-400 flex items-center justify-center animate-pulse text-blue-700 sim-dark:text-blue-400">
                         <FingerprintIcon size={32} />
                       </div>
                       <p className="text-sm text-blue-600 font-medium animate-pulse">Scanning fingerprint...</p>
@@ -525,7 +525,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   ) : (
                     <button
                       onClick={handlePasskey}
-                      className={`w-full py-3 border-2 border-gray-300 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-all ${hl("passkey-btn") ? pulse : ""}`}
+                      className={`w-full py-3 border-2 border-gray-500 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-all ${hl("passkey-btn") ? pulse : ""}`}
                     >
                       <FingerprintIcon size={20} />
                       <span className="font-medium text-sm">Sign in with Passkey</span>
@@ -567,7 +567,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
           )}
           {resetView === "new-password" && (
             <div className="w-full max-w-xs">
-              <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mx-auto mb-4"><KeyIcon size={28} /></div>
+              <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 sim-dark:text-blue-400 mx-auto mb-4"><KeyIcon size={28} /></div>
               <h3 className="font-bold text-lg text-center mb-2">Create New Password</h3>
               <p className="text-sm text-gray-500 text-center mb-4">Choose a strong new password for your account.</p>
               <input
@@ -578,7 +578,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                 }}
                 type="password"
                 placeholder="New password"
-                className={`w-full px-4 py-3 border rounded-xl text-sm outline-none focus:border-blue-400 mb-4 ${hl("login-pw-input") ? pulse : ""}`}
+                className={`w-full px-4 py-3 border border-gray-500 rounded-xl text-sm outline-none focus:border-blue-600 mb-4 ${hl("login-pw-input") ? pulse : ""}`}
               />
               <button onClick={handleLogin} className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all ${hl("login-btn") ? pulse : ""}`}>
                 Save & Log In
@@ -610,10 +610,10 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   <div className="flex items-baseline gap-1">
                     <span className="text-sm font-semibold truncate flex-1">{item?.from}</span>
                     {verdict === "safe" && <CheckCircleIcon size={12} className="text-green-500 shrink-0" />}
-                    {verdict === "dangerous" && <XCircleIcon size={12} className="text-red-500 shrink-0" />}
+                    {verdict === "dangerous" && <XCircleIcon size={12} className="text-red-700 sim-dark:text-red-400 shrink-0" />}
                   </div>
                   {!isThread && <p className="text-xs text-gray-600 truncate">{item?.subject}</p>}
-                  <p className="text-[10px] text-gray-500 sim-dark:text-gray-400">{item?.when}</p>
+                  <p className="text-[10px] text-gray-600 sim-dark:text-gray-400">{item?.when}</p>
                 </button>
               );
             })}
@@ -673,7 +673,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                             <span className="text-sm inline-flex items-center gap-1">
                               {verdict === "safe"
                                 ? <><CheckCircleIcon size={14} className="text-green-500" /> Safe</>
-                                : <><XCircleIcon size={14} className="text-red-500" /> Dangerous</>}
+                                : <><XCircleIcon size={14} className="text-red-700 sim-dark:text-red-400" /> Dangerous</>}
                             </span>
                             <p className="text-xs text-gray-600 mt-1">{item.reason}</p>
                           </div>
@@ -682,12 +682,12 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                             {isWrong && (
                               <div className="bg-red-100 border border-red-200 rounded-lg p-2 mb-2">
                                 <p className="text-xs text-red-700 font-medium">Not quite — try again!</p>
-                                <p className="text-xs text-red-600 mt-1">{wrongAnswer.reason}</p>
+                                <p className="text-xs text-red-700 sim-dark:text-red-400 mt-1">{wrongAnswer.reason}</p>
                               </div>
                             )}
                             <div className="flex gap-2">
-                              <button onClick={() => handleVerdict("safe")} className={`flex-1 py-1.5 text-xs bg-green-500 text-white rounded-lg hover:bg-green-600 inline-flex items-center justify-center gap-1 ${hl("safe-btn") ? pulse : ""}`}><CheckCircleIcon size={12} /> Safe</button>
-                              <button onClick={() => handleVerdict("dangerous")} className={`flex-1 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 inline-flex items-center justify-center gap-1 ${hl("danger-btn") ? pulse : ""}`}><XCircleIcon size={12} /> Dangerous</button>
+                              <button onClick={() => handleVerdict("safe")} className={`flex-1 py-1.5 text-xs bg-green-700 text-white rounded-lg hover:bg-green-800 inline-flex items-center justify-center gap-1 ${hl("safe-btn") ? pulse : ""}`}><CheckCircleIcon size={12} /> Safe</button>
+                              <button onClick={() => handleVerdict("dangerous")} className={`flex-1 py-1.5 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 inline-flex items-center justify-center gap-1 ${hl("danger-btn") ? pulse : ""}`}><XCircleIcon size={12} /> Dangerous</button>
                             </div>
                           </>
                         )}

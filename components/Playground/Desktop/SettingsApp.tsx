@@ -88,7 +88,9 @@ export default function SettingsApp({
   const bg = dark ? "bg-gray-900" : "bg-gray-50";
   const text = dark ? "text-gray-100" : "text-gray-900";
   const sidebar = dark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200";
-  const muted = dark ? "text-gray-400" : "text-gray-500";
+  // gray-400 is only safe down to a gray-800 ground; these descriptions sit on
+  // gray-700 panels, where it is 4.06:1. gray-300 is 7:1 there.
+  const muted = dark ? "text-gray-300" : "text-gray-500";
 
   function selectSection(s: Section) {
     setActive(s);
@@ -349,7 +351,7 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
               className={`px-3 py-1.5 rounded-lg border-2 text-sm font-semibold ${
                 theme.colorFilter === f.id
                   ? "border-blue-600 bg-blue-600 text-white"
-                  : isDark ? "border-gray-600 text-gray-200" : "border-gray-400 text-gray-700"
+                  : isDark ? "border-gray-600 text-gray-200" : "border-gray-500 text-gray-700"
               } ${highlightToggle === `color-filter-${f.id}` ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
             >
               {f.label}
@@ -397,7 +399,7 @@ function WifiPanel({ mutedClass, isDark, highlightToggle, onToggle }: {
           <div className="mt-3 space-y-1">
             <div className={`flex items-center justify-between py-1.5 px-2 rounded ${isDark ? "bg-green-900/40" : "bg-green-50"}`}>
               <span>CoolKids Network</span>
-              <span className="text-green-600 text-xs font-medium">Connected ✓</span>
+              <span className="text-green-700 sim-dark:text-green-400 text-xs font-medium">Connected ✓</span>
             </div>
             <div className={`py-1.5 px-2 ${mutedClass}`}>Neighbor&apos;s WiFi</div>
             <div className={`py-1.5 px-2 ${mutedClass}`}>Coffee shop</div>
@@ -450,7 +452,13 @@ function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onD
                 <div key={d.name} className={`flex items-center justify-between py-1.5 px-2 rounded ${isConnected ? (isDark ? "bg-blue-900/40" : "bg-blue-50") : ""}`}>
                   <div>
                     <div>{d.name}</div>
-                    <div className={`text-xs ${mutedClass}`}>{isConnected ? "Connected" : "Available"}</div>
+                    {/* A connected row is tinted, and the standard muted gray is
+                        4.44:1 on that blue-50 — just under AA. One step darker on
+                        the tinted row only; the untinted rows keep the normal
+                        muted color so the hierarchy still reads. */}
+                    <div className={`text-xs ${isConnected ? (isDark ? "text-gray-200" : "text-gray-600") : mutedClass}`}>
+                      {isConnected ? "Connected" : "Available"}
+                    </div>
                   </div>
                   {isConnected ? (
                     <button
@@ -541,7 +549,7 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
             {!item.deleted && item.category !== "system" && (
               <button
                 onClick={() => onDelete(item.name)}
-                className={`text-xs px-2 py-0.5 rounded ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-600 hover:bg-red-100"} ${highlightItem === item.name ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                className={`text-xs px-2 py-0.5 rounded ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === item.name ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
               >
                 Delete
               </button>
@@ -552,7 +560,7 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
       {trashSize > 0 && (
         <button
           onClick={onEmptyTrash}
-          className={`w-full py-2 rounded-lg font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-600 hover:bg-red-100"} ${highlightItem === "empty-trash" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+          className={`w-full py-2 rounded-lg font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === "empty-trash" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
         >
           Empty Trash ({trashSize.toFixed(1)} GB)
         </button>
@@ -604,7 +612,7 @@ function PrivacyPanel({ highlightToggle, onToggle, mutedClass, isDark }: {
         ) : (
           <button
             onClick={() => { setCleared(true); onToggle?.("clear-browsing-data", true); }}
-            className={`w-full py-2 rounded-lg text-sm font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-600 hover:bg-red-100"} ${highlightToggle === "clear-browsing-data" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+            className={`w-full py-2 rounded-lg text-sm font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightToggle === "clear-browsing-data" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
           >
             Clear Browsing Data
           </button>

@@ -62,7 +62,7 @@ export default function TextEditorTask({
           </button>
         )}
         {feedback && (
-          <div className="text-red-600 text-sm font-medium max-w-md space-y-1">
+          <div className="text-red-700 sim-dark:text-red-400 text-sm font-medium max-w-md space-y-1">
             {feedback.presentBadWords.length > 0 && (
               <p>Misspellings to fix: {feedback.presentBadWords.map((w) => `"${w}"`).join(", ")}</p>
             )}

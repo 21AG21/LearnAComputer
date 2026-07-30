@@ -65,6 +65,20 @@ const PAGES = [
   "/certificate",
   "/dashboard",
   "/privacy",
+
+  /**
+   * The two pages a learner only meets on their worst visit — and the two this
+   * check could never reach, because it walks a list of routes and neither has a
+   * route that returns 200.
+   *
+   * A wrong URL renders `not-found.tsx`; `/dev/boom` throws on purpose so
+   * `error.tsx` renders. Both are declared with the status they are *supposed* to
+   * return, so the guard below still fails on a route that broke by accident. The
+   * page written to reassure somebody whose screen just went wrong is exactly the
+   * page that has to be legible.
+   */
+  { path: "/this-url-does-not-exist", expect: 404 },
+  { path: "/dev/boom", expect: 200, settle: 500 },
 ];
 
 const NEGATIVE = process.env.CONTRAST_NEGATIVE === "1";
@@ -127,14 +141,19 @@ const unmeasured = [];
 for (const theme of ["light", "dark"]) {
   await page.emulateMedia({ colorScheme: theme });
 
-  for (const path of PAGES) {
+  for (const entry of PAGES) {
+    const path = typeof entry === "string" ? entry : entry.path;
+    const want = typeof entry === "string" ? 200 : entry.expect;
+    const settle = typeof entry === "string" ? 0 : (entry.settle ?? 0);
     const res = await page.goto(`http://localhost:3000${path}`, { waitUntil: "networkidle" }).catch(() => null);
-    if (!res || !res.ok()) {
+    if (!res || res.status() !== want) {
       throw new Error(
-        `${path} returned ${res ? res.status() : "no response"}. A page in PAGES that does not load ` +
-          `silently measures whatever was on screen before it — fix the list or the route.`
+        `${path} returned ${res ? res.status() : "no response"}, expected ${want}. A page in PAGES that ` +
+          `does not load as expected silently measures whatever was on screen before it — fix the list or the route.`
       );
     }
+
+    if (settle) await page.waitForTimeout(settle);
 
     /**
      * The site is `darkMode: "class"`, so emulating the media query only works

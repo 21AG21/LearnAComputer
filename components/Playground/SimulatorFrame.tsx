@@ -321,7 +321,7 @@ export default function SimulatorFrame({
       {/* Slim completion banner — visible after celebration clears */}
       {showCompleteBanner && (
         <div className="shrink-0 bg-green-100 border-b border-green-300 px-4 py-1.5 flex items-center gap-2 text-green-800 text-sm font-medium">
-          <span className="text-green-600">&#10003;</span>
+          <span className="text-green-700 sim-dark:text-green-400">&#10003;</span>
           Lesson complete! You can keep practicing here.
         </div>
       )}
@@ -349,8 +349,8 @@ export default function SimulatorFrame({
 
       {/* Celebration overlay — shows briefly then disappears */}
       {showCelebration && (
-        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/30 backdrop-blur-sm animate-pop-in pointer-events-none">
-          <div className="bg-green-500 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/60 backdrop-blur-sm animate-pop-in pointer-events-none">
+          <div className="bg-green-700 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
             &#10003;
           </div>
           <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{goal}</p>

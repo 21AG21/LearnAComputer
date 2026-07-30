@@ -448,7 +448,7 @@ export default function GuidedEmailTask({
                   value={draft[field]}
                   onChange={(e) => { setDraft((d) => ({ ...d, [field]: e.target.value })); handleFieldChange(field, e.target.value); }}
                   placeholder={field === "to" ? "TO" : field === "cc" ? "CC" : field === "bcc" ? "BCC" : "SUBJECT"}
-                  className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl(`field-${field}`) ? pulse : ""}`}
+                  className={`w-full border border-gray-500 rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl(`field-${field}`) ? pulse : ""}`}
                 />
               ))}
               <textarea
@@ -456,7 +456,7 @@ export default function GuidedEmailTask({
                 onChange={(e) => { setDraft((d) => ({ ...d, body: e.target.value })); handleFieldChange("body", e.target.value); }}
                 placeholder="Write your message..."
                 rows={5}
-                className={`w-full border rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 resize-none ${hl("field-body") ? pulse : ""}`}
+                className={`w-full border border-gray-500 rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 resize-none ${hl("field-body") ? pulse : ""}`}
               />
               <p className="text-[10px] text-gray-500 sim-dark:text-gray-400 -mt-1">Tip: press Tab to jump to the next box, Shift+Tab to go back.</p>
               {attachedFile && (
@@ -502,14 +502,14 @@ export default function GuidedEmailTask({
                   {currentFolder === "Spam" ? (
                     <button onClick={handleUnspam} className={`px-2 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded transition-all ${hl("unspam-btn") ? pulse : ""}`}>Not spam</button>
                   ) : (
-                    <button onClick={handleMarkSpam} className={`px-2 py-1 text-xs bg-orange-50 text-orange-600 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("spam-btn") ? pulse : ""}`}><SpamIcon size={12} /> Mark as spam</button>
+                    <button onClick={handleMarkSpam} className={`px-2 py-1 text-xs bg-orange-50 text-orange-700 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("spam-btn") ? pulse : ""}`}><SpamIcon size={12} /> Mark as spam</button>
                   )}
                   {currentFolder === "Archive" ? (
                     <button onClick={handleMoveToInbox} className={`px-2 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded transition-all inline-flex items-center gap-1 ${hl("move-inbox-btn") ? pulse : ""}`}><InboxIcon size={12} /> Move to Inbox</button>
                   ) : (
                     <button onClick={handleArchive} className={`px-2 py-1 text-xs bg-gray-50 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-100 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("archive-btn") ? pulse : ""}`}><ArchiveIcon size={12} /> Move to Archive</button>
                   )}
-                  <button onClick={handleDelete} className={`px-2 py-1 text-xs bg-red-50 text-red-600 hover:bg-red-100 rounded transition-all inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
+                  <button onClick={handleDelete} className={`px-2 py-1 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded transition-all inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 </div>
               </div>
               <div className="p-4">

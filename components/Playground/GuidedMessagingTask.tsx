@@ -497,7 +497,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
             <>
               <div className="p-3 border-b bg-gray-100 sim-dark:bg-gray-700">
                 <p className="font-bold text-sm text-gray-700 sim-dark:text-gray-100">New Group Chat</p>
-                <p className="text-xs text-gray-500 sim-dark:text-gray-300 mt-0.5">Pick people to add</p>
+                <p className="text-xs text-gray-600 sim-dark:text-gray-300 mt-0.5">Pick people to add</p>
               </div>
               {CONTACTS.map((c) => {
                 const picked = groupPicks.includes(c.id);
@@ -564,7 +564,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   </span>
                   <div className="min-w-0">
                     <p className="font-medium text-sm truncate">{c.name}</p>
-                    <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">{c.status}</p>
+                    <p className="text-xs text-gray-600 sim-dark:text-gray-400 truncate">{c.status}</p>
                   </div>
                 </button>
               ))}
@@ -689,7 +689,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   onChange={(e) => setGroupDraft(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGroupSend()}
                   placeholder="Type a message..."
-                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
+                  className={`flex-1 px-4 py-2 border border-gray-500 rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
                     hl("group-message-input") ? pulse : ""
                   }`}
                 />
@@ -717,7 +717,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleStartCall}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded bg-green-700 text-white text-sm font-medium hover:bg-green-800 transition-all ${
                       hl("call-btn") ? pulse : ""
                     }`}
                   >
@@ -798,7 +798,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                         hl("attach-photos-row") ? "bg-yellow-50 text-gray-900 ring-2 ring-yellow-400" : ""
                       }`}
                     >
-                      <svg className="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
+                      <svg className="w-5 h-5 text-green-700 sim-dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
                       Photos
                     </button>
                     <button
@@ -879,7 +879,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   onChange={(e) => { setDraft(e.target.value); setSendNudge(null); }}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Type a message..."
-                  className={`flex-1 px-4 py-2 border rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
+                  className={`flex-1 px-4 py-2 border border-gray-500 rounded-full text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 transition-all ${
                     hl("message-input") ? pulse : ""
                   }`}
                 />

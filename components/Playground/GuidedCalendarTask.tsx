@@ -250,7 +250,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                     { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-title" && v.includes((s.value ?? "").toLowerCase())); }
                   }}
                   placeholder="Event title"
-                  className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-title") ? pulse : ""}`}
+                  className={`w-full px-3 py-2 text-sm border border-gray-500 rounded-lg outline-none focus:border-blue-600 ${hl("event-title") ? pulse : ""}`}
                 />
                 <input
                   value={draftEvent.time}
@@ -259,7 +259,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                     { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-time" && v.includes((s.value ?? "").toLowerCase())); }
                   }}
                   placeholder="Time (e.g. 2:00 PM)"
-                  className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-time") ? pulse : ""}`}
+                  className={`w-full px-3 py-2 text-sm border border-gray-500 rounded-lg outline-none focus:border-blue-600 ${hl("event-time") ? pulse : ""}`}
                 />
                 <select
                   value={draftEvent.repeat}
@@ -267,7 +267,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                     setDraftEvent((d) => ({ ...d, repeat: e.target.value }));
                     tryStep((s) => s.action === "set-repeat");
                   }}
-                  className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-blue-400 ${hl("event-repeat") ? pulse : ""}`}
+                  className={`w-full px-3 py-2 text-sm border border-gray-500 rounded-lg outline-none focus:border-blue-600 ${hl("event-repeat") ? pulse : ""}`}
                 >
                   {REPEAT_OPTIONS.map((o) => <option key={o}>{o}</option>)}
                 </select>
@@ -295,12 +295,12 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                   { const v = e.target.value.toLowerCase(); tryStep((s) => s.action === "set-reminder-text" && v.includes((s.value ?? "").toLowerCase())); }
                 }}
                 placeholder="Reminder text"
-                className={`w-full px-3 py-2 text-sm border rounded-lg outline-none focus:border-green-400 mb-2 ${hl("reminder-text") ? pulse : ""}`}
+                className={`w-full px-3 py-2 text-sm border border-gray-500 rounded-lg outline-none focus:border-green-400 mb-2 ${hl("reminder-text") ? pulse : ""}`}
               />
               <div className="flex gap-2">
                 <button
                   onClick={handleSaveReminder}
-                  className={`flex-1 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 ${hl("save-reminder-btn") ? pulse : ""}`}
+                  className={`flex-1 py-2 bg-green-700 text-white text-sm font-medium rounded-lg hover:bg-green-800 ${hl("save-reminder-btn") ? pulse : ""}`}
                 >
                   Save
                 </button>
@@ -371,7 +371,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                   <div key={time} className="flex gap-2 border-t py-1.5 min-h-[36px]">
                     <span className="text-xs text-gray-500 sim-dark:text-gray-400 w-14 flex-shrink-0">{time}</span>
                     {ev && (
-                      <div className={`flex-1 px-2 py-0.5 rounded text-xs text-white ${ev.calendar === "Personal" ? "bg-blue-600" : "bg-green-500"}`}>{ev.title}</div>
+                      <div className={`flex-1 px-2 py-0.5 rounded text-xs text-white ${ev.calendar === "Personal" ? "bg-blue-600" : "bg-green-700"}`}>{ev.title}</div>
                     )}
                   </div>
                 );
@@ -388,7 +388,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
                   <div key={r.id} className={`flex items-center gap-3 p-3 border rounded-xl ${r.done ? "opacity-50" : ""}`}>
                     <button
                       onClick={() => !r.done && handleCompleteReminder(r.id, r.text)}
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${r.done ? "bg-green-500 border-green-500" : "border-gray-300 sim-dark:border-gray-700 hover:border-blue-400"} ${hl("reminder-check", r.text) ? pulse : ""}`}
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${r.done ? "bg-green-500 border-green-500" : "border-gray-500 sim-dark:border-gray-400 hover:border-blue-600"} ${hl("reminder-check", r.text) ? pulse : ""}`}
                     >
                       {r.done && <span className="text-white text-xs">✓</span>}
                     </button>

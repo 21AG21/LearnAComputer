@@ -210,7 +210,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                               setConnectedNetwork(null);
                               tryStep((s) => s.action === "disconnect-wifi");
                             }}
-                            className={`ml-2 text-xs text-red-500 font-semibold hover:text-red-700 ${
+                            className={`ml-2 text-xs text-red-700 sim-dark:text-red-400 font-semibold hover:text-red-700 ${
                               step?.action === "disconnect-wifi" ? pulse2 : ""
                             }`}
                           >

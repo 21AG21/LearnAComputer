@@ -124,7 +124,7 @@ export default function DesktopBrowserZoomTask({ onExit, onResult }: DesktopBrow
               placeholder="Type the tiny code…"
               className="flex-1 border-2 border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-blue-400"
             />
-            {readable && <span className="text-green-600 text-sm font-semibold shrink-0">Now you can read it!</span>}
+            {readable && <span className="text-green-700 sim-dark:text-green-400 text-sm font-semibold shrink-0">Now you can read it!</span>}
           </div>
         </div>
       </BrowserSimulator>

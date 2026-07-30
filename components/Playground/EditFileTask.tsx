@@ -99,7 +99,7 @@ export default function EditFileTask({
                 </button>
               )}
               {feedback && (
-                <div className="text-red-600 text-sm font-medium space-y-0.5">
+                <div className="text-red-700 sim-dark:text-red-400 text-sm font-medium space-y-0.5">
                   {feedback.presentBadWords.length > 0 && (
                     <p>Misspellings to fix: {feedback.presentBadWords.map((w) => `"${w}"`).join(", ")}</p>
                   )}

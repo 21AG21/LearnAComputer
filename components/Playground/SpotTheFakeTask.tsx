@@ -64,7 +64,7 @@ export default function SpotTheFakeTask({
               <p className="text-xl font-black">{item.label}</p>
               <p className="text-base text-gray-700 flex-1 leading-relaxed">{item.preview}</p>
               {isFakeRevealed && (
-                <p className="text-red-600 font-black text-2xl mt-2 inline-flex items-center gap-1"><WarningIcon size={24} /> SCAM!</p>
+                <p className="text-red-700 sim-dark:text-red-400 font-black text-2xl mt-2 inline-flex items-center gap-1"><WarningIcon size={24} /> SCAM!</p>
               )}
               {isLegit && (
                 <p className="text-green-700 font-bold text-lg mt-2">✓ Looks legit</p>

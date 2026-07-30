@@ -230,7 +230,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
             </div>
 
             {wrongKey && (
-              <p className="text-center text-red-600 text-sm mt-3 font-semibold animate-slide-down">
+              <p className="text-center text-red-700 sim-dark:text-red-400 text-sm mt-3 font-semibold animate-slide-down">
                 Not quite — check the instruction above!
               </p>
             )}

@@ -348,7 +348,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   tryStep((s) => s.action === "search" && !!s.value && q.includes(s.value.toLowerCase()));
                 }}
                 placeholder="Search..."
-                className={`flex-1 px-2 py-1.5 text-xs border rounded outline-none focus:border-blue-400 ${hl("search-input") ? pulse : ""}`}
+                className={`flex-1 px-2 py-1.5 text-xs border border-gray-500 rounded outline-none focus:border-blue-600 ${hl("search-input") ? pulse : ""}`}
               />
             ) : (
               <button
@@ -356,7 +356,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   setSearchOpen(true);
                   tryStep((s) => s.action === "search" && !s.value);
                 }}
-                className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 sim-dark:text-gray-400 border rounded w-full hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${hl("search-icon") ? pulse : ""}`}
+                className={`flex items-center gap-1 px-2 py-1.5 text-xs text-gray-500 sim-dark:text-gray-400 border border-gray-500 rounded w-full hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${hl("search-icon") ? pulse : ""}`}
               >
                 <SearchIcon size={12} /> Search
               </button>
@@ -370,7 +370,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 section === s ? "bg-blue-100 sim-dark:bg-blue-900 font-medium text-blue-700 sim-dark:text-blue-100" : "text-gray-700 sim-dark:text-gray-200"
               } ${hl("sidebar-item", s) ? pulse : ""}`}
             >
-              <span className="inline-flex items-center gap-1.5">{s === "All Photos" ? <ImageIcon size={14} /> : s === "Favorites" ? <HeartFilledIcon size={14} className="text-red-500" /> : s === "Recently Deleted" ? <TrashIcon size={14} /> : <FolderIcon size={14} />} {s}</span>
+              <span className="inline-flex items-center gap-1.5">{s === "All Photos" ? <ImageIcon size={14} /> : s === "Favorites" ? <HeartFilledIcon size={14} className="text-red-700 sim-dark:text-red-400" /> : s === "Recently Deleted" ? <TrashIcon size={14} /> : <FolderIcon size={14} />} {s}</span>
             </button>
           ))}
           {creatingAlbum ? (
@@ -380,7 +380,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 value={newAlbumInput}
                 onChange={(e) => setNewAlbumInput(e.target.value)}
                 placeholder={step?.value || "Album name"}
-                className="w-full px-2 py-1 text-xs border rounded outline-none mb-1"
+                className="w-full px-2 py-1 text-xs border border-gray-500 rounded outline-none mb-1"
                 onKeyDown={(e) => e.key === "Enter" && handleConfirmAlbum()}
               />
               <button
@@ -412,13 +412,13 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 >
                   ← Back
                 </button>
-                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-500 border-red-200" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("fav-btn") ? pulse : ""}`}>
+                <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-700 sim-dark:text-red-400 border-red-200" : "border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("fav-btn") ? pulse : ""}`}>
                   {selectedPhoto.favorite ? <HeartFilledIcon size={12} /> : <HeartIcon size={12} />} Fav
                 </button>
-                <button onClick={handleShareClick} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("share-btn") ? pulse : ""}`}><ShareIcon size={12} /> Share</button>
-                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("add-album-btn") ? pulse : ""}`}><FolderIcon size={12} /> Album</button>
+                <button onClick={handleShareClick} className={`px-2 py-1 text-xs rounded border border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("share-btn") ? pulse : ""}`}><ShareIcon size={12} /> Share</button>
+                <button onClick={handleAddToAlbum} className={`px-2 py-1 text-xs rounded border border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700 inline-flex items-center gap-1 ${hl("add-album-btn") ? pulse : ""}`}><FolderIcon size={12} /> Album</button>
                 {section !== "Recently Deleted" && (
-                  <button onClick={handleDelete} className={`px-2 py-1 text-xs rounded border border-red-200 text-red-600 hover:bg-red-50 inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
+                  <button onClick={handleDelete} className={`px-2 py-1 text-xs rounded border border-red-500 text-red-700 sim-dark:text-red-400 hover:bg-red-50 inline-flex items-center gap-1 ${hl("delete-btn") ? pulse : ""}`}><TrashIcon size={12} /> Delete</button>
                 )}
               </div>
 
@@ -497,12 +497,12 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={p}
                       onClick={() => handleCropPreset(p)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-600 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("crop-preset", p) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${cropPreset === p ? "bg-blue-600 text-white border-blue-500" : "border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("crop-preset", p) ? pulse : ""}`}
                     >
                       <span className="inline-flex items-center gap-1">{p === "Original" ? <CropIcon size={12} /> : p === "Square" ? <SquareIcon size={12} /> : <RectangleIcon size={12} />} {p}</span>
                     </button>
                   ))}
-                  <button onClick={handleRotate} className={`px-2 py-1 text-xs rounded border border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700 transition-all inline-flex items-center gap-1 ${hl("rotate-btn") ? pulse : ""}`}><RotateIcon size={12} /> Rotate</button>
+                  <button onClick={handleRotate} className={`px-2 py-1 text-xs rounded border border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700 transition-all inline-flex items-center gap-1 ${hl("rotate-btn") ? pulse : ""}`}><RotateIcon size={12} /> Rotate</button>
                   <button onClick={handleRevert} className={`px-2 py-1 text-xs bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 rounded transition-all inline-flex items-center gap-1 ${hl("revert-btn") ? pulse : ""}`}><UndoIcon size={12} /> Revert</button>
                 </div>
                 <div>
@@ -526,7 +526,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     <button
                       key={f}
                       onClick={() => handleApplyFilter(f)}
-                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-600 text-white border-blue-500" : "border-gray-200 sim-dark:border-gray-700 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("filter-btn", f) ? pulse : ""}`}
+                      className={`px-2 py-1 text-xs rounded border transition-all ${filter === f ? "bg-blue-600 text-white border-blue-500" : "border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("filter-btn", f) ? pulse : ""}`}
                     >
                       {f}
                     </button>
@@ -567,7 +567,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                     className={`relative aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-all ${hl("photo", photo.label) ? pulse : ""}`}
                   >
                     <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
-                    {photo.favorite && <span className="absolute top-1 right-1 text-red-500 drop-shadow"><HeartFilledIcon size={14} /></span>}
+                    {photo.favorite && <span className="absolute top-1 right-1 text-red-700 sim-dark:text-red-400 drop-shadow"><HeartFilledIcon size={14} /></span>}
                   </button>
                 ))}
                 {getVisiblePhotos().length === 0 && (

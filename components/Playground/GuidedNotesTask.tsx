@@ -134,7 +134,7 @@ export default function GuidedNotesTask({
                     editorRef.current?.focus();
                   }
                 }}
-                className={`w-8 h-8 rounded border-2 border-gray-300 sim-dark:border-gray-600 sim-dark:text-gray-100 font-semibold text-sm hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${
+                className={`w-8 h-8 rounded border-2 border-gray-500 sim-dark:border-gray-400 sim-dark:text-gray-100 font-semibold text-sm hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${
                   fmt === "bold" ? "font-black" : fmt === "italic" ? "italic" : "underline"
                 } ${step?.action === fmt ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
                 aria-label={fmt}

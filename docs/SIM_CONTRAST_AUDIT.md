@@ -111,18 +111,92 @@ Two calibrations in it are load-bearing and both were wrong at first:
   "accent" shortfalls were app-store tiles reported purely because a 🧩 sits on a
   purple square. Text characters like ✓ and ✕ *do* use `color` and stay in.
 
+## Round two: the three edges, closed
+
+The first version of this document ended with three things it did not measure.
+Each one turned out to be hiding real defects, which is the argument against ever
+leaving that list as a footnote.
+
+### States behind interaction
+
+Measuring each activity as it mounts is measuring the first screen. Everything a
+guided lesson is *about* lives past it — the compose pane, the file picker, the
+share sheet, the reading pane, the 2FA form, the crop tools, the downloads panel.
+
+The sweep now walks each lesson forward by clicking its highlighted control, the
+way the learner is being told to, and re-measures after every step. It stops as
+soon as a click stops advancing the step counter, so a control that is not what
+the step wants ends the walk rather than being hammered.
+
+Coverage went from **2966 text runs to 7099**, across **155 steps past mount**. The
+first walk found, in the four email lessons alone, three defects mounting could not
+see: "Mark as spam" at 3.35:1, "Delete" at 4.41:1, and the celebration overlay's
+congratulation at **1:1**.
+
+That last one was partly a measurement bug and worth recording. The overlay is
+`bg-black/30`, and the ground-finder skipped any layer under 0.85 alpha, so it
+sailed past the scrim to the page's white and reported white-on-white — the same
+wrong-layer mistake `contrast-check` made over the homepage photos, in a different
+disguise. It composites translucent layers now. The honest ratio was 1.9:1, still a
+fail, so the scrim went to `bg-black/60` (6.3:1) — which a celebration overlay
+wanted anyway.
+
+The full walk then surfaced a class the mount-only sweep never touched: semantic
+colours at the -500/-600 step, which do not clear AA on white or on their own pale
+tint. green-600 at 3.3:1, red-500 at 3.44:1, blue-500 at 3.68:1, yellow-500 at
+1.84:1, and white on red-500/green-500/amber-500 between 2.15:1 and 3.76:1. **69
+text tokens and 13 fills** moved one step darker, each with a light dark-mode
+partner so the same class stays right on a gray-900 window.
+
+### Non-text contrast (WCAG 1.4.11)
+
+Now enforced, and scoped deliberately. 1.4.11 asks for 3:1 on "the visual
+information required to identify a user interface component", which is not the same
+as every border on the page:
+
+- A **form field's** border is always scored. It is the only thing saying "you can
+  type here", and for an audience that struggles to find the text box that matters
+  more than anywhere else.
+- A **button's** border is scored only when it is the sole boundary — boxed on all
+  four sides and not filled. A filled button is identified by its fill.
+- A button with only a *bottom* border is a list row, not a control outline. The
+  first version scored those and reported every list separator in the course,
+  which would have meant drawing hard dark rules through every list to satisfy a
+  checker.
+- Disabled controls are exempt, WCAG's own carve-out. The messaging app's "Start
+  Chat" is meant to look muted until you tick somebody; darkening it to please a
+  checker would make a disabled button look enabled.
+
+Tailwind's default border is gray-200 — **1.24:1** on white. Every form field in
+the course had an invisible boundary. The floor is `border-gray-500`: 4.83:1 on
+white and 3.58:1 on the gray-900 dark window, so one value serves both themes.
+`focus:border-blue-400` (2.43:1) went to blue-600; a focus indicator nobody can see
+is the one border that has to be visible. **640 control borders** are now scored
+every run.
+
+### The failure pages
+
+`/not-found` needs no help — any wrong URL renders it. `error.tsx` had no route at
+all, so the page written to reassure somebody whose screen just broke was the one
+page nothing could measure.
+
+`app/dev/boom` throws on purpose, guarded for production like every other `/dev`
+page. It throws **after mount**, and that timing is the point: a first-render throw
+throws on the server too, so Next returns its own 500 document and `error.tsx`
+never renders inside the root layout — no theme, no nav, and a measurement of a
+page the product does not own. Throwing from an effect reproduces the error a
+learner actually hits, the document is a normal 200, and what gets measured is the
+real friendly page in the learner's own theme.
+
+`PAGES` entries can now declare an expected status, so a route that breaks by
+accident still fails the guard rather than being waved through.
+
 ## What is still not measured
 
-- **`/error` and `/not-found`.** `contrast-check` cannot route to them. The one
-  low-contrast string there (the error digest) was fixed by the same rule, but by
-  hand, not by measurement.
-- **States behind interaction.** The sweep measures each activity as it mounts. A
-  panel that only appears after four clicks is not reached. `simdark-check` covers
-  more of that ground for the dock apps by opening each one; deeper states are
-  still unmeasured.
-- **Non-text contrast (WCAG 1.4.11).** Borders, icons and focus rings against
-  their backgrounds are not scored. Everything checked so far clears 3:1 by
-  inspection, but nothing enforces it.
-
-None of these is a reason to distrust the green. They are the honest edge of what
-is currently measured.
+- **Deep states behind conditional branches.** The walk follows the highlighted
+  control, which is the lesson's happy path. A panel only reachable by doing
+  something the lesson never asks for is not visited. `stray-check` goes off-path
+  but does not measure colour.
+- **Hover and active states.** Only the resting and focus appearance is scored.
+- **The 45 activities with no simulator frame** to anchor to. They are reported as
+  skipped rather than silently dropped, so the number is visible every run.
