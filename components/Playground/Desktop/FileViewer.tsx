@@ -10,7 +10,11 @@ import { photoSrc } from "@/lib/photoAssets";
 const IMAGE_SRC: Record<string, string> = {
   "VacationPhoto.png": photoSrc("tropical-beach"),
   "Sunset.png": photoSrc("sunset-beach"),
-  "img_20250104_FINAL(2).jpg": photoSrc("misty-morning"),
+  // A beach vacation photo the camera saved under a meaningless name — the exact
+  // case the "Naming Files Well" lesson has the learner rename to Beach-Vacation.
+  // It used to open on a misty pine forest, so every good name the lesson taught
+  // (Beach-Vacation-2025.jpg, Holiday-2026.jpg) described a picture that wasn't there.
+  "img_20250104_FINAL(2).jpg": photoSrc("tropical-beach"),
 };
 
 // ── Budget data ───────────────────────────────────────────────────────────────
