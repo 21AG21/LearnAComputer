@@ -182,3 +182,45 @@ resize handle 32px; menu-bar status buttons ~28-36px. All below WCAG 2.5.5's 44p
    sales-number correction, pitch-check + hostile-check guard fixes.
 6. Fold new static rules into `check-a11y.py` (interactive-div needs role/tabindex;
    input needs a name) so B3/S-class regressions can't return.
+
+---
+
+## Fix status — 2026-07-31
+
+Worked top-to-bottom, each fix its own verified commit (solve-check / ring-check /
+stray-check / recovery-check / hostile-check / build kept green throughout).
+
+**Done and committed**
+- **B1 zoom dead-zone** — activity pane stacks below `lg` instead of hiding; guard
+  gates on a coarse pointer, not zoom-shrunk width; escape link contrast raised.
+- **B2 phishing** — reveal now teaches hover / long-press; "clicking is safe"
+  removed from sim and lesson; click still reveals so the solver/keyboard work.
+- **S1 red card** — routine typo/edit/paste misses keep the sim's inline amber
+  retry (no red "failed" card, no work-wipe); card reserved for consequence lessons.
+- **S2 certificate print** — forced black-on-white; nav `print:hidden`.
+- **S3 ring** — dark navy contrast edge (≈15:1) added to the yellow; five stripped
+  input focus rings restored.
+- **S4 platform** — Windows+Mac hedging in the shell/keyboard/troubleshooting
+  lessons; Ctrl+Y redo accepted.
+- **S5 privacy** — machine-read enumeration completed (User-Agent, paste, screen/zoom).
+- **S6 sales numbers** — 163/169 corrected in both docs; pitch-check now catches
+  spelled-out stale counts (negative-controlled).
+- **B3 (partial)** — messaging reactions get a single-click/keyboard React button
+  (hold no longer cancels on drift); scam ✕ → 44px; window buttons → 36×32; email
+  compose fields + sliders labeled.
+- **Minors** — accessibility-page placeholder, reduce-motion honored at OS level and
+  the `aria-live` step region (Phase 1), dead `replaceCompletedSlugs` + stale sync
+  comments removed, hostile-check `?_rsc=` abort ignored, password + shape-game copy.
+
+**Remaining — the "large sim-operability build" (item 4), genuinely multi-session**
+This is the deep keyboard / screen-reader / touch operability of the two most
+heavily-tested components, and must be done carefully so it doesn't regress
+solve-check / stray-check / ring-check / recovery-check:
+- **FileManager** — a click-file-then-folder *move* path and a keyboard/Enter *open*
+  path (today: drag + double-click only).
+- **DraggableWindow** — button/keyboard *move* and *resize* (today: drag only), and
+  Pointer Events so touch works.
+- The remaining ~15 sim inputs' `aria-label`s, `aria-current` on the highlighted
+  control, `aria-selected` on file rows, and the resize-handle/menu-bar target sizes.
+- Then the `check-a11y.py` interactive-div / input-name rules (they'd fail on the
+  above until it's finished, so they land last).
