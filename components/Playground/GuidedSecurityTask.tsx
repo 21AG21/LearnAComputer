@@ -645,7 +645,14 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                       <p className="text-sm leading-relaxed">
                         {before}
                         <button
+                          // Hover and keyboard focus reveal the address — the real,
+                          // safe technique. Click reveals too (so nobody is stuck and
+                          // free-play/keyboard both work), but the copy below teaches
+                          // hover/long-press, never "clicking a suspect link is safe".
                           onClick={() => handleInspectLink(openMessage)}
+                          onMouseEnter={() => handleInspectLink(openMessage)}
+                          onFocus={() => handleInspectLink(openMessage)}
+                          title="Rest your mouse here to preview where it goes — without opening it"
                           className={`text-blue-600 underline break-all hover:text-blue-800 rounded ${
                             !revealed && hl("inline-link", openMessage) ? pulse : ""
                           }`}
@@ -661,7 +668,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   <div className="shrink-0 border-t bg-gray-50 p-3">
                     {!revealed ? (
                       <p className="text-xs text-gray-500">
-                        Click the link in the message to see where it really goes. Looking is safe — it does not open anything.
+                        Rest your mouse on the link above (or press and hold it on a phone) to preview where it really goes — without opening it. On a real computer, never click a link in a message you are unsure of.
                       </p>
                     ) : (
                       <>
