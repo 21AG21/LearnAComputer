@@ -1195,7 +1195,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         {popupOpen && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-2">
             <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
-              <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-8 h-8 bg-white border-2 border-black rounded-full font-bold flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
+              <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-11 h-11 bg-white border-2 border-black rounded-full font-bold text-xl flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
               <p className="text-red-700 sim-dark:text-red-400 mb-2"><WarningIcon size={40} /></p>
               <p className="font-black text-red-700 sim-dark:text-red-400 text-lg">VIRUS DETECTED!!!</p>
               <p className="text-sm text-gray-700 my-2">Your computer is infected! Click below to clean it NOW!</p>

@@ -55,7 +55,7 @@ export default function WindowControls({
             key={kind}
             onClick={on}
             aria-label={label}
-            className={`w-7 h-6 flex items-center justify-center rounded transition-colors ${
+            className={`w-9 h-8 flex items-center justify-center rounded transition-colors ${
               kind === "close"
                 ? "text-gray-600 sim-dark:text-gray-300 hover:bg-red-500 hover:text-white"
                 : "text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700"
