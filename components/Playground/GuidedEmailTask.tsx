@@ -447,6 +447,7 @@ export default function GuidedEmailTask({
                   key={field}
                   value={draft[field]}
                   onChange={(e) => { setDraft((d) => ({ ...d, [field]: e.target.value })); handleFieldChange(field, e.target.value); }}
+                  aria-label={field === "to" ? "To" : field === "cc" ? "Cc" : field === "bcc" ? "Bcc" : "Subject"}
                   placeholder={field === "to" ? "TO" : field === "cc" ? "CC" : field === "bcc" ? "BCC" : "SUBJECT"}
                   className={`w-full border border-gray-500 rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 ${hl(`field-${field}`) ? pulse : ""}`}
                 />
@@ -454,6 +455,7 @@ export default function GuidedEmailTask({
               <textarea
                 value={draft.body}
                 onChange={(e) => { setDraft((d) => ({ ...d, body: e.target.value })); handleFieldChange("body", e.target.value); }}
+                aria-label="Message body"
                 placeholder="Write your message..."
                 rows={5}
                 className={`w-full border border-gray-500 rounded px-3 py-1.5 text-sm outline-none focus:border-blue-400 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400 resize-none ${hl("field-body") ? pulse : ""}`}

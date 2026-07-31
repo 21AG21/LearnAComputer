@@ -253,6 +253,7 @@ function Slider({ value, min, max, label, highlight, onChange, isDark }: { value
       </div>
       <input
         type="range"
+        aria-label={label}
         min={min}
         max={max}
         value={value}

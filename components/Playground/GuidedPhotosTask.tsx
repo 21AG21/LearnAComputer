@@ -508,7 +508,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 <div>
                   <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Brightness ({brightness}%)</label>
                   <input
-                    type="range" min={20} max={200} value={brightness}
+                    type="range" min={20} max={200} value={brightness} aria-label="Brightness"
                     onChange={(e) => handleBrightnessChange(Number(e.target.value))}
                     className={`w-full ${hl("brightness-slider") ? pulse : ""}`}
                   />
@@ -516,7 +516,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 <div>
                   <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Contrast ({contrast}%)</label>
                   <input
-                    type="range" min={20} max={200} value={contrast}
+                    type="range" min={20} max={200} value={contrast} aria-label="Contrast"
                     onChange={(e) => handleContrastChange(Number(e.target.value))}
                     className={`w-full ${hl("contrast-slider") ? pulse : ""}`}
                   />
