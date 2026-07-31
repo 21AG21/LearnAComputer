@@ -95,13 +95,25 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   }
 
   function handleResult(success: boolean, failMessage?: string) {
-    setAttemptState(success ? "success" : "failed");
     if (success) {
+      setAttemptState("success");
       markComplete(subLesson.slug);
       setFailInfo(null);
-    } else {
-      setFailInfo({ message: failMessage || subLesson.drDigitalHint });
+      return;
     }
+    // A miss on a plain typing / editing / paste task is ordinary practice, not a
+    // failure: those sims show their own gentle inline "Almost — try again" and stay
+    // live for another go. The runner must NOT also raise a red "failed" card in the
+    // reading column — this audience reads a red box as proof they cannot do it (see
+    // the comment in CopyPasteTask), and its "Try again" button remounts the sim,
+    // wiping the near-correct text and the highlight that showed the one wrong word.
+    // The card is for deliberate-consequence lessons only (CLEAN NOW, a wrong ad, a
+    // wrong phishing verdict), which pass a failMessage and genuinely restart.
+    if (["type-text", "edit-text", "keyboard-shortcut"].includes(subLesson.playgroundTask.type)) {
+      return;
+    }
+    setAttemptState("failed");
+    setFailInfo({ message: failMessage || subLesson.drDigitalHint });
   }
 
   function handleNext() {
@@ -230,7 +242,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
 
           {failInfo && attemptState === "failed" && (
             <div className="rounded-lg border-2 border-red-400 bg-red-50 p-4 space-y-3">
-              <p className="font-bold text-red-700">Activity failed</p>
+              <p className="font-bold text-red-700">Let&apos;s try that again</p>
               <p className="text-sm text-red-900">{failInfo.message}</p>
               <button
                 onClick={() => {
