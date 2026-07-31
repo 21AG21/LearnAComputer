@@ -118,11 +118,23 @@ export default function PrivacyPage() {
         page keeps nothing after you close it.
       </p>
       <p>
-        Two mission steps read a setting your browser already tells every website you visit: whether
-        you prefer dark mode, and whether you have asked for reduced motion. One reads the battery
-        level your browser reports, on the browsers that report it. Another notices when your
-        computer goes offline. None of that is stored.
+        A few mission steps read things your browser already exposes to every website — and only to
+        check your work. None of it is stored, and none of it is sent anywhere:
       </p>
+      <ul>
+        <li>whether you prefer dark mode, and whether you have asked for reduced motion;</li>
+        <li>the battery level your browser reports, on the browsers that report it;</li>
+        <li>when your computer goes offline;</li>
+        <li>
+          the size of your screen and window, and your zoom level, for the missions that ask you to
+          resize a window or zoom in;
+        </li>
+        <li>the name of the browser you are using, for the mission that asks you to identify it;</li>
+        <li>
+          the text you paste, for the missions that ask you to paste something — read only to confirm
+          you pasted rather than typed, then forgotten.
+        </li>
+      </ul>
 
       <h2>Children</h2>
       <p>
