@@ -102,7 +102,7 @@ Then one qualifying question, asked lightly:
 
 If they want one more line, use the proof, once:
 
-> "A hundred and fifty of the activities are machine-tested end to end, every
+> "**163 of the 169 activities** are machine-tested end to end, every
 > time we change anything. I'd rather show you than describe it."
 
 ---

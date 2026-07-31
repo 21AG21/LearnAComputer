@@ -110,7 +110,7 @@ export default function CertificatePage() {
 
       {/* The certificate itself — what the printer sees */}
       {chosen && name.trim() && (
-        <div className="mt-8 border-8 border-double border-gray-800 p-10 text-center print:mt-0 print:border-gray-800">
+        <div className="mt-8 border-8 border-double border-gray-800 p-10 text-center print:mt-0 print:border-gray-800 print:bg-white print:text-black">
           <p className="text-sm font-bold uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">Certificate of Completion</p>
           <p className="mt-8 text-lg text-gray-600">This certifies that</p>
           <p className="mt-2 text-4xl font-bold">{name.trim()}</p>
@@ -120,7 +120,7 @@ export default function CertificatePage() {
           </p>
           <p className="mt-8 text-gray-600">
             {chosen === "__course__"
-              ? "every hands-on lesson, assessment, and real-world mission across all fourteen units"
+              ? "every hands-on lesson, assessment, and real-world mission in the course"
               : "every hands-on lesson in this unit, including its assessment"}
           </p>
           <div className="mt-12 flex items-end justify-between text-sm text-gray-500 dark:text-gray-400">

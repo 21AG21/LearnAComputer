@@ -68,9 +68,9 @@ export default function AccessibilityPage() {
 
       <h2>Telling us about a problem</h2>
       <p>
-        If something here is unusable for you, that is a fault worth fixing. Report it to whoever
-        operates this installation of the site. If you are running it yourself, replace this
-        paragraph with your own contact details before publishing.
+        If something here is unusable for you, that is a fault worth fixing. Use the{" "}
+        <strong>Report a problem</strong> link in the footer of any page and tell us what happened
+        and what would help. An accessibility barrier is treated as a bug, not a suggestion.
       </p>
     </LegalPage>
   );

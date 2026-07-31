@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* flex-wrap, not a fixed row: with five links the bar overran a 420px
             phone and scrolled the whole page sideways (hostile-check caught it).
             Wrapping keeps every link reachable and the body from scrolling. */}
-        <nav className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-gray-200 p-4 dark:border-gray-800">
+        <nav className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-gray-200 p-4 dark:border-gray-800 print:hidden">
           {NAV.map((item) => (
             <Link
               key={item.href}

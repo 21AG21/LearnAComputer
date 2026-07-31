@@ -138,14 +138,14 @@ Whichever you pick, land this before you touch the keyboard:
 
 ## 3. The one number that matters, and how to say it
 
-> "A hundred and fifty of the activities in this course have been machine-proven
-> finishable — harnesses play them to the end the way a learner would, including
-> every task we set on the learner's own computer, and they run again every time
-> we change anything. Ten separate bugs that would have stranded a real learner
-> mid-lesson were caught that way."
+> "**163 of the 169 activities** in this course have been machine-proven
+> finishable — 145 simulated ones a harness plays to the end the way a learner
+> would, plus all 18 tasks we set on the learner's own computer — and they run
+> again every time we change anything. Ten separate bugs that would have stranded
+> a real learner mid-lesson were caught that way."
 
 If they ask whether that is all of them, the honest answer is the strong one:
-*"No — twenty are reflex and trackpad-gesture activities a script can't pinch or
+*"No — six are reflex and trackpad-gesture activities a script can't pinch or
 swipe. Those we prove render correctly and test by hand. I'd rather give you the
 real number."*
 

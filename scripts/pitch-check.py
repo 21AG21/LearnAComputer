@@ -41,6 +41,11 @@ FORBIDDEN = [
     (r"under-13 accounts", "claims child accounts are a roadmap item"),
     (r"\bSupabase\b", "names a dependency that was removed"),
     (r"@vercel/analytics|Vercel Analytics", "names analytics that were removed"),
+    # Spelled-out numbers slip past the digit checks below. These catch the two
+    # historical stale counts (150 proven / 20 un-scriptable; the truth is 163/6)
+    # in word form, so a regression to prose fails the same as a stale digit would.
+    (r"hundred and fifty[^.]*activit", "spelled-out stale proven count — use the derived digits (163 of 169)"),
+    (r"\btwenty\b[^.]*(reflex|trackpad|pinch|scriptable)", "spelled-out stale un-scriptable count — it is 6, not 20"),
 ]
 
 # A mention inside a removal note is exactly what these docs SHOULD contain —
@@ -159,8 +164,10 @@ def main() -> int:
             (r"(\d+)\s+hands-on lessons", n_lessons, "lessons"),
             (r"(\d+)\s+units\b", n_units, "units"),
             (r"all\s+(\d+)\s+real-world missions", n_missions, "missions"),
-            (r"\*\*(\d+)\s+of the \d+ activities", n_proven, "machine-proven activities"),
-            (r"\*\*\d+\s+of the (\d+) activities", n_queued, "queued activities"),
+            # Bold or plain — any "N of the M activities" digit form is validated,
+            # so a stale count fails whether or not it wears the ** wrapper.
+            (r"\b(\d+)\s+of the \d+ activit", n_proven, "machine-proven activities"),
+            (r"\b\d+\s+of the (\d+) activit", n_queued, "queued activities"),
         ):
             for m in re.finditer(num, text):
                 if int(m.group(1)) != real:
