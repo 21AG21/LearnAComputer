@@ -5,6 +5,7 @@ import WindowControls from "../WindowControls";
 
 const MOVE_THRESH = 20;
 const RESIZE_THRESH = 15;
+const KEY_STEP = 12; // px nudge per arrow key — the no-drag path to move/resize
 const MIN_W = 220;
 const MIN_H = 140;
 
@@ -62,6 +63,8 @@ export default function DraggableWindow({
   const dragStartRef = useRef({ x: initial.x, y: initial.y });
   const resizeStartRef = useRef({ w: initial.w, h: initial.h });
   const savedRef = useRef({ x: initial.x, y: initial.y, w: initial.w, h: initial.h });
+  const kbMove = useRef({ dx: 0, dy: 0, fired: false });
+  const kbResize = useRef({ dw: 0, dh: 0, fired: false });
 
   const onMovedRef = useRef(onMoved);
   onMovedRef.current = onMoved;
@@ -170,6 +173,51 @@ export default function DraggableWindow({
     };
   }
 
+  // Keyboard move/resize — the no-drag, keyboard-operable path. Defined in render
+  // scope so they read the current pos/size (the mouse handlers are bound with []).
+  const ARROW: Record<string, [number, number]> = {
+    ArrowLeft: [-KEY_STEP, 0], ArrowRight: [KEY_STEP, 0], ArrowUp: [0, -KEY_STEP], ArrowDown: [0, KEY_STEP],
+  };
+
+  function onTitleKey(e: React.KeyboardEvent) {
+    // Only when the title bar itself is focused — not a control button inside it.
+    if (isMaximized || e.target !== e.currentTarget) return;
+    const d = ARROW[e.key];
+    if (!d) return;
+    e.preventDefault();
+    const host = hostBox();
+    const maxX = host.w ? Math.max(0, host.w - size.w) : Infinity;
+    const maxY = host.h ? Math.max(0, host.h - size.h) : Infinity;
+    const nx = Math.min(Math.max(0, pos.x + d[0]), maxX);
+    const ny = Math.min(Math.max(0, pos.y + d[1]), maxY);
+    kbMove.current.dx += nx - pos.x;
+    kbMove.current.dy += ny - pos.y;
+    setPos({ x: nx, y: ny });
+    if (!kbMove.current.fired && (Math.abs(kbMove.current.dx) >= MOVE_THRESH || Math.abs(kbMove.current.dy) >= MOVE_THRESH)) {
+      kbMove.current.fired = true;
+      onMovedRef.current?.();
+    }
+  }
+
+  function onResizeKey(e: React.KeyboardEvent) {
+    if (isMaximized) return;
+    const d = ARROW[e.key];
+    if (!d) return;
+    e.preventDefault();
+    const host = hostBox();
+    const maxW = host.w ? Math.max(MIN_W, host.w - pos.x) : Infinity;
+    const maxH = host.h ? Math.max(MIN_H, host.h - pos.y) : Infinity;
+    const nw = Math.min(Math.max(MIN_W, size.w + d[0]), maxW);
+    const nh = Math.min(Math.max(MIN_H, size.h + d[1]), maxH);
+    kbResize.current.dw += nw - size.w;
+    kbResize.current.dh += nh - size.h;
+    setSize({ w: nw, h: nh });
+    if (!kbResize.current.fired && (Math.abs(kbResize.current.dw) >= RESIZE_THRESH || Math.abs(kbResize.current.dh) >= RESIZE_THRESH)) {
+      kbResize.current.fired = true;
+      onResizedRef.current?.();
+    }
+  }
+
   function handleMaximize() {
     if (!isMaximized) {
       savedRef.current = { x: pos.x, y: pos.y, w: size.w, h: size.h };
@@ -213,7 +261,7 @@ export default function DraggableWindow({
       <div
         // The app glyph draws in `currentColor`, so the bar sets a color for it to
         // inherit — without one it picked up whatever the page outside the sim had.
-        className={`shrink-0 border-b-2 px-3 py-2 flex items-center gap-2 text-gray-700 sim-dark:text-gray-200 ${
+        className={`shrink-0 border-b-2 px-3 py-2 flex items-center gap-2 text-gray-700 sim-dark:text-gray-200 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 ${
           focused
             ? "bg-gray-100 border-gray-700 sim-dark:bg-gray-800 sim-dark:border-gray-500"
             : "bg-gray-200/70 border-gray-400 sim-dark:bg-gray-800/60 sim-dark:border-gray-700"
@@ -221,6 +269,9 @@ export default function DraggableWindow({
           highlight === "titlebar" ? "ring-4 ring-yellow-400 ring-inset animate-pulse" : ""
         }`}
         onMouseDown={onTitleDown}
+        tabIndex={isMaximized ? -1 : 0}
+        aria-label="Window title bar. Drag to move, or press the arrow keys to move it."
+        onKeyDown={onTitleKey}
       >
         {icon && <span className="flex items-center" aria-hidden="true">{icon}</span>}
         <span className={`font-bold text-sm font-[var(--font-app-title)] ${focused ? "text-gray-700 sim-dark:text-gray-100" : "text-gray-500 sim-dark:text-gray-400"}`}>{title}</span>
@@ -241,11 +292,14 @@ export default function DraggableWindow({
       {/* Resize handle */}
       {!isMaximized && (
         <div
-          className={`absolute bottom-0 right-0 w-8 h-8 cursor-se-resize rounded-tl-sm ${
+          role="button"
+          tabIndex={0}
+          className={`absolute bottom-0 right-0 w-8 h-8 cursor-se-resize rounded-tl-sm outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 ${
             highlight === "resize" ? "ring-4 ring-yellow-400 animate-pulse" : ""
           }`}
           onMouseDown={onResizeDown}
-          aria-label="Drag to resize"
+          onKeyDown={onResizeKey}
+          aria-label="Resize the window. Drag, or press the arrow keys."
           style={{
             background: "repeating-linear-gradient(135deg, transparent, transparent 3px, #999 3px, #999 4px)",
           }}
