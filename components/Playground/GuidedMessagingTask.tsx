@@ -757,7 +757,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                         type="button"
                         onClick={() => setReactionTarget(i)}
                         aria-label="Add a reaction to this message"
-                        className={`mt-1 rounded-full border px-2.5 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 sim-dark:bg-gray-800 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 focus-visible:ring-2 focus-visible:ring-blue-500 ${hl("message-bubble") ? pulse : ""}`}
+                        className={`mt-1 rounded-full border border-gray-500 px-2.5 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 sim-dark:bg-gray-800 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 focus-visible:ring-2 focus-visible:ring-blue-500 ${hl("message-bubble") ? pulse : ""}`}
                       >
                         React
                       </button>

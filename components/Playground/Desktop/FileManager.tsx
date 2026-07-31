@@ -404,7 +404,7 @@ export default function FileManager({
                   onDoubleClick={() => handleItemDoubleClick(item)}
                   className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     selected === item.id ? "bg-blue-100 sim-dark:bg-blue-900 border-blue-500 sim-dark:border-blue-400" : "border-transparent hover:bg-gray-100 sim-dark:hover:bg-gray-800"
-                  } ${hl("item", item.name) ? `ring-4 ring-yellow-400 ${pulse} border-yellow-400` : ""} ${
+                  } ${hl("item", item.name) ? `ring-4 ring-yellow-400 ${pulse}` : ""} ${
                     isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                   } ${draggedFile === item.name ? "opacity-50" : ""}`}
                 >
