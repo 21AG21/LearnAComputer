@@ -735,7 +735,6 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                       onDoubleClick={() => msg.from === "contact" && i === lastContactIdx && handleReactionDoubleClick(i)}
                       onPointerDown={() => msg.from === "contact" && i === lastContactIdx && handleReactionPointerDown(i)}
                       onPointerUp={handleReactionPointerUp}
-                      onPointerLeave={handleReactionPointerUp}
                       className={`px-4 py-2 rounded-2xl text-sm select-none transition-all ${
                         msg.from === "me"
                           ? "bg-blue-600 text-white rounded-br-md"
@@ -750,6 +749,19 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                         msg.text
                       )}
                     </div>
+                    {/* A single-click, keyboard-focusable path to react — the
+                        double-click / 500ms-hold on the bubble is impossible for a
+                        shaky hand or a keyboard user, and it is a graded skill. */}
+                    {msg.from === "contact" && i === lastContactIdx && reactionTarget !== i && (
+                      <button
+                        type="button"
+                        onClick={() => setReactionTarget(i)}
+                        aria-label="Add a reaction to this message"
+                        className={`mt-1 rounded-full border px-2.5 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 sim-dark:bg-gray-800 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 focus-visible:ring-2 focus-visible:ring-blue-500 ${hl("message-bubble") ? pulse : ""}`}
+                      >
+                        React
+                      </button>
+                    )}
                     {msg.reactions && msg.reactions.length > 0 && (
                       <div className="flex gap-1 mt-1">
                         {msg.reactions.map((r, ri) => (
