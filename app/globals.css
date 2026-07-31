@@ -33,3 +33,20 @@
   transition-duration: 0s !important;
   transition-delay: 0s !important;
 }
+
+/* And honor the operating-system "reduce motion" preference site-wide — WCAG 2.3.3.
+   The `.reduce-motion` class above is only the in-simulation toggle (Unit 9 teaches
+   it); a learner who already asked their whole computer to stop animation should
+   not have to find a switch in here. This stills route transitions, the celebration
+   overlay, and every pulsing highlight ring across the real site too. 0.001ms rather
+   than 0s so any code awaiting `animationend` still receives its event. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

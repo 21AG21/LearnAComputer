@@ -5,7 +5,7 @@
   "order": 61,
   "title": "Mission: your own machine",
   "videoUrl": "",
-  "drDigitalIntro": "Every computer you have used on this site was a drawing of one. This one is real — it is the machine you are sitting at.\n• You will shrink this window and then make it fill the screen, and the page measures both as you do it.\n• You will read your own battery level off your own screen and type it in. I check that against what your computer reports, so a guess will not pass.\n• The rest is on your honor: opening an app, finding the clock, closing a window.\n• Nothing here can go wrong. The worst outcome is a window left the wrong size, which you already know how to fix.",
+  "drDigitalIntro": "Every computer you have used on this site was a drawing of one. This one is real — it is the machine you are sitting at.\n• You will shrink this window and then make it fill the screen, and the page measures both as you do it.\n• You will read your own battery level off your own screen and type it in. Where your browser will tell me, I check it against what your computer reports.\n• The rest is on your honor: opening an app, finding the clock, closing a window.\n• Nothing here can go wrong. The worst outcome is a window left the wrong size, which you already know how to fix.",
   "playgroundTask": {
     "type": "real-world",
     "goal": "You ran the mission on your own computer",

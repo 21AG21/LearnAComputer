@@ -41,6 +41,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`flex h-screen flex-col bg-white text-gray-900 dark:bg-[#10151b] dark:text-gray-100 ${roboto.variable}`}
       >
+        {/* Keyboard and screen-reader users jump past the nav in one press.
+            Hidden until focused; targets the <main> landmark PageTransition renders. */}
+        <a
+          href="#main-content"
+          className="absolute left-3 -top-16 z-50 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all focus:top-3 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-700"
+        >
+          Skip to main content
+        </a>
         {/* flex-wrap, not a fixed row: with five links the bar overran a 420px
             phone and scrolled the whole page sideways (hostile-check caught it).
             Wrapping keeps every link reachable and the body from scrolling. */}

@@ -57,6 +57,7 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
         <textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          aria-label="Type the text here"
           placeholder="Start typing here… press Return to start a new line."
           rows={4}
           className="w-full max-w-2xl border-2 border-black rounded p-4 text-lg resize-none"
@@ -66,6 +67,7 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          aria-label="Type the text here"
           placeholder="Start typing here…"
           className="w-full max-w-2xl border-2 border-black rounded p-4 text-lg"
         />

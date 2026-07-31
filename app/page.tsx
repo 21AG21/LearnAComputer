@@ -70,7 +70,9 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1400px] px-6 py-8 sm:px-8">
+      {/* A <div>, not <main>: PageTransition already renders the one <main>
+          landmark that wraps every route. A second one here nested them. */}
+      <div className="mx-auto w-full max-w-[1400px] px-6 py-8 sm:px-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
           <div className="min-w-0 space-y-8">
             <div className="space-y-6">
@@ -121,7 +123,7 @@ export default function Home() {
             </div>
           </aside>
         </div>
-      </main>
+      </div>
 
       <SiteFooter />
     </div>

@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 export default function PageTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   return (
-    <main key={pathname} className="flex-1 min-h-0 animate-fade-in">
+    <main id="main-content" tabIndex={-1} key={pathname} className="flex-1 min-h-0 animate-fade-in outline-none">
       {children}
     </main>
   );

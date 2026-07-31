@@ -274,7 +274,11 @@ export default function SimulatorFrame({
           )}
         </div>
         <div className="mt-1.5 flex items-start justify-between gap-3">
-          <p className="text-lg font-semibold leading-snug">
+          {/* aria-live: the single most important a11y hook in the product. Every
+              guided lesson teaches by swapping this instruction on each step; a
+              screen-reader learner must be told it changed, or they are stranded
+              after every step with a silent, purely-visual ring as the only cue. */}
+          <p className="text-lg font-semibold leading-snug" role="status" aria-live="polite" aria-atomic="true">
             {done ? goal + " — all done!" : instruction ?? goal}
           </p>
           {isAssessment && !done && (

@@ -72,6 +72,7 @@ export default function UrlNavigatorTask({
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               onKeyDown={handleKeyDown}
+              aria-label="Address bar — type the web address"
               placeholder={prompt}
               disabled={loaded}
               className={`flex-1 py-2 pr-3 text-lg font-mono outline-none bg-transparent ${

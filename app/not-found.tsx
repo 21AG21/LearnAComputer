@@ -8,7 +8,7 @@ import DrDigitalAvatar from "@/components/DrDigitalAvatar";
  */
 export default function NotFound() {
   return (
-    <main className="flex h-full items-center justify-center overflow-y-auto p-6">
+    <div className="flex h-full items-center justify-center overflow-y-auto p-6">
       <div className="max-w-md text-center">
         <DrDigitalAvatar className="mx-auto h-16 w-16" />
         <h1 className="mt-4 text-2xl font-bold">This page is not here</h1>
@@ -31,6 +31,6 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

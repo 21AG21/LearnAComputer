@@ -32,6 +32,7 @@ python3 scripts/spelling-check.py # one dialect: American English, plus a typo l
 python3 scripts/pitch-check.py    # does the sales material describe the product that exists?
                                   # (reads EXEMPT/STEPLESS out of lib/solve/solver.ts — never copy them)
 python3 scripts/audit-order.py    # curriculum-shape report: order, module size, dependencies
+python3 scripts/check-a11y.py     # every <img>/<Image> and lesson media has an alt (a gate)
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 npm run ring-check                # is every highlighted control actually ON SCREEN? (a gate)
 ```

@@ -15,7 +15,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   }, [error]);
 
   return (
-    <main className="flex h-full items-center justify-center overflow-y-auto p-6">
+    <div className="flex h-full items-center justify-center overflow-y-auto p-6">
       <div className="max-w-md text-center">
         <DrDigitalAvatar className="mx-auto h-16 w-16" />
         <h1 className="mt-4 text-2xl font-bold">Something went wrong on our end</h1>
@@ -45,6 +45,6 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <p className="mt-6 font-mono text-xs text-gray-500 dark:text-gray-400">Reference: {error.digest}</p>
         )}
       </div>
-    </main>
+    </div>
   );
 }

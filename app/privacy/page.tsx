@@ -138,9 +138,10 @@ export default function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        Questions about privacy should go to whoever operates this installation of the site. If you
-        are running it yourself, replace this paragraph with your own contact details before
-        publishing.
+        Questions about privacy can go through the <strong>Report a problem</strong> link in the
+        footer of any page. Because there is no account and nothing about you is collected or stored
+        on any server, there is no personal record for us to look up, change, or delete — everything
+        the site keeps lives on your own device, and the Reset all progress button clears it.
       </p>
     </LegalPage>
   );
