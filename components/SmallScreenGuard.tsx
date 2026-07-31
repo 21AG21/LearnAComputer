@@ -21,7 +21,14 @@ export default function SmallScreenGuard() {
 
   useEffect(() => {
     setHost(window.location.host);
-    const check = () => setTooSmall(window.innerWidth < 900);
+    // Gate on a genuinely small *touch* device, not on width alone. Browser zoom
+    // shrinks `innerWidth`, so a `< 900` width check fired this warning on a fine
+    // laptop that a low-vision learner had merely zoomed in on — telling someone who
+    // just enlarged the text that their computer is too small. A phone/tablet reports
+    // a coarse pointer; a zoomed laptop keeps its fine pointer, so it no longer trips.
+    // (The activity now stacks responsively, so a zoomed laptop stays fully usable.)
+    const check = () =>
+      setTooSmall(window.innerWidth < 900 && window.matchMedia("(pointer: coarse)").matches);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -46,7 +53,7 @@ export default function SmallScreenGuard() {
         </p>
         <button
           onClick={() => setDismissed(true)}
-          className="mt-6 text-sm text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300"
+          className="mt-6 text-base font-medium text-gray-700 underline hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
         >
           Continue here anyway
         </button>

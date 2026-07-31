@@ -194,7 +194,11 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
   }
 
   return (
-    <div className="h-full flex">
+    // flex-col below lg so the activity/media pane STACKS beneath the reading
+    // column instead of vanishing: a low-vision learner who zooms shrinks the whole
+    // viewport under 1024px, where the pane used to be display:none — the 900-1023px
+    // dead band three auditors hit. On lg it is the original side-by-side row.
+    <div className="h-full flex flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
       {/*
         One width for every kind of lesson.
         This used to be three: `max-w-xl` with an activity, `max-w-2xl` with a
@@ -203,7 +207,7 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
         which reads as three different websites. The right pane changes; the
         column the learner is reading does not.
       */}
-      <div ref={leftPanelRef} className="w-full shrink-0 overflow-y-auto p-6 space-y-6 lg:max-w-xl">
+      <div ref={leftPanelRef} className="w-full shrink-0 p-6 space-y-6 lg:max-w-xl lg:overflow-y-auto">
         <Link href="/lessons" className="text-sm text-gray-500 underline dark:text-gray-400">
           ← All lessons
         </Link>
@@ -334,11 +338,11 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
       </div>
 
       {media ? (
-        <div className="hidden lg:flex flex-1 min-w-0 bg-gray-50 border-l border-gray-200 dark:bg-[#0b1016] dark:border-gray-800">
+        <div className="flex h-[40vh] min-h-[280px] min-w-0 border-t border-gray-200 bg-gray-50 lg:h-full lg:min-h-0 lg:flex-1 lg:border-l lg:border-t-0 dark:bg-[#0b1016] dark:border-gray-800">
           <LessonMedia src={media.src} alt={media.alt} caption={media.caption} />
         </div>
       ) : hasGate ? (
-        <div className="hidden lg:block flex-1 min-w-0 p-4">
+        <div className="block h-[70vh] min-h-[560px] min-w-0 border-t border-gray-200 p-4 lg:h-full lg:min-h-0 lg:flex-1 lg:border-t-0 dark:border-gray-800">
           {/* One crashed sim must not blank the lesson page — the boundary keeps the
               left panel and its skip button alive, and Try again remounts the sim. */}
           <ActivityErrorBoundary onRetry={() => setActivityAttempt((n) => n + 1)}>
