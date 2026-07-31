@@ -961,7 +961,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 onKeyDown={(e) => { if (e.key === "Enter") submitAddress(); }}
                 onClick={(e) => e.stopPropagation()}
                 placeholder="Type a website address"
-                className="flex-1 outline-none text-base sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
+                className="flex-1 outline-none text-base rounded focus-visible:ring-2 focus-visible:ring-blue-500 sim-dark:bg-gray-900 sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
               />
               <button onClick={(e) => { e.stopPropagation(); submitAddress(); }} className="shrink-0 px-3 py-0.5 bg-blue-600 text-white text-sm font-bold rounded-md border border-black sim-dark:border-gray-500">Go →</button>
             </>
@@ -1087,7 +1087,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 </p>
                 <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"}`}>
                   <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
-                  <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }} placeholder="Search Google" className="flex-1 outline-none" />
+                  <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }} placeholder="Search Google" className="flex-1 outline-none rounded focus-visible:ring-2 focus-visible:ring-blue-500" />
                 </div>
                 <button onClick={submitSearch} className="px-4 py-2 bg-gray-100 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-200">Google Search</button>
                 {searchResults && (

@@ -49,8 +49,12 @@ const config: Config = {
           "100%": { opacity: "0", transform: "scale(1.3)" },
         },
         "ring-pulse": {
-          "0%, 100%": { boxShadow: "0 0 0 4px rgba(250,204,21,1), 0 0 0 8px rgba(250,204,21,0)" },
-          "50%":       { boxShadow: "0 0 0 4px rgba(250,204,21,1), 0 0 0 12px rgba(250,204,21,0.45)" },
+          // A dark navy edge (3-5px) rings the yellow so the "act here" cue clears
+          // WCAG 1.4.11's 3:1 non-text floor against a white surface — yellow-400
+          // alone is ~1.4:1 and a cataract/low-vision learner could miss the one
+          // signal the whole lesson depends on. The yellow stays the identity.
+          "0%, 100%": { boxShadow: "0 0 0 3px rgba(250,204,21,1), 0 0 0 5px rgba(23,37,84,0.95), 0 0 0 9px rgba(250,204,21,0)" },
+          "50%":       { boxShadow: "0 0 0 3px rgba(250,204,21,1), 0 0 0 5px rgba(23,37,84,0.95), 0 0 0 13px rgba(250,204,21,0.45)" },
         },
         "pop-attention": {
           "0%":   { transform: "scale(1)" },

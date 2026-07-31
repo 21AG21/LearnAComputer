@@ -332,7 +332,7 @@ export default function FileManager({
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search"
-            className="w-28 outline-none text-sm bg-transparent sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
+            className="w-28 outline-none text-sm bg-transparent rounded focus-visible:ring-2 focus-visible:ring-blue-500 sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
           />
         </div>
       </div>

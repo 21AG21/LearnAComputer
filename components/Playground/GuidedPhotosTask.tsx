@@ -380,7 +380,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 value={newAlbumInput}
                 onChange={(e) => setNewAlbumInput(e.target.value)}
                 placeholder={step?.value || "Album name"}
-                className="w-full px-2 py-1 text-xs border border-gray-500 rounded outline-none mb-1"
+                className="w-full px-2 py-1 text-xs border border-gray-500 rounded outline-none focus:border-blue-600 mb-1"
                 onKeyDown={(e) => e.key === "Enter" && handleConfirmAlbum()}
               />
               <button

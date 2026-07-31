@@ -161,7 +161,7 @@ export default function GuidedNotesTask({
               suppressContentEditableWarning
               onKeyDown={handleKeyDown}
               onInput={handleInput}
-              className="h-full p-4 text-base leading-relaxed outline-none overflow-y-auto sim-dark:text-gray-100"
+              className="h-full p-4 text-base leading-relaxed outline-none overflow-y-auto focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sim-dark:text-gray-100"
               aria-label="Notes editor"
             />
           </div>
