@@ -5,7 +5,7 @@
   "order": 207,
   "title": "Delete",
   "videoUrl": "",
-  "drDigitalIntro": "The Delete key erases mistakes.\n• It removes the letter or space just left of your cursor.\n• It's your go-to for fixing typos.",
+  "drDigitalIntro": "The Delete and Backspace keys erase mistakes.\n• Backspace removes the letter or space just to the LEFT of your cursor — your go-to for fixing a typo you just made.\n• On a Windows keyboard, the Delete key removes the letter to the RIGHT instead. On many Mac laptops there is only one key, labeled delete, and it erases to the left like Backspace.\n• Tap either one again to remove more.",
   "playgroundTask": {
     "type": "edit-text",
     "instructions": "This sentence has extra letters sprinkled in — use the Delete key to erase each one. Click into the text, use the arrow keys to find the extras, and press Delete to remove them.",

@@ -5,7 +5,7 @@
   "order": 242,
   "title": "Undo and Redo",
   "videoUrl": "",
-  "drDigitalIntro": "Made a mistake? Undo it instantly — no retyping needed.\n• Ctrl+Z (or Command+Z on a Mac) undoes your last action. Press it again to undo more steps.\n• Ctrl+Shift+Z (or Command+Shift+Z) redoes what you just undid.\n• Undo works in almost every app: word processors, email, photos, drawing tools.\n• Common mistake: deleting a lot of text and panicking — just press Ctrl+Z a few times to bring it back.\n• You can undo many steps, not just the very last one.",
+  "drDigitalIntro": "Made a mistake? Undo it instantly — no retyping needed.\n• Ctrl+Z (or Command+Z on a Mac) undoes your last action. Press it again to undo more steps.\n• Ctrl+Y (or Ctrl+Shift+Z) redoes what you just undid — on a Mac, Command+Shift+Z.\n• Undo works in almost every app: word processors, email, photos, drawing tools.\n• Common mistake: deleting a lot of text and panicking — just press Ctrl+Z a few times to bring it back.\n• You can undo many steps, not just the very last one.",
   "playgroundTask": {
     "type": "notes-shortcut",
     "goal": "Use Undo and Redo to fix a mistake",

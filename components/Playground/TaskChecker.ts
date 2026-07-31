@@ -117,7 +117,7 @@ export function checkNotesShortcut(action: string, e: KbEvent): boolean {
     case "cut":        return mod && k === "x";
     case "paste":      return mod && k === "v";
     case "undo":       return mod && !e.shiftKey && k === "z";
-    case "redo":       return mod && e.shiftKey && k === "z";
+    case "redo":       return (mod && e.shiftKey && k === "z") || (mod && !e.shiftKey && k === "y"); // Ctrl+Shift+Z (Mac/browser) or Ctrl+Y (Windows apps)
     default:           return false;
   }
 }

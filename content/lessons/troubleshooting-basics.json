@@ -5,7 +5,7 @@
   "order": 1110,
   "title": "When Something Goes Wrong",
   "videoUrl": "",
-  "drDigitalIntro": "Computers act up sometimes, and that is completely normal. Here is how to stay calm and fix it.\n• If an app freezes (stops responding), do not keep clicking. That makes it worse. The spinning indicator means the computer is struggling.\n• Force-quit the frozen app: click the system menu and choose Force Quit. This closes the stuck app without affecting the rest of your computer.\n• Reopen it fresh from the dock. Most freezes are temporary and the app starts normally again.\n• Once the app is back, test that it really works by typing or clicking inside it before moving on.\n• If force-quitting does not help, the next step is a full restart (covered in the next lesson).",
+  "drDigitalIntro": "Computers act up sometimes, and that is completely normal. Here is how to stay calm and fix it.\n• If an app freezes (stops responding), do not keep clicking. That makes it worse. The spinning indicator means the computer is struggling.\n• Force-quit the frozen app. On a Mac, open the menu and choose Force Quit. On Windows, press Ctrl+Shift+Esc to open Task Manager, pick the stuck app, and choose End Task. Either way closes just the stuck app without affecting the rest of your computer.\n• Reopen it fresh from the dock. Most freezes are temporary and the app starts normally again.\n• Once the app is back, test that it really works by typing or clicking inside it before moving on.\n• If force-quitting does not help, the next step is a full restart (covered in the next lesson).",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "You fixed a frozen app and confirmed it is working",

@@ -5,7 +5,7 @@
   "order": 1060,
   "title": "Shopping Safely Online",
   "videoUrl": "",
-  "drDigitalIntro": "Before you enter any payment details on a shopping site, take 5 seconds to check two things.\n• Look at the address bar: a padlock icon means the connection is encrypted. No padlock, or a warning icon, means your data could be intercepted.\n• Check the URL itself: the domain should be a name you recognize (like shop.example), not a jumbled mix of letters and numbers.\n• Never type your card number into a site without a padlock — move on and find the official shop instead.\n• A deal that seems too good to be true usually is — search the shop name plus the word 'reviews' before buying.\n• For extra protection, use a credit card rather than a debit card: most banks offer fraud protection on purchases.",
+  "drDigitalIntro": "Before you enter any payment details on a shopping site, take 5 seconds to check two things.\n• Look at the address bar: a padlock (or, in newer browsers, a small settings icon) means the connection is encrypted, and the address should start with https. If the browser shows \"Not secure\", your data could be intercepted.\n• Check the URL itself: the domain should be a name you recognize (like shop.example), not a jumbled mix of letters and numbers.\n• Never type your card number into a site the browser marks \"Not secure\" — move on and find the official shop instead.\n• A deal that seems too good to be true usually is — search the shop name plus the word 'reviews' before buying.\n• For extra protection, use a credit card rather than a debit card: most banks offer fraud protection on purchases.",
   "playgroundTask": {
     "type": "guided-browser",
     "goal": "Check the padlock before buying",

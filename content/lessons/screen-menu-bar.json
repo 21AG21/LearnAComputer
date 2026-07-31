@@ -5,7 +5,7 @@
   "order": 32,
   "title": "Menu Bar",
   "videoUrl": "",
-  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n• It always shows the time on the right side, plus icons for WiFi and battery.\n• On the left it shows the name of the app you are currently using.\n• Click any item in the menu bar to see its options.\n• The choices change depending on which app is open.\n• Now look at the very top of your own screen. You should see a row just like this one, with the time on the right side. Find it before you continue.",
+  "drDigitalIntro": "The menu bar is the thin strip at the very top of your screen.\n• It always shows the time on the right side, plus icons for WiFi and battery.\n• On the left it shows the name of the app you are currently using.\n• Click any item in the menu bar to see its options.\n• The choices change depending on which app is open.\n• Now look at your own screen. On a Mac this strip runs along the very top; on Windows the same information — the clock, WiFi and battery — sits in the taskbar at the bottom-right. Find yours before you continue.",
   "playgroundTask": {
     "type": "none"
   },
