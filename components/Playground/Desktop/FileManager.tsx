@@ -385,6 +385,15 @@ export default function FileManager({
               return (
                 <div
                   key={item.id}
+                  // Keyboard path to open a file/folder, since opening was
+                  // double-click-only (impossible for a shaky hand or a keyboard
+                  // user). Tab to focus, Enter/Space to open. In keyboardNav mode
+                  // the grid owns arrow-key navigation, so items aren't individually
+                  // tabbable there.
+                  role="button"
+                  tabIndex={keyboardNav ? undefined : 0}
+                  aria-label={`${item.kind === "folder" ? "Folder" : "File"}: ${item.name}`}
+                  onKeyDown={keyboardNav || isNaming ? undefined : (e) => { if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) { e.preventDefault(); handleItemDoubleClick(item); } }}
                   draggable={canDrag}
                   onDragStart={canDrag ? (e) => { e.dataTransfer.setData("text/plain", item.name); setDraggedFile(item.name); } : undefined}
                   onDragEnd={canDrag ? () => { setDraggedFile(null); setDropTarget(null); } : undefined}
@@ -393,7 +402,7 @@ export default function FileManager({
                   onDrop={canDropFolder ? (e) => handleDrop(e, item.id as Loc) : undefined}
                   onClick={() => handleItemClick(item)}
                   onDoubleClick={() => handleItemDoubleClick(item)}
-                  className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all ${
+                  className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     selected === item.id ? "bg-blue-100 sim-dark:bg-blue-900 border-blue-500 sim-dark:border-blue-400" : "border-transparent hover:bg-gray-100 sim-dark:hover:bg-gray-800"
                   } ${hl("item", item.name) ? `ring-4 ring-yellow-400 ${pulse} border-yellow-400` : ""} ${
                     isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
