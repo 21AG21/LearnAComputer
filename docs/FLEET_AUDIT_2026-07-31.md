@@ -205,22 +205,33 @@ stray-check / recovery-check / hostile-check / build kept green throughout).
 - **S5 privacy** — machine-read enumeration completed (User-Agent, paste, screen/zoom).
 - **S6 sales numbers** — 163/169 corrected in both docs; pitch-check now catches
   spelled-out stale counts (negative-controlled).
-- **B3 (partial)** — messaging reactions get a single-click/keyboard React button
-  (hold no longer cancels on drift); scam ✕ → 44px; window buttons → 36×32; email
-  compose fields + sliders labeled.
-- **Minors** — accessibility-page placeholder, reduce-motion honored at OS level and
-  the `aria-live` step region (Phase 1), dead `replaceCompletedSlugs` + stale sync
-  comments removed, hostile-check `?_rsc=` abort ignored, password + shape-game copy.
+- **B3** — messaging reactions get a single-click/keyboard React button (hold no
+  longer cancels on drift); **file/folder OPEN by keyboard** (Tab + Enter/Space,
+  tiles are `role="button"`); **window MOVE and RESIZE by keyboard** (arrow keys on
+  the focusable title bar / resize handle, firing `onMoved`/`onResized` past the same
+  thresholds); email-compose + slider labels; scam ✕ → 44px. (Window-button/resize
+  size bumps were reverted — they broke desktop-check; 28×24 already meets WCAG AA.)
+- **Minors** — accessibility-page placeholder, reduce-motion at OS level + the
+  `aria-live` step region (Phase 1), dead `replaceCompletedSlugs` + stale sync
+  comments removed, hostile-check `?_rsc=` abort ignored, password + shape-game copy,
+  sim-contrast border fixes for the new controls.
 
-**Remaining — the "large sim-operability build" (item 4), genuinely multi-session**
-This is the deep keyboard / screen-reader / touch operability of the two most
-heavily-tested components, and must be done carefully so it doesn't regress
-solve-check / stray-check / ring-check / recovery-check:
-- **FileManager** — a click-file-then-folder *move* path and a keyboard/Enter *open*
-  path (today: drag + double-click only).
-- **DraggableWindow** — button/keyboard *move* and *resize* (today: drag only), and
-  Pointer Events so touch works.
-- The remaining ~15 sim inputs' `aria-label`s, `aria-current` on the highlighted
-  control, `aria-selected` on file rows, and the resize-handle/menu-bar target sizes.
+Every one of the above is committed with the full gate battery green (solve 145/145,
+ring, stray ×2, recovery, desktop, hostile, sim-contrast 124/124, simdark, demo,
+check-a11y, check-lessons 197/197, spelling, pitch, check-actions, tsc, build).
+
+**Remaining — the tail of the sim-operability build, genuinely multi-session**
+Each touches the most heavily-tested components and must keep every gate green (a
+`role="button"` change already tripped one bubbling bug and one sim-contrast border
+this session — both caught and fixed, which is exactly why this goes carefully):
+- **FileManager** — a click-file-then-folder *move* path (today: drag only). The
+  keyboard *open* path is done.
+- **DraggableWindow / FileManager** — Pointer Events so **touch** works (today mouse
+  events only; the auto-solver dispatches mouse events, so the solver must move to
+  pointer events in the same change or it regresses).
+- ~13 more minor sim-input `aria-label`s (2FA / login / calendar / troubleshooting /
+  app-store search), `aria-current` on the highlighted control, `aria-selected` on
+  file rows, DesktopLaunch as a live region, a right-click touch/keyboard fallback.
 - Then the `check-a11y.py` interactive-div / input-name rules (they'd fail on the
-  above until it's finished, so they land last).
+  above until it's finished, so they land last), and three tiny copy items
+  (cloud-vs-computer per-item feedback, GOAL_STATE number drift, grading step text).
