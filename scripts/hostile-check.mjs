@@ -114,6 +114,10 @@ async function sweep(route) {
   page.on("requestfailed", (r) => {
     const url = r.url();
     if (url.includes("_next/static/development") || url.includes("hot-update")) return;
+    // A Next.js RSC prefetch that gets superseded aborts by design — net::ERR_ABORTED
+    // on a ?_rsc= request is not a broken route (the route returns 200). Ignoring it
+    // stops a non-deterministic false "serious" finding on this pre-demo gate.
+    if (/[?&]_rsc=/.test(url) && (r.failure()?.errorText || "").includes("ABORTED")) return;
     failedRequests.push(`${url.replace(BASE, "").slice(0, 80)} (${r.failure()?.errorText})`);
   });
 

@@ -43,8 +43,8 @@ function writeState(state: ProgressState) {
 }
 
 /**
- * Fired after any change, so the account sync can push without every call site
- * having to know whether somebody is signed in.
+ * Fired after any change, so listeners like the dashboard and the homepage
+ * greeting update the moment progress changes.
  */
 export const PROGRESS_EVENT = "lac-progress-changed";
 
@@ -63,12 +63,6 @@ export function markComplete(slug: string): void {
 
 export function getCompletedSlugs(): string[] {
   return readState().completedSlugs;
-}
-
-/** Used by the account sync when the merged list is bigger than the local one. */
-export function replaceCompletedSlugs(slugs: string[]): void {
-  writeState({ version: SCHEMA_VERSION, completedSlugs: slugs });
-  announce();
 }
 
 export function resetProgress(): void {
