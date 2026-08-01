@@ -125,10 +125,14 @@ export function FolderCheck({ step, onPass }: CheckProps) {
         {report ? "Check it again" : "Show me the folder"}
       </button>
       {!canPickFolders && (
-        <p className="mt-3 text-sm text-gray-700">
-          This browser cannot hand a whole folder to a web page — phones and tablets generally cannot. Do the sorting
-          anyway; it is the sorting that matters. To have it checked, open this lesson on a computer.
-        </p>
+        <div className="mt-3 space-y-3">
+          <p className="text-sm text-gray-700">
+            This browser cannot hand a whole folder to a web page — phones and tablets generally cannot. Do the sorting
+            anyway; it is the sorting that matters. On a computer this page can check the folder for you; here, it is on
+            your honor — tap the button once you have finished.
+          </p>
+          <button onClick={onPass} className={BTN}>I have sorted the folder</button>
+        </div>
       )}
 
       {report && (
