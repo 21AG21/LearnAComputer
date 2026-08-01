@@ -187,5 +187,6 @@ made. So the same discipline the sales docs demand applies double at volume:
   finished accessibility audit. (`SALES_PLAYBOOK.md §8` is the source of truth.)
 - Never quote a scam statistic you haven't sourced that week.
 - Lead with the two things that make people *want* to forward it: it's genuinely
-  free, and it collects nothing about anyone. Those are why a director passes it
+  free, and it collects no personal data about anyone (only anonymous page-view
+  totals). Those are why a director passes it
   to a peer without worrying it'll embarrass them. Protect that.
