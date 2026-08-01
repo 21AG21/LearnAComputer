@@ -202,8 +202,8 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 | "They can't learn this." | "That's the assumption the whole thing is built against. Lesson one is learning to click, nothing is timed, and nothing can be broken. Pick the six you think are most likely and prove me wrong." |
 | "Talk to my boss." | "Glad to — would you introduce me, or should I use your name?" *(Always ask; a forwarded intro beats a cold call.)* |
 | "Call me next quarter." | "I'll do that. So I'm not wasting your time — what would need to be different by then?" |
-| "Is it secure? Private?" | "There's nothing to secure — no account, no email, no cookies, no analytics, and the site doesn't contact any other company. The only thing kept is a list of finished lessons in their own browser. Open the developer tools and check; the cookie jar is empty." |
-| "Can we see who's progressing?" | "No, and that's deliberate. Watching people's progress means collecting data about them, and this course collects nothing at all — no account, no cookies, no analytics. What you get instead is the certificate they print at the end of a unit, and what you can see in the room." |
+| "Is it secure? Private?" | "There's almost nothing to secure — no account, no email, no cookies, and nothing tied to a person. The only things kept are a list of finished lessons in their own browser, and an anonymous, aggregate count of which lessons get opened (cookieless page views). Open the developer tools and check; the cookie jar is empty." |
+| "Can we see who's progressing?" | "No, and that's deliberate. Watching a person's progress means collecting data about them, and this course keeps nothing tied to a person — no account, no cookies. The only thing counted is anonymous, aggregate page views. What you get instead is the certificate they print at the end of a unit, and what you can see in the room." |
 
 ---
 
@@ -232,4 +232,4 @@ Rapid reference. The long versions are in `SALES_PLAYBOOK.md §5` and `§5b`.
 - A future price. The course is free; do not hint at a paid tier that does not
   exist, and do not promise it will always be free in writing.
 - Any per-learner reporting. There is no dashboard and no plan for one, because
-  the product deliberately collects nothing.
+  the product deliberately keeps nothing tied to a person (only anonymous page-view totals).

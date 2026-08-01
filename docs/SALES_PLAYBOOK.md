@@ -25,8 +25,8 @@ every unit ends with a checked task on the learner's **own** machine.
    mission on the learner's actual computer — organize a real folder, change
    real settings, copy between real programs — verified in the browser with
    nothing uploaded. No other beginner course closes the sim-to-real gap.
-3. **Nothing to install, nothing collected, and it's free.** It runs in a
-   browser. There is no account, no sign-in, no cookie, no analytics script,
+3. **Nothing to install, nothing tied to a person, and it's free.** It runs in a
+   browser. There is no account, no sign-in, no cookie, no per-person tracking,
    and nothing that contacts another company. The list of finished lessons
    lives in the learner's own browser and never expires, so they close the tab
    and pick up where they stopped. For libraries, care homes and schools the
@@ -49,7 +49,7 @@ final-assessment "trip" capstone. 197 lessons, 14 units.
 | **Adult children of aging parents (B2C)** | "I set up Mom's laptop and now I'm tech support forever" | Hand them the course instead of your weekends; the troubleshooting unit answers the panicked calls |
 
 **Not yet the buyer:** elementary schools — not for data reasons (the course
-collects nothing from anybody), but because the writing and examples are aimed
+keeps nothing tied to a person), but because the writing and examples are aimed
 at adults who missed computers. Say that, rather than implying a child version
 is coming.
 
@@ -139,10 +139,10 @@ is the moment skeptics convert; let it breathe.
 | "What about our locked-down computers?" | "Nothing to install — it's a website, and there is nothing to sign in to. It even keeps working when the machine blocks saving: the learner sees one calm note explaining that progress will last until the tab closes, and every lesson still teaches. On those machines, plan to finish a unit within a session." |
 | "How do we know it's working?" (funder/outcomes) | Be straight: "You'd see it in the room, and on the certificate a learner prints when they finish a unit. There is no dashboard, and there's a trade-off behind that — reporting on people means collecting data about them, and we decided not to collect any. For a pilot, a check-in sheet and the unit certificates are the record." *(Do not promise a dashboard. There is no longer one on the roadmap.)* |
 | "What does it cost?" | "Nothing. The whole course is free — no paid tier, no trial, no per-seat fee, and no advertising paying for it behind your back." Do not invent a future price; if they ask how it is sustained, the honest answer is that it is free to use and that is the current plan. |
-| "Data privacy? Our board will ask." | "There is nothing to disclose, which is unusual enough that I'd rather you check it than take my word. No account, no email, no cookies at all, no analytics, no advertising, and the site contacts no other company. The only thing stored is a list of finished lessons, in the learner's own browser, which they can erase in two clicks. Open the developer tools during the demo and look at the cookie jar — it is empty." *(This is verifiable and tested on every build; invite the check.)* |
+| "Data privacy? Our board will ask." | "There is very little to disclose, which is unusual enough that I'd rather you check it than take my word. No account, no email, no cookies at all, no advertising, and nothing tied to a person. The only things kept are a list of finished lessons in the learner's own browser (erasable in two clicks) and an anonymous, aggregate count of which lessons get opened. Open the developer tools during the demo and look at the cookie jar — it is empty." *(The empty cookie jar is verifiable and tested on every build; invite the check.)* |
 | "What are those Google Form links?" | Volunteer this before they find it. "Two places link out to a Google Form — Report a problem in the footer, and a feedback card that appears once a learner is three quarters through. They are ordinary links: nothing loads from Google and nothing is sent anywhere unless the learner clicks, which is why the page still makes zero third-party requests. Both are optional and neither asks who anyone is. If your policy is no Google at all, nobody has to click them and nothing depends on it." |
 | "Is it accessible?" | Honest today: "Readable at a 5th-grade level, large targets, no time pressure, dark mode, and a full unit teaching learners to adjust their own settings. A formal WCAG audit is on the near-term roadmap." *(True per master plan §1.6 — update this row when it lands.)* |
-| "We're an elementary school" | Do not lean on the privacy story here, tempting as it is. Say: "We collect nothing from anyone, so there's no data question to answer — but I haven't had this reviewed against COPPA and I'm not going to imply I have. The bigger issue is fit: the writing and the examples are aimed at adults who missed computers, not at children. I'd rather tell you that than sell you something that doesn't land." |
+| "We're an elementary school" | Do not lean on the privacy story here, tempting as it is. Say: "We keep nothing tied to a person, so there's no per-resident data question to answer — but I haven't had this reviewed against COPPA and I'm not going to imply I have. The bigger issue is fit: the writing and the examples are aimed at adults who missed computers, not at children. I'd rather tell you that than sell you something that doesn't land." |
 
 ## 5b. The competition, honestly — and the objection that actually kills deals
 
@@ -247,7 +247,7 @@ mechanically proven finishable, re-proven on every change** — 145 simulated
 (`npm run solve-check`) plus all 18 real-world missions played on a real
 machine (`npm run mission-check`) · WCAG AA contrast measured and fixed on the
 pages learners read, in both themes (`scripts/contrast-check.mjs`) · **free to
-use, with no account, no cookies, no analytics and no third-party requests** —
+use, with no account, no cookies, no per-person tracking and no third-party requests** —
 asserted on every route by `npm run hostile-check` and verifiable by the buyer
 in their own developer tools.
 
@@ -266,7 +266,7 @@ difference between a number that sounds good and one that is true.
 **Removed on purpose, 2026-07-28 — do not offer to build them back on a call:**
 accounts and sign-in, cross-device progress sync, and the classroom/instructor
 dashboard. All three required collecting something about a learner, and the
-product now collects nothing. If a buyer needs per-learner reporting, tell them
+product keeps nothing tied to a person. If a buyer needs per-learner reporting, tell them
 plainly that this is not that product and why.
 
 Shipped 2026-07-29: a **course-evaluation link** that appears on the Lessons page

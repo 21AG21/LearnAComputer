@@ -246,8 +246,8 @@ ones it does not cover.
 | "Staff don't have time to teach computers." | "That's the design. The instructor doesn't teach — the course teaches, and a staff member sits nearby for reassurance. `docs/IMPLEMENTATION_GUIDE.md` has the session sheets; the staff role is about twenty minutes of setup, once." |
 | "What if a resident actually gets scammed using this?" | "Nothing inside the course can reach the real world. The email, the browser, the shop, the bank — all simulated, no message can be sent, no purchase can be made. The only real thing is the practice folder they download, and that stays on their machine." |
 | "Is any of this HIPAA-relevant?" | "We never ask for, store, or transmit anything at all — not a name, not an email, nothing about health or care. The entire data model is a list of finished lesson names, kept in that browser on that machine. There is no account to create and no server to hold anything. Nothing about it can touch a care record." |
-| "Families will ask what we're doing with this." | "Give them the certificate and the unit list, and point them at the privacy page — it is plain language and it is short, because there is nothing to disclose. No account, no cookies, nothing collected, free to use." |
-| "Can we see who's progressing?" | "No — and I'd rather explain why than dress it up. Watching progress means collecting data about residents, and this course collects nothing: no account, no email, no cookies, no analytics. What you get is the certificate they print at the end of a unit, and what you see in the room. If per-resident reporting is a requirement, this isn't the right tool and I'll say so." |
+| "Families will ask what we're doing with this." | "Give them the certificate and the unit list, and point them at the privacy page — it is plain language and it is short, because there is nothing to disclose. No account, no cookies, nothing tied to a person, free to use." |
+| "Can we see who's progressing?" | "No — and I'd rather explain why than dress it up. Watching a resident's progress means collecting data about them, and this course keeps nothing tied to a person: no account, no email, no cookies. The only thing counted is anonymous, aggregate page views. What you get is the certificate they print at the end of a unit, and what you see in the room. If per-resident reporting is a requirement, this isn't the right tool and I'll say so." |
 
 ---
 
@@ -284,7 +284,7 @@ becomes a promise.
 - **Never demo an unrehearsed path.** The course is honest; the demo has to be.
 - **Never claim an instructor dashboard, per-learner reporting, accounts, or a
   third-party WCAG audit.** The first three were removed on purpose; the course
-  collects nothing. See `SALES_PLAYBOOK.md §8`.
+  keeps nothing tied to a person. See `SALES_PLAYBOOK.md §8`.
 - **Never quote a fraud statistic you have not sourced this week.**
 - If something breaks live: *"Let me show you that on another lesson — and
   I'll have an answer for you tomorrow."* Then actually answer tomorrow.
