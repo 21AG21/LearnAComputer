@@ -5,7 +5,7 @@
   "order": 33,
   "title": "Clock and Date",
   "videoUrl": "",
-  "drDigitalIntro": "The clock in the top-right corner of the menu bar shows the current time.\n• Click on it to see today's full date and the time.\n• This is useful when you need to check what day it is without opening a calendar.\n• On a real computer, clicking the clock may also show upcoming calendar events.\n• Look at your own computer's menu bar right now — you should see the time in the top-right corner.",
+  "drDigitalIntro": "The clock in the top-right corner of the menu bar shows the current time.\n• Click on it to see today's full date and the time.\n• This is useful when you need to check what day it is without opening a calendar.\n• On a real computer, clicking the clock may also show upcoming calendar events.\n• Look at your own computer's clock right now — it's in the top-right corner on a Mac, or the bottom-right of the taskbar on Windows.",
   "playgroundTask": {
     "type": "guided-desktop",
     "goal": "Open the clock panel and read today's date",

@@ -91,4 +91,4 @@ played, so the harness now says so out loud.
 ## Current status
 
 See the latest run results at the bottom of this file's companion audit
-(`docs/HARDENING_ROUND_1.md`).
+(`docs/archive/HARDENING_ROUND_1.md`).

@@ -40,6 +40,9 @@ BRITISH = [
     ("unauthorised", "unauthorized"), ("authorised", "authorized"),
     ("prioritise", "prioritize"), ("minimise", "minimize"), ("maximise", "maximize"),
     ("summarise", "summarize"), ("emphasise", "emphasize"), ("apologised", "apologized"),
+    # US market and de-branding: "program" (adult day program), "labeled" controls.
+    ("programmes", "programs"), ("programme", "program"),
+    ("labelling", "labeling"), ("labelled", "labeled"),
 ]
 
 # Real misspellings worth a permanent guard.

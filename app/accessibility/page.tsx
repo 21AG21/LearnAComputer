@@ -31,7 +31,7 @@ export default function AccessibilityPage() {
           moves between them and Enter activates them.
         </li>
         <li>
-          <strong>Labelled controls.</strong> Icon-only buttons carry text labels for screen readers.
+          <strong>Labeled controls.</strong> Icon-only buttons carry text labels for screen readers.
         </li>
         <li>
           <strong>No autoplay.</strong> Nothing moves, plays or pops up on its own.

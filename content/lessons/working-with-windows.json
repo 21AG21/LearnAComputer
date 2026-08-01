@@ -11,11 +11,11 @@
     "goal": "You moved, resized, minimized, maximized, and closed a window",
     "steps": [
       {
-        "say": "Drag the strip at the top of the window — the one with the app's name on it — to move the window.",
+        "say": "Drag the strip at the top of the window — the one with the app's name on it — to move the window. Or click it and use the arrow keys.",
         "action": "move"
       },
       {
-        "say": "Drag the striped corner handle at the bottom-right to resize the window.",
+        "say": "Drag the striped corner handle at the bottom-right to resize the window. Or click it and use the arrow keys.",
         "action": "resize"
       },
       {

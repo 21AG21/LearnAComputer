@@ -5,7 +5,7 @@
   "order": 21,
   "title": "Restarting your laptop",
   "videoUrl": "",
-  "drDigitalIntro": "Restarting your computer means turning it off and back on again. It is one of the most useful fixes in computing.\n• When something is acting strange, a restart often clears the problem.\n• Open Settings, find the About or System section, and look for a Restart button.\n• When you click Restart, your computer will warn you that unsaved work will be lost — save first if you can.\n• The computer goes dark for a moment, then starts up fresh. That's normal.\n• Note: restarting is different from Sleep. Sleep saves your work and wakes up quickly. Restart closes everything and starts clean.",
+  "drDigitalIntro": "Restarting your computer means turning it off and back on again. It is one of the most useful fixes in computing.\n• When something is acting strange, a restart often clears the problem.\n• On a real computer, Restart is in the Start menu (Windows) or the Apple menu in the top-left corner (Mac). On this practice computer, you'll open Settings and find the Restart button.\n• When you click Restart, your computer will warn you that unsaved work will be lost — save first if you can.\n• The computer goes dark for a moment, then starts up fresh. That's normal.\n• In the practice below you'll fix a stuck computer, so an error message appears first — that's part of the exercise, not something you did wrong.\n• Note: restarting is different from Sleep. Sleep saves your work and wakes up quickly. Restart closes everything and starts clean.",
   "playgroundTask": {
     "type": "guided-troubleshooting",
     "goal": "Restart the computer to fix the error",

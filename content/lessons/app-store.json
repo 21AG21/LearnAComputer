@@ -5,7 +5,7 @@
   "order": 810,
   "title": "The App Market",
   "videoUrl": "",
-  "drDigitalIntro": "Your computer comes with one place to get new apps. Here it is called App Market.\n• Somebody checks every app before it is listed. That makes it far safer than downloading from a website you happened to find.\n• You can look through the categories, or type a name into the search box.\n• Each app shows stars and reviews from people already using it. Read two or three before you install anything.\n• The rule to remember: get apps from here, never from a pop-up that tells you that you need one.",
+  "drDigitalIntro": "Your computer comes with one place to get new apps. Here it is called App Market.\n• Apps here are reviewed before they are listed, which makes it far safer than downloading from a website you happened to find — but no store catches everything, so still read the reviews and check what an app asks to access.\n• You can look through the categories, or type a name into the search box.\n• Each app shows stars and reviews from people already using it. Read two or three before you install anything.\n• The rule to remember: get apps from here, never from a pop-up that tells you that you need one.",
   "playgroundTask": {
     "type": "guided-app-store",
     "goal": "You browsed the App Market",

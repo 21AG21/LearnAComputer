@@ -232,7 +232,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
 
   function handleCropPreset(preset: CropPreset) {
     setCropPreset(preset);
-    tryStep((s) => s.action === "crop" && preset !== "Original");
+    tryStep((s) => s.action === "crop" && (s.value ? s.value === preset : preset !== "Original"));
   }
 
   function handleRotate() {

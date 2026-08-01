@@ -9,9 +9,9 @@
   "playgroundTask": {
     "type": "type-text",
     "instructions": "Type the sentence exactly as shown — hold Shift to make capital letters and the exclamation point!",
-    "targetText": "Dr. Digital says: WOW!",
+    "targetText": "Dr. Digital says WOW!",
     "exact": true
   },
   "drDigitalSuccess": "That is Shift: capital letters, and the symbols printed above the numbers.",
-  "drDigitalHint": "Hold Shift while pressing a letter to capitalize it. For the exclamation point, hold Shift and press the 1 key. Type: Dr. Digital says: WOW!"
+  "drDigitalHint": "Hold Shift while pressing a letter to capitalize it. For the exclamation point, hold Shift and press the 1 key. Type: Dr. Digital says WOW!"
 }

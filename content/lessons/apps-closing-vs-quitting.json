@@ -11,7 +11,7 @@
     "goal": "Practice minimize and close",
     "steps": [
       {
-        "say": "Click the yellow minus button to minimize the window.",
+        "say": "Click the minus (−) button — it's glowing — to minimize the window.",
         "action": "minimize"
       },
       {
@@ -25,5 +25,5 @@
     ]
   },
   "drDigitalSuccess": "Minimize hides a window. Close puts the app away. Now you can tell which one you just did.",
-  "drDigitalHint": "Use the yellow minus to minimize, then click the icon in the dock to restore, then the X button to close."
+  "drDigitalHint": "Use the minus (−) button to minimize, then click the icon in the dock to restore, then the X button to close."
 }

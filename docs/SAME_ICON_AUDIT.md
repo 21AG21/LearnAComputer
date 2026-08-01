@@ -15,7 +15,7 @@ and driven again afterwards.
 
 ## 1. The same icon, three different computers
 
-`docs/UI_UNIFICATION.md` collapsed the ten dock apps onto one implementation
+`docs/archive/UI_UNIFICATION.md` collapsed the ten dock apps onto one implementation
 each, so `Desktop/MailApp` is now seven lines around `GuidedEmailTask`. What it
 did not settle is **what happens when you click the icon**, and there were three
 different answers inside Unit 1 alone.

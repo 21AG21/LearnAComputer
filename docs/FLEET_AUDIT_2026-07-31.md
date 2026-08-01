@@ -224,8 +224,6 @@ check-a11y, check-lessons 197/197, spelling, pitch, check-actions, tsc, build).
 Each touches the most heavily-tested components and must keep every gate green (a
 `role="button"` change already tripped one bubbling bug and one sim-contrast border
 this session — both caught and fixed, which is exactly why this goes carefully):
-- **FileManager** — a click-file-then-folder *move* path (today: drag only). The
-  keyboard *open* path is done.
 - **DraggableWindow / FileManager** — Pointer Events so **touch** works (today mouse
   events only; the auto-solver dispatches mouse events, so the solver must move to
   pointer events in the same change or it regresses).
@@ -233,5 +231,69 @@ this session — both caught and fixed, which is exactly why this goes carefully
   app-store search), `aria-current` on the highlighted control, `aria-selected` on
   file rows, DesktopLaunch as a live region, a right-click touch/keyboard fallback.
 - Then the `check-a11y.py` interactive-div / input-name rules (they'd fail on the
-  above until it's finished, so they land last), and three tiny copy items
-  (cloud-vs-computer per-item feedback, GOAL_STATE number drift, grading step text).
+  above until it's finished, so they land last), and two tiny copy items
+  (cloud-vs-computer per-item feedback, grading step text).
+
+---
+
+## Re-audit — 2026-07-31 (round 2)
+
+A second wave of six independent, context-free agents, each a different skeptic: the
+confused first-timer, an 80-year-old with arthritis and no fine motor control, a
+cynical buyer hunting for a reason to say no, a completability QA engineer, a
+content/pedagogy editor, and an error-path tester. All read code and content only (the
+dev server was off-limits), so every finding is from tracing the product, not running a
+happy path.
+
+**What the wave confirmed.** No un-completable lesson exists — the QA agent
+cross-checked every action/target the static guards don't cover. The privacy pitch
+holds (no cookie, no analytics dep, no external request; feedback forms are plain
+links). The three earlier blockers (zoom dead-zone, phishing-teaches-the-scam,
+drag-only *window* move) are still fixed. Prose quality is high; capitalization, emoji
+and — now — spelling are clean.
+
+**Fixed this round** (each verified: tsc, spelling, check-lessons, check-actions green;
+solve-check for the sim changes):
+- **Drag-only file move (blocker).** FileManager gains a **Move to…** toolbar button —
+  select a file, pick the destination folder. No drag, keyboard-reachable, and it runs
+  the same `moveItemTo`→`onMoved` path the drag uses, so it completes the guided *and*
+  assessment move steps. Unblocks moving-files, creating-folders, final-files and
+  unit-3-assessment for anyone who can't hold a press-drag-release. CLAUDE.md's schema
+  doc — which had claimed a click path that never existed — is now correct.
+- **Video-call dead-end.** Hanging up (End call) mid-lesson unmounted the mute/camera
+  controls the next step still asked for, ringing nothing — the classic "I broke it"
+  state. `handleEndCall` now nudges instead of leaving while an in-call step is
+  outstanding.
+- **Latent crop bug.** GuidedPhotosTask's crop handler ignored the step's `value`
+  (crop-to-Square satisfied by cropping to Wide) — the exact target-honoring class the
+  project fixed for favorite/unfavorite. Not yet reachable (no lesson uses `crop`),
+  fixed defensively.
+- **Buyer-facing spelling.** "Labelled" on the public Accessibility page → "Labeled";
+  "programme" in the elder-care demo script → "program". `spelling-check.py` gained
+  `labelled/labelling` and `programme/programmes` (word-boundary matched, so
+  "programmer" and `aria-labelledby` are safe), and four code comments were Americanized
+  so the gate stays green. The gate had been blind to this class.
+- **First-ten-minutes confusion & factual errors (copy).** restart-laptop now gives the
+  real Restart location (Start menu / Apple menu) and warns the practice error dialog is
+  expected; trackpad-double-click no longer promises "files below" when it shows a
+  desktop; apps-closing drops the phantom "yellow" from a gray button; kb-shift drops an
+  untaught colon; screen-clock adds the Windows taskbar caveat; passkeys de-brands "Face
+  ID"; app-store stops overstating store safety; domain-names drops "always" from a rule
+  that isn't; working-with-windows surfaces the arrow-key move/resize alternative in the
+  visible step text.
+- **GOAL_STATE drift.** The scoreboard's 146/170 corrected to the real 145/169.
+
+**Docs cleanup (same session).** 15 finished plans and one-time audits moved to
+`docs/archive/`; three non-doc files (a stray PNG, a captured log, `.DS_Store`) deleted;
+a `docs/README.md` index added; every cross-reference into a moved or deleted doc
+repointed so pitch-check stays green.
+
+**Still remaining — product decisions, flagged for a human call.** The first-timer
+questioned curriculum shape the fixes above don't touch: the three hardest trackpad
+gestures (right-click, two-finger scroll, pinch-zoom) are taught in lessons 3–5, before
+"what is a computer?"; and the idle FakeDesktop in the right pane competes with the
+"Start activity" button for a beginner's attention. The right-click lesson still has no
+keyboard/touch path, ShapeClickGame is a moving-target click with no keyboard mode, and
+some real-world missions' live checks (Safari zoom, Ethernet offline, maximize-only
+browsers) can't be satisfied on all hardware with no per-step "it's your setup, skip
+it" escape. These join the touch/Pointer-Events + aria tail above.

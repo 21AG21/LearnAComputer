@@ -2,8 +2,8 @@
 
 Everything a human (or an agent) needs to sell, demo, and implement this
 product. Written to be read cold, five minutes before a call. Companion files:
-`docs/GOAL_STATE.md` (what's demo-safe right now), `docs/MASTER_PLAN.md`
-(what's coming), `docs/COLD_CALL_KIT.md` (the words, for dialing),
+`docs/GOAL_STATE.md` (what's demo-safe right now),
+`docs/COLD_CALL_KIT.md` (the words, for dialing),
 `docs/IMPLEMENTATION_GUIDE.md` (running a pilot once they say yes).
 
 ---
@@ -276,8 +276,7 @@ are optional. Say so plainly if asked — see §5.
 
 Designed but NOT shipped (say "roadmap"):
 certificate verification codes · full third-party WCAG audit · Spanish ·
-phone/tablet guidance page. The full sequence is
-`docs/MASTER_PLAN.md`.
+phone/tablet guidance page.
 
 The fastest way to lose these buyers permanently is one overclaim. The
 product's honesty is part of the product.

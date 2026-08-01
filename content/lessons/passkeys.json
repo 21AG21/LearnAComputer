@@ -5,7 +5,7 @@
   "order": 1030,
   "title": "Passkeys",
   "videoUrl": "",
-  "drDigitalIntro": "Passkeys let you sign in without typing a password.\n• Instead, your device uses Face ID, a fingerprint, or your PIN.\n• They're stored on your device and can't be stolen in a data breach.\n• More sites — Google, Amazon, Microsoft — are switching to them.",
+  "drDigitalIntro": "Passkeys let you sign in without typing a password.\n• Instead, your device uses your face, a fingerprint, or your PIN.\n• They're stored on your device and can't be stolen in a data breach.\n• More sites — Google, Amazon, Microsoft — are switching to them.",
   "playgroundTask": {
     "type": "guided-security",
     "goal": "You signed in with a passkey — no password needed",

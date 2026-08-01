@@ -73,6 +73,7 @@ export default function FileManager({
   const [naming, setNaming]     = useState<{ id: string; draft: string } | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [draggedFile, setDraggedFile] = useState<string | null>(null);
+  const [moveMenu, setMoveMenu]     = useState(false);
   const [kbNudge, setKbNudge]       = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -124,9 +125,15 @@ export default function FileManager({
     setSearch("");
     setDropTarget(null);
     setDraggedFile(null);
+    setMoveMenu(false);
   }, [resetKey]);
 
   const inTrash = location === "trash";
+  // A file (never a folder) can be moved. This is the no-drag path to the same
+  // moveItemTo the drag handlers use, so a shaky hand or keyboard finishes the
+  // move steps a precise press-drag-release would otherwise gate.
+  const selItem = items.find((i) => i.id === selected) ?? null;
+  const canMove = !!selItem && selItem.kind === "file" && !inTrash;
 
   const visible = useMemo(() => {
     let list = items.filter((it) => it.loc === location);
@@ -157,12 +164,14 @@ export default function FileManager({
     setLocation(loc);
     setSelected(null);
     setSearch("");
+    setMoveMenu(false);
     onSidebarClick?.(loc, label);
   }
 
   function handleItemClick(item: Item) {
     if (keyboardNav) { setKbNudge("Use the arrow keys for this one — no clicking!"); return; }
     setSelected(item.id);
+    setMoveMenu(false);
     onItemClick?.(item);
   }
 
@@ -283,6 +292,11 @@ export default function FileManager({
     moveItemTo(dragName, destLoc);
   }
 
+  function handleMoveTo(destLoc: Loc) {
+    setMoveMenu(false);
+    if (selItem && selItem.kind === "file") moveItemTo(selItem.name, destLoc);
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
@@ -310,6 +324,27 @@ export default function FileManager({
               disabled={!selected}
               highlight={hl("toolbar-trash")}
             />
+            <div className="relative">
+              <ToolbarBtn
+                label="Move to…"
+                onClick={() => setMoveMenu((v) => !v)}
+                disabled={!canMove}
+              />
+              {moveMenu && canMove && (
+                <div className="absolute left-0 top-full z-20 mt-1 min-w-[9rem] rounded-md border-2 border-gray-300 sim-dark:border-gray-600 bg-white sim-dark:bg-gray-800 py-1 shadow-lg">
+                  {SIDEBAR.filter((s) => s.id !== "home" && s.id !== "trash" && s.id !== selItem?.loc).map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleMoveTo(s.id)}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 sim-dark:text-gray-100 hover:bg-blue-100 sim-dark:hover:bg-gray-700 focus-visible:bg-blue-100 sim-dark:focus-visible:bg-gray-700 outline-none"
+                    >
+                      <span>{s.icon}</span>
+                      <span>{s.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
 

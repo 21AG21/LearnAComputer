@@ -419,7 +419,7 @@ const DOUBLE_CLICK = new Set(["open-file", "open-folder"]);
 /** Window-frame steps satisfied by dragging, not clicking — the ring sits on the handle. */
 const DRAG_ACTIONS = new Set(["move", "resize"]);
 
-/** Window-frame steps whose control is one of the aria-labelled WindowControls buttons. */
+/** Window-frame steps whose control is one of the aria-labeled WindowControls buttons. */
 const WINDOW_BUTTON: Record<string, string> = {
   minimize: "Minimize",
   maximize: "Maximize",
@@ -916,7 +916,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
   }
 
   // Photos: share picks its channel from the step's `via`; brightness and
-  // contrast are labelled range sliders aimed at the middle of the step's
+  // contrast are labeled range sliders aimed at the middle of the step's
   // "min-max" window; the album picker panel names the exact row; and edit
   // controls only exist with a photo open, so open one — the named one when
   // the step names it.
@@ -1207,7 +1207,7 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
       i.alt.toLowerCase().includes(humanTarget),
     );
 
-  // Toggles and sliders: find the labelled row, act on its control — the label
+  // Toggles and sliders: find the labeled row, act on its control — the label
   // itself is not clickable in the Settings app.
   if ((action === "toggle" || action === "slider") && humanTarget) {
     const label = Array.from(root.querySelectorAll<HTMLElement>("*")).find(

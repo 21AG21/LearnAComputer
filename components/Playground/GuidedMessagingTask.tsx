@@ -145,6 +145,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
   const [sendNudge, setSendNudge] = useState<string | null>(null);
+  const [callNudge, setCallNudge] = useState<string | null>(null);
   const [attachMenu, setAttachMenu] = useState(false);
   const [photoPicker, setPhotoPicker] = useState(false);
   const [reactionTarget, setReactionTarget] = useState<number | null>(null);
@@ -167,6 +168,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
     onResult,
     onStepComplete: () => {
       setSendNudge(null);
+      setCallNudge(null);
       setAttachMenu(false);
       setPhotoPicker(false);
       setReactionTarget(null);
@@ -324,6 +326,13 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   }
 
   function handleEndCall() {
+    // Leaving the call unmounts the mute/camera controls. If the lesson still
+    // needs an in-call action, hanging up now would strand the learner on a
+    // step whose control no longer exists — so nudge instead of ending.
+    if (!done && wanted((s) => s.action === "mute" || s.action === "camera-off")) {
+      setCallNudge("The call is still going — you don't need to hang up yet. Follow the glowing button.");
+      return;
+    }
     setInCall(false);
     tryStep((s) => s.action === "end-call");
   }
@@ -434,6 +443,12 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
               <span className="text-[10px] text-gray-300 bg-gray-800/80 px-1.5 py-0.5 rounded">You (pretend)</span>
             </div>
           </div>
+
+          {callNudge && (
+            <div className="mx-4 mb-2 rounded-lg border border-amber-400/60 bg-amber-500/20 px-3 py-2 text-center text-xs text-amber-100">
+              {callNudge}
+            </div>
+          )}
 
           <div className="flex items-end justify-center gap-5 py-5 px-4 bg-gray-800">
             <button

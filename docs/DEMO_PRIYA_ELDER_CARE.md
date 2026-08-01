@@ -27,7 +27,7 @@ questions, not a reason to postpone.
 
 | Question | Why it changes the demo | Answer |
 |---|---|---|
-| Residential facility, adult day programme, or in-home care agency? | Residential → group sessions on a shared machine, lead with the activities calendar. In-home → one caregiver, one client, lead with the family-contact story. | |
+| Residential facility, adult day program, or in-home care agency? | Residential → group sessions on a shared machine, lead with the activities calendar. In-home → one caregiver, one client, lead with the family-contact story. | |
 | Roughly how many clients, and how many staff? | Decides pilot size and whether you offer to run session one yourself. | |
 | Who is in the room, and what do they own? | Activities Director buys engagement. Executive Director buys differentiation and liability. Owner buys margin. | |
 | Do clients have their own devices, or facility machines? | Decides whether "works on locked-down machines" is a headline or a footnote. | |
@@ -194,7 +194,7 @@ Let the glow lead you. Then **click the wrong dock icon on purpose.**
 
 Then finish the step and let the completion moment play.
 
-### Beat 4 — the unit that funds the programme (3 min)
+### Beat 4 — the unit that funds the program (3 min)
 `/lessons/recognizing-threats`
 
 Open the inbox. Inspect a link — show the real address appearing. Mark the scam
