@@ -326,7 +326,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
         appName="Security"
         stepIndex={stepIndex}
         totalSteps={steps.length}
-        instruction={step?.say}
+        instruction={step?.say} currentStep={step}
         done={done}
         goal={goal}
         flash={flash}
@@ -402,7 +402,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
       appName="Security"
       stepIndex={stepIndex}
       totalSteps={steps.length}
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       done={done}
       goal={goal}
       flash={flash}

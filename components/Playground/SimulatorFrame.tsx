@@ -14,6 +14,8 @@ interface SimulatorFrameProps {
   appName: string;
   appIcon?: ReactNode;
   instruction?: string | null;
+  /** The current guided step — lets the banner show a big "Type this" box on typing steps. */
+  currentStep?: { action?: string; value?: string; url?: string; query?: string } | null;
   stepIndex?: number;
   totalSteps?: number;
   done: boolean;
@@ -31,10 +33,33 @@ interface SimulatorFrameProps {
   children: ReactNode;
 }
 
+/**
+ * The exact text a guided step asks the learner to type — or undefined if the
+ * step is not a typing step. Feeds the big "Type this" box in the banner, so the
+ * learner never has to dig the value out of a sentence or invent it themselves.
+ */
+export function typeTargetFor(
+  step: { action?: string; value?: string; url?: string; query?: string } | null | undefined,
+): string | undefined {
+  const a = step?.action;
+  if (!a) return undefined;
+  const v = a === "navigate" ? step?.url : a === "search" ? step?.query : step?.value;
+  if (!v || !v.trim()) return undefined;
+  const TYPING = new Set([
+    "navigate", "search", "new-folder", "rename", "save",
+    "set-title", "set-time", "set-reminder-text",
+    "set-subject", "set-body", "set-to", "set-cc", "set-bcc",
+    "send-message", "send-group-message",
+    "type-username", "type-new-password",
+  ]);
+  return TYPING.has(a) ? v : undefined;
+}
+
 export default function SimulatorFrame({
   appName,
   appIcon,
   instruction,
+  currentStep,
   stepIndex,
   totalSteps,
   done,
@@ -49,6 +74,7 @@ export default function SimulatorFrame({
   children,
 }: SimulatorFrameProps) {
   const isAssessment = !!objectives;
+  const typeThis = typeTargetFor(currentStep);
   const doneCount = objectives?.filter((o) => o.done).length ?? 0;
   const objTotal = objectives?.length ?? 0;
   const pct = isAssessment
@@ -302,6 +328,12 @@ export default function SimulatorFrame({
             </div>
           )}
         </div>
+        {typeThis && !done && (
+          <div className="mt-2 rounded-lg bg-white px-4 py-3 text-center shadow-sm">
+            <span className="block text-xs font-bold uppercase tracking-widest text-blue-700">Type this — exactly</span>
+            <span className="mt-1 block break-words font-mono text-2xl font-bold leading-snug text-gray-900">{typeThis}</span>
+          </div>
+        )}
         {isAssessment && hintOpen && hint && !done && (
           <div className="mt-2 rounded border border-yellow-400/50 bg-yellow-400/10 px-3 py-2 text-sm text-yellow-100">
             {hint}

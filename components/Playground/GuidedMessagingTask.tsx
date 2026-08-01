@@ -413,7 +413,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
       <SimulatorFrame
         appName="Video Call"
         appIcon="V"
-        instruction={step?.say}
+        instruction={step?.say} currentStep={step}
         stepIndex={stepIndex}
         totalSteps={steps.length}
         done={done}
@@ -494,7 +494,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
     <SimulatorFrame
       appName="Messages"
       appIcon="M"
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       stepIndex={stepIndex}
       totalSteps={steps.length}
       done={done}

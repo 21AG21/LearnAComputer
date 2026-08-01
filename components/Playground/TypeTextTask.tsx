@@ -40,12 +40,12 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
   return (
     <div className="h-full flex flex-col items-center bg-white px-8 py-6 gap-4">
       {instructions && <p className="text-lg text-gray-700 max-w-2xl text-center">{instructions}</p>}
-      <div className="w-full max-w-2xl border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 text-center">
-        <p className="text-xs font-bold uppercase text-gray-500 sim-dark:text-gray-400 mb-1">Type this:</p>
+      <div className="w-full max-w-2xl rounded-xl border-2 border-blue-600 bg-blue-50 p-5 text-center shadow-sm">
+        <p className="mb-2 text-sm font-bold uppercase tracking-widest text-blue-700">Type this — exactly</p>
         {multiline ? (
-          <pre className="text-xl font-mono tracking-wide text-left whitespace-pre-wrap">{markedTarget ?? targetText}</pre>
+          <pre className="whitespace-pre-wrap text-left font-mono text-2xl font-bold tracking-wide text-gray-900">{markedTarget ?? targetText}</pre>
         ) : (
-          <p className="text-2xl font-mono tracking-wide">{markedTarget ?? targetText}</p>
+          <p className="font-mono text-3xl font-bold tracking-wide text-gray-900">{markedTarget ?? targetText}</p>
         )}
       </div>
       {mismatch !== null && (
@@ -60,7 +60,7 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
           aria-label="Type the text here"
           placeholder="Start typing here… press Return to start a new line."
           rows={4}
-          className="w-full max-w-2xl border-2 border-black rounded p-4 text-lg resize-none"
+          className="w-full max-w-2xl border-2 border-black rounded p-4 text-xl resize-none"
         />
       ) : (
         <input
@@ -69,7 +69,7 @@ export default function TypeTextTask({ instructions, targetText, exact = false, 
           onChange={(e) => setValue(e.target.value)}
           aria-label="Type the text here"
           placeholder="Start typing here…"
-          className="w-full max-w-2xl border-2 border-black rounded p-4 text-lg"
+          className="w-full max-w-2xl border-2 border-black rounded p-4 text-xl"
         />
       )}
       <button onClick={handleSubmit} className="border-2 border-black rounded px-6 py-2 text-lg font-bold bg-white">

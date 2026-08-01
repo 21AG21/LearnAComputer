@@ -884,7 +884,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
     <SimulatorFrame
       appName="Browser"
       appIcon={<GlobeIcon size={20} />}
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       stepIndex={stepIndex}
       totalSteps={steps.length}
       done={done}

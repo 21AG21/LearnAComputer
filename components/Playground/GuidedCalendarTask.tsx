@@ -178,7 +178,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
     <SimulatorFrame
       appName="Calendar"
       appIcon={<CalendarIcon size={20} />}
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       stepIndex={stepIndex}
       totalSteps={steps.length}
       done={done}

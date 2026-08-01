@@ -124,7 +124,7 @@ export default function GuidedFilesTask({ goal, steps, mode, hint, onResult, key
     <SimulatorFrame
       appName="Files"
       appIcon={<FolderIcon size={20} />}
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       stepIndex={stepIndex}
       totalSteps={steps.length}
       done={done}

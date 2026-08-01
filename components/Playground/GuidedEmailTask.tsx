@@ -397,7 +397,7 @@ export default function GuidedEmailTask({
     <SimulatorFrame
       appName="Mail"
       appIcon={<MailIcon size={20} />}
-      instruction={step?.say}
+      instruction={step?.say} currentStep={step}
       stepIndex={stepIndex}
       totalSteps={steps.length}
       done={done}

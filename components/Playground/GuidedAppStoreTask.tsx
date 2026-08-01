@@ -355,7 +355,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
 
   if (denied) {
     return (
-      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
+      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} currentStep={step} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="bg-white sim-dark:bg-gray-800 border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-16 h-16 ${denied.app.color} rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3`}>{denied.app.icon}</div>
@@ -382,7 +382,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
   if (permDialog) {
     const perm = permDialog.app.permissions[permDialog.permIdx];
     return (
-      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
+      <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} currentStep={step} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="bg-white sim-dark:bg-gray-800 border-2 rounded-2xl shadow-xl p-6 w-full max-w-xs text-center">
             <div className={`w-14 h-14 ${permDialog.app.color} rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3`}>{permDialog.app.icon}</div>
@@ -413,7 +413,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
   }
 
   return (
-    <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
+    <SimulatorFrame appName="App Market" appIcon={<CartIcon size={18} />} instruction={step?.say} currentStep={step} stepIndex={stepIndex} totalSteps={steps.length} done={done} goal={goal} flash={flash} objectives={objectives} hint={hint} freePlay={freePlay}>
       {/* Tab bar */}
       <div className="flex border-b flex-shrink-0">
         <button
