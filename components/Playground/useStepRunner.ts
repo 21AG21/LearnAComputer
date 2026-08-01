@@ -41,9 +41,21 @@ export function useStepRunner<S extends RunnerStep>({
   const [phase, setPhase] = useState(0);
   const [flash, setFlash] = useState(false);
   const [done, setDone] = useState(false);
+  // Assessment safety net (see the stall effect below): once a stuck learner has
+  // been stalled long enough, the rings switch on and guide them the rest of the way.
+  const [revealed, setRevealed] = useState(false);
 
-  /** The step the guided banner is on. Always undefined in assessment mode — no step is "current". */
-  const step: S | undefined = isAssessment ? undefined : steps[stepIndex];
+  /**
+   * The step the guided banner/highlights read. Guided mode: the current step.
+   * Assessment mode: nothing is highlighted — the learner decides where to click —
+   * UNLESS they have been stuck long enough that `revealed` turned on, in which
+   * case it points at the first unmet objective so the yellow ring can lead them.
+   */
+  const step: S | undefined = isAssessment
+    ? revealed
+      ? steps.find((_, i) => !completed.has(i))
+      : undefined
+    : steps[stepIndex];
   const finished = isAssessment ? done : stepIndex >= steps.length;
 
   const ding = useCallback(() => {
@@ -98,6 +110,20 @@ export function useStepRunner<S extends RunnerStep>({
   useEffect(() => {
     if (!isAssessment && steps.length > 0 && stepIndex >= steps.length) finish();
   }, [isAssessment, stepIndex, steps.length, finish]);
+
+  /**
+   * Nobody gets permanently stranded on an unguided assessment. If the learner
+   * makes no progress for a stretch, the yellow rings switch on and lead them
+   * through the rest — the one cue a non-reader can always follow. The timer
+   * resets on every completed objective (`completed` in the deps), so it only
+   * fires when someone is genuinely stuck, and never during the automated harness
+   * runs, which finish an assessment in a few seconds.
+   */
+  useEffect(() => {
+    if (!isAssessment || done || revealed) return;
+    const t = setTimeout(() => setRevealed(true), 20000);
+    return () => clearTimeout(t);
+  }, [isAssessment, done, revealed, completed]);
 
   /** Assessment: satisfy one specific objective, whatever order it came in. */
   // Ref mirror, not the state closure: two same-tick completions (one handler
@@ -172,5 +198,6 @@ export function useStepRunner<S extends RunnerStep>({
     wants,
     objectives,
     completed,
+    revealed,
   };
 }

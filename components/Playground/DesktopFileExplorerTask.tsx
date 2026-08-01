@@ -51,6 +51,7 @@ export default function DesktopFileExplorerTask({ filesToOpen, onResult }: Deskt
         highlightApp={phase === "desktop" ? "files" : undefined}
         onAppOpened={(app) => { if (app === "files") setPhase("files"); }}
         filesHighlight={phase === "files" && nextFile ? { kind: "item", target: nextFile } : null}
+        autoDismissViewers
         onFileOpened={(name) =>
           setOpened((prev) => (prev.includes(name) ? prev : [...prev, name]))
         }

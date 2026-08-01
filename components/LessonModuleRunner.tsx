@@ -232,6 +232,29 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
             <h1 className="text-2xl font-bold">{subLesson.title}</h1>
           </div>
 
+          {/* Primary action, pinned to the top of the reading column so it is never
+              buried below the intro text. A non-reader never scrolls to find it. */}
+          {hasGate && !started && attemptState !== "success" && !alreadyDone && (
+            <button
+              onClick={handleStart}
+              className="w-full rounded-lg border-2 border-black bg-black px-4 py-4 text-lg font-bold text-white transition-all hover:bg-gray-800 active:scale-95 dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
+            >
+              Start activity
+            </button>
+          )}
+          {canAdvance && (
+            <button
+              onClick={handleNext}
+              className={`w-full rounded-lg border-2 px-4 py-4 text-lg font-bold transition-all active:scale-95 ${
+                justSucceeded || alreadyDone
+                  ? "border-green-600 bg-green-500 text-white hover:bg-green-600 animate-pop-attention shadow-lg"
+                  : "border-gray-900 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-300 dark:bg-gray-900 dark:text-gray-100"
+              }`}
+            >
+              {nextLabel}
+            </button>
+          )}
+
           {subLesson.warning && (
             <div className="rounded-lg border-2 border-amber-400 bg-amber-50 px-4 py-3 text-amber-900 font-medium text-sm">
               Warning: {subLesson.warning}
@@ -264,17 +287,9 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
           {hasGate && attemptState !== "success" && (
             <div className="flex items-center gap-4">
               {!started ? (
-                <>
-                  <button
-                    onClick={handleStart}
-                    className="border-2 border-black rounded px-4 py-2 font-semibold bg-white transition-all hover:bg-black hover:text-white active:scale-95 dark:border-gray-300 dark:bg-gray-900 dark:hover:bg-gray-100 dark:hover:text-gray-900"
-                  >
-                    Start activity
-                  </button>
-                  <button onClick={handleNext} className={skipBtn}>
-                    Skip this activity
-                  </button>
-                </>
+                <button onClick={handleNext} className={skipBtn}>
+                  Skip this activity
+                </button>
               ) : (
                 <>
                   <button
@@ -329,20 +344,6 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
                 className={`${navBtn} border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800`}
               >
                 {index === 0 && previousModuleSlug ? "← Previous module" : "← Back"}
-              </button>
-            )}
-            {canAdvance && (
-              <button
-                onClick={handleNext}
-                className={`${navBtn} ${
-                  justSucceeded
-                    ? "border-green-600 bg-green-500 text-white hover:bg-green-600 animate-pop-attention shadow-lg"
-                    : alreadyDone
-                    ? "border-green-600 bg-green-500 text-white hover:bg-green-600"
-                    : "border-gray-900 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-300 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800"
-                }`}
-              >
-                {nextLabel}
               </button>
             )}
           </div>

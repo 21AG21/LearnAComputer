@@ -5,7 +5,7 @@
   "order": 498,
   "title": "Find your way around the web",
   "videoUrl": "",
-  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- Nothing will glow yellow. You decide where to click.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nThese are sites you have not visited in the lessons. You will need to type addresses yourself.",
+  "drDigitalIntro": "This is your assessment for this unit. There are no step-by-step instructions this time — just a list of things to accomplish.\n\n- At first nothing glows — you decide where to click. If you get really stuck, the yellow rings switch on and lead you to the finish.\n- You can do the objectives in any order.\n- Open the objectives list with the small arrow in the dark bar to see what is left.\n- If you get stuck, the Hint button gives you a nudge — not the answer.\n\nThese are sites you have not visited in the lessons. You will need to type addresses yourself.",
   "playgroundTask": {
     "type": "guided-browser",
     "mode": "assessment",

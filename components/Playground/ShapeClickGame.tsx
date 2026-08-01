@@ -39,6 +39,10 @@ const SHAPE_COMPONENTS: Record<ShapeKind, React.FC<{ size?: number; className?: 
 const FALL_PERCENT_PER_TICK = 0.62;
 const TICK_MS = 50;
 const SPAWN_MS = 700;
+// Never let the play area pile up. Comfortably above any lesson's target score,
+// so there is always something to click, but bounded so the renderer never has
+// to animate hundreds of shapes.
+const MAX_ON_SCREEN = 16;
 
 export default function ShapeClickGame({ instructions, targetScore, onResult }: ShapeClickGameProps) {
   const [shapes, setShapes] = useState<FallingShape[]>([]);
@@ -56,15 +60,21 @@ export default function ShapeClickGame({ instructions, targetScore, onResult }: 
 
   useEffect(() => {
     const spawnInterval = setInterval(() => {
-      setShapes((prev) => [
-        ...prev,
-        {
-          id: nextId.current++,
-          kind: SHAPE_KINDS[Math.floor(Math.random() * SHAPE_KINDS.length)],
-          left: 4 + Math.random() * 84,
-          top: -14,
-        },
-      ]);
+      // Stop once the target is reached — the old loop spawned forever, even
+      // after the lesson was done, until hundreds of shapes hung the renderer.
+      if (finished.current) return;
+      setShapes((prev) => {
+        if (prev.length >= MAX_ON_SCREEN) return prev;
+        return [
+          ...prev,
+          {
+            id: nextId.current++,
+            kind: SHAPE_KINDS[Math.floor(Math.random() * SHAPE_KINDS.length)],
+            left: 4 + Math.random() * 84,
+            top: -14,
+          },
+        ];
+      });
     }, SPAWN_MS);
 
     const fallInterval = setInterval(() => {

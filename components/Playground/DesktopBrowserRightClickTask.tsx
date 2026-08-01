@@ -21,6 +21,15 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
     setMenuPos({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
   }
 
+  // A plain left-click can't invent the right-click gesture a confused or
+  // one-button user has never heard of, so open the same menu — the lesson still
+  // shows what right-click does, and everyone can still reach "Open in new tab".
+  function handleLinkClick(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setMenuPos({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+  }
+
   function handleOpenInNewTab() {
     setMenuPos(null);
     setBrowserPhase("newTabPrompt");
@@ -128,8 +137,8 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
               <div className="relative inline-block">
                 <button
                   onContextMenu={handleLinkRightClick}
-                  className="text-blue-600 underline text-base font-semibold cursor-context-menu select-none"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={handleLinkClick}
+                  className={`text-blue-600 underline text-base font-semibold cursor-pointer select-none rounded px-1 ${menuPos ? "" : "bg-yellow-50 animate-ring-pulse"}`}
                 >
                   Local Cat Judges Neighbor Without Comment →
                 </button>
@@ -142,7 +151,7 @@ export default function DesktopBrowserRightClickTask({ onExit, onResult }: Deskt
                   >
                     <button
                       onClick={handleOpenInNewTab}
-                      className="block w-full text-left px-4 py-2.5 text-base font-semibold hover:bg-blue-50 border-b border-gray-200 whitespace-nowrap"
+                      className="block w-full text-left px-4 py-2.5 text-base font-semibold bg-yellow-50 hover:bg-yellow-100 border-b border-gray-200 whitespace-nowrap"
                     >
                       Open link in new tab
                     </button>

@@ -43,6 +43,9 @@ interface FakeDesktopProps {
   interceptApps?: DesktopAppId[];
   settingsProps?: SettingsCallbacks;
   autoOpenApp?: DesktopAppId;
+  /** "Double-click to open" lessons: show an opened file briefly, then tuck it
+      away so it never covers the next file the learner has to open. */
+  autoDismissViewers?: boolean;
 }
 
 export const APP_TITLES: Record<DesktopAppId, string> = {
@@ -87,7 +90,7 @@ export default function FakeDesktop(props: FakeDesktopProps) {
   );
 }
 
-function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp }: FakeDesktopProps) {
+function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp, autoDismissViewers }: FakeDesktopProps) {
   const theme = useSimTheme();
   const desktopRef = useRef<HTMLDivElement>(null);
   /**
@@ -262,6 +265,14 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
   function openFileViewer(item: Item) {
     const uid = `fv-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     setOpenFileViewers((prev) => [...prev, { uid, item }]);
+    // In the "double-click to open" lessons the point is to SEE the file open,
+    // not to read it. Leaving the window up covers the next file the learner
+    // must open next, behind a window they would never think to close — so it
+    // shows for a moment, then tucks itself away and the next glowing tile
+    // reappears on its own.
+    if (autoDismissViewers) {
+      setTimeout(() => closeFileViewer(uid), 2000);
+    }
   }
 
   function closeFileViewer(uid: string) {
