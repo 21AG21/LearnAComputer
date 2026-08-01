@@ -507,19 +507,30 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 </div>
                 <div>
                   <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Brightness ({brightness}%)</label>
-                  <input
-                    type="range" min={20} max={200} value={brightness} aria-label="Brightness"
-                    onChange={(e) => handleBrightnessChange(Number(e.target.value))}
-                    className={`w-full ${hl("brightness-slider") ? pulse : ""}`}
-                  />
+                  {/* A <span> not a <div> so the solver's input.closest("div") still
+                      reaches the labeled parent (it matches the slider by that
+                      parent's "Brightness" text). */}
+                  <span className="flex items-center gap-2">
+                    <button aria-label="Less brightness" onClick={() => handleBrightnessChange(Math.max(20, brightness - 10))} className="h-8 w-8 shrink-0 rounded-md border-2 border-gray-500 text-base font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700">−</button>
+                    <input
+                      type="range" min={20} max={200} value={brightness} aria-label="Brightness"
+                      onChange={(e) => handleBrightnessChange(Number(e.target.value))}
+                      className={`w-full ${hl("brightness-slider") ? pulse : ""}`}
+                    />
+                    <button aria-label="More brightness" onClick={() => handleBrightnessChange(Math.min(200, brightness + 10))} className="h-8 w-8 shrink-0 rounded-md border-2 border-gray-500 text-base font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700">+</button>
+                  </span>
                 </div>
                 <div>
                   <label className="text-xs text-gray-500 sim-dark:text-gray-400 block mb-1">Contrast ({contrast}%)</label>
-                  <input
-                    type="range" min={20} max={200} value={contrast} aria-label="Contrast"
-                    onChange={(e) => handleContrastChange(Number(e.target.value))}
-                    className={`w-full ${hl("contrast-slider") ? pulse : ""}`}
-                  />
+                  <span className="flex items-center gap-2">
+                    <button aria-label="Less contrast" onClick={() => handleContrastChange(Math.max(20, contrast - 10))} className="h-8 w-8 shrink-0 rounded-md border-2 border-gray-500 text-base font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700">−</button>
+                    <input
+                      type="range" min={20} max={200} value={contrast} aria-label="Contrast"
+                      onChange={(e) => handleContrastChange(Number(e.target.value))}
+                      className={`w-full ${hl("contrast-slider") ? pulse : ""}`}
+                    />
+                    <button aria-label="More contrast" onClick={() => handleContrastChange(Math.min(200, contrast + 10))} className="h-8 w-8 shrink-0 rounded-md border-2 border-gray-500 text-base font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700">+</button>
+                  </span>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {FILTERS.map((f) => (

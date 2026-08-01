@@ -483,11 +483,12 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             leading={
               <button
                 onClick={handleOpenForceQuit}
-                className={`font-semibold text-gray-700 hover:text-gray-900 ${hl("system-menu") ? pulse + " rounded px-1" : ""}`}
+                className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-semibold text-gray-700 hover:bg-black/5 hover:text-gray-900 ${hl("system-menu") ? pulse : ""}`}
                 title="System menu"
                 aria-label="System menu"
               >
-                <svg viewBox="0 0 16 16" className="w-4 h-4 inline" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
+                <svg viewBox="0 0 16 16" className="w-5 h-5" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
+                <span className="text-sm">Menu</span>
               </button>
             }
             time={time}

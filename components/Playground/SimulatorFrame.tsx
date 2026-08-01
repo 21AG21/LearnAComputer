@@ -290,7 +290,7 @@ export default function SimulatorFrame({
                 {done
                   ? "Done"
                   : isAssessment
-                    ? `Objectives: ${doneCount} of ${objTotal} done`
+                    ? `${doneCount} of ${objTotal} done`
                     : `Step ${(stepIndex ?? 0) + 1} of ${totalSteps ?? 0}`}
               </span>
               <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">

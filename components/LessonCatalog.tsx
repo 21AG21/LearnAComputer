@@ -115,23 +115,28 @@ export default function LessonCatalog({ routes }: LessonCatalogProps) {
       ) : continueRoute ? (
         <Link
           href={`/lessons/${continueRoute.moduleSlug}`}
-          className="block rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors dark:border-gray-600 dark:bg-gray-900 dark:hover:bg-gray-800"
+          className="flex items-center justify-between gap-4 rounded-xl border-2 border-black bg-white p-5 hover:bg-gray-50 transition-colors dark:border-gray-600 dark:bg-gray-900 dark:hover:bg-gray-800"
         >
-          <p className="mb-1 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
-            {totalCompleted === 0 ? "Start here" : "Continue where you left off"}
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">{continueRoute.unit}</p>
-          <p className="font-bold text-lg">{continueRoute.module}</p>
-          {(() => {
-            const doneInModule = continueRoute.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;
-            return (
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                {doneInModule === 0
-                  ? `${continueRoute.subLessons.length} short lessons`
-                  : `Lesson ${doneInModule + 1} of ${continueRoute.subLessons.length}`}
-              </p>
-            );
-          })()}
+          <div>
+            <p className="mb-1 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+              {totalCompleted === 0 ? "Start here" : "Continue where you left off"}
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{continueRoute.unit}</p>
+            <p className="font-bold text-lg">{continueRoute.module}</p>
+            {(() => {
+              const doneInModule = continueRoute.subLessons.filter((l) => completedSlugs.includes(l.slug)).length;
+              return (
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {doneInModule === 0
+                    ? `${continueRoute.subLessons.length} short lessons`
+                    : `Lesson ${doneInModule + 1} of ${continueRoute.subLessons.length}`}
+                </p>
+              );
+            })()}
+          </div>
+          <span className="shrink-0 rounded-lg bg-black px-5 py-3 text-base font-bold text-white dark:bg-gray-100 dark:text-gray-900">
+            {totalCompleted === 0 ? "Start" : "Continue"} →
+          </span>
         </Link>
       ) : null}
 

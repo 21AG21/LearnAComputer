@@ -251,15 +251,29 @@ function Slider({ value, min, max, label, highlight, onChange, isDark }: { value
         <span>{label}</span>
         <span className={isDark ? "text-gray-500 sim-dark:text-gray-400" : "text-gray-500"}>{value}{label.includes("Text") ? "%" : ""}</span>
       </div>
-      <input
-        type="range"
-        aria-label={label}
-        min={min}
-        max={max}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-blue-500"
-      />
+      {/* +/- buttons are the no-drag path — a shaky hand or a tap-only user can
+          still reach any value without dragging the thumb. */}
+      <div className="flex items-center gap-2">
+        <button
+          aria-label={`Decrease ${label}`}
+          onClick={() => onChange(Math.max(min, value - Math.max(1, Math.round((max - min) / 20))))}
+          className="h-9 w-9 shrink-0 rounded-md border-2 border-gray-500 text-lg font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700"
+        >−</button>
+        <input
+          type="range"
+          aria-label={label}
+          min={min}
+          max={max}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-full accent-blue-500"
+        />
+        <button
+          aria-label={`Increase ${label}`}
+          onClick={() => onChange(Math.min(max, value + Math.max(1, Math.round((max - min) / 20))))}
+          className="h-9 w-9 shrink-0 rounded-md border-2 border-gray-500 text-lg font-bold leading-none text-gray-700 hover:bg-gray-100 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700"
+        >+</button>
+      </div>
     </div>
   );
 }

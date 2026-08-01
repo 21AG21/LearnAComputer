@@ -134,6 +134,15 @@ export default function FileManager({
   // move steps a precise press-drag-release would otherwise gate.
   const selItem = items.find((i) => i.id === selected) ?? null;
   const canMove = !!selItem && selItem.kind === "file" && !inTrash;
+  // When a highlighted file lives in a folder the learner isn't in (the
+  // assessment-rescue "rename Sunset.png, which is inside Pictures" case), glow
+  // that folder in the sidebar so they go there first — otherwise the ring
+  // points at a tile that is not on screen and nothing appears to glow.
+  const guideToLoc: Loc | null = (() => {
+    if (highlight?.kind !== "item" || !highlight.target) return null;
+    const it = items.find((i) => i.name === highlight.target);
+    return it && it.loc !== location ? it.loc : null;
+  })();
 
   const visible = useMemo(() => {
     let list = items.filter((it) => it.loc === location);
@@ -388,7 +397,7 @@ export default function FileManager({
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
                   location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
-                } ${hl("sidebar", s.label) ? `ring-4 ring-inset ring-yellow-400 ${pulse}` : ""} ${
+                } ${hl("sidebar", s.label) || s.id === guideToLoc ? `ring-4 ring-inset ring-yellow-400 ${pulse}` : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
               >
