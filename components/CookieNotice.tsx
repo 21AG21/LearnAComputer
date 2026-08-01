@@ -38,9 +38,9 @@ export default function CookieNotice() {
     >
       <div className="mx-auto flex max-w-[1400px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="leading-relaxed text-gray-700 dark:text-gray-300">
-          <strong>This site uses no cookies and no tracking.</strong> It remembers which lessons you
-          have finished, on this device only, so you can pick up where you left off. It never expires,
-          nothing is sent anywhere, and you are never asked to sign in.{" "}
+          <strong>This site uses no cookies and no accounts.</strong> It remembers which lessons you
+          have finished, on this device only, so you can pick up where you left off — and that never
+          leaves your browser. We count anonymous page views to see which lessons get used.{" "}
           <Link href="/privacy" className="underline underline-offset-2">
             What is stored
           </Link>

@@ -9,18 +9,19 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy" updated="28 July 2026">
+    <LegalPage title="Privacy" updated="1 August 2026">
       <p>
-        The short version: there are no accounts, no cookies, no tracking, and no server storing
-        anything about you. This site keeps your lesson progress in your own browser, and sends
-        nothing about it anywhere. You can erase all of it from inside the site in two clicks.
+        The short version: there are no accounts and no cookies. We count anonymous page views to
+        see which lessons get used — nothing more. Your lesson progress stays in your own browser
+        and is never sent anywhere, and no server stores your work. You can erase all of it from
+        inside the site in two clicks.
       </p>
 
       <h2>Cookies</h2>
       <p>
-        This site sets <strong>no cookies at all</strong> — not for advertising, not for analytics,
-        not even for signing in, because there is nothing to sign in to. That is why you are not
-        asked to accept anything.
+        This site sets <strong>no cookies at all</strong> — not for advertising, not for signing in
+        (there is nothing to sign in to), and the anonymous page-view counting described below is
+        cookieless too. That is why you are not asked to accept anything.
       </p>
       <p>
         What it does use is your browser&apos;s local storage, which is the same idea kept entirely
@@ -86,9 +87,11 @@ export default function PrivacyPage() {
 
       <h2>Analytics and advertising</h2>
       <p>
-        There is none. No advertising network, no social media pixel, no analytics script, and
-        nothing that follows you to other websites. We do not count page views and we do not know
-        who visits or which lessons are opened.
+        We use Vercel Web Analytics to count page views — roughly how many people open the site and
+        which lessons get used. It is <strong>cookieless and anonymous</strong>: no name, no account,
+        no profile built about you, and nothing that follows you to other websites. There is no
+        advertising network and no social-media pixel. We use the totals only to decide which
+        lessons to improve.
       </p>
       <p>
         The company that hosts the site keeps ordinary server logs, as every web host does, and we

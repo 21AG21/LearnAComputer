@@ -5,7 +5,7 @@ Basic computer literacy course for absolute beginners, taught step-by-step with 
 ## Stack
 
 - **Next.js 15** App Router, React 19, TypeScript, Tailwind CSS 3
-- **No database, no accounts, no cookies, no analytics** — progress lives in `localStorage` only
+- **No database, no accounts, no cookies** — progress lives in `localStorage` only. Cookieless, anonymous page-view analytics only (Vercel Web Analytics via `<Analytics/>` in `app/layout.tsx`); no per-user data, no cross-site tracking
 - Deployed via Vercel
 
 ## Commands
@@ -910,9 +910,12 @@ Sub-lessons with `type: "none"` or `"placeholder"` auto-advance (no gate).
 **There is no account and no server copy.** Progress lives in localStorage on the
 learner's own device, never expires, and is theirs to erase from the Lessons
 page. Accounts, Supabase and cross-device sync were removed on 2026-07-28: the
-product collects nothing, sets no cookie, and contacts no third party. Keep it
-that way — `hostile-check` fails the build if any route sets a cookie or calls
-out to another host, because the whole privacy claim rests on it.
+product sets no cookie, keeps no per-user data, and makes no third-party request.
+It does count anonymous, aggregate page views through Vercel Web Analytics
+(cookieless; the beacon is same-origin `/_vercel/insights`). Keep it that way —
+`hostile-check` fails the build if any route sets a cookie or calls out to
+another host, and the privacy copy (privacy page, cookie banner) must stay honest
+about the page-view counting.
 
 **Links out are fine; embeds are not.** The two feedback forms
 (`lib/feedbackLinks.ts`) are Google Forms, and they are plain `<a target="_blank"

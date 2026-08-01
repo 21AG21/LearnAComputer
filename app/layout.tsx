@@ -6,6 +6,7 @@ import ThemeToggle, { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
 import StorageNotice from "@/components/StorageNotice";
 import CookieNotice from "@/components/CookieNotice";
 import SmallScreenGuard from "@/components/SmallScreenGuard";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -70,6 +71,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieNotice />
         <SmallScreenGuard />
         <PageTransition>{children}</PageTransition>
+        {/* Vercel Web Analytics: cookieless, anonymous page-view counts. No
+            personal data, no cross-site tracking. On Vercel the script and the
+            beacon are same-origin (/_vercel/insights). Gated to production so
+            local dev never loads the debug script from va.vercel-scripts.com —
+            that is a third-party host and would (rightly) trip hostile-check;
+            keeping it out of dev keeps every local privacy check clean. */}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );
