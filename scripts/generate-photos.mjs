@@ -1757,74 +1757,257 @@ S["cover-walks"] = (w, h) => bookCover(w, h, "#e0a83f", "#a56f2f", "path");
  * keyboard across Unit 2. A learner meeting the seventh of them recognizes the
  * machine and only has to find the new part.
  */
-const CALLOUT = "#f0b429";
-const glowRect = (x, y, w2, h2, r = 6) =>
-  `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w2.toFixed(1)}" height="${h2.toFixed(1)}" rx="${r}" fill="none" stroke="${CALLOUT}" stroke-width="7" opacity="0.95"/>` +
-  `<rect x="${(x - 6).toFixed(1)}" y="${(y - 6).toFixed(1)}" width="${(w2 + 12).toFixed(1)}" height="${(h2 + 12).toFixed(1)}" rx="${r + 5}" fill="none" stroke="${CALLOUT}" stroke-width="3" opacity="0.35"/>`;
+/**
+ * One palette for the whole lesson set.
+ *
+ * The first version of these let every scene invent its own gradient, and the
+ * result was sixteen near-identical gray-blue hazes that nobody had chosen,
+ * plus a handful of unrelated tints that read as accidents. Naming the colors
+ * once makes the set look like one hand drew it.
+ *
+ * The neutrals are deliberately warm — a hair of yellow in the grays — because
+ * a course for nervous beginners should not look like a hospital form.
+ */
+const PAL = {
+  ink:    "#1E2B3B",   // darkest structure: device bodies, type
+  slate:  "#46586E",   // mid structure
+  steel:  "#8797AB",   // light structure, keys, bezels
+  mist:   "#D5DEE8",   // pale structure
+  paper:  "#FFFCF6",   // warm white
+  amber:  "#F2A81C",   // the callout, and nothing else
+  sky:    "#5C93D6",   // screens, routes, links
+  teal:   "#2F8F8A",
+  sage:   "#79A98A",
+  coral:  "#E2664B",
+  gold:   "#C9A45F",
+};
 
-/** An open laptop, three-quarters on, with one part called out. */
-function laptop(w, h, part) {
-  const g = linear([["0", "#eef2f7"], ["1", "#ccd8e4"]]);
+/**
+ * The ground every subject stands on: a warm pool of light in the middle,
+ * falling off to a tint at the edges, with a soft floor shadow under the
+ * subject. One shape, used everywhere, is what makes 28 drawings a set.
+ *
+ * `tint` is picked from the palette per unit family, so Unit 1 and Unit 2 feel
+ * related without being identical.
+ */
+function stage(w, h, tint = "#C6D4E4", { cy = 0.46, floor = 0.78 } = {}) {
+  const g = radial([["0", PAL.paper], ["0.55", mix(PAL.paper, tint, 0.45)], ["1", tint]], { cx: 0.5, cy, r: 0.78 });
   let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const cx = w * 0.5, baseY = h * 0.72, bw = w * 0.66, bh = h * 0.055;
+  // A wide, very soft ellipse reads as a floor without drawing one.
+  const fg = radial([["0", shade(tint, 0.42), 0.5], ["0.6", shade(tint, 0.3), 0.18], ["1", tint, 0]], { cx: 0.5, cy: 0.5, r: 0.5 });
+  s += `<defs>${fg.def}</defs><ellipse cx="${(w * 0.5).toFixed(1)}" cy="${(h * floor).toFixed(1)}" rx="${(w * 0.42).toFixed(1)}" ry="${(h * 0.09).toFixed(1)}" fill="url(#${fg.gid})"/>`;
+  return s;
+}
+
+/** A grounded contact shadow — darker and tighter than the floor pool. */
+const contact = (cx, cy, rx, ry, op = 0.2) => {
+  const g = radial([["0", "#101820", op], ["0.65", "#101820", op * 0.45], ["1", "#101820", 0]], { cx: 0.5, cy: 0.5, r: 0.5 });
+  return `<defs>${g.def}</defs><ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="url(#${g.gid})"/>`;
+};
+
+const CALLOUT = PAL.amber;
+
+/**
+ * The callout. This is the single most important mark in the whole set: on most
+ * of these pictures, naming one part *is* the lesson.
+ *
+ * The first version was a 7px ring with a faint 3px echo, and at the size these
+ * render it was something you had to hunt for — on the camera and the ports it
+ * was a sliver. This one lands in well under a second: a soft amber bloom that
+ * lifts the part off the body, then a crisp ring, then a thin bright inner line
+ * so it still reads against a dark screen as well as a pale case.
+ */
+function glowRect(x, y, w2, h2, r = 6) {
+  // The bloom is capped in absolute terms. Scaled to the target it looked right
+  // on a port and drowned the whole picture in orange haze on the screen, which
+  // is the largest target in the set — a highlight has to stay a highlight.
+  // The bloom is a blurred *stroke*, never a fill. Filled, it floods whatever it
+  // surrounds — on the screen, the largest target in the set, that turned the
+  // wallpaper olive and hid the very thing the ring was pointing at.
+  const pad = Math.min(26, Math.max(10, Math.min(w2, h2) * 0.28));
+  const b = blur(Math.min(14, Math.max(5, Math.min(w2, h2) * 0.3)));
+  return `<defs>${b.def}</defs>` +
+    `<rect x="${(x - pad / 2).toFixed(1)}" y="${(y - pad / 2).toFixed(1)}" width="${(w2 + pad).toFixed(1)}" height="${(h2 + pad).toFixed(1)}" rx="${r + pad / 2}" fill="none" stroke="${CALLOUT}" stroke-width="${pad.toFixed(1)}" opacity="0.5" filter="url(#${b.fid})"/>` +
+    `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w2.toFixed(1)}" height="${h2.toFixed(1)}" rx="${r}" fill="none" stroke="${CALLOUT}" stroke-width="8"/>` +
+    `<rect x="${(x + 4).toFixed(1)}" y="${(y + 4).toFixed(1)}" width="${(w2 - 8).toFixed(1)}" height="${(h2 - 8).toFixed(1)}" rx="${Math.max(1, r - 3)}" fill="none" stroke="${tint(CALLOUT, 0.55)}" stroke-width="2" opacity="0.9"/>`;
+}
+
+/** The same treatment for something round — the camera, the power button. */
+function glowCircle(cx, cy, rad) {
+  const b = blur(rad * 0.45);
+  return `<defs>${b.def}</defs>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(rad * 1.3).toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="${(rad * 0.8).toFixed(1)}" opacity="0.5" filter="url(#${b.fid})"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rad.toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="8"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(rad - 5).toFixed(1)}" fill="none" stroke="${tint(CALLOUT, 0.55)}" stroke-width="2" opacity="0.9"/>`;
+}
+
+/**
+ * An open laptop, seen slightly from the front, with one part called out.
+ *
+ * This one drawing carries eight of the twenty-eight pictures, so it is worth
+ * the detail. The earlier version filled under half the frame and its screen was
+ * a flat blue rectangle, which made every Unit 1 lesson look like a placeholder.
+ * This one fills the frame, and the screen is switched *on* — a wallpaper, a
+ * menu bar, a dock — because "the screen is the part you are looking at" is
+ * hard to sell with a blank pane of glass.
+ */
+function laptop(w, h, part) {
+  let s = stage(w, h, "#C2D2E4");
+  const cx = w * 0.5;
 
   if (part === "sleep") {
-    // Lid shut, seen slightly from the front, and big enough to be the subject
-    // rather than a bar at the bottom of an empty frame.
-    const lw = w * 0.62, lh = h * 0.14, lx = cx - lw / 2, ly = h * 0.56;
-    s += drop(cx, ly + lh * 1.5, lw * 0.55, lh * 0.42);
-    s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${lh.toFixed(1)}" rx="${(lh * 0.3).toFixed(1)}" fill="#5f6b78"/>`;
-    s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${(lh * 0.52).toFixed(1)}" rx="${(lh * 0.28).toFixed(1)}" fill="#8f9baa"/>`;
-    s += `<rect x="${(lx + lw * 0.02).toFixed(1)}" y="${(ly + lh * 0.06).toFixed(1)}" width="${(lw * 0.96).toFixed(1)}" height="${(lh * 0.16).toFixed(1)}" rx="${(lh * 0.08).toFixed(1)}" fill="#b4bfcc"/>`;
-    // The one light that tells you it is asleep and not off — so it breathes.
-    s += a("led", `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.13).toFixed(1)}" fill="#8fd47f"/>` +
-      `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.26).toFixed(1)}" fill="#8fd47f" opacity="0.3"/>`);
-    [[0.6, 0.42, 62], [0.68, 0.3, 44], [0.745, 0.21, 30]].forEach(([fx, fy, sz], i) => {
-      s += a("zz", `<text x="${(w * fx).toFixed(1)}" y="${(h * fy).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${sz}" font-weight="700" fill="#5f7185" opacity="0.8">Z</text>`, i);
+    // A closed laptop on a desk, seen from just above the front edge. The
+    // earlier version was a flat gray bar floating in the middle of the frame,
+    // which read as a stapler; the lid needs a visible top face to read as shut.
+    const lw = w * 0.62, lh = h * 0.075, lx = cx - lw / 2, ly = h * 0.6;
+    const topSkew = w * 0.05;   // the top face receding behind the front edge
+    s += contact(cx, ly + lh + h * 0.05, lw * 0.6, h * 0.03, 0.26);
+    // Top face.
+    s += `<path d="M ${(lx + topSkew).toFixed(1)} ${(ly - h * 0.075).toFixed(1)} L ${(lx + lw - topSkew).toFixed(1)} ${(ly - h * 0.075).toFixed(1)} ` +
+      `L ${(lx + lw).toFixed(1)} ${ly.toFixed(1)} L ${lx.toFixed(1)} ${ly.toFixed(1)} Z" fill="${tint(PAL.steel, 0.34)}"/>`;
+    // Front edge, with the seam between lid and base.
+    s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${lh.toFixed(1)}" rx="${(lh * 0.28).toFixed(1)}" fill="${PAL.steel}"/>`;
+    s += `<rect x="${(lx + lw * 0.008).toFixed(1)}" y="${(ly + lh * 0.44).toFixed(1)}" width="${(lw * 0.984).toFixed(1)}" height="${(lh * 0.1).toFixed(1)}" rx="2" fill="${shade(PAL.steel, 0.4)}" opacity="0.6"/>`;
+    s += `<rect x="${(lx + lw * 0.02).toFixed(1)}" y="${(ly + lh * 0.06).toFixed(1)}" width="${(lw * 0.96).toFixed(1)}" height="${(lh * 0.12).toFixed(1)}" rx="${(lh * 0.06).toFixed(1)}" fill="${tint(PAL.steel, 0.62)}" opacity="0.8"/>`;
+    // The notch you open it by.
+    s += `<rect x="${(cx - lw * 0.07).toFixed(1)}" y="${(ly + lh * 0.42).toFixed(1)}" width="${(lw * 0.14).toFixed(1)}" height="${(lh * 0.16).toFixed(1)}" rx="${(lh * 0.08).toFixed(1)}" fill="${shade(PAL.steel, 0.28)}"/>`;
+    // The one light that says asleep rather than off — so it breathes.
+    const lightX = cx + lw * 0.42, lightY = ly + lh * 0.74;
+    s += a("led",
+      `<circle cx="${lightX.toFixed(1)}" cy="${lightY.toFixed(1)}" r="${(lh * 0.42).toFixed(1)}" fill="#8FD47F" opacity="0.3"/>` +
+      `<circle cx="${lightX.toFixed(1)}" cy="${lightY.toFixed(1)}" r="${(lh * 0.14).toFixed(1)}" fill="#9BDA8A"/>`);
+    [[0.6, 0.44, 66], [0.672, 0.335, 46], [0.73, 0.25, 32]].forEach(([fx, fy, sz], i) => {
+      s += a("zz", `<text x="${(w * fx).toFixed(1)}" y="${(h * fy).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${sz}" font-weight="700" fill="${PAL.slate}" opacity="0.6">Z</text>`, i);
     });
     return s;
   }
 
-  const lidTop = baseY - h * 0.42;
-  s += drop(cx, baseY + bh * 1.5, bw * 0.58, bh * 1.0);
-  // Lid
-  s += `<path d="M ${(cx - bw * 0.44).toFixed(1)} ${baseY.toFixed(1)} L ${(cx - bw * 0.36).toFixed(1)} ${lidTop.toFixed(1)} L ${(cx + bw * 0.36).toFixed(1)} ${lidTop.toFixed(1)} L ${(cx + bw * 0.44).toFixed(1)} ${baseY.toFixed(1)} Z" fill="#4a5765"/>`;
-  const scr = linear([["0", "#5f8fc4"], ["1", "#3a5f8f"]]);
-  const sx = cx - bw * 0.325, sy = lidTop + h * 0.028, sw = bw * 0.65, sh = baseY - lidTop - h * 0.05;
-  s += `<defs>${scr.def}</defs><path d="M ${sx.toFixed(1)} ${(baseY - h * 0.022).toFixed(1)} L ${(cx - bw * 0.31).toFixed(1)} ${sy.toFixed(1)} L ${(cx + bw * 0.31).toFixed(1)} ${sy.toFixed(1)} L ${(sx + sw).toFixed(1)} ${(baseY - h * 0.022).toFixed(1)} Z" fill="url(#${scr.gid})"/>`;
-  // Camera dot in the lid bezel
-  s += `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.008).toFixed(1)}" fill="#20262e"/>`;
-  // Base
-  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${baseY.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
-  s += `<rect x="${(cx - bw * 0.5).toFixed(1)}" y="${baseY.toFixed(1)}" width="${bw.toFixed(1)}" height="${(bh * 0.42).toFixed(1)}" rx="${(bh * 0.25).toFixed(1)}" fill="#b4bfcc"/>`;
-  // Keys and trackpad, drawn on the base's top face
-  const kx = cx - bw * 0.36, ky = baseY + bh * 0.06, kw = bw * 0.72, kh = bh * 0.22;
+  // ── Geometry ───────────────────────────────────────────────────────────────
+  const baseY = h * 0.70, bw = w * 0.78, bh = h * 0.052;
+  const lidTop = baseY - h * 0.46;
+  // The lid is square-on, not tapered. A tapered lid means a trapezoidal screen,
+  // and the callout ring is a rectangle — the two never quite lined up, leaving
+  // an amber corner floating inside the bezel on the one lesson about the
+  // screen. The deck below keeps its perspective, which is where it reads.
+  const lidBotHalf = bw * 0.44, lidTopHalf = bw * 0.44;
+
+  s += contact(cx, baseY + bh + h * 0.035, bw * 0.56, h * 0.028, 0.24);
+
+  // ── Lid ────────────────────────────────────────────────────────────────────
+  const shell = linear([["0", shade(PAL.slate, 0.1)], ["1", shade(PAL.ink, 0.05)]]);
+  s += `<defs>${shell.def}</defs>`;
+  s += `<path d="M ${(cx - lidBotHalf).toFixed(1)} ${baseY.toFixed(1)} L ${(cx - lidTopHalf).toFixed(1)} ${lidTop.toFixed(1)} ` +
+    `Q ${cx.toFixed(1)} ${(lidTop - h * 0.012).toFixed(1)} ${(cx + lidTopHalf).toFixed(1)} ${lidTop.toFixed(1)} ` +
+    `L ${(cx + lidBotHalf).toFixed(1)} ${baseY.toFixed(1)} Z" fill="url(#${shell.gid})"/>`;
+
+  // ── Screen, switched on ────────────────────────────────────────────────────
+  const bezel = h * 0.026;
+  const sTop = lidTop + bezel * 1.5, sBot = baseY - bezel;
+  const sxTop = cx - lidTopHalf + bezel, sxBot = cx - lidBotHalf + bezel;
+  const swTop = (lidTopHalf - bezel) * 2, swBot = (lidBotHalf - bezel) * 2;
+  const screenPath = `M ${sxBot.toFixed(1)} ${sBot.toFixed(1)} L ${sxTop.toFixed(1)} ${sTop.toFixed(1)} ` +
+    `L ${(sxTop + swTop).toFixed(1)} ${sTop.toFixed(1)} L ${(sxBot + swBot).toFixed(1)} ${sBot.toFixed(1)} Z`;
+  const wall = linear([["0", "#6FA8DC"], ["0.55", "#7FBCC9"], ["1", "#8CC7A8"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  const clip = id("scr");
+  s += `<defs>${wall.def}<clipPath id="${clip}"><path d="${screenPath}"/></clipPath></defs>`;
+  s += `<path d="${screenPath}" fill="url(#${wall.gid})"/>`;
+  // Menu bar and dock, clipped to the screen so they follow its perspective.
+  s += `<g clip-path="url(#${clip})">`;
+  s += `<rect x="${(cx - lidBotHalf).toFixed(1)}" y="${sTop.toFixed(1)}" width="${(lidBotHalf * 2).toFixed(1)}" height="${(h * 0.026).toFixed(1)}" fill="${PAL.paper}" opacity="0.85"/>`;
+  const dockY = sBot - h * 0.055, dockW = swBot * 0.42;
+  s += `<rect x="${(cx - dockW / 2).toFixed(1)}" y="${dockY.toFixed(1)}" width="${dockW.toFixed(1)}" height="${(h * 0.042).toFixed(1)}" rx="${(h * 0.012).toFixed(1)}" fill="${PAL.paper}" opacity="0.55"/>`;
+  ["#7FB4E0", "#8FC48F", "#E8B46F", "#C4A8E0", "#7FC4BC"].forEach((c, i) => {
+    s += `<rect x="${(cx - dockW / 2 + dockW * 0.06 + i * dockW * 0.182).toFixed(1)}" y="${(dockY + h * 0.008).toFixed(1)}" width="${(dockW * 0.13).toFixed(1)}" height="${(h * 0.026).toFixed(1)}" rx="${(h * 0.007).toFixed(1)}" fill="${c}"/>`;
+  });
+  // A soft diagonal sheen — the thing that makes glass read as glass.
+  const sheen = linear([["0", "#fff", 0.16], ["0.5", "#fff", 0.04], ["1", "#fff", 0]], { x1: 0, y1: 0, x2: 0.7, y2: 1 });
+  s += `<defs>${sheen.def}</defs><rect x="${(cx - lidBotHalf).toFixed(1)}" y="${lidTop.toFixed(1)}" width="${(lidBotHalf * 2).toFixed(1)}" height="${(baseY - lidTop).toFixed(1)}" fill="url(#${sheen.gid})"/>`;
+  s += `</g>`;
+
+  // Camera in the top bezel, on its own so the callout has something to circle.
+  const camY = lidTop + bezel * 0.72;
+  s += `<circle cx="${cx.toFixed(1)}" cy="${camY.toFixed(1)}" r="${(h * 0.0075).toFixed(1)}" fill="${shade(PAL.ink, 0.5)}"/>`;
+  s += `<circle cx="${(cx - h * 0.002).toFixed(1)}" cy="${(camY - h * 0.002).toFixed(1)}" r="${(h * 0.003).toFixed(1)}" fill="${PAL.steel}" opacity="0.8"/>`;
+
+  // ── Base, in perspective ───────────────────────────────────────────────────
+  // Drawn as a receding deck rather than an edge-on slab. Flat, the deck was
+  // eleven pixels tall and the "keyboard" it was supposed to show came out as a
+  // solid bar — which is no good on the lesson whose subject is the keyboard.
+  const deckBackY = baseY, deckFrontY = baseY + h * 0.13;
+  const backHalf = bw * 0.44, frontHalf = bw * 0.5;
+  const lerp = (a2, b2, t) => a2 + (b2 - a2) * t;
+  const deckX = (t, f) => cx + lerp(backHalf, frontHalf, t) * f;
+  const deckY = (t) => lerp(deckBackY, deckFrontY, t);
+
+  const deck = linear([["0", shade(PAL.mist, 0.06)], ["1", tint(PAL.steel, 0.3)]]);
+  s += `<defs>${deck.def}</defs>`;
+  s += `<path d="M ${deckX(0, -1).toFixed(1)} ${deckBackY.toFixed(1)} L ${deckX(0, 1).toFixed(1)} ${deckBackY.toFixed(1)} ` +
+    `L ${deckX(1, 1).toFixed(1)} ${deckFrontY.toFixed(1)} L ${deckX(1, -1).toFixed(1)} ${deckFrontY.toFixed(1)} Z" fill="url(#${deck.gid})"/>`;
+  // The front lip: the edge you see when a laptop is open in front of you.
+  const lipH = h * 0.032;
+  s += `<path d="M ${deckX(1, -1).toFixed(1)} ${deckFrontY.toFixed(1)} L ${deckX(1, 1).toFixed(1)} ${deckFrontY.toFixed(1)} ` +
+    `L ${(deckX(1, 1) - bw * 0.012).toFixed(1)} ${(deckFrontY + lipH).toFixed(1)} L ${(deckX(1, -1) + bw * 0.012).toFixed(1)} ${(deckFrontY + lipH).toFixed(1)} Z" fill="${shade(PAL.steel, 0.32)}"/>`;
+
+  // Keys: four rows, each a little wider and taller as it comes forward.
+  const kTop = 0.16, kBot = 0.66;          // where the key block sits on the deck
+  const keyHalf = (t) => lerp(backHalf, frontHalf, t) * 0.7;
+  const rowT = (r) => lerp(kTop, kBot, r / 4);
+  const kx = cx - keyHalf(kTop), kw = keyHalf(kTop) * 2;
+  const ky = deckY(kTop), kh = deckY(kBot) - deckY(kTop);
+  s += `<path d="M ${(cx - keyHalf(kTop) - 5).toFixed(1)} ${(deckY(kTop) - 4).toFixed(1)} L ${(cx + keyHalf(kTop) + 5).toFixed(1)} ${(deckY(kTop) - 4).toFixed(1)} ` +
+    `L ${(cx + keyHalf(kBot) + 6).toFixed(1)} ${(deckY(kBot) + 4).toFixed(1)} L ${(cx - keyHalf(kBot) - 6).toFixed(1)} ${(deckY(kBot) + 4).toFixed(1)} Z" fill="${shade(PAL.mist, 0.16)}"/>`;
   for (let r = 0; r < 4; r++) {
+    const t0 = rowT(r), t1 = rowT(r + 1);
+    const y0 = deckY(t0) + 1.5, y1 = deckY(t1) - 1.5;
+    const hw0 = keyHalf(t0), hw1 = keyHalf(t1);
     for (let c = 0; c < 14; c++) {
-      s += `<rect x="${(kx + c * (kw / 14) + 1).toFixed(1)}" y="${(ky + r * (kh / 4) + 0.6).toFixed(1)}" width="${(kw / 14 - 2).toFixed(1)}" height="${(kh / 4 - 1.2).toFixed(1)}" rx="1.2" fill="#7f8b99"/>`;
+      const f0 = -1 + (c * 2) / 14, f1 = -1 + ((c + 1) * 2) / 14;
+      const pad0 = (hw0 * 2 / 14) * 0.09, pad1 = (hw1 * 2 / 14) * 0.09;
+      s += `<path d="M ${(cx + hw0 * f0 + pad0).toFixed(1)} ${y0.toFixed(1)} L ${(cx + hw0 * f1 - pad0).toFixed(1)} ${y0.toFixed(1)} ` +
+        `L ${(cx + hw1 * f1 - pad1).toFixed(1)} ${y1.toFixed(1)} L ${(cx + hw1 * f0 + pad1).toFixed(1)} ${y1.toFixed(1)} Z" fill="${tint(PAL.paper, 0.12)}"/>`;
     }
   }
-  const tx = cx - bw * 0.11, ty = baseY + bh * 0.34, tw2 = bw * 0.22, th2 = bh * 0.2;
-  s += `<rect x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" width="${tw2.toFixed(1)}" height="${th2.toFixed(1)}" rx="2" fill="#7f8b99"/>`;
-  // Speaker grilles either side of the keys
+  // Trackpad, forward of the keys and centered.
+  const tT0 = 0.72, tT1 = 0.94;
+  const tHalf = (t) => lerp(backHalf, frontHalf, t) * 0.19;
+  const tx = cx - tHalf(tT0), ty = deckY(tT0), tw2 = tHalf(tT0) * 2, th2 = deckY(tT1) - deckY(tT0);
+  s += `<path d="M ${(cx - tHalf(tT0)).toFixed(1)} ${deckY(tT0).toFixed(1)} L ${(cx + tHalf(tT0)).toFixed(1)} ${deckY(tT0).toFixed(1)} ` +
+    `L ${(cx + tHalf(tT1)).toFixed(1)} ${deckY(tT1).toFixed(1)} L ${(cx - tHalf(tT1)).toFixed(1)} ${deckY(tT1).toFixed(1)} Z" fill="${shade(PAL.mist, 0.1)}" stroke="${shade(PAL.mist, 0.2)}" stroke-width="1.5"/>`;
+
+  // Speaker grilles either side of the keys.
+  const spkInner = 0.74, spkOuter = 0.95;   // fraction of the half-width
   [-1, 1].forEach((d) => {
-    for (let i = 0; i < 4; i++) {
-      s += `<rect x="${(cx + d * bw * 0.4 - bw * 0.03 + i * bw * 0.014).toFixed(1)}" y="${(baseY + bh * 0.08).toFixed(1)}" width="${(bw * 0.007).toFixed(1)}" height="${(bh * 0.2).toFixed(1)}" rx="1" fill="#6f7b89"/>`;
+    for (let i = 0; i < 6; i++) {
+      const f = spkInner + (spkOuter - spkInner) * (i / 5.5);
+      s += `<path d="M ${(cx + d * lerp(backHalf, frontHalf, kTop) * f).toFixed(1)} ${(deckY(kTop) + 2).toFixed(1)} ` +
+        `L ${(cx + d * lerp(backHalf, frontHalf, kBot) * f).toFixed(1)} ${(deckY(kBot) - 2).toFixed(1)}" stroke="${shade(PAL.steel, 0.28)}" stroke-width="3" stroke-linecap="round" opacity="0.75"/>`;
     }
-  });
-  // Ports along the near edge
-  [[-0.42, 0.05], [-0.34, 0.035], [0.34, 0.035], [0.42, 0.05]].forEach(([fx, fw2]) => {
-    s += `<rect x="${(cx + bw * fx - bw * fw2 / 2).toFixed(1)}" y="${(baseY + bh * 0.86).toFixed(1)}" width="${(bw * fw2).toFixed(1)}" height="${(bh * 0.16).toFixed(1)}" rx="2" fill="#5f6874"/>`;
   });
 
-  if (part === "screen") s += a("cal", glowRect(sx, sy, sw, sh, 4));
-  if (part === "keyboard") s += a("cal", glowRect(kx - 4, ky - 3, kw + 8, kh + 6, 4));
-  if (part === "trackpad") s += a("cal", glowRect(tx - 4, ty - 3, tw2 + 8, th2 + 6, 4));
-  if (part === "camera") s += a("cal", `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.03).toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="6"/>`);
+  // Ports along the front lip.
+  const portW = bw * 0.05, portY = deckFrontY + lipH * 0.28, portH = lipH * 0.44;
+  const portXs = [-0.42, -0.34, 0.34, 0.42];
+  portXs.forEach((fx) => {
+    s += `<rect x="${(cx + frontHalf * 2 * fx * 0.5 - portW / 2).toFixed(1)}" y="${portY.toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="2" fill="${shade(PAL.ink, 0.1)}"/>`;
+  });
+
+  // ── The callout ────────────────────────────────────────────────────────────
+  if (part === "screen") s += a("cal", glowRect(sxBot + 4, sTop + 3, swBot - 8, sBot - sTop - 6, 5));
+  if (part === "keyboard") s += a("cal", glowRect(kx - 6, ky - 5, kw + 12, kh + 10, 5));
+  if (part === "trackpad") s += a("cal", glowRect(tx - 5, ty - 4, tw2 + 10, th2 + 8, 4));
+  if (part === "camera") s += a("cal", glowCircle(cx, camY, h * 0.026));
   if (part === "speakers") {
-    [-1, 1].forEach((d) => { s += a("cal", glowRect(cx + d * bw * 0.4 - bw * 0.036, baseY + bh * 0.04, bw * 0.072, bh * 0.28, 3)); });
+    [-1, 1].forEach((d) => {
+      const xIn = cx + d * lerp(backHalf, frontHalf, kTop) * spkInner;
+      const xOut = cx + d * lerp(backHalf, frontHalf, kBot) * spkOuter;
+      const x0 = Math.min(xIn, xOut) - 8, x1 = Math.max(xIn, xOut) + 8;
+      s += a("cal", glowRect(x0, ky - 5, x1 - x0, kh + 10, 4));
+    });
   }
-  if (part === "ports") s += a("cal", glowRect(cx - bw * 0.47, baseY + bh * 0.8, bw * 0.16, bh * 0.28, 3));
+  if (part === "ports") {
+    const px0 = cx + frontHalf * portXs[0] - portW;
+    s += a("cal", glowRect(px0, portY - 7, portW * 2.9, portH + 14, 4));
+  }
   return s;
 }
 
@@ -1845,34 +2028,49 @@ const KEY_ROWS = [
   ["ctrl", "alt", "space", "alt", "ctrl"],
 ];
 function keyboard(w, h, want) {
-  const g = linear([["0", "#e9edf2"], ["1", "#cbd5e0"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const bx = w * 0.07, by = h * 0.16, bw = w * 0.86, bh = h * 0.68;
-  s += drop(w * 0.5, by + bh + h * 0.03, bw * 0.5, h * 0.02);
-  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14" fill="#8f9baa"/>`;
-  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh * 0.94}" rx="14" fill="#b4bfcc"/>`;
-  const pad = bw * 0.022, rowH = (bh * 0.86) / KEY_ROWS.length;
+  let s = stage(w, h, "#C8D6E2");
+  const bx = w * 0.055, by = h * 0.14, bw = w * 0.89, bh = h * 0.7;
+  s += contact(w * 0.5, by + bh + h * 0.045, bw * 0.5, h * 0.028, 0.22);
+  // The body: a light deck with a darker rim, lit from above.
+  const body = linear([["0", tint(PAL.steel, 0.62)], ["1", PAL.steel]]);
+  s += `<defs>${body.def}</defs>`;
+  s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="18" fill="${shade(PAL.steel, 0.3)}"/>`;
+  s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${(bh * 0.965).toFixed(1)}" rx="18" fill="url(#${body.gid})"/>`;
+
+  const pad = bw * 0.02, rowH = (bh * 0.86) / KEY_ROWS.length;
   const hits = [];
   KEY_ROWS.forEach((row, r) => {
     // Widths in units; space is wide, modifiers a little wider than letters.
     const units = row.map((k) => (k === "space" ? 5 : ["tab", "caps", "shift", "return", "ctrl", "alt", "cmd", "esc"].includes(k) ? 1.5 : 1));
-    const total = units.reduce((a, b) => a + b, 0);
+    const total = units.reduce((a2, b2) => a2 + b2, 0);
     const avail = bw - pad * 2 - pad * (row.length - 1);
     let x = bx + pad;
     const y = by + bh * 0.06 + r * rowH;
+    const kh = rowH * 0.84;
     row.forEach((k, i) => {
       const kw = (units[i] / total) * avail;
-      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${kw.toFixed(1)}" height="${(rowH * 0.82).toFixed(1)}" rx="4" fill="#f4f6f8"/>`;
-      s += `<rect x="${x.toFixed(1)}" y="${(y + rowH * 0.68).toFixed(1)}" width="${kw.toFixed(1)}" height="${(rowH * 0.14).toFixed(1)}" rx="3" fill="#d8dde3"/>`;
+      // Each key is a little slab: a shadow edge, the cap, and a top highlight.
+      s += `<rect x="${x.toFixed(1)}" y="${(y + kh * 0.1).toFixed(1)}" width="${kw.toFixed(1)}" height="${(kh * 0.94).toFixed(1)}" rx="5" fill="${shade(PAL.steel, 0.34)}" opacity="0.55"/>`;
+      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${kw.toFixed(1)}" height="${(kh * 0.92).toFixed(1)}" rx="5" fill="${PAL.paper}"/>`;
+      s += `<rect x="${(x + 1.5).toFixed(1)}" y="${(y + 1.5).toFixed(1)}" width="${(kw - 3).toFixed(1)}" height="${(kh * 0.34).toFixed(1)}" rx="4" fill="#fff" opacity="0.85"/>`;
       const label = k.length > 1 && k !== "space" ? k : k === "space" ? "" : k.toUpperCase();
       if (label) {
-        s += `<text x="${(x + kw / 2).toFixed(1)}" y="${(y + rowH * 0.55).toFixed(1)}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="${Math.min(rowH * 0.36, kw * 0.44).toFixed(1)}" fill="#5f6874">${label === "cmd" ? "ctrl" : label}</text>`;
+        s += `<text x="${(x + kw / 2).toFixed(1)}" y="${(y + kh * 0.66).toFixed(1)}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-weight="600" font-size="${Math.min(kh * 0.4, kw * 0.46).toFixed(1)}" fill="${PAL.slate}">${label === "cmd" ? "ctrl" : label}</text>`;
       }
-      if (want.includes(k)) hits.push([x, y, kw, rowH * 0.82]);
+      if (want.includes(k)) hits.push([x, y, kw, kh * 0.92]);
       x += kw + pad;
     });
   });
-  hits.forEach(([x, y, kw, kh], i) => { s += a("cal key", glowRect(x, y, kw, kh, 4), i); });
+  // A run of adjacent keys gets one ring around the run, not ten rings — ten
+  // amber boxes in a row read as decoration, one reads as "this row here".
+  const runs = [];
+  hits.sort((a2, b2) => a2[1] - b2[1] || a2[0] - b2[0]).forEach((k) => {
+    const last = runs[runs.length - 1];
+    if (last && Math.abs(last.y - k[1]) < 2 && k[0] - (last.x + last.w) < pad * 2.2) {
+      last.w = k[0] + k[2] - last.x;
+    } else runs.push({ x: k[0], y: k[1], w: k[2], h: k[3] });
+  });
+  runs.forEach(({ x, y, w: rw, h: rh }, i) => { s += a("cal key", glowRect(x - 3, y - 3, rw + 6, rh + 6, 7), i); });
   return s;
 }
 S["key-numbers"] = (w, h) => keyboard(w, h, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]);
@@ -1880,421 +2078,441 @@ S["key-caps"] = (w, h) => keyboard(w, h, ["caps"]);
 S["key-ctrl"] = (w, h) => keyboard(w, h, ["ctrl"]);
 S["key-escape"] = (w, h) => keyboard(w, h, ["esc"]);
 
-/** A screen showing the practice desktop, with one region called out. */
+/**
+ * The practice desktop, filling a screen, with one region called out.
+ *
+ * These two are the only pictures whose subject is a *region of the screen*
+ * rather than an object, so the screen has to be big enough that the region
+ * inside it is still a shape and not a sliver. It is drawn full-bleed in a lid,
+ * cropped at the bottom, rather than as a small monitor floating on a ground.
+ */
 function desktopShot(w, h, region) {
-  const g = linear([["0", "#dfe6ee"], ["1", "#c2cfdc"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const bx = w * 0.08, by = h * 0.12, bw = w * 0.84, bh = h * 0.7;
-  s += drop(w * 0.5, by + bh + h * 0.05, bw * 0.34, h * 0.02);
-  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="10" fill="#2f3a45"/>`;
-  const ix = bx + bw * 0.014, iy = by + bh * 0.02, iw = bw * 0.972, ih = bh * 0.96;
-  const wall = linear([["0", "#f2c8c8"], ["0.5", "#c8e8c8"], ["1", "#c8ccf0"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
-  s += `<defs>${wall.def}</defs><rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" rx="6" fill="url(#${wall.gid})"/>`;
-  // Menu bar
-  const mh = ih * 0.075;
-  s += `<rect x="${ix}" y="${iy}" width="${iw}" height="${mh}" rx="6" fill="#fbfcfd"/>`;
-  s += `<rect x="${ix}" y="${(iy + mh * 0.5).toFixed(1)}" width="${iw}" height="${(mh * 0.5).toFixed(1)}" fill="#fbfcfd"/>`;
-  s += `<rect x="${(ix + iw * 0.02).toFixed(1)}" y="${(iy + mh * 0.32).toFixed(1)}" width="${(iw * 0.09).toFixed(1)}" height="${(mh * 0.34).toFixed(1)}" rx="2" fill="#4f5a66"/>`;
-  [0.84, 0.89, 0.94].forEach((fx) => {
-    s += `<rect x="${(ix + iw * fx).toFixed(1)}" y="${(iy + mh * 0.32).toFixed(1)}" width="${(iw * 0.035).toFixed(1)}" height="${(mh * 0.34).toFixed(1)}" rx="2" fill="#8f99a5"/>`;
+  let s = stage(w, h, "#C2D2E4", { cy: 0.42, floor: 0.93 });
+  const bx = w * 0.06, by = h * 0.08, bw = w * 0.88, bh = h * 0.78;
+  s += contact(w * 0.5, by + bh + h * 0.045, bw * 0.5, h * 0.026, 0.24);
+  // Lid, then the glass inside it.
+  s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="16" fill="${shade(PAL.ink, 0.05)}"/>`;
+  const ix = bx + bw * 0.017, iy = by + bh * 0.024, iw = bw * 0.966, ih = bh * 0.93;
+  const wall = linear([["0", "#6FA8DC"], ["0.5", "#7FBCC9"], ["1", "#8CC7A8"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  s += `<defs>${wall.def}</defs><rect x="${ix.toFixed(1)}" y="${iy.toFixed(1)}" width="${iw.toFixed(1)}" height="${ih.toFixed(1)}" rx="6" fill="url(#${wall.gid})"/>`;
+
+  // Menu bar across the top.
+  const mh = ih * 0.085;
+  s += `<rect x="${ix.toFixed(1)}" y="${iy.toFixed(1)}" width="${iw.toFixed(1)}" height="${mh.toFixed(1)}" rx="6" fill="${PAL.paper}" opacity="0.94"/>`;
+  s += `<rect x="${ix.toFixed(1)}" y="${(iy + mh * 0.5).toFixed(1)}" width="${iw.toFixed(1)}" height="${(mh * 0.5).toFixed(1)}" fill="${PAL.paper}" opacity="0.94"/>`;
+  s += `<rect x="${(ix + iw * 0.025).toFixed(1)}" y="${(iy + mh * 0.3).toFixed(1)}" width="${(iw * 0.1).toFixed(1)}" height="${(mh * 0.4).toFixed(1)}" rx="3" fill="${PAL.slate}" opacity="0.8"/>`;
+  [0.83, 0.885, 0.94].forEach((fx) => {
+    s += `<rect x="${(ix + iw * fx).toFixed(1)}" y="${(iy + mh * 0.32).toFixed(1)}" width="${(iw * 0.036).toFixed(1)}" height="${(mh * 0.36).toFixed(1)}" rx="3" fill="${PAL.steel}"/>`;
   });
-  // Dock
-  const dw = iw * 0.52, dh = ih * 0.11, dx = ix + (iw - dw) / 2, dy = iy + ih - dh * 1.35;
-  s += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${dw.toFixed(1)}" height="${dh.toFixed(1)}" rx="${(dh * 0.28).toFixed(1)}" fill="#fff" opacity="0.62"/>`;
-  const cols = ["#cfe6f5", "#d6e8d0", "#f5dfc0", "#dcd6f0", "#f5cfd6", "#d0e8e4"];
-  for (let i = 0; i < 6; i++) {
-    s += `<rect x="${(dx + dw * 0.045 + i * dw * 0.155).toFixed(1)}" y="${(dy + dh * 0.18).toFixed(1)}" width="${(dw * 0.12).toFixed(1)}" height="${(dh * 0.64).toFixed(1)}" rx="${(dh * 0.18).toFixed(1)}" fill="${cols[i]}"/>`;
+
+  // A couple of desktop icons, so the middle is recognisably "the desktop".
+  [[0.06, 0.2], [0.06, 0.42]].forEach(([fx, fy]) => {
+    s += `<rect x="${(ix + iw * fx).toFixed(1)}" y="${(iy + ih * fy).toFixed(1)}" width="${(iw * 0.052).toFixed(1)}" height="${(ih * 0.075).toFixed(1)}" rx="5" fill="${PAL.paper}" opacity="0.75"/>`;
+    s += `<rect x="${(ix + iw * (fx + 0.005)).toFixed(1)}" y="${(iy + ih * (fy + 0.095)).toFixed(1)}" width="${(iw * 0.042).toFixed(1)}" height="${(ih * 0.022).toFixed(1)}" rx="3" fill="${PAL.paper}" opacity="0.55"/>`;
+  });
+
+  // Dock along the bottom.
+  const dw = iw * 0.55, dh = ih * 0.13, dx = ix + (iw - dw) / 2, dy = iy + ih - dh * 1.3;
+  s += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${dw.toFixed(1)}" height="${dh.toFixed(1)}" rx="${(dh * 0.28).toFixed(1)}" fill="${PAL.paper}" opacity="0.6"/>`;
+  ["#5C93D6", "#79A98A", "#E8A93F", "#B18FD8", "#E2807A", "#5FB8B0"].forEach((c, i) => {
+    s += `<rect x="${(dx + dw * 0.04 + i * dw * 0.157).toFixed(1)}" y="${(dy + dh * 0.17).toFixed(1)}" width="${(dw * 0.12).toFixed(1)}" height="${(dh * 0.66).toFixed(1)}" rx="${(dh * 0.2).toFixed(1)}" fill="${c}"/>`;
+  });
+
+  if (region === "menubar") s += a("cal", glowRect(ix + 3, iy + 3, iw - 6, mh - 4, 5));
+  if (region === "desktop") {
+    const top = iy + mh * 1.35, bot = dy - ih * 0.05;
+    s += a("cal", glowRect(ix + iw * 0.04, top, iw * 0.92, bot - top, 8));
   }
-  if (region === "menubar") s += a("cal", glowRect(ix, iy, iw, mh, 4));
-  if (region === "desktop") s += a("cal", glowRect(ix + iw * 0.06, iy + mh * 1.4, iw * 0.88, ih - mh * 1.4 - dh * 1.6, 6));
   return s;
 }
 S["screen-desktop-art"] = (w, h) => desktopShot(w, h, "desktop");
 S["screen-menubar-art"] = (w, h) => desktopShot(w, h, "menubar");
 
-/** Everything else: one idea, one picture. */
+/**
+ * Everything else: one idea, one picture.
+ *
+ * All of these share `stage()` and the palette, so the set reads as one hand.
+ * The rule for each is the same — the subject fills the frame and says the
+ * lesson's one idea without a caption.
+ */
 const cloudPath = (cx, cy, r) =>
-  `<path d="M ${(cx - r * 1.5).toFixed(1)} ${(cy + r * 0.45).toFixed(1)} a ${(r * 0.62).toFixed(1)} ${(r * 0.62).toFixed(1)} 0 0 1 ${(r * 0.16).toFixed(1)} ${(-r * 1.18).toFixed(1)} a ${(r * 0.78).toFixed(1)} ${(r * 0.78).toFixed(1)} 0 0 1 ${(r * 1.42).toFixed(1)} ${(-r * 0.34).toFixed(1)} a ${(r * 0.58).toFixed(1)} ${(r * 0.58).toFixed(1)} 0 0 1 ${(r * 1.06).toFixed(1)} ${(r * 0.5).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.55).toFixed(1)} 0 0 1 ${(-r * 0.2).toFixed(1)} ${(r * 1.06).toFixed(1)} Z" fill="#fff" opacity="0.95"/>`;
+  `<path d="M ${(cx - r * 1.5).toFixed(1)} ${(cy + r * 0.45).toFixed(1)} a ${(r * 0.62).toFixed(1)} ${(r * 0.62).toFixed(1)} 0 0 1 ${(r * 0.16).toFixed(1)} ${(-r * 1.18).toFixed(1)} a ${(r * 0.78).toFixed(1)} ${(r * 0.78).toFixed(1)} 0 0 1 ${(r * 1.42).toFixed(1)} ${(-r * 0.34).toFixed(1)} a ${(r * 0.58).toFixed(1)} ${(r * 0.58).toFixed(1)} 0 0 1 ${(r * 1.06).toFixed(1)} ${(r * 0.5).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.55).toFixed(1)} 0 0 1 ${(-r * 0.2).toFixed(1)} ${(r * 1.06).toFixed(1)} Z"`;
+
+/** A phone, drawn once, used by three scenes. */
+function phone(cx, cy, pw, ph) {
+  const r = pw * 0.13;
+  return `<rect x="${(cx - pw / 2).toFixed(1)}" y="${(cy - ph / 2).toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="${r.toFixed(1)}" fill="${PAL.ink}"/>` +
+    `<rect x="${(cx - pw / 2 + pw * 0.055).toFixed(1)}" y="${(cy - ph / 2 + pw * 0.055).toFixed(1)}" width="${(pw * 0.89).toFixed(1)}" height="${(ph - pw * 0.11).toFixed(1)}" rx="${(r * 0.7).toFixed(1)}" fill="${tint(PAL.mist, 0.5)}"/>`;
+}
+
+/** A photo print: white border, colored picture, slight tilt. */
+const print = (cx, cy, pw, col, rot = 0) =>
+  `<g transform="rotate(${rot} ${cx.toFixed(1)} ${cy.toFixed(1)})">` +
+  `<rect x="${(cx - pw / 2).toFixed(1)}" y="${(cy - pw * 0.4).toFixed(1)}" width="${pw.toFixed(1)}" height="${(pw * 0.8).toFixed(1)}" rx="4" fill="${PAL.paper}"/>` +
+  `<rect x="${(cx - pw / 2 + pw * 0.07).toFixed(1)}" y="${(cy - pw * 0.33).toFixed(1)}" width="${(pw * 0.86).toFixed(1)}" height="${(pw * 0.52).toFixed(1)}" rx="2" fill="${col}"/></g>`;
 
 S["cloud-backup"] = (w, h) => {
-  const g = linear([["0", "#8fc4e8"], ["1", "#d8ecf6"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  s += cloudPath(w * 0.5, h * 0.32, Math.min(w, h) * 0.2);
-  // Phone below, photos rising into the cloud
-  const px = w * 0.5 - w * 0.055, py = h * 0.66, pw = w * 0.11, ph = h * 0.3;
-  s += `<rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="${(pw * 0.18).toFixed(1)}" fill="#2f3540"/>`;
-  s += `<rect x="${(px + pw * 0.07).toFixed(1)}" y="${(py + pw * 0.07).toFixed(1)}" width="${(pw * 0.86).toFixed(1)}" height="${(ph - pw * 0.14).toFixed(1)}" rx="${(pw * 0.12).toFixed(1)}" fill="#dfe8f0"/>`;
-  [["#f0c07f", -0.14, 0.54], ["#a8d8a0", 0, 0.5], ["#c4b0e8", 0.14, 0.56]].forEach(([c, dx, fy], i) => {
-    s += a("rise", `<g transform="rotate(${(dx * 60).toFixed(0)} ${(w * (0.5 + dx)).toFixed(1)} ${(h * fy).toFixed(1)})"><rect x="${(w * (0.5 + dx) - w * 0.038).toFixed(1)}" y="${(h * fy - h * 0.045).toFixed(1)}" width="${(w * 0.076).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#fff"/><rect x="${(w * (0.5 + dx) - w * 0.03).toFixed(1)}" y="${(h * fy - h * 0.035).toFixed(1)}" width="${(w * 0.06).toFixed(1)}" height="${(h * 0.055).toFixed(1)}" rx="2" fill="${c}"/></g>`, i);
+  // A deeper sky than the sibling cloud scene: this cloud is white and needs a
+  // ground to sit against, where drive-cloud's is a container with color inside.
+  let s = stage(w, h, "#7FB6DE", { cy: 0.3, floor: 0.88 });
+  const cr = Math.min(w, h) * 0.23;
+  s += `<g opacity="0.35">${cloudPath(w * 0.5, h * 0.24, cr * 1.12)} fill="${PAL.paper}"/></g>`;
+  s += `${cloudPath(w * 0.5, h * 0.24, cr)} fill="${PAL.paper}"/>`;
+  // The phone the photos are leaving.
+  s += contact(w * 0.5, h * 0.87, w * 0.09, h * 0.02, 0.2);
+  s += phone(w * 0.5, h * 0.72, w * 0.115, h * 0.26);
+  // Three prints climbing toward it.
+  s += a("rise", print(w * 0.5, h * 0.55, w * 0.105, "#F0C07F", -8), 0);
+  s += a("rise", print(w * 0.355, h * 0.48, w * 0.095, "#8FC9E8", -14), 1);
+  s += a("rise", print(w * 0.645, h * 0.48, w * 0.095, "#A8D8A0", 12), 2);
+  // The arrow that says which way they are going.
+  s += a("arrow", `<path d="M ${(w * 0.5).toFixed(1)} ${(h * 0.44).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.34).toFixed(1)} M ${(w * 0.472).toFixed(1)} ${(h * 0.375).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.335).toFixed(1)} L ${(w * 0.528).toFixed(1)} ${(h * 0.375).toFixed(1)}" stroke="${PAL.slate}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>`);
+  return s;
+};
+
+S["drive-cloud"] = (w, h) => {
+  let s = stage(w, h, "#A9CFEA", { cy: 0.44, floor: 0.92 });
+  const cr = Math.min(w, h) * 0.34;
+  s += `<g opacity="0.3">${cloudPath(w * 0.5, h * 0.46, cr * 1.1)} fill="${PAL.paper}"/></g>`;
+  s += `${cloudPath(w * 0.5, h * 0.46, cr)} fill="${PAL.paper}"/>`;
+  const folder = (fx, fy, fw, c) =>
+    `<path d="M ${fx.toFixed(1)} ${(fy + fw * 0.16).toFixed(1)} l 0 ${(fw * 0.6).toFixed(1)} l ${fw.toFixed(1)} 0 l 0 ${(-fw * 0.6).toFixed(1)} l ${(-fw * 0.52).toFixed(1)} 0 l ${(-fw * 0.1).toFixed(1)} ${(-fw * 0.13).toFixed(1)} l ${(-fw * 0.38).toFixed(1)} 0 Z" fill="${c}"/>` +
+    `<rect x="${fx.toFixed(1)}" y="${(fy + fw * 0.3).toFixed(1)}" width="${fw.toFixed(1)}" height="${(fw * 0.46).toFixed(1)}" rx="3" fill="${tint(c, 0.22)}"/>`;
+  const fw = w * 0.115;
+  [[0.335, "#E8A93F"], [0.5, "#5C93D6"], [0.665, "#79A98A"]].forEach(([fx, c], i) => {
+    s += a("fold", folder(w * fx - fw / 2, h * 0.44, fw, c), i);
   });
-  s += a("arrow", `<path d="M ${(w * 0.5).toFixed(1)} ${(h * 0.62).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.46).toFixed(1)} M ${(w * 0.47).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.455).toFixed(1)} L ${(w * 0.53).toFixed(1)} ${(h * 0.5).toFixed(1)}" stroke="#2f6f9f" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`);
   return s;
 };
 
 S["app-vs-web"] = (w, h) => {
-  const g = linear([["0", "#eef1f5"], ["1", "#d2dae4"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  s += `<line x1="${(w * 0.5).toFixed(1)}" y1="${(h * 0.12).toFixed(1)}" x2="${(w * 0.5).toFixed(1)}" y2="${(h * 0.88).toFixed(1)}" stroke="#a8b4c0" stroke-width="3" stroke-dasharray="9 9"/>`;
-  // Left: an app icon on a device home screen
-  const px = w * 0.16, py = h * 0.22, pw = w * 0.18, ph = h * 0.56;
-  let left = "";
-  left += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${(pw * 0.14).toFixed(1)}" fill="#2f3540"/>`;
-  left += `<rect x="${(px + pw * 0.06).toFixed(1)}" y="${(py + pw * 0.06).toFixed(1)}" width="${(pw * 0.88).toFixed(1)}" height="${(ph - pw * 0.12).toFixed(1)}" rx="${(pw * 0.09).toFixed(1)}" fill="#e6ecf2"/>`;
+  let s = stage(w, h, "#C6D2E0", { cy: 0.44, floor: 0.86 });
+  // Two things, side by side, each labelled by what it looks like rather than
+  // by text: a phone full of app icons, and a browser window with an address bar.
+  const px = w * 0.245, py = h * 0.5, pw = w * 0.2, ph = h * 0.62;
+  s += contact(px, py + ph / 2 + h * 0.035, pw * 0.62, h * 0.022, 0.2);
+  let left = phone(px, py, pw, ph);
+  const cols = ["#5C93D6", "#79A98A", "#E8A93F", "#B18FD8", "#E2807A", "#5FB8B0"];
   for (let i = 0; i < 6; i++) {
-    const c = ["#7fb4e0", "#8fc48f", "#e8b46f", "#c4a8e0", "#e08f9f", "#7fc4bc"][i];
-    left += `<rect x="${(px + pw * 0.16 + (i % 2) * pw * 0.38).toFixed(1)}" y="${(py + ph * 0.14 + Math.floor(i / 2) * ph * 0.22).toFixed(1)}" width="${(pw * 0.3).toFixed(1)}" height="${(pw * 0.3).toFixed(1)}" rx="${(pw * 0.08).toFixed(1)}" fill="${c}"/>`;
+    const ix = px - pw * 0.26 + (i % 2) * pw * 0.52, iy = py - ph * 0.26 + Math.floor(i / 2) * ph * 0.26;
+    left += `<rect x="${(ix - pw * 0.17).toFixed(1)}" y="${(iy - pw * 0.17).toFixed(1)}" width="${(pw * 0.34).toFixed(1)}" height="${(pw * 0.34).toFixed(1)}" rx="${(pw * 0.1).toFixed(1)}" fill="${cols[i]}"/>`;
   }
   s += a("sideA", left);
-  // Right: a browser window with an address bar
-  const bx = w * 0.56, by = h * 0.28, bw = w * 0.36, bh = h * 0.44;
-  let right = "";
-  right += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="8" fill="#fff"/>`;
-  right += `<rect x="${bx}" y="${by}" width="${bw}" height="${(bh * 0.2).toFixed(1)}" rx="8" fill="#e4e9ef"/>`;
-  right += `<rect x="${(bx + bw * 0.06).toFixed(1)}" y="${(by + bh * 0.055).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${(bh * 0.09).toFixed(1)}" rx="${(bh * 0.045).toFixed(1)}" fill="#fff"/>`;
+  // Browser window.
+  const bx = w * 0.5, by = h * 0.5, bwid = w * 0.4, bhig = h * 0.5;
+  s += contact(bx + bwid * 0.24, by + bhig / 2 + h * 0.035, bwid * 0.44, h * 0.02, 0.18);
+  let right = `<rect x="${(bx + bwid * 0.04).toFixed(1)}" y="${(by - bhig / 2).toFixed(1)}" width="${bwid.toFixed(1)}" height="${bhig.toFixed(1)}" rx="10" fill="${PAL.paper}"/>`;
+  right += `<path d="M ${(bx + bwid * 0.04).toFixed(1)} ${(by - bhig / 2 + 10).toFixed(1)} a 10 10 0 0 1 10 -10 l ${(bwid - 20).toFixed(1)} 0 a 10 10 0 0 1 10 10 l 0 ${(bhig * 0.19).toFixed(1)} l ${(-bwid).toFixed(1)} 0 Z" fill="${shade(PAL.mist, 0.04)}"/>`;
+  right += `<rect x="${(bx + bwid * 0.11).toFixed(1)}" y="${(by - bhig * 0.42).toFixed(1)}" width="${(bwid * 0.74).toFixed(1)}" height="${(bhig * 0.1).toFixed(1)}" rx="${(bhig * 0.05).toFixed(1)}" fill="${PAL.paper}"/>`;
+  [0.09, 0.135, 0.18].forEach((fx, i) => {
+    right += `<circle cx="${(bx + bwid * fx).toFixed(1)}" cy="${(by - bhig * 0.55).toFixed(1)}" r="${(bwid * 0.014).toFixed(1)}" fill="${["#E2807A", "#E8C06F", "#8FC48F"][i]}"/>`;
+  });
   for (let i = 0; i < 5; i++) {
-    right += `<rect x="${(bx + bw * 0.07).toFixed(1)}" y="${(by + bh * 0.32 + i * bh * 0.12).toFixed(1)}" width="${(bw * (i === 4 ? 0.4 : 0.84)).toFixed(1)}" height="${(bh * 0.055).toFixed(1)}" rx="3" fill="#c8d0d8"/>`;
+    right += `<rect x="${(bx + bwid * 0.11).toFixed(1)}" y="${(by - bhig * 0.2 + i * bhig * 0.13).toFixed(1)}" width="${(bwid * (i === 4 ? 0.36 : 0.76)).toFixed(1)}" height="${(bhig * 0.06).toFixed(1)}" rx="3" fill="${shade(PAL.mist, 0.1)}"/>`;
   }
   s += a("sideB", right);
   return s;
 };
 
-S["hardware-trouble"] = (w, h) => {
-  let s = laptop(w, h, "none");
-  const cx = w * 0.74, cy = h * 0.3, r = Math.min(w, h) * 0.13;
-  s += a("warn",
-    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0b429"/>` +
-    `<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(1)}" fill="#fdf6e4"/>` +
-    `<rect x="${(cx - r * 0.09).toFixed(1)}" y="${(cy - r * 0.46).toFixed(1)}" width="${(r * 0.18).toFixed(1)}" height="${(r * 0.6).toFixed(1)}" rx="${(r * 0.09).toFixed(1)}" fill="#a5701f"/>` +
-    `<circle cx="${cx}" cy="${(cy + r * 0.4).toFixed(1)}" r="${(r * 0.11).toFixed(1)}" fill="#a5701f"/>`);
-  return s;
-};
-
 S["peripheral-trouble"] = (w, h) => {
-  const g = linear([["0", "#f2f4f7"], ["1", "#d0d8e0"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  // The laptop, seen from its left side: a lid standing behind a base, with the
-  // sockets down the near edge. Drawn as a plain slab it read as a filing
-  // cabinet, and "plug the mouse into the box" is not the lesson.
-  const lx = w * 0.62, lw = w * 0.3;
-  const baseY = h * 0.6, baseH = h * 0.075;
-  s += drop(lx + lw / 2, baseY + baseH + h * 0.03, lw * 0.52, h * 0.018);
-  s += `<path d="M ${(lx + lw * 0.16).toFixed(1)} ${baseY.toFixed(1)} L ${(lx + lw * 0.3).toFixed(1)} ${(h * 0.2).toFixed(1)} L ${(lx + lw).toFixed(1)} ${(h * 0.2).toFixed(1)} L ${(lx + lw).toFixed(1)} ${baseY.toFixed(1)} Z" fill="#4a5765"/>`;
-  s += `<rect x="${(lx + lw * 0.34).toFixed(1)}" y="${(h * 0.23).toFixed(1)}" width="${(lw * 0.62).toFixed(1)}" height="${(baseY - h * 0.26).toFixed(1)}" rx="3" fill="#7fa8cf"/>`;
-  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${baseH.toFixed(1)}" rx="${(baseH * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
-  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${(baseH * 0.4).toFixed(1)}" rx="${(baseH * 0.26).toFixed(1)}" fill="#b4bfcc"/>`;
-  // One socket, not two. The base is a slab now, and the lesson is about the
-  // one empty hole the plug never reaches.
-  const portY = baseY + baseH * 0.26, portW = lw * 0.13, portH = baseH * 0.42;
-  s += `<rect x="${(lx - portW * 0.3).toFixed(1)}" y="${portY.toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="#39414a"/>`;
+  let s = stage(w, h, "#CBD6E2", { cy: 0.46, floor: 0.82 });
+  // A laptop seen from its left side, one socket empty, and a mouse whose plug
+  // stops short of it. The gap is the whole lesson.
+  const lx = w * 0.6, lw = w * 0.34;
+  const baseY = h * 0.62, baseH = h * 0.055;
+  s += contact(lx + lw / 2, baseY + baseH + h * 0.035, lw * 0.55, h * 0.022, 0.22);
+  s += `<path d="M ${(lx + lw * 0.14).toFixed(1)} ${baseY.toFixed(1)} L ${(lx + lw * 0.28).toFixed(1)} ${(h * 0.19).toFixed(1)} L ${(lx + lw).toFixed(1)} ${(h * 0.19).toFixed(1)} L ${(lx + lw).toFixed(1)} ${baseY.toFixed(1)} Z" fill="${shade(PAL.ink, 0.05)}"/>`;
+  const scr = linear([["0", "#6FA8DC"], ["1", "#8CC7A8"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  s += `<defs>${scr.def}</defs><rect x="${(lx + lw * 0.33).toFixed(1)}" y="${(h * 0.225).toFixed(1)}" width="${(lw * 0.63).toFixed(1)}" height="${(baseY - h * 0.26).toFixed(1)}" rx="3" fill="url(#${scr.gid})"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${baseH.toFixed(1)}" rx="${(baseH * 0.3).toFixed(1)}" fill="${shade(PAL.steel, 0.28)}"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${(baseH * 0.45).toFixed(1)}" rx="${(baseH * 0.26).toFixed(1)}" fill="${tint(PAL.steel, 0.4)}"/>`;
+  const portY = baseY + baseH * 0.26, portW = lw * 0.11, portH = baseH * 0.44;
+  s += `<rect x="${(lx - portW * 0.32).toFixed(1)}" y="${portY.toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="${shade(PAL.ink, 0.1)}"/>`;
 
-  // The mouse, and a plug that stops short of the socket.
-  const mx = w * 0.22, my = h * 0.58, mw = w * 0.13, mh = h * 0.28;
-  s += drop(mx, my + mh * 0.55, mw * 0.6, mh * 0.09);
-  s += `<rect x="${(mx - mw / 2).toFixed(1)}" y="${(my - mh / 2).toFixed(1)}" width="${mw.toFixed(1)}" height="${mh.toFixed(1)}" rx="${(mw / 2).toFixed(1)}" fill="#d4dbe2"/>`;
-  s += `<path d="M ${(mx - mw / 2).toFixed(1)} ${(my - mh * 0.16).toFixed(1)} a ${(mw / 2).toFixed(1)} ${(mh * 0.34).toFixed(1)} 0 0 1 ${mw.toFixed(1)} 0 Z" fill="#eef2f6"/>`;
-  s += `<line x1="${mx.toFixed(1)}" y1="${(my - mh / 2).toFixed(1)}" x2="${mx.toFixed(1)}" y2="${(my - mh * 0.16).toFixed(1)}" stroke="#9fabb8" stroke-width="3"/>`;
-  s += `<rect x="${(mx - mw * 0.055).toFixed(1)}" y="${(my - mh * 0.34).toFixed(1)}" width="${(mw * 0.11).toFixed(1)}" height="${(mh * 0.13).toFixed(1)}" rx="3" fill="#9fabb8"/>`;
-  const cableEnd = w * 0.5;
-  // The cable runs a little way *past* where the plug sits, so the nudge below
-  // slides the plug along it instead of tearing a gap in the middle of it.
+  // The mouse.
+  const mx = w * 0.19, my = h * 0.6, mw = w * 0.14, mh = h * 0.3;
+  s += contact(mx, my + mh * 0.55, mw * 0.55, h * 0.022, 0.2);
+  s += `<rect x="${(mx - mw / 2).toFixed(1)}" y="${(my - mh / 2).toFixed(1)}" width="${mw.toFixed(1)}" height="${mh.toFixed(1)}" rx="${(mw / 2).toFixed(1)}" fill="${tint(PAL.mist, 0.45)}"/>`;
+  s += `<path d="M ${(mx - mw / 2).toFixed(1)} ${(my - mh * 0.14).toFixed(1)} a ${(mw / 2).toFixed(1)} ${(mh * 0.36).toFixed(1)} 0 0 1 ${mw.toFixed(1)} 0 Z" fill="${PAL.paper}"/>`;
+  s += `<line x1="${mx.toFixed(1)}" y1="${(my - mh / 2).toFixed(1)}" x2="${mx.toFixed(1)}" y2="${(my - mh * 0.14).toFixed(1)}" stroke="${PAL.mist}" stroke-width="3"/>`;
+  s += `<rect x="${(mx - mw * 0.05).toFixed(1)}" y="${(my - mh * 0.36).toFixed(1)}" width="${(mw * 0.1).toFixed(1)}" height="${(mh * 0.14).toFixed(1)}" rx="3" fill="${PAL.steel}"/>`;
+
+  const cableEnd = w * 0.435;
   s += a("plug",
-    `<path d="M ${(mx + mw * 0.42).toFixed(1)} ${(my - mh * 0.34).toFixed(1)} q ${(w * 0.09).toFixed(1)} ${(-h * 0.16).toFixed(1)} ${(cableEnd - mx - mw * 0.42).toFixed(1)} ${(portY + portH / 2 - my + mh * 0.34).toFixed(1)} l 18 0" stroke="#6f7b89" stroke-width="8" fill="none" stroke-linecap="round"/>` +
-    `<rect x="${cableEnd.toFixed(1)}" y="${(portY + portH * 0.06).toFixed(1)}" width="${(portW * 0.75).toFixed(1)}" height="${(portH * 0.88).toFixed(1)}" rx="2" fill="#b4bfcc" stroke="#6f7b89" stroke-width="3"/>`);
-  // The gap is the lesson.
-  s += a("cal", glowRect(cableEnd - 8, portY - 10, (lx - portW * 0.3) - cableEnd + portW + 16, portH + 20, 6));
-  return s;
-};
-
-/**
- * A street map with a route on it.
- *
- * The grid is the load-bearing part. Roads sit at fixed centers, blocks fill
- * the gaps *between* them, and the route runs down the middle of real roads —
- * so it reads as a way through a town. Laid out on three unrelated grids (which
- * is how this started) the blocks straddled the streets and the route cut
- * across gardens, and the whole thing read as beige confetti.
- */
-S["map-route"] = (w, h) => {
-  const COL = [0.06, 0.20, 0.34, 0.48, 0.62, 0.76, 0.90];   // vertical road centers
-  const ROW = [0.09, 0.29, 0.49, 0.69, 0.89];               // horizontal road centers
-  let s = `<rect width="${w}" height="${h}" fill="#e6dfcf"/>`;
-  COL.forEach((fx) => {
-    s += `<rect x="${(w * fx - w * 0.01).toFixed(1)}" y="0" width="${(w * 0.02).toFixed(1)}" height="${h}" fill="#f6f3ea"/>`;
-  });
-  ROW.forEach((fy) => {
-    s += `<rect x="0" y="${(h * fy - h * 0.01).toFixed(1)}" width="${w}" height="${(h * 0.02).toFixed(1)}" fill="#f6f3ea"/>`;
-  });
-  // Blocks fill the gaps between roads, inset far enough to leave a kerb.
-  for (let ci = 0; ci < COL.length - 1; ci++) {
-    for (let ri = 0; ri < ROW.length - 1; ri++) {
-      const x0 = w * COL[ci] + w * 0.014, x1 = w * COL[ci + 1] - w * 0.014;
-      const y0 = h * ROW[ri] + h * 0.02, y1 = h * ROW[ri + 1] - h * 0.02;
-      // One block is a park, so the map has a landmark instead of a texture.
-      const park = ci === 1 && ri === 1;
-      s += `<rect x="${x0.toFixed(1)}" y="${y0.toFixed(1)}" width="${(x1 - x0).toFixed(1)}" height="${(y1 - y0).toFixed(1)}" rx="5" fill="${park ? "#bcd4b0" : (ci + ri) % 3 ? "#d6cdb8" : "#cfd6c2"}"/>`;
-    }
-  }
-  const P = (fx, fy) => `${(w * fx).toFixed(1)} ${(h * fy).toFixed(1)}`;
-  const route = `M ${P(0.20, 0.89)} L ${P(0.20, 0.69)} L ${P(0.62, 0.69)} L ${P(0.62, 0.29)}`;
-  // A white casing under the route is what lifts it off a busy map.
-  s += `<path d="${route}" stroke="#fff" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
-  // The route is ALWAYS fully drawn. A draw-on effect was the obvious idea and
-  // the wrong one: it plays once, so a learner who looks up a few seconds late
-  // has missed it entirely, and any paused timeline leaves a map with no route
-  // on it. A brighter segment travelling along a route that is always there
-  // repeats, survives a frozen frame, and shows the direction of travel — which
-  // is the thing the picture is actually for. The dash pattern lives in the
-  // markup so the resting state is a highlight on a finished route.
-  s += `<path d="${route}" stroke="#2f6fdf" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
-  s += a("route", `<path d="${route}" stroke="#7fb0f5" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="150 1000" stroke-dashoffset="0"/>`);
-  const pin = (fx, fy, c) => {
-    const px = w * fx, py = h * fy;
-    return `<ellipse cx="${px.toFixed(1)}" cy="${(py + h * 0.008).toFixed(1)}" rx="${(w * 0.018).toFixed(1)}" ry="${(h * 0.008).toFixed(1)}" fill="#000" opacity="0.18"/>` +
-      `<path d="M ${px.toFixed(1)} ${py.toFixed(1)} c ${(-w * 0.032).toFixed(1)} ${(-h * 0.05).toFixed(1)} ${(-w * 0.032).toFixed(1)} ${(-h * 0.11).toFixed(1)} 0 ${(-h * 0.13).toFixed(1)} c ${(w * 0.032).toFixed(1)} ${(h * 0.02).toFixed(1)} ${(w * 0.032).toFixed(1)} ${(h * 0.08).toFixed(1)} 0 ${(h * 0.13).toFixed(1)} Z" fill="${c}"/>` +
-      `<circle cx="${px.toFixed(1)}" cy="${(py - h * 0.088).toFixed(1)}" r="${(w * 0.013).toFixed(1)}" fill="#fff"/>`;
-  };
-  s += pin(0.20, 0.89, "#3f7f4f");
-  s += a("pinB", pin(0.62, 0.29, "#cf3f3f"));
+    `<path d="M ${(mx + mw * 0.44).toFixed(1)} ${(my - mh * 0.34).toFixed(1)} q ${(w * 0.08).toFixed(1)} ${(-h * 0.15).toFixed(1)} ${(cableEnd - mx - mw * 0.44).toFixed(1)} ${(portY + portH / 2 - my + mh * 0.34).toFixed(1)} l 20 0" stroke="${PAL.slate}" stroke-width="9" fill="none" stroke-linecap="round"/>` +
+    `<rect x="${cableEnd.toFixed(1)}" y="${(portY + portH * 0.02).toFixed(1)}" width="${(portW * 0.8).toFixed(1)}" height="${(portH * 0.96).toFixed(1)}" rx="2" fill="${PAL.mist}" stroke="${PAL.slate}" stroke-width="3"/>`);
+  s += a("cal", glowRect(cableEnd - 10, portY - 12, (lx - portW * 0.32) - cableEnd + portW + 22, portH + 24, 6));
   return s;
 };
 
 S["qr-code"] = (w, h, rng) => {
-  const g = linear([["0", "#f2f4f7"], ["1", "#d8dee6"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const N = 17, side = Math.min(w, h) * 0.58, cell = side / N;
-  const ox = w * 0.5 - side / 2, oy = h * 0.5 - side / 2;
-  s += drop(w * 0.5, oy + side + h * 0.03, side * 0.55, h * 0.018);
-  s += `<rect x="${(ox - cell).toFixed(1)}" y="${(oy - cell).toFixed(1)}" width="${(side + cell * 2).toFixed(1)}" height="${(side + cell * 2).toFixed(1)}" rx="8" fill="#fff"/>`;
+  let s = stage(w, h, "#C9D5E2", { cy: 0.46, floor: 0.86 });
+  // The code sits on a card being held up to be read, which is what a QR code
+  // is *for*. A bare square on a gradient was a picture of nothing happening.
+  const N = 17, side = Math.min(w, h) * 0.5, cell = side / N;
+  const cardW = side + cell * 5, cardH = side + cell * 7;
+  const ox = w * 0.5 - side / 2, oy = h * 0.47 - side / 2;
+  s += contact(w * 0.5, oy + cardH * 0.62, cardW * 0.5, h * 0.022, 0.22);
+  s += `<rect x="${(w * 0.5 - cardW / 2).toFixed(1)}" y="${(oy - cell * 2.5).toFixed(1)}" width="${cardW.toFixed(1)}" height="${cardH.toFixed(1)}" rx="14" fill="${PAL.paper}"/>`;
   const finder = (fx, fy) => {
-    let t = `<rect x="${(ox + fx * cell).toFixed(1)}" y="${(oy + fy * cell).toFixed(1)}" width="${(cell * 7).toFixed(1)}" height="${(cell * 7).toFixed(1)}" fill="#1d2733"/>`;
-    t += `<rect x="${(ox + (fx + 1) * cell).toFixed(1)}" y="${(oy + (fy + 1) * cell).toFixed(1)}" width="${(cell * 5).toFixed(1)}" height="${(cell * 5).toFixed(1)}" fill="#fff"/>`;
-    t += `<rect x="${(ox + (fx + 2) * cell).toFixed(1)}" y="${(oy + (fy + 2) * cell).toFixed(1)}" width="${(cell * 3).toFixed(1)}" height="${(cell * 3).toFixed(1)}" fill="#1d2733"/>`;
+    let t = `<rect x="${(ox + fx * cell).toFixed(1)}" y="${(oy + fy * cell).toFixed(1)}" width="${(cell * 7).toFixed(1)}" height="${(cell * 7).toFixed(1)}" rx="${(cell * 0.9).toFixed(1)}" fill="${PAL.ink}"/>`;
+    t += `<rect x="${(ox + (fx + 1) * cell).toFixed(1)}" y="${(oy + (fy + 1) * cell).toFixed(1)}" width="${(cell * 5).toFixed(1)}" height="${(cell * 5).toFixed(1)}" rx="${(cell * 0.6).toFixed(1)}" fill="${PAL.paper}"/>`;
+    t += `<rect x="${(ox + (fx + 2) * cell).toFixed(1)}" y="${(oy + (fy + 2) * cell).toFixed(1)}" width="${(cell * 3).toFixed(1)}" height="${(cell * 3).toFixed(1)}" rx="${(cell * 0.4).toFixed(1)}" fill="${PAL.ink}"/>`;
     return t;
   };
   const inFinder = (r, c) => (r < 8 && c < 8) || (r < 8 && c > N - 9) || (r > N - 9 && c < 8);
   for (let r = 0; r < N; r++) {
     for (let c = 0; c < N; c++) {
       if (inFinder(r, c)) continue;
-      if (rng.f() > 0.52) s += `<rect x="${(ox + c * cell).toFixed(1)}" y="${(oy + r * cell).toFixed(1)}" width="${cell.toFixed(1)}" height="${cell.toFixed(1)}" fill="#1d2733"/>`;
+      if (rng.f() > 0.52) s += `<rect x="${(ox + c * cell).toFixed(1)}" y="${(oy + r * cell).toFixed(1)}" width="${(cell * 0.92).toFixed(1)}" height="${(cell * 0.92).toFixed(1)}" rx="${(cell * 0.18).toFixed(1)}" fill="${PAL.ink}"/>`;
     }
   }
   s += finder(0, 0) + finder(N - 7, 0) + finder(0, N - 7);
-  // The scan line is the whole point of the picture: a code is something a
-  // camera reads, and a still square never says that.
-  const scan = linear([["0", "#2f9f6f", 0], ["0.5", "#2f9f6f", 0.55], ["1", "#2f9f6f", 0]], { x1: 0, y1: 0, x2: 1, y2: 0 });
+  const scan = linear([["0", PAL.teal, 0], ["0.5", PAL.teal, 0.5], ["1", PAL.teal, 0]], { x1: 0, y1: 0, x2: 1, y2: 0 });
   s += `<defs>${scan.def}</defs>`;
-  // It rests across the middle, not at the top edge: the still is what a
-  // reduced-motion learner sees, and a band parked at the rim reads as a
-  // rendering fault rather than a scanner.
   s += a("scan", `<rect x="${(ox - cell).toFixed(1)}" y="${(oy + side / 2 - cell * 0.45).toFixed(1)}" width="${(side + cell * 2).toFixed(1)}" height="${(cell * 0.9).toFixed(1)}" fill="url(#${scan.gid})"/>`);
   return s;
 };
 
 S["safe-payment"] = (w, h) => {
-  const g = linear([["0", "#e4f0e8"], ["1", "#c2dccc"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const cw = w * 0.44, ch = cw * 0.63, cx = w * 0.5 - cw / 2, cy = h * 0.56 - ch / 2;
-  s += drop(w * 0.5, cy + ch + h * 0.04, cw * 0.5, h * 0.02);
-  s += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="14" fill="#3f6f8f"/>`;
-  s += `<rect x="${cx}" y="${(cy + ch * 0.2).toFixed(1)}" width="${cw}" height="${(ch * 0.17).toFixed(1)}" fill="#22384a"/>`;
-  s += `<rect x="${(cx + cw * 0.08).toFixed(1)}" y="${(cy + ch * 0.5).toFixed(1)}" width="${(cw * 0.16).toFixed(1)}" height="${(ch * 0.18).toFixed(1)}" rx="3" fill="#e8c96f"/>`;
+  let s = stage(w, h, "#B9D6C4", { cy: 0.5, floor: 0.84 });
+  const cw = w * 0.5, ch = cw * 0.63, cx = w * 0.5 - cw / 2, cy = h * 0.56 - ch / 2;
+  s += contact(w * 0.5, cy + ch + h * 0.04, cw * 0.52, h * 0.025, 0.24);
+  const card = linear([["0", "#3F6F8F"], ["1", "#2C566F"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  s += `<defs>${card.def}</defs>`;
+  s += `<rect x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="18" fill="url(#${card.gid})"/>`;
+  s += `<rect x="${cx.toFixed(1)}" y="${(cy + ch * 0.18).toFixed(1)}" width="${cw.toFixed(1)}" height="${(ch * 0.17).toFixed(1)}" fill="#1B3murk"/>`.replace("#1B3murk", "#1B3242");
+  // Chip, with the little contact lines that make it read as a chip.
+  const chx = cx + cw * 0.09, chy = cy + ch * 0.48, chw = cw * 0.15, chh = ch * 0.2;
+  s += `<rect x="${chx.toFixed(1)}" y="${chy.toFixed(1)}" width="${chw.toFixed(1)}" height="${chh.toFixed(1)}" rx="4" fill="#E8C96F"/>`;
+  s += `<path d="M ${(chx + chw * 0.33).toFixed(1)} ${chy.toFixed(1)} l 0 ${chh.toFixed(1)} M ${(chx + chw * 0.66).toFixed(1)} ${chy.toFixed(1)} l 0 ${chh.toFixed(1)} M ${chx.toFixed(1)} ${(chy + chh * 0.5).toFixed(1)} l ${chw.toFixed(1)} 0" stroke="#B8973F" stroke-width="2"/>`;
   for (let i = 0; i < 4; i++) {
-    s += `<rect x="${(cx + cw * 0.3 + i * cw * 0.17).toFixed(1)}" y="${(cy + ch * 0.56).toFixed(1)}" width="${(cw * 0.12).toFixed(1)}" height="${(ch * 0.07).toFixed(1)}" rx="2" fill="#a8c4d8"/>`;
+    s += `<rect x="${(cx + cw * 0.3 + i * cw * 0.17).toFixed(1)}" y="${(cy + ch * 0.55).toFixed(1)}" width="${(cw * 0.12).toFixed(1)}" height="${(ch * 0.07).toFixed(1)}" rx="3" fill="#A8C4D8" opacity="0.85"/>`;
   }
-  // Padlock, closed — and it closes, because "locked" is the whole idea.
-  const lx = w * 0.5, ly = h * 0.24, lr = Math.min(w, h) * 0.09;
-  s += a("shackle", `<path d="M ${(lx - lr * 0.55).toFixed(1)} ${ly.toFixed(1)} a ${(lr * 0.55).toFixed(1)} ${(lr * 0.6).toFixed(1)} 0 0 1 ${(lr * 1.1).toFixed(1)} 0" stroke="#2f6f4f" stroke-width="${(lr * 0.26).toFixed(1)}" fill="none"/>`);
+  // The padlock, closed, sitting proud of the card.
+  const lx = w * 0.5, ly = h * 0.26, lr = Math.min(w, h) * 0.1;
+  s += a("shackle", `<path d="M ${(lx - lr * 0.55).toFixed(1)} ${ly.toFixed(1)} a ${(lr * 0.55).toFixed(1)} ${(lr * 0.62).toFixed(1)} 0 0 1 ${(lr * 1.1).toFixed(1)} 0" stroke="${shade(PAL.sage, 0.3)}" stroke-width="${(lr * 0.26).toFixed(1)}" fill="none" stroke-linecap="round"/>`);
   s += a("lockbody",
-    `<rect x="${(lx - lr * 0.8).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.6).toFixed(1)}" height="${(lr * 1.2).toFixed(1)}" rx="${(lr * 0.22).toFixed(1)}" fill="#3f8f5f"/>` +
-    `<circle cx="${lx.toFixed(1)}" cy="${(ly + lr * 0.55).toFixed(1)}" r="${(lr * 0.16).toFixed(1)}" fill="#e4f0e8"/>`);
+    `<rect x="${(lx - lr * 0.85).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.7).toFixed(1)}" height="${(lr * 1.25).toFixed(1)}" rx="${(lr * 0.24).toFixed(1)}" fill="${PAL.sage}"/>` +
+    `<rect x="${(lx - lr * 0.85).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.7).toFixed(1)}" height="${(lr * 0.45).toFixed(1)}" rx="${(lr * 0.22).toFixed(1)}" fill="${tint(PAL.sage, 0.22)}"/>` +
+    `<circle cx="${lx.toFixed(1)}" cy="${(ly + lr * 0.58).toFixed(1)}" r="${(lr * 0.15).toFixed(1)}" fill="${shade(PAL.sage, 0.45)}"/>`);
   return s;
 };
 
 S["share-doc"] = (w, h) => {
-  const g = linear([["0", "#eef2f7"], ["1", "#cfd9e4"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const dx = w * 0.14, dy = h * 0.18, dw = w * 0.34, dh = h * 0.64;
-  s += drop(dx + dw / 2, dy + dh + h * 0.03, dw * 0.5, h * 0.018);
-  s += `<rect x="${dx}" y="${dy}" width="${dw}" height="${dh}" rx="8" fill="#fff"/>`;
-  s += `<rect x="${dx}" y="${dy}" width="${dw}" height="${(dh * 0.09).toFixed(1)}" rx="8" fill="#4f7fbf"/>`;
-  for (let i = 0; i < 8; i++) {
-    s += `<rect x="${(dx + dw * 0.1).toFixed(1)}" y="${(dy + dh * 0.2 + i * dh * 0.085).toFixed(1)}" width="${(dw * (i % 4 === 3 ? 0.42 : 0.8)).toFixed(1)}" height="${(dh * 0.035).toFixed(1)}" rx="2" fill="#c8d0d8"/>`;
+  let s = stage(w, h, "#C6D2E2", { cy: 0.46, floor: 0.86 });
+  const dx = w * 0.13, dy = h * 0.14, dw = w * 0.36, dh = h * 0.7;
+  s += contact(dx + dw / 2, dy + dh + h * 0.03, dw * 0.5, h * 0.02, 0.2);
+  s += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${dw.toFixed(1)}" height="${dh.toFixed(1)}" rx="10" fill="${PAL.paper}"/>`;
+  s += `<path d="M ${dx.toFixed(1)} ${(dy + 10).toFixed(1)} a 10 10 0 0 1 10 -10 l ${(dw - 20).toFixed(1)} 0 a 10 10 0 0 1 10 10 l 0 ${(dh * 0.08).toFixed(1)} l ${(-dw).toFixed(1)} 0 Z" fill="${PAL.sky}"/>`;
+  for (let i = 0; i < 9; i++) {
+    s += `<rect x="${(dx + dw * 0.1).toFixed(1)}" y="${(dy + dh * 0.2 + i * dh * 0.078).toFixed(1)}" width="${(dw * (i % 4 === 3 ? 0.42 : 0.8)).toFixed(1)}" height="${(dh * 0.032).toFixed(1)}" rx="2" fill="${shade(PAL.mist, 0.08)}"/>`;
   }
-  // Two people, one link between them
   const face = (fx, fy, r, c) =>
     `<circle cx="${fx.toFixed(1)}" cy="${fy.toFixed(1)}" r="${r.toFixed(1)}" fill="${c}"/>` +
-    `<circle cx="${fx.toFixed(1)}" cy="${(fy - r * 0.28).toFixed(1)}" r="${(r * 0.34).toFixed(1)}" fill="#fff" opacity="0.9"/>` +
-    `<path d="M ${(fx - r * 0.52).toFixed(1)} ${(fy + r * 0.62).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.5).toFixed(1)} 0 0 1 ${(r * 1.04).toFixed(1)} 0 Z" fill="#fff" opacity="0.9"/>`;
-  s += a("link", `<path d="M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.44).toFixed(1)} L ${(w * 0.66).toFixed(1)} ${(h * 0.36).toFixed(1)} M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.75).toFixed(1)} ${(h * 0.63).toFixed(1)}" stroke="#4f7fbf" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 10"/>`);
-  s += a("face", face(w * 0.72, h * 0.34, Math.min(w, h) * 0.1, "#4f8f9f"), 0);
-  s += a("face", face(w * 0.82, h * 0.66, Math.min(w, h) * 0.1, "#9f6f4f"), 1);
-  return s;
-};
-
-S["drive-cloud"] = (w, h) => {
-  const g = linear([["0", "#9fcfe8"], ["1", "#dff0f8"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  s += cloudPath(w * 0.5, h * 0.44, Math.min(w, h) * 0.3);
-  // Folders inside the cloud
-  const folder = (fx, fy, fw, c) =>
-    `<path d="M ${fx.toFixed(1)} ${(fy + fw * 0.16).toFixed(1)} l 0 ${(fw * 0.56).toFixed(1)} l ${fw.toFixed(1)} 0 l 0 ${(-fw * 0.56).toFixed(1)} l ${(-fw * 0.52).toFixed(1)} 0 l ${(-fw * 0.1).toFixed(1)} ${(-fw * 0.12).toFixed(1)} l ${(-fw * 0.38).toFixed(1)} 0 Z" fill="${c}"/>`;
-  s += a("fold", folder(w * 0.34, h * 0.4, w * 0.1, "#e8b45f"), 0);
-  s += a("fold", folder(w * 0.47, h * 0.4, w * 0.1, "#7fb4e0"), 1);
-  s += a("fold", folder(w * 0.6, h * 0.4, w * 0.1, "#8fc48f"), 2);
+    `<circle cx="${fx.toFixed(1)}" cy="${(fy - r * 0.26).toFixed(1)}" r="${(r * 0.33).toFixed(1)}" fill="${PAL.paper}" opacity="0.95"/>` +
+    `<path d="M ${(fx - r * 0.5).toFixed(1)} ${(fy + r * 0.6).toFixed(1)} a ${(r * 0.53).toFixed(1)} ${(r * 0.48).toFixed(1)} 0 0 1 ${(r * 1.0).toFixed(1)} 0 Z" fill="${PAL.paper}" opacity="0.95"/>`;
+  s += a("link", `<path d="M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.4).toFixed(1)} L ${(w * 0.68).toFixed(1)} ${(h * 0.3).toFixed(1)} M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.52).toFixed(1)} L ${(w * 0.72).toFixed(1)} ${(h * 0.68).toFixed(1)}" stroke="${PAL.sky}" stroke-width="7" stroke-linecap="round" stroke-dasharray="16 12"/>`);
+  s += a("face", face(w * 0.75, h * 0.28, Math.min(w, h) * 0.115, PAL.teal), 0);
+  s += a("face", face(w * 0.79, h * 0.7, Math.min(w, h) * 0.115, "#B0764C"), 1);
   return s;
 };
 
 S["staying-connected"] = (w, h) => {
-  const g = linear([["0", "#f0e8f5"], ["1", "#d4c8e4"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const bubble = (bx, by, bw, bh, c, flip) =>
-    `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.34).toFixed(1)}" fill="${c}"/>` +
-    `<path d="M ${(flip ? bx + bw - bh * 0.1 : bx + bh * 0.1).toFixed(1)} ${(by + bh).toFixed(1)} l ${(flip ? bh * 0.3 : -bh * 0.3).toFixed(1)} ${(bh * 0.3).toFixed(1)} l ${(flip ? -bh * 0.42 : bh * 0.42).toFixed(1)} ${(-bh * 0.14).toFixed(1)} Z" fill="${c}"/>`;
-  // Each bubble carries its own lines of "text" so the group can pop in as one
-  // message — a conversation arriving a turn at a time, which is the idea.
-  const lines = (x0, y0) => {
+  let s = stage(w, h, "#CFC4E2", { cy: 0.46, floor: 0.9 });
+  const bubble = (bx, by, bw2, bh2, c, flip) =>
+    `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw2.toFixed(1)}" height="${bh2.toFixed(1)}" rx="${(bh2 * 0.42).toFixed(1)}" fill="${c}"/>` +
+    `<path d="M ${(flip ? bx + bw2 - bh2 * 0.1 : bx + bh2 * 0.1).toFixed(1)} ${(by + bh2).toFixed(1)} l ${(flip ? bh2 * 0.3 : -bh2 * 0.3).toFixed(1)} ${(bh2 * 0.3).toFixed(1)} l ${(flip ? -bh2 * 0.42 : bh2 * 0.42).toFixed(1)} ${(-bh2 * 0.14).toFixed(1)} Z" fill="${c}"/>`;
+  const lines = (x0, y0, n, wide) => {
     let t = "";
-    for (let i = 0; i < 3; i++) {
-      t += `<rect x="${(x0 + i * w * 0.07).toFixed(1)}" y="${y0.toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
+    for (let i = 0; i < n; i++) {
+      t += `<rect x="${x0.toFixed(1)}" y="${(y0 + i * h * 0.045).toFixed(1)}" width="${(wide * (i === n - 1 ? 0.6 : 1)).toFixed(1)}" height="${(h * 0.024).toFixed(1)}" rx="5" fill="${PAL.paper}" opacity="0.8"/>`;
     }
     return t;
   };
-  s += a("bub", bubble(w * 0.1, h * 0.2, w * 0.42, h * 0.16, "#7f8fd8", false) + lines(w * 0.16, h * 0.26), 0);
-  s += a("bub", bubble(w * 0.44, h * 0.46, w * 0.44, h * 0.16, "#8fc4a8", true) + lines(w * 0.5, h * 0.52), 1);
-  s += a("bub", bubble(w * 0.14, h * 0.7, w * 0.32, h * 0.14, "#7f8fd8", false), 2);
+  s += a("bub", bubble(w * 0.08, h * 0.14, w * 0.46, h * 0.2, "#6E7FD2") + lines(w * 0.12, h * 0.19, 2, w * 0.36), 0);
+  s += a("bub", bubble(w * 0.44, h * 0.42, w * 0.48, h * 0.2, "#5FA98A") + lines(w * 0.48, h * 0.47, 2, w * 0.38), 1);
+  s += a("bub", bubble(w * 0.12, h * 0.7, w * 0.34, h * 0.17, "#6E7FD2") + lines(w * 0.16, h * 0.755, 1, w * 0.24), 2);
   return s;
 };
 
 S["settings-adapt"] = (w, h) => {
-  const g = linear([["0", "#eef1f5"], ["1", "#cfd6de"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const px = w * 0.14, py = h * 0.16, pw = w * 0.72, ph = h * 0.68;
-  s += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="12" fill="#fff"/>`;
-  const rows = [
-    ["Text size", 0.72], ["Brightness", 0.4], ["Contrast", 0.58],
-  ];
+  let s = stage(w, h, "#C6D0DE", { cy: 0.46, floor: 0.9 });
+  const px = w * 0.11, py = h * 0.12, pw = w * 0.78, ph = h * 0.76;
+  s += contact(w * 0.5, py + ph + h * 0.03, pw * 0.48, h * 0.022, 0.2);
+  s += `<rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="18" fill="${PAL.paper}"/>`;
+  s += `<path d="M ${px.toFixed(1)} ${(py + 18).toFixed(1)} a 18 18 0 0 1 18 -18 l ${(pw - 36).toFixed(1)} 0 a 18 18 0 0 1 18 18 l 0 ${(ph * 0.12).toFixed(1)} l ${(-pw).toFixed(1)} 0 Z" fill="${shade(PAL.mist, 0.03)}"/>`;
+  s += `<rect x="${(px + pw * 0.06).toFixed(1)}" y="${(py + ph * 0.045).toFixed(1)}" width="${(pw * 0.26).toFixed(1)}" height="${(ph * 0.04).toFixed(1)}" rx="5" fill="${PAL.steel}" opacity="0.65"/>`;
+  const rows = [["Text size", 0.72], ["Brightness", 0.4], ["Contrast", 0.58]];
   rows.forEach(([label, v], i) => {
-    const ry = py + ph * (0.16 + i * 0.2);
+    const ry = py + ph * (0.26 + i * 0.17);
     s += a("row",
-      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>` +
-      `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#dde3ea"/>` +
-      `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5 * v).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#4f8fcf"/>` +
-      `<circle cx="${(px + pw * (0.42 + 0.5 * v)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.038).toFixed(1)}" fill="#fff" stroke="#4f8fcf" stroke-width="4"/>`, i);
+      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 8).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.066).toFixed(1)}" fill="${PAL.slate}">${label}</text>` +
+      `<rect x="${(px + pw * 0.44).toFixed(1)}" y="${(ry - ph * 0.016).toFixed(1)}" width="${(pw * 0.48).toFixed(1)}" height="${(ph * 0.032).toFixed(1)}" rx="${(ph * 0.016).toFixed(1)}" fill="${shade(PAL.mist, 0.02)}"/>` +
+      `<rect x="${(px + pw * 0.44).toFixed(1)}" y="${(ry - ph * 0.016).toFixed(1)}" width="${(pw * 0.48 * v).toFixed(1)}" height="${(ph * 0.032).toFixed(1)}" rx="${(ph * 0.016).toFixed(1)}" fill="${PAL.sky}"/>` +
+      `<circle cx="${(px + pw * (0.44 + 0.48 * v)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.042).toFixed(1)}" fill="${PAL.paper}" stroke="${PAL.sky}" stroke-width="4"/>`, i);
   });
-  // Two toggles below
   [["Dark mode", true], ["Reduce motion", false]].forEach(([label, on], i) => {
-    const ry = py + ph * (0.72 + i * 0.16);
+    const ry = py + ph * (0.77 + i * 0.14);
     s += a("row",
-      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>` +
-      `<rect x="${(px + pw * 0.78).toFixed(1)}" y="${(ry - ph * 0.036).toFixed(1)}" width="${(pw * 0.14).toFixed(1)}" height="${(ph * 0.072).toFixed(1)}" rx="${(ph * 0.036).toFixed(1)}" fill="${on ? "#4f8fcf" : "#c8d0d8"}"/>` +
-      `<circle cx="${(px + pw * (on ? 0.885 : 0.815)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.029).toFixed(1)}" fill="#fff"/>`, i + 3);
+      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 8).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.066).toFixed(1)}" fill="${PAL.slate}">${label}</text>` +
+      `<rect x="${(px + pw * 0.78).toFixed(1)}" y="${(ry - ph * 0.04).toFixed(1)}" width="${(pw * 0.14).toFixed(1)}" height="${(ph * 0.08).toFixed(1)}" rx="${(ph * 0.04).toFixed(1)}" fill="${on ? PAL.sky : shade(PAL.mist, 0.06)}"/>` +
+      `<circle cx="${(px + pw * (on ? 0.885 : 0.815)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.031).toFixed(1)}" fill="${PAL.paper}"/>`, i + 3);
   });
   return s;
 };
 
 S["holiday-away"] = (w, h) => {
-  const sky = linear([["0", "#7fc4e8"], ["0.62", "#ffd8a8"], ["1", "#f5e0c0"]]);
+  const sky = linear([["0", "#7FC4E8"], ["0.55", "#FFD8A8"], ["1", "#F7E3C4"]]);
   let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
-  s += a("sun", `<circle cx="${(w * 0.74).toFixed(1)}" cy="${(h * 0.3).toFixed(1)}" r="${(Math.min(w, h) * 0.11).toFixed(1)}" fill="#fff0c0"/>`);
-  s += `<rect x="0" y="${(h * 0.62).toFixed(1)}" width="${w}" height="${(h * 0.1).toFixed(1)}" fill="#6fb4cf"/>`;
-  s += `<rect x="0" y="${(h * 0.72).toFixed(1)}" width="${w}" height="${(h * 0.28).toFixed(1)}" fill="#f0dcb0"/>`;
-  // A deckchair: a canvas back leaning on a frame, a seat, and legs. It used to
-  // be a single red parallelogram, which read as a fallen sign.
-  const cx0 = w * 0.24, seatY = h * 0.82;
-  s += drop(w * 0.3, h * 0.9, w * 0.1, h * 0.014, 0.12);
-  s += `<line x1="${cx0.toFixed(1)}" y1="${(h * 0.9).toFixed(1)}" x2="${(w * 0.33).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
-  s += `<line x1="${(w * 0.36).toFixed(1)}" y1="${(h * 0.9).toFixed(1)}" x2="${(w * 0.3).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
-  s += `<path d="M ${(w * 0.255).toFixed(1)} ${(h * 0.68).toFixed(1)} L ${(w * 0.315).toFixed(1)} ${(h * 0.69).toFixed(1)} L ${(w * 0.345).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.285).toFixed(1)} ${seatY.toFixed(1)} Z" fill="#e0654f"/>`;
-  s += `<path d="M ${(w * 0.285).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.345).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.38).toFixed(1)} ${(h * 0.845).toFixed(1)} L ${(w * 0.32).toFixed(1)} ${(h * 0.845).toFixed(1)} Z" fill="#c9553f"/>`;
-  s += `<line x1="${(w * 0.255).toFixed(1)}" y1="${(h * 0.68).toFixed(1)}" x2="${(w * 0.315).toFixed(1)}" y2="${(h * 0.69).toFixed(1)}" stroke="#a5825c" stroke-width="6" stroke-linecap="round"/>`;
-  // The laptop, shut, left on the sand — the whole point of the picture.
-  s += drop(w * 0.585, h * 0.845, w * 0.075, h * 0.012, 0.12);
-  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.034).toFixed(1)}" rx="5" fill="#5f6b78"/>`;
-  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.017).toFixed(1)}" rx="5" fill="#98a4b2"/>`;
-  // Palm
-  s += `<path d="M ${(w * 0.82).toFixed(1)} ${(h * 0.86).toFixed(1)} q ${(-w * 0.02).toFixed(1)} ${(-h * 0.24).toFixed(1)} ${(w * 0.01).toFixed(1)} ${(-h * 0.4).toFixed(1)}" stroke="#8a6a4a" stroke-width="10" fill="none" stroke-linecap="round"/>`;
-  // The fronds sway; the trunk does not. Grouping each frond around the crown
-  // means the rotation the sway adds composes with the one that placed it.
+  s += a("sun", `<circle cx="${(w * 0.73).toFixed(1)}" cy="${(h * 0.3).toFixed(1)}" r="${(Math.min(w, h) * 0.13).toFixed(1)}" fill="#FFF2C8" opacity="0.95"/>`);
+  s += `<rect x="0" y="${(h * 0.6).toFixed(1)}" width="${w}" height="${(h * 0.11).toFixed(1)}" fill="#5FA8C4"/>`;
+  s += `<rect x="0" y="${(h * 0.68).toFixed(1)}" width="${w}" height="${(h * 0.04).toFixed(1)}" fill="#8FCADC" opacity="0.7"/>`;
+  s += `<rect x="0" y="${(h * 0.71).toFixed(1)}" width="${w}" height="${(h * 0.29).toFixed(1)}" fill="#EFDCB4"/>`;
+  // Deckchair.
+  const seatY = h * 0.83;
+  s += contact(w * 0.3, h * 0.92, w * 0.11, h * 0.018, 0.16);
+  s += `<line x1="${(w * 0.24).toFixed(1)}" y1="${(h * 0.92).toFixed(1)}" x2="${(w * 0.33).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#A5825C" stroke-width="8" stroke-linecap="round"/>`;
+  s += `<line x1="${(w * 0.37).toFixed(1)}" y1="${(h * 0.92).toFixed(1)}" x2="${(w * 0.3).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#A5825C" stroke-width="8" stroke-linecap="round"/>`;
+  s += `<path d="M ${(w * 0.253).toFixed(1)} ${(h * 0.67).toFixed(1)} L ${(w * 0.318).toFixed(1)} ${(h * 0.681).toFixed(1)} L ${(w * 0.348).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.283).toFixed(1)} ${seatY.toFixed(1)} Z" fill="${PAL.coral}"/>`;
+  s += `<path d="M ${(w * 0.283).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.348).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.385).toFixed(1)} ${(h * 0.858).toFixed(1)} L ${(w * 0.32).toFixed(1)} ${(h * 0.858).toFixed(1)} Z" fill="${shade(PAL.coral, 0.18)}"/>`;
+  s += `<line x1="${(w * 0.253).toFixed(1)}" y1="${(h * 0.67).toFixed(1)}" x2="${(w * 0.318).toFixed(1)}" y2="${(h * 0.681).toFixed(1)}" stroke="#A5825C" stroke-width="7" stroke-linecap="round"/>`;
+  // The laptop, shut, left on the sand.
+  s += contact(w * 0.575, h * 0.878, w * 0.08, h * 0.014, 0.16);
+  s += `<rect x="${(w * 0.51).toFixed(1)}" y="${(h * 0.83).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.036).toFixed(1)}" rx="6" fill="${PAL.slate}"/>`;
+  s += `<rect x="${(w * 0.51).toFixed(1)}" y="${(h * 0.83).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.017).toFixed(1)}" rx="6" fill="${PAL.steel}"/>`;
+  // Palm.
+  s += `<path d="M ${(w * 0.83).toFixed(1)} ${(h * 0.9).toFixed(1)} q ${(-w * 0.025).toFixed(1)} ${(-h * 0.26).toFixed(1)} ${(w * 0.012).toFixed(1)} ${(-h * 0.44).toFixed(1)}" stroke="#8A6A4A" stroke-width="12" fill="none" stroke-linecap="round"/>`;
   let fronds = "";
-  for (let i = 0; i < 5; i++) {
-    const deg = -140 + i * 55;
-    fronds += `<ellipse cx="${(w * 0.83).toFixed(1)}" cy="${(h * 0.46).toFixed(1)}" rx="${(w * 0.075).toFixed(1)}" ry="${(h * 0.024).toFixed(1)}" fill="#3f8f5f" transform="rotate(${deg} ${(w * 0.83).toFixed(1)} ${(h * 0.46).toFixed(1)})"/>`;
+  for (let i = 0; i < 6; i++) {
+    const deg = -150 + i * 48;
+    fronds += `<ellipse cx="${(w * 0.842).toFixed(1)}" cy="${(h * 0.44).toFixed(1)}" rx="${(w * 0.085).toFixed(1)}" ry="${(h * 0.026).toFixed(1)}" fill="${i % 2 ? "#3F8F5F" : "#4EA06B"}" transform="rotate(${deg} ${(w * 0.842).toFixed(1)} ${(h * 0.44).toFixed(1)})"/>`;
   }
   s += a("crown", fronds);
   return s;
 };
 
 S["graduation"] = (w, h) => {
-  const g = radial([["0", "#fff4d8"], ["1", "#e8d9b8"]], { r: 0.75 });
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  // Certificate
-  const cx = w * 0.5, cw = w * 0.5, ch = cw * 0.72, cy = h * 0.56 - ch / 2;
-  s += drop(cx, cy + ch + h * 0.04, cw * 0.5, h * 0.02);
-  s += `<rect x="${(cx - cw / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="6" fill="#fffdf7"/>`;
-  s += `<rect x="${(cx - cw / 2 + 10).toFixed(1)}" y="${(cy + 10).toFixed(1)}" width="${(cw - 20).toFixed(1)}" height="${(ch - 20).toFixed(1)}" rx="3" fill="none" stroke="#c9a45f" stroke-width="4"/>`;
+  let s = stage(w, h, "#E4CE9C", { cy: 0.46, floor: 0.86 });
+  const cx = w * 0.5, cw = w * 0.56, ch = cw * 0.72, cy = h * 0.58 - ch / 2;
+  s += contact(cx, cy + ch + h * 0.04, cw * 0.5, h * 0.025, 0.22);
+  s += `<rect x="${(cx - cw / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="8" fill="${PAL.paper}"/>`;
+  s += `<rect x="${(cx - cw / 2 + 12).toFixed(1)}" y="${(cy + 12).toFixed(1)}" width="${(cw - 24).toFixed(1)}" height="${(ch - 24).toFixed(1)}" rx="4" fill="none" stroke="${PAL.gold}" stroke-width="4"/>`;
+  s += `<rect x="${(cx - cw / 2 + 20).toFixed(1)}" y="${(cy + 20).toFixed(1)}" width="${(cw - 40).toFixed(1)}" height="${(ch - 40).toFixed(1)}" rx="2" fill="none" stroke="${PAL.gold}" stroke-width="1.5" opacity="0.55"/>`;
   for (let i = 0; i < 4; i++) {
-    s += `<rect x="${(cx - cw * 0.3).toFixed(1)}" y="${(cy + ch * (0.34 + i * 0.13)).toFixed(1)}" width="${(cw * (i === 3 ? 0.28 : 0.6)).toFixed(1)}" height="${(ch * 0.045).toFixed(1)}" rx="3" fill="#d8d2c4"/>`;
+    s += `<rect x="${(cx - cw * (i === 3 ? 0.14 : 0.3)).toFixed(1)}" y="${(cy + ch * (0.36 + i * 0.13)).toFixed(1)}" width="${(cw * (i === 3 ? 0.28 : 0.6)).toFixed(1)}" height="${(ch * 0.048).toFixed(1)}" rx="3" fill="${shade(PAL.mist, 0.06)}"/>`;
   }
-  s += a("seal", `<circle cx="${(cx + cw * 0.3).toFixed(1)}" cy="${(cy + ch * 0.76).toFixed(1)}" r="${(ch * 0.11).toFixed(1)}" fill="#c9a45f"/>`);
-  // Cap
-  const mx = cx, my = h * 0.22, mw = w * 0.26;
-  s += `<polygon points="${mx.toFixed(1)},${(my - mw * 0.16).toFixed(1)} ${(mx + mw / 2).toFixed(1)},${my.toFixed(1)} ${mx.toFixed(1)},${(my + mw * 0.16).toFixed(1)} ${(mx - mw / 2).toFixed(1)},${my.toFixed(1)}" fill="#2f3540"/>`;
-  s += `<path d="M ${(mx - mw * 0.22).toFixed(1)} ${(my + mw * 0.07).toFixed(1)} l 0 ${(mw * 0.16).toFixed(1)} q ${(mw * 0.22).toFixed(1)} ${(mw * 0.1).toFixed(1)} ${(mw * 0.44).toFixed(1)} 0 l 0 ${(-mw * 0.16).toFixed(1)} Z" fill="#3f4750"/>`;
-  // The tassel swings from where it is pinned at the corner of the cap.
+  s += a("seal",
+    `<circle cx="${(cx + cw * 0.29).toFixed(1)}" cy="${(cy + ch * 0.77).toFixed(1)}" r="${(ch * 0.12).toFixed(1)}" fill="${PAL.gold}"/>` +
+    `<circle cx="${(cx + cw * 0.29).toFixed(1)}" cy="${(cy + ch * 0.77).toFixed(1)}" r="${(ch * 0.085).toFixed(1)}" fill="none" stroke="${tint(PAL.gold, 0.45)}" stroke-width="2.5"/>`);
+  // Cap, resting on the top edge of the certificate.
+  const mx = cx, my = h * 0.235, mw = w * 0.3;
+  s += `<polygon points="${mx.toFixed(1)},${(my - mw * 0.17).toFixed(1)} ${(mx + mw / 2).toFixed(1)},${my.toFixed(1)} ${mx.toFixed(1)},${(my + mw * 0.17).toFixed(1)} ${(mx - mw / 2).toFixed(1)},${my.toFixed(1)}" fill="${PAL.ink}"/>`;
+  s += `<path d="M ${(mx - mw * 0.22).toFixed(1)} ${(my + mw * 0.075).toFixed(1)} l 0 ${(mw * 0.17).toFixed(1)} q ${(mw * 0.22).toFixed(1)} ${(mw * 0.11).toFixed(1)} ${(mw * 0.44).toFixed(1)} 0 l 0 ${(-mw * 0.17).toFixed(1)} Z" fill="${shade(PAL.slate, 0.15)}"/>`;
   s += a("tassel",
-    `<line x1="${(mx + mw / 2).toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + mw * 0.56).toFixed(1)}" y2="${(my + mw * 0.28).toFixed(1)}" stroke="#e0a83f" stroke-width="5"/>` +
-    `<circle cx="${(mx + mw * 0.56).toFixed(1)}" cy="${(my + mw * 0.3).toFixed(1)}" r="${(mw * 0.045).toFixed(1)}" fill="#e0a83f"/>`,
+    `<line x1="${(mx + mw / 2).toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + mw * 0.57).toFixed(1)}" y2="${(my + mw * 0.29).toFixed(1)}" stroke="${PAL.gold}" stroke-width="6" stroke-linecap="round"/>` +
+    `<circle cx="${(mx + mw * 0.57).toFixed(1)}" cy="${(my + mw * 0.31).toFixed(1)}" r="${(mw * 0.05).toFixed(1)}" fill="${PAL.gold}"/>`,
     undefined,
     `transform-box:view-box;transform-origin:${(mx + mw / 2).toFixed(1)}px ${my.toFixed(1)}px`);
   return s;
 };
 
-/**
- * The power symbol. Its two lessons used to point at loose 512px PNGs in
- * `public/playgrounds/` — the only two no-activity lessons whose picture came
- * from outside this generator, and so the only two that missed the shared
- * finish and the motion.
- */
-S["power-symbol"] = (w, h) => {
-  const g = radial([["0", "#f4f7fa"], ["1", "#d3dde7"]], { r: 0.72 });
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const cx = w * 0.5, cy = h * 0.52, r = Math.min(w, h) * 0.26;
-  s += drop(cx, cy + r * 1.35, r * 0.9, r * 0.13);
-  s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.16).toFixed(1)}" fill="#39424d"/>`;
-  s += a("halo", `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.16).toFixed(1)}" fill="none" stroke="#8fd47f" stroke-width="${(r * 0.1).toFixed(1)}"/>`);
-  // The symbol itself: a ring broken at the top, and a bar through the break.
-  const rr = r * 0.6;
-  s += a("glyph",
-    `<path d="M ${(cx - rr * 0.78).toFixed(1)} ${(cy - rr * 0.5).toFixed(1)} a ${rr.toFixed(1)} ${rr.toFixed(1)} 0 1 0 ${(rr * 1.56).toFixed(1)} 0" fill="none" stroke="#f4f7fa" stroke-width="${(r * 0.17).toFixed(1)}" stroke-linecap="round"/>` +
-    `<line x1="${cx.toFixed(1)}" y1="${(cy - rr * 1.12).toFixed(1)}" x2="${cx.toFixed(1)}" y2="${(cy - rr * 0.05).toFixed(1)}" stroke="#f4f7fa" stroke-width="${(r * 0.17).toFixed(1)}" stroke-linecap="round"/>`);
+S["hardware-trouble"] = (w, h) => {
+  let s = laptop(w, h, "none");
+  const cx = w * 0.79, cy = h * 0.24, r = Math.min(w, h) * 0.13;
+  s += a("warn",
+    `<circle cx="${cx.toFixed(1)}" cy="${(cy + r * 0.08).toFixed(1)}" r="${r.toFixed(1)}" fill="${shade(PAL.amber, 0.35)}" opacity="0.3"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${PAL.amber}"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 0.84).toFixed(1)}" fill="${tint(PAL.amber, 0.86)}"/>` +
+    `<rect x="${(cx - r * 0.1).toFixed(1)}" y="${(cy - r * 0.46).toFixed(1)}" width="${(r * 0.2).toFixed(1)}" height="${(r * 0.58).toFixed(1)}" rx="${(r * 0.1).toFixed(1)}" fill="${shade(PAL.amber, 0.45)}"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${(cy + r * 0.4).toFixed(1)}" r="${(r * 0.12).toFixed(1)}" fill="${shade(PAL.amber, 0.45)}"/>`);
   return s;
 };
 
-/** A charging cable, with the current running along it. */
-S["charger-cable"] = (w, h) => {
-  const g = linear([["0", "#f2f5f8"], ["1", "#d5dee6"]]);
-  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  const y = h * 0.5;
-  // Wall plug on the left, laptop connector on the right.
-  s += `<rect x="${(w * 0.08).toFixed(1)}" y="${(y - h * 0.11).toFixed(1)}" width="${(w * 0.12).toFixed(1)}" height="${(h * 0.22).toFixed(1)}" rx="10" fill="#eef2f6" stroke="#8f9baa" stroke-width="4"/>`;
-  [-1, 1].forEach((d) => {
-    s += `<rect x="${(w * 0.045).toFixed(1)}" y="${(y + d * h * 0.06 - h * 0.018).toFixed(1)}" width="${(w * 0.038).toFixed(1)}" height="${(h * 0.036).toFixed(1)}" rx="3" fill="#9fabb8"/>`;
+/**
+ * A street map with a route on it.
+ *
+ * The grid is the load-bearing part. Roads sit at fixed centers, blocks fill the
+ * gaps *between* them, and the route runs down the middle of real roads — so it
+ * reads as a way through a town. On three unrelated grids (which is how this
+ * started) the blocks straddled the streets and it read as beige confetti.
+ */
+S["map-route"] = (w, h) => {
+  const COL = [0.06, 0.20, 0.34, 0.48, 0.62, 0.76, 0.90];
+  const ROW = [0.09, 0.29, 0.49, 0.69, 0.89];
+  let s = `<rect width="${w}" height="${h}" fill="#E9E1CF"/>`;
+  COL.forEach((fx) => {
+    s += `<rect x="${(w * fx - w * 0.011).toFixed(1)}" y="0" width="${(w * 0.022).toFixed(1)}" height="${h}" fill="#F8F5EC"/>`;
   });
-  const cable = `M ${(w * 0.2).toFixed(1)} ${y.toFixed(1)} C ${(w * 0.36).toFixed(1)} ${(y - h * 0.26).toFixed(1)} ${(w * 0.5).toFixed(1)} ${(y + h * 0.26).toFixed(1)} ${(w * 0.64).toFixed(1)} ${y.toFixed(1)}`;
-  s += `<path d="${cable}" stroke="#6f7b89" stroke-width="14" fill="none" stroke-linecap="round"/>`;
-  // The charge itself, running plug-to-laptop along the same curve. The dash
-  // pattern lives in the markup, not the stylesheet: the still has to show one
-  // travelling segment, and a CSS-only pattern would paint the whole cable
-  // green for every learner who asked for reduced motion.
-  s += a("charge", `<path d="${cable}" stroke="#8fd47f" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 700" stroke-dashoffset="430"/>`);
-  s += `<rect x="${(w * 0.63).toFixed(1)}" y="${(y - h * 0.045).toFixed(1)}" width="${(w * 0.07).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#b4bfcc" stroke="#6f7b89" stroke-width="4"/>`;
+  ROW.forEach((fy) => {
+    s += `<rect x="0" y="${(h * fy - h * 0.011).toFixed(1)}" width="${w}" height="${(h * 0.022).toFixed(1)}" fill="#F8F5EC"/>`;
+  });
+  for (let ci = 0; ci < COL.length - 1; ci++) {
+    for (let ri = 0; ri < ROW.length - 1; ri++) {
+      const x0 = w * COL[ci] + w * 0.015, x1 = w * COL[ci + 1] - w * 0.015;
+      const y0 = h * ROW[ri] + h * 0.022, y1 = h * ROW[ri + 1] - h * 0.022;
+      const park = ci === 1 && ri === 1;
+      s += `<rect x="${x0.toFixed(1)}" y="${y0.toFixed(1)}" width="${(x1 - x0).toFixed(1)}" height="${(y1 - y0).toFixed(1)}" rx="6" fill="${park ? "#B6D0A8" : (ci + ri) % 3 ? "#DCD2BB" : "#D3D9C2"}"/>`;
+    }
+  }
+  const Pt = (fx, fy) => `${(w * fx).toFixed(1)} ${(h * fy).toFixed(1)}`;
+  const route = `M ${Pt(0.20, 0.89)} L ${Pt(0.20, 0.69)} L ${Pt(0.62, 0.69)} L ${Pt(0.62, 0.29)}`;
+  s += `<path d="${route}" stroke="${PAL.paper}" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += `<path d="${route}" stroke="#2F6FDF" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  // A brighter segment travels the route rather than drawing it on: a draw-on
+  // plays once, so a learner who looks up late has missed it, and any paused
+  // timeline leaves a map with no route. The dashes live in the markup.
+  s += a("route", `<path d="${route}" stroke="#8FBAF7" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="150 1000" stroke-dashoffset="0"/>`);
+  const pin = (fx, fy, c) => {
+    const px = w * fx, py = h * fy;
+    return `<ellipse cx="${px.toFixed(1)}" cy="${(py + h * 0.008).toFixed(1)}" rx="${(w * 0.02).toFixed(1)}" ry="${(h * 0.009).toFixed(1)}" fill="#101820" opacity="0.22"/>` +
+      `<path d="M ${px.toFixed(1)} ${py.toFixed(1)} c ${(-w * 0.036).toFixed(1)} ${(-h * 0.055).toFixed(1)} ${(-w * 0.036).toFixed(1)} ${(-h * 0.12).toFixed(1)} 0 ${(-h * 0.145).toFixed(1)} c ${(w * 0.036).toFixed(1)} ${(h * 0.025).toFixed(1)} ${(w * 0.036).toFixed(1)} ${(h * 0.09).toFixed(1)} 0 ${(h * 0.145).toFixed(1)} Z" fill="${c}"/>` +
+      `<circle cx="${px.toFixed(1)}" cy="${(py - h * 0.098).toFixed(1)}" r="${(w * 0.014).toFixed(1)}" fill="${PAL.paper}"/>`;
+  };
+  s += pin(0.20, 0.89, "#3F7F4F");
+  s += a("pinB", pin(0.62, 0.29, "#CF3F3F"));
+  return s;
+};
+
+/** The power symbol, on the button it lives on. */
+S["power-symbol"] = (w, h) => {
+  let s = stage(w, h, "#C6D2E0", { cy: 0.46, floor: 0.84 });
+  const cx = w * 0.5, cy = h * 0.5, r = Math.min(w, h) * 0.27;
+  s += contact(cx, cy + r * 1.28, r * 0.92, h * 0.026, 0.24);
+  s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.18).toFixed(1)}" fill="${shade(PAL.mist, 0.06)}"/>`;
+  const btn = linear([["0", shade(PAL.slate, 0.02)], ["1", shade(PAL.ink, 0.12)]]);
+  s += `<defs>${btn.def}</defs><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="url(#${btn.gid})"/>`;
+  s += a("halo", `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.09).toFixed(1)}" fill="none" stroke="#8FD47F" stroke-width="${(r * 0.085).toFixed(1)}"/>`);
+  const rr = r * 0.55;
+  s += a("glyph",
+    `<path d="M ${(cx - rr * 0.8).toFixed(1)} ${(cy - rr * 0.46).toFixed(1)} a ${rr.toFixed(1)} ${rr.toFixed(1)} 0 1 0 ${(rr * 1.6).toFixed(1)} 0" fill="none" stroke="${PAL.paper}" stroke-width="${(r * 0.14).toFixed(1)}" stroke-linecap="round"/>` +
+    `<line x1="${cx.toFixed(1)}" y1="${(cy - rr * 1.15).toFixed(1)}" x2="${cx.toFixed(1)}" y2="${(cy - rr * 0.02).toFixed(1)}" stroke="${PAL.paper}" stroke-width="${(r * 0.14).toFixed(1)}" stroke-linecap="round"/>`);
+  return s;
+};
+
+/** A charging cable, with the current running along it into a laptop. */
+S["charger-cable"] = (w, h) => {
+  let s = stage(w, h, "#C8D4E2", { cy: 0.46, floor: 0.86 });
+  const y = h * 0.42;
+  // Wall plug.
+  s += `<rect x="${(w * 0.06).toFixed(1)}" y="${(y - h * 0.11).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.22).toFixed(1)}" rx="12" fill="${PAL.paper}" stroke="${PAL.steel}" stroke-width="4"/>`;
+  [-1, 1].forEach((d) => {
+    s += `<rect x="${(w * 0.03).toFixed(1)}" y="${(y + d * h * 0.058 - h * 0.018).toFixed(1)}" width="${(w * 0.036).toFixed(1)}" height="${(h * 0.036).toFixed(1)}" rx="3" fill="${PAL.steel}"/>`;
+  });
+  const cable = `M ${(w * 0.19).toFixed(1)} ${y.toFixed(1)} C ${(w * 0.34).toFixed(1)} ${(y - h * 0.24).toFixed(1)} ${(w * 0.46).toFixed(1)} ${(y + h * 0.24).toFixed(1)} ${(w * 0.6).toFixed(1)} ${y.toFixed(1)}`;
+  s += `<path d="${cable}" stroke="${PAL.slate}" stroke-width="15" fill="none" stroke-linecap="round"/>`;
+  // The charge itself. The dash pattern is in the markup so a still frame shows
+  // one travelling segment rather than a wholly green cable.
+  s += a("charge", `<path d="${cable}" stroke="#8FD47F" stroke-width="15" fill="none" stroke-linecap="round" stroke-dasharray="90 700" stroke-dashoffset="430"/>`);
+  s += `<rect x="${(w * 0.59).toFixed(1)}" y="${(y - h * 0.045).toFixed(1)}" width="${(w * 0.07).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="5" fill="${PAL.mist}" stroke="${PAL.slate}" stroke-width="4"/>`;
   // A small laptop at the far end, so the picture says what the cable is for.
-  const lx = w * 0.72, lby = y + h * 0.14, lbw = w * 0.2, lbh = h * 0.035;
-  s += drop(lx + lbw / 2, lby + lbh * 1.6, lbw * 0.55, lbh * 0.8);
-  s += `<path d="M ${(lx + lbw * 0.08).toFixed(1)} ${lby.toFixed(1)} L ${(lx + lbw * 0.16).toFixed(1)} ${(lby - h * 0.26).toFixed(1)} L ${(lx + lbw * 0.84).toFixed(1)} ${(lby - h * 0.26).toFixed(1)} L ${(lx + lbw * 0.92).toFixed(1)} ${lby.toFixed(1)} Z" fill="#4a5765"/>`;
-  s += `<rect x="${(lx + lbw * 0.18).toFixed(1)}" y="${(lby - h * 0.235).toFixed(1)}" width="${(lbw * 0.64).toFixed(1)}" height="${(h * 0.2).toFixed(1)}" rx="3" fill="#7fa8cf"/>`;
-  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${lbh.toFixed(1)}" rx="${(lbh * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
-  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${(lbh * 0.42).toFixed(1)}" rx="${(lbh * 0.25).toFixed(1)}" fill="#b4bfcc"/>`;
+  const lx = w * 0.665, lby = y + h * 0.2, lbw = w * 0.26, lbh = h * 0.042;
+  s += contact(lx + lbw / 2, lby + lbh * 1.7, lbw * 0.55, h * 0.02, 0.2);
+  s += `<path d="M ${(lx + lbw * 0.09).toFixed(1)} ${lby.toFixed(1)} L ${(lx + lbw * 0.17).toFixed(1)} ${(lby - h * 0.3).toFixed(1)} L ${(lx + lbw * 0.83).toFixed(1)} ${(lby - h * 0.3).toFixed(1)} L ${(lx + lbw * 0.91).toFixed(1)} ${lby.toFixed(1)} Z" fill="${shade(PAL.ink, 0.05)}"/>`;
+  const sc = linear([["0", "#6FA8DC"], ["1", "#8CC7A8"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  s += `<defs>${sc.def}</defs><rect x="${(lx + lbw * 0.19).toFixed(1)}" y="${(lby - h * 0.272).toFixed(1)}" width="${(lbw * 0.62).toFixed(1)}" height="${(h * 0.235).toFixed(1)}" rx="3" fill="url(#${sc.gid})"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${lbh.toFixed(1)}" rx="${(lbh * 0.32).toFixed(1)}" fill="${shade(PAL.steel, 0.28)}"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${(lbh * 0.45).toFixed(1)}" rx="${(lbh * 0.28).toFixed(1)}" fill="${tint(PAL.steel, 0.4)}"/>`;
   return s;
 };
 

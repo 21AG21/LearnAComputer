@@ -1187,6 +1187,31 @@ Keep them separate: `PhotosApp` renders `PHOTO_ASSETS` wholesale, so an avatar
 or a lesson diagram landing in that folder shows up in the learner's photo
 library.
 
+**The lesson art has one palette (`PAL`) and one ground (`stage()`). Use them.**
+The first version let every scene invent its own gradient and the result was
+sixteen near-identical gray-blue hazes nobody had chosen, plus a few unrelated
+tints that read as accidents. A new scene picks a tint for `stage()` from the
+existing families rather than mixing a fresh one, and takes its colors from
+`PAL`; `contact()` is the grounded shadow that stops a subject floating.
+
+**The callout is the most important mark in the set** — on most of these,
+naming one part *is* the lesson — so `glowRect`/`glowCircle` are deliberately
+loud: a blurred amber bloom, a crisp ring, a bright inner line. Two things about
+them are load-bearing. The bloom is a blurred **stroke**, never a fill: filled,
+it floods whatever it surrounds, and on the screen (the largest target in the
+set) it turned the wallpaper olive and hid the thing it was pointing at. And its
+size is capped in absolute terms, because scaled to the target it looked right
+on a port and drowned the frame on a screen. A run of adjacent keys gets **one**
+ring around the run, not one per key — ten amber boxes in a row read as
+decoration.
+
+Two geometry rules the drawings learned the hard way: the laptop lid is
+**square-on, not tapered**, because a tapered lid means a trapezoidal screen and
+the callout ring is a rectangle — the two never lined up. The deck below it
+*does* keep its perspective, and needs it: drawn flat it was eleven pixels tall
+and the keyboard came out as a solid bar, on the lesson whose subject is the
+keyboard.
+
 **Unit 1's and Unit 2's lesson art is deliberately one drawing repeated.** The
 same laptop with a different part outlined, the same keyboard with a different
 key outlined — so a learner meeting the seventh of them recognizes the machine
