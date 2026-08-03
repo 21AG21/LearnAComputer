@@ -16,7 +16,8 @@
     "ring-check": "node scripts/ring-check.mjs",
     "stray-check": "node scripts/stray-check.mjs",
     "simdark-check": "node scripts/simdark-check.mjs",
-    "sim-contrast-check": "node scripts/sim-contrast-check.mjs"
+    "sim-contrast-check": "node scripts/sim-contrast-check.mjs",
+    "motion-check": "node scripts/motion-check.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

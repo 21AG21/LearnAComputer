@@ -35,6 +35,7 @@ python3 scripts/audit-order.py    # curriculum-shape report: order, module size,
 python3 scripts/check-a11y.py     # every <img>/<Image> and lesson media has an alt (a gate)
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 npm run ring-check                # is every highlighted control actually ON SCREEN? (a gate)
+npm run motion-check              # does the lesson art move — and stop when asked?
 ```
 
 All the browser checks need `npm run dev` running on :3000 first.
@@ -1175,6 +1176,13 @@ all seeded so re-running is byte-identical:
 | `SITE_MANIFEST` | `public/site/` | `lib/siteArt.ts` | contact portraits, practice-website pictures |
 | `LESSON_MANIFEST` | `public/lesson/` | `lib/lessonArt.ts` | the picture beside a no-activity lesson, keyed by slug |
 
+The first two rasterize to WebP through the shared `finish()` — grain and a
+strong vignette, which is what makes a photo read as a photo. Lesson art takes
+`lessonFinish()` instead and stays vector: that finish on flat diagrams is noise
+on every large flat area, and it was the reason the lesson set looked muddy. A
+scene in `LESSON_MANIFEST` must also have an entry in `ANIM`, or the generator
+throws.
+
 Keep them separate: `PhotosApp` renders `PHOTO_ASSETS` wholesale, so an avatar
 or a lesson diagram landing in that folder shows up in the learner's photo
 library.
@@ -1184,6 +1192,39 @@ same laptop with a different part outlined, the same keyboard with a different
 key outlined — so a learner meeting the seventh of them recognizes the machine
 and only has to find the new part. Add to `laptop()` / `keyboard()` rather than
 drawing a new machine.
+
+**The lesson art moves, and it ships as SVG, in two files per scene.** `foo.svg`
+animates; `foo-still.svg` is the same drawing with the `<style>` block left out.
+`LessonMedia` offers both through a `<picture>` and lets the browser pick. That
+shape is forced by a measured fact: **`prefers-reduced-motion` does not reach
+inside an SVG referenced as an image** — Chromium runs the animation regardless,
+so a media query in the file is decoration. `<picture>` resolves `source media`
+against the page, fetches exactly one file, and is why this is worth stepping
+outside `next/image` for.
+
+Two rules govern the keyframes, and the second one cost real time:
+
+- **The still is the finished pose.** Every start position lives in a keyframe,
+  never in the markup, or reduced-motion learners get the "before" picture.
+- **The first frame is a picture too.** Some browsers never run CSS animations
+  inside SVG-as-image at all — the same file animated under Playwright's
+  Chromium and sat frozen at frame 0 in another Chrome on the same machine. Any
+  keyframe starting at `opacity: 0` then means a permanently *missing* element:
+  a map with no route, a certificate with no seal. `assertPresentableFirstFrame`
+  in the generator throws on it at build time, with **no fill-mode exemption** —
+  `forwards` was exempted for one revision on the reasoning that it never paints
+  frame 0, and the frozen browser had already started the animation and held
+  frame 0 anyway. Anything that must always be visible must be visible in the
+  *markup*, with the animation only moving a highlight across it.
+  And check the animation does not contradict the lesson: the padlock in
+  `safe-payment` no longer swings shut, because a frozen frame was an open lock
+  on the lesson about closed ones.
+
+After touching `ANIM`, `lessonFinish`, `LessonMedia` or any lesson scene, run
+**`npm run motion-check`** (needs `npm run dev`). Nothing else looks at this —
+every other harness drives the DOM or measures a page that is holding still.
+`MOTION_NEGATIVE=1` is the negative control and has been watched to fail (16
+findings). See `docs/LESSON_ART_MOTION.md`.
 
 **Sizing a picture: cap the width, not the height.** `object-cover` inside a
 short full-width box is a letterbox crop that throws the subject away — a

@@ -383,8 +383,13 @@ export interface Lesson {
   drDigitalHint: string;
   /** Warning shown above the Dr. Digital bubble — for keys/actions the learner must NOT press during this lesson. */
   warning?: string;
-  /** Optional still image shown in the right pane instead of the PlaygroundOS desktop. */
-  media?: { src: string; alt: string; caption?: string };
+  /**
+   * Optional picture shown in the right pane instead of the PlaygroundOS
+   * desktop. `still` names a motionless version of an animated `src`, and is
+   * only ever set by the generated `LESSON_ART` — a lesson pointing at its own
+   * flat image has nothing to hold still.
+   */
+  media?: { src: string; alt: string; caption?: string; still?: string };
 }
 
 export interface ModuleGroup {

@@ -6,11 +6,6 @@
   "title": "Charger",
   "videoUrl": "",
   "drDigitalIntro": "The charger is your laptop's power cord.\n• One end plugs into the wall and the other end plugs into the side of your laptop.\n• When it is plugged in, a small light on the charger or a lightning bolt on the battery icon tells you it is charging.\n• It is safe to leave the charger plugged in all the time — modern laptops stop drawing power once the battery is full.\n• Always hold the plug itself when pulling the charger out. Yanking by the cable can damage the wire over time.\n• Most modern laptops charge through a USB-C cable, which looks like a small oval plug.",
-  "media": {
-    "src": "/playgrounds/charger.png",
-    "alt": "A USB charging cable with plug connectors on both ends",
-    "caption": "This is what a laptop charger looks like."
-  },
   "playgroundTask": {
     "type": "none"
   },

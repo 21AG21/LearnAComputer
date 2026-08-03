@@ -194,6 +194,49 @@ function finish(w, h, warmth = 0.5) {
     <rect width="${w}" height="${h}" filter="url(#${gid})" opacity="0.05" style="mix-blend-mode:overlay"/>`;
 }
 
+/**
+ * Lesson art is a diagram, not a photograph, and it needs its own finish.
+ *
+ * `finish()` above is what makes the photo library read as photography: film
+ * grain and a strong vignette. Both are wrong on flat vector illustration. The
+ * grain turns every large area of one color into visible noise, and a 34%
+ * vignette drags all four edges toward gray — which is the whole reason the
+ * lesson set looked muddy next to the crisp UI it sits beside. So: no grain, a
+ * third of the vignette, and a touch of warmth.
+ *
+ * These ship as live SVG rather than WebP, so the grain filter would also be a
+ * per-paint `feTurbulence` over 1200×800 on machines chosen for being old.
+ */
+function lessonFinish(w, h) {
+  const vig = radial([["0.55", "#000", 0], ["1", "#101820", 0.12]], { r: 0.78 });
+  return `<defs>${vig.def}</defs>
+    <rect width="${w}" height="${h}" fill="#f7c98b" opacity="0.03" style="mix-blend-mode:overlay"/>
+    <rect width="${w}" height="${h}" fill="url(#${vig.gid})"/>`;
+}
+
+/**
+ * Wrap markup in a named group so the lesson stylesheet can find it.
+ *
+ * The class is emitted whether or not the picture is animated — the still is
+ * the same markup with no `<style>`, which is what keeps the two files honest
+ * with each other. That imposes one rule on every keyframe below: **the resting
+ * state must be the finished state**, so anything that moves has to declare its
+ * starting position in the CSS, never in the markup. A route drawn with
+ * `stroke-dashoffset` in the attributes would show up as a blank map for every
+ * learner who asked for reduced motion.
+ *
+ * `i` is the element's place in a run of siblings that animate one after the
+ * other. It rides along as a custom property so the stylesheet can say
+ * `animation-delay: calc(var(--i) * 140ms)` once instead of naming every child.
+ *
+ * `style` carries anything the stylesheet cannot know in advance — a pivot for a
+ * rotation, say, which lives in the scene's own coordinates.
+ */
+const a = (cls, inner, i, style) => {
+  const st = [i === undefined ? "" : `--i:${i}`, style || ""].filter(Boolean).join(";");
+  return `<g class="${cls}"${st ? ` style="${st}"` : ""}>${inner}</g>`;
+};
+
 // ═══════════════════════════════════════════════════════════════════════════
 // Scenes
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1733,11 +1776,11 @@ function laptop(w, h, part) {
     s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${lh.toFixed(1)}" rx="${(lh * 0.3).toFixed(1)}" fill="#5f6b78"/>`;
     s += `<rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${(lh * 0.52).toFixed(1)}" rx="${(lh * 0.28).toFixed(1)}" fill="#8f9baa"/>`;
     s += `<rect x="${(lx + lw * 0.02).toFixed(1)}" y="${(ly + lh * 0.06).toFixed(1)}" width="${(lw * 0.96).toFixed(1)}" height="${(lh * 0.16).toFixed(1)}" rx="${(lh * 0.08).toFixed(1)}" fill="#b4bfcc"/>`;
-    // The one light that tells you it is asleep and not off.
-    s += `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.13).toFixed(1)}" fill="#8fd47f"/>`;
-    s += `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.26).toFixed(1)}" fill="#8fd47f" opacity="0.3"/>`;
-    [[0.6, 0.42, 62], [0.68, 0.3, 44], [0.745, 0.21, 30]].forEach(([fx, fy, sz]) => {
-      s += `<text x="${(w * fx).toFixed(1)}" y="${(h * fy).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${sz}" font-weight="700" fill="#5f7185" opacity="0.8">Z</text>`;
+    // The one light that tells you it is asleep and not off — so it breathes.
+    s += a("led", `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.13).toFixed(1)}" fill="#8fd47f"/>` +
+      `<circle cx="${(cx + lw * 0.42).toFixed(1)}" cy="${(ly + lh * 0.66).toFixed(1)}" r="${(lh * 0.26).toFixed(1)}" fill="#8fd47f" opacity="0.3"/>`);
+    [[0.6, 0.42, 62], [0.68, 0.3, 44], [0.745, 0.21, 30]].forEach(([fx, fy, sz], i) => {
+      s += a("zz", `<text x="${(w * fx).toFixed(1)}" y="${(h * fy).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${sz}" font-weight="700" fill="#5f7185" opacity="0.8">Z</text>`, i);
     });
     return s;
   }
@@ -1774,14 +1817,14 @@ function laptop(w, h, part) {
     s += `<rect x="${(cx + bw * fx - bw * fw2 / 2).toFixed(1)}" y="${(baseY + bh * 0.86).toFixed(1)}" width="${(bw * fw2).toFixed(1)}" height="${(bh * 0.16).toFixed(1)}" rx="2" fill="#5f6874"/>`;
   });
 
-  if (part === "screen") s += glowRect(sx, sy, sw, sh, 4);
-  if (part === "keyboard") s += glowRect(kx - 4, ky - 3, kw + 8, kh + 6, 4);
-  if (part === "trackpad") s += glowRect(tx - 4, ty - 3, tw2 + 8, th2 + 6, 4);
-  if (part === "camera") s += `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.03).toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="6"/>`;
+  if (part === "screen") s += a("cal", glowRect(sx, sy, sw, sh, 4));
+  if (part === "keyboard") s += a("cal", glowRect(kx - 4, ky - 3, kw + 8, kh + 6, 4));
+  if (part === "trackpad") s += a("cal", glowRect(tx - 4, ty - 3, tw2 + 8, th2 + 6, 4));
+  if (part === "camera") s += a("cal", `<circle cx="${cx.toFixed(1)}" cy="${(lidTop + h * 0.014).toFixed(1)}" r="${(h * 0.03).toFixed(1)}" fill="none" stroke="${CALLOUT}" stroke-width="6"/>`);
   if (part === "speakers") {
-    [-1, 1].forEach((d) => { s += glowRect(cx + d * bw * 0.4 - bw * 0.036, baseY + bh * 0.04, bw * 0.072, bh * 0.28, 3); });
+    [-1, 1].forEach((d) => { s += a("cal", glowRect(cx + d * bw * 0.4 - bw * 0.036, baseY + bh * 0.04, bw * 0.072, bh * 0.28, 3)); });
   }
-  if (part === "ports") s += glowRect(cx - bw * 0.47, baseY + bh * 0.8, bw * 0.16, bh * 0.28, 3);
+  if (part === "ports") s += a("cal", glowRect(cx - bw * 0.47, baseY + bh * 0.8, bw * 0.16, bh * 0.28, 3));
   return s;
 }
 
@@ -1829,7 +1872,7 @@ function keyboard(w, h, want) {
       x += kw + pad;
     });
   });
-  hits.forEach(([x, y, kw, kh]) => { s += glowRect(x, y, kw, kh, 4); });
+  hits.forEach(([x, y, kw, kh], i) => { s += a("cal key", glowRect(x, y, kw, kh, 4), i); });
   return s;
 }
 S["key-numbers"] = (w, h) => keyboard(w, h, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]);
@@ -1862,8 +1905,8 @@ function desktopShot(w, h, region) {
   for (let i = 0; i < 6; i++) {
     s += `<rect x="${(dx + dw * 0.045 + i * dw * 0.155).toFixed(1)}" y="${(dy + dh * 0.18).toFixed(1)}" width="${(dw * 0.12).toFixed(1)}" height="${(dh * 0.64).toFixed(1)}" rx="${(dh * 0.18).toFixed(1)}" fill="${cols[i]}"/>`;
   }
-  if (region === "menubar") s += glowRect(ix, iy, iw, mh, 4);
-  if (region === "desktop") s += glowRect(ix + iw * 0.06, iy + mh * 1.4, iw * 0.88, ih - mh * 1.4 - dh * 1.6, 6);
+  if (region === "menubar") s += a("cal", glowRect(ix, iy, iw, mh, 4));
+  if (region === "desktop") s += a("cal", glowRect(ix + iw * 0.06, iy + mh * 1.4, iw * 0.88, ih - mh * 1.4 - dh * 1.6, 6));
   return s;
 }
 S["screen-desktop-art"] = (w, h) => desktopShot(w, h, "desktop");
@@ -1881,10 +1924,10 @@ S["cloud-backup"] = (w, h) => {
   const px = w * 0.5 - w * 0.055, py = h * 0.66, pw = w * 0.11, ph = h * 0.3;
   s += `<rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${pw.toFixed(1)}" height="${ph.toFixed(1)}" rx="${(pw * 0.18).toFixed(1)}" fill="#2f3540"/>`;
   s += `<rect x="${(px + pw * 0.07).toFixed(1)}" y="${(py + pw * 0.07).toFixed(1)}" width="${(pw * 0.86).toFixed(1)}" height="${(ph - pw * 0.14).toFixed(1)}" rx="${(pw * 0.12).toFixed(1)}" fill="#dfe8f0"/>`;
-  [["#f0c07f", -0.14, 0.54], ["#a8d8a0", 0, 0.5], ["#c4b0e8", 0.14, 0.56]].forEach(([c, dx, fy]) => {
-    s += `<g transform="rotate(${(dx * 60).toFixed(0)} ${(w * (0.5 + dx)).toFixed(1)} ${(h * fy).toFixed(1)})"><rect x="${(w * (0.5 + dx) - w * 0.038).toFixed(1)}" y="${(h * fy - h * 0.045).toFixed(1)}" width="${(w * 0.076).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#fff"/><rect x="${(w * (0.5 + dx) - w * 0.03).toFixed(1)}" y="${(h * fy - h * 0.035).toFixed(1)}" width="${(w * 0.06).toFixed(1)}" height="${(h * 0.055).toFixed(1)}" rx="2" fill="${c}"/></g>`;
+  [["#f0c07f", -0.14, 0.54], ["#a8d8a0", 0, 0.5], ["#c4b0e8", 0.14, 0.56]].forEach(([c, dx, fy], i) => {
+    s += a("rise", `<g transform="rotate(${(dx * 60).toFixed(0)} ${(w * (0.5 + dx)).toFixed(1)} ${(h * fy).toFixed(1)})"><rect x="${(w * (0.5 + dx) - w * 0.038).toFixed(1)}" y="${(h * fy - h * 0.045).toFixed(1)}" width="${(w * 0.076).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#fff"/><rect x="${(w * (0.5 + dx) - w * 0.03).toFixed(1)}" y="${(h * fy - h * 0.035).toFixed(1)}" width="${(w * 0.06).toFixed(1)}" height="${(h * 0.055).toFixed(1)}" rx="2" fill="${c}"/></g>`, i);
   });
-  s += `<path d="M ${(w * 0.5).toFixed(1)} ${(h * 0.62).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.46).toFixed(1)} M ${(w * 0.47).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.455).toFixed(1)} L ${(w * 0.53).toFixed(1)} ${(h * 0.5).toFixed(1)}" stroke="#2f6f9f" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += a("arrow", `<path d="M ${(w * 0.5).toFixed(1)} ${(h * 0.62).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.46).toFixed(1)} M ${(w * 0.47).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.5).toFixed(1)} ${(h * 0.455).toFixed(1)} L ${(w * 0.53).toFixed(1)} ${(h * 0.5).toFixed(1)}" stroke="#2f6f9f" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`);
   return s;
 };
 
@@ -1894,44 +1937,55 @@ S["app-vs-web"] = (w, h) => {
   s += `<line x1="${(w * 0.5).toFixed(1)}" y1="${(h * 0.12).toFixed(1)}" x2="${(w * 0.5).toFixed(1)}" y2="${(h * 0.88).toFixed(1)}" stroke="#a8b4c0" stroke-width="3" stroke-dasharray="9 9"/>`;
   // Left: an app icon on a device home screen
   const px = w * 0.16, py = h * 0.22, pw = w * 0.18, ph = h * 0.56;
-  s += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${(pw * 0.14).toFixed(1)}" fill="#2f3540"/>`;
-  s += `<rect x="${(px + pw * 0.06).toFixed(1)}" y="${(py + pw * 0.06).toFixed(1)}" width="${(pw * 0.88).toFixed(1)}" height="${(ph - pw * 0.12).toFixed(1)}" rx="${(pw * 0.09).toFixed(1)}" fill="#e6ecf2"/>`;
+  let left = "";
+  left += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${(pw * 0.14).toFixed(1)}" fill="#2f3540"/>`;
+  left += `<rect x="${(px + pw * 0.06).toFixed(1)}" y="${(py + pw * 0.06).toFixed(1)}" width="${(pw * 0.88).toFixed(1)}" height="${(ph - pw * 0.12).toFixed(1)}" rx="${(pw * 0.09).toFixed(1)}" fill="#e6ecf2"/>`;
   for (let i = 0; i < 6; i++) {
     const c = ["#7fb4e0", "#8fc48f", "#e8b46f", "#c4a8e0", "#e08f9f", "#7fc4bc"][i];
-    s += `<rect x="${(px + pw * 0.16 + (i % 2) * pw * 0.38).toFixed(1)}" y="${(py + ph * 0.14 + Math.floor(i / 2) * ph * 0.22).toFixed(1)}" width="${(pw * 0.3).toFixed(1)}" height="${(pw * 0.3).toFixed(1)}" rx="${(pw * 0.08).toFixed(1)}" fill="${c}"/>`;
+    left += `<rect x="${(px + pw * 0.16 + (i % 2) * pw * 0.38).toFixed(1)}" y="${(py + ph * 0.14 + Math.floor(i / 2) * ph * 0.22).toFixed(1)}" width="${(pw * 0.3).toFixed(1)}" height="${(pw * 0.3).toFixed(1)}" rx="${(pw * 0.08).toFixed(1)}" fill="${c}"/>`;
   }
+  s += a("sideA", left);
   // Right: a browser window with an address bar
   const bx = w * 0.56, by = h * 0.28, bw = w * 0.36, bh = h * 0.44;
-  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="8" fill="#fff"/>`;
-  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${(bh * 0.2).toFixed(1)}" rx="8" fill="#e4e9ef"/>`;
-  s += `<rect x="${(bx + bw * 0.06).toFixed(1)}" y="${(by + bh * 0.055).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${(bh * 0.09).toFixed(1)}" rx="${(bh * 0.045).toFixed(1)}" fill="#fff"/>`;
+  let right = "";
+  right += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="8" fill="#fff"/>`;
+  right += `<rect x="${bx}" y="${by}" width="${bw}" height="${(bh * 0.2).toFixed(1)}" rx="8" fill="#e4e9ef"/>`;
+  right += `<rect x="${(bx + bw * 0.06).toFixed(1)}" y="${(by + bh * 0.055).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${(bh * 0.09).toFixed(1)}" rx="${(bh * 0.045).toFixed(1)}" fill="#fff"/>`;
   for (let i = 0; i < 5; i++) {
-    s += `<rect x="${(bx + bw * 0.07).toFixed(1)}" y="${(by + bh * 0.32 + i * bh * 0.12).toFixed(1)}" width="${(bw * (i === 4 ? 0.4 : 0.84)).toFixed(1)}" height="${(bh * 0.055).toFixed(1)}" rx="3" fill="#c8d0d8"/>`;
+    right += `<rect x="${(bx + bw * 0.07).toFixed(1)}" y="${(by + bh * 0.32 + i * bh * 0.12).toFixed(1)}" width="${(bw * (i === 4 ? 0.4 : 0.84)).toFixed(1)}" height="${(bh * 0.055).toFixed(1)}" rx="3" fill="#c8d0d8"/>`;
   }
+  s += a("sideB", right);
   return s;
 };
 
 S["hardware-trouble"] = (w, h) => {
   let s = laptop(w, h, "none");
   const cx = w * 0.74, cy = h * 0.3, r = Math.min(w, h) * 0.13;
-  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0b429"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(1)}" fill="#fdf6e4"/>`;
-  s += `<rect x="${(cx - r * 0.09).toFixed(1)}" y="${(cy - r * 0.46).toFixed(1)}" width="${(r * 0.18).toFixed(1)}" height="${(r * 0.6).toFixed(1)}" rx="${(r * 0.09).toFixed(1)}" fill="#a5701f"/>`;
-  s += `<circle cx="${cx}" cy="${(cy + r * 0.4).toFixed(1)}" r="${(r * 0.11).toFixed(1)}" fill="#a5701f"/>`;
+  s += a("warn",
+    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0b429"/>` +
+    `<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(1)}" fill="#fdf6e4"/>` +
+    `<rect x="${(cx - r * 0.09).toFixed(1)}" y="${(cy - r * 0.46).toFixed(1)}" width="${(r * 0.18).toFixed(1)}" height="${(r * 0.6).toFixed(1)}" rx="${(r * 0.09).toFixed(1)}" fill="#a5701f"/>` +
+    `<circle cx="${cx}" cy="${(cy + r * 0.4).toFixed(1)}" r="${(r * 0.11).toFixed(1)}" fill="#a5701f"/>`);
   return s;
 };
 
 S["peripheral-trouble"] = (w, h) => {
   const g = linear([["0", "#f2f4f7"], ["1", "#d0d8e0"]]);
   let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
-  // The laptop side, with one socket empty.
-  const lx = w * 0.62, ly = h * 0.3, lw = w * 0.3, lh = h * 0.4;
-  s += drop(lx + lw / 2, ly + lh + h * 0.03, lw * 0.5, h * 0.02);
-  s += `<rect x="${lx}" y="${ly}" width="${lw}" height="${lh}" rx="10" fill="#8f9baa"/>`;
-  s += `<rect x="${lx}" y="${ly}" width="${lw}" height="${(lh * 0.16).toFixed(1)}" rx="10" fill="#a8b4c0"/>`;
-  const portY = ly + lh * 0.46, portW = lw * 0.16, portH = lh * 0.11;
+  // The laptop, seen from its left side: a lid standing behind a base, with the
+  // sockets down the near edge. Drawn as a plain slab it read as a filing
+  // cabinet, and "plug the mouse into the box" is not the lesson.
+  const lx = w * 0.62, lw = w * 0.3;
+  const baseY = h * 0.6, baseH = h * 0.075;
+  s += drop(lx + lw / 2, baseY + baseH + h * 0.03, lw * 0.52, h * 0.018);
+  s += `<path d="M ${(lx + lw * 0.16).toFixed(1)} ${baseY.toFixed(1)} L ${(lx + lw * 0.3).toFixed(1)} ${(h * 0.2).toFixed(1)} L ${(lx + lw).toFixed(1)} ${(h * 0.2).toFixed(1)} L ${(lx + lw).toFixed(1)} ${baseY.toFixed(1)} Z" fill="#4a5765"/>`;
+  s += `<rect x="${(lx + lw * 0.34).toFixed(1)}" y="${(h * 0.23).toFixed(1)}" width="${(lw * 0.62).toFixed(1)}" height="${(baseY - h * 0.26).toFixed(1)}" rx="3" fill="#7fa8cf"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${baseH.toFixed(1)}" rx="${(baseH * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${baseY.toFixed(1)}" width="${lw.toFixed(1)}" height="${(baseH * 0.4).toFixed(1)}" rx="${(baseH * 0.26).toFixed(1)}" fill="#b4bfcc"/>`;
+  // One socket, not two. The base is a slab now, and the lesson is about the
+  // one empty hole the plug never reaches.
+  const portY = baseY + baseH * 0.26, portW = lw * 0.13, portH = baseH * 0.42;
   s += `<rect x="${(lx - portW * 0.3).toFixed(1)}" y="${portY.toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="#39414a"/>`;
-  s += `<rect x="${(lx - portW * 0.3).toFixed(1)}" y="${(portY + lh * 0.22).toFixed(1)}" width="${portW.toFixed(1)}" height="${portH.toFixed(1)}" rx="3" fill="#39414a"/>`;
 
   // The mouse, and a plug that stops short of the socket.
   const mx = w * 0.22, my = h * 0.58, mw = w * 0.13, mh = h * 0.28;
@@ -1941,32 +1995,64 @@ S["peripheral-trouble"] = (w, h) => {
   s += `<line x1="${mx.toFixed(1)}" y1="${(my - mh / 2).toFixed(1)}" x2="${mx.toFixed(1)}" y2="${(my - mh * 0.16).toFixed(1)}" stroke="#9fabb8" stroke-width="3"/>`;
   s += `<rect x="${(mx - mw * 0.055).toFixed(1)}" y="${(my - mh * 0.34).toFixed(1)}" width="${(mw * 0.11).toFixed(1)}" height="${(mh * 0.13).toFixed(1)}" rx="3" fill="#9fabb8"/>`;
   const cableEnd = w * 0.5;
-  s += `<path d="M ${(mx + mw * 0.42).toFixed(1)} ${(my - mh * 0.34).toFixed(1)} q ${(w * 0.09).toFixed(1)} ${(-h * 0.16).toFixed(1)} ${(cableEnd - mx - mw * 0.42).toFixed(1)} ${(portY + portH / 2 - my + mh * 0.34).toFixed(1)}" stroke="#6f7b89" stroke-width="8" fill="none" stroke-linecap="round"/>`;
-  s += `<rect x="${cableEnd.toFixed(1)}" y="${(portY + portH * 0.06).toFixed(1)}" width="${(portW * 0.75).toFixed(1)}" height="${(portH * 0.88).toFixed(1)}" rx="2" fill="#b4bfcc" stroke="#6f7b89" stroke-width="3"/>`;
+  // The cable runs a little way *past* where the plug sits, so the nudge below
+  // slides the plug along it instead of tearing a gap in the middle of it.
+  s += a("plug",
+    `<path d="M ${(mx + mw * 0.42).toFixed(1)} ${(my - mh * 0.34).toFixed(1)} q ${(w * 0.09).toFixed(1)} ${(-h * 0.16).toFixed(1)} ${(cableEnd - mx - mw * 0.42).toFixed(1)} ${(portY + portH / 2 - my + mh * 0.34).toFixed(1)} l 18 0" stroke="#6f7b89" stroke-width="8" fill="none" stroke-linecap="round"/>` +
+    `<rect x="${cableEnd.toFixed(1)}" y="${(portY + portH * 0.06).toFixed(1)}" width="${(portW * 0.75).toFixed(1)}" height="${(portH * 0.88).toFixed(1)}" rx="2" fill="#b4bfcc" stroke="#6f7b89" stroke-width="3"/>`);
   // The gap is the lesson.
-  s += glowRect(cableEnd - 8, portY - 10, (lx - portW * 0.3) - cableEnd + portW + 16, portH + 20, 6);
+  s += a("cal", glowRect(cableEnd - 8, portY - 10, (lx - portW * 0.3) - cableEnd + portW + 16, portH + 20, 6));
   return s;
 };
 
+/**
+ * A street map with a route on it.
+ *
+ * The grid is the load-bearing part. Roads sit at fixed centers, blocks fill
+ * the gaps *between* them, and the route runs down the middle of real roads —
+ * so it reads as a way through a town. Laid out on three unrelated grids (which
+ * is how this started) the blocks straddled the streets and the route cut
+ * across gardens, and the whole thing read as beige confetti.
+ */
 S["map-route"] = (w, h) => {
-  let s = `<rect width="${w}" height="${h}" fill="#e8e4d8"/>`;
-  s += `<rect x="0" y="${(h * 0.62).toFixed(1)}" width="${w}" height="${(h * 0.16).toFixed(1)}" fill="#cfe0ec"/>`;
-  for (let i = 0; i < 7; i++) {
-    s += `<rect x="${(w * (0.05 + i * 0.14)).toFixed(1)}" y="0" width="${(w * 0.02).toFixed(1)}" height="${h}" fill="#f7f5ee"/>`;
+  const COL = [0.06, 0.20, 0.34, 0.48, 0.62, 0.76, 0.90];   // vertical road centers
+  const ROW = [0.09, 0.29, 0.49, 0.69, 0.89];               // horizontal road centers
+  let s = `<rect width="${w}" height="${h}" fill="#e6dfcf"/>`;
+  COL.forEach((fx) => {
+    s += `<rect x="${(w * fx - w * 0.01).toFixed(1)}" y="0" width="${(w * 0.02).toFixed(1)}" height="${h}" fill="#f6f3ea"/>`;
+  });
+  ROW.forEach((fy) => {
+    s += `<rect x="0" y="${(h * fy - h * 0.01).toFixed(1)}" width="${w}" height="${(h * 0.02).toFixed(1)}" fill="#f6f3ea"/>`;
+  });
+  // Blocks fill the gaps between roads, inset far enough to leave a kerb.
+  for (let ci = 0; ci < COL.length - 1; ci++) {
+    for (let ri = 0; ri < ROW.length - 1; ri++) {
+      const x0 = w * COL[ci] + w * 0.014, x1 = w * COL[ci + 1] - w * 0.014;
+      const y0 = h * ROW[ri] + h * 0.02, y1 = h * ROW[ri + 1] - h * 0.02;
+      // One block is a park, so the map has a landmark instead of a texture.
+      const park = ci === 1 && ri === 1;
+      s += `<rect x="${x0.toFixed(1)}" y="${y0.toFixed(1)}" width="${(x1 - x0).toFixed(1)}" height="${(y1 - y0).toFixed(1)}" rx="5" fill="${park ? "#bcd4b0" : (ci + ri) % 3 ? "#d6cdb8" : "#cfd6c2"}"/>`;
+    }
   }
-  for (let i = 0; i < 5; i++) {
-    s += `<rect x="0" y="${(h * (0.08 + i * 0.2)).toFixed(1)}" width="${w}" height="${(h * 0.02).toFixed(1)}" fill="#f7f5ee"/>`;
-  }
-  for (let i = 0; i < 16; i++) {
-    const bx = w * (0.03 + (i % 8) * 0.12), by2 = h * (0.16 + Math.floor(i / 8) * 0.44);
-    s += `<rect x="${bx.toFixed(1)}" y="${by2.toFixed(1)}" width="${(w * 0.07).toFixed(1)}" height="${(h * 0.13).toFixed(1)}" rx="3" fill="${i % 3 ? "#dcd6c8" : "#cfd8c8"}"/>`;
-  }
-  s += `<path d="M ${(w * 0.18).toFixed(1)} ${(h * 0.78).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.78).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.4).toFixed(1)} L ${(w * 0.62).toFixed(1)} ${(h * 0.4).toFixed(1)} L ${(w * 0.62).toFixed(1)} ${(h * 0.22).toFixed(1)}" stroke="#2f6fdf" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
-  const pin = (px, py, c) =>
-    `<path d="M ${px.toFixed(1)} ${py.toFixed(1)} c ${(-w * 0.032).toFixed(1)} ${(-h * 0.05).toFixed(1)} ${(-w * 0.032).toFixed(1)} ${(-h * 0.11).toFixed(1)} 0 ${(-h * 0.13).toFixed(1)} c ${(w * 0.032).toFixed(1)} ${(h * 0.02).toFixed(1)} ${(w * 0.032).toFixed(1)} ${(h * 0.08).toFixed(1)} 0 ${(h * 0.13).toFixed(1)} Z" fill="${c}"/>` +
-    `<circle cx="${px.toFixed(1)}" cy="${(py - h * 0.088).toFixed(1)}" r="${(w * 0.013).toFixed(1)}" fill="#fff"/>`;
-  s += pin(w * 0.18, h * 0.78, "#3f7f4f");
-  s += pin(w * 0.62, h * 0.22, "#cf3f3f");
+  const P = (fx, fy) => `${(w * fx).toFixed(1)} ${(h * fy).toFixed(1)}`;
+  const route = `M ${P(0.20, 0.89)} L ${P(0.20, 0.69)} L ${P(0.62, 0.69)} L ${P(0.62, 0.29)}`;
+  // A white casing under the route is what lifts it off a busy map.
+  s += `<path d="${route}" stroke="#fff" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  // The route is ALWAYS fully drawn. A draw-on effect was the obvious idea and
+  // the wrong one: it depends on the animation running, and where it does not,
+  // the learner gets a map with no route on it. Instead a brighter segment
+  // travels along a route that is always there — the dash pattern is in the
+  // markup, so a frozen frame is a highlight sitting on a finished route.
+  s += `<path d="${route}" stroke="#2f6fdf" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += a("route", `<path d="${route}" stroke="#7fb0f5" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="150 1000" stroke-dashoffset="0"/>`);
+  const pin = (fx, fy, c) => {
+    const px = w * fx, py = h * fy;
+    return `<ellipse cx="${px.toFixed(1)}" cy="${(py + h * 0.008).toFixed(1)}" rx="${(w * 0.018).toFixed(1)}" ry="${(h * 0.008).toFixed(1)}" fill="#000" opacity="0.18"/>` +
+      `<path d="M ${px.toFixed(1)} ${py.toFixed(1)} c ${(-w * 0.032).toFixed(1)} ${(-h * 0.05).toFixed(1)} ${(-w * 0.032).toFixed(1)} ${(-h * 0.11).toFixed(1)} 0 ${(-h * 0.13).toFixed(1)} c ${(w * 0.032).toFixed(1)} ${(h * 0.02).toFixed(1)} ${(w * 0.032).toFixed(1)} ${(h * 0.08).toFixed(1)} 0 ${(h * 0.13).toFixed(1)} Z" fill="${c}"/>` +
+      `<circle cx="${px.toFixed(1)}" cy="${(py - h * 0.088).toFixed(1)}" r="${(w * 0.013).toFixed(1)}" fill="#fff"/>`;
+  };
+  s += pin(0.20, 0.89, "#3f7f4f");
+  s += a("pinB", pin(0.62, 0.29, "#cf3f3f"));
   return s;
 };
 
@@ -1991,6 +2077,14 @@ S["qr-code"] = (w, h, rng) => {
     }
   }
   s += finder(0, 0) + finder(N - 7, 0) + finder(0, N - 7);
+  // The scan line is the whole point of the picture: a code is something a
+  // camera reads, and a still square never says that.
+  const scan = linear([["0", "#2f9f6f", 0], ["0.5", "#2f9f6f", 0.55], ["1", "#2f9f6f", 0]], { x1: 0, y1: 0, x2: 1, y2: 0 });
+  s += `<defs>${scan.def}</defs>`;
+  // It rests across the middle, not at the top edge: the still is what a
+  // reduced-motion learner sees, and a band parked at the rim reads as a
+  // rendering fault rather than a scanner.
+  s += a("scan", `<rect x="${(ox - cell).toFixed(1)}" y="${(oy + side / 2 - cell * 0.45).toFixed(1)}" width="${(side + cell * 2).toFixed(1)}" height="${(cell * 0.9).toFixed(1)}" fill="url(#${scan.gid})"/>`);
   return s;
 };
 
@@ -2005,11 +2099,12 @@ S["safe-payment"] = (w, h) => {
   for (let i = 0; i < 4; i++) {
     s += `<rect x="${(cx + cw * 0.3 + i * cw * 0.17).toFixed(1)}" y="${(cy + ch * 0.56).toFixed(1)}" width="${(cw * 0.12).toFixed(1)}" height="${(ch * 0.07).toFixed(1)}" rx="2" fill="#a8c4d8"/>`;
   }
-  // Padlock, closed
+  // Padlock, closed — and it closes, because "locked" is the whole idea.
   const lx = w * 0.5, ly = h * 0.24, lr = Math.min(w, h) * 0.09;
-  s += `<path d="M ${(lx - lr * 0.55).toFixed(1)} ${ly.toFixed(1)} a ${(lr * 0.55).toFixed(1)} ${(lr * 0.6).toFixed(1)} 0 0 1 ${(lr * 1.1).toFixed(1)} 0" stroke="#2f6f4f" stroke-width="${(lr * 0.26).toFixed(1)}" fill="none"/>`;
-  s += `<rect x="${(lx - lr * 0.8).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.6).toFixed(1)}" height="${(lr * 1.2).toFixed(1)}" rx="${(lr * 0.22).toFixed(1)}" fill="#3f8f5f"/>`;
-  s += `<circle cx="${lx.toFixed(1)}" cy="${(ly + lr * 0.55).toFixed(1)}" r="${(lr * 0.16).toFixed(1)}" fill="#e4f0e8"/>`;
+  s += a("shackle", `<path d="M ${(lx - lr * 0.55).toFixed(1)} ${ly.toFixed(1)} a ${(lr * 0.55).toFixed(1)} ${(lr * 0.6).toFixed(1)} 0 0 1 ${(lr * 1.1).toFixed(1)} 0" stroke="#2f6f4f" stroke-width="${(lr * 0.26).toFixed(1)}" fill="none"/>`);
+  s += a("lockbody",
+    `<rect x="${(lx - lr * 0.8).toFixed(1)}" y="${ly.toFixed(1)}" width="${(lr * 1.6).toFixed(1)}" height="${(lr * 1.2).toFixed(1)}" rx="${(lr * 0.22).toFixed(1)}" fill="#3f8f5f"/>` +
+    `<circle cx="${lx.toFixed(1)}" cy="${(ly + lr * 0.55).toFixed(1)}" r="${(lr * 0.16).toFixed(1)}" fill="#e4f0e8"/>`);
   return s;
 };
 
@@ -2028,9 +2123,9 @@ S["share-doc"] = (w, h) => {
     `<circle cx="${fx.toFixed(1)}" cy="${fy.toFixed(1)}" r="${r.toFixed(1)}" fill="${c}"/>` +
     `<circle cx="${fx.toFixed(1)}" cy="${(fy - r * 0.28).toFixed(1)}" r="${(r * 0.34).toFixed(1)}" fill="#fff" opacity="0.9"/>` +
     `<path d="M ${(fx - r * 0.52).toFixed(1)} ${(fy + r * 0.62).toFixed(1)} a ${(r * 0.55).toFixed(1)} ${(r * 0.5).toFixed(1)} 0 0 1 ${(r * 1.04).toFixed(1)} 0 Z" fill="#fff" opacity="0.9"/>`;
-  s += face(w * 0.72, h * 0.34, Math.min(w, h) * 0.1, "#4f8f9f");
-  s += face(w * 0.82, h * 0.66, Math.min(w, h) * 0.1, "#9f6f4f");
-  s += `<path d="M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.44).toFixed(1)} L ${(w * 0.66).toFixed(1)} ${(h * 0.36).toFixed(1)} M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.75).toFixed(1)} ${(h * 0.63).toFixed(1)}" stroke="#4f7fbf" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 10"/>`;
+  s += a("link", `<path d="M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.44).toFixed(1)} L ${(w * 0.66).toFixed(1)} ${(h * 0.36).toFixed(1)} M ${(dx + dw + w * 0.02).toFixed(1)} ${(h * 0.5).toFixed(1)} L ${(w * 0.75).toFixed(1)} ${(h * 0.63).toFixed(1)}" stroke="#4f7fbf" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 10"/>`);
+  s += a("face", face(w * 0.72, h * 0.34, Math.min(w, h) * 0.1, "#4f8f9f"), 0);
+  s += a("face", face(w * 0.82, h * 0.66, Math.min(w, h) * 0.1, "#9f6f4f"), 1);
   return s;
 };
 
@@ -2041,9 +2136,9 @@ S["drive-cloud"] = (w, h) => {
   // Folders inside the cloud
   const folder = (fx, fy, fw, c) =>
     `<path d="M ${fx.toFixed(1)} ${(fy + fw * 0.16).toFixed(1)} l 0 ${(fw * 0.56).toFixed(1)} l ${fw.toFixed(1)} 0 l 0 ${(-fw * 0.56).toFixed(1)} l ${(-fw * 0.52).toFixed(1)} 0 l ${(-fw * 0.1).toFixed(1)} ${(-fw * 0.12).toFixed(1)} l ${(-fw * 0.38).toFixed(1)} 0 Z" fill="${c}"/>`;
-  s += folder(w * 0.34, h * 0.4, w * 0.1, "#e8b45f");
-  s += folder(w * 0.47, h * 0.4, w * 0.1, "#7fb4e0");
-  s += folder(w * 0.6, h * 0.4, w * 0.1, "#8fc48f");
+  s += a("fold", folder(w * 0.34, h * 0.4, w * 0.1, "#e8b45f"), 0);
+  s += a("fold", folder(w * 0.47, h * 0.4, w * 0.1, "#7fb4e0"), 1);
+  s += a("fold", folder(w * 0.6, h * 0.4, w * 0.1, "#8fc48f"), 2);
   return s;
 };
 
@@ -2053,13 +2148,18 @@ S["staying-connected"] = (w, h) => {
   const bubble = (bx, by, bw, bh, c, flip) =>
     `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bh * 0.34).toFixed(1)}" fill="${c}"/>` +
     `<path d="M ${(flip ? bx + bw - bh * 0.1 : bx + bh * 0.1).toFixed(1)} ${(by + bh).toFixed(1)} l ${(flip ? bh * 0.3 : -bh * 0.3).toFixed(1)} ${(bh * 0.3).toFixed(1)} l ${(flip ? -bh * 0.42 : bh * 0.42).toFixed(1)} ${(-bh * 0.14).toFixed(1)} Z" fill="${c}"/>`;
-  s += bubble(w * 0.1, h * 0.2, w * 0.42, h * 0.16, "#7f8fd8", false);
-  s += bubble(w * 0.44, h * 0.46, w * 0.44, h * 0.16, "#8fc4a8", true);
-  s += bubble(w * 0.14, h * 0.7, w * 0.32, h * 0.14, "#7f8fd8", false);
-  for (let i = 0; i < 3; i++) {
-    s += `<rect x="${(w * 0.16 + i * w * 0.07).toFixed(1)}" y="${(h * 0.26).toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
-    s += `<rect x="${(w * 0.5 + i * w * 0.07).toFixed(1)}" y="${(h * 0.52).toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
-  }
+  // Each bubble carries its own lines of "text" so the group can pop in as one
+  // message — a conversation arriving a turn at a time, which is the idea.
+  const lines = (x0, y0) => {
+    let t = "";
+    for (let i = 0; i < 3; i++) {
+      t += `<rect x="${(x0 + i * w * 0.07).toFixed(1)}" y="${y0.toFixed(1)}" width="${(w * 0.045).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#fff" opacity="0.65"/>`;
+    }
+    return t;
+  };
+  s += a("bub", bubble(w * 0.1, h * 0.2, w * 0.42, h * 0.16, "#7f8fd8", false) + lines(w * 0.16, h * 0.26), 0);
+  s += a("bub", bubble(w * 0.44, h * 0.46, w * 0.44, h * 0.16, "#8fc4a8", true) + lines(w * 0.5, h * 0.52), 1);
+  s += a("bub", bubble(w * 0.14, h * 0.7, w * 0.32, h * 0.14, "#7f8fd8", false), 2);
   return s;
 };
 
@@ -2073,17 +2173,19 @@ S["settings-adapt"] = (w, h) => {
   ];
   rows.forEach(([label, v], i) => {
     const ry = py + ph * (0.16 + i * 0.2);
-    s += `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>`;
-    s += `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#dde3ea"/>`;
-    s += `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5 * v).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#4f8fcf"/>`;
-    s += `<circle cx="${(px + pw * (0.42 + 0.5 * v)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.038).toFixed(1)}" fill="#fff" stroke="#4f8fcf" stroke-width="4"/>`;
+    s += a("row",
+      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>` +
+      `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#dde3ea"/>` +
+      `<rect x="${(px + pw * 0.42).toFixed(1)}" y="${(ry - ph * 0.014).toFixed(1)}" width="${(pw * 0.5 * v).toFixed(1)}" height="${(ph * 0.028).toFixed(1)}" rx="${(ph * 0.014).toFixed(1)}" fill="#4f8fcf"/>` +
+      `<circle cx="${(px + pw * (0.42 + 0.5 * v)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.038).toFixed(1)}" fill="#fff" stroke="#4f8fcf" stroke-width="4"/>`, i);
   });
   // Two toggles below
   [["Dark mode", true], ["Reduce motion", false]].forEach(([label, on], i) => {
     const ry = py + ph * (0.72 + i * 0.16);
-    s += `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>`;
-    s += `<rect x="${(px + pw * 0.78).toFixed(1)}" y="${(ry - ph * 0.036).toFixed(1)}" width="${(pw * 0.14).toFixed(1)}" height="${(ph * 0.072).toFixed(1)}" rx="${(ph * 0.036).toFixed(1)}" fill="${on ? "#4f8fcf" : "#c8d0d8"}"/>`;
-    s += `<circle cx="${(px + pw * (on ? 0.885 : 0.815)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.029).toFixed(1)}" fill="#fff"/>`;
+    s += a("row",
+      `<text x="${(px + pw * 0.07).toFixed(1)}" y="${(ry + 6).toFixed(1)}" font-family="Helvetica,Arial,sans-serif" font-size="${(ph * 0.062).toFixed(1)}" fill="#4f5a66">${label}</text>` +
+      `<rect x="${(px + pw * 0.78).toFixed(1)}" y="${(ry - ph * 0.036).toFixed(1)}" width="${(pw * 0.14).toFixed(1)}" height="${(ph * 0.072).toFixed(1)}" rx="${(ph * 0.036).toFixed(1)}" fill="${on ? "#4f8fcf" : "#c8d0d8"}"/>` +
+      `<circle cx="${(px + pw * (on ? 0.885 : 0.815)).toFixed(1)}" cy="${ry.toFixed(1)}" r="${(ph * 0.029).toFixed(1)}" fill="#fff"/>`, i + 3);
   });
   return s;
 };
@@ -2091,19 +2193,32 @@ S["settings-adapt"] = (w, h) => {
 S["holiday-away"] = (w, h) => {
   const sky = linear([["0", "#7fc4e8"], ["0.62", "#ffd8a8"], ["1", "#f5e0c0"]]);
   let s = `<defs>${sky.def}</defs><rect width="${w}" height="${h}" fill="url(#${sky.gid})"/>`;
-  s += `<circle cx="${(w * 0.74).toFixed(1)}" cy="${(h * 0.3).toFixed(1)}" r="${(Math.min(w, h) * 0.11).toFixed(1)}" fill="#fff0c0"/>`;
+  s += a("sun", `<circle cx="${(w * 0.74).toFixed(1)}" cy="${(h * 0.3).toFixed(1)}" r="${(Math.min(w, h) * 0.11).toFixed(1)}" fill="#fff0c0"/>`);
   s += `<rect x="0" y="${(h * 0.62).toFixed(1)}" width="${w}" height="${(h * 0.1).toFixed(1)}" fill="#6fb4cf"/>`;
   s += `<rect x="0" y="${(h * 0.72).toFixed(1)}" width="${w}" height="${(h * 0.28).toFixed(1)}" fill="#f0dcb0"/>`;
-  // Deckchair and a closed laptop left behind
-  s += `<path d="M ${(w * 0.22).toFixed(1)} ${(h * 0.86).toFixed(1)} L ${(w * 0.34).toFixed(1)} ${(h * 0.68).toFixed(1)} L ${(w * 0.42).toFixed(1)} ${(h * 0.7).toFixed(1)} L ${(w * 0.3).toFixed(1)} ${(h * 0.88).toFixed(1)} Z" fill="#e0654f"/>`;
-  s += `<line x1="${(w * 0.24).toFixed(1)}" y1="${(h * 0.88).toFixed(1)}" x2="${(w * 0.36).toFixed(1)}" y2="${(h * 0.74).toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
-  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.14).toFixed(1)}" height="${(h * 0.03).toFixed(1)}" rx="4" fill="#8f9baa"/>`;
+  // A deckchair: a canvas back leaning on a frame, a seat, and legs. It used to
+  // be a single red parallelogram, which read as a fallen sign.
+  const cx0 = w * 0.24, seatY = h * 0.82;
+  s += drop(w * 0.3, h * 0.9, w * 0.1, h * 0.014, 0.12);
+  s += `<line x1="${cx0.toFixed(1)}" y1="${(h * 0.9).toFixed(1)}" x2="${(w * 0.33).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
+  s += `<line x1="${(w * 0.36).toFixed(1)}" y1="${(h * 0.9).toFixed(1)}" x2="${(w * 0.3).toFixed(1)}" y2="${seatY.toFixed(1)}" stroke="#a5825c" stroke-width="7" stroke-linecap="round"/>`;
+  s += `<path d="M ${(w * 0.255).toFixed(1)} ${(h * 0.68).toFixed(1)} L ${(w * 0.315).toFixed(1)} ${(h * 0.69).toFixed(1)} L ${(w * 0.345).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.285).toFixed(1)} ${seatY.toFixed(1)} Z" fill="#e0654f"/>`;
+  s += `<path d="M ${(w * 0.285).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.345).toFixed(1)} ${seatY.toFixed(1)} L ${(w * 0.38).toFixed(1)} ${(h * 0.845).toFixed(1)} L ${(w * 0.32).toFixed(1)} ${(h * 0.845).toFixed(1)} Z" fill="#c9553f"/>`;
+  s += `<line x1="${(w * 0.255).toFixed(1)}" y1="${(h * 0.68).toFixed(1)}" x2="${(w * 0.315).toFixed(1)}" y2="${(h * 0.69).toFixed(1)}" stroke="#a5825c" stroke-width="6" stroke-linecap="round"/>`;
+  // The laptop, shut, left on the sand — the whole point of the picture.
+  s += drop(w * 0.585, h * 0.845, w * 0.075, h * 0.012, 0.12);
+  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.034).toFixed(1)}" rx="5" fill="#5f6b78"/>`;
+  s += `<rect x="${(w * 0.52).toFixed(1)}" y="${(h * 0.8).toFixed(1)}" width="${(w * 0.13).toFixed(1)}" height="${(h * 0.017).toFixed(1)}" rx="5" fill="#98a4b2"/>`;
   // Palm
   s += `<path d="M ${(w * 0.82).toFixed(1)} ${(h * 0.86).toFixed(1)} q ${(-w * 0.02).toFixed(1)} ${(-h * 0.24).toFixed(1)} ${(w * 0.01).toFixed(1)} ${(-h * 0.4).toFixed(1)}" stroke="#8a6a4a" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+  // The fronds sway; the trunk does not. Grouping each frond around the crown
+  // means the rotation the sway adds composes with the one that placed it.
+  let fronds = "";
   for (let i = 0; i < 5; i++) {
-    const a = -140 + i * 55;
-    s += `<ellipse cx="${(w * 0.83).toFixed(1)}" cy="${(h * 0.46).toFixed(1)}" rx="${(w * 0.075).toFixed(1)}" ry="${(h * 0.024).toFixed(1)}" fill="#3f8f5f" transform="rotate(${a} ${(w * 0.83).toFixed(1)} ${(h * 0.46).toFixed(1)})"/>`;
+    const deg = -140 + i * 55;
+    fronds += `<ellipse cx="${(w * 0.83).toFixed(1)}" cy="${(h * 0.46).toFixed(1)}" rx="${(w * 0.075).toFixed(1)}" ry="${(h * 0.024).toFixed(1)}" fill="#3f8f5f" transform="rotate(${deg} ${(w * 0.83).toFixed(1)} ${(h * 0.46).toFixed(1)})"/>`;
   }
+  s += a("crown", fronds);
   return s;
 };
 
@@ -2118,13 +2233,66 @@ S["graduation"] = (w, h) => {
   for (let i = 0; i < 4; i++) {
     s += `<rect x="${(cx - cw * 0.3).toFixed(1)}" y="${(cy + ch * (0.34 + i * 0.13)).toFixed(1)}" width="${(cw * (i === 3 ? 0.28 : 0.6)).toFixed(1)}" height="${(ch * 0.045).toFixed(1)}" rx="3" fill="#d8d2c4"/>`;
   }
-  s += `<circle cx="${(cx + cw * 0.3).toFixed(1)}" cy="${(cy + ch * 0.76).toFixed(1)}" r="${(ch * 0.11).toFixed(1)}" fill="#c9a45f"/>`;
+  s += a("seal", `<circle cx="${(cx + cw * 0.3).toFixed(1)}" cy="${(cy + ch * 0.76).toFixed(1)}" r="${(ch * 0.11).toFixed(1)}" fill="#c9a45f"/>`);
   // Cap
   const mx = cx, my = h * 0.22, mw = w * 0.26;
   s += `<polygon points="${mx.toFixed(1)},${(my - mw * 0.16).toFixed(1)} ${(mx + mw / 2).toFixed(1)},${my.toFixed(1)} ${mx.toFixed(1)},${(my + mw * 0.16).toFixed(1)} ${(mx - mw / 2).toFixed(1)},${my.toFixed(1)}" fill="#2f3540"/>`;
   s += `<path d="M ${(mx - mw * 0.22).toFixed(1)} ${(my + mw * 0.07).toFixed(1)} l 0 ${(mw * 0.16).toFixed(1)} q ${(mw * 0.22).toFixed(1)} ${(mw * 0.1).toFixed(1)} ${(mw * 0.44).toFixed(1)} 0 l 0 ${(-mw * 0.16).toFixed(1)} Z" fill="#3f4750"/>`;
-  s += `<line x1="${(mx + mw / 2).toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + mw * 0.56).toFixed(1)}" y2="${(my + mw * 0.28).toFixed(1)}" stroke="#e0a83f" stroke-width="5"/>`;
-  s += `<circle cx="${(mx + mw * 0.56).toFixed(1)}" cy="${(my + mw * 0.3).toFixed(1)}" r="${(mw * 0.045).toFixed(1)}" fill="#e0a83f"/>`;
+  // The tassel swings from where it is pinned at the corner of the cap.
+  s += a("tassel",
+    `<line x1="${(mx + mw / 2).toFixed(1)}" y1="${my.toFixed(1)}" x2="${(mx + mw * 0.56).toFixed(1)}" y2="${(my + mw * 0.28).toFixed(1)}" stroke="#e0a83f" stroke-width="5"/>` +
+    `<circle cx="${(mx + mw * 0.56).toFixed(1)}" cy="${(my + mw * 0.3).toFixed(1)}" r="${(mw * 0.045).toFixed(1)}" fill="#e0a83f"/>`,
+    undefined,
+    `transform-box:view-box;transform-origin:${(mx + mw / 2).toFixed(1)}px ${my.toFixed(1)}px`);
+  return s;
+};
+
+/**
+ * The power symbol. Its two lessons used to point at loose 512px PNGs in
+ * `public/playgrounds/` — the only two no-activity lessons whose picture came
+ * from outside this generator, and so the only two that missed the shared
+ * finish and the motion.
+ */
+S["power-symbol"] = (w, h) => {
+  const g = radial([["0", "#f4f7fa"], ["1", "#d3dde7"]], { r: 0.72 });
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const cx = w * 0.5, cy = h * 0.52, r = Math.min(w, h) * 0.26;
+  s += drop(cx, cy + r * 1.35, r * 0.9, r * 0.13);
+  s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.16).toFixed(1)}" fill="#39424d"/>`;
+  s += a("halo", `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(r * 1.16).toFixed(1)}" fill="none" stroke="#8fd47f" stroke-width="${(r * 0.1).toFixed(1)}"/>`);
+  // The symbol itself: a ring broken at the top, and a bar through the break.
+  const rr = r * 0.6;
+  s += a("glyph",
+    `<path d="M ${(cx - rr * 0.78).toFixed(1)} ${(cy - rr * 0.5).toFixed(1)} a ${rr.toFixed(1)} ${rr.toFixed(1)} 0 1 0 ${(rr * 1.56).toFixed(1)} 0" fill="none" stroke="#f4f7fa" stroke-width="${(r * 0.17).toFixed(1)}" stroke-linecap="round"/>` +
+    `<line x1="${cx.toFixed(1)}" y1="${(cy - rr * 1.12).toFixed(1)}" x2="${cx.toFixed(1)}" y2="${(cy - rr * 0.05).toFixed(1)}" stroke="#f4f7fa" stroke-width="${(r * 0.17).toFixed(1)}" stroke-linecap="round"/>`);
+  return s;
+};
+
+/** A charging cable, with the current running along it. */
+S["charger-cable"] = (w, h) => {
+  const g = linear([["0", "#f2f5f8"], ["1", "#d5dee6"]]);
+  let s = `<defs>${g.def}</defs><rect width="${w}" height="${h}" fill="url(#${g.gid})"/>`;
+  const y = h * 0.5;
+  // Wall plug on the left, laptop connector on the right.
+  s += `<rect x="${(w * 0.08).toFixed(1)}" y="${(y - h * 0.11).toFixed(1)}" width="${(w * 0.12).toFixed(1)}" height="${(h * 0.22).toFixed(1)}" rx="10" fill="#eef2f6" stroke="#8f9baa" stroke-width="4"/>`;
+  [-1, 1].forEach((d) => {
+    s += `<rect x="${(w * 0.045).toFixed(1)}" y="${(y + d * h * 0.06 - h * 0.018).toFixed(1)}" width="${(w * 0.038).toFixed(1)}" height="${(h * 0.036).toFixed(1)}" rx="3" fill="#9fabb8"/>`;
+  });
+  const cable = `M ${(w * 0.2).toFixed(1)} ${y.toFixed(1)} C ${(w * 0.36).toFixed(1)} ${(y - h * 0.26).toFixed(1)} ${(w * 0.5).toFixed(1)} ${(y + h * 0.26).toFixed(1)} ${(w * 0.64).toFixed(1)} ${y.toFixed(1)}`;
+  s += `<path d="${cable}" stroke="#6f7b89" stroke-width="14" fill="none" stroke-linecap="round"/>`;
+  // The charge itself, running plug-to-laptop along the same curve. The dash
+  // pattern lives in the markup, not the stylesheet: the still has to show one
+  // travelling segment, and a CSS-only pattern would paint the whole cable
+  // green for every learner who asked for reduced motion.
+  s += a("charge", `<path d="${cable}" stroke="#8fd47f" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 700" stroke-dashoffset="430"/>`);
+  s += `<rect x="${(w * 0.63).toFixed(1)}" y="${(y - h * 0.045).toFixed(1)}" width="${(w * 0.07).toFixed(1)}" height="${(h * 0.09).toFixed(1)}" rx="4" fill="#b4bfcc" stroke="#6f7b89" stroke-width="4"/>`;
+  // A small laptop at the far end, so the picture says what the cable is for.
+  const lx = w * 0.72, lby = y + h * 0.14, lbw = w * 0.2, lbh = h * 0.035;
+  s += drop(lx + lbw / 2, lby + lbh * 1.6, lbw * 0.55, lbh * 0.8);
+  s += `<path d="M ${(lx + lbw * 0.08).toFixed(1)} ${lby.toFixed(1)} L ${(lx + lbw * 0.16).toFixed(1)} ${(lby - h * 0.26).toFixed(1)} L ${(lx + lbw * 0.84).toFixed(1)} ${(lby - h * 0.26).toFixed(1)} L ${(lx + lbw * 0.92).toFixed(1)} ${lby.toFixed(1)} Z" fill="#4a5765"/>`;
+  s += `<rect x="${(lx + lbw * 0.18).toFixed(1)}" y="${(lby - h * 0.235).toFixed(1)}" width="${(lbw * 0.64).toFixed(1)}" height="${(h * 0.2).toFixed(1)}" rx="3" fill="#7fa8cf"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${lbh.toFixed(1)}" rx="${(lbh * 0.3).toFixed(1)}" fill="#8f9baa"/>`;
+  s += `<rect x="${lx.toFixed(1)}" y="${lby.toFixed(1)}" width="${lbw.toFixed(1)}" height="${(lbh * 0.42).toFixed(1)}" rx="${(lbh * 0.25).toFixed(1)}" fill="#b4bfcc"/>`;
   return s;
 };
 
@@ -2248,6 +2416,173 @@ async function render(manifest, dir) {
  * is in the picture rather than repeating the lesson title.
  */
 const LA = [1200, 800];
+
+/**
+ * What moves, per picture.
+ *
+ * These are teaching aids, not decoration. Each one answers the question the
+ * lesson beside it is asking: the callout pulses so a beginner's eye lands on
+ * the part being named, the photos climb into the cloud because that is what
+ * backup *is*, the plug stops short of the socket over and over because the
+ * lesson is "it is not plugged in."
+ *
+ * Three rules hold the set together:
+ *
+ * 1. **The resting state is the finished state.** The still is this same markup
+ *    with the stylesheet removed, so every start position lives in a keyframe.
+ *    Nothing may depend on a transform that only the animated file applies.
+ * 2. **Loop only when the loop is the meaning.** A pulse that says "look here"
+ *    should repeat; an entrance that says "these things exist" should play once
+ *    and stop. An illustration that never settles is exhausting to read beside
+ *    text, and this audience reads slowly on purpose.
+ * 3. **The first frame must be a presentable picture.** This is the expensive
+ *    one, and it was learned the hard way: some browsers do not run CSS
+ *    animations inside an SVG that is referenced as an image at all. The same
+ *    `map-route.svg` animated under Playwright's Chromium and sat frozen at 0%
+ *    in another Chrome build on the same machine. Where a keyframe set began at
+ *    `opacity: 0` — and most entrance animations naturally do — "frozen" meant
+ *    an empty map, a certificate with no seal, a cloud with no folders. Not a
+ *    missing animation: a *broken drawing*, and worse than no motion at all.
+ *
+ *    So no keyframe starts invisible. Entrances begin a few pixels off and a
+ *    little pale, which reads as motion where motion works and as a finished
+ *    picture where it does not. `assertPresentableFirstFrame` below enforces it.
+ *
+ *    `animation-fill-mode: forwards` is **not** a way around this, though it
+ *    looks like one. The reasoning — "no backwards fill, so the natural state
+ *    shows until the animation runs" — is wrong in practice: the browser that
+ *    froze these had already *started* the animation, so frame 0 was applied
+ *    and then held. The map's route drew itself for exactly one round of
+ *    testing before that browser showed a map with no route on it. Anything
+ *    that must always be visible has to be visible in the markup, with the
+ *    animation only moving a highlight across it.
+ */
+const EASE = "cubic-bezier(.4,0,.2,1)";
+/**
+ * The callout breathes rather than blinks. The floor is .72, not the .45 this
+ * started at: the ring is the only thing on screen saying *which part the
+ * lesson means*, and for half of every cycle a 45% ring had all but vanished.
+ * The scale is what keeps it alive without dimming it.
+ */
+const CALLOUT_CSS = `
+  @keyframes cal { 0%,100% { opacity:.72; transform:scale(1) } 50% { opacity:1; transform:scale(1.015) } }
+  .cal { transform-box:fill-box; transform-origin:center; animation: cal 2.4s ${EASE} infinite; }`;
+
+/** A highlighted key dips like a key being pressed; a run of them ripples. */
+const KEYS_CSS = `
+  @keyframes keypress { 0%,100% { opacity:.62; transform:translateY(0) } 50% { opacity:1; transform:translateY(2px) } }
+  .key { animation: keypress 2.2s ${EASE} infinite; animation-delay: calc(var(--i, 0) * 90ms); }`;
+
+const ANIM = {
+  // Unit 1 — one laptop, a different part outlined each time.
+  "part-screen": CALLOUT_CSS,
+  "part-keyboard": CALLOUT_CSS,
+  "part-trackpad": CALLOUT_CSS,
+  "part-speakers": CALLOUT_CSS,
+  "part-camera": CALLOUT_CSS,
+  "part-ports": CALLOUT_CSS,
+  "screen-desktop": CALLOUT_CSS,
+  "screen-menubar": CALLOUT_CSS,
+
+  // The keys ripple left to right, so a run of ten reads as one row.
+  "key-numbers": KEYS_CSS,
+  "key-caps": KEYS_CSS,
+  "key-ctrl": KEYS_CSS,
+  "key-escape": KEYS_CSS,
+
+  // The Z's drift up and settle back rather than fading in from nothing, so a
+  // frozen first frame is three Z's sitting over a sleeping laptop.
+  "laptop-sleep": `
+    @keyframes drift { 0%,100% { opacity:.85; transform:translate(0,0) } 50% { opacity:.4; transform:translate(6px,-16px) } }
+    @keyframes breathe { 0%,100% { opacity:.45 } 50% { opacity:1 } }
+    .zz { transform-box:fill-box; transform-origin:center; animation: drift 4s ${EASE} infinite; animation-delay: calc(var(--i) * .9s); }
+    .led { animation: breathe 3.6s ${EASE} infinite; }`,
+
+  "cloud-backup": `
+    @keyframes lift { 0%,100% { opacity:1; transform:translateY(0) } 55% { opacity:.55; transform:translateY(-46px) } }
+    @keyframes nudge { 0%,100% { opacity:.5; transform:translateY(4px) } 50% { opacity:1; transform:translateY(-4px) } }
+    .rise { animation: lift 4.2s ${EASE} infinite; animation-delay: calc(var(--i) * .5s); }
+    .arrow { animation: nudge 2.1s ${EASE} infinite; }`,
+
+  "app-vs-web": `
+    @keyframes takeTurns { 0%,42% { opacity:1; transform:scale(1) } 58%,92% { opacity:.5; transform:scale(.97) } 100% { opacity:1; transform:scale(1) } }
+    .sideA, .sideB { transform-box:fill-box; transform-origin:center; animation: takeTurns 5s ${EASE} infinite; }
+    .sideB { animation-delay: 2.5s; }`,
+
+  "hardware-trouble": `
+    @keyframes alert { 0%,68%,100% { transform:scale(1) } 78% { transform:scale(1.09) } 88% { transform:scale(1) } }
+    .warn { transform-box:fill-box; transform-origin:center; animation: alert 2.8s ${EASE} infinite; }`,
+
+  // The plug reaches for the socket and never gets there. That IS the lesson.
+  "peripheral-trouble": `
+    @keyframes reach { 0%,100% { transform:translateX(0) } 50% { transform:translateX(9px) } }
+    ${CALLOUT_CSS}
+    .plug { animation: reach 2.6s ${EASE} infinite; }`,
+
+  "map-route": `
+    @keyframes trace { from { stroke-dashoffset: 1150 } to { stroke-dashoffset: -150 } }
+    @keyframes dropIn { 0% { opacity:.8; transform:translateY(-12px) } 70% { opacity:1; transform:translateY(3px) } 100% { opacity:1; transform:translateY(0) } }
+    .route path { animation: trace 3.4s linear infinite; }
+    .pinB { transform-box:fill-box; transform-origin:center bottom; animation: dropIn .6s ${EASE} 1.2s both; }`,
+
+  "qr-code": `
+    @keyframes sweep { 0% { transform:translateY(-190px) } 50% { transform:translateY(190px) } 100% { transform:translateY(-190px) } }
+    .scan { animation: sweep 3.4s ${EASE} infinite; }`,
+
+  // The padlock does NOT swing open and shut. A frozen first frame would then
+  // be an *open* lock on a lesson whose whole point is that the closed one
+  // means safe — the animation would be teaching the opposite of the lesson.
+  // It reassures instead: a slow, closed-the-whole-time pulse.
+  "safe-payment": `
+    @keyframes secure { 0%,100% { transform:scale(1) } 50% { transform:scale(1.04) } }
+    @keyframes glint { 0%,100% { opacity:1 } 50% { opacity:.86 } }
+    .shackle { transform-box:fill-box; transform-origin:center bottom; animation: glint 3s ${EASE} infinite; }
+    .lockbody { transform-box:fill-box; transform-origin:center; animation: secure 3s ${EASE} infinite; }`,
+
+  // The link lines are drawn dashed on purpose, so they travel rather than
+  // draw on — overriding stroke-dasharray here would erase the pattern that
+  // says "a link" and leave two solid rules.
+  "share-doc": `
+    @keyframes travel { from { stroke-dashoffset: 48 } to { stroke-dashoffset: 0 } }
+    @keyframes popIn { 0% { opacity:.85; transform:scale(.92) } 70% { transform:scale(1.05) } 100% { opacity:1; transform:scale(1) } }
+    .link path { animation: travel 1.2s linear infinite; }
+    .face { transform-box:fill-box; transform-origin:center; animation: popIn .55s ${EASE} both; animation-delay: calc(.3s + var(--i) * .25s); }`,
+
+  "drive-cloud": `
+    @keyframes settleIn { 0% { opacity:.9; transform:translateY(10px) } 100% { opacity:1; transform:translateY(0) } }
+    .fold { animation: settleIn .7s ${EASE} both; animation-delay: calc(var(--i) * .22s); }`,
+
+  "staying-connected": `
+    @keyframes arrive { 0% { opacity:.88; transform:translateY(8px) scale(.97) } 100% { opacity:1; transform:translateY(0) scale(1) } }
+    .bub { transform-box:fill-box; transform-origin:center; animation: arrive .6s ${EASE} both; animation-delay: calc(var(--i) * .45s); }`,
+
+  "settings-adapt": `
+    @keyframes rowIn { 0% { opacity:.9; transform:translateX(-9px) } 100% { opacity:1; transform:translateX(0) } }
+    .row { animation: rowIn .55s ${EASE} both; animation-delay: calc(var(--i) * .16s); }`,
+
+  "holiday-away": `
+    @keyframes sway { 0%,100% { transform:rotate(-1.6deg) } 50% { transform:rotate(1.6deg) } }
+    @keyframes shine { 0%,100% { opacity:.85 } 50% { opacity:1 } }
+    .crown { transform-box:fill-box; transform-origin:center; animation: sway 5.5s ${EASE} infinite; }
+    .sun { animation: shine 5.5s ${EASE} infinite; }`,
+
+  "graduation": `
+    @keyframes swing { 0%,100% { transform:rotate(-7deg) } 50% { transform:rotate(7deg) } }
+    @keyframes stamp { 0% { opacity:.85; transform:scale(1.3) } 60% { opacity:1; transform:scale(.95) } 100% { opacity:1; transform:scale(1) } }
+    .tassel { animation: swing 3.2s ${EASE} infinite; }
+    .seal { transform-box:fill-box; transform-origin:center; animation: stamp .7s ${EASE} .5s both; }`,
+
+  "power-symbol": `
+    @keyframes wake { 0%,100% { opacity:.25 } 50% { opacity:.9 } }
+    @keyframes glyphGlow { 0%,100% { opacity:.82 } 50% { opacity:1 } }
+    .halo { animation: wake 2.8s ${EASE} infinite; }
+    .glyph { animation: glyphGlow 2.8s ${EASE} infinite; }`,
+
+  "charger-cable": `
+    @keyframes flow { from { stroke-dashoffset: 790 } to { stroke-dashoffset: 0 } }
+    .charge path { animation: flow 2.6s linear infinite; }`,
+};
+
 const LESSON_MANIFEST = [
   ["part-screen",      "part-screen",      "A laptop with the screen outlined",                 LA, "computer-parts-screen"],
   ["part-keyboard",    "part-keyboard",    "A laptop with the keyboard outlined",               LA, "computer-parts-keyboard"],
@@ -2275,7 +2610,73 @@ const LESSON_MANIFEST = [
   ["settings-adapt",   "settings-adapt",   "A settings panel of sliders and switches",          LA, "a11y-why"],
   ["holiday-away",     "holiday-away",     "A beach with a deckchair and a closed laptop",      LA, "final-intro"],
   ["graduation",       "graduation",       "A certificate and a graduation cap",                LA, "final-graduation"],
+  ["power-symbol",     "power-symbol",     "The power symbol: a circle with a line at the top", LA, "computer-parts-power-button", "The power symbol looks the same on nearly every device."],
+  ["charger-cable",    "charger-cable",    "A charging cable running from a wall plug to a laptop", LA, "computer-parts-charger", "This is what a laptop charger looks like."],
 ];
+
+/**
+ * Lesson art ships as live SVG, in two files: the animated one, and a still
+ * that is byte-for-byte the same drawing with the stylesheet left out.
+ *
+ * Both are needed because `prefers-reduced-motion` does **not** reach inside an
+ * `<img>`-embedded SVG — Chromium runs the animation regardless, which was
+ * measured, not assumed. `<picture>` evaluates its `source media` against the
+ * page instead, so `LessonMedia` hands the browser both and lets it pick; a
+ * learner who asked for less motion downloads only the still.
+ *
+ * WebP is gone from this set. These are flat vector diagrams: SVG is smaller,
+ * stays sharp on any screen at any zoom — which matters more here than
+ * anywhere, since a good part of this audience runs the browser at 150% — and
+ * it is the only format that can carry the motion at all.
+ */
+/**
+ * Rule 3, enforced: no keyframe may start from nothing.
+ *
+ * A browser that never starts these animations renders the first frame
+ * forever, so `0% { opacity: 0 }` is not a fade-in — it is a permanently
+ * missing element. Rejecting it here is cheap; noticing it in a screenshot of
+ * one lesson, on one browser, months later, is not.
+ *
+ * There is no fill-mode exemption. `forwards` was exempted here for exactly one
+ * revision, on the reasoning that it never paints the start frame — and the
+ * browser that froze the map had started the animation and held frame 0
+ * anyway. Every keyframe set is checked.
+ */
+function assertPresentableFirstFrame(file, css) {
+  for (const [, name, body] of css.matchAll(/@keyframes\s+([\w-]+)\s*\{([\s\S]*?)\}\s*(?=@keyframes|\n\s*\.|$)/g)) {
+    const first = body.match(/(?:^|\})\s*(?:0%|from)[^{]*\{([^}]*)\}/);
+    if (first && /opacity\s*:\s*0(?!\.)/.test(first[1])) {
+      throw new Error(
+        `${file}: @keyframes ${name} starts at opacity:0 where the first frame can be ` +
+        `painted. A browser that does not animate SVG-as-image renders that frame ` +
+        `forever, so the element would simply be missing. Start from a visible pose.`
+      );
+    }
+  }
+}
+
+async function renderLessonArt(dir) {
+  mkdirSync(dir, { recursive: true });
+  const meta = [];
+  for (const [file, sceneName, label, [w, h], slug, caption] of LESSON_MANIFEST) {
+    const scene = S[sceneName];
+    if (!scene) throw new Error(`No scene named ${sceneName}`);
+    uid = 0;
+    const body = scene(w, h, makeRng(file)) + lessonFinish(w, h);
+    const open = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img">`;
+    const css = ANIM[file];
+    if (!css) throw new Error(`No animation defined for lesson art "${file}"`);
+    assertPresentableFirstFrame(file, css);
+    // The in-file query is belt and braces behind the <picture> swap: harmless
+    // where it is ignored, correct anywhere it is honored.
+    const style = `<style>${css}\n  @media (prefers-reduced-motion: reduce) { * { animation: none !important } }</style>`;
+    writeFileSync(join(dir, `${file}.svg`), `${open}${style}${body}</svg>`);
+    writeFileSync(join(dir, `${file}-still.svg`), `${open}${body}</svg>`);
+    meta.push({ file, label, w, h, slug, caption });
+    process.stdout.write(`  ${file}.svg + still\n`);
+  }
+  return meta;
+}
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
@@ -2301,11 +2702,17 @@ async function main() {
     `\n];\n\nexport const photoSrc = (id: string) =>\n  PHOTO_ASSETS.find((p) => p.id === id)?.src ?? PHOTO_ASSETS[0].src;\n`;
   writeFileSync(join(ROOT, "lib", "photoAssets.ts"), ts);
 
-  const lessonMeta = await render(LESSON_MANIFEST, join(ROOT, "public", "lesson"));
+  const lessonMeta = await renderLessonArt(join(ROOT, "public", "lesson"));
   const lessonTs = `// Generated by scripts/generate-photos.mjs — do not edit by hand.\n\n` +
-    `/** The picture beside a lesson that has no activity. Keyed by lesson slug. */\n` +
-    `export const LESSON_ART: Record<string, { src: string; alt: string; caption?: string }> = {\n` +
-    lessonMeta.map((m) => `  ${JSON.stringify(m.slug)}: { src: ${JSON.stringify(`/lesson/${m.file}.webp`)}, alt: ${JSON.stringify(m.label)} },`).join("\n") +
+    `/**\n * The picture beside a lesson that has no activity. Keyed by lesson slug.\n *\n` +
+    ` * \`src\` animates; \`still\` is the same drawing holding its finished pose, for\n` +
+    ` * learners who have asked for reduced motion. LessonMedia offers both and lets\n` +
+    ` * the browser choose — see the note there for why the choice cannot be made\n * inside the SVG.\n */\n` +
+    `export const LESSON_ART: Record<string, { src: string; still: string; alt: string; caption?: string }> = {\n` +
+    lessonMeta.map((m) =>
+      `  ${JSON.stringify(m.slug)}: { src: ${JSON.stringify(`/lesson/${m.file}.svg`)}, ` +
+      `still: ${JSON.stringify(`/lesson/${m.file}-still.svg`)}, alt: ${JSON.stringify(m.label)}` +
+      `${m.caption ? `, caption: ${JSON.stringify(m.caption)}` : ""} },`).join("\n") +
     `\n};\n`;
   writeFileSync(join(ROOT, "lib", "lessonArt.ts"), lessonTs);
 
