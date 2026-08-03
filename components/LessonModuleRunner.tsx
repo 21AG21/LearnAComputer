@@ -16,11 +16,13 @@ type FailInfo = { message: string } | null;
 
 interface LessonModuleRunnerProps {
   route: ModuleRoute;
+  /** Lesson-art SVG markup to inline, keyed by sub-lesson slug. Read on the server. */
+  artMarkup?: Record<string, string>;
   nextModuleSlug: string | null;
   previousModuleSlug?: string | null;
 }
 
-export default function LessonModuleRunner({ route, nextModuleSlug, previousModuleSlug }: LessonModuleRunnerProps) {
+export default function LessonModuleRunner({ route, artMarkup, nextModuleSlug, previousModuleSlug }: LessonModuleRunnerProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [index, setIndex] = useState(0);
@@ -352,7 +354,12 @@ export default function LessonModuleRunner({ route, nextModuleSlug, previousModu
 
       {media ? (
         <div className="flex h-[40vh] min-h-[280px] min-w-0 border-t border-gray-200 bg-gray-50 lg:h-full lg:min-h-0 lg:flex-1 lg:border-l lg:border-t-0 dark:bg-[#0b1016] dark:border-gray-800">
-          <LessonMedia src={media.src} still={media.still} alt={media.alt} caption={media.caption} />
+          <LessonMedia
+            src={media.src}
+            markup={artMarkup?.[subLesson.slug]}
+            alt={media.alt}
+            caption={media.caption}
+          />
         </div>
       ) : hasGate ? (
         <div className="block h-[70vh] min-h-[560px] min-w-0 border-t border-gray-200 p-4 lg:h-full lg:min-h-0 lg:flex-1 lg:border-t-0 dark:border-gray-800">

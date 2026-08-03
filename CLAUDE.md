@@ -1193,38 +1193,48 @@ key outlined — so a learner meeting the seventh of them recognizes the machine
 and only has to find the new part. Add to `laptop()` / `keyboard()` rather than
 drawing a new machine.
 
-**The lesson art moves, and it ships as SVG, in two files per scene.** `foo.svg`
-animates; `foo-still.svg` is the same drawing with the `<style>` block left out.
-`LessonMedia` offers both through a `<picture>` and lets the browser pick. That
-shape is forced by a measured fact: **`prefers-reduced-motion` does not reach
-inside an SVG referenced as an image** — Chromium runs the animation regardless,
-so a media query in the file is decoration. `<picture>` resolves `source media`
-against the page, fetches exactly one file, and is why this is worth stepping
-outside `next/image` for.
+**The lesson art moves, it ships as SVG, and it is *inlined into the page*, not
+loaded as an image.** The server reads the module's art in
+`app/lessons/[slug]/page.tsx` (`lib/lessonArtMarkup.ts`) and passes the markup
+down; `LessonMedia` renders it inside a `role="img"` wrapper carrying the alt
+text.
 
-Two rules govern the keyframes, and the second one cost real time:
+Inlining is load-bearing, for one measured reason: **`prefers-reduced-motion`
+does not reach inside an SVG referenced as an image.** The media query in the
+file is ignored and the picture keeps moving for the learner who asked it to
+stop. Inlined, the query is evaluated against the page and honored. (Animation
+itself works either way — a claim that browsers refuse to animate SVG-as-image
+was made here and **withdrawn**: the page doing the measuring was hidden, which
+freezes its whole timeline. `document.visibilityState` makes working animation
+and broken animation look identical; check it before believing "nothing moved".)
 
-- **The still is the finished pose.** Every start position lives in a keyframe,
-  never in the markup, or reduced-motion learners get the "before" picture.
-- **The first frame is a picture too.** Some browsers never run CSS animations
-  inside SVG-as-image at all — the same file animated under Playwright's
-  Chromium and sat frozen at frame 0 in another Chrome on the same machine. Any
-  keyframe starting at `opacity: 0` then means a permanently *missing* element:
+**An inlined `<style>` is not scoped to its SVG — it applies document-wide.**
+`scopeCss` in the generator namespaces every selector and keyframe name to
+`#la-<file>`, and `assertScoped` fails the build on any rule that escapes.
+Without it this set would publish site-wide rules for `.row`, `.link` and
+`.key`, and a `prefers-reduced-motion` block that switched off every animation
+on the site.
+
+Two rules govern the keyframes:
+
+- **The resting state is the finished state.** Every start position lives in a
+  keyframe, never in the markup.
+- **The first frame is a picture too.** A paused timeline holds frame 0 on
+  screen — a background tab freezes `document.timeline` outright — so a keyframe
+  starting at `opacity: 0` is not "not started yet", it is a *missing element*:
   a map with no route, a certificate with no seal. `assertPresentableFirstFrame`
-  in the generator throws on it at build time, with **no fill-mode exemption** —
-  `forwards` was exempted for one revision on the reasoning that it never paints
-  frame 0, and the frozen browser had already started the animation and held
-  frame 0 anyway. Anything that must always be visible must be visible in the
-  *markup*, with the animation only moving a highlight across it.
-  And check the animation does not contradict the lesson: the padlock in
-  `safe-payment` no longer swings shut, because a frozen frame was an open lock
-  on the lesson about closed ones.
+  throws on it at build time, with **no fill-mode exemption** (`forwards` looks
+  like one and is not: a paused animation has already started).
+  Also check the animation does not argue with the lesson — the padlock in
+  `safe-payment` does not swing shut, because closing it means showing it open
+  first on the lesson about closed locks.
 
-After touching `ANIM`, `lessonFinish`, `LessonMedia` or any lesson scene, run
-**`npm run motion-check`** (needs `npm run dev`). Nothing else looks at this —
-every other harness drives the DOM or measures a page that is holding still.
-`MOTION_NEGATIVE=1` is the negative control and has been watched to fail (16
-findings). See `docs/LESSON_ART_MOTION.md`.
+After touching `ANIM`, `scopeCss`, `lessonFinish`, `LessonMedia` or any lesson
+scene, run **`npm run motion-check`** (needs `npm run dev`). Nothing else looks
+at this — every other harness drives the DOM or measures a page holding still.
+`MOTION_NEGATIVE=1` is the negative control: it puts the art back behind an
+image and has been watched to fail, 8/8 still moving under reduced motion. See
+`docs/LESSON_ART_MOTION.md`.
 
 **Sizing a picture: cap the width, not the height.** `object-cover` inside a
 short full-width box is a letterbox crop that throws the subject away — a
@@ -1233,5 +1243,9 @@ four legs. `w-full max-w-[300px] h-auto` shows the whole picture at any pane
 width. `object-cover` is only safe where the subject fills the frame (a
 bookshelf, a banner behind overlaid text).
 
-`LessonMedia` draws **no border**. `object-contain` letterboxes inside its box,
-so a border on that box frames mostly empty space.
+`LessonMedia` frames the lesson art in a soft rounded card, and that is only
+safe because the art is **inlined**. With an `<img>` and `object-contain` the
+element box was a fixed rectangle with the picture letterboxed inside it, so any
+border framed mostly empty space — which is why there deliberately wasn't one.
+An inlined SVG sized `w-full h-auto` *is* its own box, so the radius follows the
+artwork. Anything that goes back to `object-contain` has to drop the frame again.

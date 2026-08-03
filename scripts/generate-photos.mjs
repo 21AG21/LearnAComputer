@@ -2039,10 +2039,12 @@ S["map-route"] = (w, h) => {
   // A white casing under the route is what lifts it off a busy map.
   s += `<path d="${route}" stroke="#fff" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   // The route is ALWAYS fully drawn. A draw-on effect was the obvious idea and
-  // the wrong one: it depends on the animation running, and where it does not,
-  // the learner gets a map with no route on it. Instead a brighter segment
-  // travels along a route that is always there — the dash pattern is in the
-  // markup, so a frozen frame is a highlight sitting on a finished route.
+  // the wrong one: it plays once, so a learner who looks up a few seconds late
+  // has missed it entirely, and any paused timeline leaves a map with no route
+  // on it. A brighter segment travelling along a route that is always there
+  // repeats, survives a frozen frame, and shows the direction of travel — which
+  // is the thing the picture is actually for. The dash pattern lives in the
+  // markup so the resting state is a highlight on a finished route.
   s += `<path d="${route}" stroke="#2f6fdf" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   s += a("route", `<path d="${route}" stroke="#7fb0f5" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="150 1000" stroke-dashoffset="0"/>`);
   const pin = (fx, fy, c) => {
@@ -2435,27 +2437,28 @@ const LA = [1200, 800];
  *    should repeat; an entrance that says "these things exist" should play once
  *    and stop. An illustration that never settles is exhausting to read beside
  *    text, and this audience reads slowly on purpose.
- * 3. **The first frame must be a presentable picture.** This is the expensive
- *    one, and it was learned the hard way: some browsers do not run CSS
- *    animations inside an SVG that is referenced as an image at all. The same
- *    `map-route.svg` animated under Playwright's Chromium and sat frozen at 0%
- *    in another Chrome build on the same machine. Where a keyframe set began at
- *    `opacity: 0` — and most entrance animations naturally do — "frozen" meant
- *    an empty map, a certificate with no seal, a cloud with no folders. Not a
- *    missing animation: a *broken drawing*, and worse than no motion at all.
+ * 3. **The first frame must be a presentable picture.** A paused timeline holds
+ *    frame 0 on screen indefinitely, and timelines pause for ordinary reasons:
+ *    a background tab freezes `document.timeline` outright, and printing or
+ *    capturing a page can catch it anywhere. Where a keyframe set begins at
+ *    `opacity: 0` — and most entrance animations naturally do — that frame is
+ *    not "the animation hasn't started", it is an empty map, a certificate with
+ *    no seal, a cloud with no folders in it. A *drawing with a piece missing*.
  *
  *    So no keyframe starts invisible. Entrances begin a few pixels off and a
- *    little pale, which reads as motion where motion works and as a finished
- *    picture where it does not. `assertPresentableFirstFrame` below enforces it.
+ *    little pale, which reads as motion when it plays and as a finished picture
+ *    when it does not. `assertPresentableFirstFrame` below enforces it.
  *
- *    `animation-fill-mode: forwards` is **not** a way around this, though it
- *    looks like one. The reasoning — "no backwards fill, so the natural state
- *    shows until the animation runs" — is wrong in practice: the browser that
- *    froze these had already *started* the animation, so frame 0 was applied
- *    and then held. The map's route drew itself for exactly one round of
- *    testing before that browser showed a map with no route on it. Anything
- *    that must always be visible has to be visible in the markup, with the
- *    animation only moving a highlight across it.
+ *    A correction worth keeping, because it nearly became a rule: an earlier
+ *    round of this work concluded that *some browsers refuse to animate
+ *    SVG-as-image at all*, on the evidence of a Chrome that showed these frozen
+ *    while a DOM animation on the same page moved. That was wrong. The page
+ *    doing the measuring was not visible, so its whole timeline was stopped;
+ *    the "control" had been measured in an earlier call when the page happened
+ *    to be visible. A visible Chrome, headless and headed, animates SVG-as-image
+ *    perfectly well. **A hidden page makes working animation indistinguishable
+ *    from broken animation** — check `document.visibilityState` before
+ *    concluding anything from "nothing moved".
  */
 const EASE = "cubic-bezier(.4,0,.2,1)";
 /**
@@ -2529,10 +2532,11 @@ const ANIM = {
     @keyframes sweep { 0% { transform:translateY(-190px) } 50% { transform:translateY(190px) } 100% { transform:translateY(-190px) } }
     .scan { animation: sweep 3.4s ${EASE} infinite; }`,
 
-  // The padlock does NOT swing open and shut. A frozen first frame would then
-  // be an *open* lock on a lesson whose whole point is that the closed one
-  // means safe — the animation would be teaching the opposite of the lesson.
-  // It reassures instead: a slow, closed-the-whole-time pulse.
+  // The padlock does NOT swing open and shut. Closing it means opening it
+  // first, and this is the lesson whose whole point is that the closed one
+  // means safe — a picture that shows an open padlock at any moment, or holds
+  // one on a paused timeline, is arguing against the words beside it. It
+  // reassures instead: a slow, closed-the-whole-time pulse.
   "safe-payment": `
     @keyframes secure { 0%,100% { transform:scale(1) } 50% { transform:scale(1.04) } }
     @keyframes glint { 0%,100% { opacity:1 } 50% { opacity:.86 } }
@@ -2615,19 +2619,26 @@ const LESSON_MANIFEST = [
 ];
 
 /**
- * Lesson art ships as live SVG, in two files: the animated one, and a still
- * that is byte-for-byte the same drawing with the stylesheet left out.
+ * Lesson art ships as live SVG, **inlined into the lesson page** rather than
+ * referenced as an image.
  *
- * Both are needed because `prefers-reduced-motion` does **not** reach inside an
- * `<img>`-embedded SVG — Chromium runs the animation regardless, which was
- * measured, not assumed. `<picture>` evaluates its `source media` against the
- * page instead, so `LessonMedia` hands the browser both and lets it pick; a
- * learner who asked for less motion downloads only the still.
+ * The reason is reduced motion. **`prefers-reduced-motion` does not reach inside
+ * an SVG referenced as an image** — measured, not assumed — so a media query in
+ * the file does nothing at all, and the animation runs for the learner who
+ * explicitly asked it not to. Inlined, the query is evaluated against the page
+ * like any other, which is both correct and simpler: it replaces a `<picture>`
+ * holding a second, motionless copy of every drawing.
  *
- * WebP is gone from this set. These are flat vector diagrams: SVG is smaller,
- * stays sharp on any screen at any zoom — which matters more here than
- * anywhere, since a good part of this audience runs the browser at 150% — and
- * it is the only format that can carry the motion at all.
+ * (Animation itself is fine either way. An earlier round of this work claimed
+ * SVG-as-image would not animate at all; that was a hidden page freezing its own
+ * timeline, and the claim is withdrawn. `motion-check`'s negative control proves
+ * the real one: put the art back behind an image and reduced motion stops
+ * working for all eight sampled lessons.)
+ *
+ * WebP is gone from this set. These are flat vector diagrams: SVG is far smaller
+ * over the wire (part-screen 9,422B → 1,253B gzipped), stays sharp at the 150%
+ * browser zoom a good part of this audience uses, and is the only format that
+ * can carry the motion at all.
  */
 /**
  * Rule 3, enforced: no keyframe may start from nothing.
@@ -2637,10 +2648,10 @@ const LESSON_MANIFEST = [
  * missing element. Rejecting it here is cheap; noticing it in a screenshot of
  * one lesson, on one browser, months later, is not.
  *
- * There is no fill-mode exemption. `forwards` was exempted here for exactly one
- * revision, on the reasoning that it never paints the start frame — and the
- * browser that froze the map had started the animation and held frame 0
- * anyway. Every keyframe set is checked.
+ * There is no fill-mode exemption. `forwards` looks like one — "it never paints
+ * the start frame, so the natural styling shows until the animation runs" — but
+ * a paused timeline has already *started* the animation and holds frame 0
+ * regardless. Every keyframe set is checked.
  */
 function assertPresentableFirstFrame(file, css) {
   for (const [, name, body] of css.matchAll(/@keyframes\s+([\w-]+)\s*\{([\s\S]*?)\}\s*(?=@keyframes|\n\s*\.|$)/g)) {
@@ -2655,6 +2666,50 @@ function assertPresentableFirstFrame(file, css) {
   }
 }
 
+/**
+ * Namespace a scene's stylesheet to its own root element.
+ *
+ * These SVGs are **inlined into the page**, and an inlined `<style>` is not
+ * scoped to the SVG — its rules apply to the whole document. Left alone, this
+ * set would ship page-wide rules for `.row`, `.link`, `.face` and `.key`, and a
+ * `@media (prefers-reduced-motion: reduce) { * { animation: none } }` that would
+ * silently kill every animation on the site. Keyframe names are global too, so
+ * `draw` or `popIn` would be up for grabs by anything else on the page.
+ *
+ * Every rule is therefore prefixed with `#la-<file>`, and every keyframe name
+ * gets the same prefix. Line-based because each rule in `ANIM` is written on its
+ * own line, and a real CSS parser for six shapes of rule is not worth the
+ * dependency — `assertScoped` below fails the build if that ever stops holding.
+ */
+function scopeCss(file, css) {
+  const root = `#la-${file}`;
+  const ns = `la-${file}`.replace(/[^a-z0-9-]/gi, "");
+  let out = css;
+  for (const [, name] of css.matchAll(/@keyframes\s+([\w-]+)/g)) {
+    out = out.replace(new RegExp(`@keyframes\\s+${name}\\b`, "g"), `@keyframes ${ns}-${name}`)
+             .replace(new RegExp(`(animation:\\s*)${name}\\b`, "g"), `$1${ns}-${name}`);
+  }
+  return out.split("\n").map((line) => {
+    const m = line.match(/^(\s*)([^@\s][^{]*?)\s*\{(.*)$/);
+    if (!m) return line;                       // blank, or an @-rule
+    return `${m[1]}${m[2].split(",").map((s) => `${root} ${s.trim()}`).join(", ")} {${m[3]}`;
+  }).join("\n");
+}
+
+/** Every selector must be anchored to this scene, or it leaks onto the page. */
+function assertScoped(file, css) {
+  for (const line of css.split("\n")) {
+    const m = line.match(/^(\s*)([^@\s][^{]*?)\s*\{/);
+    if (!m) continue;
+    for (const sel of m[2].split(",")) {
+      if (!sel.trim().startsWith(`#la-${file}`)) {
+        throw new Error(`${file}: selector "${sel.trim()}" is not scoped to #la-${file}. ` +
+          `Inlined <style> is document-wide — an unscoped rule here restyles the whole site.`);
+      }
+    }
+  }
+}
+
 async function renderLessonArt(dir) {
   mkdirSync(dir, { recursive: true });
   const meta = [];
@@ -2663,17 +2718,21 @@ async function renderLessonArt(dir) {
     if (!scene) throw new Error(`No scene named ${sceneName}`);
     uid = 0;
     const body = scene(w, h, makeRng(file)) + lessonFinish(w, h);
-    const open = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img">`;
-    const css = ANIM[file];
-    if (!css) throw new Error(`No animation defined for lesson art "${file}"`);
-    assertPresentableFirstFrame(file, css);
-    // The in-file query is belt and braces behind the <picture> swap: harmless
-    // where it is ignored, correct anywhere it is honored.
-    const style = `<style>${css}\n  @media (prefers-reduced-motion: reduce) { * { animation: none !important } }</style>`;
-    writeFileSync(join(dir, `${file}.svg`), `${open}${style}${body}</svg>`);
-    writeFileSync(join(dir, `${file}-still.svg`), `${open}${body}</svg>`);
+    const raw = ANIM[file];
+    if (!raw) throw new Error(`No animation defined for lesson art "${file}"`);
+    assertPresentableFirstFrame(file, raw);
+    const css = scopeCss(file, raw);
+    assertScoped(file, css);
+    // Scoped to this scene, not `*`: inlined, a bare universal selector would
+    // switch off every animation on the page, not just this picture's.
+    const style = `<style>${css}\n  @media (prefers-reduced-motion: reduce) { #la-${file} * { animation: none !important } }</style>`;
+    // `aria-hidden` on the drawing, `role="img"` + the description on the
+    // wrapper `LessonMedia` puts around it. Both carrying `role="img"` nests one
+    // image inside another and leaves a screen reader announcing an unnamed one.
+    writeFileSync(join(dir, `${file}.svg`),
+      `<svg xmlns="http://www.w3.org/2000/svg" id="la-${file}" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">${style}${body}</svg>`);
     meta.push({ file, label, w, h, slug, caption });
-    process.stdout.write(`  ${file}.svg + still\n`);
+    process.stdout.write(`  ${file}.svg\n`);
   }
   return meta;
 }
@@ -2705,13 +2764,13 @@ async function main() {
   const lessonMeta = await renderLessonArt(join(ROOT, "public", "lesson"));
   const lessonTs = `// Generated by scripts/generate-photos.mjs — do not edit by hand.\n\n` +
     `/**\n * The picture beside a lesson that has no activity. Keyed by lesson slug.\n *\n` +
-    ` * \`src\` animates; \`still\` is the same drawing holding its finished pose, for\n` +
-    ` * learners who have asked for reduced motion. LessonMedia offers both and lets\n` +
-    ` * the browser choose — see the note there for why the choice cannot be made\n * inside the SVG.\n */\n` +
-    `export const LESSON_ART: Record<string, { src: string; still: string; alt: string; caption?: string }> = {\n` +
+    ` * These animate, and they are **inlined** into the page rather than loaded as\n` +
+    ` * images — see \`lib/lessonArtMarkup.ts\` for why that is load-bearing. \`src\` is\n` +
+    ` * the file on disk, which is what the server reads and what motion-check fetches.\n */\n` +
+    `export const LESSON_ART: Record<string, { src: string; alt: string; caption?: string }> = {\n` +
     lessonMeta.map((m) =>
       `  ${JSON.stringify(m.slug)}: { src: ${JSON.stringify(`/lesson/${m.file}.svg`)}, ` +
-      `still: ${JSON.stringify(`/lesson/${m.file}-still.svg`)}, alt: ${JSON.stringify(m.label)}` +
+      `alt: ${JSON.stringify(m.label)}` +
       `${m.caption ? `, caption: ${JSON.stringify(m.caption)}` : ""} },`).join("\n") +
     `\n};\n`;
   writeFileSync(join(ROOT, "lib", "lessonArt.ts"), lessonTs);
