@@ -62,7 +62,18 @@ export interface PhoneGestureLesson {
   slug: string;
   title: string;
   intro: string;
+  /** Past tense; the finish card's sentence. */
   goal: string;
+  /**
+   * Present tense; the banner while the learner is working.
+   *
+   * Assessments have no current step, so the banner used to fall back to `goal`
+   * — and `goal` is written for the card that appears *after* it is done. A
+   * frightened beginner opened the Unit 1 check and read "You found your way
+   * around the phone", about something they had not done yet, above a screen
+   * with no rings on it. Guided lessons never see this: they have a step.
+   */
+  doing?: string;
   success: string;
   hint: string;
   mode?: "guided" | "assessment";
@@ -128,7 +139,7 @@ export const PHONE_COURSE: PhoneUnit[] = [
           "The thin strip at the very top of the screen shows the time, whether you have Wi-Fi, and how much battery is left. It is there on every screen, in every app, and it never goes away.\n\nEach of those three is a button. Tap the Wi-Fi symbol and you get the list of networks in range. Tap the battery and it tells you how much is left in plain words. Tap the time and you get today's date and what is on.\n\nThis is where you go first when something seems wrong. \"The internet is not working\" is very often \"the Wi-Fi symbol is not there\", and you can see that in one glance without opening anything.\n\nTapping the same button again puts the panel away, and so does tapping anywhere else on the screen.",
         goal: "You opened a panel from the top strip and put it away again.",
         success: "Three buttons, always in the same corner, in every app. That strip answers most of the questions a phone raises.",
-        hint: "The Wi-Fi symbol, the battery and the time are all at the top right. Tap one.",
+        hint: "The time is at the top left; the Wi-Fi symbol and the battery are at the top right. Tap one of them.",
         steps: [
           { say: "Tap the Wi-Fi symbol at the top of the screen.", action: "open-panel", target: "wifi" },
           { say: "Close the panel.", action: "close-panel" },
@@ -141,15 +152,25 @@ export const PHONE_COURSE: PhoneUnit[] = [
         slug: "phone-unit1-check",
         title: "Unit 1 check: find your way around",
         intro:
-          "No yellow rings this time. Nothing here is new — you have done every one of these already, just with a hint pointing at it.\n\nThe list of what to do is at the top, and it does not matter which order you do them in. If you get properly stuck, the rings come back on their own after a while.\n\nTake as long as you like. Nothing on this phone can break, and there is nobody watching.",
+          "No yellow rings this time. Nothing here is new — you have done every one of these already, just with a hint pointing at it.\n\nTap \"What to do\" in the dark bar to see the list, and it does not matter which order you do them in. If you get properly stuck, the rings come back on their own after a while.\n\nTake as long as you like. Nothing on this phone can break, and there is nobody watching.",
         goal: "You found your way around the phone without being shown where to tap.",
+        // The banner in an assessment falls back to `goal`, which is written for
+        // the finish card — so a learner who had done nothing yet was reading a
+        // claim about something they had not done. Present tense, and it points
+        // at the only guidance an assessment has.
+        doing: "Your turn, with no rings. Tap \"What to do\" in this bar to see the list.",
         success: "That was the whole unit with the training wheels off. From here on, the lessons are the same ones the laptop course uses — on your phone.",
-        hint: "Home is the bar along the very bottom. The clock is at the top right.",
+        hint: "Home is the bar along the very bottom. The clock is at the top left.",
         mode: "assessment",
         steps: [
           { say: "Open the Notes app.", action: "open-app", target: "notes" },
           { say: "Get back to the home screen.", action: "go-home" },
-          { say: "Find out what today's date is.", action: "open-panel", target: "calendar" },
+          // Worded away from the Calendar app on purpose. "Find out today's date"
+          // has an obvious wrong answer sitting on the home screen — the Calendar
+          // icon — which opens, fills the screen, and leaves the score at 0 with
+          // nothing said. The control that counts is the clock in the status
+          // strip, and the objective now names the strip rather than the fact.
+          { say: "Check the time and date without opening an app.", action: "open-panel", target: "calendar" },
         ],
       },
     ],

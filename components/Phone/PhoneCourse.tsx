@@ -53,6 +53,7 @@ interface PhoneCourseProps {
 export default function PhoneCourse({ lessons }: PhoneCourseProps) {
   const [view, setView] = useState<View>({ at: "list" });
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
+  const [confirmRestart, setConfirmRestart] = useState(false);
 
   // Read on mount rather than in `useState`: localStorage does not exist while
   // this is being server-rendered, and reading it during the first client render
@@ -271,28 +272,66 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
     const { attempt } = view;
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-[#1d2733]">
-        {/* The only chrome. Painted the same color as the banner beneath it, so
-            the two read as one bar rather than two. */}
-        <div className="flex h-8 shrink-0 items-center gap-3 px-3 text-white">
+        {/**
+          * The only chrome. Painted the same color as the banner beneath it, so
+          * the two read as one bar rather than two.
+          *
+          * The strip stays 32px tall — vertical space here is the lesson's — but
+          * the two buttons in it do not. `py-3 -my-3` grows each hit area to
+          * 44px **without** growing the strip: the extra 12px hangs down over
+          * the banner's top padding, which is text and takes no input.
+          * Measured at 57x20 and 67x20 before this, on a course whose audience
+          * is defined by not being able to hit small things.
+          */}
+        <div className="relative z-10 flex h-8 shrink-0 items-center gap-3 px-3 text-white">
           <button
             type="button"
             data-phone-close
             onClick={() => setView({ at: "list" })}
             aria-label="Close this lesson"
-            className="flex items-center gap-1 text-sm font-semibold text-white/90 hover:text-white"
+            className="-my-3 flex items-center gap-1 py-3 text-sm font-semibold text-white/90 hover:text-white"
           >
             <XIcon size={15} aria-hidden />
             Close
           </button>
           <p className="min-w-0 flex-1 truncate text-center text-sm font-semibold text-white/80">{titleOf(entry)}</p>
+          {/**
+           * Confirmed, and quieter than Close.
+           *
+           * It was underlined, top-right and the most salient thing in the bar,
+           * and it threw away everything the learner had done with one 20px-tall
+           * press and no way back. The people this course is for press things by
+           * accident; that is the premise of the whole product.
+           */}
           <button
             type="button"
-            onClick={() => setView({ at: "doing", entry, attempt: attempt + 1 })}
-            className="shrink-0 text-sm font-semibold text-white/90 underline hover:text-white"
+            onClick={() => setConfirmRestart(true)}
+            className="-my-3 shrink-0 py-3 text-sm font-semibold text-white/70 hover:text-white"
           >
             Start over
           </button>
         </div>
+        {confirmRestart && (
+          <div className="absolute inset-x-3 top-9 z-30 rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800">
+            <p className="text-[15px] font-semibold">Start this lesson again from the beginning?</p>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => { setConfirmRestart(false); setView({ at: "doing", entry, attempt: attempt + 1 }); }}
+                className="min-h-[44px] flex-1 rounded-lg bg-blue-600 px-3 font-bold text-white"
+              >
+                Start again
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmRestart(false)}
+                className="min-h-[44px] flex-1 rounded-lg border-2 border-gray-500 px-3 font-bold"
+              >
+                Keep going
+              </button>
+            </div>
+          </div>
+        )}
 
         {/**
           * The shape of an actual phone.
@@ -331,7 +370,19 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
       <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-6">
         <div className="rounded-xl border-2 border-red-500 bg-red-50 p-4 dark:bg-red-950/40">
           <p className="text-lg font-bold">Not that one</p>
-          <p className="mt-2 text-[17px] leading-relaxed">{message}</p>
+          {/* The one learner-facing string on the phone that used to skip the
+              rewrite — and the screen this audience reads most carefully, since
+              it is the screen that appears when something went wrong. It was
+              telling them to "click" the ✕ next time. */}
+          <p className="mt-2 text-[17px] leading-relaxed">
+            {entry.kind === "lesson" ? inPhoneWords(message) : message}
+          </p>
+          {/* Said out loud, because the alternative is a beginner deciding they
+              broke it. Nothing here can be broken; that is the whole promise. */}
+          <p className="mt-3 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
+            Nothing is broken — this is the practice phone. Tap Try again to have
+            another go.
+          </p>
         </div>
         <button
           type="button"
@@ -347,6 +398,7 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
 
   // ── The finish card ────────────────────────────────────────────────────────
   const next = nextPhoneEntry(entry.slug);
+  const doneNow = PHONE_ENTRIES.filter((l) => completed.has(l.slug)).length;
   return (
     <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-6">
       <div className="rounded-xl border-2 border-green-500 bg-green-50 p-4 dark:bg-green-950/40">
@@ -356,6 +408,12 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
         </div>
         <p className="mt-3 text-[17px] leading-relaxed">{success}</p>
         {goal && <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{goal}</p>}
+        {/* One line of "how far along am I". Finishing something and being told
+            nothing about where it sits is the moment a course stops feeling like
+            progress and starts feeling like a list. */}
+        <p className="mt-3 text-sm font-semibold text-green-800 dark:text-green-300">
+          {doneNow} of {PHONE_ENTRIES.length} lessons done
+        </p>
       </div>
 
       {next ? (

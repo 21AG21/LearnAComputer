@@ -56,6 +56,22 @@ const config: Config = {
           "0%, 100%": { boxShadow: "0 0 0 3px rgba(250,204,21,1), 0 0 0 5px rgba(23,37,84,0.95), 0 0 0 9px rgba(250,204,21,0)" },
           "50%":       { boxShadow: "0 0 0 3px rgba(250,204,21,1), 0 0 0 5px rgba(23,37,84,0.95), 0 0 0 13px rgba(250,204,21,0.45)" },
         },
+        /**
+         * The same cue, painted inward.
+         *
+         * `ring-pulse` is an *outer* box-shadow, and the home bar is the last
+         * child of an `overflow: hidden` column, flush with the bottom edge:
+         * every pixel of that shadow lands outside the clip and none of it is
+         * drawn. Measured on lesson 1, step 2 — the gesture the whole phone
+         * course opens with — the highlight rendered **0 yellow pixels**. The
+         * learner saw a plain gray pill, identical to the step before, and the
+         * only obvious control on screen was a back arrow meaning something
+         * else. An edge-anchored target has to be ringed from the inside.
+         */
+        "ring-pulse-inset": {
+          "0%, 100%": { boxShadow: "inset 0 0 0 3px rgba(250,204,21,1), inset 0 0 0 5px rgba(23,37,84,0.95)" },
+          "50%":       { boxShadow: "inset 0 0 0 5px rgba(250,204,21,1), inset 0 0 0 8px rgba(23,37,84,0.95)" },
+        },
         "pop-attention": {
           "0%":   { transform: "scale(1)" },
           "40%":  { transform: "scale(1.12)" },
@@ -125,6 +141,7 @@ const config: Config = {
         "window-minimize": "window-minimize 0.32s ease-in both",
         "window-close": "window-close 0.18s ease-in both",
         "ring-pulse": "ring-pulse 1.4s ease-in-out infinite",
+        "ring-pulse-inset": "ring-pulse-inset 1.4s ease-in-out infinite",
         "pop-attention": "pop-attention 0.35s ease-out 1",
         "lesson-in": "lesson-in 0.28s ease-out both",
         "loading-bar": "loading-bar 0.9s ease-in-out infinite",

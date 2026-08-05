@@ -111,8 +111,17 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
   const [showMeBanner, setShowMeBanner] = useState(false);
   const [showMeConfirmed, setShowMeConfirmed] = useState(false);
 
-  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives, completed } =
+  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives, completed, isAssessment } =
     useStepRunner({ steps, mode, onResult });
+
+  /**
+   * One screen at a time on a phone: the open photo replaces the album list.
+   * A step pointing at something in that list — a new album, an album to open,
+   * search — pops back to it.
+   */
+  const listStep =
+    step?.action === "create-album" || step?.action === "go-to-album" || step?.action === "search";
+  const showDetail = isPhone && !isAssessment && !listStep && !!selectedPhoto;
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -345,7 +354,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               list keeps a capped slice of the height and scrolls inside it. */}
         <div
           className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto ${
-            isPhone ? (selectedPhoto ? "w-full max-h-[26%] border-b" : "w-full flex-1 border-b") : "w-36"
+            isPhone ? (showDetail ? "hidden" : "w-full flex-1") : "w-36"
           }`}
         >
           <div className="p-2 border-b flex items-center gap-1">

@@ -184,6 +184,18 @@ export default function FileManager({
     setSelected(item.id);
     setMoveMenu(false);
     onItemClick?.(item);
+    /**
+     * One tap opens, on a phone.
+     *
+     * Double-click is a mouse convention and no phone file list has it: a
+     * single tap opens a file everywhere the learner will go afterwards.
+     * Requiring two here was also flatly contradicted two lessons earlier, by
+     * Unit 1's "a phone does not need the double tap a laptop does" — and
+     * measured, one tap did nothing and two taps 400ms apart did nothing
+     * either, because only a real `dblclick` counted. A learner following the
+     * course's own teaching got silence on six lessons.
+     */
+    if (isPhone) handleItemDoubleClick(item);
   }
 
   function handleGridKeyDown(e: React.KeyboardEvent) {
@@ -536,15 +548,25 @@ function ToolbarBtn({ label, onClick, disabled, highlight }: { label: string; on
   );
 }
 
+/**
+ * A dialog. On a phone it is a sheet from the bottom edge, which is where a
+ * phone asks its questions; a box floating in the middle is a desktop
+ * convention and reads as a website popping something at you.
+ */
 export function FileModal({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
+  const isPhone = useIsPhone();
   return (
     <div
-      className="absolute inset-0 z-30 flex items-center justify-center bg-black/40"
+      className={`absolute inset-0 z-30 flex bg-black/40 ${isPhone ? "items-end" : "items-center justify-center"}`}
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white sim-dark:bg-gray-900 border-4 border-black sim-dark:border-gray-500 rounded-xl shadow-2xl animate-slide-down"
+        className={`border-black bg-white shadow-2xl sim-dark:border-gray-500 sim-dark:bg-gray-900 ${
+          isPhone
+            ? "w-full rounded-t-2xl border-t-4 animate-sheet-up"
+            : "rounded-xl border-4 animate-slide-down"
+        }`}
       >
         {children}
       </div>

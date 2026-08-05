@@ -135,7 +135,11 @@ function FakeDesktopInner({
   const [closingApp, setClosingApp] = useState<DesktopAppId | null>(null);
   const [minimizingApp, setMinimizingApp] = useState<DesktopAppId | null>(null);
   const [launchingApp, setLaunchingApp] = useState<DesktopAppId | null>(null);
+  /** Phone: the app that just opened and is not accepting input yet. See below. */
+  const [inertApp, setInertApp] = useState<DesktopAppId | null>(null);
   const [closingPanel, setClosingPanel] = useState<"wifi" | "battery" | "calendar" | null>(null);
+  /** When the status strip was last toggled — see `onTogglePanel` below. */
+  const lastPanelToggle = useRef(0);
   const [openFileViewers, setOpenFileViewers] = useState<{ uid: string; item: Item }[]>([]);
 
   useEffect(() => {
@@ -262,9 +266,22 @@ function FakeDesktopInner({
     setStack((prev) => (prev[prev.length - 1] === app ? prev : [...prev.filter((a) => a !== app), app]));
   }
 
+  /**
+   * Every route out of a status panel, reported.
+   *
+   * There are three: the panel's own ✕, a tap on the wallpaper behind it, and
+   * tapping the menu-bar icon a second time. Only the third used to tell the
+   * lesson, so `phone-status-strip`'s "Close the panel" step sat unsatisfied
+   * while the panel it named was gone — no panel, no ring, and no way forward
+   * short of guessing you had to re-open it and shut it a *different* way. The
+   * lesson's own teaching text walks the learner into that: "tapping anywhere
+   * else on the screen puts it away too". Notifying from here means the step
+   * cannot disagree with the screen no matter which route was taken.
+   */
   function dismissPanel() {
     const current = openPanel;
     if (!current) return;
+    onPanelChange?.(null);
     setClosingPanel(current);
     setTimeout(() => {
       setOpenPanel(null);
@@ -281,6 +298,8 @@ function FakeDesktopInner({
     if (!openApps.includes(app)) {
       setLaunchingApp(app);
       setTimeout(() => setLaunchingApp(null), 550);
+      setInertApp(app);
+      setTimeout(() => setInertApp(null), 300);
     }
     setOpenPanel(null);
     setClosingPanel(null);
@@ -414,10 +433,27 @@ function FakeDesktopInner({
           batteryPercent={batteryPercent}
           openPanel={openPanel}
           highlight={highlightPanel}
+          /**
+           * A finger bouncing must not toggle twice.
+           *
+           * This one control opens a status panel and shuts it again, and
+           * `phone-status-strip` spends one step on each. Two presses 120ms
+           * apart therefore ticked **both** steps and the learner never saw the
+           * panel the lesson is about — measured, step 1 straight to step 3.
+           *
+           * Guarded here rather than in `useStepRunner`, and that distinction
+           * cost a round trip: a 150ms guard across steps in the step engine
+           * blocked three laptop lessons whose steps are honestly satisfied back
+           * to back, and then 34 phone lessons, because the solver completes
+           * steps faster than any hand. The hazard is one toggling control, so
+           * the guard belongs on it.
+           */
           onTogglePanel={(panel) => {
+            const now = performance.now();
+            if (isPhone && now - lastPanelToggle.current < 250) return;
+            lastPanelToggle.current = now;
             if (openPanel === panel) {
               dismissPanel();
-              onPanelChange?.(null);
             } else {
               setOpenPanel(panel);
               onPanelChange?.(panel);
@@ -520,9 +556,22 @@ function FakeDesktopInner({
                  * home appeared to work, and then every icon underneath was
                  * unclickable.
                  */
+                /**
+                 * `pointer-events-none` while it is growing out of its icon.
+                 *
+                 * A double-press on an app icon — which is what somebody trained
+                 * on a laptop does, and what an unsteady hand does by accident —
+                 * opened the app and then landed the second press on whatever
+                 * had arrived under the finger. On lesson 1 that meant Messages
+                 * opened and Sam's conversation opened on top of it, uninvited,
+                 * on the lesson whose own teaching card says "a second tap
+                 * usually lands somewhere you did not mean". The app is inert
+                 * is inert for 300ms — longer than the gap in an accidental
+                 * double-press, shorter than any deliberate second press.
+                 */
                 className={`absolute inset-0 z-20 overflow-hidden bg-white sim-dark:bg-gray-900 ${
                   focusedApp === id ? "flex flex-col" : "hidden"
-                } ${windowAnim(id)}`}
+                } ${inertApp === id ? "pointer-events-none" : ""} ${windowAnim(id)}`}
               >
                 <AppBody
                   id={id}
@@ -615,6 +664,23 @@ function FakeDesktopInner({
           </DraggableWindow>
         ))}
 
+        {/**
+          * A ring is not enough when the gesture is not a tap.
+          *
+          * Every other highlight in the course means "press this", and a learner
+          * who has only ever been asked to press things will press this too —
+          * and pressing the home bar does nothing, by design. So the one step
+          * that wants a *slide* says so on the screen, beside the bar, with an
+          * arrow pointing the way the finger goes. Persistent, not stall-timed:
+          * the person who needs it most is the one who has not moved yet.
+          */}
+        {isPhone && highlightHomeBar && !missedSwipe && (
+          <div className="pointer-events-none absolute inset-x-3 bottom-4 z-40 flex items-center justify-center gap-2 rounded-xl bg-[#101820] px-4 py-3 text-center text-sm font-semibold text-white shadow-xl">
+            <span aria-hidden="true" className="animate-bounce text-lg leading-none">↑</span>
+            Put your finger on the bar below and slide it up
+          </div>
+        )}
+
         {/* A swipe that did not qualify says so, rather than nothing happening —
             which is what makes a learner conclude the gesture is broken. */}
         {isPhone && missedSwipe && (
@@ -688,11 +754,13 @@ function FakeDesktopInner({
              it used to be the smallest target on the screen. */
           className={`flex min-h-[44px] shrink-0 touch-none select-none items-center justify-center ${
             isDark ? "bg-gray-800" : "bg-white"
-          } ${highlightHomeBar ? "animate-ring-pulse" : ""}`}
+          } ${highlightHomeBar ? "animate-ring-pulse-inset" : ""}`}
         >
           <span
             className={`h-1.5 rounded-full transition-all duration-150 ${
-              lift < -8 ? "w-32 bg-blue-600" : `w-28 ${isDark ? "bg-white/70" : "bg-gray-500"}`
+              lift < -8
+                ? "w-32 bg-blue-600"
+                : `w-28 ${highlightHomeBar ? "bg-blue-700" : isDark ? "bg-white/70" : "bg-gray-500"}`
             }`}
           />
         </div>

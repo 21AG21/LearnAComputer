@@ -5,13 +5,13 @@
   "order": 300,
   "title": "What is a File?",
   "videoUrl": "",
-  "drDigitalIntro": "Everything you keep on a computer is stored as a file.\n• A photo is a file. A typed letter is a file. A song is a file.\n• Each file has a name and holds one piece of your stuff.\n• When you open a file, a window appears with the file's name in the title bar.\n• The X in the corner closes the window. It does not delete the file.\n• Open a couple below and see what is in them.",
+  "drDigitalIntro": "Everything you keep on a computer is stored as a file.\n• A photo is a file. A typed letter is a file. A song is a file.\n• Each file has a name and holds one piece of your stuff.\n• When you open a file, a window appears with the file's name in the title bar.\n• The X in the file's own top corner closes it. It does not delete the file.\n• Open a couple below and see what is in them.",
   "playgroundTask": {
     "type": "guided-files",
     "goal": "Open two files to see what a file is",
     "steps": [
       {
-        "say": "Double-click GroceryList.txt to open it. A window will pop up — read what's inside, then click Got it — Close.",
+        "say": "Double-click GroceryList.txt to open it. A window will pop up — read what's inside, then close it with the X in its top corner.",
         "action": "open-file",
         "target": "GroceryList.txt"
       },

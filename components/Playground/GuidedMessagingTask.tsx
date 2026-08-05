@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useIsPhone } from "./SimFormFactor";
+import { ArrowLeftIcon } from "./Icons";
 import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -164,7 +165,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { step, stepIndex, finished, done, flash, tryStep, wanted, objectives } = useStepRunner({
+  const { step, stepIndex, finished, done, flash, tryStep, wanted, objectives, isAssessment } = useStepRunner({
     steps,
     mode,
     onResult,
@@ -183,6 +184,26 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   const lastContactIdx = currentMessages.reduce((acc, m, i) => (m.from === "contact" ? i : acc), -1);
   const currentGroupObj = groups.find((g) => g.id === activeGroupId);
   const currentGroupMessages = activeGroupId ? groupThreads[activeGroupId] ?? [] : [];
+  /**
+   * On a phone the thread replaces the contact list. A step that points at
+   * something *in the list* — the + that starts a group — pops back to it, so
+   * the ring is never behind the screen the learner is looking at.
+   */
+  /**
+   * Assessments keep both panes.
+   *
+   * An assessment has no current step, so nothing can know which pane the
+   * learner is about to need, and the pop-back-to-the-list rule below has
+   * nothing to fire on. Hiding the list there put objectives behind a screen —
+   * "make a new album called Garden" with the New Album button on the screen the
+   * photo had replaced. Both panes is the lesser evil in the one mode where the
+   * course deliberately stops pointing.
+   */
+  const listStep = step?.action === "create-group" || step?.action === "select-contact";
+  // `creatingGroup` is NOT detail: the contact picker replaces the contact list,
+  // in the list pane. Counting it as detail hid the checkboxes the step names.
+  const showDetail = isPhone && !isAssessment && !listStep && !creatingGroup && !!(activeContact || activeGroupId);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -513,7 +534,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
         {/* Contacts / group picker sidebar */}
         <div
           className={`border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col overflow-y-auto ${
-            isPhone ? (activeContact || creatingGroup ? "w-full max-h-[30%] shrink-0 border-b" : "w-full flex-1 border-b") : "w-48"
+            isPhone ? (showDetail ? "hidden" : "w-full flex-1") : "w-48"
           }`}
         >
           {creatingGroup ? (
@@ -626,7 +647,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
         </div>
 
         {/* Chat area */}
-        <div className="flex-1 flex flex-col relative">
+        <div className={`flex-1 flex flex-col relative ${showDetail ? "animate-screen-push" : ""}`}>
           {activeGroupId && currentGroupObj ? (
             /* Group chat view */
             <>
@@ -730,7 +751,19 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           ) : activeContact ? (
             /* 1-to-1 chat view */
             <>
-              {/* Chat header */}
+              {/* Chat header. On a phone the thread replaced the list, so the
+                  back chevron here is the only way to it — top left, where every
+                  phone puts it. */}
+              {isPhone && (
+                <button
+                  type="button"
+                  onClick={() => setActiveContact(null)}
+                  className="flex min-h-[44px] w-full items-center gap-1 border-b bg-gray-50 px-3 text-left text-[15px] font-semibold text-blue-700 sim-dark:bg-gray-800 sim-dark:text-blue-300"
+                >
+                  <ArrowLeftIcon size={18} aria-hidden />
+                  Contacts
+                </button>
+              )}
               <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50 sim-dark:bg-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="relative w-8 h-8 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">

@@ -47,6 +47,27 @@
   }
 }
 
+/**
+ * Touch feedback inside the simulated phone.
+ *
+ * A real phone highlights whatever you press the instant you press it, and that
+ * acknowledgement is most of what makes a touch screen feel responsive. The sim
+ * carries 430 `hover:` rules — dead weight on glass — and, before this, exactly
+ * one `active:` a phone learner could ever reach. 530 controls, no press state:
+ * every tap was silent until the screen changed, which for a beginner is
+ * indistinguishable from a tap that missed.
+ *
+ * One rule rather than 530 edits, scoped to the phone so the laptop course is
+ * untouched, and deliberately weak enough that a control naming its own
+ * `active:` colour still wins.
+ */
+[data-phone-screen] button:active:not(:disabled),
+[data-phone-screen] [role="button"]:active,
+[data-phone-screen] a:active {
+  filter: brightness(0.92);
+  transform: scale(0.985);
+}
+
 /* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
 .reduce-motion,
 .reduce-motion * {

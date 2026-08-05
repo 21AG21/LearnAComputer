@@ -168,12 +168,116 @@ is what stops a swipe from also opening the thing it swiped.
 
 ---
 
+## What two persona audits found, and what changed
+
+Two adversarial agents played the course cold at 390×844 with real touch — one
+as a nervous 68-year-old meeting a smartphone, one as a 100-year-old with a
+tremor. **Both independently reached the same verdict: they could not finish
+Unit 1 unaided**, and both named the same first cause.
+
+**The highlight on lesson 1's home bar rendered zero pixels.** `animate-ring-pulse`
+is an *outer* `box-shadow`; the home bar is the last child of an
+`overflow: hidden` column, flush with the bottom edge, so every pixel of that
+shadow lands outside the clip. Measured against step 1's icon ring — 675 yellow
+pixels — step 2's home-bar ring sampled **0, at every phase of the animation**.
+The learner saw a plain gray pill, identical to the step before, on the very
+first gesture the course teaches, with a back arrow at the top left as the only
+obvious control. The fix is `animate-ring-pulse-inset`, the same cue painted
+inward, **plus a sentence and an arrow** — because every other highlight in the
+course means "press this", and a ring alone cannot say "slide".
+
+The rest, in the order they hurt:
+
+- **"Close the panel" was a hard dead end.** `dismissPanel()` never reported
+  upward, so the panel's own ✕ and a tap on the wallpaper both closed it while
+  the step stayed unsatisfied — no panel, no ring, nothing to do. The lesson's
+  own teaching text sends the learner down exactly those two routes.
+- **A double-press skipped a whole step.** Two presses 120ms apart on the Wi-Fi
+  glyph ticked "open the panel" *and* "close the panel" together; the learner
+  never saw the panel the lesson is about. The guard lives on the toggling
+  control, and finding that took two wrong attempts worth recording: a 150ms
+  cross-step guard in `useStepRunner` broke **three laptop lessons** whose steps
+  are honestly satisfied back to back, and scoping that same guard to the phone
+  broke **34 phone lessons**, because a solver completes steps faster than any
+  hand can. The hazard is one control that both opens and closes a panel, so
+  that is where the 250ms bounce guard belongs.
+- **A double-press on an app icon opened something uninvited.** The second press
+  landed on whatever had arrived under the finger — Messages opened, then Sam's
+  conversation on top of it, on the lesson whose card says "a second tap usually
+  lands somewhere you did not mean". A freshly-opened app is now inert for 300ms.
+- **A tap on the home bar produced nothing at all.** `onMissed` only fired after
+  8px of movement, so the single most likely first attempt from somebody who has
+  never swiped — a tap — was silence. It fires on any press with no direction now.
+- **Six lessons demanded a double-tap two lessons after Unit 1 says a phone has
+  none.** One tap did nothing; two taps 400ms apart did nothing; only a real
+  `dblclick` opened a file. `FileManager` opens on a single tap on a phone, and
+  the wording follows.
+- **`scams-phishing` was unlearnable.** The whole skill is reading the real
+  address under a link, and the two panes sat side by side inside 390px — a
+  166px reading pane, the URL chip truncated to `bank-secure-l…`, and the
+  wrong-answer explanation naming a `.ru` that was never on screen. Stacked now,
+  and the chip wraps rather than ellipsizing: that string *is* the lesson.
+- **Assessments hid their instructions.** The objectives list — the only guidance
+  an assessment has — was folded behind a bare **▼** measuring 21×18px, on the
+  lesson whose card promises "the list of what to do is at the top". The button
+  reads **"What to do ▼"** now, and the lesson copy points at it by name.
+  Opening the list by default was the obvious fix and the wrong one: it grows
+  the banner, the banner shrinks the device, and `phone-check` came back with
+  37 unfinishable lessons. Vertical space on a phone belongs to the lesson;
+  what was actually broken was discoverability.
+- **The banner read the finish card's sentence.** With no current step, it fell
+  back to `goal`, which is past tense: a frightened beginner opened the Unit 1
+  check and read *"You found your way around the phone"* about something they
+  had not done. Gesture lessons take a present-tense `doing` line now.
+- **Two hints pointed at the wrong corner** — the compact strip puts the clock
+  on the **left**. On an assessment the hint is the only help there is.
+- **`Close` and `Start over` were 20px tall**, and `Start over` threw away the
+  attempt with no confirmation, underlined and top-right where it was the most
+  salient thing in the bar. Both are 44px hit areas inside the same 32px strip
+  (`py-3 -my-3`), and Start over asks first.
+- **The failure card skipped the rewrite** — the one learner-facing string on the
+  phone that did, and the screen this audience reads most carefully. It now also
+  says *nothing is broken*, which is the whole promise of a simulator.
+
+**One fix broke the laptop, and `solve-check` said so.** Giving the objectives
+toggle a written label wrapped it in a `<span>` — and the solver identifies a
+dock icon as `button[aria-label]` containing an `img` or a `span`, so lesson
+*chrome* joined the list of app icons it clicks through. `final-files`' last
+objective spent its entire budget toggling the checklist open and shut. The
+label is bare text now (the `aria-label` is what a screen reader announces
+either way). Worth remembering in both directions: a phone fix lands in
+components 145 laptop activities also render, and the solver's idea of "an app
+icon" is looser than it looks.
+
+Held up under both audits: the 44px home bar with its follow-the-finger lift,
+60px of forgiven sideways drift, the 20-second stuck-learner reveal (measured at
+20.14s), no horizontal overflow at 150% zoom or dsf 3, and the wrong-verdict
+recovery in the phishing lesson — *"the best failure handling in the course"*.
+
 ## The gates
 
 ```sh
 npm run phone-check          # 112 borrowed lessons at 390x844 — green at 112/112
 npm run phone-gesture-check  # the 4 gesture lessons, real swipes — green at 4/4
+npm run phone-words-check    # does the phone course still speak phone?
 ```
+
+`phone-words-check` runs the real `inPhoneWords` over the real lesson JSON and
+fails on any laptop word reaching a learner, plus on *"X is called X"* — the
+shape a rewrite makes when it renames both halves of a definition. It found
+`finder-overview` teaching a word by saying **"The list at the top is called the
+list"**, "press Enter" in 22 lessons on a device with no Enter key, and "Hover to
+reveal its link" in the phishing lesson. Nothing else had ever read this text:
+`phone-check` plays every lesson through the DOM without reading a sentence, and
+`check-lessons.py` reads the JSON *as authored*, before the rewrite exists.
+
+It is a `.ts` file rather than `.mjs` like its neighbours, and that is load-bearing:
+`tsx` only transpiles a `.ts` **entry point**, and from an `.mjs` entry the same
+import resolves down the CommonJS path and every named export silently vanishes.
+
+`PHONEWORDS_NEGATIVE=1` skips the rewrite — the exact regression this guards,
+since every call site is one `phoneWording={false}` away from it — and has been
+watched to fail at 346 findings.
 
 `phone-check` is `/dev/phone-check`: the same `SolveCheck` component and the same
 `lib/solve` solver the laptop course uses, wrapped in the phone context. Two

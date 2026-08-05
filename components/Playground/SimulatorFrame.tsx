@@ -1,5 +1,7 @@
 "use client";
 
+import { inPhoneWords } from "@/lib/phoneWords";
+
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 import { useIsPhone, usePhoneHome } from "./SimFormFactor";
@@ -74,61 +76,12 @@ export function typeTargetFor(
 }
 
 /**
- * The same instruction, in the words a phone user would use.
- *
- * The 130-odd lessons the phone course borrows are written for a laptop and say
- * "click". Rewriting them per device would mean two copies of every sentence,
- * which is the duplication this whole design exists to avoid — and a lesson that
- * tells somebody holding a phone to "click" is teaching them a word for
- * something they cannot do. So the swap happens at the last moment, on the way
- * to the screen, and the lesson JSON stays single-sourced.
- *
- * Kept deliberately small. Every entry is a verb for the same physical act; none
- * of them changes what the step is asking for.
+ * Re-exported so the many call sites that already import it from here keep
+ * working. The rules themselves live in `lib/phoneWords.ts`, where a script can
+ * import them too — see `npm run phone-words-check`.
  */
-export function inPhoneWords(text: string): string {
-  return text
-    .replace(/\bDouble-click\b/g, "Double-tap")
-    .replace(/\bdouble-click\b/g, "double-tap")
-    .replace(/\bDouble-clicking\b/g, "Double-tapping")
-    .replace(/\bdouble-clicking\b/g, "double-tapping")
-    .replace(/\bClicking\b/g, "Tapping")
-    .replace(/\bclicking\b/g, "tapping")
-    .replace(/\bClick\b/g, "Tap")
-    .replace(/\bclick\b/g, "tap")
-    .replace(/\bClicks\b/g, "Taps")
-    .replace(/\bclicks\b/g, "taps")
-    .replace(/\bClicked\b/g, "Tapped")
-    .replace(/\bclicked\b/g, "tapped")
-    // A phone has no sidebar: Settings and Mail put their sections in a list you
-    // go into. Saying "in the sidebar" would point at something not on screen.
-    .replace(/\bin the sidebar\b/g, "in the list")
-    .replace(/\bthe sidebar\b/g, "the list")
-    // And no dock — the icons are the home screen.
-    .replace(/\bin the dock\b/g, "on the home screen")
-    // The stacked list is above the panel, not beside it.
-    .replace(/\bthe list on the left\b/g, "the list at the top")
-    .replace(/\bon the left\b/g, "at the top")
-    /**
-     * There is no hover on a touch screen. Every one of these steps is satisfied
-     * by a tap in the simulator already — the laptop word was the only thing
-     * asking for a mouse.
-     */
-    .replace(/\bHover over\b/g, "Tap")
-    .replace(/\bhover over\b/g, "tap")
-    .replace(/\bHovering over\b/g, "Tapping")
-    .replace(/\bhovering over\b/g, "tapping")
-    // The icons are the home screen, however a sentence reaches them.
-    .replace(/\bin the dock below\b/g, "on the home screen")
-    .replace(/\bfrom the dock\b/g, "from the home screen")
-    .replace(/\bin the menu bar\b/g, "in the strip at the top")
-    // A phone has no windows.
-    .replace(/\bA window will pop up\b/g, "It will open")
-    .replace(/\bwindow animations\b/g, "screen animations")
-    // And it is not a laptop. One Final Assessment title says so out loud.
-    .replace(/\bLaptop\b/g, "Phone")
-    .replace(/\blaptop\b/g, "phone");
-}
+export { inPhoneWords };
+
 
 /**
  * The same rewrite, for text a *component* renders rather than the lesson JSON.
@@ -318,6 +271,19 @@ export default function SimulatorFrame({
     };
   }, [stepIndex, done, instruction, goal]);
 
+  /**
+   * Collapsed — but no longer behind a control that says nothing.
+   *
+   * An assessment deliberately stops pointing, so the checklist *is* the
+   * instructions, and it was folded behind a bare ▼ measuring 21×18px with
+   * nothing beside it naming what it opened. Two persona audits stalled there.
+   *
+   * Opening it by default on a phone was the obvious fix and the wrong one:
+   * the list grows the banner, the banner shrinks the device, and `phone-check`
+   * came back with **37 unfinishable lessons**. Vertical space on a phone
+   * belongs to the lesson. What was actually broken was discoverability, and a
+   * button reading "What to do ▼" fixes that for the price of two words.
+   */
   const [expanded, setExpanded] = useState(false);
   const [hintOpen, setHintOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -437,14 +403,39 @@ export default function SimulatorFrame({
               )}
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="text-white/70 hover:text-white text-lg leading-none px-1"
-                aria-label={expanded ? "Collapse objectives" : "Expand objectives"}
+                /**
+                 * Labelled, and a real target — without growing the banner.
+                 *
+                 * A bare chevron says nothing about what is behind it, and at
+                 * 21×18px it is a quarter of the touch floor, guarding the only
+                 * guidance an assessment has. But `min-h-[44px]` on its own made
+                 * the dark banner 24px taller, and the simulator below it 24px
+                 * shorter — which pushed `final-files`' Put Back button under the
+                 * fold and made the last lesson of the course unfinishable.
+                 * `py-3 -my-3` buys the hit area out of the padding instead, and
+                 * `solve-check` is what caught the first attempt.
+                 *
+                 * **No element children.** The solver identifies a dock icon as
+                 * `button[aria-label]` containing an `img` or a `span`, so
+                 * wrapping this label in spans put lesson *chrome* into the list
+                 * of app icons it clicks through — and `final-files`' last
+                 * objective spent its whole budget toggling this open and shut.
+                 * The `aria-label` is what a screen reader announces either way,
+                 * so the text can sit here bare and lose nothing.
+                 */
+                className="-my-3 flex items-center gap-1 px-2 py-3 text-sm font-semibold text-white/80 hover:text-white"
+                aria-label={expanded ? "Hide what to do" : "Show what to do"}
               >
-                {expanded ? "▲" : "▼"}
+                What to do {expanded ? "▲" : "▼"}
               </button>
             </div>
           )}
         </div>
+        {/* Reserved unconditionally on a phone. The box only appears on typing
+            steps, so its arrival pushed the whole device down 69px mid-lesson —
+            on `urls`, which is a typing lesson. A status bar that moves is the
+            one thing a status bar must never do. */}
+        {isPhone && !typeThis && !done && <div className="mt-2 h-[3.25rem]" aria-hidden />}
         {typeThis && !done && (
           <div className={`mt-2 rounded-lg bg-white text-center shadow-sm ${isPhone ? "px-3 py-2" : "px-4 py-3"}`}>
             <span className="block text-xs font-bold uppercase tracking-widest text-blue-700">Type this — exactly</span>

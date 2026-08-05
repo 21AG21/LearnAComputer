@@ -67,7 +67,16 @@ interface SwipeOptions {
    * of the vertical travel.
    */
   tolerance?: number;
-  /** Fires when the press ended without qualifying, so the caller can say so. */
+  /**
+   * Fires when the press ended without qualifying, so the caller can say so.
+   *
+   * Including a press that never moved at all. That looks like a non-event and
+   * is in fact the single most likely first attempt from somebody who has never
+   * swiped anything: they tap the bar, because tapping is the only thing this
+   * course has taught them so far, and — before this — absolutely nothing
+   * happened. A tap on a control that wants a slide is not noise, it is the
+   * exact moment the learner needs the sentence explaining the difference.
+   */
   onMissed?: () => void;
 }
 
@@ -126,7 +135,7 @@ export function useSwipe(
         dir = dy < 0 ? "up" : "down";
       }
       onEndRef.current({ dx, dy, dir });
-      if (!dir && moved.current) onMissedRef.current?.();
+      if (!dir) onMissedRef.current?.();
     };
     const up = (e: PointerEvent) => finish(e, false);
     const cancel = (e: PointerEvent) => finish(e, true);

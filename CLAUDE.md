@@ -80,6 +80,7 @@ After touching `SimFormFactor`, `PhoneShell`, any `isPhone` branch,
 ```sh
 npm run phone-check          # the 112 borrowed lessons at 390x844 — green at 112/112
 npm run phone-gesture-check  # the 4 gesture lessons, real swipes — green at 4/4
+npm run phone-words-check    # does the phone course still speak phone? (static, 1s)
 ```
 
 …and then `solve-check`, `ring-check` and `desktop-check`, because the phone
@@ -99,7 +100,21 @@ and `element.click()` works on a zero-width button**, so a collapsed pane only
 stops a step needing real geometry. `PHONE_NEGATIVE=1 phone-gesture-check`
 replaces every swipe with a click and stalls 3 of 4.
 
-Four rules for this code, each of which shipped as a bug first:
+`phone-words-check` runs the real `inPhoneWords` over the real lesson JSON and
+fails on a laptop word reaching a learner — and on *"X is called X"*, the shape a
+rewrite makes when it renames both halves of a definition (`finder-overview`
+shipped **"The list at the top is called the list"**). Nothing else reads this
+text: `phone-check` drives the DOM without reading a sentence, and
+`check-lessons.py` reads the JSON *as authored*, before the rewrite exists. The
+rules compile **case-insensitively** — matching lowercase only is the bug it
+exists to stop, and it leaked "Hover to reveal its link" into the phishing lesson
+and "press Enter" into 22 lessons on a device with no Enter key.
+`PHONEWORDS_NEGATIVE=1` is the negative control, watched to fail at 346 findings.
+It is a `.ts` file, not `.mjs`: `tsx` only transpiles a `.ts` **entry point**, and
+from an `.mjs` entry the same import silently resolves down the CommonJS path
+with every named export gone.
+
+Seven rules for this code, each of which shipped as a bug first:
 
 - **`SimulatorFrame`'s no-chrome pane must be a flex column.** As a block, every
   sim's `flex-1` body sized to its content rather than the screen — invisible on
@@ -114,6 +129,27 @@ Four rules for this code, each of which shipped as a bug first:
   every tap on the button inside it. Track the pointer on the **window**
   (`touchGestures.ts`), and call `consumeClick()` first in the click handler —
   a drag that starts and ends in one element still fires a click.
+- **An edge-anchored control gets `animate-ring-pulse-inset`.** `ring-pulse` is
+  an *outer* box-shadow, and the home bar is the last child of an
+  `overflow: hidden` column flush with the bottom edge — the whole shadow lands
+  outside the clip. Measured: **0 yellow pixels** on lesson 1 step 2, the first
+  gesture the course teaches, while step 1's icon ring painted 675. Two personas
+  found it independently and both stalled there.
+- **A ring cannot say "slide".** Every other highlight in the course means "press
+  this", so a learner taught only to tap will tap — and tapping the home bar does
+  nothing, by design. The go-home step carries words and an arrow beside the ring.
+- **A bounce guard belongs on the control that bounces, not in the step engine.**
+  Two presses 120ms apart on the status strip ticked "open the panel" *and*
+  "close the panel" together. A 150ms cross-step guard in `useStepRunner` broke
+  three *laptop* lessons whose steps are honestly satisfied back to back;
+  scoping that guard to the phone broke 34 *phone* lessons, because the solver
+  completes steps faster than any hand can. `FakeDesktop`'s `onTogglePanel`
+  carries a 250ms guard instead — one control, one hazard.
+- **Never put an element child inside a `SimulatorFrame` chrome button.** The
+  solver identifies a dock icon as `button[aria-label]` containing an `img` or a
+  `span`, so a labelled chevron wrapped in spans joined the list of app icons it
+  clicks through, and `final-files` spent its whole budget toggling the
+  objectives list. The `aria-label` is what a screen reader announces anyway.
 - **The highlight ring is `animate-ring-pulse`, never `ring-4 ring-yellow-400
   animate-pulse`.** Tailwind's stock `animate-pulse` animates opacity 1→0.5, so
   44 call sites were fading the one control the learner had to find to 54% while

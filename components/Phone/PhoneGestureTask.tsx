@@ -66,7 +66,7 @@ export default function PhoneGestureTask({
   return (
     <SimulatorFrame
       appName="Phone"
-      instruction={step?.say ?? lesson.goal}
+      instruction={step?.say ?? lesson.doing ?? lesson.goal}
       stepIndex={stepIndex}
       totalSteps={lesson.steps.length}
       done={done}

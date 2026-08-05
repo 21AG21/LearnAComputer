@@ -93,11 +93,26 @@ export function DesktopMenuBar({
         compact ? "h-8 px-2 text-sm font-semibold" : "h-9 px-2 text-lg font-semibold"
       } ${dark ? "bg-gray-800 text-gray-100 border-gray-700" : "bg-white text-gray-900 border-gray-200"}`}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 items-center gap-2">
         {leading}
-        <span className="font-[var(--font-app-title)]">{title}</span>
+        {/* Clock on the LEFT in the phone's compact strip, which is where every
+            phone puts it; a laptop menu bar puts it on the right with the rest of
+            the status cluster. Same button, same panel, the side each machine
+            actually uses. */}
+        {compact && (
+          <button
+            onClick={() => onTogglePanel("calendar")}
+            aria-label="Open calendar"
+            aria-expanded={openPanel === "calendar"}
+            suppressHydrationWarning
+            className={btn("calendar", "tabular-nums")}
+          >
+            {time}
+          </button>
+        )}
+        <span className="truncate font-[var(--font-app-title)]">{title}</span>
       </div>
-      <div className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
+      <div className={`flex shrink-0 items-center ${compact ? "gap-2" : "gap-3"}`}>
         {trailing}
         <button
           onClick={() => onTogglePanel("wifi")}
@@ -116,15 +131,17 @@ export function DesktopMenuBar({
           <BatteryIcon className={compact ? "w-6 h-3" : "w-8 h-4"} />
           {batteryPercent !== null && <span>{batteryPercent}%</span>}
         </button>
-        <button
-          onClick={() => onTogglePanel("calendar")}
-          aria-label="Open calendar"
-          aria-expanded={openPanel === "calendar"}
-          suppressHydrationWarning
-          className={btn("calendar")}
-        >
-          {time}
-        </button>
+        {!compact && (
+          <button
+            onClick={() => onTogglePanel("calendar")}
+            aria-label="Open calendar"
+            aria-expanded={openPanel === "calendar"}
+            suppressHydrationWarning
+            className={btn("calendar")}
+          >
+            {time}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -592,9 +592,23 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
 
       {/* Phishing Inspector — with wrong-answer feedback */}
       {section === "phishing" && (
-        <div className="flex-1 min-h-0 flex overflow-hidden">
+        /**
+         * Stacked on a phone, like every other two-pane app in the course.
+         *
+         * This one was missed, and it is the worst place to miss it: the whole
+         * skill is reading the real address hiding under a link, and side by
+         * side at 390px the reading pane was 166px wide. The address chip
+         * truncated to "bank-secure-l…", so the learner was asked to judge a
+         * string they could not see — and then told, in the explanation, that it
+         * "ends in .fakesite.ru", about characters that were never on screen.
+         */
+        <div className={`flex-1 min-h-0 flex overflow-hidden ${isPhone ? "flex-col" : ""}`} data-phone-stacked>
           {/* Message list — an inbox in Mail, a text thread in Messages */}
-          <div className={`${isThread ? "w-40" : "w-56"} shrink-0 border-r overflow-y-auto bg-gray-50`}>
+          <div
+            className={`${
+              isPhone ? "max-h-[38%] w-full border-b" : `${isThread ? "w-40" : "w-56"} border-r`
+            } shrink-0 overflow-y-auto bg-gray-50`}
+          >
             <p className="px-3 py-2 text-xs font-bold uppercase tracking-wide text-gray-500 border-b bg-white">
               {isThread ? "Messages" : "Inbox"}
             </p>
@@ -676,8 +690,10 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                       </p>
                     ) : (
                       <>
-                        <div className="bg-white border rounded px-2 py-1 text-xs font-mono text-gray-700 mb-2 truncate inline-flex items-center gap-1 max-w-full">
-                          <LinkIcon size={12} className="shrink-0" /> <span className="truncate">{item.url}</span>
+                        {/* Wraps, never truncates: this string IS the lesson. An ellipsis here
+                            hides the ".ru" the learner is being asked to notice. */}
+                        <div className="bg-white border rounded px-2 py-1 text-xs font-mono text-gray-700 mb-2 flex items-start gap-1 max-w-full">
+                          <LinkIcon size={12} className="mt-0.5 shrink-0" /> <span className="break-all">{item.url}</span>
                         </div>
                         {verdict ? (
                           <div>

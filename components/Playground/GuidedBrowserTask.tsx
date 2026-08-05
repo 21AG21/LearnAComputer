@@ -984,7 +984,11 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         <ActionBtn label="Reading List" icon={<BookIcon size={14} />} onClick={addReadingList} highlight={hl("readinglist-btn")} />
         <ActionBtn label="History" icon={<ClockIcon size={14} />} onClick={clickHistoryBtn} highlight={hl("history-btn")} />
         <ActionBtn label="Downloads" icon={<DownloadIcon size={14} />} onClick={clickDownloadsBtn} highlight={hl("downloads-btn")} />
-        <ActionBtn label="New Window" icon={<WindowIcon size={14} />} onClick={() => { setNewWindow(true); tryStep((s) => s.action === "new-window"); }} highlight={hl("newwindow-btn")} />
+        {/* A phone has no windows — only tabs. The lesson that teaches windows
+            (`safari-windows`) is not in the phone course for the same reason. */}
+        {!isPhone && (
+          <ActionBtn label="New Window" icon={<WindowIcon size={14} />} onClick={() => { setNewWindow(true); tryStep((s) => s.action === "new-window"); }} highlight={hl("newwindow-btn")} />
+        )}
         <div className="flex-1" />
         <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">
           <button onClick={zoomOut} aria-label="Zoom out" className="px-2 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700">−</button>
