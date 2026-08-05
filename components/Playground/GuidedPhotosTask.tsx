@@ -480,7 +480,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               )}
               {showMeBanner && (
                 <div className="mx-4 mt-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 flex items-center gap-2">
-                  <span className="flex-1">{showMeConfirmed ? "Photo sent! Open Messages from the dock to see it." : "Want to see it arrive? Send the photo to Messages."}</span>
+                  <span className="flex-1">{showMeConfirmed ? (isPhone ? "Photo sent! Open Messages from the home screen to see it." : "Photo sent! Open Messages from the dock to see it.") : "Want to see it arrive? Send the photo to Messages."}</span>
                   {!showMeConfirmed && (
                     <button
                       onClick={handleShowMe}

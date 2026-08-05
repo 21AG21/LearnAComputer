@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useIsPhone } from "./SimFormFactor";
+import { useSimWords } from "./SimulatorFrame";
 import SimulatorFrame from "./SimulatorFrame";
 import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -99,6 +100,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   const [view, setView] = useState<View>("desktop");
   const isPhone = useIsPhone();
+  // Text this component renders itself — the banner rewrite never saw it.
+  const words = useSimWords();
   /** An app opened from the dock that this scenario has no script for — free play. */
   const [freeApp, setFreeApp] = useState<AppBodyId | null>(null);
   const [frozenApps, setFrozenApps] = useState<FrozenApp[]>(() => {
@@ -895,7 +898,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                         <MailIcon size={32} className="mx-auto text-blue-700 sim-dark:text-blue-400 mb-2" />
                         <p className="text-sm font-semibold mb-1">Check your email</p>
                         <p className="text-xs text-gray-600 sim-dark:text-gray-400">
-                          We sent a reset link to you@example.com. Open the Mail app in the dock below to read it.
+                          {words("We sent a reset link to you@example.com. Open the Mail app in the dock below to read it.")}
                         </p>
                       </div>
                     )}
@@ -955,7 +958,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                   </div>
                   {clickedFrozen && (
                     <div className="bg-yellow-50 border-t border-yellow-200 px-3 py-2">
-                      <p className="text-xs text-yellow-800">The app is not responding. It won&apos;t react to any clicks.</p>
+                      <p className="text-xs text-yellow-800">{words("The app is not responding. It won\u2019t react to any clicks.")}</p>
                     </div>
                   )}
                 </div>
@@ -964,7 +967,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <div className="text-center py-8">
                   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 13l4 4L19 7"/></svg>
                   <p className="text-sm text-gray-600">{frozenTarget.name} has been force quit.</p>
-                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">Click {frozenTarget.name} in the dock below to reopen it.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">{words(`Click ${frozenTarget.name} in the dock below to reopen it.`)}</p>
                 </div>
               )}
               {appReopened && (
@@ -992,7 +995,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                     <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 005 8.26m2.28 4.14a7 7 0 019.5 0M8.53 16.11a3.5 3.5 0 014.95 0M12 20h.01"/>
                   </svg>
                   <p className="text-sm font-medium text-gray-500 mb-1">No Internet Connection</p>
-                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">Click the WiFi icon in the menu bar to fix this.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400">{words("Click the WiFi icon in the menu bar to fix this.")}</p>
                 </div>
               ) : (
                 <div className="py-8">
@@ -1054,7 +1057,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
                 <>
                   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-red-400 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
                   <p className="text-sm font-medium text-gray-600">{arBrokenTarget} keeps crashing.</p>
-                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">Open App Market from the dock to fix it.</p>
+                  <p className="text-xs text-gray-500 sim-dark:text-gray-400 mt-1">{words("Open App Market from the dock to fix it.")}</p>
                 </>
               ) : (
                 <>
@@ -1154,7 +1157,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
           {mode === "error-restart" && !erSystemError && !erSettingsOpen && !erRestarting && !erRestarted && (
             <div className="p-4 text-center py-8">
               <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto text-amber-400 mb-2" fill="none" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
-              <p className="text-sm text-gray-600">Open Settings from the dock to restart.</p>
+              <p className="text-sm text-gray-600">{words("Open Settings from the dock to restart.")}</p>
             </div>
           )}
 

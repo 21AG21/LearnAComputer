@@ -115,7 +115,7 @@ export default function Dock({
        * have and keeps the labels lined up under each other.
        */
       className={`max-w-full rounded-2xl px-2 py-2 ${
-        wrap ? "grid grid-cols-4 gap-x-2 gap-y-7 justify-items-center" : "flex items-start gap-1"
+        wrap ? "grid grid-cols-4 gap-x-1 gap-y-6 justify-items-center" : "flex items-start gap-1"
       } ${tray ? "backdrop-blur-md" : ""} ${className}`}
       style={
         tray
@@ -138,7 +138,11 @@ export default function Dock({
                name and belongs to the learner; a test selector that rides on it
                breaks the day the label is reworded. */
             data-dock-app={normalize(id)}
-            className={`group flex shrink-0 flex-col items-center gap-1 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${col} ${
+            /* `w-full min-w-0` in the grid: a fixed 64px column inside a bezel
+               narrower than 4x64 made neighbouring labels overlap. */
+            className={`group flex shrink-0 flex-col items-center gap-1 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              wrap ? "w-full min-w-0" : col
+            } ${
               bouncing ? "animate-dock-bounce" : ""
             }`}
           >
@@ -151,7 +155,7 @@ export default function Dock({
                * all ten as light surfaces left unpainted, in every app.
                */
               data-sim-paper
-              className={`relative block ${tile} ${pad} rounded-2xl transition-transform group-hover:-translate-y-1 group-active:scale-95 ${
+              className={`relative block ${wrap ? "aspect-square w-full max-w-16" : tile} ${pad} rounded-2xl transition-transform group-hover:-translate-y-1 group-active:scale-95 ${
                 highlighted ? "animate-ring-pulse" : ""
               }`}
               style={{

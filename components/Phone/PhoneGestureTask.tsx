@@ -78,6 +78,8 @@ export default function PhoneGestureTask({
       chrome={false}
       /* FakeDesktop below grows its own status strip and home bar. */
       phoneChrome={false}
+      /* Already phone language — see `inPhoneWords`. */
+      phoneWording={false}
     >
       <div ref={hostRef} onScrollCapture={onScrollCapture} className="h-full w-full">
         <FakeDesktop

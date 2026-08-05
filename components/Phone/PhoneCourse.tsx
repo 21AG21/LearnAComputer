@@ -76,7 +76,7 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
   }, []);
 
   const titleOf = useCallback(
-    (e: PhoneEntry) => (e.kind === "gesture" ? e.title : (lessons[e.slug]?.title ?? e.slug)),
+    (e: PhoneEntry) => (e.kind === "gesture" ? e.title : inPhoneWords(lessons[e.slug]?.title ?? e.slug)),
     [lessons],
   );
 
@@ -166,16 +166,41 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
    * card is the *other* place a learner reads that prose, and it was going out
    * raw — telling somebody holding a phone to press Ctrl+D.
    */
-  const intro = inPhoneWords(entry.kind === "gesture" ? entry.intro : (lesson?.drDigitalIntro ?? ""));
-  const success = inPhoneWords(entry.kind === "gesture" ? entry.success : (lesson?.drDigitalSuccess ?? "Well done."));
+  /**
+   * Only the **borrowed** lessons get rewritten.
+   *
+   * The four gesture lessons are already written in phone language and name the
+   * laptop on purpose — "a phone does not need the double tap a laptop does".
+   * Running the rewrite over them turned that into "a phone does not need the
+   * double tap a phone does": a self-contradiction, on lesson one, in the
+   * sentence carrying the whole idea. A translator must not translate the text
+   * that was already in the target language.
+   */
+  const say = (text: string) => (entry.kind === "lesson" ? inPhoneWords(text) : text);
+  const intro = say(entry.kind === "gesture" ? entry.intro : (lesson?.drDigitalIntro ?? ""));
+  const success = say(entry.kind === "gesture" ? entry.success : (lesson?.drDigitalSuccess ?? "Well done."));
   const goal = entry.kind === "gesture" ? entry.goal : "";
+  /**
+   * The amber caution the laptop runner shows above Dr. Digital.
+   *
+   * It was being dropped here, and one of the three lessons carrying one is
+   * `unit-4-assessment`, whose warning names the CLEAN NOW pop-up that *fails*
+   * the lesson. An assessment has no rings; the laptop learner was warned and
+   * the phone learner walked into it blind.
+   */
+  const warning = entry.kind === "lesson" ? lesson?.warning : undefined;
 
   // ── The teaching card, before the activity ─────────────────────────────────
   if (view.at === "teach") {
     return (
-      <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-4">
+      <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pt-4">
         <BackToList onBack={() => setView({ at: "list" })} />
         <h1 className="mt-3 text-2xl font-bold">{titleOf(entry)}</h1>
+        {warning && (
+          <p className="mt-4 rounded-xl border-2 border-amber-500 bg-amber-50 px-4 py-3 text-[15px] font-semibold text-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+            Warning: {inPhoneWords(warning)}
+          </p>
+        )}
         <div className="mt-4 rounded-xl border-2 border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center gap-2">
             <DrDigitalAvatar className="h-9 w-9 shrink-0" />
@@ -195,6 +220,9 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
             ))}
           </div>
         </div>
+        {/* The sticky button below is 84px of permanently-covered screen. Without
+            this spacer the last paragraph can never be scrolled clear of it. */}
+        <div className="h-20" aria-hidden />
       {/* Sticky, because a four-paragraph intro puts this 700px down the page —
           on the very first lesson of the course, where a learner has no reason
           to believe scrolling is what comes next. */}
@@ -252,7 +280,7 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
           */}
         <div className="flex min-h-0 flex-1 items-center justify-center sm:p-4">
           <SimFormFactorProvider value="phone">
-            <div className="flex h-full w-full flex-col overflow-hidden bg-white sm:aspect-[9/19.5] sm:h-auto sm:max-h-full sm:w-auto sm:rounded-[2.25rem] sm:border-[10px] sm:border-gray-900 sm:shadow-2xl">
+            <div className="flex h-full w-full flex-col overflow-hidden bg-white sm:aspect-[9/19.5] sm:h-full sm:w-auto sm:rounded-[2.25rem] sm:border-[10px] sm:border-gray-900 sm:shadow-2xl">
               {entry.kind === "gesture" ? (
                 <PhoneGestureTask key={`${entry.slug}-${attempt}`} lesson={entry} onResult={onResult} />
               ) : lesson ? (

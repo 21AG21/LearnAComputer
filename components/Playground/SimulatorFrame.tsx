@@ -39,6 +39,13 @@ interface SimulatorFrameProps {
    * grows its own strip and bar, and two of each is two clocks and two home bars.
    */
   phoneChrome?: boolean;
+  /**
+   * Rewrite laptop words for touch. On by default in the phone form factor,
+   * because almost every lesson there is a borrowed laptop lesson. The phone's
+   * own gesture lessons pass `false`: they are already in phone language and
+   * name the laptop deliberately.
+   */
+  phoneWording?: boolean;
   /** Free-play mode: no banner, no frame, no celebration — children fill the container directly. */
   freePlay?: boolean;
   children: ReactNode;
@@ -98,7 +105,42 @@ export function inPhoneWords(text: string): string {
     .replace(/\bin the sidebar\b/g, "in the list")
     .replace(/\bthe sidebar\b/g, "the list")
     // And no dock — the icons are the home screen.
-    .replace(/\bin the dock\b/g, "on the home screen");
+    .replace(/\bin the dock\b/g, "on the home screen")
+    // The stacked list is above the panel, not beside it.
+    .replace(/\bthe list on the left\b/g, "the list at the top")
+    .replace(/\bon the left\b/g, "at the top")
+    /**
+     * There is no hover on a touch screen. Every one of these steps is satisfied
+     * by a tap in the simulator already — the laptop word was the only thing
+     * asking for a mouse.
+     */
+    .replace(/\bHover over\b/g, "Tap")
+    .replace(/\bhover over\b/g, "tap")
+    .replace(/\bHovering over\b/g, "Tapping")
+    .replace(/\bhovering over\b/g, "tapping")
+    // The icons are the home screen, however a sentence reaches them.
+    .replace(/\bin the dock below\b/g, "on the home screen")
+    .replace(/\bfrom the dock\b/g, "from the home screen")
+    .replace(/\bin the menu bar\b/g, "in the strip at the top")
+    // A phone has no windows.
+    .replace(/\bA window will pop up\b/g, "It will open")
+    .replace(/\bwindow animations\b/g, "screen animations")
+    // And it is not a laptop. One Final Assessment title says so out loud.
+    .replace(/\bLaptop\b/g, "Phone")
+    .replace(/\blaptop\b/g, "phone");
+}
+
+/**
+ * The same rewrite, for text a *component* renders rather than the lesson JSON.
+ *
+ * The banner and the teaching card were being translated and the apps
+ * underneath were not, so a phone learner read "Open App Market from the dock"
+ * and "Click the WiFi icon in the menu bar" inside the simulator itself. Wrap
+ * those strings in this and they follow the same one rulebook.
+ */
+export function useSimWords(): (text: string) => string {
+  const isPhone = useIsPhone();
+  return isPhone ? inPhoneWords : (t: string) => t;
 }
 
 export default function SimulatorFrame({
@@ -117,6 +159,7 @@ export default function SimulatorFrame({
   onHint,
   chrome = true,
   phoneChrome = true,
+  phoneWording = true,
   freePlay,
   children,
 }: SimulatorFrameProps) {
@@ -363,14 +406,22 @@ export default function SimulatorFrame({
               screen-reader learner must be told it changed, or they are stranded
               after every step with a silent, purely-visual ring as the only cue. */}
           <p
-            className={`font-semibold leading-snug ${isPhone ? "text-[15px]" : "text-lg"}`}
+            /**
+             * Three lines' worth of room on a phone, always.
+             *
+             * The banner sits above the device, so a one-line step and a
+             * three-line step moved the whole phone up and down between steps —
+             * the Wi-Fi icon jumped 110px on `urls`. A status bar that moves is
+             * the one thing a status bar must never do.
+             */
+            className={`font-semibold leading-snug ${isPhone ? "min-h-[3.75rem] text-[15px]" : "text-lg"}`}
             role="status"
             aria-live="polite"
             aria-atomic="true"
           >
             {(() => {
               const line = done ? goal + " — all done!" : (instruction ?? goal);
-              return isPhone ? inPhoneWords(line) : line;
+              return isPhone && phoneWording ? inPhoneWords(line) : line;
             })()}
           </p>
           {isAssessment && !done && (
@@ -408,7 +459,7 @@ export default function SimulatorFrame({
         )}
         {isAssessment && hintOpen && hint && !done && (
           <div className="mt-2 rounded border border-yellow-400/50 bg-yellow-400/10 px-3 py-2 text-sm text-yellow-100">
-            {inPhoneWords(hint)}
+            {isPhone && phoneWording ? inPhoneWords(hint) : hint}
           </div>
         )}
         {isAssessment && expanded && objectives && (
@@ -419,7 +470,7 @@ export default function SimulatorFrame({
                 className={`flex items-center gap-2 text-sm ${obj.done ? "text-green-400" : "text-white/60"}`}
               >
                 <span className="w-4 text-center">{obj.done ? "✓" : "○"}</span>
-                <span>{isPhone ? inPhoneWords(obj.label) : obj.label}</span>
+                <span>{isPhone && phoneWording ? inPhoneWords(obj.label) : obj.label}</span>
               </div>
             ))}
           </div>
@@ -496,7 +547,7 @@ export default function SimulatorFrame({
           <div className="bg-green-700 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
             &#10003;
           </div>
-          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{isPhone ? inPhoneWords(goal) : goal}</p>
+          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{isPhone && phoneWording ? inPhoneWords(goal) : goal}</p>
         </div>
       )}
 

@@ -932,7 +932,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           ) : (
             /* Empty state */
             <div className="flex-1 flex items-center justify-center text-gray-500 sim-dark:text-gray-400">
-              <p>Select a contact to start chatting</p>
+              <p>{isPhone ? "Tap someone above to start chatting" : "Select a contact to start chatting"}</p>
             </div>
           )}
         </div>

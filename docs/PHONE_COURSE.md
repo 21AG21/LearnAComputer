@@ -112,7 +112,17 @@ rows, showing the top half of a word.
 laptop and say "click", "the sidebar", "in the dock". Rewriting them per device
 would mean two copies of every sentence. The swap happens on the way to the
 screen instead, so the JSON stays single-sourced. It runs on the banner, the
-hint, the goal and the teaching card.
+hint, the goal, the title, the warning and the teaching card, and — through
+`useSimWords()` — on the handful of strings the *apps* render themselves, which
+were the last place a phone learner was still being told to look "in the dock".
+
+**Never run it over the phone's own words.** The four gesture lessons are already
+in phone language and name the laptop deliberately: *"A phone does not need the
+double tap a laptop does."* The blanket `laptop → phone` rule turned that into
+*"a phone does not need the double tap a phone does"* — a self-contradiction, on
+lesson one, in the sentence carrying the whole idea. `phoneWording={false}` and
+the `kind === "lesson"` guard exist for that. A translator must not translate
+text that is already in the target language.
 
 ---
 
@@ -136,6 +146,13 @@ hint, the goal and the teaching card.
   with every ancestor `overflow: hidden` — four icons off screen with no scroll,
   and three lessons named one of them.
 - **Three comparison cards side by side** needed 595px on a 390px screen.
+- **The status strip moved between steps.** The banner above the phone grew with
+  the step's text, so the Wi-Fi icon jumped 110px between step 1 and step 2 of
+  `urls`. A status bar that moves is the one thing a status bar must never do;
+  the banner now reserves three lines' height on a phone.
+- **Home tiles overlapped at 1280px.** A fixed 64px tile in a grid column
+  narrower than that made neighbouring labels collide. The tiles size to their
+  column now, and the bezel is a full-height 386x836 rather than 266x576.
 
 ## `touchGestures.ts`: two designs that are wrong
 

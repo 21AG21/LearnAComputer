@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { KeyIcon, FishingIcon, ShieldIcon, CheckCircleIcon, XCircleIcon, LinkIcon, MailIcon, FingerprintIcon } from "./Icons";
@@ -136,6 +137,7 @@ function LoggedInPanel({ username, method, onSignOut }: { username: string; meth
 
 export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "browser", onResult }: GuidedSecurityTaskProps) {
   const [loggedIn, setLoggedIn] = useState<{ username: string; method: string } | null>(null);
+  const isPhone = useIsPhone();
 
   function inferSection(s: GuidedSecurityStep | undefined): Section {
     if (!s) return "password-tester";
@@ -652,7 +654,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                           onClick={() => handleInspectLink(openMessage)}
                           onMouseEnter={() => handleInspectLink(openMessage)}
                           onFocus={() => handleInspectLink(openMessage)}
-                          title="Rest your mouse here to preview where it goes — without opening it"
+                          title={isPhone ? "Tap to preview where it goes — without opening it" : "Rest your mouse here to preview where it goes — without opening it"}
                           className={`text-blue-600 underline break-all hover:text-blue-800 rounded ${
                             !revealed && hl("inline-link", openMessage) ? pulse : ""
                           }`}
@@ -668,7 +670,9 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
                   <div className="shrink-0 border-t bg-gray-50 p-3">
                     {!revealed ? (
                       <p className="text-xs text-gray-500">
-                        Rest your mouse on the link above (or press and hold it on a phone) to preview where it really goes — without opening it. On a real computer, never click a link in a message you are unsure of.
+                        {isPhone
+                          ? "Tap the link above to preview where it really goes — without opening it. On a real phone, never open a link in a message you are unsure of."
+                          : "Rest your mouse on the link above to preview where it really goes — without opening it. On a real computer, never click a link in a message you are unsure of."}
                       </p>
                     ) : (
                       <>
