@@ -217,7 +217,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
                             : isFocused
                               ? "bg-gray-200 text-gray-800 ring-4 ring-gray-300 scale-105"
                               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        } ${isTarget && !isFocused ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
+                        } ${isTarget && !isFocused ? "animate-ring-pulse" : ""}`}
                         tabIndex={-1}
                       >
                         {item.label}

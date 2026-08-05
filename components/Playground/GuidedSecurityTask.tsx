@@ -204,7 +204,7 @@ export default function GuidedSecurityTask({ goal, steps, mode, hint, chrome = "
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
     { id: "password-tester", label: "Passwords", icon: <KeyIcon size={14} /> },

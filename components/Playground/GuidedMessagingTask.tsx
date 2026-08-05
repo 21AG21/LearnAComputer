@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useIsPhone } from "./SimFormFactor";
 import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -152,6 +153,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   // Group chat state
   const [creatingGroup, setCreatingGroup] = useState(false);
   const [groupPicks, setGroupPicks] = useState<string[]>([]);
+  const isPhone = useIsPhone();
   const [groups, setGroups] = useState<GroupInfo[]>([]);
   const [groupThreads, setGroupThreads] = useState<Record<string, Message[]>>({});
   const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
@@ -227,7 +229,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   function handleSelectContact(id: string) {
     setActiveContact(id);
@@ -504,9 +506,16 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
       hint={hint}
       freePlay={freePlay}
     >
-      <div className="flex-1 flex overflow-hidden">
+      <div
+        data-phone-stacked={isPhone || undefined}
+        className={`flex-1 overflow-hidden ${isPhone ? "flex flex-col" : "flex"}`}
+      >
         {/* Contacts / group picker sidebar */}
-        <div className="w-48 border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col overflow-y-auto">
+        <div
+          className={`border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col overflow-y-auto ${
+            isPhone ? (activeContact || creatingGroup ? "w-full max-h-[30%] shrink-0 border-b" : "w-full flex-1 border-b") : "w-48"
+          }`}
+        >
           {creatingGroup ? (
             /* Group creation picker */
             <>
@@ -822,7 +831,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                     <button
                       onClick={handleAttachPhotosRow}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-blue-50 sim-dark:hover:bg-gray-700 transition-colors ${
-                        hl("attach-photos-row") ? "bg-yellow-50 text-gray-900 ring-2 ring-yellow-400" : ""
+                        hl("attach-photos-row") ? "bg-yellow-50 text-gray-900 animate-ring-pulse" : ""
                       }`}
                     >
                       <svg className="w-5 h-5 text-green-700 sim-dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>

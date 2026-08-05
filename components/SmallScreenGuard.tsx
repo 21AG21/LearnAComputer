@@ -46,7 +46,13 @@ export default function SmallScreenGuard() {
 
   // The phone course is *meant* to be played here. Covering it with a notice
   // saying phones are too small would be both wrong and slightly insulting.
-  if (pathname?.startsWith("/phone")) return null;
+  //
+  // The dev harnesses are exempt for a different reason: `phone-check` drives
+  // /dev/phone-check at 390px with a touch pointer, which is precisely what
+  // trips this guard, and a full-screen notice over the harness makes the whole
+  // run time out. Those routes `notFound()` in production, so no learner can
+  // reach them either way.
+  if (pathname?.startsWith("/phone") || pathname?.startsWith("/dev/")) return null;
   if (!tooSmall || dismissed) return null;
 
   return (

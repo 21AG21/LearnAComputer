@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -89,6 +90,7 @@ const CONTACTS = [
 
 export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedPhotosTaskProps) {
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
+  const isPhone = useIsPhone();
   const [albums, setAlbums] = useState<string[]>(["Vacation", "Family", "Pets"]);
   const [section, setSection] = useState("All Photos");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
@@ -143,7 +145,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   function resetEdits(photo?: Photo | null) {
     setFilter(null);
@@ -332,9 +334,20 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
       hint={hint}
       freePlay={freePlay}
     >
-      <div className="flex-1 flex overflow-hidden relative">
+      <div
+        data-phone-stacked={isPhone || undefined}
+        className={`flex-1 overflow-hidden relative ${isPhone ? "flex flex-col" : "flex"}`}
+      >
         {/* Sidebar */}
-        <div className="w-36 bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto">
+        {/* On a phone the two panes stack: this app is a sidebar beside a content
+              pane, which needs about 700px. At 390px the sidebar took 40% of the
+              width and the thing the lesson is about got the rest. Stacked, the
+              list keeps a capped slice of the height and scrolls inside it. */}
+        <div
+          className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto ${
+            isPhone ? (selectedPhoto ? "w-full max-h-[26%] border-b" : "w-full flex-1 border-b") : "w-36"
+          }`}
+        >
           <div className="p-2 border-b flex items-center gap-1">
             {searchOpen ? (
               <input

@@ -85,6 +85,7 @@ export default function GuidedSettingsTask({ goal, steps, mode, hint, onResult }
 
   return (
     <SimulatorFrame
+      phoneChrome={false}
       appName="Settings"
       stepIndex={stepIndex}
       totalSteps={steps.length}

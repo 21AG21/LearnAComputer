@@ -22,7 +22,7 @@ interface WindowControlsProps {
   showMaximize?: boolean;
 }
 
-const pulse = "ring-4 ring-yellow-400 animate-pulse";
+const pulse = "animate-ring-pulse";
 
 function Glyph({ kind }: { kind: ControlKind }) {
   if (kind === "minimize") return <span className="block w-3.5 h-[3px] bg-current rounded-full" />;

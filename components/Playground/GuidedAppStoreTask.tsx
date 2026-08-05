@@ -247,7 +247,7 @@ export default function GuidedAppStoreTask({ goal, steps, mode, hint, freePlay, 
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   const installedApps = [
     ...BUILT_IN_APPS,

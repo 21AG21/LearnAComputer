@@ -33,6 +33,7 @@ import GuidedNotesTask from "@/components/Playground/GuidedNotesTask";
 import DesktopLaunch from "@/components/Playground/DesktopLaunch";
 import RealWorldMission from "@/components/Playground/RealWorldMission";
 import { NoteIcon, GlobeIcon } from "@/components/Playground/Icons";
+import { useIsPhone } from "@/components/Playground/SimFormFactor";
 import type { PlaygroundTask } from "@/lib/lessons";
 
 interface LessonPlaygroundPaneProps {
@@ -70,6 +71,7 @@ const HANDLED = new Set<PlaygroundTask["type"]>([
  * between sub-lessons does not reset it.
  */
 export default function LessonPlaygroundPane({ task, started, onResult }: LessonPlaygroundPaneProps) {
+  const isPhone = useIsPhone();
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
@@ -84,7 +86,14 @@ export default function LessonPlaygroundPane({ task, started, onResult }: Lesson
   // text-gray-900 is not decorative: the simulated computer keeps its own light
   // appearance in dark mode, so it must not inherit the site's light text color.
   return (
-    <div className="playground-root relative h-full w-full border-4 border-gray-300 bg-white text-gray-900 overflow-hidden">
+    // The gray frame is the laptop pane's edge against the lesson text beside
+    // it. On a phone there is nothing beside it, and 8px of border is 8px of
+    // decoration taken off a screen that has none to spare.
+    <div
+      className={`playground-root relative h-full w-full overflow-hidden bg-white text-gray-900 ${
+        isPhone ? "" : "border-4 border-gray-300"
+      }`}
+    >
       {!started && <FakeDesktop />}
 
       {started && (

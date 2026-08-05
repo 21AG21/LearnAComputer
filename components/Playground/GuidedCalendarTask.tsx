@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { CalendarIcon, CheckIcon } from "./Icons";
@@ -76,6 +77,7 @@ const CALENDARS = ["Personal", "Work"];
 
 export default function GuidedCalendarTask({ goal, steps, initialView, mode, hint, freePlay, onResult }: GuidedCalendarTaskProps) {
   const [view, setView] = useState<"month" | "day" | "reminders">(initialView ?? "month");
+  const isPhone = useIsPhone();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(PRESET_EVENTS);
   const [reminders, setReminders] = useState<Reminder[]>(PRESET_REMINDERS);
@@ -107,7 +109,7 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   function handleSelectDay(day: number) {
     setSelectedDay(day);
@@ -188,9 +190,15 @@ export default function GuidedCalendarTask({ goal, steps, initialView, mode, hin
       hint={hint}
       freePlay={freePlay}
     >
-      <div className="flex-1 flex overflow-hidden">
+      <div data-phone-stacked={isPhone || undefined} className={`flex-1 overflow-hidden ${isPhone ? "flex flex-col" : "flex"}`}>
         {/* Left sidebar */}
-        <div className="w-36 border-r bg-gray-50 sim-dark:bg-gray-800 flex flex-col flex-shrink-0">
+        {/* Stacked on a phone. Side by side, the sidebar took 42% of a 390px
+              screen and every filename wrapped mid-word into three lines. */}
+        <div
+          className={`flex flex-shrink-0 flex-col bg-gray-50 sim-dark:bg-gray-800 ${
+            isPhone ? "max-h-[24%] w-full overflow-y-auto border-b" : "w-36 border-r"
+          }`}
+        >
           {/* View switcher */}
           <div className="p-2 border-b flex flex-col gap-1">
             {(["month", "day", "reminders"] as const).map((v) => (

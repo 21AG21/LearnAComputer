@@ -266,7 +266,7 @@ export default function DraggableWindow({
             ? "bg-gray-100 border-gray-700 sim-dark:bg-gray-800 sim-dark:border-gray-500"
             : "bg-gray-200/70 border-gray-400 sim-dark:bg-gray-800/60 sim-dark:border-gray-700"
         } ${!isMaximized ? "cursor-grab active:cursor-grabbing" : "cursor-default"} ${
-          highlight === "titlebar" ? "ring-4 ring-yellow-400 ring-inset animate-pulse" : ""
+          highlight === "titlebar" ? "animate-ring-pulse" : ""
         }`}
         onMouseDown={onTitleDown}
         tabIndex={isMaximized ? -1 : 0}
@@ -295,7 +295,7 @@ export default function DraggableWindow({
           role="button"
           tabIndex={0}
           className={`absolute bottom-0 right-0 w-8 h-8 cursor-se-resize rounded-tl-sm outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 ${
-            highlight === "resize" ? "ring-4 ring-yellow-400 animate-pulse" : ""
+            highlight === "resize" ? "animate-ring-pulse" : ""
           }`}
           onMouseDown={onResizeDown}
           onKeyDown={onResizeKey}

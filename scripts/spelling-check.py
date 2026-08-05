@@ -61,6 +61,10 @@ ALLOW = {
     # every learner who finished the lesson appear not to have. It stays en-GB
     # forever; only its visible text is American. See CLAUDE.md.
     ("content/lessons/a11y-colour-filters.json", "colour"),
+    # The phone course is a playlist of those same slugs, so the frozen one
+    # appears here too. Same reason, same permanence: it is a storage key, not
+    # prose, and the phone course must be able to name it.
+    ("lib/phoneCourse.ts", "colour"),
 }
 
 # kb-delete.json teaches the learner to fix typos, so its typos are the lesson.

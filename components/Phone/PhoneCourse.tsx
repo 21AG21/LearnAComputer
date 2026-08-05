@@ -3,48 +3,56 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import DrDigitalAvatar from "@/components/DrDigitalAvatar";
+import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
+import { SimFormFactorProvider } from "@/components/Playground/SimFormFactor";
 import { getCompletedSlugs, markComplete, PROGRESS_EVENT } from "@/lib/progress";
-import { PHONE_COURSE, PHONE_LESSONS, nextPhoneLesson, type PhoneLesson } from "@/lib/phoneCourse";
-import { CheckIcon, SmartphoneIcon } from "@/components/Playground/Icons";
-import PhoneScreen from "./PhoneScreen";
+import { PHONE_COURSE, PHONE_ENTRIES, nextPhoneEntry, type PhoneEntry } from "@/lib/phoneCourse";
+import type { Lesson } from "@/lib/lessons";
+import { CheckIcon, SmartphoneIcon, XIcon } from "@/components/Playground/Icons";
+import { inPhoneWords } from "@/components/Playground/SimulatorFrame";
+import PhoneGestureTask from "./PhoneGestureTask";
 
 /**
- * The "On Your Phone" tab: a course list, a teaching card, the activity, and a
- * finish card — one at a time, filling the screen.
+ * The "On Your Phone" tab.
  *
- * ## Why there is no two-column layout here
+ * ## The activity takes the whole viewport, on purpose
  *
- * Every other lesson surface in this repo puts the teaching on the left and the
- * activity on the right. That layout needs about 900px, which is the whole
- * problem this course exists to solve. So the phone course shows exactly one
- * thing at a time and the learner moves forward through it, which is how phone
- * software works anyway — a beginner reading this on a 390px screen should
- * recognize the shape of it from every other app they have used.
+ * On a laptop a lesson is two columns and there is room for a nav bar above it.
+ * On a 390×844 phone there is not: a site nav, a page heading and a row of
+ * lesson controls had between them been eating a fifth of the screen before the
+ * simulated phone got a pixel. So the activity is a **fixed, full-viewport
+ * layer**. It covers the nav rather than fighting it, and what is left is two
+ * things and nothing else — the sentence telling the learner what to do, and the
+ * phone they do it on.
  *
- * On a wide screen the same four views are simply centered in a narrow column
- * with the simulated phone in a bezel. Deliberately not a special desktop
- * layout: an instructor demonstrating this on a projector should be looking at
- * what the learner is holding.
+ * The Close and Start-over controls live in one 32px strip painted the same
+ * color as the instruction banner directly below it, so the two read as a single
+ * bar. That strip is the entire cost of the chrome.
  *
- * ## Progress
+ * ## Almost none of this course lives here
  *
- * Phone lessons are marked complete in `lac-progress` alongside the laptop
- * course's slugs, so "Reset all progress" clears both and there is no second
- * storage key to forget about. Every phone slug starts `phone-`; nothing else in
- * `content/lessons/` does, and `phone-check` asserts the two sets never overlap.
+ * Entries marked `kind: "lesson"` are real lessons out of `content/lessons/`,
+ * handed straight to `LessonPlaygroundPane` — the same component the laptop
+ * course uses, rendering the same activity, with `SimFormFactorProvider` telling
+ * the simulator underneath it to take its phone shape. There is no second
+ * Messages app and no second Settings app to keep in step.
  */
 
 type View =
   | { at: "list" }
-  | { at: "teach"; lesson: PhoneLesson }
-  | { at: "doing"; lesson: PhoneLesson; attempt: number }
-  | { at: "failed"; lesson: PhoneLesson; attempt: number; message: string }
-  | { at: "done"; lesson: PhoneLesson };
+  | { at: "teach"; entry: PhoneEntry }
+  | { at: "doing"; entry: PhoneEntry; attempt: number }
+  | { at: "failed"; entry: PhoneEntry; attempt: number; message: string }
+  | { at: "done"; entry: PhoneEntry };
 
-export default function PhoneCourse() {
+interface PhoneCourseProps {
+  /** The borrowed lessons, resolved on the server: slug → the lesson JSON. */
+  lessons: Record<string, Lesson>;
+}
+
+export default function PhoneCourse({ lessons }: PhoneCourseProps) {
   const [view, setView] = useState<View>({ at: "list" });
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
-  const [hint, setHint] = useState<string | null>(null);
 
   // Read on mount rather than in `useState`: localStorage does not exist while
   // this is being server-rendered, and reading it during the first client render
@@ -58,111 +66,90 @@ export default function PhoneCourse() {
 
   /**
    * `phone-check` reads the curriculum from here rather than parsing the
-   * TypeScript module off disk, so the harness plays exactly the steps the page
-   * is running — the same reason `stray-check` mounts activities through
-   * `window.__strayShow`. Development only: nothing is attached in a production
-   * build.
+   * TypeScript module off disk, so the harness plays exactly the entries the
+   * page is running — the same reason `stray-check` mounts activities through
+   * `window.__strayShow`. Development only.
    */
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
     (window as unknown as { __phoneCourse?: unknown }).__phoneCourse = PHONE_COURSE;
   }, []);
 
-  const onResult = useCallback(
-    (success: boolean, failMessage?: string) => {
-      setView((v) => {
-        if (v.at !== "doing") return v;
-        if (success) {
-          markComplete(v.lesson.slug);
-          return { at: "done", lesson: v.lesson };
-        }
-        return { at: "failed", lesson: v.lesson, attempt: v.attempt, message: failMessage ?? "That did not work." };
-      });
-    },
-    [],
+  const titleOf = useCallback(
+    (e: PhoneEntry) => (e.kind === "gesture" ? e.title : (lessons[e.slug]?.title ?? e.slug)),
+    [lessons],
   );
+
+  const onResult = useCallback((success: boolean, failMessage?: string) => {
+    setView((v) => {
+      if (v.at !== "doing") return v;
+      if (success) {
+        markComplete(v.entry.slug);
+        return { at: "done", entry: v.entry };
+      }
+      return { at: "failed", entry: v.entry, attempt: v.attempt, message: failMessage ?? "That did not work." };
+    });
+  }, []);
+
+  const open = useCallback((entry: PhoneEntry) => setView({ at: "teach", entry }), []);
 
   // ── The course list ────────────────────────────────────────────────────────
   if (view.at === "list") {
-    const doneCount = PHONE_LESSONS.filter((l) => completed.has(l.slug)).length;
+    const doneCount = PHONE_ENTRIES.filter((l) => completed.has(l.slug)).length;
     return (
-      <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-16 pt-6">
-        <h1 className="flex items-center gap-2 text-2xl font-bold">
-          <SmartphoneIcon size={26} aria-hidden />
-          On Your Phone
-        </h1>
-        <p className="mt-2 text-gray-700 dark:text-gray-300">
-          A separate course for the computer in your pocket. It is built to be done{" "}
-          <strong>on a phone</strong> — tapping, holding, swiping and pinching, with a keyboard made of glass. It
-          works on a computer too, in a picture of a phone.
-        </p>
-        <p className="mt-2 text-gray-700 dark:text-gray-300">
-          The main course teaches a laptop, and almost nothing in it transfers: a phone has no second mouse button,
-          no keys to hold down and no windows to arrange. So this teaches the phone on its own terms.
-        </p>
-
-        <div
-          className="mt-5 rounded-xl border-2 border-gray-300 p-4 dark:border-gray-700"
-          role="status"
-        >
-          <p className="font-semibold">
-            {doneCount} of {PHONE_LESSONS.length} lessons done
-          </p>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
-            <div
-              className="h-full rounded-full bg-green-600 transition-all duration-300"
-              style={{ width: `${(doneCount / PHONE_LESSONS.length) * 100}%` }}
-            />
-          </div>
-          <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-            Finish a unit and its certificate appears on the{" "}
-            <Link href="/certificate" className="text-blue-700 underline dark:text-blue-400">
-              Certificates
-            </Link>{" "}
-            tab. Progress is saved on this phone only — there is no account and nothing is sent anywhere.
-          </p>
+      <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-16 pt-4">
+        {/* One heading, one number, one bar. Everything a learner needs to start
+            is a lesson row, and every sentence above the first row is a sentence
+            between them and the course. */}
+        <div className="flex items-center gap-2">
+          <SmartphoneIcon size={24} aria-hidden />
+          <h1 className="text-xl font-bold">On Your Phone</h1>
+          <span className="ml-auto text-sm font-semibold text-gray-700 dark:text-gray-300">
+            {doneCount} of {PHONE_ENTRIES.length}
+          </span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800" role="status">
+          <div
+            className="h-full rounded-full bg-green-600 transition-all duration-300"
+            style={{ width: `${(doneCount / PHONE_ENTRIES.length) * 100}%` }}
+          />
         </div>
 
         {PHONE_COURSE.map((unit) => {
           const unitDone = unit.lessons.every((l) => completed.has(l.slug));
           return (
-            <section key={unit.unit} className="mt-8">
-              <h2 className="flex items-center gap-2 text-lg font-bold">
+            <section key={unit.unit} className="mt-6">
+              <h2 className="flex items-center gap-2 text-base font-bold">
                 {unit.unit}
                 {unitDone && <CheckIcon size={18} className="text-green-700 dark:text-green-400" aria-label="Finished" />}
               </h2>
-              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{unit.blurb}</p>
-              <ul className="mt-3 space-y-2">
-                {unit.lessons.map((lesson) => (
-                  <li key={lesson.slug}>
-                    <button
-                      type="button"
-                      data-phone-lesson={lesson.slug}
-                      onClick={() => {
-                        setHint(null);
-                        setView({ at: "teach", lesson });
-                      }}
-                      className="flex w-full items-center gap-3 rounded-xl border-2 border-gray-300 px-4 py-4 text-left transition-colors hover:border-blue-600 dark:border-gray-700"
-                    >
-                      <span
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                          completed.has(lesson.slug)
-                            ? "bg-green-700 text-white"
-                            : "border-2 border-gray-500 text-gray-700 dark:text-gray-300"
-                        }`}
-                        aria-hidden
+              <ul className="mt-2 space-y-1.5">
+                {unit.lessons.map((entry) => {
+                  const missing = entry.kind === "lesson" && !lessons[entry.slug];
+                  return (
+                    <li key={entry.slug}>
+                      <button
+                        type="button"
+                        data-phone-lesson={entry.slug}
+                        disabled={missing}
+                        onClick={() => open(entry)}
+                        className="flex w-full items-center gap-3 rounded-xl border-2 border-gray-300 px-3 py-3 text-left transition-colors hover:border-blue-600 disabled:opacity-50 dark:border-gray-700"
                       >
-                        {completed.has(lesson.slug) ? "✓" : ""}
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block font-semibold">{lesson.title}</span>
-                        <span className="block text-sm text-gray-700 dark:text-gray-300">
-                          {completed.has(lesson.slug) ? "Finished — tap to do it again" : `${lesson.steps.length} steps`}
+                        <span
+                          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+                            completed.has(entry.slug)
+                              ? "bg-green-700 text-white"
+                              : "border-2 border-gray-500 text-gray-700 dark:text-gray-300"
+                          }`}
+                          aria-hidden
+                        >
+                          {completed.has(entry.slug) ? "✓" : ""}
                         </span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
+                        <span className="min-w-0 font-semibold">{titleOf(entry)}</span>
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           );
@@ -171,20 +158,31 @@ export default function PhoneCourse() {
     );
   }
 
+  const { entry } = view;
+  const lesson = entry.kind === "lesson" ? lessons[entry.slug] : undefined;
+  /**
+   * The borrowed lessons are written for a laptop and say "click", "the sidebar",
+   * "the dock". `SimulatorFrame` already rewrites the step banner; the teaching
+   * card is the *other* place a learner reads that prose, and it was going out
+   * raw — telling somebody holding a phone to press Ctrl+D.
+   */
+  const intro = inPhoneWords(entry.kind === "gesture" ? entry.intro : (lesson?.drDigitalIntro ?? ""));
+  const success = inPhoneWords(entry.kind === "gesture" ? entry.success : (lesson?.drDigitalSuccess ?? "Well done."));
+  const goal = entry.kind === "gesture" ? entry.goal : "";
+
   // ── The teaching card, before the activity ─────────────────────────────────
   if (view.at === "teach") {
-    const { lesson } = view;
     return (
       <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-4">
         <BackToList onBack={() => setView({ at: "list" })} />
-        <h1 className="mt-3 text-2xl font-bold">{lesson.title}</h1>
+        <h1 className="mt-3 text-2xl font-bold">{titleOf(entry)}</h1>
         <div className="mt-4 rounded-xl border-2 border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center gap-2">
             <DrDigitalAvatar className="h-9 w-9 shrink-0" />
             <p className="font-semibold">Dr. Digital</p>
           </div>
           <div className="mt-3 space-y-3 text-[17px] leading-relaxed">
-            {lesson.intro.split("\n\n").map((para, i) => (
+            {intro.split(/\n{2,}|\n/).filter(Boolean).map((para, i) => (
               <p key={i}>
                 {para.split(/(\*\*[^*]+\*\*)/g).map((bit, j) =>
                   bit.startsWith("**") && bit.endsWith("**") ? (
@@ -197,51 +195,84 @@ export default function PhoneCourse() {
             ))}
           </div>
         </div>
+      {/* Sticky, because a four-paragraph intro puts this 700px down the page —
+          on the very first lesson of the course, where a learner has no reason
+          to believe scrolling is what comes next. */}
+      <div className="sticky bottom-0 -mx-4 mt-5 border-t border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-[#10151b]">
         <button
           type="button"
           data-phone-start
-          onClick={() => setView({ at: "doing", lesson, attempt: 0 })}
-          className="mt-5 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700"
+          onClick={() => setView({ at: "doing", entry, attempt: 0 })}
+          className="w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700"
         >
           Try it on the phone
         </button>
+        </div>
       </div>
     );
   }
 
-  // ── The activity ───────────────────────────────────────────────────────────
+  // ── The activity: the whole viewport, and nothing but the lesson ───────────
   if (view.at === "doing") {
-    const { lesson, attempt } = view;
+    const { attempt } = view;
     return (
-      <div className="flex h-full min-h-0 flex-col">
-        <div className="flex shrink-0 items-center justify-between gap-2 px-3 py-2">
-          <BackToList onBack={() => setView({ at: "list" })} />
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#1d2733]">
+        {/* The only chrome. Painted the same color as the banner beneath it, so
+            the two read as one bar rather than two. */}
+        <div className="flex h-8 shrink-0 items-center gap-3 px-3 text-white">
           <button
             type="button"
-            onClick={() => setView({ at: "doing", lesson, attempt: attempt + 1 })}
-            className="text-sm font-semibold text-blue-700 underline dark:text-blue-400"
+            data-phone-close
+            onClick={() => setView({ at: "list" })}
+            aria-label="Close this lesson"
+            className="flex items-center gap-1 text-sm font-semibold text-white/90 hover:text-white"
+          >
+            <XIcon size={15} aria-hidden />
+            Close
+          </button>
+          <p className="min-w-0 flex-1 truncate text-center text-sm font-semibold text-white/80">{titleOf(entry)}</p>
+          <button
+            type="button"
+            onClick={() => setView({ at: "doing", entry, attempt: attempt + 1 })}
+            className="shrink-0 text-sm font-semibold text-white/90 underline hover:text-white"
           >
             Start over
           </button>
         </div>
-        {hint && (
-          <p className="mx-3 mb-2 shrink-0 rounded-lg border-2 border-yellow-500 bg-yellow-50 px-3 py-2 text-sm dark:bg-yellow-950/40">
-            {lesson.hint}
-          </p>
-        )}
-        <PhoneScreen
-          key={`${lesson.slug}-${attempt}`}
-          lesson={lesson}
-          onResult={onResult}
-          onHint={() => setHint((h) => (h ? null : lesson.hint))}
-        />
+
+        {/**
+          * The shape of an actual phone.
+          *
+          * On a phone this fills the screen, because it *is* the screen. On
+          * anything wider it takes a real handset's proportions — 9:19.5, the
+          * ratio almost every phone sold in the last few years uses — inside a
+          * dark bezel with rounded corners. Before this it was a 430px column
+          * running off the bottom edge with a radius on the top only, which read
+          * as a cropped web page rather than as a phone.
+          */}
+        <div className="flex min-h-0 flex-1 items-center justify-center sm:p-4">
+          <SimFormFactorProvider value="phone">
+            <div className="flex h-full w-full flex-col overflow-hidden bg-white sm:aspect-[9/19.5] sm:h-auto sm:max-h-full sm:w-auto sm:rounded-[2.25rem] sm:border-[10px] sm:border-gray-900 sm:shadow-2xl">
+              {entry.kind === "gesture" ? (
+                <PhoneGestureTask key={`${entry.slug}-${attempt}`} lesson={entry} onResult={onResult} />
+              ) : lesson ? (
+                <LessonPlaygroundPane
+                  key={`${entry.slug}-${attempt}`}
+                  task={lesson.playgroundTask}
+                  started
+                  onResult={onResult}
+                />
+              ) : null}
+            </div>
+          </SimFormFactorProvider>
+        </div>
       </div>
     );
   }
 
   // ── The failure card ───────────────────────────────────────────────────────
   if (view.at === "failed") {
-    const { lesson, attempt, message } = view;
+    const { attempt, message } = view;
     return (
       <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-6">
         <div className="rounded-xl border-2 border-red-500 bg-red-50 p-4 dark:bg-red-950/40">
@@ -250,7 +281,7 @@ export default function PhoneCourse() {
         </div>
         <button
           type="button"
-          onClick={() => setView({ at: "doing", lesson, attempt: attempt + 1 })}
+          onClick={() => setView({ at: "doing", entry, attempt: attempt + 1 })}
           className="mt-5 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700"
         >
           Try again
@@ -261,8 +292,7 @@ export default function PhoneCourse() {
   }
 
   // ── The finish card ────────────────────────────────────────────────────────
-  const { lesson } = view;
-  const next = nextPhoneLesson(lesson.slug);
+  const next = nextPhoneEntry(entry.slug);
   return (
     <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-10 pt-6">
       <div className="rounded-xl border-2 border-green-500 bg-green-50 p-4 dark:bg-green-950/40">
@@ -270,21 +300,18 @@ export default function PhoneCourse() {
           <DrDigitalAvatar className="h-9 w-9 shrink-0" mood="success" />
           <p className="font-semibold">Dr. Digital</p>
         </div>
-        <p className="mt-3 text-[17px] leading-relaxed">{lesson.success}</p>
-        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{lesson.goal}</p>
+        <p className="mt-3 text-[17px] leading-relaxed">{success}</p>
+        {goal && <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{goal}</p>}
       </div>
 
       {next ? (
         <button
           type="button"
           data-phone-next
-          onClick={() => {
-            setHint(null);
-            setView({ at: "teach", lesson: next });
-          }}
+          onClick={() => setView({ at: "teach", entry: next })}
           className="mt-5 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700"
         >
-          Next: {next.title}
+          Next: {titleOf(next)}
         </button>
       ) : (
         <div className="mt-5 rounded-xl border-2 border-gray-300 p-4 dark:border-gray-700">

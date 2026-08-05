@@ -8,7 +8,10 @@ import FileViewer from "./Desktop/FileViewer";
 import { iconFor, type Item } from "./Desktop/filesData";
 import { SimThemeProvider, useSimTheme, themeFilter, themeCursor } from "./Desktop/SimThemeContext";
 import Dock from "./Dock";
-import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
+import { CalendarPanel, DesktopMenuBar, StatusPanel, wallpaper } from "./DesktopChrome";
+import { useIsPhone } from "./SimFormFactor";
+import { useSwipe } from "./touchGestures";
+import { ArrowLeftIcon } from "./Icons";
 import {
   BellOffIcon, ChatIcon, GlobeIcon, FolderIcon, MailIcon,
   GearIcon, CameraIcon, CalendarIcon, BellIcon, CartIcon, NoteIcon,
@@ -46,6 +49,14 @@ interface FakeDesktopProps {
   /** "Double-click to open" lessons: show an opened file briefly, then tuck it
       away so it never covers the next file the learner has to open. */
   autoDismissViewers?: boolean;
+  /** Phone shape only: the learner slid the bar at the bottom upward. */
+  onGoHome?: () => void;
+  /** Phone shape only: which of the status-strip buttons a step is pointing at. */
+  highlightPanel?: "wifi" | "battery" | "calendar" | null;
+  /** Fires when a status panel opens or closes, so a gesture lesson can score it. */
+  onPanelChange?: (panel: "wifi" | "battery" | "calendar" | null) => void;
+  /** Draws a pulsing ring on the bar at the bottom. */
+  highlightHomeBar?: boolean;
 }
 
 export const APP_TITLES: Record<DesktopAppId, string> = {
@@ -90,8 +101,13 @@ export default function FakeDesktop(props: FakeDesktopProps) {
   );
 }
 
-function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps, settingsProps, autoOpenApp, autoDismissViewers }: FakeDesktopProps) {
+function FakeDesktopInner({
+  onAppOpened, filesHint, filesHighlight, onFileOpened, highlightApp, interceptApps,
+  settingsProps, autoOpenApp, autoDismissViewers,
+  onGoHome, highlightPanel = null, onPanelChange, highlightHomeBar,
+}: FakeDesktopProps) {
   const theme = useSimTheme();
+  const isPhone = useIsPhone();
   const desktopRef = useRef<HTMLDivElement>(null);
   /**
    * Which apps have a window, in the order they were opened. A real desktop lets
@@ -176,11 +192,35 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
     return rect;
   }
 
+  const homeBar = useSwipe(
+    ({ dir }) => {
+      if (dir === "up") goHome();
+    },
+    { axis: "y", threshold: 24 },
+  );
+
   function windowAnim(id: DesktopAppId) {
     if (closingApp === id) return "animate-window-close";
     if (minimizingApp === id) return "animate-window-minimize";
     if (launchingApp === id) return "animate-window-open";
     return "";
+  }
+
+  /**
+   * Put every app away and show the home screen — the phone's version of the
+   * gesture there is no laptop equivalent for.
+   *
+   * It minimizes rather than closes, which is the difference between a phone and
+   * a laptop and is worth being exact about: on a phone, leaving an app does not
+   * throw away what you were doing. A half-written message is still there when
+   * you come back, the dock keeps its running dot, and Unit 1's promise that
+   * "nothing is lost when you do that" stays true.
+   */
+  function goHome() {
+    setOpenPanel(null);
+    setClosingPanel(null);
+    setMinimized(new Set(openApps));
+    onGoHome?.();
   }
 
   /** The window on top: the last-raised one that is not minimized. */
@@ -323,12 +363,35 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       <div className="relative shrink-0">
         <DesktopMenuBar
           dark={isDark}
-          title={focusedApp ? APP_TITLES[focusedApp] : "Desktop"}
+          compact={isPhone}
+          leading={
+            isPhone && focusedApp ? (
+              <button
+                type="button"
+                data-phone-back
+                aria-label="Back to the home screen"
+                onClick={goHome}
+                className="-ml-1 rounded p-1 hover:bg-black/10 sim-dark:hover:bg-white/15"
+              >
+                <ArrowLeftIcon size={18} />
+              </button>
+            ) : undefined
+          }
+          title={focusedApp ? APP_TITLES[focusedApp] : isPhone ? "Home" : "Desktop"}
           trailing={theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
           time={time}
           batteryPercent={batteryPercent}
           openPanel={openPanel}
-          onTogglePanel={(panel) => (openPanel === panel ? dismissPanel() : setOpenPanel(panel))}
+          highlight={highlightPanel}
+          onTogglePanel={(panel) => {
+            if (openPanel === panel) {
+              dismissPanel();
+              onPanelChange?.(null);
+            } else {
+              setOpenPanel(panel);
+              onPanelChange?.(panel);
+            }
+          }}
         />
 
         {(openPanel === "wifi" || closingPanel === "wifi") && (
@@ -399,8 +462,57 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
           </div>
         )}
 
+        {/**
+          * Apps on a phone fill the screen; apps on a laptop are windows.
+          *
+          * Every open app stays mounted either way and the ones behind are
+          * merely hidden, so leaving an app and coming back finds the
+          * half-written message still there. That is not a detail — Unit 1
+          * tells the learner "nothing is lost when you do that", and a phone
+          * that unmounted the app would make the lesson a lie.
+          */}
+        {isPhone
+          ? openApps.map((id) => (
+              <div
+                key={`${id}-${appKeys[id]}`}
+                data-phone-app-surface={id}
+                aria-hidden={focusedApp !== id}
+                /**
+                 * `hidden` as a **class**, not as the HTML attribute.
+                 *
+                 * The attribute's `display: none` comes from the UA stylesheet,
+                 * and any author `display` beats it — so `hidden` alongside
+                 * Tailwind's `flex` does nothing at all. The app you had just
+                 * left stayed sitting on top of the home screen, invisible as a
+                 * bug because it looked like a perfectly normal open app: going
+                 * home appeared to work, and then every icon underneath was
+                 * unclickable.
+                 */
+                className={`absolute inset-0 z-20 overflow-hidden bg-white sim-dark:bg-gray-900 ${
+                  focusedApp === id ? "flex flex-col" : "hidden"
+                } ${windowAnim(id)}`}
+              >
+                <AppBody
+                  id={id}
+                  extras={{
+                    browser: { noWifi: !connectedNetwork },
+                    settings: settingsProps,
+                    files: {
+                      hint: filesHint,
+                      highlight: filesHighlight,
+                      onFileOpened,
+                      onFileOpen: openFileViewer,
+                      onClose: goHome,
+                      onMinimize: goHome,
+                    },
+                  }}
+                />
+              </div>
+            ))
+          : null}
+
         {/* Apps as draggable windows, back to front */}
-        {openApps.map((id) => (
+        {!isPhone && openApps.map((id) => (
           <DraggableWindow
             key={`${id}-${appKeys[id]}`}
             title={APP_TITLES[id]}
@@ -432,8 +544,29 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
           </DraggableWindow>
         ))}
 
+        {/* A file the learner opened. Full screen on a phone, a window on a laptop. */}
+        {isPhone
+          ? openFileViewers.map((fv) => (
+              <div key={fv.uid} className="absolute inset-0 z-30 flex flex-col overflow-hidden bg-white sim-dark:bg-gray-900 animate-window-open">
+                <div className="flex shrink-0 items-center gap-2 border-b bg-gray-100 px-2 py-2 sim-dark:bg-gray-800">
+                  <button
+                    type="button"
+                    aria-label="Close this file"
+                    onClick={() => closeFileViewer(fv.uid)}
+                    className="rounded p-1 hover:bg-black/10 sim-dark:hover:bg-white/15"
+                  >
+                    <ArrowLeftIcon size={18} />
+                  </button>
+                  {iconFor(fv.item, 16)}
+                  <p className="truncate font-semibold">{fv.item.name}</p>
+                </div>
+                <div className="min-h-0 flex-1"><FileViewer item={fv.item} /></div>
+              </div>
+            ))
+          : null}
+
         {/* File viewer windows */}
-        {openFileViewers.map((fv, i) => (
+        {!isPhone && openFileViewers.map((fv, i) => (
           <DraggableWindow
             key={fv.uid}
             title={fv.item.name}
@@ -450,9 +583,28 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
           </DraggableWindow>
         ))}
 
-        {/* Dock — rendered after apps so it stays clickable when windows overlap it */}
-        <div className="absolute bottom-4 inset-x-2 flex justify-center z-30">
+        {/**
+          * The dock. Same ten icons, same artwork, same order, in the place each
+          * machine keeps them: a floating tray along the bottom of a laptop, and
+          * the home screen itself on a phone, where it sits under everything and
+          * the open app covers it.
+          */}
+        <div
+          className={
+            isPhone
+              ? // Centered, not top-aligned. A real phone tops out its icons because
+                // it has six pages of them; this one has ten apps and no wallpaper
+                // art, and hugging the top left two thirds of the screen looking
+                // like something had failed to load.
+                "absolute inset-0 z-10 flex flex-col justify-center overflow-y-auto px-3 py-5"
+              : "absolute bottom-4 inset-x-2 flex justify-center z-30"
+          }
+        >
           <Dock
+            wrap={isPhone}
+            tray={!isPhone}
+            size={isPhone ? "lg" : "md"}
+            showLabels
             tone={isDark ? "dark" : "light"}
             items={BUILT_IN_APPS.map((id) => ({
               id,
@@ -475,100 +627,36 @@ function FakeDesktopInner({ onAppOpened, filesHint, filesHighlight, onFileOpened
       {theme.nightShift && (
         <div className="absolute inset-0 pointer-events-none bg-orange-500/15 transition-opacity" style={{ filter: "sepia(0.15)" }} />
       )}
+      {/**
+        * The bar you slide upward to go home.
+        *
+        * Outside the wallpaper area, like the status strip, so it is present in
+        * every app and an app's own scrolling never swallows the gesture.
+        * `touch-action: none` is load-bearing: without it the browser reads the
+        * upward drag as a scroll and takes the gesture before this code sees it.
+        */}
+      {isPhone && (
+        <div
+          {...homeBar.props}
+          data-phone-homebar
+          // Swipe only, and not focusable: as a button it swallowed the Enter a
+          // learner pressed to name a new folder and sent them home instead. The
+          // keyboard route home is the back arrow in the strip above.
+          aria-hidden="true"
+          className={`flex shrink-0 touch-none select-none items-center justify-center py-1.5 ${
+            isDark ? "bg-gray-800" : "bg-white"
+          } ${highlightHomeBar ? "animate-ring-pulse" : ""}`}
+        >
+          <span className={`h-1.5 w-28 rounded-full ${isDark ? "bg-white/70" : "bg-gray-500"}`} />
+        </div>
+      )}
+
       {theme.spokenDescriptions && <SpokenDescriptionBar />}
     </div>
   );
 }
 
 
-function StatusPanel({
-  color,
-  tint,
-  darkTint,
-  title,
-  onClose,
-  closing,
-  children,
-}: {
-  color: string;
-  tint: string;
-  /**
-   * The header tint for the practice computer's dark mode. The light tints are pale
-   * washes meant to carry black text; on a dark panel they read as a bright strip
-   * pasted onto it. Each one is the same hue taken down to a shade that carries
-   * white text instead, so the panel stays recognizably the WiFi / battery /
-   * calendar panel either way.
-   */
-  darkTint: string;
-  title: string;
-  onClose: () => void;
-  closing?: boolean;
-  children: React.ReactNode;
-}) {
-  const { dark } = useSimTheme();
-  return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className={`absolute top-10 right-2 z-50 w-72 border-4 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-900 sim-dark:text-gray-100 shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
-    >
-      <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: dark ? darkTint : tint }}>
-        <p className="text-lg font-bold">{title}</p>
-        <button
-          onClick={onClose}
-          aria-label={`Close ${title}`}
-          className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-sm hover:opacity-80 transition-opacity"
-          style={{ backgroundColor: color }}
-        >
-          &times;
-        </button>
-      </div>
-      <div className="h-1" style={{ backgroundColor: color }} />
-      <div className="p-2">{children}</div>
-      <div className="h-3" style={{ backgroundColor: color }} />
-    </div>
-  );
-}
-
-const CALENDAR_EVENTS = [
-  { time: "9:00 am", label: "School" },
-  { time: "12:00 pm", label: "Lunch" },
-  { time: "4:00 pm", label: "Soccer practice" },
-  { time: "7:00 pm", label: "Homework time" },
-];
-
-const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const MONTH_NAMES = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December",
-];
-function ordinal(n: number) {
-  if (n === 1 || n === 21 || n === 31) return `${n}st`;
-  if (n === 2 || n === 22) return `${n}nd`;
-  if (n === 3 || n === 23) return `${n}rd`;
-  return `${n}th`;
-}
-
-function CalendarPanel({ onClose, closing }: { onClose: () => void; closing?: boolean }) {
-  const now = new Date();
-  const dayName = DAY_NAMES[now.getDay()];
-  const monthName = MONTH_NAMES[now.getMonth()];
-  const dateOrdinal = ordinal(now.getDate());
-  return (
-    <StatusPanel color="#c0392b" tint="#fde8e6" darkTint="#7f2019" onClose={onClose} title="Calendar" closing={closing}>
-      <p className="px-2 py-1 font-semibold text-sm text-gray-700 sim-dark:text-gray-200">
-        Today is {dayName}, {monthName} {dateOrdinal}
-      </p>
-      <div className="mt-1 space-y-1">
-        {CALENDAR_EVENTS.map((ev) => (
-          <div key={ev.label} className="flex gap-2 items-baseline px-2 py-1 border-t border-red-100 sim-dark:border-gray-700">
-            <span className="text-xs text-gray-500 sim-dark:text-gray-400 w-16 shrink-0">{ev.time}</span>
-            <span className="text-sm font-medium">{ev.label}</span>
-          </div>
-        ))}
-      </div>
-    </StatusPanel>
-  );
-}
 
 /**
  * Stands in for a screen reader. A real one speaks; this one prints, because a

@@ -128,6 +128,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
 
   return (
     <SimulatorFrame
+      phoneChrome={false}
       appName="Desktop"
       instruction={step?.say}
       stepIndex={stepIdx}
@@ -165,7 +166,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                 </span>
                 <button
                   onClick={handleClosePanel}
-                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 text-sm leading-none ${step?.action === "close-panel" ? "ring-2 ring-yellow-400 rounded animate-pulse" : ""}`}
+                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 text-sm leading-none ${step?.action === "close-panel" ? "animate-ring-pulse rounded" : ""}`}
                   aria-label="Close panel"
                 >
                   &times;
@@ -181,7 +182,7 @@ export default function GuidedDesktopTask({ goal, steps, mode, hint, onResult }:
                 <div className="p-3 space-y-1.5">
                   {NETWORKS.map((net) => {
                     const isConnected = net === connectedNetwork;
-                    const pulse2 = "ring-2 ring-yellow-400 animate-pulse rounded";
+                    const pulse2 = "animate-ring-pulse rounded";
                     return (
                       <div
                         key={net}

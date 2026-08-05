@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import SimulatorFrame from "./SimulatorFrame";
 import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -97,6 +98,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const mode = inferScenarioMode(steps);
 
   const [view, setView] = useState<View>("desktop");
+  const isPhone = useIsPhone();
   /** An app opened from the dock that this scenario has no script for — free play. */
   const [freeApp, setFreeApp] = useState<AppBodyId | null>(null);
   const [frozenApps, setFrozenApps] = useState<FrozenApp[]>(() => {
@@ -220,7 +222,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
     }
   }
 
-  const pulse = "ring-2 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
   const frozenTarget = frozenApps.find((a) => a.frozen && !a.closed);
 
   function handleClickFrozen() {
@@ -458,6 +460,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
   return (
     <SimulatorFrame
+      phoneChrome={false}
       appName=""
       appIcon=""
       instruction={step?.say}
@@ -479,7 +482,10 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
         {/* Menu Bar */}
         <div className="relative shrink-0">
           <DesktopMenuBar
-            title={view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
+            compact={isPhone}
+            title={
+              view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : isPhone ? "Home" : "Desktop"
+            }
             leading={
               <button
                 onClick={handleOpenForceQuit}
@@ -1208,8 +1214,13 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
         {/* Dock */}
         <div className="shrink-0 flex items-center justify-center px-2 py-2">
+          {/* Four to a row on a phone. Ten in a single row need about 640px, so
+              at 390 the row overflowed the right edge and the icon a step named
+              could be off screen with nothing to say so. */}
           <Dock
-            size="md"
+            size={isPhone ? "lg" : "md"}
+            wrap={isPhone}
+            tray={!isPhone}
             items={ALL_DOCK_APPS.map((app) => ({
               id: app.id,
               label: app.label,

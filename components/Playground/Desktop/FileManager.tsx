@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useIsPhone } from "../SimFormFactor";
 import { FolderIcon, SaveIcon, SearchIcon } from "../Icons";
 import { iconFor, Item, Loc, LOC_TITLE, makeItems, SIDEBAR } from "./filesData";
 import FileViewer from "./FileViewer";
@@ -165,7 +166,8 @@ export default function FileManager({
     return true;
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
+  const isPhone = useIsPhone();
 
   // ── Handlers ─────────────────────────────────────────────────────────────
 
@@ -382,9 +384,15 @@ export default function FileManager({
       </div>
 
       {/* Body: sidebar + file grid */}
-      <div className="flex-1 min-h-0 flex">
+      <div data-phone-stacked={isPhone || undefined} className={`flex-1 min-h-0 ${isPhone ? "flex flex-col" : "flex"}`}>
         {/* Sidebar */}
-        <div className="w-40 shrink-0 bg-[#eef1f5] sim-dark:bg-gray-800 border-r-2 border-gray-300 sim-dark:border-gray-700 py-2 overflow-auto">
+        {/* Stacked on a phone. Side by side, the sidebar took 42% of a 390px
+              screen and every filename wrapped mid-word into three lines. */}
+        <div
+          className={`shrink-0 overflow-auto border-gray-300 bg-[#eef1f5] py-2 sim-dark:bg-gray-800 sim-dark:border-gray-700 ${
+            isPhone ? "max-h-[34%] w-full border-b-2" : "w-40 border-r-2"
+          }`}
+        >
           {SIDEBAR.map((s) => {
             const droppable = s.id !== "home" && s.id !== "trash";
             const isDropOver = dropTarget === `sidebar-${s.id}`;
@@ -397,7 +405,7 @@ export default function FileManager({
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
                   location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
-                } ${hl("sidebar", s.label) || s.id === guideToLoc ? `ring-4 ring-inset ring-yellow-400 ${pulse}` : ""} ${
+                } ${hl("sidebar", s.label) || s.id === guideToLoc ? "animate-ring-pulse" : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
               >
@@ -448,7 +456,7 @@ export default function FileManager({
                   onDoubleClick={() => handleItemDoubleClick(item)}
                   className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     selected === item.id ? "bg-blue-100 sim-dark:bg-blue-900 border-blue-500 sim-dark:border-blue-400" : "border-transparent hover:bg-gray-100 sim-dark:hover:bg-gray-800"
-                  } ${hl("item", item.name) ? `ring-4 ring-yellow-400 ${pulse}` : ""} ${
+                  } ${hl("item", item.name) ? "animate-ring-pulse" : ""} ${
                     isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                   } ${draggedFile === item.name ? "opacity-50" : ""}`}
                 >
@@ -496,7 +504,7 @@ export default function FileManager({
                 onClick={handlePreviewClose}
                 aria-label={`Close ${preview.name}`}
                 className={`flex h-7 w-7 items-center justify-center rounded-md border-2 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 text-sm font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 ${
-                  pendingPreviewClose ? `ring-4 ring-yellow-400 ${pulse}` : ""
+                  pendingPreviewClose ? "animate-ring-pulse" : ""
                 }`}
               >
                 ✕
@@ -520,7 +528,7 @@ function ToolbarBtn({ label, onClick, disabled, highlight }: { label: string; on
       onClick={onClick}
       disabled={disabled}
       className={`px-3 py-1.5 rounded-md border-2 border-black sim-dark:border-gray-500 font-semibold text-sm bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 disabled:opacity-30 disabled:cursor-not-allowed ${
-        highlight ? "ring-4 ring-yellow-400 animate-pulse bg-yellow-50 text-gray-900" : "hover:bg-gray-100 sim-dark:hover:bg-gray-600"
+        highlight ? "animate-ring-pulse bg-yellow-50 text-gray-900" : "hover:bg-gray-100 sim-dark:hover:bg-gray-600"
       }`}
     >
       {label}
@@ -558,7 +566,7 @@ interface SaveDialogProps {
 }
 
 export function SaveDialog({ stage, highlight, saveName, saveFolder, onSaveClick, onNameChange, onFolderSelect, onConfirm }: SaveDialogProps) {
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
   const hl = highlight ?? (() => false);
 
   if (stage === "doc") {

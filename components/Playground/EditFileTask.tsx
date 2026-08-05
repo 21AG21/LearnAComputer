@@ -51,6 +51,7 @@ export default function EditFileTask({
   if (phase === "editing" || done) {
     return (
       <SimulatorFrame
+      phoneChrome={false}
         appName={fileName}
         appIcon={<FileDocIcon size={20} />}
         instruction={instruction}

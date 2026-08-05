@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import { WarningIcon } from "./Icons";
 
 interface FakeItem {
@@ -22,6 +23,7 @@ export default function SpotTheFakeTask({
   fakeExplanation,
   onResult,
 }: SpotTheFakeTaskProps) {
+  const isPhone = useIsPhone();
   const [clicked, setClicked] = useState<number | null>(null);
   const [solved, setSolved] = useState(false);
 
@@ -37,10 +39,13 @@ export default function SpotTheFakeTask({
   }
 
   return (
-    <div className="h-full flex flex-col p-6 bg-white gap-5">
+    <div className={`h-full flex flex-col bg-white gap-5 ${isPhone ? "p-4" : "p-6"}`}>
       {instructions && <p className="text-2xl font-bold text-center">{instructions}</p>}
 
-      <div className="flex gap-4 flex-1 min-h-0">
+      {/* Stacked on a phone. Three cards side by side needed 595px on a 390px
+          screen: they overflowed the right edge and each ran 663px tall, so the
+          one the learner had to compare against was off screen. */}
+      <div className={`flex gap-4 min-h-0 ${isPhone ? "flex-col overflow-y-auto" : "flex-1"}`}>
         {items.map((item, i) => {
           const isClicked = clicked === i;
           const isFakeRevealed = solved && item.isFake;
@@ -51,7 +56,7 @@ export default function SpotTheFakeTask({
             <button
               key={i}
               onClick={() => handleClick(i)}
-              className={`flex-1 rounded-2xl border-4 p-6 text-left flex flex-col gap-3 transition-all ${
+              className={`rounded-2xl border-4 text-left flex flex-col gap-3 transition-all ${isPhone ? "shrink-0 p-4" : "flex-1 p-6"} ${
                 isFakeRevealed
                   ? "border-red-500 bg-red-50"
                   : isWrongClick

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { ATTACHABLE_FILES } from "./Desktop/filesData";
@@ -94,6 +95,7 @@ export default function GuidedEmailTask({
   goal, steps, seedDraft, seedInbox, highlightEmail, highlightEmailAction,
   onOpenEmail, onEmailAction, mode, hint, freePlay, onResult,
 }: GuidedEmailTaskProps) {
+  const isPhone = useIsPhone();
   const [emails, setEmails] = useState<Email[]>(() => {
     const seeded: Email[] = (seedInbox ?? []).map((e) => ({
       id: e.id,
@@ -185,7 +187,7 @@ export default function GuidedEmailTask({
     }
   }
 
-  const pulse = "ring-4 ring-yellow-400 animate-pulse";
+  const pulse = "animate-ring-pulse";
 
   const visibleEmails =
     currentFolder === "Sent"
@@ -407,9 +409,22 @@ export default function GuidedEmailTask({
       hint={hint}
       freePlay={freePlay}
     >
-      <div className="flex-1 flex overflow-hidden relative">
+      <div
+        data-phone-stacked={isPhone || undefined}
+        className={`flex-1 overflow-hidden relative ${isPhone ? "flex flex-col" : "flex"}`}
+      >
         {/* Sidebar */}
-        <div className="w-32 bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0">
+        {/* On a phone the two panes stack: this app is a sidebar beside a content
+              pane, which needs about 700px. At 390px the sidebar took 40% of the
+              width and the thing the lesson is about got the rest. Stacked, the
+              list keeps a capped slice of the height and scrolls inside it. */}
+        <div
+          className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-shrink-0 ${
+            isPhone
+              ? `w-full flex-col overflow-y-auto border-b ${selectedEmail || composing ? "max-h-[24%]" : "flex-1"}`
+              : "w-32 flex-col"
+          }`}
+        >
           <div className="p-2 border-b">
             <button
               onClick={handleCompose}

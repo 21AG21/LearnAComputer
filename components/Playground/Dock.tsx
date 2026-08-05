@@ -68,29 +68,64 @@ interface DockProps {
   onOpen: (id: string) => void;
   /** Tray color. Match it to whatever sits behind the dock. */
   tone?: "light" | "dark";
-  size?: "md" | "sm";
+  size?: "md" | "sm" | "lg";
   showLabels?: boolean;
   className?: string;
+  /**
+   * Wrap onto as many rows as it takes, instead of one scrolling row.
+   *
+   * The phone course's home screen is this same dock, four tiles to a row. Ten
+   * tiles in a single row need about 640px and a phone has 390, so without this
+   * the row either overflows the screen or shrinks the tiles to something a
+   * finger cannot hit. It is a second layout for one dock, deliberately, rather
+   * than a second dock: "the same icon opens the same app" is only true while
+   * there is one place the icons come from.
+   */
+  wrap?: boolean;
+  /** The frosted tray behind the icons. Off on the phone's home screen, where the
+   *  icons sit straight on the wallpaper exactly as they do on a real phone. */
+  tray?: boolean;
 }
 
-export default function Dock({ items, onOpen, tone = "light", size = "md", showLabels = true, className = "" }: DockProps) {
+export default function Dock({
+  items,
+  onOpen,
+  tone = "light",
+  size = "md",
+  showLabels = true,
+  className = "",
+  wrap = false,
+  tray = true,
+}: DockProps) {
   // The column is exactly the tile's width. Ten of these plus gaps fit the lesson pane,
   // where a wider column did not — a long label wraps to a second line instead.
-  const tile = size === "md" ? "w-14 h-14" : "w-12 h-12";
-  const col = size === "md" ? "w-14" : "w-12";
-  const pad = size === "md" ? "p-2.5" : "p-2";
-  const px = size === "md" ? 56 : 48;
+  const tile = size === "lg" ? "w-16 h-16" : size === "md" ? "w-14 h-14" : "w-12 h-12";
+  const col = size === "lg" ? "w-16" : size === "md" ? "w-14" : "w-12";
+  const pad = size === "lg" ? "p-3" : size === "md" ? "p-2.5" : "p-2";
+  const px = size === "lg" ? 64 : size === "md" ? 56 : 48;
 
   return (
     // items-start, so a label that wraps to two lines grows downward instead of
     // shoving its own tile out of line with the rest of the row.
     <div
-      className={`flex max-w-full items-start gap-1 rounded-2xl px-2 py-2 backdrop-blur-md ${className}`}
-      style={{
-        background: tone === "dark" ? "rgba(17,24,39,0.55)" : "rgba(255,255,255,0.55)",
-        border: tone === "dark" ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.85)",
-        boxShadow: tone === "dark" ? "0 8px 24px rgba(0,0,0,0.42)" : "0 8px 24px rgba(15,23,42,0.16)",
-      }}
+      /**
+       * Four to a row on a phone, and a grid rather than a wrapping flex row:
+       * flex-wrap packs by width, so ten icons landed 5 + 5 with a ragged gap,
+       * while a grid gives the even column rhythm a home screen is supposed to
+       * have and keeps the labels lined up under each other.
+       */
+      className={`max-w-full rounded-2xl px-2 py-2 ${
+        wrap ? "grid grid-cols-4 gap-x-2 gap-y-7 justify-items-center" : "flex items-start gap-1"
+      } ${tray ? "backdrop-blur-md" : ""} ${className}`}
+      style={
+        tray
+          ? {
+              background: tone === "dark" ? "rgba(17,24,39,0.55)" : "rgba(255,255,255,0.55)",
+              border: tone === "dark" ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.85)",
+              boxShadow: tone === "dark" ? "0 8px 24px rgba(0,0,0,0.42)" : "0 8px 24px rgba(15,23,42,0.16)",
+            }
+          : undefined
+      }
     >
       {items.map(({ id, label, running, highlighted, bouncing }) => {
         const icon = dockIcon(id) ?? dockIcon(label);
@@ -99,6 +134,10 @@ export default function Dock({ items, onOpen, tone = "light", size = "md", showL
             key={id}
             onClick={() => onOpen(id)}
             aria-label={label}
+            /* A stable hook for the harnesses. `aria-label` is the accessible
+               name and belongs to the learner; a test selector that rides on it
+               breaks the day the label is reworded. */
+            data-dock-app={normalize(id)}
             className={`group flex shrink-0 flex-col items-center gap-1 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${col} ${
               bouncing ? "animate-dock-bounce" : ""
             }`}
@@ -137,7 +176,9 @@ export default function Dock({ items, onOpen, tone = "light", size = "md", showL
             </span>
             {showLabels && (
               <span
-                className={`w-full select-none text-center text-[10px] font-medium leading-tight ${
+                className={`w-full select-none text-center font-medium leading-tight ${
+                  size === "lg" ? "text-[11px]" : "text-[10px]"
+                } ${
                   tone === "dark" ? "text-slate-200" : "text-slate-700"
                 }`}
               >

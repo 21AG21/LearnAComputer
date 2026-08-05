@@ -1,250 +1,203 @@
 # The phone course
 
-**Built 2026-08-04.** A second, separate course at `/phone` — the "On Your Phone"
-tab, next to Certificates — for people whose only computer is the one in their
-pocket. 23 lessons across 5 units, played on a simulated phone, with real touch
-gestures.
+**Rebuilt 2026-08-05.** `/phone` — the "On Your Phone" tab — is the *same* course
+on the *same* practice computer, laid out for a screen you hold in one hand.
+**116 entries: 112 real lessons out of `content/lessons/` plus 4 phone-only
+gesture lessons.**
 
 ---
 
-## Why it is a separate course and not the main one made responsive
+## The mistake this replaced, and why it mattered
 
-The obvious version of this request is "make the lessons fit a 390px screen".
-That version does not work, and it took about ten minutes with the existing
-curriculum to see why. The laptop course's 197 lessons are, overwhelmingly, about
-things a phone does not have:
+The first version was a second curriculum with its own hand-built Messages,
+Photos, Camera, Settings and on-screen keyboard. It looked fine and it was the
+wrong idea, for the reason `SAME_ICON_AUDIT.md` exists: **a copy of an app drifts
+from the app.** A learner who did Unit 1 on a phone and Unit 4 on a laptop would
+have been looking at two different computers with the same icons.
 
-| The main course teaches | On a phone |
-|---|---|
-| Right-click (Unit 4 and every browser lesson) | there is no second button |
-| Double-click (the first thing Unit 1 teaches) | one tap, and double-tap means zoom |
-| The physical keyboard — 22 lessons of Unit 2 | there are no keys to hold down |
-| Windows: move, resize, minimize, maximize | apps are full-screen, always |
-| Hover, and everything that reveals | a finger has no hover state |
-| Folder pickers in the real-world missions | `webkitdirectory` is desktop-only |
+So the bespoke phone was deleted. What is left is a **form-factor switch** on the
+real simulator.
 
-Shrinking those to phone width would not produce phone lessons. It would produce
-unusable lessons that also happen to be small. `SmallScreenGuard` has always told
-phone visitors the truth about this — and for most of its life it stopped there,
-at "go and find a computer", which for a great many of the people this course
-exists for is the end of the conversation.
+## How it works
 
-So the phone gets taught on its own terms, with its own vocabulary: tap, press and
-hold, swipe, drag, pinch, and a keyboard made of pictures of keys.
+`components/Playground/SimFormFactor.tsx` is a React context — `"desktop"` or
+`"phone"`, defaulting to desktop. `PhoneCourse` wraps `LessonPlaygroundPane` —
+the same component every laptop lesson uses — in `SimFormFactorProvider
+value="phone"`, hands it the same lesson JSON, and the components underneath
+change *layout only*.
 
----
+Why a context and not a prop: a lesson renders a `Guided…Task`, which renders
+`DesktopLaunch`, which renders `FakeDesktop`, which renders `Dock`, `AppBody` and
+`SimulatorFrame`. Threading a `variant` prop through that chain means touching
+every guided task in the course and giving each one a prop that means nothing to
+it. A context is read only by the components whose layout actually differs, and
+**every lesson in `content/lessons/` keeps working, unedited, in either shape.**
 
-## Shape
+The default is what protects the laptop course: nothing outside
+`components/Phone/` provides the context, so every existing lesson takes the
+identical code path it always did. `solve-check` (145/145), `desktop-check` and
+`ring-check` are the proof, and all three are run after any change in here.
 
 ```
-lib/phoneCourse.ts            the whole curriculum + the typed action union
+lib/phoneCourse.ts               the curriculum: a playlist of slugs + 4 gesture lessons
+app/phone/page.tsx               resolves the borrowed lessons on the server
 components/Phone/
-  gestures.ts                 tap / long-press / swipe / drag / pinch / slider
-  PhoneKeyboard.tsx           the on-screen keyboard, three layouts
-  PhoneScreen.tsx             the simulated phone: 6 apps, Quick Settings, step engine
-  PhoneCourse.tsx             course list → teaching card → activity → finish card
-app/phone/page.tsx            the route
-scripts/phone-check.mjs       plays all 23 lessons with real gestures  (npm run phone-check)
+  PhoneCourse.tsx                list → teaching card → activity → finish card
+  PhoneGestureTask.tsx           the only bespoke activity (Unit 1)
+components/Playground/
+  SimFormFactor.tsx              the context, and the home-bar exit context
+  PhoneShell.tsx                 the status strip and the home bar
+  touchGestures.ts               useSwipe — Pointer Events only
+app/dev/phone-check/             SolveCheck, in the phone shape
+scripts/phone-check.mjs          plays the 112 borrowed lessons at 390x844
+scripts/phone-gesture-check.mjs  plays the 4 gesture lessons with real swipes
 ```
 
-### Units
+## What each unit is
 
-| Unit | Lessons | Teaches |
+| Unit | Lessons | Source |
 |---|---|---|
-| 1. Meet Your Phone | 4 | home screen, opening/leaving an app, Quick Settings, scrolling |
-| 2. Touch Gestures | 5 | press and hold, swipe a row, drag an icon, pinch to zoom |
-| 3. Typing on Glass | 5 | the keyboard, Shift and 123, suggested words, emoji |
-| 4. Texting and Photos | 5 | read/reply, send a picture, the camera, the scam text |
-| 5. Settings and Staying Safe | 4 | brightness and text size, Wi-Fi, app permissions |
+| 1. Meet Your Phone | 4 | **bespoke** — tapping, sliding, the status strip, a check |
+| 2. Files and Folders | 10 | Unit 3 |
+| 3. The Internet and Browsing | 16 | Unit 4 |
+| 4. Messages and Video Calls | 8 | Unit 5 |
+| 5. Email | 9 | Unit 6 |
+| 6. Photos | 8 | Unit 7 |
+| 7. Apps | 7 | Unit 8 |
+| 8. Settings | 6 | Unit 9 |
+| 9. Online Safety | 11 | Unit 10 |
+| 10. When Something Goes Wrong | 7 | Unit 11 |
+| 11. Everyday Life | 7 | Unit 12 |
+| 12. Making It Easier to Read | 13 | Unit 13 |
+| Final Assessment | 10 | Final |
 
-Each unit ends with an **assessment** — same `useStepRunner` mode the laptop
-course uses, so the rings go off and objectives can be met in any order.
+Left out on purpose, because a phone cannot do them: the trackpad and mouse
+lessons, the whole physical-keyboard unit, window management, and the real-world
+missions whose checks need a desktop-only browser API.
 
-### What is shared with the laptop course, and what is not
-
-**Shared:** `useStepRunner` (unchanged — guided mode, assessment mode, the 150ms
-double-fire guard, the 20-second stuck-learner ring reveal), `Icons.tsx`,
-`DrDigitalAvatar`, `lib/progress.ts`, the `animate-ring-pulse` cue, and the
-contrast maths in `scripts/lib/sim-contrast.mjs`.
-
-**Not shared:** `FakeDesktop`. A phone is not a small desktop — no windows, no
-menu bar, no dock cascade, no second mouse button — and every one of that
-component's affordances would be a lie here.
-
-**No `sim-dark`.** That variant follows the Dark Mode switch inside the *laptop*
-simulator's Settings app. The simulated phone has no such switch, so a
-`sim-dark:` class here could never match; the first draft carried a few and they
-were removed rather than left as decoration.
-
-### Progress and certificates
-
-Phone lessons are marked complete in `lac-progress` alongside the laptop
-course's slugs — no second storage key, so "Reset all progress" clears both.
-Every phone slug starts `phone-`, and `phone-check` asserts the two sets never
-collide (they share one completed-slugs list; a collision would tick the wrong
-lesson).
-
-The certificate page offers phone unit certificates and a **separate**
-whole-phone-course certificate. Deliberately not merged with the laptop one:
-somebody who has finished the phone course has not been taught a laptop, and a
-certificate implying otherwise would be a lie told to whoever they hand it to.
+**Held back, and named in the file rather than quietly absent:**
+`shopping-spot-fake` and `final-files` — `phone-check` cannot yet play either to
+the end at 390px. They are listed in a comment in `lib/phoneCourse.ts` so the gap
+is a line somebody trips over rather than an absence nobody notices. A lesson a
+learner cannot finish is worse than one they were never offered.
 
 ---
 
-## The gesture engine, and the two mistakes it is built around
+## The phone layout, component by component
 
-Everything in `gestures.ts` is Pointer Events. Touch events fire on a phone and
-never on a laptop; mouse events fire on a laptop and only in a delayed,
-lied-about form on a phone. Pointer events report both honestly, which matters
-here more than anywhere else in the repo: **this course is meant to be played on
-a phone, but it is authored, reviewed and script-checked on a computer.** A
-gesture only one of those can perform is a gesture nobody can verify.
+**`FakeDesktop`** — apps fill the screen instead of opening in draggable windows;
+the dock becomes a four-column grid of the same tiles on the wallpaper; the menu
+bar goes compact and grows a back arrow; a home bar appears at the bottom. Every
+open app **stays mounted** and the ones behind are hidden, so leaving an app and
+coming back finds the half-written message still there — Unit 1 promises exactly
+that.
 
-Two designs were tried and are wrong, and the file says so because both failures
-are invisible until you hit them:
+**`PhoneShell`** — the status strip and home bar for the lessons that *don't*
+render a `FakeDesktop`. Most guided lessons go through `DesktopLaunch`, which
+hands over to the sim once the app is open and drops the desktop; correct on a
+laptop, and on a phone it left the app floating with no clock and no way home in
+**91 of the 118 entries**, falsifying two Unit 1 lessons in the process. It is
+rendered by `SimulatorFrame`, so the lesson banner stays *above* the phone rather
+than inside it. Simulators that render `FakeDesktop` themselves pass
+`phoneChrome={false}`; forget that and you get two clocks and two home bars.
 
-1. **Listening on the element alone.** The gesture dies the moment the finger
-   leaves it — which, for the 22px-tall bar you swipe upward to go home, is
-   immediately. Every swipe failed on its first frame.
+**Stacked panes** — `SettingsApp`, `FileManager`, `GuidedMessagingTask`,
+`GuidedEmailTask`, `GuidedPhotosTask`, `GuidedCalendarTask` all put a sidebar
+beside a content pane, which needs about 700px. On a phone they stack, marked
+`data-phone-stacked`. The list takes the whole height until something is selected
+and a capped strip after that: a fixed percentage looked tidy and bisected its own
+rows, showing the top half of a word.
 
-2. **`setPointerCapture` on `pointerdown`.** Fixes that and breaks something
-   worse. While a pointer is captured, the `click` that follows is dispatched to
-   the *capturing* element instead of to whatever was under the finger. A
-   swipeable row silently swallowed every tap on the button inside it: the entire
-   Messages list opened nothing. The only screens that still worked were the ones
-   where the swipe handler and the click handler happened to sit on the same
-   element — which is exactly the pattern that makes a bug look like a
-   coincidence rather than a rule.
-
-The answer is a shared `usePointerTracking`: listen on the **window** for the
-duration of the press, detach on `pointerup`, on `pointercancel` (how a browser
-says "this is a scroll now, I am taking it") and on unmount. The gesture survives
-leaving the element, and a plain tap is never intercepted.
-
-### `touch-action` is not optional
-
-A browser claims a gesture *before* it sends you the events for it. Left alone, a
-vertical drag scrolls the page and a two-finger spread zooms the whole document,
-and neither reaches this code. Each hook documents the value its element must
-carry — `none` for the home bar and the photo, `pan-y` for a swipeable row so the
-list underneath still scrolls. Getting this wrong does not throw. It produces a
-gesture that works with a mouse and does nothing at all with a finger.
-
-### `consumeClick`, twice
-
-A browser does not decide a gesture was "a drag, not a tap" on your behalf. Both
-of these were real, both were found by the harness, and both would have been
-worse for a learner than for a script:
-
-- **Long press then release still fires a `click`.** Holding an app icon opened
-  its menu and then instantly opened the app on top of it. The menu appeared and
-  vanished inside one gesture, which reads as "press and hold does nothing" — on
-  the lesson whose entire subject is press and hold.
-- **A swipe that starts and ends inside one element still fires a `click`.**
-  Swiping a junk message sideways to uncover Delete *also opened it* — putting
-  the learner inside the scam text they were trying to throw away without
-  reading, in the unit that teaches not to open it.
-
-Both hooks now expose `consumeClick()`. Call it first in the click handler and
-bail out when it returns true.
-
-### The pinch listener is a callback ref, not `useRef` + `useEffect`
-
-The photo it attaches to only exists while a photo is open, so the node arrives
-long after the hook first ran. An effect keyed on the handler re-attaches when
-the *handler* changes — which in a guided lesson happens on every step, and hid
-this completely. An **assessment has no current step**, so the handler identity
-sat still, the effect never re-ran, and the wheel listener was never attached at
-all. Pinching in the Unit 2 check did nothing, in the one place a learner has no
-ring to fall back on.
-
-A callback ref is invoked when the node mounts and again when it unmounts, which
-is the question actually being asked.
+**`inPhoneWords`** (`SimulatorFrame.tsx`) — the borrowed lessons are written for a
+laptop and say "click", "the sidebar", "in the dock". Rewriting them per device
+would mean two copies of every sentence. The swap happens on the way to the
+screen instead, so the JSON stays single-sourced. It runs on the banner, the
+hint, the goal and the teaching card.
 
 ---
 
-## `npm run phone-check`
+## Bugs this shook out, all of which had shipped
 
-Plays all 23 lessons to the end at 390×844 with a touch context. Needs
-`npm run dev` on :3000. **Green at 23/23.**
+- **`SimulatorFrame`'s no-chrome pane was a block**, so every sim's `flex-1` body
+  sized to its own content instead of the screen. Invisible on a laptop, where
+  that branch is never used; on a phone, Mail's folder list was 600px tall with
+  the inbox squeezed to nothing under it.
+- **The HTML `hidden` attribute loses to Tailwind's `flex`.** A backgrounded app
+  stayed on top of the home screen — going home *looked* like it worked, and then
+  every icon underneath was unclickable.
+- **The home bar was a focusable button that went home on Enter**, so a learner
+  pressing Enter to name a new folder was thrown back to the home screen. It is
+  swipe-only now; the keyboard route home is the back arrow.
+- **44 highlight rings used Tailwind's stock `animate-pulse`**, which animates
+  opacity 1→0.5 — fading the one control the learner has to find to 54% while
+  everything around it stayed black. All of them now use the project's own
+  `animate-ring-pulse`, whose navy edge exists to clear WCAG 1.4.11.
+- **`GuidedTroubleshootingTask` drew its dock as one 604px row** in a 364px box
+  with every ancestor `overflow: hidden` — four icons off screen with no scroll,
+  and three lessons named one of them.
+- **Three comparison cards side by side** needed 595px on a 390px screen.
 
-The gestures are performed, not faked. A swipe is a pointer pressed, moved across
-several frames and released; a long press is a pointer held still for 750ms; a
-pinch is Ctrl and the wheel, which is the same event a two-finger spread produces
-and the only one a machine without a touchscreen can generate. Nothing goes near
-`dispatchEvent` with a synthetic object.
+## `touchGestures.ts`: two designs that are wrong
 
-It reads the curriculum from `window.__phoneCourse` rather than parsing the
-TypeScript off disk, so the harness plays exactly the steps the page is running —
-the same reasoning behind `stray-check`'s `window.__strayShow`. Development only.
+- **Listening on the element alone** loses the gesture the moment the finger
+  leaves it — which, for the 20px bar you slide upward, is immediately.
+- **`setPointerCapture` on `pointerdown`** fixes that and breaks worse: while a
+  pointer is captured the following `click` goes to the *capturing* element, so a
+  swipeable row swallows every tap on the button inside it.
 
-Assessment lessons list outcomes, not routes ("write the word Friday" says nothing
-about opening Notes first). A learner works that out; the harness is told, in
-`ensureFor`.
-
-### It also measures contrast
-
-After every step, using `scripts/lib/sim-contrast.mjs` — the same maths
-`sim-contrast-check` and `simdark-check` use, not a fourth copy of it. Measuring
-on mount would measure the home screen; everything the course is about lives past
-it.
-
-Green at **1219 text runs and 13 control borders**, and it is demonstrably not
-blind — on its first run it found three real defects, all now fixed:
-
-- the celebration overlay's smaller line at **3.99:1** (translucent green-700
-  over whatever the app was showing);
-- "Tap anywhere else to close this" at **2.1:1**, white on the dimmed backdrop —
-  the one line telling a stuck learner how to get out of a menu they did not mean
-  to open;
-- the keyboard's suggestion-strip placeholder at **3.9:1**.
-
-### The negative control
-
-`PHONE_NEGATIVE=1` replaces every gesture with a plain click on the same element.
-That is not random sabotage — it is precisely the regression this course is most
-likely to suffer, because "make it a button" is the reflex fix for a gesture
-somebody finds fiddly, and a course that teaches swiping by asking you to click a
-swipe-shaped button teaches nothing.
-
-**Watched to fail: 11 findings, 12 of 23 lessons still finishing.** The twelve
-that survive are the right twelve — the typing and messaging lessons genuinely are
-all taps — and *that* is the reading to check on a future run. A negative control
-that failed everything would mean the flag had broken the page rather than removed
-the gestures, and would prove nothing.
+Track the pointer on the **window** for the duration of the press. And a drag
+that starts and ends inside one element still fires a `click` — `consumeClick()`
+is what stops a swipe from also opening the thing it swiped.
 
 ---
 
-## Two site-wide changes this needed
+## The gates
 
-**`.h-screen` now resolves to `100dvh` where supported** (`globals.css`, in the
-utilities layer, behind `@supports`). On a phone `100vh` is the height the
-viewport *would* have with the address bar hidden, which it usually is not — so
-the body ran taller than the visible area and the bar you swipe up to go home sat
-underneath the browser chrome, unreachable. Layered as an override rather than
-swapped at the call site, so a browser too old to know the unit keeps its
-`100vh`. Identical on a desktop.
+```sh
+npm run phone-check          # 112 borrowed lessons at 390x844 — green at 112/112
+npm run phone-gesture-check  # the 4 gesture lessons, real swipes — green at 4/4
+```
 
-**The storage notice is tighter on small screens.** Full text kept — it is a
-disclosure and shortening it would make it a less honest one — but at the desktop
-size it took 430px off an 844px screen, which is half the simulated phone gone
-until somebody finds the button.
+`phone-check` is `/dev/phone-check`: the same `SolveCheck` component and the same
+`lib/solve` solver the laptop course uses, wrapped in the phone context. Two
+solvers would mean two definitions of "finished".
+
+**What it proves that `solve-check` cannot:** the phone renders the same
+activities through different layout branches, and `solve-check` runs at 1440x900.
+A pane collapsed to zero width or a control below a 390px fold passes there. Not
+hypothetical — the first run found Mail and Photos at **0px wide** while
+`solve-check` was green on the same code.
+
+**Negative controls, both watched to fail.** `PHONE_NEGATIVE=1 npm run
+phone-check` injects `[data-phone-stacked]{flex-direction:row}` — the exact
+regression above — and produces 2 findings. Two, not twenty, and the reason
+matters: **the solver reaches controls through the DOM**, and `element.click()`
+works fine on a button zero pixels wide, so a collapsed pane only stops a step
+that needs real geometry. `PHONE_NEGATIVE=1 npm run phone-gesture-check` replaces
+every swipe with a click and stalls 3 of 4.
 
 ---
 
 ## Still open
 
-- **The simulated phone has no dark mode.** The laptop sim has one and Unit 9
-  teaches it; the phone course teaches brightness and text size instead. If a
-  phone dark mode is ever added it needs its own variant and its own sweep — do
-  not reach for `sim-dark:`, which follows a switch in a different simulator.
-- **No real-world missions.** The laptop course ends every unit with a task on
-  the learner's own machine, checked in the browser. Most of those checks
-  (`folder`, `window-max`, `zoom`) need APIs a phone browser does not have. The
-  ones that could work on a phone — `dark-mode`, `reduce-motion`, `offline`,
-  `type-answer`, `paste` — would make a genuine sixth unit.
-- **Six apps, and every icon opens something.** Messages, Photos, Camera, Notes,
-  Settings, Weather. Anything added to the home screen has to do something real;
-  a beginner who taps an app that does nothing does not conclude "that app is
-  empty", they conclude they tapped it wrong and try again harder. See
-  `SAME_ICON_AUDIT.md`.
+- **`ring-check` and `sim-contrast-check` run at 1440x900 only.** Neither has ever
+  looked at the phone. Running them against `/dev/phone-check` is the obvious next
+  gate, and it is the hole that hid the off-screen dock.
+- **`isReachable` in `lib/solve/gestures.ts` never checks the viewport** — its
+  docstring says "on screen" and it does not test the rect. That is why the solver
+  clicked a dock icon 171px past the right edge and reported green.
+- **No reading lessons and no real-world missions.** All 28 `type: "none"` lessons
+  are absent because `LessonPlaygroundPane` renders no branch for them and
+  `PhoneCourse` has no "Continue" path. Several — `app-vs-website`, `qrcodes-siri`,
+  `cloud-photos`, `final-graduation` — are more relevant on a phone than a laptop.
+  Of the 18 missions, only 5 are genuinely desktop-blocked; 13 use checks a phone
+  browser supports, and `unit-7-assessment-real` ("your own photos, measured") is
+  the most phone-native task in the whole product.
+- **A phone-only learner can earn no certificate.** `/api/units` counts every slug
+  in a unit, and every unit has at least one lesson the phone course does not
+  offer.
+- **A lesson's `warning` is dropped on the phone.** Three lessons carry one;
+  `unit-4-assessment`'s warns about the CLEAN NOW trap that fails the lesson.
+- **The sales corpus still says phones are not supported** — `SALES_PLAYBOOK.md`,
+  `COLD_CALL_KIT.md`, `IMPLEMENTATION_GUIDE.md`, `DEMO_PRIYA_ELDER_CARE.md`.
+  `pitch-check.py` has no rule for a capability being *added*.

@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
+import { useIsPhone, usePhoneHome } from "./SimFormFactor";
+import PhoneShell from "./PhoneShell";
+import { SimThemeProvider } from "./Desktop/SimThemeContext";
 
 export const CELEBRATION_MS = 800;
 
@@ -28,6 +31,14 @@ interface SimulatorFrameProps {
   onHint?: () => void;
   /** When false, skip the title bar and window border — children fill the pane directly. Default true. */
   chrome?: boolean;
+  /**
+   * Draw the phone's status strip and home bar around the children.
+   *
+   * Only consulted in the phone form factor, where it defaults to on. The
+   * simulators that render `FakeDesktop` themselves pass `false`: that component
+   * grows its own strip and bar, and two of each is two clocks and two home bars.
+   */
+  phoneChrome?: boolean;
   /** Free-play mode: no banner, no frame, no celebration — children fill the container directly. */
   freePlay?: boolean;
   children: ReactNode;
@@ -55,6 +66,41 @@ export function typeTargetFor(
   return TYPING.has(a) ? v : undefined;
 }
 
+/**
+ * The same instruction, in the words a phone user would use.
+ *
+ * The 130-odd lessons the phone course borrows are written for a laptop and say
+ * "click". Rewriting them per device would mean two copies of every sentence,
+ * which is the duplication this whole design exists to avoid — and a lesson that
+ * tells somebody holding a phone to "click" is teaching them a word for
+ * something they cannot do. So the swap happens at the last moment, on the way
+ * to the screen, and the lesson JSON stays single-sourced.
+ *
+ * Kept deliberately small. Every entry is a verb for the same physical act; none
+ * of them changes what the step is asking for.
+ */
+export function inPhoneWords(text: string): string {
+  return text
+    .replace(/\bDouble-click\b/g, "Double-tap")
+    .replace(/\bdouble-click\b/g, "double-tap")
+    .replace(/\bDouble-clicking\b/g, "Double-tapping")
+    .replace(/\bdouble-clicking\b/g, "double-tapping")
+    .replace(/\bClicking\b/g, "Tapping")
+    .replace(/\bclicking\b/g, "tapping")
+    .replace(/\bClick\b/g, "Tap")
+    .replace(/\bclick\b/g, "tap")
+    .replace(/\bClicks\b/g, "Taps")
+    .replace(/\bclicks\b/g, "taps")
+    .replace(/\bClicked\b/g, "Tapped")
+    .replace(/\bclicked\b/g, "tapped")
+    // A phone has no sidebar: Settings and Mail put their sections in a list you
+    // go into. Saying "in the sidebar" would point at something not on screen.
+    .replace(/\bin the sidebar\b/g, "in the list")
+    .replace(/\bthe sidebar\b/g, "the list")
+    // And no dock — the icons are the home screen.
+    .replace(/\bin the dock\b/g, "on the home screen");
+}
+
 export default function SimulatorFrame({
   appName,
   appIcon,
@@ -70,9 +116,12 @@ export default function SimulatorFrame({
   hint,
   onHint,
   chrome = true,
+  phoneChrome = true,
   freePlay,
   children,
 }: SimulatorFrameProps) {
+  const isPhone = useIsPhone();
+  const goHome = usePhoneHome();
   const isAssessment = !!objectives;
   const typeThis = typeTargetFor(currentStep);
   const doneCount = objectives?.filter((o) => o.done).length ?? 0;
@@ -107,6 +156,7 @@ export default function SimulatorFrame({
    * the sim can. This is that signal.
    */
   const [settled, setSettled] = useState(false);
+
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -281,8 +331,16 @@ export default function SimulatorFrame({
       // objectives and trample one objective's target while chasing another.
       data-sim-objdone={isAssessment ? objectives!.map((o) => (o.done ? "1" : "0")).join("") : undefined}
     >
-      {/* Guidance banner */}
-      <div className="shrink-0 bg-[#1d2733] text-white px-5 py-3">
+      {/**
+        * Guidance banner.
+        *
+        * Tighter on a phone, because there the banner and the simulated screen
+        * are competing for the same 844px and the screen has to win. Same
+        * content in the same order — the step counter, the progress bar, the
+        * instruction, the "type this" box — at a size that leaves room to use
+        * the thing the instruction is about.
+        */}
+      <div className={`shrink-0 bg-[#1d2733] text-white ${isPhone ? "px-3 py-2" : "px-5 py-3"}`}>
         <div className="flex items-center gap-3">
           {(done || isAssessment || totalSteps != null) && (
             <>
@@ -304,8 +362,16 @@ export default function SimulatorFrame({
               guided lesson teaches by swapping this instruction on each step; a
               screen-reader learner must be told it changed, or they are stranded
               after every step with a silent, purely-visual ring as the only cue. */}
-          <p className="text-lg font-semibold leading-snug" role="status" aria-live="polite" aria-atomic="true">
-            {done ? goal + " — all done!" : instruction ?? goal}
+          <p
+            className={`font-semibold leading-snug ${isPhone ? "text-[15px]" : "text-lg"}`}
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {(() => {
+              const line = done ? goal + " — all done!" : (instruction ?? goal);
+              return isPhone ? inPhoneWords(line) : line;
+            })()}
           </p>
           {isAssessment && !done && (
             <div className="flex items-center gap-2 shrink-0">
@@ -329,14 +395,20 @@ export default function SimulatorFrame({
           )}
         </div>
         {typeThis && !done && (
-          <div className="mt-2 rounded-lg bg-white px-4 py-3 text-center shadow-sm">
+          <div className={`mt-2 rounded-lg bg-white text-center shadow-sm ${isPhone ? "px-3 py-2" : "px-4 py-3"}`}>
             <span className="block text-xs font-bold uppercase tracking-widest text-blue-700">Type this — exactly</span>
-            <span className="mt-1 block break-words font-mono text-2xl font-bold leading-snug text-gray-900">{typeThis}</span>
+            <span
+              className={`mt-1 block break-words font-mono font-bold leading-snug text-gray-900 ${
+                isPhone ? "text-lg" : "text-2xl"
+              }`}
+            >
+              {typeThis}
+            </span>
           </div>
         )}
         {isAssessment && hintOpen && hint && !done && (
           <div className="mt-2 rounded border border-yellow-400/50 bg-yellow-400/10 px-3 py-2 text-sm text-yellow-100">
-            {hint}
+            {inPhoneWords(hint)}
           </div>
         )}
         {isAssessment && expanded && objectives && (
@@ -347,7 +419,7 @@ export default function SimulatorFrame({
                 className={`flex items-center gap-2 text-sm ${obj.done ? "text-green-400" : "text-white/60"}`}
               >
                 <span className="w-4 text-center">{obj.done ? "✓" : "○"}</span>
-                <span>{obj.label}</span>
+                <span>{isPhone ? inPhoneWords(obj.label) : obj.label}</span>
               </div>
             ))}
           </div>
@@ -362,8 +434,31 @@ export default function SimulatorFrame({
         </div>
       )}
 
-      {/* App window */}
-      {chrome ? (
+      {/**
+        * App window.
+        *
+        * A phone has no window: the app is the screen. Drawing the laptop's
+        * bordered window inside a phone would be a picture of a laptop inside a
+        * picture of a phone, and it would spend 24px of padding and 40px of
+        * title bar saying something the device frame already says.
+        */}
+      {isPhone && phoneChrome ? (
+        /**
+         * The phone, with the lesson's banner above it rather than inside it.
+         *
+         * `SimThemeProvider` is here because the strip reads the practice
+         * computer's own dark-mode setting, and on these lessons there is no
+         * `FakeDesktop` above to have provided one. It is the same provider, so
+         * a lesson that *does* have a desktop is unaffected.
+         */
+        <div className="min-h-0 flex-1">
+          <SimThemeProvider>
+            <PhoneShell title={appName} onHome={goHome ?? undefined}>
+              <div className="flex h-full min-h-0 flex-col bg-white">{children}</div>
+            </PhoneShell>
+          </SimThemeProvider>
+        </div>
+      ) : chrome && !isPhone ? (
         <div className="flex-1 min-h-0 p-3">
           <div className="h-full flex flex-col border-2 border-gray-800 rounded-lg overflow-hidden shadow-md bg-white">
             {/* Title bar */}
@@ -380,7 +475,19 @@ export default function SimulatorFrame({
           </div>
         </div>
       ) : (
-        <div className="flex-1 min-h-0 relative bg-white">{children}</div>
+        /**
+         * A flex **column**, not a plain block — the same trap the free-play
+         * branch above documents, and this branch had it too.
+         *
+         * Every sim's body is a `flex-1` pane, and `flex-1` against a block
+         * parent sizes to its own *content* rather than to the space available.
+         * With the laptop's bordered window this pane is never used, so the bug
+         * sat here unseen; the phone drops the window chrome on every lesson,
+         * and suddenly Mail's folder list was 600px tall with the inbox squeezed
+         * to nothing underneath it. `min-h-0` is what lets a flex item shrink
+         * below its content instead of pushing the column past the screen.
+         */
+        <div className="flex-1 min-h-0 flex flex-col relative bg-white">{children}</div>
       )}
 
       {/* Celebration overlay — shows briefly then disappears */}
@@ -389,7 +496,7 @@ export default function SimulatorFrame({
           <div className="bg-green-700 text-white text-5xl w-24 h-24 rounded-full flex items-center justify-center shadow-2xl animate-ping-once">
             &#10003;
           </div>
-          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{goal}</p>
+          <p className="text-xl font-bold text-white text-center px-6 drop-shadow-md">{isPhone ? inPhoneWords(goal) : goal}</p>
         </div>
       )}
 

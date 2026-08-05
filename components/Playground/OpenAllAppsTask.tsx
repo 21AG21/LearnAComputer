@@ -29,6 +29,7 @@ export default function OpenAllAppsTask({ instructions, targetCount = 4, onResul
 
   return (
     <SimulatorFrame
+      phoneChrome={false}
       appName="Desktop"
       instruction={done ? instructions : `Open any ${targetCount} apps from the dock.`}
       stepIndex={Math.min(opened.size, targetCount)}

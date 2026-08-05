@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import { useIsPhone } from "./SimFormFactor";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -538,6 +539,7 @@ interface Tab {
 
 export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode = "guided", hint, freePlay, onResult }: GuidedBrowserTaskProps) {
   const [tabs, setTabs] = useState<Tab[]>([{ id: "t1", pageId: "newtab", zoom: 100, back: [], fwd: [] }]);
+  const isPhone = useIsPhone();
   const [activeId, setActiveId] = useState("t1");
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
@@ -913,7 +915,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 onClick={(e) => { e.stopPropagation(); closeTab(t.id); }}
                 aria-label={`Close ${p.title} tab`}
                 className={`shrink-0 w-5 h-5 rounded flex items-center justify-center text-gray-600 sim-dark:text-gray-300 hover:bg-gray-300 sim-dark:hover:bg-gray-700 ${
-                  hl("tab-close", p.title) ? "ring-4 ring-yellow-400 animate-pulse" : ""
+                  hl("tab-close", p.title) ? "animate-ring-pulse" : ""
                 }`}
               >
                 <span className="text-xs font-bold">&times;</span>
@@ -925,7 +927,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           onClick={newTab}
           aria-label="New tab"
           className={`px-3 py-1.5 text-lg font-bold text-gray-600 sim-dark:text-gray-300 hover:bg-gray-100 sim-dark:hover:bg-gray-800 rounded-t-lg ${
-            hl("newtab-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""
+            hl("newtab-btn") ? "animate-ring-pulse" : ""
           }`}
         >
           +
@@ -936,7 +938,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-black sim-dark:border-gray-600 flex items-center gap-2 px-3 py-2">
         <button onClick={goBack} disabled={activeTab.back.length === 0} aria-label="Go back" className={`text-xl px-1 rounded ${activeTab.back.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>‹</button>
         <button onClick={goForward} disabled={activeTab.fwd.length === 0} aria-label="Go forward" className={`text-xl px-1 rounded ${activeTab.fwd.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>›</button>
-        <button onClick={reload} aria-label="Reload" className={`px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("reload-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}><ReloadIcon size={18} /></button>
+        <button onClick={reload} aria-label="Reload" className={`px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("reload-btn") ? "animate-ring-pulse" : ""}`}><ReloadIcon size={18} /></button>
         {/* Address bar */}
         <div
           onClick={() => { setEditing(true); setDraft(activePage.url); }}
@@ -947,7 +949,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           <button
             onClick={(e) => { e.stopPropagation(); if (activePage.url) clickLock(); }}
             aria-label="Site security"
-            className={`shrink-0 ${hl("lock-btn") ? "ring-4 ring-yellow-400 animate-pulse rounded" : ""}`}
+            className={`shrink-0 ${hl("lock-btn") ? "animate-ring-pulse rounded" : ""}`}
           >
             {activePage.url ? (activePage.secure ? <LockIcon size={16} /> : <WarningIcon size={16} className="text-red-700 sim-dark:text-red-400" />) : null}
           </button>
@@ -972,7 +974,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             </span>
           )}
         </div>
-        <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`text-lg px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>
+        <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`text-lg px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "animate-ring-pulse" : ""}`}>
           {bookmarks.includes(activeTab.pageId) ? <StarFilledIcon size={18} className="text-amber-700 sim-dark:text-yellow-400" /> : <StarIcon size={18} />}
         </button>
       </div>
@@ -990,7 +992,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           {/* When the PDF viewer is open it sits in an overlay above the page, and this
               toolbar zooms the page BEHIND it — so the ring belongs on the PDF's own +
               (below), not here, or the learner zooms something they cannot see. */}
-          <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
+          <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
         </div>
       </div>
 
@@ -1066,12 +1068,14 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             {activePage.kind === "newtab" && (
               <div>
                 <p className="text-gray-500 sim-dark:text-gray-400 font-semibold mb-3">Favorites</p>
-                <div className="grid grid-cols-4 gap-3 max-w-2xl">
+                {/* Two columns on a phone: at four, the URL captions overflowed their
+                    75px tiles and ran into each other as one unreadable line. */}
+                <div className={`grid gap-3 max-w-2xl ${isPhone ? "grid-cols-2" : "grid-cols-4"}`}>
                   {FAVORITES.map((f) => (
                     <button key={f} onClick={() => navigate(f)} className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50">
                       <span className="text-gray-600 sim-dark:text-gray-300">{PAGES[f].icon}</span>
                       <span className="text-xs font-semibold text-center leading-tight">{PAGES[f].title}</span>
-                      <span className="text-[10px] text-gray-500 sim-dark:text-gray-400 text-center leading-tight">{PAGES[f].url}</span>
+                      <span className="w-full truncate text-center text-[10px] leading-tight text-gray-500 sim-dark:text-gray-400">{PAGES[f].url}</span>
                     </button>
                   ))}
                 </div>
@@ -1097,7 +1101,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                         key={i}
                         onClick={() => openSearchResult(r.title)}
                         className={`text-left border-b border-gray-200 pb-2 hover:bg-blue-50 rounded px-2 py-1 transition-colors ${
-                          hl("search-result", r.title) ? "ring-4 ring-yellow-400 animate-pulse" : ""
+                          hl("search-result", r.title) ? "animate-ring-pulse" : ""
                         }`}
                       >
                         <p className="text-blue-700 font-semibold underline">{r.title}</p>
@@ -1121,7 +1125,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                   </>
                 )}
                 {activePage.download && (
-                  <button onClick={clickDownloadLink} className={`self-start px-5 py-2.5 bg-blue-600 text-white font-bold rounded-lg border-2 border-black inline-flex items-center gap-2 ${hl("download-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>
+                  <button onClick={clickDownloadLink} className={`self-start px-5 py-2.5 bg-blue-600 text-white font-bold rounded-lg border-2 border-black inline-flex items-center gap-2 ${hl("download-btn") ? "animate-ring-pulse" : ""}`}>
                     <DownloadIcon size={16} /> Download {activePage.download}
                   </button>
                 )}
@@ -1170,7 +1174,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           <div className="absolute bottom-0 left-0 right-0 bg-gray-900 text-white p-4 flex flex-wrap items-center gap-3 animate-slide-up">
             <p className="flex-1 text-sm min-w-48 flex items-center gap-2"><Image src="/playgrounds/cookie.png" alt="cookie" width={24} height={24} className="shrink-0 rounded" /> This site uses cookies to remember your preferences. Do you accept?</p>
             <button onClick={acceptCookies} className="px-4 py-2 bg-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-500">Accept</button>
-            <button onClick={declineCookies} className={`px-4 py-2 bg-white text-gray-900 rounded-lg font-bold text-sm ${hl("cookie-decline") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>Decline</button>
+            <button onClick={declineCookies} className={`px-4 py-2 bg-white text-gray-900 rounded-lg font-bold text-sm ${hl("cookie-decline") ? "animate-ring-pulse" : ""}`}>Decline</button>
           </div>
         )}
 
@@ -1195,7 +1199,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         {popupOpen && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-2">
             <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
-              <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-11 h-11 bg-white border-2 border-black rounded-full font-bold text-xl flex items-center justify-center ${hl("popup-close") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>&times;</button>
+              <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-11 h-11 bg-white border-2 border-black rounded-full font-bold text-xl flex items-center justify-center ${hl("popup-close") ? "animate-ring-pulse" : ""}`}>&times;</button>
               <p className="text-red-700 sim-dark:text-red-400 mb-2"><WarningIcon size={40} /></p>
               <p className="font-black text-red-700 sim-dark:text-red-400 text-lg">VIRUS DETECTED!!!</p>
               <p className="text-sm text-gray-700 my-2">Your computer is infected! Click below to clean it NOW!</p>
@@ -1225,7 +1229,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 </p>
               </>
             )}
-            <button onClick={closeLockGotIt} className={`mt-3 px-4 py-1.5 bg-gray-100 border-2 border-gray-300 sim-dark:border-gray-700 rounded-lg font-semibold text-sm ${hl("lock-gotit") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>Got it</button>
+            <button onClick={closeLockGotIt} className={`mt-3 px-4 py-1.5 bg-gray-100 border-2 border-gray-300 sim-dark:border-gray-700 rounded-lg font-semibold text-sm ${hl("lock-gotit") ? "animate-ring-pulse" : ""}`}>Got it</button>
           </div>
         )}
 
@@ -1242,7 +1246,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                     <button
                       key={h}
                       onClick={() => navigate(h)}
-                      className={`w-full text-left px-3 py-2 flex items-center gap-2 text-sm hover:bg-blue-50 border-b border-gray-100 ${hl("history-item", PAGES[h].title) ? "ring-4 ring-inset ring-yellow-400 animate-pulse" : ""}`}
+                      className={`w-full text-left px-3 py-2 flex items-center gap-2 text-sm hover:bg-blue-50 border-b border-gray-100 ${hl("history-item", PAGES[h].title) ? "animate-ring-pulse" : ""}`}
                     >
                       <span>{PAGES[h].icon}</span><span className="font-medium">{PAGES[h].title}</span>
                       <span className="text-gray-500 sim-dark:text-gray-400 ml-auto">{PAGES[h].url}</span>
@@ -1259,7 +1263,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                           onClick={() => openDownload(d)}
                           aria-label={`Open ${d}`}
                           className={`shrink-0 px-2 h-6 rounded text-xs font-semibold border border-gray-300 sim-dark:border-gray-700 bg-white hover:bg-blue-50 hover:border-blue-400 text-gray-700 ${
-                            hl("download-open", d) ? "ring-4 ring-yellow-400 animate-pulse border-yellow-400" : ""
+                            hl("download-open", d) ? "animate-ring-pulse border-yellow-400" : ""
                           }`}
                         >
                           Open
@@ -1269,7 +1273,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                         onClick={() => deleteDownload(d)}
                         aria-label={`Delete ${d}`}
                         className={`shrink-0 w-6 h-6 rounded flex items-center justify-center hover:bg-red-100 text-gray-500 hover:text-red-600 ${
-                          hl("download-delete", d) ? "ring-4 ring-yellow-400 animate-pulse" : ""
+                          hl("download-delete", d) ? "animate-ring-pulse" : ""
                         }`}
                       >
                         <TrashIcon size={14} />
@@ -1300,7 +1304,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             </div>
             <div className="flex justify-end gap-2">
               <button onClick={() => setBookmarkSheet(false)} className="px-4 py-1.5 border-2 border-gray-300 sim-dark:border-gray-700 rounded-lg font-semibold text-sm">Cancel</button>
-              <button onClick={confirmBookmark} className={`px-5 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-sm border-2 border-black sim-dark:border-gray-500 ${hl("bookmark-add") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>Add Bookmark</button>
+              <button onClick={confirmBookmark} className={`px-5 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-sm border-2 border-black sim-dark:border-gray-500 ${hl("bookmark-add") ? "animate-ring-pulse" : ""}`}>Add Bookmark</button>
             </div>
           </div>
         </div>
@@ -1325,7 +1329,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 {/* This is the zoom control a learner viewing the PDF actually sees, so it
                     both carries the zoom-in highlight and satisfies the step — the toolbar
                     button above only zooms the page hidden behind this overlay. */}
-                <button onClick={() => { const nz = Math.min(pdfZoom + 25, 200); setPdfZoom(nz); if (nz >= 150) tryStep((s) => s.action === "zoom-in"); }} aria-label="Zoom in" className={`w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm ${hl("zoomin-btn") ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}>+</button>
+                <button onClick={() => { const nz = Math.min(pdfZoom + 25, 200); setPdfZoom(nz); if (nz >= 150) tryStep((s) => s.action === "zoom-in"); }} aria-label="Zoom in" className={`w-7 h-7 border border-gray-300 sim-dark:border-gray-700 rounded bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-600 text-sm ${hl("zoomin-btn") ? "animate-ring-pulse" : ""}`}>+</button>
               </div>
             </div>
             {/* Content */}
@@ -1392,7 +1396,7 @@ function ActionBtn({ label, icon, onClick, highlight }: { label: string; icon?: 
     <button
       onClick={onClick}
       className={`px-2.5 py-1 rounded-md border-2 border-gray-300 sim-dark:border-gray-700 bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 font-semibold whitespace-nowrap hover:bg-gray-100 sim-dark:hover:bg-gray-600 inline-flex items-center gap-1.5 ${
-        highlight ? "ring-4 ring-yellow-400 animate-pulse border-yellow-400" : ""
+        highlight ? "animate-ring-pulse border-yellow-400" : ""
       }`}
     >
       {icon}{label}

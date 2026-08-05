@@ -12,6 +12,7 @@
     "demo-check": "node scripts/demo-check.mjs",
     "mission-check": "node scripts/mission-check.mjs",
     "phone-check": "node scripts/phone-check.mjs",
+    "phone-gesture-check": "node scripts/phone-gesture-check.mjs",
     "hostile-check": "node scripts/hostile-check.mjs",
     "recovery-check": "node scripts/recovery-check.mjs",
     "ring-check": "node scripts/ring-check.mjs",

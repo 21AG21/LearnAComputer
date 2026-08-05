@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
-import ThemeToggle, { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
+import { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
 import StorageNotice from "@/components/StorageNotice";
 import CookieNotice from "@/components/CookieNotice";
 import SmallScreenGuard from "@/components/SmallScreenGuard";
+import SiteNav from "@/components/SiteNav";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
@@ -23,15 +23,6 @@ export const metadata: Metadata = {
   description:
     "Hands-on computer lessons for complete beginners. Practice clicking, typing, email, video calls and staying safe online inside a computer you cannot break.",
 };
-
-const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/lessons", label: "Lessons" },
-  { href: "/playground", label: "Playground" },
-  { href: "/certificate", label: "Certificates" },
-  { href: "/phone", label: "On Your Phone" },
-  { href: "/feedback", label: "Feedback" },
-];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -51,23 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        {/* flex-wrap, not a fixed row: with five links the bar overran a 420px
-            phone and scrolled the whole page sideways (hostile-check caught it).
-            Wrapping keeps every link reachable and the body from scrolling. */}
-        <nav className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-gray-200 p-4 dark:border-gray-800 print:hidden">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="inline-block transition-colors hover:text-blue-600 active:scale-95 dark:hover:text-blue-400"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="ml-auto flex items-center gap-3">
-            <ThemeToggle />
-          </div>
-        </nav>
+        <SiteNav />
         <StorageNotice />
         <CookieNotice />
         <SmallScreenGuard />

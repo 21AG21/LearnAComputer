@@ -38,6 +38,7 @@ export default function DesktopFileExplorerTask({ filesToOpen, onResult }: Deskt
 
   return (
     <SimulatorFrame
+      phoneChrome={false}
       appName="Files"
       appIcon={<FolderIcon size={20} />}
       instruction={instruction}

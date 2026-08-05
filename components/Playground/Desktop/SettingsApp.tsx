@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useIsPhone } from "../SimFormFactor";
 import { useSimTheme, type ColorFilter } from "./SimThemeContext";
 import {
   PaletteIcon, DisplayIcon, AccessibilityIcon, WifiIcon,
@@ -80,6 +81,7 @@ export default function SettingsApp({
   highlightRestart,
 }: SettingsAppProps) {
   const theme = useSimTheme();
+  const isPhone = useIsPhone();
   const [active, setActive] = useState<Section>(initialSection);
   const [storageItems, setStorageItems] = useState<StorageItem[]>(INITIAL_STORAGE);
   const [trashSize, setTrashSize] = useState(0);
@@ -96,6 +98,7 @@ export default function SettingsApp({
     setActive(s);
     onSectionOpen?.(s);
   }
+
 
   function totalUsedGb() {
     return storageItems.filter((i) => !i.deleted).reduce((sum, i) => sum + i.sizeGb, 0) + trashSize;
@@ -120,9 +123,22 @@ export default function SettingsApp({
   // scale on top — 140% rendered Settings at ~196% while the rest of the computer was
   // at 140%.
   return (
-    <div className={`h-full flex ${bg} ${text} text-sm`}>
-      {/* Sidebar */}
-      <div className={`w-44 shrink-0 border-r ${sidebar} overflow-y-auto`}>
+    <div
+      data-phone-stacked={isPhone || undefined}
+      className={`h-full ${isPhone ? "flex flex-col" : "flex"} ${bg} ${text} text-sm`}
+    >
+      {/**
+        * Sections: a sidebar on a laptop, a capped strip along the top on a
+        * phone — the same treatment Messages, Mail and Photos get, for the same
+        * reason. Both panes stay on screen deliberately: the version that
+        * *replaced* the list with the panel read well, and then broke every
+        * assessment, because an assessment highlights nothing and a learner
+        * following "dim the screen" has to be able to see both the section list
+        * and what happened when they tapped it.
+        */}
+      <div
+        className={`${isPhone ? "max-h-[30%] shrink-0 border-b" : "w-44 shrink-0"} border-r ${sidebar} overflow-y-auto`}
+      >
         <div className={`p-3 font-semibold text-base ${muted} select-none`} aria-hidden="true" />
         {SECTIONS.map((s) => {
           const isActive = active === s.id;
@@ -133,7 +149,7 @@ export default function SettingsApp({
               onClick={() => selectSection(s.id)}
               className={`w-full text-left px-3 py-2 flex items-center gap-2 transition-colors ${
                 isActive ? (dark ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800") : dark ? "hover:bg-gray-700" : "hover:bg-gray-100"
-              } ${hl ? "ring-2 ring-yellow-400 animate-pulse rounded" : ""}`}
+              } ${hl ? "animate-ring-pulse rounded" : ""}`}
             >
               <span>{s.icon}</span>
               <span>{s.label}</span>
@@ -143,7 +159,7 @@ export default function SettingsApp({
       </div>
 
       {/* Panel */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className={`min-h-0 flex-1 overflow-y-auto ${isPhone ? "p-3" : "p-4"}`}>
         {active === "appearance" && (
           <AppearancePanel
             dark={dark}
@@ -234,7 +250,7 @@ function Toggle({ on, onToggle, label, highlight, isDark }: { on: boolean; onTog
       onClick={() => onToggle(!on)}
       role="switch"
       aria-checked={on}
-      className={`flex items-center justify-between w-full py-2 ${highlight ? "ring-2 ring-yellow-400 animate-pulse rounded px-2" : ""}`}
+      className={`flex items-center justify-between w-full py-2 ${highlight ? "animate-ring-pulse rounded px-2" : ""}`}
     >
       <span>{label}</span>
       <div className={`w-10 h-6 rounded-full relative transition-colors ${on ? "bg-green-500" : isDark ? "bg-gray-600" : "bg-gray-300"}`}>
@@ -246,7 +262,7 @@ function Toggle({ on, onToggle, label, highlight, isDark }: { on: boolean; onTog
 
 function Slider({ value, min, max, label, highlight, onChange, isDark }: { value: number; min: number; max: number; label: string; highlight: boolean; onChange: (v: number) => void; isDark: boolean }) {
   return (
-    <div className={`py-2 ${highlight ? "ring-2 ring-yellow-400 animate-pulse rounded px-2" : ""}`}>
+    <div className={`py-2 ${highlight ? "animate-ring-pulse rounded px-2" : ""}`}>
       <div className="flex items-center justify-between mb-1">
         <span>{label}</span>
         <span className={isDark ? "text-gray-500 sim-dark:text-gray-400" : "text-gray-500"}>{value}{label.includes("Text") ? "%" : ""}</span>
@@ -371,7 +387,7 @@ function AccessibilityPanel({ theme, onSlider, onToggle, highlightToggle, highli
                 theme.colorFilter === f.id
                   ? "border-blue-600 bg-blue-600 text-white"
                   : isDark ? "border-gray-600 text-gray-200" : "border-gray-500 text-gray-700"
-              } ${highlightToggle === `color-filter-${f.id}` ? "ring-4 ring-yellow-400 animate-pulse" : ""}`}
+              } ${highlightToggle === `color-filter-${f.id}` ? "animate-ring-pulse" : ""}`}
             >
               {f.label}
             </button>
@@ -482,14 +498,14 @@ function BluetoothPanel({ highlightDeviceConnect, highlightDeviceDisconnect, onD
                   {isConnected ? (
                     <button
                       onClick={() => disconnectDevice(d.name)}
-                      className={`text-xs px-2 py-1 rounded ${isDark ? "bg-gray-600 hover:bg-gray-500" : "bg-gray-200 hover:bg-gray-300"} ${hlDisconnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                      className={`text-xs px-2 py-1 rounded ${isDark ? "bg-gray-600 hover:bg-gray-500" : "bg-gray-200 hover:bg-gray-300"} ${hlDisconnect ? "animate-ring-pulse" : ""}`}
                     >
                       Disconnect
                     </button>
                   ) : (
                     <button
                       onClick={() => connectDevice(d.name)}
-                      className={`text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white ${hlConnect ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                      className={`text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white ${hlConnect ? "animate-ring-pulse" : ""}`}
                     >
                       Connect
                     </button>
@@ -568,7 +584,7 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
             {!item.deleted && item.category !== "system" && (
               <button
                 onClick={() => onDelete(item.name)}
-                className={`text-xs px-2 py-0.5 rounded ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === item.name ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+                className={`text-xs px-2 py-0.5 rounded ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === item.name ? "animate-ring-pulse" : ""}`}
               >
                 Delete
               </button>
@@ -579,7 +595,7 @@ function StoragePanel({ items, trashSize, totalGb, usedGb, onDelete, onEmptyTras
       {trashSize > 0 && (
         <button
           onClick={onEmptyTrash}
-          className={`w-full py-2 rounded-lg font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === "empty-trash" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+          className={`w-full py-2 rounded-lg font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightItem === "empty-trash" ? "animate-ring-pulse" : ""}`}
         >
           Empty Trash ({trashSize.toFixed(1)} GB)
         </button>
@@ -631,7 +647,7 @@ function PrivacyPanel({ highlightToggle, onToggle, mutedClass, isDark }: {
         ) : (
           <button
             onClick={() => { setCleared(true); onToggle?.("clear-browsing-data", true); }}
-            className={`w-full py-2 rounded-lg text-sm font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightToggle === "clear-browsing-data" ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+            className={`w-full py-2 rounded-lg text-sm font-medium ${isDark ? "bg-red-900/50 text-red-300 hover:bg-red-800" : "bg-red-50 text-red-700 sim-dark:text-red-400 hover:bg-red-100"} ${highlightToggle === "clear-browsing-data" ? "animate-ring-pulse" : ""}`}
           >
             Clear Browsing Data
           </button>
@@ -664,7 +680,7 @@ function AboutPanel({ mutedClass, isDark, onRestart, highlightRestart }: {
             onClick={onRestart}
             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium ${
               isDark ? "bg-amber-900/40 text-amber-300 hover:bg-amber-900/60" : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-            } ${highlightRestart ? "ring-2 ring-yellow-400 animate-pulse" : ""}`}
+            } ${highlightRestart ? "animate-ring-pulse" : ""}`}
           >
             <span>Restart</span>
             <span aria-hidden="true">&rsaquo;</span>

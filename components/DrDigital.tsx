@@ -97,7 +97,11 @@ export default function DrDigital({ message, mood = "neutral" }: DrDigitalProps)
     <div
       key={mood}
       data-mood={mood}
-      className={`border-2 rounded p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
+      // `rounded-xl`, not `rounded`: every other card on the site — the lesson
+      // rows, the progress panel, the certificate list, the phone course's
+      // teaching card — is 12px, and Dr. Digital's 4px corner was the one box
+      // that looked like it came from a different site.
+      className={`rounded-xl border-2 p-4 animate-pop-in ${MOOD_STYLES[mood]}`}
     >
       <div className="flex items-center gap-2">
         <DrDigitalAvatar className="w-10 h-10 shrink-0" mood={mood} />
