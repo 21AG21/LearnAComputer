@@ -101,11 +101,27 @@ export default function PhoneShell({
     }, 160);
   }
 
+  /** How far the screen has been lifted by the finger on the home bar. */
+  const [lift, setLift] = useState(0);
+  const [missed, setMissed] = useState(false);
+
   const homeBar = useSwipe(
     ({ dir }) => {
+      setLift(0);
       if (dir === "up") onHome?.();
     },
-    { axis: "y", threshold: 24 },
+    {
+      axis: "y",
+      // 24px of travel, and sideways wander forgiven — a tremor turns a straight
+      // slide into a diagonal, and the strict test called those horizontal.
+      threshold: 24,
+      tolerance: 2.5,
+      onMove: (_dx, dy) => setLift(Math.max(-56, Math.min(0, dy))),
+      onMissed: () => {
+        setMissed(true);
+        setTimeout(() => setMissed(false), 2600);
+      },
+    },
   );
 
   return (
@@ -179,29 +195,49 @@ export default function PhoneShell({
         )}
       </div>
 
-      <div className="relative min-h-0 flex-1" onClick={() => (openPanel ? dismissPanel() : undefined)}>
+      <div
+        className="relative min-h-0 flex-1"
+        onClick={() => (openPanel ? dismissPanel() : undefined)}
+        style={{ transform: lift ? `translateY(${lift * 0.35}px)` : undefined }}
+      >
         {children}
+        {missed && (
+          <p className="pointer-events-none absolute inset-x-3 bottom-3 z-50 animate-slide-up rounded-xl bg-[#101820] px-4 py-3 text-center text-sm font-semibold text-white shadow-xl">
+            Keep your finger on the bar and slide it upward.
+          </p>
+        )}
       </div>
 
       {onHome ? (
         /**
-         * Swipe only, and deliberately not focusable.
+         * The bar you slide upward to go home.
          *
-         * It used to be a `tabIndex={0}` button that went home on Enter, which
-         * quietly ate an Enter meant for the text field above it — a learner
-         * naming a new folder pressed Enter and was thrown back to the home
-         * screen. The keyboard route home is the back arrow in the strip above,
-         * which is a real button and always has been.
+         * Three things here are for the hands this course is for:
+         *
+         * - **A 44px touch area** behind a 6px visible bar. The visible bar is
+         *   what a phone shows; 44px is what a shaky finger needs, and it is the
+         *   accessibility floor for any target. An 18px strip was the smallest
+         *   thing on the screen and it was the only way out of an app.
+         * - **It follows the finger.** A real home bar lifts the screen as you
+         *   drag, so you can see it working before you have finished. Silence
+         *   until success is what makes a learner think the gesture is broken.
+         * - **A press that does not qualify says so.** `onMissed` puts one line
+         *   on screen rather than leaving nothing to have happened, which is the
+         *   difference between "I nearly had it" and "this is broken".
          */
         <div
           {...homeBar.props}
           data-phone-homebar
           aria-hidden="true"
-          className={`flex shrink-0 touch-none select-none items-center justify-center py-1.5 ${
+          className={`flex min-h-[44px] shrink-0 touch-none select-none items-center justify-center ${
             isDark ? "bg-gray-800" : "bg-white"
           }`}
         >
-          <span className={`h-1.5 w-28 rounded-full ${isDark ? "bg-white/70" : "bg-gray-500"}`} />
+          <span
+            className={`h-1.5 w-28 rounded-full transition-all duration-150 ${
+              lift < -8 ? "w-32 bg-blue-600" : isDark ? "bg-white/70" : "bg-gray-500"
+            }`}
+          />
         </div>
       ) : (
         <div className={`h-1.5 shrink-0 ${isDark ? "bg-gray-800" : "bg-white"}`} />

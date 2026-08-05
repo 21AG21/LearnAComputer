@@ -55,6 +55,20 @@ interface SwipeOptions {
   onMove?: (dx: number, dy: number) => void;
   /** Restrict which axis is reported. `"x"` also lets the browser keep vertical scrolling. */
   axis?: "x" | "y" | "both";
+  /**
+   * How much sideways wander to forgive on a vertical swipe (and vice versa).
+   *
+   * The strict rule is "whichever axis moved further wins", which is fine for a
+   * steady hand and wrong for the people this course is for. A tremor turns a
+   * 60px upward slide into 60 up and 35 across, the dominant-axis test calls it
+   * horizontal, and the gesture **fails silently** — the worst outcome there is,
+   * because nothing tells the learner they nearly had it. Forgiving means a
+   * swipe counts as vertical while the sideways drift stays under this multiple
+   * of the vertical travel.
+   */
+  tolerance?: number;
+  /** Fires when the press ended without qualifying, so the caller can say so. */
+  onMissed?: () => void;
 }
 
 /**
@@ -64,13 +78,18 @@ interface SwipeOptions {
  * purpose: spreading a stray function onto a DOM node is a React warning and an
  * attribute nobody wanted.
  */
-export function useSwipe(onEnd: (e: SwipeEnd) => void, { threshold = 40, onMove, axis = "both" }: SwipeOptions = {}) {
+export function useSwipe(
+  onEnd: (e: SwipeEnd) => void,
+  { threshold = 40, onMove, axis = "both", tolerance = 1.2, onMissed }: SwipeOptions = {},
+) {
   const start = useRef<{ x: number; y: number; id: number } | null>(null);
   const moved = useRef(false);
   const onEndRef = useRef(onEnd);
   const onMoveRef = useRef(onMove);
+  const onMissedRef = useRef(onMissed);
   onEndRef.current = onEnd;
   onMoveRef.current = onMove;
+  onMissedRef.current = onMissed;
 
   const detach = useRef<(() => void) | null>(null);
   const stop = useCallback(() => {
@@ -98,11 +117,16 @@ export function useSwipe(onEnd: (e: SwipeEnd) => void, { threshold = 40, onMove,
       }
       const dx = e.clientX - s.x;
       const dy = e.clientY - s.y;
-      const horizontal = Math.abs(dx) > Math.abs(dy);
       let dir: SwipeDir | null = null;
-      if (horizontal && axis !== "y" && Math.abs(dx) >= threshold) dir = dx < 0 ? "left" : "right";
-      if (!horizontal && axis !== "x" && Math.abs(dy) >= threshold) dir = dy < 0 ? "up" : "down";
+      // Forgiving, not dominant-axis: a shaky vertical slide is still vertical.
+      if (axis !== "y" && Math.abs(dx) >= threshold && Math.abs(dy) <= Math.abs(dx) * tolerance) {
+        dir = dx < 0 ? "left" : "right";
+      }
+      if (!dir && axis !== "x" && Math.abs(dy) >= threshold && Math.abs(dx) <= Math.abs(dy) * tolerance) {
+        dir = dy < 0 ? "up" : "down";
+      }
       onEndRef.current({ dx, dy, dir });
+      if (!dir && moved.current) onMissedRef.current?.();
     };
     const up = (e: PointerEvent) => finish(e, false);
     const cancel = (e: PointerEvent) => finish(e, true);
@@ -114,7 +138,7 @@ export function useSwipe(onEnd: (e: SwipeEnd) => void, { threshold = 40, onMove,
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", cancel);
     };
-  }, [axis, stop, threshold]);
+  }, [axis, stop, threshold, tolerance]);
 
   return {
     props: {

@@ -83,6 +83,37 @@ const config: Config = {
           "0%":   { opacity: "1", transform: "translateY(0)" },
           "100%": { opacity: "0", transform: "translateY(-8px)" },
         },
+        /**
+         * The phone's own motion.
+         *
+         * A phone animates everything, and a beginner reads that motion as
+         * cause and effect: the app grew out of the icon I pressed, so I pressed
+         * the right thing. Instant swaps leave them unsure anything happened,
+         * which on this course reads as "it is broken" rather than "it is fast".
+         *
+         * `app-open` grows from roughly where a home-screen icon sits rather
+         * than from dead centre, which is what makes it feel like the icon
+         * opened rather than a page appeared.
+         */
+        "app-open": {
+          "0%":   { opacity: "0", transform: "scale(0.72)" },
+          "60%":  { opacity: "1" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "app-close": {
+          "0%":   { opacity: "1", transform: "scale(1)" },
+          "100%": { opacity: "0", transform: "scale(0.72)" },
+        },
+        /** A screen pushed in from the right, and popped back out to it. */
+        "screen-push": {
+          "0%":   { opacity: "0.4", transform: "translateX(28%)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        /** A sheet coming up from the bottom edge, the way a phone offers choices. */
+        "sheet-up": {
+          "0%":   { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.2s ease-out both",
@@ -98,6 +129,10 @@ const config: Config = {
         "lesson-in": "lesson-in 0.28s ease-out both",
         "loading-bar": "loading-bar 0.9s ease-in-out infinite",
         "dock-bounce": "dock-bounce 0.5s cubic-bezier(0.36,0.07,0.19,0.97) 1",
+        "app-open": "app-open 0.26s cubic-bezier(0.2,0.8,0.2,1) both",
+        "app-close": "app-close 0.2s cubic-bezier(0.4,0,1,1) both",
+        "screen-push": "screen-push 0.24s cubic-bezier(0.2,0.8,0.2,1) both",
+        "sheet-up": "sheet-up 0.24s cubic-bezier(0.2,0.8,0.2,1) both",
       },
     },
   },

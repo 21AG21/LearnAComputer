@@ -19,7 +19,16 @@ export default function DesktopLaunch({ app, children }: DesktopLaunchProps) {
     // On a phone, "go home" means putting the app away and coming back to the
     // icons — which is this component's own `launched` flag. `SimulatorFrame`
     // draws the bar; it finds the way back here.
-    return isPhone ? <PhoneHomeProvider value={() => setLaunched(false)}>{body}</PhoneHomeProvider> : <>{body}</>;
+    // The app grows in, the way it does on a phone. Without this the screen
+    // simply became a different screen, and a beginner cannot tell whether their
+    // tap did that or something else did.
+    return isPhone ? (
+      <PhoneHomeProvider value={() => setLaunched(false)}>
+        <div className="h-full w-full animate-app-open">{body}</div>
+      </PhoneHomeProvider>
+    ) : (
+      <>{body}</>
+    );
   }
 
   return (

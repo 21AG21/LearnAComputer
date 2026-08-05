@@ -96,6 +96,7 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
   // ── The course list ────────────────────────────────────────────────────────
   if (view.at === "list") {
     const doneCount = PHONE_ENTRIES.filter((l) => completed.has(l.slug)).length;
+    const next = PHONE_ENTRIES.find((l) => !completed.has(l.slug));
     return (
       <div className="mx-auto h-full w-full max-w-xl overflow-y-auto px-4 pb-16 pt-4">
         {/* One heading, one number, one bar. Everything a learner needs to start
@@ -114,6 +115,31 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
             style={{ width: `${(doneCount / PHONE_ENTRIES.length) * 100}%` }}
           />
         </div>
+
+        {/**
+          * One button that answers "where do I start?".
+          *
+          * The list is 116 rows under thirteen headings, and a beginner arriving
+          * cold has to decide which one is for them before they can do anything.
+          * That decision is the first thing between them and the course, and it
+          * is a decision the page already knows the answer to.
+          */}
+        {next && (
+          <button
+            type="button"
+            data-phone-continue
+            onClick={() => open(next)}
+            className="mt-4 flex w-full items-center justify-between gap-3 rounded-xl bg-blue-600 px-4 py-4 text-left text-white hover:bg-blue-700"
+          >
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold text-blue-100">
+                {doneCount === 0 ? "Start here" : "Carry on where you left off"}
+              </span>
+              <span className="block truncate text-lg font-bold">{titleOf(next)}</span>
+            </span>
+            <span aria-hidden className="shrink-0 text-2xl">›</span>
+          </button>
+        )}
 
         {PHONE_COURSE.map((unit) => {
           const unitDone = unit.lessons.every((l) => completed.has(l.slug));

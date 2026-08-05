@@ -192,17 +192,36 @@ function FakeDesktopInner({
     return rect;
   }
 
+  /** How far the finger has lifted the screen on the home bar. See PhoneShell. */
+  const [lift, setLift] = useState(0);
+  const [missedSwipe, setMissedSwipe] = useState(false);
+
   const homeBar = useSwipe(
     ({ dir }) => {
+      setLift(0);
       if (dir === "up") goHome();
     },
-    { axis: "y", threshold: 24 },
+    {
+      axis: "y",
+      threshold: 24,
+      // Sideways wander forgiven: a tremor turns a straight slide into a
+      // diagonal, and the dominant-axis test called those horizontal and did
+      // nothing at all.
+      tolerance: 2.5,
+      onMove: (_dx, dy) => setLift(Math.max(-56, Math.min(0, dy))),
+      onMissed: () => {
+        setMissedSwipe(true);
+        setTimeout(() => setMissedSwipe(false), 2600);
+      },
+    },
   );
 
   function windowAnim(id: DesktopAppId) {
-    if (closingApp === id) return "animate-window-close";
-    if (minimizingApp === id) return "animate-window-minimize";
-    if (launchingApp === id) return "animate-window-open";
+    // A phone grows the app out of its icon and shrinks it back; a laptop opens
+    // and minimizes a window. Same three states, the motion each machine uses.
+    if (closingApp === id) return isPhone ? "animate-app-close" : "animate-window-close";
+    if (minimizingApp === id) return isPhone ? "animate-app-close" : "animate-window-minimize";
+    if (launchingApp === id) return isPhone ? "animate-app-open" : "animate-window-open";
     return "";
   }
 
@@ -219,7 +238,19 @@ function FakeDesktopInner({
   function goHome() {
     setOpenPanel(null);
     setClosingPanel(null);
-    setMinimized(new Set(openApps));
+    // Let the app shrink away before it is hidden. Without the delay the screen
+    // simply blinked to the home screen, and a blink teaches nothing about where
+    // the app went.
+    const going = focusedApp;
+    if (going) {
+      setMinimizingApp(going);
+      setTimeout(() => {
+        setMinimizingApp(null);
+        setMinimized(new Set(openApps));
+      }, 200);
+    } else {
+      setMinimized(new Set(openApps));
+    }
     onGoHome?.();
   }
 
@@ -440,6 +471,7 @@ function FakeDesktopInner({
         ref={desktopRef}
         className="relative flex-1 overflow-hidden"
         onClick={() => openPanel ? dismissPanel() : undefined}
+        style={isPhone && lift ? { transform: `translateY(${lift * 0.35}px)` } : undefined}
       >
         <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />
 
@@ -583,6 +615,14 @@ function FakeDesktopInner({
           </DraggableWindow>
         ))}
 
+        {/* A swipe that did not qualify says so, rather than nothing happening —
+            which is what makes a learner conclude the gesture is broken. */}
+        {isPhone && missedSwipe && (
+          <p className="pointer-events-none absolute inset-x-3 bottom-4 z-40 animate-slide-up rounded-xl bg-[#101820] px-4 py-3 text-center text-sm font-semibold text-white shadow-xl">
+            Keep your finger on the bar and slide it upward.
+          </p>
+        )}
+
         {/**
           * The dock. Same ten icons, same artwork, same order, in the place each
           * machine keeps them: a floating tray along the bottom of a laptop, and
@@ -643,11 +683,18 @@ function FakeDesktopInner({
           // learner pressed to name a new folder and sent them home instead. The
           // keyboard route home is the back arrow in the strip above.
           aria-hidden="true"
-          className={`flex shrink-0 touch-none select-none items-center justify-center py-1.5 ${
+          /* py-3 gives the 44px touch area the accessibility floor asks for
+             behind a 6px visible bar — this is the only way out of an app, and
+             it used to be the smallest target on the screen. */
+          className={`flex min-h-[44px] shrink-0 touch-none select-none items-center justify-center ${
             isDark ? "bg-gray-800" : "bg-white"
           } ${highlightHomeBar ? "animate-ring-pulse" : ""}`}
         >
-          <span className={`h-1.5 w-28 rounded-full ${isDark ? "bg-white/70" : "bg-gray-500"}`} />
+          <span
+            className={`h-1.5 rounded-full transition-all duration-150 ${
+              lift < -8 ? "w-32 bg-blue-600" : `w-28 ${isDark ? "bg-white/70" : "bg-gray-500"}`
+            }`}
+          />
         </div>
       )}
 
