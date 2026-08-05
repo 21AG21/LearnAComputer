@@ -17,6 +17,7 @@ below are the ones still worth reading.
 | [SIM_DARK_MODE.md](SIM_DARK_MODE.md) | The practice computer's own dark mode (`sim-dark:`) and the `simdark-check` gate. |
 | [SIM_CONTRAST_AUDIT.md](SIM_CONTRAST_AUDIT.md) | WCAG AA inside every activity — the `sim-contrast-check` gate. |
 | [REAL_WORLD_MISSIONS.md](REAL_WORLD_MISSIONS.md) | The on-the-learner's-own-machine missions and how each check reads real state. |
+| [PHONE_COURSE.md](PHONE_COURSE.md) | The separate touch course at `/phone`, its gesture engine, and the `phone-check` harness. |
 | [DISCOVERABILITY_AUDIT.md](DISCOVERABILITY_AUDIT.md) | Authoring rules for assessment-mode lessons (hide the controls, never the goal). |
 | [HOSTILE_BUYER_AUDIT.md](HOSTILE_BUYER_AUDIT.md) | What a skeptic finds off the demo path — the `hostile-check` gate. |
 | [ADA_ACCESSIBILITY_AUDIT.md](ADA_ACCESSIBILITY_AUDIT.md) | Accessibility posture and the honest way to describe it in sales copy. |

@@ -43,7 +43,12 @@ export const MEASURE = (wantDark) => {
     ? document.querySelector(".sim-dark")
     : document.querySelector("[data-sim-desktop]") ??
       document.querySelector("[data-sim-frame]") ??
-      document.querySelector("[data-stray-host]");
+      document.querySelector("[data-stray-host]") ??
+      // The simulated *phone*, for `phone-check`. Added to the shared chain rather
+      // than forked into a fourth copy of this maths: the phone course spends its
+      // whole life inside a playground too, and it would otherwise be the one
+      // playground in the repo whose colours nobody ever looked at.
+      document.querySelector("[data-phone-screen]");
   if (!scope) {
     return { error: wantDark ? "no .sim-dark root — dark mode did not turn on" : "nothing mounted to measure" };
   }

@@ -34,10 +34,14 @@ export default function CookieNotice() {
     <div
       role="region"
       aria-label="How this site stores your progress"
-      className="shrink-0 border-b border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-gray-800 dark:bg-gray-900"
+      // Tighter on a phone. The full text stays — this is a disclosure and
+      // shortening it would make it a less honest one — but at the roomy desktop
+      // size it took 430px off an 844px screen, which on the phone course is half
+      // the simulated phone gone until somebody finds the button.
+      className="shrink-0 border-b border-gray-200 bg-gray-50 px-4 py-2 text-xs sm:py-3 sm:text-sm dark:border-gray-800 dark:bg-gray-900"
     >
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+        <p className="leading-snug text-gray-700 sm:leading-relaxed dark:text-gray-300">
           <strong>This site uses no cookies and no accounts.</strong> It remembers which lessons you
           have finished, on this device only, so you can pick up where you left off — and that never
           leaves your browser. We count anonymous page views to see which lessons get used.{" "}
@@ -50,7 +54,7 @@ export default function CookieNotice() {
             storageSet(SEEN_KEY, "1");
             setShow(false);
           }}
-          className="shrink-0 self-start rounded-lg border-2 border-gray-300 px-4 py-2 font-semibold hover:bg-gray-100 sm:self-auto dark:border-gray-600 dark:hover:bg-gray-800"
+          className="shrink-0 self-start rounded-lg border-2 border-gray-500 px-4 py-2 text-sm font-semibold hover:bg-gray-100 sm:self-auto dark:border-gray-600 dark:hover:bg-gray-800"
         >
           Got it
         </button>

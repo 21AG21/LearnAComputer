@@ -63,6 +63,7 @@ const PAGES = [
   "/lessons",
   "/lessons/using-the-trackpad-or-mouse",
   "/certificate",
+  "/phone",
   "/dashboard",
   "/privacy",
 

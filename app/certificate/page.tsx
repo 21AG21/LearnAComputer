@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getCompletedSlugs } from "@/lib/progress";
+import { PHONE_UNIT_SLUGS } from "@/lib/phoneCourse";
 
 /**
  * Printable certificates of completion. For adult-education programs this
@@ -13,12 +14,22 @@ import { getCompletedSlugs } from "@/lib/progress";
  * certificates are offered comes from real progress: a unit appears when every
  * one of its lessons is complete. Printing uses the browser's own dialog —
  * which is itself the skill Unit 12 teaches.
+ *
+ * Two courses feed this page. The laptop course's unit → slug map is served by
+ * `/api/units` because it is read off disk; the phone course's is a module this
+ * page can simply import. They are kept as two separate whole-course
+ * certificates rather than merged into one, because they certify different
+ * things — somebody who has finished the phone course has not been taught a
+ * laptop, and a certificate that implied otherwise would be a lie told to
+ * whoever they hand it to.
  */
 
 interface UnitInfo {
   unit: string;
   total: number;
   done: number;
+  /** Which course it belongs to, for the two whole-course certificates. */
+  course: "laptop" | "phone";
 }
 
 export default function CertificatePage() {
@@ -26,22 +37,33 @@ export default function CertificatePage() {
   const [chosen, setChosen] = useState<string | null>(null);
   const [units, setUnits] = useState<UnitInfo[]>([]);
   const [courseDone, setCourseDone] = useState(false);
+  const [phoneDone, setPhoneDone] = useState(false);
 
   useEffect(() => {
+    const completed = new Set(getCompletedSlugs());
+    const score = (list: Array<{ unit: string; slugs: string[] }>, course: "laptop" | "phone"): UnitInfo[] =>
+      list.map((u) => ({
+        unit: u.unit,
+        total: u.slugs.length,
+        done: u.slugs.filter((s) => completed.has(s)).length,
+        course,
+      }));
+
+    const phone = score(PHONE_UNIT_SLUGS, "phone");
+    setPhoneDone(phone.length > 0 && phone.every((u) => u.done >= u.total));
+
     // The lesson catalog (slug → unit, totals) is served statically for this page.
+    // A failed fetch must still leave the phone certificates on offer — they do
+    // not depend on it, and losing them because an unrelated route hiccuped would
+    // hide work the learner has genuinely finished.
     fetch("/api/units")
       .then((r) => r.json())
       .then((catalog: Array<{ unit: string; slugs: string[] }>) => {
-        const completed = new Set(getCompletedSlugs());
-        const info = catalog.map((u) => ({
-          unit: u.unit,
-          total: u.slugs.length,
-          done: u.slugs.filter((s) => completed.has(s)).length,
-        }));
-        setUnits(info);
-        setCourseDone(info.length > 0 && info.every((u) => u.done >= u.total));
+        const laptop = score(catalog, "laptop");
+        setUnits([...laptop, ...phone]);
+        setCourseDone(laptop.length > 0 && laptop.every((u) => u.done >= u.total));
       })
-      .catch(() => setUnits([]));
+      .catch(() => setUnits(phone));
   }, []);
 
   const finished = useMemo(() => units.filter((u) => u.done >= u.total), [units]);
@@ -73,7 +95,17 @@ export default function CertificatePage() {
               onClick={() => setChosen("__course__")}
               className={`w-full rounded-lg border-2 px-4 py-3 text-left font-semibold ${chosen === "__course__" ? "border-blue-600 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-700"}`}
             >
-              Full course — all {units.reduce((n, u) => n + u.total, 0)} lessons
+              Full laptop course — all{" "}
+              {units.filter((u) => u.course === "laptop").reduce((n, u) => n + u.total, 0)} lessons
+            </button>
+          )}
+          {phoneDone && (
+            <button
+              onClick={() => setChosen("__phone__")}
+              className={`w-full rounded-lg border-2 px-4 py-3 text-left font-semibold ${chosen === "__phone__" ? "border-blue-600 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-700"}`}
+            >
+              Full phone course — all{" "}
+              {units.filter((u) => u.course === "phone").reduce((n, u) => n + u.total, 0)} lessons
             </button>
           )}
           {finished
@@ -92,6 +124,10 @@ export default function CertificatePage() {
               No completed units yet — finish a unit and come back.{" "}
               <Link href="/lessons" className="text-blue-600 underline dark:text-blue-400">
                 Back to lessons
+              </Link>
+              , or the{" "}
+              <Link href="/phone" className="text-blue-600 underline dark:text-blue-400">
+                phone course
               </Link>
             </p>
           )}
@@ -116,12 +152,18 @@ export default function CertificatePage() {
           <p className="mt-2 text-4xl font-bold">{name.trim()}</p>
           <p className="mt-6 text-lg text-gray-600">has completed</p>
           <p className="mt-2 text-2xl font-semibold">
-            {chosen === "__course__" ? "the complete LearnAComputer course" : chosen}
+            {chosen === "__course__"
+              ? "the complete LearnAComputer laptop course"
+              : chosen === "__phone__"
+                ? "the complete LearnAComputer phone course"
+                : chosen}
           </p>
           <p className="mt-8 text-gray-600">
             {chosen === "__course__"
               ? "every hands-on lesson, assessment, and real-world mission in the course"
-              : "every hands-on lesson in this unit, including its assessment"}
+              : chosen === "__phone__"
+                ? "every hands-on lesson and check in the touch-screen course"
+                : "every hands-on lesson in this unit, including its assessment"}
           </p>
           <div className="mt-12 flex items-end justify-between text-sm text-gray-500 dark:text-gray-400">
             <span>{today}</span>

@@ -25,6 +25,28 @@
   }
 }
 
+/**
+ * The full-height shell, measured against what a phone can actually show.
+ *
+ * `h-screen` is `100vh`, and on a phone `100vh` is a lie: it is the height the
+ * viewport would have with the browser's address bar hidden, which it usually is
+ * not. The body ends up taller than the visible area, and whatever sits at the
+ * bottom of a full-height page — on the phone course, the bar you swipe up to go
+ * home — is underneath the browser chrome, unreachable.
+ *
+ * `100dvh` is the height that is genuinely on screen right now. It is layered as
+ * an override rather than swapped in at the call site so that a browser too old
+ * to know the unit simply drops this declaration and keeps the `100vh` it
+ * already had. On a desktop the two are identical, so nothing else moves.
+ */
+@layer utilities {
+  @supports (height: 100dvh) {
+    .h-screen {
+      height: 100dvh;
+    }
+  }
+}
+
 /* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
 .reduce-motion,
 .reduce-motion * {

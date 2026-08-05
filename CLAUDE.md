@@ -16,6 +16,7 @@ npm run dev          # dev server on :3000
 # /dev/solve-check   # dev-only page: PLAYS every guided lesson to the end (see docs/SOLVE_CHECK.md)
 npm run solve-check  # headless: PLAYS all 145 playable activities to the end (canonical)
 npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
+npm run phone-check   # PLAYS all 23 phone-course lessons with real touch gestures
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
 npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
@@ -58,6 +59,44 @@ device pixel ratio apart from each other. Keep it green at **18/18**.
 After touching `FakeDesktop`, `DraggableWindow` or `AppBody`, also run
 **desktop-check** — no guided lesson opens two apps at once, so solve-check
 cannot see a broken window stack, and multi-window is what Unit 1 teaches.
+
+**There is a second course, and nothing above looks at it.** `/phone` — the "On
+Your Phone" tab — is a separate 23-lesson curriculum for people whose only
+computer is a phone. It lives in `lib/phoneCourse.ts` and `components/Phone/`,
+deliberately *not* in `content/lessons/`, because `check-lessons.py` and
+`pitch-check.py` derive unit counts and sales claims from that folder and a
+second curriculum in there corrupts every one of those numbers.
+
+After touching anything under `components/Phone/`, `lib/phoneCourse.ts` or
+`app/phone/`, run **`npm run phone-check`**. It plays all 23 lessons with real
+gestures at 390×844 and measures WCAG AA inside the phone after every step. Green
+at **23/23, 1219 text runs, 13 control borders**. `PHONE_NEGATIVE=1` is the
+negative control — it replaces every gesture with a plain click, which is exactly
+the regression this course would suffer — and has been watched to fail: 11
+findings, **12 of 23 lessons still passing**, and those twelve are the right
+twelve (the typing and messaging lessons genuinely are all taps). A negative
+control that failed *everything* would mean the flag broke the page rather than
+removed the gestures.
+
+Three rules for that code, each of which shipped as a bug first:
+
+- **Never `setPointerCapture` on `pointerdown`.** While a pointer is captured the
+  following `click` is dispatched to the *capturing* element, so a swipeable row
+  swallows every tap on the button inside it — the whole Messages list opened
+  nothing. Gestures track the pointer on the **window** instead
+  (`usePointerTracking`), which also survives the finger leaving a 22px-tall bar.
+- **A long press and a swipe both still fire a `click` afterwards.** Holding an
+  app icon opened its menu and then the app on top of it; swiping a junk message
+  to reveal Delete also opened it. Both hooks expose `consumeClick()` — call it
+  first in the click handler and bail out when it returns true.
+- **Attach listeners with a callback ref, not `useRef` plus an effect keyed on a
+  handler.** Guided mode changes the handler every step and hides the problem;
+  an assessment has no current step, so the effect never re-ran and pinch-to-zoom
+  was dead in the Unit 2 check — the one place with no ring to fall back on.
+
+**`sim-dark:` must not be used in `components/Phone/`.** It follows the Dark Mode
+switch inside the *laptop* simulator's Settings app; the phone has no such switch,
+so those classes can never match. See `docs/PHONE_COURSE.md`.
 
 **Every harness here except one does the moderate, correct thing.** solve-check
 performs exactly the current step's action and nothing else, so it has never
@@ -306,8 +345,15 @@ app/
   dev/solve-check/        # Dev-only completability harness (auto-plays every guided lesson)
   dev/mission-check/      # Dev-only: mounts one real-world mission for scripts/mission-check.mjs
   dev/stray-check/        # Dev-only: mounts one activity under script control, for scripts/stray-check.mjs
+  phone/page.tsx          # "On Your Phone" — the separate touch course (see components/Phone/)
 
 components/
+  Phone/
+    PhoneCourse.tsx        # Course list → teaching card → activity → finish card
+    PhoneScreen.tsx        # The simulated phone: 6 apps, Quick Settings, step engine
+    PhoneKeyboard.tsx      # The on-screen keyboard (letters / 123 / emoji)
+    gestures.ts            # tap, long-press, swipe, drag, pinch, slider — Pointer Events only
+
   MountCheck.tsx           # Dev-only harness behind /dev/mount-check
   SolveCheck.tsx           # Dev-only harness behind /dev/solve-check (drives lib/solve/)
   StrayCheck.tsx           # Dev-only harness behind /dev/stray-check — mounts one activity, script-driven
@@ -369,9 +415,11 @@ components/
       SettingsApp.tsx        # Settings panels (appearance, display, accessibility, etc.)
       filesData.ts          # Shared file/folder tree used by FilesApp and EditFileTask
 
-content/lessons/           # 150+ lesson JSON files (see Lesson schema below)
+content/lessons/           # 197 lesson JSON files for the laptop course (see Lesson schema below)
+                           # The phone course is NOT here — see lib/phoneCourse.ts
 
 lib/
+  phoneCourse.ts           # The whole phone curriculum + its typed touch-action union
   feedbackLinks.ts         # The two Google Form URLs + the 75% threshold. Links only, never embeds
   lessons.ts               # Reads lesson JSON, groups by unit/module, module routing
   progress.ts              # localStorage read/write for completed slugs (fires lac-progress-changed)
@@ -907,6 +955,12 @@ Stored in `localStorage` under key `"lac-progress"`:
 
 `LessonModuleRunner` calls `markComplete(slug)` when a sub-lesson's playground is finished.
 Sub-lessons with `type: "none"` or `"placeholder"` auto-advance (no gate).
+
+**The phone course writes into the same list**, with slugs that all start
+`phone-`. One store, so "Reset all progress" clears both courses and there is no
+second key to forget. A phone slug must never collide with a lesson slug in
+`content/lessons/` — they share one array and a collision would tick the wrong
+lesson; `phone-check` asserts it on every run.
 
 **There is no account and no server copy.** Progress lives in localStorage on the
 learner's own device, never expires, and is theirs to erase from the Lessons

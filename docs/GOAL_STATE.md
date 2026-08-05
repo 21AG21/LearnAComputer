@@ -29,7 +29,8 @@ what moved, what's proven, what's still a demo risk.
 | Instructor visibility | **Removed 2026-07-28 and not coming back.** Built, then cut with accounts: a roster means collecting data about learners, and the product now collects none. Sales material says so plainly rather than promising a roadmap item that will not arrive. | `docs/SALES_PLAYBOOK.md §8` |
 | Certificates | **Done, v1** — printable per-unit and full-course at /certificate, name asked at print time and never stored; verification codes still roadmap | `app/certificate/page.tsx` |
 | WCAG/contrast measured | **Done** — scripts/contrast-check.mjs samples every text node on core pages in both themes; 14 real AA failures found and fixed (muted grays, dark-mode reds/blues); remaining 4 reports are false positives (hero text over the background image) | `scripts/contrast-check.mjs` |
-| Wrong-device (phone) handling | **Done** — under 900px, a kind full-screen note with the live address and a continue-anyway escape | `components/SmallScreenGuard.tsx` |
+| Wrong-device (phone) handling | **Superseded 2026-08-04 — there is now a course for the phone.** The guard still says the laptop lessons need a laptop, but the first and largest thing on it is a way into `/phone` rather than "go and find a computer", which for a great many of the people this product is for was the end of the conversation. | `components/SmallScreenGuard.tsx` |
+| Phone course ("On Your Phone") | **Done, v1 — 2026-08-04.** A separate 23-lesson touch curriculum at `/phone`, 5 units, played on a simulated phone with real gestures: tap, press-and-hold, swipe, drag, pinch, and a keyboard made of glass. Not the main course made responsive — almost nothing in the laptop curriculum survives the translation (no right-click, no double-click, no physical keyboard, no windows, no folder picker). Shares `useStepRunner`, so guided and assessment modes behave identically to the laptop course; shares `lac-progress`, so one Reset clears both. Three real bugs shipped and were caught by the harness before release, all of them invisible to a click: pointer capture swallowing taps on swipeable rows, a long press opening the app on top of its own menu, and pinch-to-zoom dead in assessment mode. | `docs/PHONE_COURSE.md` |
 
 ## What is proven by machine, and what is not
 
@@ -48,6 +49,7 @@ number, because everything outside it is assumption wearing the same clothes.
 | **Every highlighted control is on screen** | `ring-check` — a gate since 2026-07-29 |
 | A stray click never strands the learner | `stray-check` |
 | The sales material matches the product | `pitch-check` |
+| **23 phone lessons finishable with a finger**, and AA inside the phone | `phone-check` — since 2026-08-04 |
 | Lesson shape, step targets, reading level, dialect | `check-lessons.py`, `spelling-check.py` |
 | WCAG AA contrast, both themes | `contrast-check.mjs` |
 

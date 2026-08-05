@@ -29,6 +29,7 @@ const NAV = [
   { href: "/lessons", label: "Lessons" },
   { href: "/playground", label: "Playground" },
   { href: "/certificate", label: "Certificates" },
+  { href: "/phone", label: "On Your Phone" },
   { href: "/feedback", label: "Feedback" },
 ];
 
