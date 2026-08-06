@@ -356,6 +356,21 @@ its own 16-lesson unit. The symptom is a spin-out under load, not a wrong
 screen. Not yet diagnosed, and recorded here rather than left as a mystery
 somebody rediscovers.
 
+**Photos, Mail and Files followed.** A selected photo rendered in a fixed
+`w-48` box — 192px on a 390px screen, a thumbnail floating in white space with
+its title captioned underneath. It fills the width now, on a fixed clipping
+stage: `max-h` cannot cap a box sized by `aspect-ratio` from its width, and
+Rotate is a CSS **transform**, so a 347x260 photo turned on its side still
+*occupies* 347x260 while *painting* 260x347 — it ran over the controls above and
+below, and no amount of sizing the picture could have fixed it. Mail's five
+action chips moved from above the message to a bar under it, and its ✕ is gone
+on the phone because the row above already says "← Inbox"; two controls that
+both mean "leave this screen" is the laptop habit this course keeps unlearning.
+Files is a single column of rows with the whole filename on one line —
+"GroceryList.txt" was rendering as "GroceryList.tx / t" in a 115px tile — and
+its toolbar hides what it cannot do instead of graying it, which took it from
+three wrapped rows to one.
+
 **Deliberately not done:** the browser still shows a tab strip. Hiding it at one
 tab is what a phone does, and it broke `browser-vs-search` reproducibly, with
 the cause unidentified — a lesson nobody can finish is worse than a strip that
@@ -363,12 +378,6 @@ looks like a laptop.
 
 ## Still open
 
-- **Mail, Photos and Files still need their rebuilds.** Mail's mailbox rail is
-  half the screen and its actions are chips at the top rather than a bottom
-  toolbar; a selected photo renders in a fixed `w-48` box on a 390px screen;
-  Files is a wrapping desktop toolbar over a three-column icon grid, 55% chrome
-  before a file. All three are laid out in `docs/` only here, and all three are
-  the honest answer to "it is still based off of the computer".
 - **No app implements a swipe.** `useSwipe` is used twice in the product, both
   times on the home bar — no swipe-to-delete on a mail row, no swipe between
   photos, no pull-to-refresh. That absence, more than any single layout, is what

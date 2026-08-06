@@ -325,7 +325,14 @@ export default function FileManager({
   return (
     <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 px-3 py-2 flex items-center gap-2 flex-wrap">
+      {/* On a phone this wraps to three rows of desktop buttons — 180px before
+          a single file, three of them rendered gray and disabled, which reads
+          as broken rather than as unavailable. Tightened rather than rebuilt:
+          the steps ring these controls by name and a `⋯` menu would be a screen
+          the lesson vocabulary has no word for. */}
+      <div className={`shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-center flex-wrap ${
+        isPhone ? "gap-1 px-2 py-1" : "gap-2 px-3 py-2"
+      }`}>
         <span className="font-bold text-gray-600 sim-dark:text-gray-300 text-sm mr-1">{LOC_TITLE[location]}</span>
 
         {!inTrash && (
@@ -440,7 +447,17 @@ export default function FileManager({
               {inTrash ? "The Trash is empty." : search ? "No files match your search." : "This folder is empty."}
             </p>
           )}
-          <div className="grid grid-cols-3 gap-4 content-start">
+          {/**
+            * A list on a phone, a grid of tiles on a laptop.
+            *
+            * Three columns inside 390px gives each tile about 115px, and the
+            * filenames this course teaches people to write do not fit in it —
+            * "GroceryList.txt" rendered as "GroceryList.tx / t" and
+            * "VacationPhoto.png" as "VacationPhot". A phone's file browser is a
+            * single column of rows with the whole name on one line, which is
+            * also the shape that gives each row a finger's height for free.
+            */}
+          <div className={`grid content-start ${isPhone ? "grid-cols-1 gap-1" : "grid-cols-3 gap-4"}`}>
             {visible.map((item) => {
               const isNaming = naming?.id === item.id;
               const canDrag = item.kind === "file" && !inTrash;
@@ -466,7 +483,9 @@ export default function FileManager({
                   onDrop={canDropFolder ? (e) => handleDrop(e, item.id as Loc) : undefined}
                   onClick={() => handleItemClick(item)}
                   onDoubleClick={() => handleItemDoubleClick(item)}
-                  className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-pointer border-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                  className={`flex cursor-pointer gap-1 rounded-lg border-2 p-2 outline-none transition-all focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                    isPhone ? "flex-row items-center gap-3 px-3 text-left" : "flex-col items-center"
+                  } ${
                     selected === item.id ? "bg-blue-100 sim-dark:bg-blue-900 border-blue-500 sim-dark:border-blue-400" : "border-transparent hover:bg-gray-100 sim-dark:hover:bg-gray-800"
                   } ${hl("item", item.name) ? "animate-ring-pulse" : ""} ${
                     isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
@@ -535,11 +554,26 @@ export default function FileManager({
 // ── Sub-components ─────────────────────────────────────────────────────────
 
 function ToolbarBtn({ label, onClick, disabled, highlight }: { label: string; onClick: () => void; disabled?: boolean; highlight?: boolean }) {
+  const isPhone = useIsPhone();
+  /**
+   * A phone hides what it cannot do; a laptop grays it out.
+   *
+   * With nothing selected, three of the five toolbar buttons render disabled —
+   * and at 390px the row wraps to three lines, so 180px of the screen is spent
+   * on controls that do nothing, in a palette that reads as broken rather than
+   * as "not yet". Hiding them is also what makes the toolbar one row.
+   *
+   * A step never rings a disabled control: by the time a lesson says "Rename
+   * it", the file is selected and the button is back.
+   */
+  if (isPhone && disabled) return null;
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-3 py-1.5 rounded-md border-2 border-black sim-dark:border-gray-500 font-semibold text-sm bg-white sim-dark:bg-gray-700 sim-dark:text-gray-100 disabled:opacity-30 disabled:cursor-not-allowed ${
+      className={`rounded-md border-2 border-black bg-white text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-30 sim-dark:border-gray-500 sim-dark:bg-gray-700 sim-dark:text-gray-100 ${
+        isPhone ? "px-2 py-1" : "px-3 py-1.5"
+      } ${
         highlight ? "animate-ring-pulse bg-yellow-50 text-gray-900" : "hover:bg-gray-100 sim-dark:hover:bg-gray-600"
       }`}
     >

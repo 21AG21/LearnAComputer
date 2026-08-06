@@ -518,8 +518,8 @@ export default function GuidedEmailTask({
               </div>
             </div>
           ) : selectedEmail ? (
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-3 border-b">
+            <div className={`flex-1 overflow-y-auto ${isPhone ? "flex flex-col" : ""}`}>
+              <div className={`p-3 ${isPhone ? "order-first border-b" : "border-b"}`}>
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div>
                     <h3 className="font-semibold text-sm">{selectedEmail.subject}</h3>
@@ -528,12 +528,28 @@ export default function GuidedEmailTask({
                   <button
                     onClick={() => setSelectedEmail(null)}
                     aria-label="Close email"
-                    className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 sim-dark:hover:text-gray-200 flex-shrink-0 rounded px-1 ${hl("close-reading") ? pulse : ""}`}
+                    /* Hidden on a phone: the back row above already says
+                       "← Inbox", and two controls that both mean "leave this
+                       screen", one of them a ✕ in the far corner, is the
+                       laptop habit this course keeps having to unlearn. */
+                    className={`flex-shrink-0 rounded px-1 text-gray-500 hover:text-gray-600 sim-dark:text-gray-400 sim-dark:hover:text-gray-200 ${isPhone ? "hidden" : ""} ${hl("close-reading") ? pulse : ""}`}
                   >
                     ✕
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
+                {/**
+                  * On a phone the actions are a bar under the message.
+                  *
+                  * Every phone mail app puts reply / flag / archive / trash
+                  * along the bottom, because the message is what you came for
+                  * and the thumb is down there. As a wrapping row of chips
+                  * above the body it took two lines of the 578px screen before
+                  * a word of the email, and pushed the text the lesson is
+                  * about below the fold.
+                  */}
+                <div className={`flex flex-wrap gap-1.5 ${
+                  isPhone ? "order-last border-t bg-gray-50 p-2 sim-dark:bg-gray-800" : ""
+                }`}>
                   <button onClick={handleReply} className={`px-2 py-1 text-xs bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-200 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("reply-btn") ? pulse : ""}`}><ReplyIcon size={12} /> Reply</button>
                   <button onClick={handleForward} className={`px-2 py-1 text-xs bg-gray-100 sim-dark:bg-gray-700 sim-dark:text-gray-100 hover:bg-gray-200 sim-dark:hover:bg-gray-600 rounded transition-all inline-flex items-center gap-1 ${hl("forward-btn") ? pulse : ""}`}><ForwardIcon size={12} /> Forward</button>
                   {currentFolder === "Spam" ? (

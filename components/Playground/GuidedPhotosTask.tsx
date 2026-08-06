@@ -425,15 +425,46 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
         {/* Main */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {selectedPhoto ? (
-            <div className="flex-1 overflow-y-auto">
-              {/* Toolbar */}
-              <div className="p-3 border-b flex items-center gap-2 flex-wrap">
+            <div className={`flex-1 overflow-y-auto ${isPhone ? "flex flex-col" : ""}`}>
+              {/* The nav row: a chevron at the top left, which is where a phone
+                  puts "back", and where this app's own `back-btn` ring belongs
+                  once the toolbar it used to live in has moved to the bottom. */}
+              {isPhone && (
                 <button
                   onClick={() => { setSelectedPhoto(null); resetEdits(); }}
-                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 mr-1 rounded px-1 ${hl("back-btn") ? pulse : ""}`}
+                  aria-label="Back to all photos"
+                  className={`flex w-full shrink-0 items-center gap-1 border-b px-3 text-left text-[15px] font-semibold text-blue-700 sim-dark:text-blue-300 ${hl("back-btn") ? pulse : ""}`}
+                >
+                  <span aria-hidden className="text-lg leading-none">‹</span> Photos
+                </button>
+              )}
+              {/**
+                * The actions, and on a phone they are under the picture.
+                *
+                * Every phone photo app puts share / favorite / delete in a bar
+                * along the bottom, because the picture is the point and the
+                * thumb is down there. As a wrapping chip row above the photo at
+                * 390px it took two lines, pushed the picture down, and the row
+                * a learner had scrolled past was the row holding Back.
+                *
+                * `order-last` rather than moving the JSX: the ring targets and
+                * handlers stay exactly where the lessons expect them.
+                */}
+              <div
+                className={`flex items-center gap-2 flex-wrap p-3 ${
+                  isPhone ? "order-last border-t" : "border-b"
+                }`}
+              >
+                <button
+                  onClick={() => { setSelectedPhoto(null); resetEdits(); }}
+                  /* A phone's back control is a chevron at the top left of the
+                     screen, not a text link in a toolbar — so on a phone this
+                     one moves out of the row and up into its own nav row. */
+                  className={`text-gray-500 sim-dark:text-gray-400 hover:text-gray-600 mr-1 rounded px-1 ${isPhone ? "hidden" : ""} ${hl("back-btn") ? pulse : ""}`}
                 >
                   ← Back
                 </button>
+
                 <button onClick={handleFavorite} className={`px-2 py-1 text-xs rounded border transition-all inline-flex items-center gap-1 ${selectedPhoto.favorite ? "bg-red-50 text-red-700 sim-dark:text-red-400 border-red-200" : "border-gray-500 sim-dark:border-gray-400 hover:bg-gray-50 sim-dark:hover:bg-gray-700"} ${hl("fav-btn") ? pulse : ""}`}>
                   {selectedPhoto.favorite ? <HeartFilledIcon size={12} /> : <HeartIcon size={12} />} Fav
                 </button>
@@ -501,13 +532,55 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                 </div>
               )}
 
-              {/* Photo display */}
-              <div className="flex items-center justify-center py-4 px-4">
+              {/**
+                * The photo, and on a phone it is the screen.
+                *
+                * `w-48` is 192px on a 390px handset — a thumbnail floating in
+                * white space with its title captioned underneath, which is what
+                * a photo library looks like on a laptop and nothing like what
+                * it looks like on the device people actually keep photos on.
+                * A phone gives the picture the full width and lets the editing
+                * controls sit under it.
+                */}
+              {/**
+                * A fixed, clipping stage on a phone.
+                *
+                * Rotate is a CSS `transform`, and a transform does not change
+                * the layout box — so a 347x260 photo turned on its side still
+                * *occupies* 347x260 while *painting* 260x347, and the painted
+                * half ran over the back row above it and the crop buttons
+                * below. Sizing the picture could never fix that; the stage it
+                * sits on has to be a fixed height that clips.
+                */}
+              <div
+                className={`flex shrink-0 items-center justify-center ${
+                  isPhone ? "h-[280px] overflow-hidden px-0 py-2" : "px-4 py-4"
+                }`}
+              >
                 <div
-                  className={`${cropAspect} w-48 rounded-xl overflow-hidden relative`}
+                  /**
+                   * Height first on a phone, and the aspect works out the width.
+                   *
+                   * `w-full` looks right until Rotate turns a landscape photo
+                   * portrait: at 390px wide a 3:4 crop is 520px tall, and the
+                   * picture ran straight out over the crop buttons under it.
+                   * `max-h` does not save it — a box sized by `aspect-ratio`
+                   * from its width ignores the cap. Fixing the height instead
+                   * means every crop fits, and the widest (4:3) still comes out
+                   * 347px across on a 390px screen.
+                   */
+                  className={`${cropAspect} relative overflow-hidden ${
+                    isPhone ? "h-[260px] w-auto rounded-none" : "w-48 rounded-xl"
+                  }`}
                   style={photoStyle}
                 >
-                  <Image src={selectedPhoto.src} alt={selectedPhoto.label} fill sizes="200px" className="object-cover" />
+                  <Image
+                    src={selectedPhoto.src}
+                    alt={selectedPhoto.label}
+                    fill
+                    sizes={isPhone ? "390px" : "200px"}
+                    className="object-cover"
+                  />
                 </div>
               </div>
               <p className="text-center text-sm font-medium text-gray-700 sim-dark:text-gray-200 mb-2">{selectedPhoto.label}</p>
@@ -570,10 +643,10 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
           ) : section === "Recently Deleted" ? (
             <div className="flex-1 overflow-y-auto">
               <div className="px-3 py-2 bg-gray-50 sim-dark:bg-gray-800 border-b text-xs text-gray-500 sim-dark:text-gray-400">Photos are deleted permanently after 30 days.</div>
-              <div className="p-3 grid grid-cols-3 gap-2">
+              <div className={`grid grid-cols-3 ${isPhone ? "gap-0.5 p-0.5" : "gap-2 p-3"}`}>
                 {photos.filter((p) => p.deleted).map((photo) => (
                   <div key={photo.id} className="flex flex-col items-center gap-1">
-                    <div className="w-full aspect-square rounded-lg overflow-hidden relative opacity-60">
+                    <div className="w-full aspect-square overflow-hidden relative opacity-60">
                       <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
                     </div>
                     <p className="text-xs text-gray-500 sim-dark:text-gray-400 text-center truncate w-full">{photo.label}</p>
@@ -592,12 +665,12 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto p-3">
-              <div className="grid grid-cols-3 gap-2">
+              <div className={`grid grid-cols-3 ${isPhone ? "gap-0.5" : "gap-2"}`}>
                 {getVisiblePhotos().map((photo) => (
                   <button
                     key={photo.id}
                     onClick={() => handleSelectPhoto(photo)}
-                    className={`relative aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-all ${hl("photo", photo.label) ? pulse : ""}`}
+                    className={`relative aspect-square overflow-hidden hover:opacity-90 transition-all ${hl("photo", photo.label) ? pulse : ""}`}
                   >
                     <Image src={photo.src} alt={photo.label} fill sizes="120px" className="object-cover" />
                     {photo.favorite && <span className="absolute top-1 right-1 text-red-700 sim-dark:text-red-400 drop-shadow"><HeartFilledIcon size={14} /></span>}
