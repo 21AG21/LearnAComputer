@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "../WindowControls";
+import { useIsPhone } from "../SimFormFactor";
+import { ArrowLeftIcon } from "../Icons";
 
 const MOVE_THRESH = 20;
 const RESIZE_THRESH = 15;
@@ -53,6 +55,7 @@ export default function DraggableWindow({
   title, icon, initial, fit, minimized, onClose, onMinimize, onMaximize,
   highlight, onMoved, onResized, className, z, onFocus, focused = true, children,
 }: DraggableWindowProps) {
+  const isPhone = useIsPhone();
   const [pos, setPos] = useState({ x: initial.x, y: initial.y });
   const [size, setSize] = useState({ w: initial.w, h: initial.h });
   const [isMaximized, setIsMaximized] = useState(false);
@@ -240,6 +243,63 @@ export default function DraggableWindow({
   // Keep children mounted while minimized so their state survives.
   if (minimized) {
     return <div style={{ display: "none" }}>{children}</div>;
+  }
+
+  /**
+   * A phone has no windows, so on a phone this is not one.
+   *
+   * Eight troubleshooting lessons rendered a literal desktop inside the handset:
+   * a 366x265 window floating on a wallpaper, a 42px title bar, minimize /
+   * maximize / close at 28x24 each, a `cursor-se-resize` corner, and the dock
+   * still showing underneath. A learner who has only ever used a phone has never
+   * seen any of it, and — measured — those lessons had **no back arrow and no
+   * home bar**, so the window chrome was also the only thing on screen that
+   * looked like a way out, and none of its three buttons was one.
+   *
+   * Fixing it here rather than at the seven call sites is the point: the phone
+   * branch is one place, the desktop path is byte-identical, and the next window
+   * somebody adds is phone-correct without being told. The app fills the screen,
+   * the title moves into a navigation bar, and Close becomes a back chevron —
+   * which is what every phone does with "leave this screen".
+   */
+  if (isPhone) {
+    return (
+      <div
+        ref={rootRef}
+        data-phone-window
+        className={`absolute inset-0 z-20 flex flex-col overflow-hidden bg-white animate-app-open sim-dark:bg-gray-900 ${className ?? ""}`}
+        style={{ zIndex: z }}
+        onMouseDownCapture={onFocus}
+      >
+        {/* The navigation bar: a back chevron, the app's name, nothing else. */}
+        <div
+          className={`flex shrink-0 items-center gap-1 border-b bg-gray-50 px-1 sim-dark:bg-gray-800 ${
+            highlight === "titlebar" ? "animate-ring-pulse-inset" : ""
+          }`}
+        >
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={`Back — leave ${title}`}
+              className={`flex min-h-[44px] items-center gap-1 rounded px-2 text-[15px] font-semibold text-blue-700 active:bg-black/5 sim-dark:text-blue-300 ${
+                hlControl === "close" ? "animate-ring-pulse" : ""
+              }`}
+            >
+              <ArrowLeftIcon size={20} />
+              Back
+            </button>
+          )}
+          <span className="min-w-0 flex-1 truncate text-center text-[15px] font-bold text-gray-800 sim-dark:text-gray-100">
+            {title}
+          </span>
+          {/* Balances the back button so the title sits centered, the way a
+              phone's navigation bar does. */}
+          <span aria-hidden className="w-[76px] shrink-0" />
+        </div>
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
+      </div>
+    );
   }
 
   return (

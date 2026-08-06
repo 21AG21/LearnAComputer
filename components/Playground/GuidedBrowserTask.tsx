@@ -943,7 +943,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         <div
           onClick={() => { setEditing(true); setDraft(activePage.url); }}
           className={`flex-1 flex items-center gap-2 bg-white sim-dark:bg-gray-900 border-2 rounded-lg px-3 py-1.5 cursor-text ${
-            hl("address") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400 sim-dark:border-gray-600"
+            hl("address") ? "animate-ring-pulse border-yellow-400" : "border-gray-400 sim-dark:border-gray-600"
           }`}
         >
           <button
@@ -1093,7 +1093,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                   <span className="text-amber-700 sim-dark:text-yellow-400">o</span><span className="text-blue-700 sim-dark:text-blue-400">g</span>
                   <span className="text-green-500">l</span><span className="text-red-700 sim-dark:text-red-400">e</span>
                 </p>
-                <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "border-yellow-400 ring-4 ring-yellow-300 animate-pulse" : "border-gray-400"}`}>
+                <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "animate-ring-pulse border-yellow-400" : "border-gray-400"}`}>
                   <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
                   <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }} placeholder="Search Google" className="flex-1 outline-none rounded focus-visible:ring-2 focus-visible:ring-blue-500" />
                 </div>

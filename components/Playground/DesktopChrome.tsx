@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useSimTheme } from "./Desktop/SimThemeContext";
+import { useIsPhone } from "./SimFormFactor";
 
 /**
  * The parts that make a simulated desktop recognizable: the wallpaper, the menu bar,
@@ -82,8 +83,19 @@ export function DesktopMenuBar({
   // `sim-dark:`, not `dark:` — these follow the practice computer's own Dark Mode
   // setting, not the learner's site theme. As `dark:` they lit up white-on-white
   // whenever someone read the site in dark mode with the sim still light.
+  /**
+   * On a phone every one of these gets a 44px hit area out of its own padding.
+   *
+   * `py-3 -my-3` grows the *padding box* — which is what a finger lands on —
+   * without growing the strip, so the lesson keeps its vertical space. Measured
+   * before this: Wi-Fi 32x24, the clock 69x28, the battery 79x28, all of them
+   * pressed in three Unit 1 lessons by people chosen for having unsteady hands.
+   * `relative` so the grown box paints over the app below rather than under it.
+   */
   const btn = (panel: StatusPanelId, extra = "") =>
-    `rounded px-1.5 py-1 transition-colors hover:bg-black/10 sim-dark:hover:bg-white/15 ${
+    `rounded transition-colors hover:bg-black/10 sim-dark:hover:bg-white/15 ${
+      compact ? "relative -my-3 px-2 py-3" : "px-1.5 py-1"
+    } ${
       openPanel === panel ? "bg-black/10 sim-dark:bg-white/15" : ""
     } ${highlight === panel ? "animate-ring-pulse" : ""} ${extra}`;
 
@@ -120,7 +132,7 @@ export function DesktopMenuBar({
           aria-expanded={openPanel === "wifi"}
           className={btn("wifi")}
         >
-          <WifiIcon className={compact ? "w-5 h-4" : "w-6 h-5"} />
+          <WifiIcon className={compact ? "w-7 h-5" : "w-6 h-5"} />
         </button>
         <button
           onClick={() => onTogglePanel("battery")}
@@ -181,17 +193,38 @@ export function StatusPanel({
   children: React.ReactNode;
 }) {
   const { dark } = useSimTheme();
+  const isPhone = useIsPhone();
   return (
+    /**
+     * A dropdown on a laptop; the panel a phone slides down from its status bar.
+     *
+     * Anchored `top-10 right-2 w-72`, on a 390px screen this hung 288px of box
+     * off a 32px icon, overflowed toward the right edge and left the thing it
+     * described half covered. Every phone answers a tap on the status bar with a
+     * panel the full width of the screen — Control Center, the notification
+     * shade — because at this size there is no room for anything to be "beside"
+     * anything else.
+     *
+     * The laptop path is untouched, which matters: this is the same panel the
+     * whole of Unit 1's menu-bar lesson points at.
+     */
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`absolute top-10 right-2 z-50 w-72 border-4 border-black sim-dark:border-gray-500 bg-white sim-dark:bg-gray-900 sim-dark:text-gray-100 shadow-lg overflow-hidden ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
+      className={`absolute z-50 overflow-hidden border-black bg-white shadow-lg sim-dark:border-gray-500 sim-dark:bg-gray-900 sim-dark:text-gray-100 ${
+        isPhone
+          ? "inset-x-2 top-2 rounded-2xl border-2"
+          : "right-2 top-10 w-72 border-4"
+      } ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
     >
       <div className="flex items-center justify-between px-3 py-2" style={{ backgroundColor: dark ? darkTint : tint }}>
         <p className="text-lg font-bold">{title}</p>
         <button
           onClick={onClose}
           aria-label={`Close ${title}`}
-          className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-sm hover:opacity-80 transition-opacity"
+          /* A phone's dismiss control is a finger's width. This was 28x28. */
+          className={`flex items-center justify-center rounded-full font-bold text-white hover:opacity-80 transition-opacity ${
+            isPhone ? "min-h-[44px] w-11 text-lg" : "h-7 w-7 text-sm"
+          }`}
           style={{ backgroundColor: color }}
         >
           &times;

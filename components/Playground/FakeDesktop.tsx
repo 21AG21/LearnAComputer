@@ -22,6 +22,8 @@ export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings
 export const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "photos", "app-market", "calendar", "reminders", "notes"];
 
 interface SettingsCallbacks {
+  /** Phone assessments keep the section list and panel together. */
+  keepBothPanes?: boolean;
   highlightSection?: string;
   highlightToggle?: string;
   highlightSlider?: string;
@@ -421,9 +423,11 @@ function FakeDesktopInner({
                 data-phone-back
                 aria-label="Back to the home screen"
                 onClick={goHome}
-                className="-ml-1 rounded p-1 hover:bg-black/10 sim-dark:hover:bg-white/15"
+                /* 44px of finger out of the padding, not out of the strip —
+                   this was 26x26 and it is the way out of every app. */
+                className="relative -my-3 -ml-2 rounded px-3 py-3 hover:bg-black/10 sim-dark:hover:bg-white/15"
               >
-                <ArrowLeftIcon size={18} />
+                <ArrowLeftIcon size={20} />
               </button>
             ) : undefined
           }

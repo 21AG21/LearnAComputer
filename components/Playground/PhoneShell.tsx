@@ -137,9 +137,14 @@ export default function PhoneShell({
                 data-phone-back
                 aria-label="Back to the home screen"
                 onClick={onHome}
-                className="-ml-1 rounded p-1 hover:bg-black/10 sim-dark:hover:bg-white/15"
+                /* 44px of finger out of the padding, not out of the strip.
+                   Measured at 26x26, and it is the keyboard route home and the
+                   only visible way out of an app. Kept identical to
+                   `FakeDesktop`'s copy — two back arrows that feel different
+                   are two back arrows. */
+                className="relative -my-3 -ml-2 rounded px-3 py-3 hover:bg-black/10 sim-dark:hover:bg-white/15"
               >
-                <ArrowLeftIcon size={18} />
+                <ArrowLeftIcon size={20} />
               </button>
             ) : undefined
           }

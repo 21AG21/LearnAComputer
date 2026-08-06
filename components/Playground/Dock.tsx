@@ -180,8 +180,14 @@ export default function Dock({
             </span>
             {showLabels && (
               <span
+                /* 13px on the phone home screen, not 11. These are the first
+                   words a learner reads on the device and the only thing
+                   telling them which icon is which; a real phone sets them
+                   around 12-13px on a screen this size and this audience is
+                   the reason the course exists. The laptop dock keeps 10px —
+                   it sits under a 1440px screen with a tooltip. */
                 className={`w-full select-none text-center font-medium leading-tight ${
-                  size === "lg" ? "text-[11px]" : "text-[10px]"
+                  size === "lg" ? "text-[13px]" : "text-[10px]"
                 } ${
                   tone === "dark" ? "text-slate-200" : "text-slate-700"
                 }`}

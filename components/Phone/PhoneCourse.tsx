@@ -345,7 +345,17 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
           */}
         <div className="flex min-h-0 flex-1 items-center justify-center sm:p-4">
           <SimFormFactorProvider value="phone">
-            <div className="flex h-full w-full flex-col overflow-hidden bg-white sm:aspect-[9/19.5] sm:h-full sm:w-auto sm:rounded-[2.25rem] sm:border-[10px] sm:border-gray-900 sm:shadow-2xl">
+            {/* `data-phone-screen` marks the glass: everything inside it is the
+                simulated device rather than the lesson's chrome. `globals.css`
+                hangs the press-feedback rule off it, and
+                `npm run phone-touch-check` scopes its measurements to it. It
+                was referenced by both and set by neither, so every tap inside
+                the phone was silent until the screen changed — which for a
+                beginner is indistinguishable from a tap that missed. */}
+            <div
+              data-phone-screen
+              className="flex h-full w-full flex-col overflow-hidden bg-white sm:aspect-[9/19.5] sm:h-full sm:w-auto sm:rounded-[2.25rem] sm:border-[10px] sm:border-gray-900 sm:shadow-2xl"
+            >
               {entry.kind === "gesture" ? (
                 <PhoneGestureTask key={`${entry.slug}-${attempt}`} lesson={entry} onResult={onResult} />
               ) : lesson ? (

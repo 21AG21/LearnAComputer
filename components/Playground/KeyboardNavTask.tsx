@@ -197,7 +197,7 @@ export default function KeyboardNavTask({ onResult }: KeyboardNavTaskProps) {
                             isFocused
                               ? "border-blue-500 ring-4 ring-blue-200 bg-blue-50"
                               : "border-gray-300 bg-white"
-                          } ${isTarget && !isFocused ? "border-yellow-400 animate-pulse" : ""}`}
+                          } ${isTarget && !isFocused ? "animate-ring-pulse border-yellow-400" : ""}`}
                         >
                           {isFocused ? (
                             <span className="text-blue-700 font-medium">▶ Focused</span>

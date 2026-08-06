@@ -68,6 +68,55 @@
   transform: scale(0.985);
 }
 
+/**
+ * The touch floor, inside the simulated phone only.
+ *
+ * The apps in here were laid out for a mouse, where a 36px list row is
+ * comfortable and a 24px icon button is normal. On glass, 44px is the
+ * accessibility floor, and this course is sold to people defined by not being
+ * able to hit small things — `npm run phone-touch-check` measured **1227**
+ * controls under it, across Files, Mail, Photos, Settings and the browser.
+ *
+ * One rule rather than forty edits in eight files, for the same reason the
+ * press-feedback rule above is one rule: every one of those edits is a place to
+ * forget the forty-first, and the laptop course must not move at all.
+ *
+ * Scoped by `[data-phone-screen]`, so nothing outside the simulated device is
+ * touched. `min-height` only — a minimum *width* would stretch the chips and
+ * badges that sit inline inside sentences, and sliders, checkboxes and radios
+ * are excluded because forcing their box distorts the control itself rather
+ * than growing it. Icon-only buttons that are still too narrow after this are a
+ * per-component fix, and the check names them.
+ */
+[data-phone-screen] button,
+[data-phone-screen] [role="button"],
+[data-phone-screen] select,
+[data-phone-screen] textarea,
+[data-phone-screen] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]) {
+  min-height: 44px;
+}
+
+/**
+ * And the reading floor.
+ *
+ * 10px and 12px text is a desktop convention — a secondary line you glance at
+ * from 50cm. Held at arm's length by someone with presbyopia it is not
+ * secondary, it is absent: the browser's saved-bookmark addresses were 10px,
+ * every Settings explanation 12px, and the lesson's own "Type this — exactly"
+ * label 12px on the lessons that are entirely about typing.
+ *
+ * Targeting the utility classes rather than the elements is deliberate: it
+ * lifts the floor without flattening the hierarchy, so text that was smaller
+ * than its neighbours still is. Anything that names a bigger size still wins.
+ */
+[data-phone-screen] .text-xs,
+[data-phone-screen] .text-\[10px\],
+[data-phone-screen] .text-\[11px\],
+[data-phone-screen] .text-\[12px\] {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.15rem;
+}
+
 /* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
 .reduce-motion,
 .reduce-motion * {

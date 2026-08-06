@@ -21,7 +21,7 @@ interface GuidedSettingsTaskProps {
 }
 
 export default function GuidedSettingsTask({ goal, steps, mode, hint, onResult }: GuidedSettingsTaskProps) {
-  const { step, stepIndex, flash, done, tryStep, objectives } = useStepRunner({ steps, mode, onResult });
+  const { step, stepIndex, flash, done, tryStep, objectives, isAssessment } = useStepRunner({ steps, mode, onResult });
 
   function highlightSection(): string | undefined {
     if (!step || step.action !== "open-section") return undefined;
@@ -100,6 +100,7 @@ export default function GuidedSettingsTask({ goal, steps, mode, hint, onResult }
       <FakeDesktop
         autoOpenApp="settings"
         settingsProps={{
+          keepBothPanes: isAssessment,
           highlightSection: highlightSection(),
           highlightToggle: highlightToggle(),
           highlightSlider: highlightSlider(),

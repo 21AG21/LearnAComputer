@@ -20,7 +20,8 @@
     "simdark-check": "node scripts/simdark-check.mjs",
     "sim-contrast-check": "node scripts/sim-contrast-check.mjs",
     "motion-check": "node scripts/motion-check.mjs",
-    "phone-words-check": "tsx scripts/phone-words-check.ts"
+    "phone-words-check": "tsx scripts/phone-words-check.ts",
+    "phone-touch-check": "node scripts/phone-touch-check.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

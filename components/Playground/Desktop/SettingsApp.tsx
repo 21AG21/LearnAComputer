@@ -25,6 +25,13 @@ const SECTIONS: { id: Section; label: string; icon: ReactNode }[] = [
 interface SettingsAppProps {
   /** Which panel is showing when the app opens. Defaults to Appearance. */
   initialSection?: Section;
+  /**
+   * Phone: keep the section list and the panel on screen together.
+   *
+   * Set for assessments, where nothing is highlighted and a learner cannot be
+   * told which screen to be on. See `showSectionList`.
+   */
+  keepBothPanes?: boolean;
   highlightSection?: string;
   highlightToggle?: string;
   highlightSlider?: string;
@@ -63,6 +70,7 @@ const INITIAL_STORAGE: StorageItem[] = [
 ];
 
 export default function SettingsApp({
+  keepBothPanes,
   initialSection = "appearance",
   highlightSection,
   highlightToggle,
@@ -83,6 +91,29 @@ export default function SettingsApp({
   const theme = useSimTheme();
   const isPhone = useIsPhone();
   const [active, setActive] = useState<Section>(initialSection);
+  /**
+   * Phone only: has the learner gone *into* a section?
+   *
+   * A phone's Settings is two screens, not two panes. You see one full-screen
+   * list of rows, you tap one, it pushes in, and a back chevron brings you out.
+   * Separate from `active` because `active` also decides which panel to render
+   * on a laptop, where both are on screen at once and "entered" is meaningless.
+   */
+  const [entered, setEntered] = useState(false);
+
+  /**
+   * A guided step pointing at a section pops the learner back to the list.
+   *
+   * Without this, "Open Storage" would ring a row on a screen the learner is
+   * not looking at — the exact class of bug `ring-check` exists to catch, and
+   * the reason the first attempt at this navigation was reverted.
+   *
+   * `keepBothPanes` is the assessment carve-out, and it is the same one Mail,
+   * Messages and Photos carry: an assessment points at nothing, so nothing can
+   * know which screen the learner needs next, and a push with no signposting is
+   * how "turn on Dark Mode" ends up behind a screen they have to guess at.
+   */
+  const showSectionList = isPhone && !keepBothPanes && (!entered || !!highlightSection);
   const [storageItems, setStorageItems] = useState<StorageItem[]>(INITIAL_STORAGE);
   const [trashSize, setTrashSize] = useState(0);
 
@@ -96,6 +127,7 @@ export default function SettingsApp({
 
   function selectSection(s: Section) {
     setActive(s);
+    setEntered(true);
     onSectionOpen?.(s);
   }
 
@@ -128,16 +160,31 @@ export default function SettingsApp({
       className={`h-full ${isPhone ? "flex flex-col" : "flex"} ${bg} ${text} text-sm`}
     >
       {/**
-        * Sections: a sidebar on a laptop, a capped strip along the top on a
-        * phone — the same treatment Messages, Mail and Photos get, for the same
-        * reason. Both panes stay on screen deliberately: the version that
-        * *replaced* the list with the panel read well, and then broke every
-        * assessment, because an assessment highlights nothing and a learner
-        * following "dim the screen" has to be able to see both the section list
-        * and what happened when they tapped it.
+        * Sections: a sidebar on a laptop, its own **screen** on a phone.
+        *
+        * The stacked version capped this list at 30% of the screen — measured
+        * 390x173 holding 420px of rows, so four of the nine sections were
+        * visible and Storage, Privacy and About lived behind a scroll inside a
+        * strip that did not look scrollable. Every phone's Settings is a
+        * full-screen list of rows with chevrons that you push into.
+        *
+        * An earlier attempt at this broke every assessment and was reverted; the
+        * reason is worth recording, because it was not the layout. It had **no
+        * way back**. An assessment highlights nothing, so a learner who tapped
+        * into Display and then needed Storage was stranded. The back chevron is
+        * what makes the push safe — and `wantsList` pops it automatically when a
+        * guided step is pointing at a section the learner is not looking at.
         */}
       <div
-        className={`${isPhone ? "max-h-[30%] shrink-0 border-b" : "w-44 shrink-0"} border-r ${sidebar} overflow-y-auto`}
+        className={`${
+          isPhone
+            ? keepBothPanes
+              ? "max-h-[30%] w-full shrink-0 border-b"
+              : showSectionList
+                ? "min-h-0 w-full flex-1"
+                : "hidden"
+            : "w-44 shrink-0"
+        } border-r ${sidebar} overflow-y-auto`}
       >
         <div className={`p-3 font-semibold text-base ${muted} select-none`} aria-hidden="true" />
         {SECTIONS.map((s) => {
@@ -147,19 +194,48 @@ export default function SettingsApp({
             <button
               key={s.id}
               onClick={() => selectSection(s.id)}
-              className={`w-full text-left px-3 py-2 flex items-center gap-2 transition-colors ${
-                isActive ? (dark ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800") : dark ? "hover:bg-gray-700" : "hover:bg-gray-100"
+              className={`w-full text-left flex items-center gap-2 transition-colors ${
+                isPhone && !keepBothPanes ? "min-h-[48px] px-4 py-2 text-[15px]" : "px-3 py-2"
+              } ${
+                // On a phone the row you last opened is not "selected" — you are
+                // not looking at it any more. A permanent blue tint on a list
+                // row is a macOS sidebar habit.
+                isActive && (!isPhone || keepBothPanes)
+                  ? dark ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800"
+                  : dark ? "hover:bg-gray-700" : "hover:bg-gray-100"
               } ${hl ? "animate-ring-pulse rounded" : ""}`}
             >
               <span>{s.icon}</span>
-              <span>{s.label}</span>
+              <span className="flex-1">{s.label}</span>
+              {isPhone && !keepBothPanes && <span aria-hidden className={`text-lg ${muted}`}>›</span>}
             </button>
           );
         })}
       </div>
 
       {/* Panel */}
-      <div className={`min-h-0 flex-1 overflow-y-auto ${isPhone ? "p-3" : "p-4"}`}>
+      <div
+        className={`min-h-0 overflow-y-auto ${
+          isPhone
+            ? keepBothPanes
+              ? "w-full flex-1 p-3"
+              : showSectionList
+                ? "hidden"
+                : "w-full flex-1 animate-screen-push p-3"
+            : "flex-1 p-4"
+        }`}
+      >
+        {isPhone && !keepBothPanes && (
+          <button
+            type="button"
+            onClick={() => setEntered(false)}
+            className={`-mx-3 -mt-3 mb-2 flex min-h-[44px] w-[calc(100%+1.5rem)] items-center gap-1 border-b px-3 text-[15px] font-semibold ${
+              dark ? "border-gray-700 text-blue-300" : "border-gray-200 text-blue-700"
+            }`}
+          >
+            <span aria-hidden className="text-lg leading-none">‹</span> Settings
+          </button>
+        )}
         {active === "appearance" && (
           <AppearancePanel
             dark={dark}
