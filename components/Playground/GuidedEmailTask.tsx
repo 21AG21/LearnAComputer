@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { useIsPhone } from "./SimFormFactor";
+import { useSwipe } from "./touchGestures";
 import { ArrowLeftIcon } from "./Icons";
 import SimulatorFrame from "./SimulatorFrame";
 import { useStepRunner, type SimMode } from "./useStepRunner";
@@ -91,6 +92,76 @@ const FOLDER_ICONS: Record<Folder, ReactNode> = {
 };
 
 const ATTACH_FILES = ATTACHABLE_FILES.map((f) => f.name);
+
+/**
+ * A row you can tap, or swipe left to archive.
+ *
+ * The course had `useSwipe` and used it in exactly two places, both of them the
+ * home bar — no swipe-to-delete, no swipe between photos, nothing. That absence
+ * is most of what still made the simulated phone feel like a computer: the
+ * gesture people use twenty times a day on a real mail app did not exist here.
+ *
+ * Two things are load-bearing and both are documented in `touchGestures.ts`
+ * because they shipped as bugs first: the pointer is tracked on the **window**
+ * (a swipe that leaves the row must not die), and `consumeClick()` is called
+ * first in the click handler — a drag that starts and ends inside one element
+ * still fires a `click`, so without it swiping a message also opens it.
+ */
+function EmailRow({
+  onOpen,
+  onSwipeArchive,
+  className,
+  children,
+}: {
+  onOpen: () => void;
+  /** Omitted where archiving makes no sense — in Archive, Spam or Sent. */
+  onSwipeArchive?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  const [dx, setDx] = useState(0);
+  const swipe = useSwipe(
+    ({ dir }) => {
+      setDx(0);
+      if (dir === "left" && onSwipeArchive) onSwipeArchive();
+    },
+    {
+      axis: "x",
+      threshold: 56,
+      onMove: (moveX) => setDx(Math.min(0, Math.max(-96, moveX))),
+    },
+  );
+  if (!onSwipeArchive) {
+    return (
+      <button onClick={onOpen} className={className}>
+        {children}
+      </button>
+    );
+  }
+  return (
+    <div className="relative overflow-hidden">
+      {/* What the row slides off to reveal. A phone always shows the action
+          under the finger before it commits to it. */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 right-0 flex w-24 items-center justify-center bg-blue-600 text-sm font-semibold text-white"
+      >
+        Archive
+      </div>
+      <button
+        {...swipe.props}
+        onClick={() => {
+          if (swipe.consumeClick()) return;
+          onOpen();
+        }}
+        style={{ transform: dx ? `translateX(${dx}px)` : undefined }}
+        className={`relative bg-white transition-transform sim-dark:bg-gray-900 ${className ?? ""}`}
+      >
+        {children}
+      </button>
+    </div>
+  );
+}
 
 export default function GuidedEmailTask({
   goal, steps, seedDraft, seedInbox, highlightEmail, highlightEmailAction,
@@ -369,6 +440,19 @@ export default function GuidedEmailTask({
     tryStep((s) => s.action === "mark-spam" && (!s.target || s.target === selectedEmail.subject));
   }
 
+  /**
+   * Archive one row, named — the swipe's version of Archive.
+   *
+   * `handleArchive` works on `selectedEmail`, which is right for the button
+   * inside an open message and wrong for a gesture on a row in the list: a
+   * swipe knows exactly which email it is on and must not depend on what
+   * happens to be selected.
+   */
+  function archiveOne(email: Email) {
+    setEmails((prev) => prev.map((e) => (e.id === email.id ? { ...e, folder: "Archive" as Folder } : e)));
+    tryStep((s) => s.action === "archive" && (!s.target || s.target === email.subject));
+  }
+
   function handleArchive() {
     if (!selectedEmail) return;
     setEmails((prev) => prev.map((e) => e.id === selectedEmail.id ? { ...e, folder: "Archive" as Folder } : e));
@@ -604,9 +688,12 @@ export default function GuidedEmailTask({
                 <div className="flex items-center justify-center h-24 text-gray-500 sim-dark:text-gray-400 text-sm">Empty</div>
               ) : (
                 visibleEmails.map((email) => (
-                  <button
+                  <EmailRow
                     key={email.id}
-                    onClick={() => handleOpenEmail(email)}
+                    onOpen={() => handleOpenEmail(email)}
+                    onSwipeArchive={
+                      isPhone && currentFolder === "Inbox" ? () => archiveOne(email) : undefined
+                    }
                     className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 sim-dark:hover:bg-gray-800 transition-all ${
                       hl("email-row", email.subject) || highlightEmail === email.subject ? pulse : ""
                     }`}
@@ -617,7 +704,7 @@ export default function GuidedEmailTask({
                     </div>
                     <p className="text-xs text-gray-700 sim-dark:text-gray-300 truncate">{email.subject}</p>
                     <p className="text-xs text-gray-500 sim-dark:text-gray-400 truncate">{email.preview}</p>
-                  </button>
+                  </EmailRow>
                 ))
               )}
             </div>

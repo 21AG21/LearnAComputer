@@ -371,6 +371,16 @@ Files is a single column of rows with the whole filename on one line —
 its toolbar hides what it cannot do instead of graying it, which took it from
 three wrapped rows to one.
 
+**And Mail rows swipe.** `useSwipe` had existed for months and was used in
+exactly two places, both of them the home bar. A left swipe on an inbox row now
+slides it under the finger to reveal Archive. Both rules from `touchGestures.ts`
+apply and both had shipped as bugs before: the pointer is tracked on the
+**window**, because a swipe that leaves the row must not die, and
+`consumeClick()` is called first in the click handler, because a drag that
+starts and ends inside one element still fires a `click` — without it, swiping a
+message would also open it. Verified by driving a real pointer drag: the row
+archives, and a plain tap still opens the email.
+
 **Deliberately not done:** the browser still shows a tab strip. Hiding it at one
 tab is what a phone does, and it broke `browser-vs-search` reproducibly, with
 the cause unidentified — a lesson nobody can finish is worse than a strip that
@@ -378,10 +388,10 @@ looks like a laptop.
 
 ## Still open
 
-- **No app implements a swipe.** `useSwipe` is used twice in the product, both
-  times on the home bar — no swipe-to-delete on a mail row, no swipe between
-  photos, no pull-to-refresh. That absence, more than any single layout, is what
-  still reads as a computer.
+- **Only Mail implements a swipe.** An inbox row now slides left to reveal
+  Archive, which is the gesture people use twenty times a day on a real phone
+  and the first one in this product outside the home bar. Photos still has no
+  swipe between pictures and nothing has pull-to-refresh.
 - **There is no on-screen keyboard**, so no typing lesson ever has one appear,
   and nothing handles `visualViewport`: on a real phone the keyboard covers the
   Send button in `messages-app` and `composing-email`, with no scroll to reveal
