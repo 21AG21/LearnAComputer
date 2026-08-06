@@ -260,6 +260,7 @@ recovery in the phishing lesson — *"the best failure handling in the course"*.
 npm run phone-check          # 112 borrowed lessons at 390x844 — green at 112/112
 npm run phone-gesture-check  # the 4 gesture lessons, real swipes — green at 4/4
 npm run phone-words-check    # does the phone course still speak phone?
+npm run phone-touch-check    # can a finger hit it, and can a 75-year-old read it?
 ```
 
 `phone-words-check` runs the real `inPhoneWords` over the real lesson JSON and
@@ -299,8 +300,83 @@ every swipe with a click and stalls 3 of 4.
 
 ---
 
+## What three app-realism agents found, and what changed
+
+Three agents played the course at 390x844 against one question: *what would a
+person who uses a real phone every day find wrong?* They converged on one cause.
+**Six of the eight apps were a macOS split view folded into a column** — the
+sidebar was rotated from beside the content to above it, and then left on screen
+forever. Measured at rest: Mail and Photos gave **exactly half the phone** to a
+sidebar; Settings showed **four of its nine sections** in a 173px strip holding
+420px of rows.
+
+Fixed:
+
+- **Settings pushes and pops.** A full-screen list of rows with chevrons; tap
+  one, it slides in; a back chevron brings you out. An earlier attempt at this
+  was reverted for breaking assessments and the reason was not the layout — it
+  had no way back. Assessments keep both panes, and that path is byte-identical
+  to what shipped, proven by reverting the file and re-running when
+  `final-settings` stalled.
+- **`DraggableWindow` is not a window on a phone.** Eight troubleshooting
+  lessons rendered a 366x265 floating window with a title bar, minimize /
+  maximize / close at 28x24, a resize corner, and the dock visible underneath —
+  and no back arrow and no home bar, so the only thing that looked like a way
+  out was window chrome and none of its three buttons was one. It is now a
+  full-screen app with a navigation bar and a back chevron, fixed at the
+  component so the next window is right too.
+- **Status panels are full-width**, below the strip rather than a 288px dropdown
+  hanging off a 32px icon. Below, not over: a real Control Center does cover the
+  status bar, but this course teaches "tap the same button again", and covering
+  that button made its own instruction impossible.
+- **The browser's controls are at the bottom.** Four stacked bands of chrome
+  took 186px — 32% of the 578px a learner gets — before any web page. The
+  address bar is alone at the top now and everything else is in two rows under
+  the page, where the thumb is.
+- **`SimSheet`** extracts the bottom-sheet pattern that was already written
+  correctly twice (Mail's attachment picker, the Files viewer) and hand-rolled
+  seven times without it.
+- **Three highlight rings still used Tailwind's `animate-pulse`**, which fades
+  the control to 54% — including the browser's address bar, which is the single
+  most-pointed-at control in the course.
+
+**Two of these fixes broke something, and both were caught by a harness rather
+than by looking.** Giving the objectives toggle a written label wrapped it in a
+`<span>`, and the solver identifies a dock icon as `button[aria-label]`
+containing an `img` or a `span` — so lesson chrome joined the app icons it
+clicks through. And making Settings a proper phone screen took away the only
+list in `phone-sliding` that was longer than the screen, so the lesson that
+teaches sliding had nothing left to slide; it uses the browser's Favorites now,
+and the gesture harness asks the page which box is scrollable instead of naming
+an app.
+
+**Known intermittent:** `browser-vs-search` stalls at its search step in roughly
+half of full `phone-check` runs, and passes every time it is run alone or with
+its own 16-lesson unit. The symptom is a spin-out under load, not a wrong
+screen. Not yet diagnosed, and recorded here rather than left as a mystery
+somebody rediscovers.
+
+**Deliberately not done:** the browser still shows a tab strip. Hiding it at one
+tab is what a phone does, and it broke `browser-vs-search` reproducibly, with
+the cause unidentified — a lesson nobody can finish is worse than a strip that
+looks like a laptop.
+
 ## Still open
 
+- **Mail, Photos and Files still need their rebuilds.** Mail's mailbox rail is
+  half the screen and its actions are chips at the top rather than a bottom
+  toolbar; a selected photo renders in a fixed `w-48` box on a 390px screen;
+  Files is a wrapping desktop toolbar over a three-column icon grid, 55% chrome
+  before a file. All three are laid out in `docs/` only here, and all three are
+  the honest answer to "it is still based off of the computer".
+- **No app implements a swipe.** `useSwipe` is used twice in the product, both
+  times on the home bar — no swipe-to-delete on a mail row, no swipe between
+  photos, no pull-to-refresh. That absence, more than any single layout, is what
+  still reads as a computer.
+- **There is no on-screen keyboard**, so no typing lesson ever has one appear,
+  and nothing handles `visualViewport`: on a real phone the keyboard covers the
+  Send button in `messages-app` and `composing-email`, with no scroll to reveal
+  it.
 - **`ring-check` and `sim-contrast-check` run at 1440x900 only.** Neither has ever
   looked at the phone. Running them against `/dev/phone-check` is the obvious next
   gate, and it is the hole that hid the off-screen dock.

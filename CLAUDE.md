@@ -18,6 +18,8 @@ npm run solve-check  # headless: PLAYS all 145 playable activities to the end (c
 npm run mission-check # headless: PLAYS all 18 real-world missions on a real machine
 npm run phone-check   # PLAYS the 112 borrowed lessons in the phone shape (390x844)
 npm run phone-gesture-check # PLAYS the 4 phone-only gesture lessons with real swipes
+npm run phone-words-check   # does the phone course still speak phone? (static)
+npm run phone-touch-check   # 44px targets and legible text, in every phone lesson
 npm run desktop-check # proves the practice desktop holds several windows at once
 npm run demo-check   # proves every page on the sales demo path loads clean
 npm run hostile-check # the buyer with crossed arms: what a skeptic finds off the demo path
@@ -81,7 +83,33 @@ After touching `SimFormFactor`, `PhoneShell`, any `isPhone` branch,
 npm run phone-check          # the 112 borrowed lessons at 390x844 — green at 112/112
 npm run phone-gesture-check  # the 4 gesture lessons, real swipes — green at 4/4
 npm run phone-words-check    # does the phone course still speak phone? (static, 1s)
+npm run phone-touch-check    # can a finger hit it, and can a 75-year-old read it?
 ```
+
+**`phone-touch-check` measures the two things a touch screen makes
+non-negotiable**, and it exists because every other harness answers through the
+DOM — where `element.click()` lands perfectly on a 20x20 button and reads 11px
+text as easily as 17px. Its first run found **1227 controls under the 44px touch
+floor and 1895 findings under the reading floor**, with `phone-check` green at
+112/112 on the same code. Gate: targets under 44px, text under 13px. Text
+between 13 and 15 is printed and advisory — a real phone sets a home-screen icon
+label at about 11px, so a blanket 15px floor would mean inflating every label in
+the course to serve a number rather than a person.
+
+Most of it was fixed by **scoped rules in `globals.css`, not by 40 hand edits**:
+a 44px minimum on controls inside `[data-phone-screen]`, a 44px `min-width` on
+icon-only buttons, `font-size: 16px` on every field (under 16px, mobile Safari
+zooms the whole page on focus and does not zoom back), 44px on range inputs, and
+a 13px floor on the small text utilities. `[data-phone-screen]` marks the glass;
+it was referenced by the press-feedback rule and **set by nothing**, so every tap
+inside the phone had been silent since that rule was written.
+
+`PHONETOUCH_NEGATIVE=1` shrinks the back arrow and drops body text to 8px, then
+asserts **those exact defects come back named**. Its first version used
+`addStyleTag` once, before a loop that calls `page.goto` per lesson — which
+discards the sheet — so the negative run was the ordinary run wearing a label,
+and reported *fewer* findings than the baseline. `addInitScript` survives
+navigation.
 
 …and then `solve-check`, `ring-check` and `desktop-check`, because the phone
 branches live inside components 145 laptop activities also render.

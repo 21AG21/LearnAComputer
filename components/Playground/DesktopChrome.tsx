@@ -212,7 +212,13 @@ export function StatusPanel({
       onClick={(e) => e.stopPropagation()}
       className={`absolute z-50 overflow-hidden border-black bg-white shadow-lg sim-dark:border-gray-500 sim-dark:bg-gray-900 sim-dark:text-gray-100 ${
         isPhone
-          ? "inset-x-2 top-2 rounded-2xl border-2"
+          ? // Below the strip, not over it. A real phone's Control Center does
+            // slide over the status bar — but a real phone also dismisses it by
+            // swiping, and this course teaches "tap the same button again".
+            // Covering that button made the lesson's own instruction impossible
+            // to follow, and the gesture harness timed out clicking a control
+            // the panel was sitting on top of.
+            "inset-x-2 top-10 rounded-2xl border-2"
           : "right-2 top-10 w-72 border-4"
       } ${closing ? "animate-slide-up-out" : "animate-slide-down"}`}
     >

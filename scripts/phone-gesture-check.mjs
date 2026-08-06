@@ -116,11 +116,21 @@ async function perform(step) {
     }
     case "scroll-to": {
       if (NEGATIVE) return tap("[data-phone-section], button");
-      // Wheel over the *section list*, which is the strip the lesson asks the
-      // learner to slide — not whichever scrollable happens to be last in the DOM.
-      const list = page.locator("div.overflow-y-auto", { has: page.getByText("Appearance", { exact: true }) }).first();
-      const box = await list.boundingBox();
-      if (!box) throw new Error("no scrollable section list");
+      // Wheel over whichever pane actually holds the row the step names AND can
+      // actually scroll — not the first `overflow-y-auto` in the DOM, and not a
+      // hard-coded app. Naming the app here is how this check went stale when
+      // the lesson moved off Settings; asking the page which box is scrollable
+      // cannot.
+      const target = step.target ?? "";
+      const handle = await page.evaluateHandle((t) => {
+        const holds = (el) => (el.textContent ?? "").includes(t);
+        return [...document.querySelectorAll("*")].find(
+          (el) => el.scrollHeight > el.clientHeight + 8 && el.clientHeight > 80 && holds(el),
+        ) ?? null;
+      }, target);
+      const list = handle.asElement();
+      const box = await list?.boundingBox();
+      if (!box) throw new Error(`no scrollable pane containing "${target}"`);
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       for (let i = 0; i < 14; i++) {
         await page.mouse.wheel(0, 140);

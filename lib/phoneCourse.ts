@@ -125,9 +125,20 @@ export const PHONE_COURSE: PhoneUnit[] = [
         goal: "You slid a long list to reach something below the edge of the screen.",
         success: "Sliding to see more is the single most-used gesture on a phone. You will do it hundreds of times a day now.",
         hint: "Rest your finger on the list, slide it upward without lifting, then let go.",
+        /**
+         * The Browser's Favorites, not Settings.
+         *
+         * This lesson used Settings' list of sections, and then Settings became
+         * a proper phone screen — nine full-width rows that *fit*, with nothing
+         * below the edge. The lesson still said "slide until you can see About"
+         * about a row already on screen, and `scroll-to` is satisfied by a
+         * scroll event, so a list that cannot scroll can never satisfy it. The
+         * Favorites grid is genuinely longer than the screen, which is what the
+         * lesson is about.
+         */
         steps: [
-          { say: "Tap Settings to open it.", action: "open-app", target: "settings" },
-          { say: "Slide the list upward until you can see About.", action: "scroll-to", target: "About" },
+          { say: "Tap Browser to open it.", action: "open-app", target: "browser" },
+          { say: "Slide the list of websites upward until you can see Book Shop.", action: "scroll-to", target: "Book Shop" },
           { say: "Go home.", action: "go-home" },
         ],
       },

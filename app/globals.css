@@ -97,6 +97,61 @@
 }
 
 /**
+ * 16px in every field, because under it the whole page jumps.
+ *
+ * Mobile Safari zooms the layout viewport whenever a focused input is smaller
+ * than 16px, and it does not zoom back. Ten of the eleven text fields in the
+ * course were 14px — To, Subject, the message body, the event title, the file
+ * search — so on a real iPhone, tapping a field the lesson just told you to tap
+ * made the screen lurch. For a learner who has been told nothing here can
+ * break, that is the most alarming thing the product can do. The browser's
+ * address bar was already 16px and is the model.
+ */
+[data-phone-screen] input,
+[data-phone-screen] textarea,
+[data-phone-screen] select {
+  font-size: 16px;
+}
+
+/**
+ * Icon-only buttons get a finger's width as well as its height.
+ *
+ * The `min-height` rule above left a column of controls 44 tall and 20-37 wide
+ * — a compose ✕ at 9.8px, the tab close at 20, the group-chat + at 24, the
+ * photo-editing steppers at 32. The selector is narrow on purpose: a button
+ * whose only child is an icon, or a button with no element children at all —
+ * which is what a `×`, a `−`, a `←` or an emoji cell is.
+ *
+ * `min-width` can only ever *add* width, so catching a wide text button like
+ * "Reading List" in the same net changes nothing about it. The rule stops at
+ * buttons rather than covering everything because a `span`-shaped chip sitting
+ * inline in a sentence is not a target and stretching it would break the line.
+ *
+ * Three `:has()` selectors, not five. `:has()` is evaluated on every style
+ * recalculation, this audience is on old handsets, and two of the original five
+ * were fully covered by the other three — so they were cost with no reach.
+ */
+[data-phone-screen] button:has(> svg:only-child),
+[data-phone-screen] button:has(> span:only-child),
+[data-phone-screen] button:not(:has(*)) {
+  min-width: 44px;
+}
+
+/**
+ * A slider is a drag target, and 16px of rail is not one.
+ *
+ * Brightness, contrast and Text Size were 278x16 and 230x16 — the smallest
+ * interactive things left in the course, on the lessons meant to make a screen
+ * easier to see. Range inputs are excluded from the blanket `min-height` rule
+ * because forcing their box distorts the control; giving the input real height
+ * with a transparent background lets the browser centre its own track in it.
+ */
+[data-phone-screen] input[type="range"] {
+  height: 44px;
+  background: transparent;
+}
+
+/**
  * And the reading floor.
  *
  * 10px and 12px text is a desktop convention — a secondary line you glance at

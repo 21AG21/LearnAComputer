@@ -882,6 +882,26 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const showBookmarksBar = bookmarks.length > 0;
   const isBroken = brokenPages.has(activeTab.pageId);
 
+  /**
+   * Back, forward, reload and bookmark.
+   *
+   * On a laptop they sit left of the address bar, which is where a laptop
+   * browser puts them. On a phone they move into the bar at the bottom: a
+   * phone's top row is the address and nothing else, and squeezing four 44px
+   * controls in beside it pushed the Go button clean off the right edge of a
+   * 390px screen, with the field's own placeholder clipped.
+   */
+  const navButtons = (
+    <>
+      <button onClick={goBack} disabled={activeTab.back.length === 0} aria-label="Go back" className={`text-xl rounded ${isPhone ? "min-w-[44px]" : "px-1"}  ${activeTab.back.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>‹</button>
+      <button onClick={goForward} disabled={activeTab.fwd.length === 0} aria-label="Go forward" className={`text-xl rounded ${isPhone ? "min-w-[44px]" : "px-1"}  ${activeTab.fwd.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>›</button>
+      <button onClick={reload} aria-label="Reload" className={`flex items-center justify-center rounded hover:bg-gray-200 ${isPhone ? "min-w-[44px]" : "px-1"} sim-dark:hover:bg-gray-700 ${hl("reload-btn") ? "animate-ring-pulse" : ""}`}><ReloadIcon size={18} /></button>
+      <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`flex items-center justify-center text-lg rounded hover:bg-gray-200 ${isPhone ? "min-w-[44px]" : "px-1"} sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "animate-ring-pulse" : ""}`}>
+        {bookmarks.includes(activeTab.pageId) ? <StarFilledIcon size={18} className="text-amber-700 sim-dark:text-yellow-400" /> : <StarIcon size={18} />}
+      </button>
+    </>
+  );
+
   return (
     <SimulatorFrame
       appName="Browser"
@@ -896,7 +916,18 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
       hint={hint}
       freePlay={freePlay}
     >
-      {/* Tab strip */}
+      {/**
+        * The tab strip, kept on the phone — and that is a deliberate retreat.
+        *
+        * No phone browser shows a permanent strip of tabs; it shows a count you
+        * tap for a grid. Hiding it at one tab was tried and reverted: it broke
+        * `browser-vs-search` at the search step, reproducibly, and restoring
+        * this one condition alone fixed it — with the cause not identified. A
+        * lesson nobody can finish is worse than a strip that looks like a
+        * laptop, and shipping a change whose failure mechanism is a mystery is
+        * worse than both. For whoever picks this up: the symptom was `rings=[]`
+        * with the Google page's search box never highlighted.
+        */}
       <div className="shrink-0 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-stretch gap-1 px-2 pt-2">
         {tabs.map((t) => {
           const p = PAGES[t.pageId];
@@ -914,9 +945,9 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
               <button
                 onClick={(e) => { e.stopPropagation(); closeTab(t.id); }}
                 aria-label={`Close ${p.title} tab`}
-                className={`shrink-0 w-5 h-5 rounded flex items-center justify-center text-gray-600 sim-dark:text-gray-300 hover:bg-gray-300 sim-dark:hover:bg-gray-700 ${
-                  hl("tab-close", p.title) ? "animate-ring-pulse" : ""
-                }`}
+                className={`shrink-0 rounded flex items-center justify-center text-gray-600 sim-dark:text-gray-300 hover:bg-gray-300 sim-dark:hover:bg-gray-700 ${
+                  isPhone ? "min-w-[44px] px-2" : "w-5 h-5"
+                } ${hl("tab-close", p.title) ? "animate-ring-pulse" : ""}`}
               >
                 <span className="text-xs font-bold">&times;</span>
               </button>
@@ -926,9 +957,9 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         <button
           onClick={newTab}
           aria-label="New tab"
-          className={`px-3 py-1.5 text-lg font-bold text-gray-600 sim-dark:text-gray-300 hover:bg-gray-100 sim-dark:hover:bg-gray-800 rounded-t-lg ${
-            hl("newtab-btn") ? "animate-ring-pulse" : ""
-          }`}
+          className={`text-lg font-bold text-gray-600 sim-dark:text-gray-300 hover:bg-gray-100 sim-dark:hover:bg-gray-800 rounded-t-lg ${
+            isPhone ? "min-w-[44px]" : "px-3 py-1.5"
+          } ${hl("newtab-btn") ? "animate-ring-pulse" : ""}`}
         >
           +
         </button>
@@ -936,14 +967,14 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
 
       {/* Toolbar */}
       <div className="shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-black sim-dark:border-gray-600 flex items-center gap-2 px-3 py-2">
-        <button onClick={goBack} disabled={activeTab.back.length === 0} aria-label="Go back" className={`text-xl px-1 rounded ${activeTab.back.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>‹</button>
-        <button onClick={goForward} disabled={activeTab.fwd.length === 0} aria-label="Go forward" className={`text-xl px-1 rounded ${activeTab.fwd.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>›</button>
-        <button onClick={reload} aria-label="Reload" className={`px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("reload-btn") ? "animate-ring-pulse" : ""}`}><ReloadIcon size={18} /></button>
+        {!isPhone && navButtons}
         {/* Address bar */}
         <div
           onClick={() => { setEditing(true); setDraft(activePage.url); }}
           className={`flex-1 flex items-center gap-2 bg-white sim-dark:bg-gray-900 border-2 rounded-lg px-3 py-1.5 cursor-text ${
             hl("address") ? "animate-ring-pulse border-yellow-400" : "border-gray-400 sim-dark:border-gray-600"
+            /* Stays on the wrapper: unlike the search box, this row is a *button*
+               until it is tapped — there is no input to ring until then. */
           }`}
         >
           <button
@@ -974,13 +1005,40 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             </span>
           )}
         </div>
-        <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`text-lg px-1 rounded hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "animate-ring-pulse" : ""}`}>
-          {bookmarks.includes(activeTab.pageId) ? <StarFilledIcon size={18} className="text-amber-700 sim-dark:text-yellow-400" /> : <StarIcon size={18} />}
-        </button>
       </div>
 
-      {/* Action bar */}
-      <div className="shrink-0 bg-gray-50 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm">
+      {/**
+        * The action bar, and on a phone it is at the *bottom*.
+        *
+        * Every modern phone browser puts its controls under the page, where the
+        * thumb is; the top of the screen is the address and nothing else. This
+        * bar was the third of four stacked bands of chrome, and between them
+        * they took 186px — 32% of the 578px the learner actually gets — before
+        * a single web page appeared.
+        *
+        * `order-last` rather than moving the JSX: the parent is already a flex
+        * column, the handlers and the ring targets stay exactly where the
+        * lessons expect them, and the laptop keeps the order it has always had.
+        */}
+      <div className={`shrink-0 bg-gray-50 sim-dark:bg-gray-800 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm ${
+        isPhone
+          ? "order-last border-t-2 border-gray-300 sim-dark:border-gray-700"
+          : "border-b-2 border-gray-300 sim-dark:border-gray-700"
+      }`}>
+        {/* Two deliberate rows on a phone, not four wrapped ones. `basis-full`
+            after the nav cluster forces the break, so the bar is a predictable
+            height instead of re-flowing every time a label changes. */}
+        {isPhone && (
+          <>
+            {navButtons}
+            <div className="flex items-center overflow-hidden rounded-lg border-2 border-gray-400 sim-dark:border-gray-600">
+              <button onClick={zoomOut} aria-label="Zoom out" className="min-w-[44px] text-gray-600 hover:bg-gray-200 sim-dark:text-gray-300 sim-dark:hover:bg-gray-700">−</button>
+              <span className="border-x-2 border-gray-300 px-2 font-semibold tabular-nums sim-dark:border-gray-700">{activeTab.zoom}%</span>
+              <button onClick={zoomIn} aria-label="Zoom in" className={`min-w-[44px] font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
+            </div>
+            <div className="basis-full" />
+          </>
+        )}
         <ActionBtn label="Reading List" icon={<BookIcon size={14} />} onClick={addReadingList} highlight={hl("readinglist-btn")} />
         <ActionBtn label="History" icon={<ClockIcon size={14} />} onClick={clickHistoryBtn} highlight={hl("history-btn")} />
         <ActionBtn label="Downloads" icon={<DownloadIcon size={14} />} onClick={clickDownloadsBtn} highlight={hl("downloads-btn")} />
@@ -989,15 +1047,21 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         {!isPhone && (
           <ActionBtn label="New Window" icon={<WindowIcon size={14} />} onClick={() => { setNewWindow(true); tryStep((s) => s.action === "new-window"); }} highlight={hl("newwindow-btn")} />
         )}
-        <div className="flex-1" />
-        <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">
-          <button onClick={zoomOut} aria-label="Zoom out" className="px-2 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700">−</button>
-          <span className="px-2 border-x-2 border-gray-300 sim-dark:border-gray-700 font-semibold tabular-nums">{activeTab.zoom}%</span>
-          {/* When the PDF viewer is open it sits in an overlay above the page, and this
-              toolbar zooms the page BEHIND it — so the ring belongs on the PDF's own +
-              (below), not here, or the learner zooms something they cannot see. */}
-          <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
-        </div>
+        {/* The laptop's zoom stepper sits at the right end of one flat row; the
+            phone's is on the first of its two rows, above. When the PDF viewer
+            is open it overlays the page and this control zooms the page
+            *behind* it, so the ring belongs on the PDF's own + rather than
+            here, or the learner zooms something they cannot see. */}
+        {!isPhone && (
+          <>
+            <div className="flex-1" />
+            <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">
+              <button onClick={zoomOut} aria-label="Zoom out" className="px-2 text-gray-600 sim-dark:text-gray-300 hover:bg-gray-200 sim-dark:hover:bg-gray-700">−</button>
+              <span className="px-2 border-x-2 border-gray-300 sim-dark:border-gray-700 font-semibold tabular-nums">{activeTab.zoom}%</span>
+              <button onClick={zoomIn} aria-label="Zoom in" className={`px-2 font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Page-load progress bar */}
@@ -1095,6 +1159,12 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                 </p>
                 <div className={`flex items-center gap-2 w-full max-w-md bg-white border-2 rounded-full px-4 py-2 ${hl("searchbox") ? "animate-ring-pulse border-yellow-400" : "border-gray-400"}`}>
                   <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
+                  {/* The ring stays on the wrapper, not the input: it has to
+                      enclose the magnifier and the field together to read as
+                      "the search box", and moving it inward broke the lesson —
+                      the solver types into whatever the ring encloses, and an
+                      input ringed on its own no longer reached the Search
+                      button beside it. */}
                   <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }} placeholder="Search Google" className="flex-1 outline-none rounded focus-visible:ring-2 focus-visible:ring-blue-500" />
                 </div>
                 <button onClick={submitSearch} className="px-4 py-2 bg-gray-100 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-200">Google Search</button>
