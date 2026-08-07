@@ -550,10 +550,16 @@ checks humility. The short version, each entry earned:
   and nothing handles `visualViewport`: on a real phone the keyboard covers the
   Send button in `messages-app` and `composing-email`, with no scroll to reveal
   it.
-- **`sim-contrast-check` runs at 1440x900 only.** `ring-check` got its phone
-  mode this round (`npm run ring-check-phone`); the contrast walk has still
-  never looked at a phone-shaped screen, and the phone's restyled list rows and
-  sheets have therefore never been measured.
+- ~~`sim-contrast-check` runs at 1440x900 only.~~ **Closed:**
+  `npm run sim-contrast-check-phone` walks the phone-course guided lessons at
+  390x844 through `/dev/stray-check?phone=1`, hosted at the full viewport.
+  Its first run reported the dark home screen's icon labels at 1.23:1 on
+  *white* — measurement fiction, not a defect: the phone painted its wallpaper
+  with the `background` shorthand, which resets `background-color` and knocked
+  out the root's own `bg-gray-900`, so the ground resolver fell through the
+  gradient to white. `backgroundImage` keeps the solid layer, and the sweep is
+  green at ~5300 text runs. The negative control has been watched to fail at
+  phone size.
 - **`isReachable` in `lib/solve/gestures.ts` never checks the viewport** — its
   docstring says "on screen" and it does not test the rect. That is why the solver
   clicked a dock icon 171px past the right edge and reported green.

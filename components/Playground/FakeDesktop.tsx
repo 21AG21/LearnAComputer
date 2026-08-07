@@ -488,8 +488,18 @@ function FakeDesktopInner({
          * a menu bar and a taskbar. Painting a second gradient on a 32px strip
          * would not do: the same 115deg gradient over a different box height
          * lands at a different angle and leaves a visible seam.
+         *
+         * `backgroundImage`, never the `background` shorthand. The shorthand
+         * resets `background-color` to transparent, which knocked out this
+         * element's own `bg-gray-900`/`bg-white` class — invisible on screen
+         * (the gradient covers every pixel), but it is the solid layer
+         * `sim-contrast`'s ground resolver rests on, and without it the
+         * resolver fell through the gradient to white and scored the dark home
+         * screen's slate-200 labels at 1.23:1 against a ground that does not
+         * exist. The laptop never had this bug because its wallpaper is a
+         * sibling div and the root keeps its color.
          */
-        ...(isPhone ? { background: wallpaper(isDark) } : null),
+        ...(isPhone ? { backgroundImage: wallpaper(isDark) } : null),
         fontWeight: theme.boldText ? 600 : 400,
         filter: themeFilter(theme),
         cursor: themeCursor(theme),

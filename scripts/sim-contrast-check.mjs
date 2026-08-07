@@ -47,13 +47,26 @@ import { MEASURE } from "./lib/sim-contrast.mjs";
 const BASE = "http://localhost:3000";
 const NEGATIVE = process.env.SIMCONTRAST_NEGATIVE === "1";
 const FILTER = process.env.SIMCONTRAST_FILTER ?? "";
+/**
+ * SIMCONTRAST_PHONE=1 measures the same lessons in the phone shape: 390x844,
+ * `?phone=1` on the harness page (which wraps the activities in the phone form
+ * factor and hosts them at the full viewport, the geometry `PhoneCourse` gives
+ * them). The phone restyled every list row, sheet and nav bar, and until this
+ * mode nothing had ever measured their colors — the laptop sweep never renders
+ * a single phone branch.
+ */
+const PHONE = process.env.SIMCONTRAST_PHONE === "1";
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const page = await browser.newPage(
+  PHONE
+    ? { viewport: { width: 390, height: 844 }, hasTouch: true, deviceScaleFactor: 2 }
+    : { viewport: { width: 1440, height: 900 } },
+);
 page.on("pageerror", (e) => console.error(`[pageerror] ${e.message}`));
 
 try {
-  await page.goto(`${BASE}/dev/stray-check`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/dev/stray-check${PHONE ? "?phone=1" : ""}`, { waitUntil: "networkidle" });
 } catch (e) {
   console.error(`Could not reach ${BASE} — is the dev server running? (${e.message})`);
   await browser.close();
@@ -99,7 +112,9 @@ for (let i = 0; i < slugs.length; i++) {
 
   if (!framed) {
     const gate = await page.evaluate(() => {
-      if (!/click the glowing icon in the dock/i.test(document.body.innerText)) return false;
+      // Two wordings for one gate: the phone says "Tap Files to open it",
+      // the laptop "Open Files — click the glowing icon in the dock".
+      if (!/click the glowing icon in the dock|tap .* to open it/i.test(document.body.innerText)) return false;
       const ringed = [...document.querySelectorAll("*")].filter(
         (e) => /ring-yellow|animate-ring-pulse/.test((e.className || "").toString()) && e.offsetParent !== null,
       );

@@ -27,6 +27,7 @@ npm run recovery-check # deliberately FAILS a lesson, then proves the learner ca
 npm run stray-check   # does the WRONG thing on purpose; proves nobody is left with no way forward
 npm run simdark-check # is the practice computer's Dark Mode actually painted, in every dock app?
 npm run sim-contrast-check # WCAG AA inside every one of the 170 activities (a gate)
+npm run sim-contrast-check-phone # the same walk at 390x844, via /dev/stray-check?phone=1
 npm run build        # production build (rm -rf .next first if switching from dev)
 npm run lint         # eslint
 npx tsc --noEmit     # type-check without emitting
@@ -412,6 +413,24 @@ two copies of the same maths is how you get two answers. It composites transluce
 layers when resolving a ground — skipping anything under 0.85 alpha made the
 celebration overlay's white congratulation read as white-on-white at 1:1, the same
 wrong-layer mistake `contrast-check` once made over the homepage photos.
+
+The ground resolver reads `background-color` layers only, so **any surface that
+paints itself with the `background` shorthand is invisible to it** — the
+shorthand resets `background-color`, and the resolver falls through the gradient
+to white. That shipped once: the phone wallpaper was `background:
+wallpaper(isDark)` on the sim root, which knocked out the root's own
+`bg-gray-900`, and the phone sweep scored the dark home screen's labels at
+1.23:1 against a white that exists nowhere. Wallpapers and gradients go in
+`backgroundImage`, leaving the class's solid color as the layer both the
+resolver and the eye rest on.
+
+**`npm run sim-contrast-check-phone`** is the same sweep at 390x844, walking the
+phone course's guided lessons through `/dev/stray-check?phone=1` — which wraps
+the same activities in the phone form factor and hosts them at the **full
+viewport**, the box `PhoneCourse` actually gives them (a 520px host is how
+`ring-check-phone` once audited a phone 300px shorter than any that exists).
+Green at ~5300 text runs and 630 control borders; `SIMCONTRAST_NEGATIVE=1` has
+been watched to fail in this mode too.
 `SIMCONTRAST_NEGATIVE=1` is the negative control, covers both halves, and has been
 watched to fail. Green at **7099 text runs and 640 control borders over 125
 activities, walking 155 steps past mount**.

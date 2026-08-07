@@ -33,7 +33,7 @@ class Boundary extends Component<{ onError: (e: Error) => void; children: ReactN
  *
  * Driven from `scripts/stray-check.mjs` through `window.__stray*`.
  */
-export default function StrayCheck({ lessons }: { lessons: Item[] }) {
+export default function StrayCheck({ lessons, phone = false }: { lessons: Item[]; phone?: boolean }) {
   const [index, setIndex] = useState(-1);
   const [threw, setThrew] = useState<string | null>(null);
 
@@ -72,7 +72,11 @@ export default function StrayCheck({ lessons }: { lessons: Item[] }) {
         {current ? `${current.slug}` : "idle"}
       </p>
       {current && (
-        <div data-stray-host="" className="mt-2 h-[520px] w-full">
+        /* The phone host is the whole viewport, not a 520px box — the same
+           wrong-geometry trap `SolveCheck` fell into: `PhoneCourse` hands the
+           sim `min-h-0 flex-1` of the screen, and a measurement taken in a
+           shorter box than any real phone reports fiction both ways. */
+        <div data-stray-host="" className={phone ? "fixed inset-0 z-40 bg-white" : "mt-2 h-[520px] w-full"}>
           <Boundary key={current.slug} onError={(e) => setThrew(e.message)}>
             <LessonPlaygroundPane task={current.task} started onResult={() => {}} onExit={() => {}} />
           </Boundary>
