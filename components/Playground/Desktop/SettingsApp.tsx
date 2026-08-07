@@ -221,7 +221,7 @@ export default function SettingsApp({
               ? "w-full flex-1 p-3"
               : showSectionList
                 ? "hidden"
-                : "w-full flex-1 animate-screen-push p-3"
+                : "w-full flex-1 p-3"
             : "flex-1 p-4"
         }`}
       >

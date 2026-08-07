@@ -172,6 +172,95 @@
   line-height: 1.15rem;
 }
 
+/* ── The phone's look, not the laptop's ───────────────────────────────────
+ *
+ * The simulated apps were built for a 1440px window and drawn in the idiom
+ * that suits one. Counted across `components/Playground`: **106 `border-2`,
+ * 280 `text-xs` and 303 `text-sm`, against three uses of a phone's body size.**
+ * At 390px that reads as a wireframe — every element a boxed rectangle, 12px
+ * captions, nothing grouped, nothing at rest.
+ *
+ * The earlier pass here lifted a *reading floor* so nothing was illegible.
+ * This one is about the look, and it is deliberately generous rather than
+ * economical: **the screen scrolls.** Space spent on a comfortable row or a
+ * readable secondary line is not space taken from anything, and cramming was
+ * what made these apps feel like a spreadsheet.
+ *
+ * Scoped to `[data-phone-screen]`, so the laptop course is byte-identical, and
+ * targeting the *utility classes* rather than the elements for the same reason
+ * the reading floor does: it restates the scale without flattening the
+ * hierarchy, and anything naming a bigger value still wins.
+ *
+ * Specificity, not order, is what makes these win: `[attr] .class` beats a bare
+ * `.class` wherever Tailwind's utilities land in the cascade.
+ */
+
+/* Hairlines. A phone separates things with one device pixel and lets
+   whitespace do the rest; a 2px rule at this width is a drawn box. Only the
+   width changes, so every border keeps the color WCAG 1.4.11 is measured on
+   and `sim-contrast-check` reads the same values it always did. */
+[data-phone-screen] .border-2 { border-width: 1px; }
+[data-phone-screen] .border-b-2 { border-bottom-width: 1px; }
+[data-phone-screen] .border-t-2 { border-top-width: 1px; }
+[data-phone-screen] .border-l-2 { border-left-width: 1px; }
+[data-phone-screen] .border-r-2 { border-right-width: 1px; }
+[data-phone-screen] .border-4 { border-width: 2px; }
+
+/* Softer corners — the loudest remaining "this is a desktop" signal once the
+   borders thin out. */
+[data-phone-screen] .rounded { border-radius: 0.5rem; }
+[data-phone-screen] .rounded-md { border-radius: 0.625rem; }
+[data-phone-screen] .rounded-lg { border-radius: 0.875rem; }
+[data-phone-screen] .rounded-xl { border-radius: 1rem; }
+
+/* The phone type scale: 17 / 15 / 13. The floor rule above holds the bottom
+   at 13; these two set the rungs above it, so three sizes stay three sizes. */
+[data-phone-screen] .text-sm { font-size: 0.9375rem; line-height: 1.35rem; }
+[data-phone-screen] .text-base { font-size: 1.0625rem; line-height: 1.5rem; }
+
+/* Room to breathe.
+ *
+ * Tap targets were already 44px, but a 44px row full of 12px text is a
+ * *dense* list, not a comfortable one — the height was bought for the finger
+ * and none of it was given to the eye. A phone's list row is nearer 56px with
+ * 16px of side padding, and the screen scrolls, so the extra costs nothing but
+ * a shorter first screenful.
+ *
+ * `:where()` keeps this at zero specificity against the utilities, so any
+ * component that states its own padding still wins outright. */
+[data-phone-screen] :where(button, [role="button"]).px-2,
+[data-phone-screen] :where(button, [role="button"]).px-3 { padding-left: 1rem; padding-right: 1rem; }
+
+/* ── Motion, kept to what does a job ──────────────────────────────────────
+ *
+ * The simulated phone had grown a transition for nearly every state change:
+ * an app scaling out of its icon, an icon bouncing as it launched, a screen
+ * sliding in from the right on every push, a sheet rising, a panel dropping.
+ * Individually each is defensible; together they are a phone that will not
+ * sit still, and on a course whose learners are told to look for one specific
+ * thing, motion everywhere is motion nowhere.
+ *
+ * So the decorative ones stop here. What survives is the **highlight ring**,
+ * which is not decoration — it is the entire "look for the glow" mechanic —
+ * and the sheet/panel slides, which say where a thing came from and therefore
+ * where it will go back to.
+ *
+ * The keyframes themselves stay defined and the classes stay on the elements
+ * on purpose: Unit 12's `a11y-reduce-motion` lesson teaches the learner to
+ * switch motion off and watch it stop, and a lesson about stilling animation
+ * needs animation to still. This narrows what moves by default; it does not
+ * take the switch away from the thing it teaches.
+ */
+[data-phone-screen] .animate-app-open,
+[data-phone-screen] .animate-app-close,
+[data-phone-screen] .animate-dock-bounce,
+[data-phone-screen] .animate-window-open,
+[data-phone-screen] .animate-window-close,
+[data-phone-screen] .animate-window-minimize,
+[data-phone-screen] .animate-pop-attention {
+  animation: none;
+}
+
 /* Accessibility: Reduce Motion stills every animation inside the simulated desktop. */
 .reduce-motion,
 .reduce-motion * {

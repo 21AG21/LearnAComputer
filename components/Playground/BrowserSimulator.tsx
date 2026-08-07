@@ -2,6 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import WindowControls from "./WindowControls";
+import { useIsPhone } from "./SimFormFactor";
 import { GlobeIcon, LockIcon, ReloadIcon, StarIcon, BookIcon, ClockIcon, DownloadIcon } from "./Icons";
 
 interface ExtraTab {
@@ -67,6 +68,7 @@ export default function BrowserSimulator({
 }: BrowserSimulatorProps) {
   const [showLockInfo, setShowLockInfo] = useState(false);
   const hasZoom = !!(onZoomIn || onZoomOut);
+  const isPhone = useIsPhone();
   return (
     <div className={`h-full w-full ${bezel ? "bg-gray-200 sim-dark:bg-gray-900 p-3 sm:p-5" : ""}`} onClick={() => setShowLockInfo(false)}>
       <div
@@ -79,8 +81,18 @@ export default function BrowserSimulator({
          */
         className={`relative h-full w-full bg-white overflow-hidden flex flex-col ${bezel ? "rounded-lg shadow" : ""}`}
       >
-        {/* Tab strip */}
-        <div className="shrink-0 flex items-stretch gap-1 px-2 pt-2 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700">
+        {/*
+          * Tab strip — desktop only, unless a lesson put a second tab in it.
+          *
+          * A phone browser has no tab strip; `GuidedBrowserTask` already
+          * replaced its own with a tab count months ago, and this copy sat on
+          * every *other* browser in the course. At 390px it and the dead action
+          * row below cost about 110px, which is what left the bank sign-in page
+          * in `password-recovery` with 40px to render in.
+          */}
+        <div className={`shrink-0 items-stretch gap-1 px-2 pt-2 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700 ${
+          isPhone && !extraTabs?.length ? "hidden" : "flex"
+        }`}>
           <div className="flex items-stretch gap-1">
             <div
               role={onTabClick ? "button" : undefined}
@@ -149,11 +161,20 @@ export default function BrowserSimulator({
           </div>
         )}
 
-        {/* Action bar — the same row Unit 4 uses, with only the zoom control live here. */}
-        <div className="shrink-0 bg-gray-50 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm">
-          <DeadActionBtn label="Reading List" icon={<BookIcon size={14} />} />
-          <DeadActionBtn label="History" icon={<ClockIcon size={14} />} />
-          <DeadActionBtn label="Downloads" icon={<DownloadIcon size={14} />} />
+        {/* Action bar — the same row Unit 4 uses, with only the zoom control
+            live here. On a phone the three dead buttons go: they are scenery,
+            they do nothing when pressed, and scenery is not what a 390px screen
+            has room for. The row survives only when zoom is in it. */}
+        <div className={`shrink-0 bg-gray-50 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm ${
+          isPhone && !hasZoom ? "hidden" : "flex"
+        }`}>
+          {!isPhone && (
+            <>
+              <DeadActionBtn label="Reading List" icon={<BookIcon size={14} />} />
+              <DeadActionBtn label="History" icon={<ClockIcon size={14} />} />
+              <DeadActionBtn label="Downloads" icon={<DownloadIcon size={14} />} />
+            </>
+          )}
           <div className="flex-1" />
           {hasZoom && (
             <div className="flex items-center border-2 border-gray-400 sim-dark:border-gray-600 rounded-lg overflow-hidden">

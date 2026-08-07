@@ -10,7 +10,7 @@
     "type": "guided-files",
     "mode": "assessment",
     "goal": "You tidied the files on your own",
-    "hint": "The left-hand list moves you between places. The buttons along the top act on whichever file you have selected — so select first, then click.",
+    "hint": "There is a list of the places files live, and getting between them is half the work. Everything you can do to one file only appears once you have chosen that file.",
     "steps": [
       {
         "say": "Make a folder called Receipts.",
@@ -43,5 +43,5 @@
     ]
   },
   "drDigitalSuccess": "You created, moved, renamed, deleted, and searched — that is every file skill in the unit, sequenced by you rather than by me.",
-  "drDigitalHint": "Sunset.png is in Pictures and Letter.docx is in Documents. To rename or delete, click the file once to select it, then use the buttons at the top."
+  "drDigitalHint": "Sunset.png is in Pictures and Letter.docx is in Documents. To rename or delete, choose the file first — until you do, the things you can do to it are not offered."
 }

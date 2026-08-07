@@ -221,6 +221,55 @@ export default function SimulatorFrame({
      * animation frame. The glow is a hint, not a leash.
      */
     let revealedFor: HTMLElement | null = null;
+    /**
+     * Did the last attempt actually get this ring into view?
+     *
+     * The latch above exists so a learner who scrolls away to read something is
+     * not yanked back — the glow is a hint, not a leash. But latching on a
+     * *failed* reveal is a different thing: it means one bad measurement, taken
+     * while the app was still animating in or before the layout had settled,
+     * permanently gives up on showing the control.
+     *
+     * That is invisible at 1440x900, where almost everything fits anyway, and
+     * it is seven lessons at 390x844 — the first phone-size run of `ring-check`
+     * found the browser's popup ✕, the recipe download and the Forgot-password
+     * link all clipped by a container that could have been scrolled.
+     *
+     * So: latch on success, retry on failure. A learner who has been shown the
+     * ring keeps their scroll position; a ring that was never shown gets
+     * another go on the next mutation.
+     */
+    let revealedOk = false;
+    /**
+     * How many times this control has been re-revealed *after* the screen
+     * stopped moving.
+     *
+     * `reveal` only ever ran on a DOM mutation, so an attempt made while a
+     * window was still opening was the last word on that control: the sim
+     * settles, no further mutation arrives, and nothing tries again. The
+     * `revealedOk` latch above could ask for a retry but had no way to cause
+     * one. That is why *Forgot password?* and the error-code Copy button stayed
+     * clipped on a phone through several rounds of fixing the latch — the
+     * retry existed and was never reachable.
+     *
+     * Bounded, because a control that is genuinely too big for its container
+     * cannot be scrolled into view and must not spin trying.
+     */
+    let retries = 0;
+    const MAX_RETRIES = 3;
+    /** The first ancestor inside the frame cutting `el` off, or null. */
+    const clippedBy = (el: HTMLElement): HTMLElement | null => {
+      const r = el.getBoundingClientRect();
+      for (let node = el.parentElement; node && frame.contains(node); node = node.parentElement) {
+        const cs = getComputedStyle(node);
+        if (!/(hidden|clip|auto|scroll)/.test(cs.overflowY + cs.overflowX)) continue;
+        const box = node.getBoundingClientRect();
+        if (r.bottom > box.bottom + 2 || r.top < box.top - 2 || r.right > box.right + 2 || r.left < box.left - 2) {
+          return node;
+        }
+      }
+      return null;
+    };
     const reveal = () => {
       queued = 0;
       const rings = Array.from(
@@ -230,8 +279,12 @@ export default function SimulatorFrame({
       // highlighted row, and the inner one is the thing to click.
       const el = rings.find((r) => !rings.some((o) => o !== r && r.contains(o)));
       if (!el || el.offsetParent === null) return;
-      if (el === revealedFor) return;
-      revealedFor = el;
+      if (el === revealedFor && revealedOk) return;
+      if (el !== revealedFor) {
+        revealedFor = el;
+        retries = 0;
+        revealedOk = false;
+      }
 
       for (let node = el.parentElement; node && frame.contains(node); node = node.parentElement) {
         const cs = getComputedStyle(node);
@@ -250,35 +303,33 @@ export default function SimulatorFrame({
 
       // Did it work?
       //
-      // Reporting from right here removes the race an earlier version had, when
-      // the audit lived in the solver's loop and returned 42, then 12, then 10
-      // for the same course depending on how long it waited — it was timing the
-      // reveal, not measuring the product.
+      // Asked once the screen has stopped moving, never during. An earlier
+      // version measured from the solver's loop and returned 42, then 12, then
+      // 10 for the same course depending on how long it waited — it was timing
+      // the reveal, not measuring the product. A ring is legitimately out of
+      // view whenever a panel is mid-render.
       //
-      // The record is a MAP, and every reveal overwrites this control's entry:
-      // last observation wins. It is also only written once the screen has
-      // stopped moving (`data-sim-settled`), because a ring is briefly out of
-      // view whenever a panel is mid-render — reporting those made the count
-      // wobble between 6 and 10 on identical code. `npm run ring-check` reads
-      // what is left.
-      if (process.env.NODE_ENV !== "production") {
-        // Re-measure after the quiet period rather than now: `reveal` runs on
-        // the mutation that started it, which is by definition mid-movement.
-        const record = () => {
-        const w = window as unknown as { __ringClipped?: Map<string, unknown>; __ringLesson?: string };
-        const lesson = w.__ringLesson ?? "(unknown)";
-        const control =
-          (el.textContent || "").trim().slice(0, 40) || el.getAttribute("aria-label") || el.tagName;
-        const key = `${lesson}|${control}`;
-        w.__ringClipped ??= new Map();
-        w.__ringClipped.delete(key);
+      // Settling is also when the *retry* belongs: the scroll above ran against
+      // whatever layout existed at the moment of the mutation, and if that was
+      // a window still opening, this second pass is the one that lands.
+      if (quiet) clearTimeout(quiet);
+      quiet = setTimeout(() => {
+        setSettled(true);
+        const node = clippedBy(el);
+        revealedOk = node === null;
 
-        const r = el.getBoundingClientRect();
-        for (let node = el.parentElement; node && frame.contains(node); node = node.parentElement) {
-          const cs = getComputedStyle(node);
-          if (!/(hidden|clip|auto|scroll)/.test(cs.overflowY + cs.overflowX)) continue;
-          const box = node.getBoundingClientRect();
-          if (r.bottom > box.bottom + 2 || r.top < box.top - 2 || r.right > box.right + 2 || r.left < box.left - 2) {
+        // The record is a MAP, and every reveal overwrites this control's
+        // entry: last observation wins. `npm run ring-check` reads what is
+        // left.
+        if (process.env.NODE_ENV !== "production") {
+          const w = window as unknown as { __ringClipped?: Map<string, unknown>; __ringLesson?: string };
+          const lesson = w.__ringLesson ?? "(unknown)";
+          const control =
+            (el.textContent || "").trim().slice(0, 40) || el.getAttribute("aria-label") || el.tagName;
+          const key = `${lesson}|${control}`;
+          w.__ringClipped ??= new Map();
+          w.__ringClipped.delete(key);
+          if (node) {
             w.__ringClipped.set(key, {
               lesson,
               control,
@@ -286,16 +337,15 @@ export default function SimulatorFrame({
               scrollable: node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1,
               by: `${node.tagName.toLowerCase()}.${(node.className || "").toString().split(/\s+/).slice(0, 3).join(".")}`,
             });
-            return;
           }
         }
-        };
-        if (quiet) clearTimeout(quiet);
-        quiet = setTimeout(() => {
-          setSettled(true);
-          record();
-        }, QUIET_MS);
-      }
+
+        if (node && retries < MAX_RETRIES) {
+          retries += 1;
+          if (queued) cancelAnimationFrame(queued);
+          queued = requestAnimationFrame(() => requestAnimationFrame(reveal));
+        }
+      }, QUIET_MS);
     };
 
     const schedule = () => {

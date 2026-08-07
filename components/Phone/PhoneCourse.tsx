@@ -54,6 +54,8 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
   const [view, setView] = useState<View>({ at: "list" });
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
   const [confirmRestart, setConfirmRestart] = useState(false);
+  /** Is the teaching card showing everything, or just its first two lines? */
+  const [introOpen, setIntroOpen] = useState(false);
 
   // Read on mount rather than in `useState`: localStorage does not exist while
   // this is being server-rendered, and reading it during the first client render
@@ -92,7 +94,11 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
     });
   }, []);
 
-  const open = useCallback((entry: PhoneEntry) => setView({ at: "teach", entry }), []);
+  const open = useCallback((entry: PhoneEntry) => {
+    // A new lesson starts folded again, whatever the last one was left as.
+    setIntroOpen(false);
+    setView({ at: "teach", entry });
+  }, []);
 
   // ── The course list ────────────────────────────────────────────────────────
   if (view.at === "list") {
@@ -233,8 +239,27 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
             <DrDigitalAvatar className="h-9 w-9 shrink-0" />
             <p className="font-semibold">Dr. Digital</p>
           </div>
-          <div className="mt-3 space-y-3 text-[17px] leading-relaxed">
-            {intro.split(/\n{2,}|\n/).filter(Boolean).map((para, i) => (
+          {/**
+            * The first two lines, then "Read more".
+            *
+            * These intros were written for a laptop, where they sit in a column
+            * beside the activity and a learner reads them at a glance. Measured
+            * on the phone course: a median of 401 characters, half the lessons
+            * over 400, the worst 848 — six dense bullets filling the screen and
+            * running past the fold *before* anything can be tried. That is the
+            * shape people bounce off, and this audience most of all.
+            *
+            * Nothing is cut. The course's promise is that a learner could
+            * re-teach the concept, so the rest is one tap away rather than
+            * gone — which is the difference between shortening a lesson and
+            * shortening what it *demands up front*.
+            */}
+          {(() => {
+            const paras = intro.split(/\n{2,}|\n/).filter(Boolean);
+            const LEAD = 2;
+            const shown = introOpen ? paras : paras.slice(0, LEAD);
+            const rest = paras.length - LEAD;
+            const render = (para: string, i: number) => (
               <p key={i}>
                 {para.split(/(\*\*[^*]+\*\*)/g).map((bit, j) =>
                   bit.startsWith("**") && bit.endsWith("**") ? (
@@ -244,8 +269,22 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
                   ),
                 )}
               </p>
-            ))}
-          </div>
+            );
+            return (
+              <>
+                <div className="mt-3 space-y-3 text-[17px] leading-relaxed">{shown.map(render)}</div>
+                {!introOpen && rest > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setIntroOpen(true)}
+                    className="mt-3 min-h-[44px] text-[15px] font-semibold text-blue-700 underline dark:text-blue-400"
+                  >
+                    Read more ({rest} more {rest === 1 ? "point" : "points"})
+                  </button>
+                )}
+              </>
+            );
+          })()}
         </div>
         {/* The sticky button below is 84px of permanently-covered screen. Without
             this spacer the last paragraph can never be scrolled clear of it. */}
@@ -430,7 +469,7 @@ export default function PhoneCourse({ lessons }: PhoneCourseProps) {
         <button
           type="button"
           data-phone-next
-          onClick={() => setView({ at: "teach", entry: next })}
+          onClick={() => { setIntroOpen(false); setView({ at: "teach", entry: next }); }}
           className="mt-5 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white hover:bg-blue-700"
         >
           Next: {titleOf(next)}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useIsPhone } from "@/components/Playground/SimFormFactor";
 import LessonPlaygroundPane from "@/components/LessonPlaygroundPane";
 import { EXEMPT, STEPLESS, solve, solveStepless, type AnyStep, type SolveOutcome } from "@/lib/solve/solver";
 import type { PlaygroundTask } from "@/lib/lessons";
@@ -40,6 +41,9 @@ function stepsOf(task: PlaygroundTask): AnyStep[] | null {
 }
 
 export default function SolveCheck({ lessons }: { lessons: Item[] }) {
+  /* `/dev/phone-check` wraps this in the phone context; `/dev/solve-check`
+     does not. It buys the solver patience for screens it has to travel to. */
+  const isPhone = useIsPhone();
   const [index, setIndex] = useState(0);
   const [rows, setRows] = useState<Row[]>([]);
   const [running, setRunning] = useState(false);
@@ -149,7 +153,7 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
 
       // A throw inside the solver used to leave the run parked on one lesson with
       // nothing on screen to say why. Whatever happens, this lesson produces a row.
-      const outcome = await solve(root, { steps, assessment, signal: aborter.signal }).catch(
+      const outcome = await solve(root, { steps, assessment, pushesScreens: isPhone, signal: aborter.signal }).catch(
         (e: unknown): SolveOutcome => ({
           ok: false,
           progress: 0,
@@ -256,9 +260,27 @@ export default function SolveCheck({ lessons }: { lessons: Item[] }) {
           <p className="text-sm text-gray-500">
             {current.slug} — {current.task.type}
           </p>
-          {/* 520px tall and full width: a real pane, so a control that only falls below
-              the fold at this size fails here rather than in front of a learner. */}
-          <div ref={hostRef} className="mt-2 h-[520px] w-full">
+          {/*
+            * A real pane, so a control that only falls below the fold at this
+            * size fails here rather than in front of a learner — and "real"
+            * means a different box on each device.
+            *
+            * 520px tall and full width is the laptop lesson's pane. It is *not*
+            * the phone's: `PhoneCourse` hands the activity `min-h-0 flex-1` of
+            * the whole viewport, so at 390x844 the sim gets about 534px of
+            * screen and this box was giving it 396. `ring-check-phone` was
+            * therefore auditing a phone 300px shorter than any that exists, and
+            * reported `troubleshooting-basics` as clipped when a screenshot of
+            * the real course showed the same card with room to spare below it.
+            *
+            * A harness that measures geometry has to have the geometry right,
+            * or its findings are fiction in both directions — this one would
+            * also have missed anything that only breaks in the taller box.
+            */}
+          <div
+            ref={hostRef}
+            className={isPhone ? "fixed inset-0 z-40 bg-white" : "mt-2 h-[520px] w-full"}
+          >
             <Boundary
               key={current.slug}
               onError={(e) => {

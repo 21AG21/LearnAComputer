@@ -576,6 +576,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const [adNudge, setAdNudge] = useState(false);
   /** Phone only: the tab switcher, a phone's answer to a permanent tab strip. */
   const [tabsOpen, setTabsOpen] = useState(false);
+  /** Phone only: the ⋯ menu holding Reading List, History and Downloads. */
+  const [moreOpen, setMoreOpen] = useState(false);
   const [unknownUrl, setUnknownUrl] = useState("");
 
   const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, objectives } =
@@ -614,6 +616,33 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
    * Mail back to Mailboxes.
    */
   const wantsTabs = !finished && step?.action === "close-tab";
+  /** A step pointing at something the ⋯ menu holds opens it. */
+  const wantsMore =
+    !finished &&
+    (step?.action === "reading-list-add" ||
+      step?.action === "history-visit" ||
+      step?.action === "open-downloads" ||
+      (step?.action === "zoom-in" && !pdfViewer));
+  /**
+   * The `⋯` menu is the phone's layout in **both** modes.
+   *
+   * It was guided-only for one round, on the reasoning that an assessment has
+   * no current step, so nothing can open the menu on the learner's behalf and
+   * the solver would never find Reading List. That reasoning was about the
+   * harness, and it cost the learner: `final-browser` asks the phone to zoom,
+   * the zoom stepper is a laptop control that lives *only* in this menu, and
+   * with the menu gone that objective had no control on screen at all. A
+   * second layout also meant two answers to "where does Downloads live?" on
+   * the same device.
+   *
+   * The solver opens it instead: the button carries `data-phone-more`, and
+   * `navHunt` presses a *closed* one when it goes looking. Only closed, which
+   * is what keeps it from oscillating — the earlier attempt was a general
+   * "click anything that says it expands" rule, and it thrashed between the
+   * tab switcher and the menu.
+   */
+  const useMenu = isPhone;
+  const showMore = useMenu && (moreOpen || wantsMore);
   const showTabs = isPhone && (tabsOpen || wantsTabs);
 
   function hl(kind: string, name?: string): boolean {
@@ -1049,7 +1078,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         * column, the handlers and the ring targets stay exactly where the
         * lessons expect them, and the laptop keeps the order it has always had.
         */}
-      <div className={`shrink-0 bg-gray-50 sim-dark:bg-gray-800 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm ${
+      <div className={`relative shrink-0 bg-gray-50 sim-dark:bg-gray-800 flex items-center flex-wrap gap-1.5 px-3 py-1.5 text-sm ${
         isPhone
           ? "order-last border-t-2 border-gray-300 sim-dark:border-gray-700"
           : "border-b-2 border-gray-300 sim-dark:border-gray-700"
@@ -1060,11 +1089,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         {isPhone && (
           <>
             {navButtons}
-            <div className="flex items-center overflow-hidden rounded-lg border-2 border-gray-400 sim-dark:border-gray-600">
-              <button onClick={zoomOut} aria-label="Zoom out" className="min-w-[44px] text-gray-600 hover:bg-gray-200 sim-dark:text-gray-300 sim-dark:hover:bg-gray-700">−</button>
-              <span className="border-x-2 border-gray-300 px-2 font-semibold tabular-nums sim-dark:border-gray-700">{activeTab.zoom}%</span>
-              <button onClick={zoomIn} aria-label="Zoom in" className={`min-w-[44px] font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
-            </div>
+
             {/**
               * Tabs, the way a phone shows them: a count you tap for a grid of
               * cards. The desktop strip above is hidden here.
@@ -1106,12 +1131,67 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             >
               ＋
             </button>
-            <div className="basis-full" />
           </>
         )}
-        <ActionBtn label="Reading List" icon={<BookIcon size={14} />} onClick={addReadingList} highlight={hl("readinglist-btn")} />
-        <ActionBtn label="History" icon={<ClockIcon size={14} />} onClick={clickHistoryBtn} highlight={hl("history-btn")} />
-        <ActionBtn label="Downloads" icon={<DownloadIcon size={14} />} onClick={clickDownloadsBtn} highlight={hl("downloads-btn")} />
+        {/**
+          * Reading List, History and Downloads: three outlined buttons on a
+          * laptop, one `⋯` on a phone.
+          *
+          * As buttons they took a whole third row of the bottom bar — the bar
+          * was 200px of chrome under a 390px-wide page, which is a menu bar
+          * pretending to be a phone. Every phone browser keeps exactly this
+          * set behind one overflow control.
+          *
+          * The menu opens itself when a step points inside it, the same way
+          * the tab switcher does; otherwise the ring would be behind a closed
+          * sheet and the lesson would be pointing at nothing.
+          */}
+        {useMenu ? (
+          <>
+            <button
+              type="button"
+              onClick={() => setMoreOpen((v) => !v)}
+              aria-label="More browser options"
+              aria-expanded={showMore}
+              data-phone-more
+              className={`flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-xl font-bold text-gray-700 hover:bg-gray-200 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 ${
+                wantsMore && !showMore ? "animate-ring-pulse" : ""
+              }`}
+            >
+              ⋯
+            </button>
+            {showMore && (
+              <div className="absolute inset-x-2 bottom-full z-40 mb-2 overflow-hidden rounded-xl border border-gray-300 bg-white shadow-xl sim-dark:border-gray-600 sim-dark:bg-gray-800">
+                <MenuRow label="Reading List" icon={<BookIcon size={18} />} onClick={() => { addReadingList(); setMoreOpen(false); }} highlight={hl("readinglist-btn")} />
+                <MenuRow label="History" icon={<ClockIcon size={18} />} onClick={() => { clickHistoryBtn(); setMoreOpen(false); }} highlight={hl("history-btn")} />
+                <MenuRow label="Downloads" icon={<DownloadIcon size={18} />} onClick={() => { clickDownloadsBtn(); setMoreOpen(false); }} highlight={hl("downloads-btn")} />
+                {/* Zoom lives here too. A stepper with a percentage readout is a
+                    desktop control — a phone pinches — but three lessons ring it
+                    by name, so it moves into the menu rather than disappearing. */}
+                <div className="flex min-h-[52px] items-center gap-3 px-4 text-[17px] font-medium">
+                  <span className="flex-1">Zoom</span>
+                  <button onClick={zoomOut} aria-label="Zoom out" className="min-h-[44px] min-w-[44px] rounded-lg border border-gray-400 text-gray-700 sim-dark:border-gray-600 sim-dark:text-gray-200">−</button>
+                  <span className="w-14 text-center tabular-nums">{activeTab.zoom}%</span>
+                  <button
+                    onClick={zoomIn}
+                    aria-label="Zoom in"
+                    className={`min-h-[44px] min-w-[44px] rounded-lg border border-gray-400 font-bold text-gray-700 sim-dark:border-gray-600 sim-dark:text-gray-200 ${
+                      hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""
+                    }`}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <ActionBtn label="Reading List" icon={<BookIcon size={14} />} onClick={addReadingList} highlight={hl("readinglist-btn")} />
+            <ActionBtn label="History" icon={<ClockIcon size={14} />} onClick={clickHistoryBtn} highlight={hl("history-btn")} />
+            <ActionBtn label="Downloads" icon={<DownloadIcon size={14} />} onClick={clickDownloadsBtn} highlight={hl("downloads-btn")} />
+          </>
+        )}
         {/* A phone has no windows — only tabs. The lesson that teaches windows
             (`safari-windows`) is not in the phone course for the same reason. */}
         {!isPhone && (
@@ -1230,7 +1310,11 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
                     onChange={(e) => setSearchInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }}
                     placeholder="Search the web"
-                    className="flex-1 rounded outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    /* `bg-transparent` is load-bearing: with no background class
+                       the UA paints its own white field color, which stays white
+                       inside the dark pill when the sim's Dark Mode is on —
+                       simdark-check's one finding on this page. */
+                    className="flex-1 rounded bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sim-dark:text-gray-100 sim-dark:placeholder-gray-400"
                   />
                 </div>
                 {searchResults && (
@@ -1461,10 +1545,17 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
             the close button — the one control this entire lesson is about — was
             cut off with no way to reach it. It sits inside the corner now,
             where it cannot overflow at any pane size. Found by `ring-check`
-            once that check was made stable enough to believe. */}
+            once that check was made stable enough to believe.
+
+            At 390x844 the *whole dialog* then outgrew the page area, and
+            `items-center` on an overflowing flex container clips the top — the
+            end the ✕ is at. `my-auto` inside a scrollable overlay is the fix
+            that behaves both ways: centered when there is room, top-aligned and
+            scrollable when there is not. Found by `ring-check` again, at phone
+            size this time, on `popups-ads` and `popup-accident`. */}
         {popupOpen && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 p-2">
-            <div className="bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
+          <div className="absolute inset-0 z-20 flex justify-center overflow-auto bg-black/30 p-2">
+            <div className="my-auto bg-white border-4 border-red-500 rounded-xl shadow-2xl p-6 pt-8 max-w-xs text-center relative animate-pop-in">
               <button onClick={closePopup} aria-label="Close popup" className={`absolute top-1.5 right-1.5 w-11 h-11 bg-white border-2 border-black rounded-full font-bold text-xl flex items-center justify-center ${hl("popup-close") ? "animate-ring-pulse" : ""}`}>&times;</button>
               <p className="text-red-700 sim-dark:text-red-400 mb-2"><WarningIcon size={40} /></p>
               <p className="font-black text-red-700 sim-dark:text-red-400 text-lg">VIRUS DETECTED!!!</p>
@@ -1657,6 +1748,23 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   );
 }
 
+/** One row of the phone browser's `⋯` menu. Full width, 52px, hairline below. */
+function MenuRow({ label, icon, onClick, highlight }: { label: string; icon?: ReactNode; onClick: () => void; highlight?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex min-h-[52px] w-full items-center gap-3 border-b border-gray-200 px-4 text-left text-[17px] font-medium last:border-b-0 hover:bg-gray-50 sim-dark:border-gray-700 sim-dark:hover:bg-gray-700 ${
+        highlight ? "animate-ring-pulse-inset" : ""
+      }`}
+    >
+      <span className="text-gray-500 sim-dark:text-gray-400">{icon}</span>
+      {label}
+    </button>
+  );
+}
+
+/** The laptop's outlined toolbar button. A phone puts these in the ⋯ menu. */
 function ActionBtn({ label, icon, onClick, highlight }: { label: string; icon?: ReactNode; onClick: () => void; highlight?: boolean }) {
   return (
     <button

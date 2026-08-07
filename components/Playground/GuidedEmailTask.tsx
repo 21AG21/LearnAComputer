@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, type ReactNode } from "react";
 import { useIsPhone } from "./SimFormFactor";
 import { useSwipe } from "./touchGestures";
 import SimulatorFrame from "./SimulatorFrame";
-import { ROW_RING } from "./PhoneChrome";
+import { DisclosureChevron, ROW_RING } from "./PhoneChrome";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { ATTACHABLE_FILES } from "./Desktop/filesData";
 import {
@@ -205,7 +205,7 @@ export default function GuidedEmailTask({
   const [undoPill, setUndoPill] = useState<{ emailId: string; countdown: number; body: string } | null>(null);
   const undoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { step, stepIndex, finished, done, flash, tryStep, objectives, isAssessment } = useStepRunner({
+  const { step, stepIndex, finished, done, flash, tryStep, objectives } = useStepRunner({
     steps,
     mode,
     onResult,
@@ -220,7 +220,7 @@ export default function GuidedEmailTask({
    * only way the ring can be somewhere they can see.
    */
   const listStep = step?.action === "compose" || step?.action === "go-to-folder";
-  const showDetail = isPhone && !isAssessment && !listStep && !!(selectedEmail || composing);
+  const showDetail = isPhone && !listStep && !!(selectedEmail || composing);
 
   /**
    * The mailbox list is its own screen, the way a phone's Mail app has it.
@@ -242,9 +242,21 @@ export default function GuidedEmailTask({
    */
   const [atMailboxes, setAtMailboxes] = useState(false);
   const showMailboxes =
-    isPhone && !isAssessment && !showDetail && (atMailboxes || step?.action === "go-to-folder");
-  /** The stacked layout, kept for assessments and for the laptop. */
-  const bothPanes = !isPhone || isAssessment;
+    isPhone && !showDetail && (atMailboxes || step?.action === "go-to-folder");
+  /**
+   * The laptop's two-pane layout. Phones push instead — including in
+   * assessments.
+   *
+   * Assessments used to be carved out here, on the reasoning that nothing
+   * points during one so the app cannot know which screen the learner needs.
+   * That was true and beside the point: a learner navigates *themselves*, and
+   * every screen has a chevron labeled with where it goes. What actually broke
+   * was the solver, whose nav-hunt did not know the words "Mailboxes",
+   * "Browse", "Chats", "Library" or "Albums". Teaching it those (see
+   * `NAV_LABELS`) removed the reason, and with it thirteen lessons that still
+   * looked like a desktop.
+   */
+  const bothPanes = !isPhone;
 
   useEffect(() => {
     if (!undoPill) return;
@@ -560,7 +572,7 @@ export default function GuidedEmailTask({
             bothPanes
               ? "w-32 flex-col"
               : showMailboxes
-                ? "w-full flex-1 flex-col overflow-y-auto animate-screen-push"
+                ? "w-full flex-1 flex-col overflow-y-auto"
                 : "hidden"
           }`}
         >
@@ -593,8 +605,7 @@ export default function GuidedEmailTask({
                 {folderCount(f) > 0 && (
                   <span className="text-xs bg-gray-200 sim-dark:bg-gray-600 sim-dark:text-gray-100 rounded-full px-1 leading-4">{folderCount(f)}</span>
                 )}
-                {/* The disclosure chevron that says "this pushes a screen". */}
-                {!bothPanes && <span aria-hidden className="text-gray-400">›</span>}
+                {!bothPanes && <DisclosureChevron />}
               </span>
             </button>
           ))}
@@ -606,7 +617,7 @@ export default function GuidedEmailTask({
             for itself — see the `phoneNav` handed to `SimulatorFrame` below.
             Two back controls on one screen is two back controls. */}
         <div
-          className={`flex-1 flex flex-col overflow-hidden ${showDetail ? "animate-screen-push" : ""} ${
+          className={`flex-1 flex flex-col overflow-hidden ${showDetail ? "" : ""} ${
             showMailboxes ? "hidden" : ""
           }`}
         >

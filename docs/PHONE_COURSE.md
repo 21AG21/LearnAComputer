@@ -483,29 +483,77 @@ The lesson for next time: a "deliberate retreat" is a hypothesis nobody has
 tested. This one was recorded honestly as a mystery and it stayed a mystery for
 as long as nobody read the trace.
 
+## Round two: assessments, the ring at phone size, and the harness's fake phone
+
+The second pass on this course closed three of the list below and taught two
+checks humility. The short version, each entry earned:
+
+- **Assessments push and pop now.** The solver learned phone navigation instead
+  of the apps learning to flatten themselves: back chevrons carry
+  `data-phone-back` ("home" is never pressed during a hunt, "app" goes last,
+  after every forward move), `NAV_LABELS` grew the phones' screen names, and a
+  closed `⋯` menu (`data-phone-more`) is opened as part of looking — closed
+  only, which is what keeps the hunt from oscillating the way the general
+  "click anything expandable" rule did.
+- **On a phone, a file's actions live on the file's own screen.** One tap opens
+  a file into a sheet; Rename / Move to… / Move to Trash used to be in the list
+  toolbar *under* that sheet, so no finger could reach them — while every gate
+  stayed green, because `element.click()` passes through a `bg-black/40`
+  overlay and the solver renamed files through it. The sheet carries the
+  actions now (Move to… asks its follow-up question inside the same sheet), and
+  the phone's list toolbar keeps only New Folder and Search.
+- **The `⋯` menu is the phone's layout in both modes.** It was guided-only for
+  one round because the solver couldn't open it — harness reasoning, learner
+  cost: `final-browser` asks for zoom, the stepper lives only in that menu, so
+  the objective had no control on screen at all.
+- **`ring-check-phone` exists** (`RING_PHONE=1`, against `/dev/phone-check` at
+  390x844) and is green over all 112 lessons. Getting it green found four real
+  clipping bugs — most seriously `password-recovery`, where the ten-icon dock
+  wrapped to three rows and left the bank's sign-in page **40px tall** — and
+  two check bugs that matter more than any of them:
+  - **The harness's phone was 300px shorter than a real one.** `SolveCheck`
+    hosted every activity in the laptop pane's fixed `h-[520px]` box;
+    `PhoneCourse` gives the sim the whole viewport. A geometry check with the
+    wrong geometry reports fiction in both directions. On a phone the host is
+    now `fixed inset-0`.
+  - **The documented negative control certified the check.** "Make the reveal
+    return early" also disables the recorder that *writes the findings*, so the
+    run came back green with nothing inspected. The control is now "disable
+    only the scroll loop, keep the recorder", watched to fail at 6 findings on
+    the laptop and 1 at phone size.
+- **The reveal retries after the screen settles.** It only ever ran on a DOM
+  mutation, so an attempt made mid-animation was the final word — the
+  `revealedOk` latch could *ask* for a retry but nothing could cause one. It
+  re-runs on settle now, bounded at three attempts.
+- **`GuidedTroubleshootingTask` behaves like a phone**: dense two-row dock that
+  steps aside while an app is open (and returns when a step rings a dock icon —
+  hiding it broke `when-to-get-help`'s "reopen Photos" step the same hour it
+  was added), one nav bar per screen, and `BrowserSimulator` drops its desktop
+  tab strip and dead Reading List/History/Downloads row at phone size.
+- **The words caught up with the apps**: "tap it once to select it" became "to
+  open it" (selection-then-toolbar is a mouse model the phone no longer has),
+  "the left-hand list" became "the list of places", and `left-hand` joined
+  `LAPTOP_WORDS` — which immediately caught a fourth leak in
+  `unit-9-assessment` nobody was looking for.
+
 ## Still open
 
 - **Only Mail implements a swipe.** An inbox row now slides left to reveal
   Archive, which is the gesture people use twenty times a day on a real phone
   and the first one in this product outside the home bar. Photos still has no
   swipe between pictures and nothing has pull-to-refresh.
-- **Assessments keep the stacked two-pane layout.** Mail, Messages, Photos and
-  Settings all carve out `isAssessment`: nothing points during an assessment, so
-  the app cannot know which screen the learner needs next, and guessing wrong
-  hides a control rather than merely moving it. Thirteen lessons therefore still
-  look like a desktop. Push-and-pop *is* navigable without a ring — every screen
-  has a labelled chevron — so this is worth revisiting with the solver watched
-  closely rather than assumed.
-- **The browser keeps its zoom stepper** (`− 100% +`) in the bottom bar, which
-  is a desktop control; a phone zooms by pinching. `zooming-webpages` and
-  `a11y-zoom-web-page` ring it by name, so it cannot simply go.
+- **The browser keeps its zoom stepper** (`− 100% +`), now inside the `⋯` menu
+  rather than on the bar — still a desktop control; a phone zooms by pinching.
+  `zooming-webpages` and `a11y-zoom-web-page` ring it by name, so it cannot
+  simply go.
 - **There is no on-screen keyboard**, so no typing lesson ever has one appear,
   and nothing handles `visualViewport`: on a real phone the keyboard covers the
   Send button in `messages-app` and `composing-email`, with no scroll to reveal
   it.
-- **`ring-check` and `sim-contrast-check` run at 1440x900 only.** Neither has ever
-  looked at the phone. Running them against `/dev/phone-check` is the obvious next
-  gate, and it is the hole that hid the off-screen dock.
+- **`sim-contrast-check` runs at 1440x900 only.** `ring-check` got its phone
+  mode this round (`npm run ring-check-phone`); the contrast walk has still
+  never looked at a phone-shaped screen, and the phone's restyled list rows and
+  sheets have therefore never been measured.
 - **`isReachable` in `lib/solve/gestures.ts` never checks the viewport** — its
   docstring says "on screen" and it does not test the rect. That is why the solver
   clicked a dock icon 171px past the right edge and reported green.

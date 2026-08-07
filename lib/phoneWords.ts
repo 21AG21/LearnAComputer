@@ -127,6 +127,22 @@ const RULES: [string, string][] = [
   ["\\bin the sidebar\\b", "in the list"],
   ["\\bthe sidebar\\b", "the list"],
   ["\\bthe list at the top\\b", "the list"],
+  /**
+   * A phone opens what you tap. It does not select it and wait.
+   *
+   * "Click it to select it, then press Rename" is the laptop's two-stage
+   * model, and it survived into the phone course as "tap it to select it" —
+   * which describes nothing the learner sees, because the tap opens the file
+   * and the Rename button is on the screen that opened. Same for the places
+   * list, which is its own screen behind the back chevron and has not been on
+   * the left of anything since the apps started pushing.
+   */
+  ["\\bonce to select it\\b", "once to open it"],
+  ["\\bto select it, then\\b", "to open it, then"],
+  ["\\bthe left-hand list\\b", "the list of places"],
+  ["\\bleft-hand list\\b", "list of places"],
+  ["\\bdown the left-hand side\\b", "as a list you go into"],
+  ["\\bon the left-hand side\\b", "in the list"],
   // Bare and possessive forms reach the noun with no "the" in front of it —
   // "the left sidebar", "the Settings sidebar", "the browser's toolbar".
   ["\\bsidebar\\b", "list"],
@@ -201,6 +217,7 @@ export const LAPTOP_WORDS = [
   "cursor",
   "press Enter",
   "sidebar",
+  "left-hand",
   "the dock",
   "menu bar",
   "taskbar",

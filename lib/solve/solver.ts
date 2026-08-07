@@ -404,6 +404,23 @@ const NAV_LABELS = [
   "Phishing", "Passwords",
   // Escape hatches out of detail views, so a hunt can reach list-level controls.
   "\u2190 Back", "Back", "Back to Store",
+  /**
+   * The phone's own navigation words.
+   *
+   * A phone pushes screens instead of stacking panes, so the places a hunt
+   * needs to reach \u2014 Mail's folder list, Files' locations, Photos' albums \u2014
+   * live one chevron away rather than on the same screen. Those chevrons are
+   * labeled with their destination, and until those words were in this list
+   * the hunt could not see them: it would sit on the Inbox looking for Spam
+   * with the way there written on a button it did not recognize.
+   *
+   * That gap is the whole reason assessments were carved out of push-and-pop
+   * for five apps and left looking like a desktop. It was a missing vocabulary
+   * entry, not a reason to keep the old layout.
+   *
+   * `PhoneTabBar`'s tabs are here too \u2014 a tab bar is navigation by definition.
+   */
+  "Mailboxes", "Browse", "Chats", "Library", "Albums",
 ];
 
 /** Anything the sims use to mean "this is the control you want next". */
@@ -1265,8 +1282,43 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
        */
       (b) => isReachable(b) && isNav(textOf(b)) && b.getAttribute("data-phone-back") !== "home",
     );
-    const start = navSpin++ % Math.max(navs.length, 1);
-    for (const b of [...navs.slice(start), ...navs.slice(0, start)]) out.push(() => click(b));
+    /**
+     * Going *in* before going back.
+     *
+     * A phone's back chevron is labeled with its destination, so it is a
+     * navigation label like any other — and once "Browse" was one, the hunt
+     * would step into Documents and immediately press Browse to come out
+     * again, oscillating for its whole budget. `unit-3-assessment` failed on a
+     * different objective each run for exactly this, always with the places
+     * list on screen.
+     *
+     * Backing out is still allowed, and has to be: it is the only route from
+     * one folder to another. It just goes last, after every forward move on
+     * the screen has been tried.
+     */
+    const forward = navs.filter((b) => !b.hasAttribute("data-phone-back"));
+    const backward = navs.filter((b) => b.hasAttribute("data-phone-back"));
+    const start = navSpin++ % Math.max(forward.length, 1);
+    for (const b of [...forward.slice(start), ...forward.slice(0, start), ...backward]) out.push(() => click(b));
+    /**
+     * A phone keeps a handful of controls behind one `⋯`, and looking behind it
+     * is part of looking.
+     *
+     * Reading List, History, Downloads and Zoom are four separate buttons on a
+     * 1440px toolbar and one overflow menu at 390px — so on a phone those
+     * controls are genuinely *not in the DOM* until the menu is open, and every
+     * branch above correctly finds nothing to click.
+     *
+     * **Closed ones only.** That single condition is what makes this safe: the
+     * first attempt at this was a general "click anything with
+     * `aria-expanded=false`" rule, which toggled the status-bar clock forever
+     * and then oscillated between the tab switcher and the menu. Opening
+     * something already open is the move that loops, and this cannot make it.
+     */
+    const more = Array.from(root.querySelectorAll<HTMLElement>("[data-phone-more]")).filter(
+      (b) => isReachable(b) && b.getAttribute("aria-expanded") === "false",
+    );
+    for (const b of more) out.push(() => click(b));
   };
 
   // Without a current step there is no click-then-click move path (the sims gate
@@ -1361,6 +1413,22 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     }
   }
 
+  /**
+   * Nothing to try at all means the control is somewhere else — so go looking.
+   *
+   * Every other branch above ends with "and if that is not on screen, hunt".
+   * The case with *no* branch matching had no such ending: the loop asked for
+   * gestures, got an empty list, and spent its whole budget performing none of
+   * them. `final-photos` sat on the Photos library for fourteen iterations with
+   * an "Albums" tab in front of it, because "create an album" matches no
+   * control on the library screen and there was no rule saying to look
+   * elsewhere.
+   *
+   * Doing nothing is never the right move, which makes this safe as a
+   * last resort: it can only fire where the alternative was standing still.
+   */
+  if (out.length === 0) navHunt();
+
   return out;
 }
 
@@ -1401,6 +1469,21 @@ export interface SolveOptions {
   steps: AnyStep[];
   /** Assessment activities have no current step; the solver walks objectives in order instead. */
   assessment?: boolean;
+  /**
+   * The sim pushes screens instead of showing everything at once — the phone.
+   *
+   * It buys patience, and only patience. A laptop assessment can see the file
+   * list, the sidebar and the toolbar together, so an objective is a click or
+   * two from wherever the solver is standing. A phone has to *travel*: Browse,
+   * then Pictures, then the file, then the action. `unit-3-assessment` was
+   * measured doing exactly that and getting there — `click:Pictures`,
+   * `click:Sunset.png` — one iteration after the spin guard had already given
+   * up on it.
+   *
+   * This does not make a stuck lesson pass. The guard still fires, on the same
+   * evidence; it just stops counting honest navigation as thrashing.
+   */
+  pushesScreens?: boolean;
   budgetMs?: number;
   /**
    * Stops the loop between gestures. Without it, restarting the harness left the
@@ -1443,7 +1526,22 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
   // budget looking busy and reports a timeout instead of naming the step.
   let spinning = 0;
   let lastProgress = -1;
-  const MAX_SPIN = Math.max(14, total + 6);
+  /**
+   * How many screen changes one assessment objective may cost before the solver
+   * abandons it and tries another.
+   *
+   * This number was raised once, for `unit-3-assessment`, which failed its first
+   * attempt on every single run and passed on the harness's retry. Raising it
+   * did move the failure — from three objectives done to four — which is what a
+   * symptom-fix looks like, and `window.__solveTrace` said why: the run reached
+   * `click:Pictures → click:Sunset.png` and then had nothing left to press,
+   * because tapping a file on a phone opens a modal over the toolbar the rename
+   * lives in. With the file's actions moved onto the file's own screen the
+   * lesson finishes in under five seconds, three runs out of three, on the
+   * original allowance. So the allowance is the original one.
+   */
+  const HUNT = Math.max(total * 2, opts.pushesScreens ? 18 : 8);
+  const MAX_SPIN = Math.max(opts.pushesScreens ? 26 : 14, total + 6);
   // The sims answer some gestures on a deliberate delay (navigation runs a 250ms
   // loading beat). The macrotask-fast loop can burn all its spins before the
   // first delayed handler ever lands — and once the harness declares failure and
@@ -1618,7 +1716,7 @@ export async function solve(root: HTMLElement, opts: SolveOptions): Promise<Solv
         // only fail after two whole laps produced nothing. Two, because one
         // objective's gesture often creates the state another one needs (the
         // + New Event click opens the form the title objective types into).
-        if (opts.assessment && spinning < Math.max(total * 2, 8)) {
+        if (opts.assessment && spinning < HUNT) {
           spinning += 1;
           pursue += 1;
           pursueMoves = 0;

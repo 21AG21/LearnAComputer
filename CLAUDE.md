@@ -39,6 +39,7 @@ python3 scripts/audit-order.py    # curriculum-shape report: order, module size,
 python3 scripts/check-a11y.py     # every <img>/<Image> and lesson media has an alt (a gate)
 node scripts/contrast-check.mjs   # WCAG AA contrast over the pages learners read, both themes
 npm run ring-check                # is every highlighted control actually ON SCREEN? (a gate)
+npm run ring-check-phone          # the same audit at 390x844, against /dev/phone-check
 npm run motion-check              # does the lesson art move — and stop when asked?
 ```
 
@@ -229,9 +230,33 @@ Seven more rules for this code, each of which shipped as a bug first:
 A simulator that renders `FakeDesktop` itself must pass `phoneChrome={false}` to
 its `SimulatorFrame`, or the phone gets two status strips and two home bars.
 
-See `docs/PHONE_COURSE.md`, including its **Still open** list — `ring-check` and
-`sim-contrast-check` have never run at phone size, and that is the hole that hid
-an off-screen dock.
+**`npm run ring-check-phone` audits the ring at 390x844** — same script, same
+recorder, driving `/dev/phone-check` — and it is where the worst phone bug so
+far was found: `password-recovery`'s ten-icon dock wrapped to three rows and
+left the bank sign-in page 40px tall, with every other harness green because
+the solver clicks through the DOM. Two rules came out of getting it green:
+
+- **A geometry check must measure the geometry a learner gets.** `SolveCheck`
+  hosted every activity in the laptop's fixed 520px box; the real phone course
+  hands the sim the whole viewport, ~300px more. The harness's phone host is
+  `fixed inset-0` now. Before trusting any finding from a check that measures
+  pixels, confirm the box it measures in is the box the product renders.
+- **A negative control must break the cure, never the measurement.** The
+  documented control ("make the reveal return early") also disabled the
+  recorder that writes the findings, so it passed — a control that certifies
+  the check. The working control disables only the scroll loop; watched to
+  fail at 6 laptop / 1 phone findings.
+
+On a phone, **a file's actions live on the file's own screen**: one tap opens a
+file into a sheet, and Rename / Move to… / Move to Trash are in that sheet, not
+in a toolbar under it. The toolbar-under-a-modal version left every gate green —
+`element.click()` passes through a `bg-black/40` overlay — while no finger could
+rename a file. The solver opens a **closed** `⋯` menu (`data-phone-more`) as
+part of its nav hunt; closed only, or it oscillates.
+
+See `docs/PHONE_COURSE.md`, including its **Still open** list —
+`sim-contrast-check` has never run at phone size, so the phone's restyled rows
+and sheets are unmeasured for contrast.
 
 **Every harness here except one does the moderate, correct thing.** solve-check
 performs exactly the current step's action and nothing else, so it has never

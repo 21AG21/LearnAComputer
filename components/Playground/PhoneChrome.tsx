@@ -38,8 +38,9 @@ import { WifiIcon, BatteryIcon, type StatusPanelId } from "./DesktopChrome";
  * *swiping down* from the top edge. This course teaches "tap it, then tap it
  * again to close", because a learner who cannot yet reliably tap cannot
  * reliably swipe from a screen edge, and because a swipe that opens something
- * has no visible affordance to teach from. The buttons keep their 44px hit
- * areas out of their own padding, so the strip itself stays 32px.
+ * has no visible affordance to teach from. The strip is a real 44px tall so
+ * those buttons are 44px without hanging off the top of the device — see the
+ * note on `PhoneStatusBar`.
  */
 
 /**
@@ -56,6 +57,25 @@ import { WifiIcon, BatteryIcon, type StatusPanelId } from "./DesktopChrome";
  * nothing can clip it. Same rule, same reason, as the phone's home bar.
  */
 export const ROW_RING = "animate-ring-pulse-inset";
+
+/**
+ * The "this pushes a screen" chevron at the right end of a list row.
+ *
+ * An **SVG**, deliberately, and not the `›` character it looks like. A text
+ * chevron joins the row's `textContent`, so a mailbox called Recently Deleted
+ * announced itself as "Recently Deleted›" — to a screen reader, and to
+ * `lib/solve/solver.ts`, whose navigation lookup is an exact string match.
+ * `aria-hidden` does not help: it hides the node from the accessibility tree
+ * but leaves it in the text. That one character is what kept `final-photos`
+ * and `unit-7-assessment` from reaching an album they were standing next to.
+ */
+export function DisclosureChevron() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m9 5 7 7-7 7" />
+    </svg>
+  );
+}
 
 interface StatusBarProps {
   dark?: boolean;
@@ -88,18 +108,30 @@ export function PhoneStatusBar({
   trailing,
   transparent = false,
 }: StatusBarProps) {
-  // `py-3 -my-3` grows the padding box — which is what a finger lands on — to
-  // 44px without growing the 32px strip. `relative` so the grown box paints
-  // over the app below rather than under it.
+  /**
+   * A real 44px strip, rather than 32px with the targets hanging out of it.
+   *
+   * The earlier trick was `py-3 -my-3`: grow the padding box to 44px without
+   * growing the bar. That works in the middle of a screen and fails at the very
+   * top of one, because the extra 12px goes *above* the first pixel of the
+   * phone — off the device, where no finger can land. The first phone-size run
+   * of `ring-check` reported it as the Wi-Fi icon being clipped by the sim's
+   * own root on `internet-problems` and `final-troubleshooting`.
+   *
+   * Growing downward instead would put the clock's hit area on top of the nav
+   * bar's back chevron, which is the overlapping-targets bug in a new hat. So
+   * the strip is simply the height a phone's status bar actually is, and the
+   * 12px comes out of the banner space this redesign already reclaimed.
+   */
   const btn = (panel: StatusPanelId, extra = "") =>
-    `relative -my-3 rounded px-2 py-3 transition-colors hover:bg-black/10 sim-dark:hover:bg-white/15 ${
+    `relative flex h-11 items-center rounded px-2 transition-colors hover:bg-black/10 sim-dark:hover:bg-white/15 ${
       openPanel === panel ? "bg-black/10 sim-dark:bg-white/15" : ""
     } ${highlight === panel ? "animate-ring-pulse" : ""} ${extra}`;
 
   return (
     <div
       data-phone-statusbar
-      className={`relative flex h-8 shrink-0 items-center justify-between px-3 text-sm font-semibold ${
+      className={`relative flex h-11 shrink-0 items-center justify-between px-3 text-sm font-semibold ${
         transparent ? "bg-transparent" : dark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
       } ${transparent ? (dark ? "text-gray-100" : "text-gray-900") : ""}`}
     >
@@ -133,6 +165,14 @@ export function PhoneStatusBar({
 
 interface NavBarProps {
   dark?: boolean;
+  /**
+   * Take the bar out when a full-screen app is covering this screen.
+   *
+   * A phone shows one nav bar: the one belonging to what you are looking at.
+   * A host that keeps its own bar *and* opens an app over itself shows two
+   * titles for one screen and spends 46px saying nothing.
+   */
+  hidden?: boolean;
   /** The screen you are on. Centered, like every phone puts it. */
   title: string;
   /**
@@ -171,7 +211,8 @@ interface NavBarProps {
   highlightBack?: boolean;
 }
 
-export function PhoneNavBar({ dark = false, title, backLabel = "Home", onBack, trailing, backKind = "home", highlightBack }: NavBarProps) {
+export function PhoneNavBar({ dark = false, hidden = false, title, backLabel = "Home", onBack, trailing, backKind = "home", highlightBack }: NavBarProps) {
+  if (hidden) return null;
   return (
     <div
       data-phone-navbar

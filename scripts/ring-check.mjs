@@ -49,17 +49,21 @@
  * measured was asked to say when it had stopped moving.
  *
  * NEGATIVE CONTROL — run this before trusting a green result, because this repo
- * has shipped three harnesses that were quietly inspecting nothing. Two runs,
- * because one of them tests the check and the other tests the cure:
+ * has shipped three harnesses that were quietly inspecting nothing.
  *
- *   A. Shrink a window AND disable the reveal. In GuidedTroubleshootingTask set
- *      the public-wifi portal's `initial` height to 300, and make
- *      SimulatorFrame's reveal effect return early. Then
- *      `npm run ring-check -- public-wifi` must FAIL, naming "Continue".
- *      That is the exact bug that shipped twice. If it passes, this file is
- *      decoration.
- *   B. Put the reveal back, leave the window at 300. It must now PASS — which
- *      is what proves the reveal, not the window height, is doing the work.
+ * **Disable the scroll loop only, never the whole reveal.** The findings this
+ * check reads are recorded *inside* `reveal()`, so an early `return` at the top
+ * of it switches off the measurement along with the cure, the map stays empty,
+ * and the run comes back green with nothing being checked at all. That is
+ * precisely what the previous wording here asked for, and running it as written
+ * produced a clean sheet on both modes — a negative control that cannot fail is
+ * worse than none, because it certifies the check.
+ *
+ * The control that works: in `SimulatorFrame`, make the ancestor loop that
+ * writes `node.scrollTop` / `node.scrollLeft` iterate zero times, leaving the
+ * recorder below it intact. Watched to fail at **6 findings on the laptop and 1
+ * at phone size**. One is thin, and honestly so: with the phone screens sized
+ * correctly, only one lesson still needs a scroll to bring its ring into view.
  */
 
 import { chromium } from "playwright";
@@ -67,13 +71,31 @@ import { chromium } from "playwright";
 const filter = process.argv[2] ?? "";
 const BASE = process.env.SOLVE_CHECK_URL ?? "http://localhost:3000";
 
+/**
+ * `RING_PHONE=1` audits the ring at 390x844 instead of 1440x900.
+ *
+ * This check spent its whole life at laptop size, and that was the last hole
+ * in the phone course's coverage — the one that hid an off-screen dock. It is
+ * the same `SolveCheck` component behind both routes and the same audit inside
+ * `lib/solve/solver.ts`; only the viewport and the page differ, which is the
+ * point. A ring that clears a 900px-tall window says nothing about a 844px
+ * screen where 124px of it is the lesson banner and 76px is the phone's own
+ * chrome.
+ */
+const PHONE = process.env.RING_PHONE === "1";
+const ROUTE = PHONE ? "/dev/phone-check" : "/dev/solve-check";
+
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const page = await browser.newPage(
+  PHONE
+    ? { viewport: { width: 390, height: 844 }, hasTouch: true, deviceScaleFactor: 2 }
+    : { viewport: { width: 1440, height: 900 } },
+);
 
 page.on("pageerror", (e) => console.error(`[pageerror] ${e.message}`));
 
 try {
-  await page.goto(`${BASE}/dev/solve-check`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}${ROUTE}`, { waitUntil: "networkidle" });
 } catch (e) {
   console.error(`Could not reach ${BASE} — is the dev server running? (${e.message})`);
   await browser.close();

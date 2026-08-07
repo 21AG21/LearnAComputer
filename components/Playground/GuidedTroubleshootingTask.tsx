@@ -8,6 +8,7 @@ import Dock from "./Dock";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { GlobeIcon, MailIcon, GearIcon } from "./Icons";
 import { DesktopMenuBar, wallpaper } from "./DesktopChrome";
+import { PhoneNavBar, PhoneStatusBar } from "./PhoneChrome";
 import DraggableWindow from "./Desktop/DraggableWindow";
 import AppBody, { type AppBodyId } from "./Desktop/AppBody";
 import SettingsApp from "./Desktop/SettingsApp";
@@ -154,6 +155,21 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
   const [erRestartConfirm, setErRestartConfirm] = useState(false);
   const [erRestarting, setErRestarting] = useState(false);
   const [erRestarted, setErRestarted] = useState(false);
+
+  /**
+   * Is any window covering the screen?
+   *
+   * One expression rather than a flag each call site has to remember to set —
+   * these are exactly the conditions the six `DraggableWindow`s below render
+   * on, and a window that forgets to say so is a home screen that stays up
+   * underneath it.
+   */
+  const aWindowIsOpen =
+    !!freeApp ||
+    supportOpen ||
+    erSettingsOpen ||
+    (mode === "public-wifi" && (privacyOpen || (portalWinOpen && portalStage !== "offline"))) ||
+    (mode === "password-reset" && prApp !== null);
 
   // frozen + type-in-app state
   const [frozenAppReopened, setFrozenAppReopened] = useState(false);
@@ -484,11 +500,57 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
       <div className="h-full flex flex-col overflow-hidden relative" style={{ background: wallpaper(false) }}>
         {/* Menu Bar */}
         <div className="relative shrink-0">
+          {/**
+            * This sim draws its own desktop, so it needs its own top bar — and
+            * on a phone that is two bars, not one squeezed.
+            *
+            * `DesktopMenuBar compact` put a Menu button, a title, the clock,
+            * Wi-Fi and the battery in a single 390px row, and the Wi-Fi icon
+            * ended up past the right edge. Three lessons — `public-wifi`,
+            * `internet-problems` and `final-troubleshooting` — then said "click
+            * the Wi-Fi icon" while pointing at something off screen. The first
+            * phone-size run of `ring-check` is what found it; nothing else can,
+            * because the solver reaches a control through the DOM whether or
+            * not a learner could ever see it.
+            */}
+          {isPhone ? (
+            <>
+              <PhoneStatusBar
+                time={time}
+                batteryPercent={batteryPct}
+                openPanel={wifiPanelOpen ? "wifi" : null}
+                onTogglePanel={(panel) => {
+                  if (panel !== "wifi") return;
+                  if (wifiPanelOpen) setWifiPanelOpen(false);
+                  else handleOpenWifiPanel();
+                }}
+                highlight={hl("wifi-icon") ? "wifi" : null}
+              />
+              {/* One nav bar per screen. With an app open, the app's own bar
+                  ("← Back / Browser") is the bar for the screen you are on, and
+                  this one stacked a second "Home ⋮ Menu" above it — two titles
+                  for one screen, and 46px a phone does not have spare. The
+                  status bar stays: a phone always shows the time. */}
+              <PhoneNavBar
+                hidden={aWindowIsOpen}
+                title={view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Home"}
+                trailing={
+                  /* Bare text, no `<span>`: `button[aria-label]` wrapping an
+                     element is how `solver.ts` identifies a dock icon. */
+                  <button
+                    onClick={handleOpenForceQuit}
+                    aria-label="System menu"
+                    className={`inline-flex min-h-[44px] items-center gap-1.5 rounded px-2 text-[15px] font-semibold text-blue-700 hover:bg-black/5 ${hl("system-menu") ? pulse : ""}`}
+                  >
+                    <svg viewBox="0 0 16 16" className="h-5 w-5" fill="currentColor" aria-hidden="true"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
+                    Menu
+                  </button>
+                }
+              />
+            </>
+          ) : (
           <DesktopMenuBar
-            compact={isPhone}
-            title={
-              view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : isPhone ? "Home" : "Desktop"
-            }
+            title={view === "force-quit" ? "Force Quit" : view === "app-market" ? "App Market" : "Desktop"}
             leading={
               <button
                 onClick={handleOpenForceQuit}
@@ -511,10 +573,13 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
             }}
             highlight={hl("wifi-icon") ? "wifi" : null}
           />
+          )}
 
         {/* WiFi Panel Dropdown */}
         {wifiPanelOpen && (
-          <div className="absolute top-full right-2 z-50 w-56 bg-white rounded-xl shadow-xl border border-gray-200 p-3">
+          <div className={`absolute top-full z-50 rounded-xl border border-gray-200 bg-white p-3 shadow-xl ${
+            isPhone ? "inset-x-2" : "right-2 w-56"
+          }`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold">WiFi</span>
               <button
@@ -578,7 +643,7 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
         </div>{/* end menu bar container */}
 
         {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto relative">
+        <div className="flex-1 min-h-0 overflow-y-auto relative">
           {/* An app the scenario has no script for, opened from the dock. Same window,
               same app, same everything as every other dock in the course. */}
           {freeApp && (
@@ -595,8 +660,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
           )}
           {/* Error Dialog Overlay */}
           {mode === "error-code" && !errorDismissed && (
-            <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs">
+            <div className="absolute inset-0 z-40 bg-black/40 flex justify-center overflow-auto p-4">
+              <div className="my-auto bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs">
                 <div className="text-center mb-3">
                   <svg viewBox="0 0 24 24" className="w-10 h-10 mx-auto text-red-700 sim-dark:text-red-400" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
                 </div>
@@ -1138,8 +1203,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
           {/* Error-Restart: system error dialog */}
           {mode === "error-restart" && erSystemError && (
-            <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
+            <div className="absolute inset-0 z-40 bg-black/40 flex justify-center overflow-auto p-4">
+              <div className="my-auto bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
                 <svg viewBox="0 0 24 24" className="w-10 h-10 mx-auto text-amber-500 mb-2" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
                 <h3 className="font-bold text-base mb-1">Something went wrong</h3>
                 <p className="text-xs text-gray-500 mb-4">Restarting your computer usually fixes this.</p>
@@ -1181,8 +1246,8 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
 
           {/* Error-Restart: confirm dialog */}
           {mode === "error-restart" && erRestartConfirm && (
-            <div className="absolute inset-0 z-40 bg-black/40 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
+            <div className="absolute inset-0 z-40 bg-black/40 flex justify-center overflow-auto p-4">
+              <div className="my-auto bg-white rounded-2xl shadow-2xl p-5 w-full max-w-xs text-center">
                 <h3 className="font-bold text-base mb-1">Restart your computer?</h3>
                 <p className="text-xs text-gray-500 mb-4">All unsaved work will be lost.</p>
                 <div className="flex gap-2">
@@ -1215,14 +1280,44 @@ export default function GuidedTroubleshootingTask({ goal, steps, mode: simMode, 
           )}
         </div>
 
-        {/* Dock */}
-        <div className="shrink-0 flex items-center justify-center px-2 py-2">
+        {/*
+          * Dock — and on a phone, the grid **is** the home screen.
+          *
+          * Wrapping ten large icons takes three rows and about 350px, which on
+          * a 530px screen leaves the content area above it with a computed
+          * height of *zero*. Measured on `password-recovery`: the bank's
+          * sign-in page rendered 40px tall with the wallpaper showing through
+          * it, and `Forgot password?` — the control step 1 names — was a
+          * clipped sliver. `ring-check` at phone size is what pointed at it;
+          * every other harness clicks through the DOM and saw a healthy lesson.
+          *
+          * So it behaves the way `FakeDesktop`'s home screen does: the icons
+          * when nothing is open, and the app's own screen when something is.
+          * Back on the window's nav bar returns here.
+          *
+          * And when it *is* showing, it shows `dense` — five small tiles to a
+          * row instead of four large ones, two rows instead of three. Unlike
+          * the phone home screen, this dock always has a scene above it that
+          * needs the space: with the tall grid, `when-to-get-help`'s error
+          * dialog and `troubleshooting-basics`'s frozen window both opened into
+          * a container too short to show them.
+          */}
+        <div className={`shrink-0 items-center justify-center px-2 py-2 ${
+          /* …unless the step is pointing *at* the dock. `when-to-get-help` ends
+             with "reopen Photos", and hiding the dock under an open browser
+             left that ring on nothing — the same trap `FileManager` solves by
+             popping back to Browse when a step names a place. Asking every dock
+             app rather than reading `step.target`, because two actions
+             (`open-settings-privacy`) name their app in the handler. */
+          isPhone && aWindowIsOpen && !ALL_DOCK_APPS.some((a) => hl("dock-app", a.id)) ? "hidden" : "flex"
+        }`}>
           {/* Four to a row on a phone. Ten in a single row need about 640px, so
               at 390 the row overflowed the right edge and the icon a step named
               could be off screen with nothing to say so. */}
           <Dock
-            size={isPhone ? "lg" : "md"}
+            size={isPhone ? "sm" : "md"}
             wrap={isPhone}
+            dense={isPhone}
             tray={!isPhone}
             items={ALL_DOCK_APPS.map((app) => ({
               id: app.id,

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useIsPhone } from "../SimFormFactor";
-import { ROW_RING, usePhoneScreen } from "../PhoneChrome";
+import { DisclosureChevron, ROW_RING, usePhoneScreen } from "../PhoneChrome";
 import { FolderIcon, SaveIcon, SearchIcon } from "../Icons";
 import { iconFor, Item, Loc, LOC_TITLE, makeItems, SIDEBAR } from "./filesData";
 import FileViewer from "./FileViewer";
@@ -181,6 +181,8 @@ export default function FileManager({
 
   const pulse = "animate-ring-pulse";
   const isPhone = useIsPhone();
+  /** A phone acts on a file from the file's own screen — see the preview below. */
+  const actionsInPreview = isPhone && preview !== null;
 
   /**
    * A phone's file browser is **Browse, then a folder** — not both at once.
@@ -399,19 +401,29 @@ export default function FileManager({
               onClick={handleNewFolder}
               highlight={hl("toolbar-newfolder")}
             />
-            <ToolbarBtn
-              label="Rename"
-              onClick={handleRenameButtonClick}
-              disabled={!selected}
-              highlight={hl("toolbar-rename")}
-            />
-            <ToolbarBtn
-              label="Move to Trash"
-              onClick={handleDeleteButtonClick}
-              disabled={!selected}
-              highlight={hl("toolbar-trash")}
-            />
-            <div className="relative">
+            {/* A folder screen and a file screen, not both at once.
+                On a phone these three act on a *file*, and a file has its own
+                screen now — the preview below carries them. Left here as well
+                they wrapped this toolbar onto two rows the moment anything was
+                selected, and rang two Renames at once with the list's one under
+                a modal, which is an ambiguity `ring-check` cannot see. */}
+            {!isPhone && (
+              <ToolbarBtn
+                label="Rename"
+                onClick={handleRenameButtonClick}
+                disabled={!selected}
+                highlight={hl("toolbar-rename")}
+              />
+            )}
+            {!isPhone && (
+              <ToolbarBtn
+                label="Move to Trash"
+                onClick={handleDeleteButtonClick}
+                disabled={!selected}
+                highlight={hl("toolbar-trash")}
+              />
+            )}
+            <div className={`relative ${isPhone ? "hidden" : ""}`}>
               <ToolbarBtn
                 label="Move to…"
                 onClick={() => setMoveMenu((v) => !v)}
@@ -439,8 +451,8 @@ export default function FileManager({
           <ToolbarBtn
             label="Put Back"
             onClick={handleRestoreButtonClick}
-            disabled={!selected}
-            highlight={hl("toolbar-putback")}
+            disabled={!selected || actionsInPreview}
+            highlight={hl("toolbar-putback") && !actionsInPreview}
           />
         )}
 
@@ -465,7 +477,7 @@ export default function FileManager({
         {/* Stacked on a phone. Side by side, the sidebar took 42% of a 390px
               screen and every filename wrapped mid-word into three lines. */}
         <div
-          className={`shrink-0 overflow-auto border-gray-300 bg-[#eef1f5] py-2 sim-dark:bg-gray-800 sim-dark:border-gray-700 ${
+          className={`shrink-0 overflow-auto border-gray-300 sim-dark:border-gray-700 ${isPhone ? "bg-gray-100 sim-dark:bg-gray-900" : "bg-[#eef1f5] py-2 sim-dark:bg-gray-800"} ${
             /**
              * Three layouts, not two.
              *
@@ -481,7 +493,7 @@ export default function FileManager({
               : !phonePushPop
                 ? "max-h-[34%] w-full border-b-2"
                 : showBrowse
-                  ? "w-full flex-1 animate-screen-push"
+                  ? "w-full flex-1"
                   : "hidden"
           }`}
         >
@@ -495,14 +507,34 @@ export default function FileManager({
                 onDragOver={droppable ? (e) => { e.preventDefault(); setDropTarget(`sidebar-${s.id}`); } : undefined}
                 onDragLeave={droppable ? () => { setDropTarget((p) => p === `sidebar-${s.id}` ? null : p); } : undefined}
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
-                className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
-                  location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
+                /**
+                 * On a phone these are white rows on a gray ground with a
+                 * hairline between them, and the one you are in is a pale tint
+                 * rather than a saturated blue slab. The laptop keeps its
+                 * sidebar exactly as it was.
+                 *
+                 * Full-bleed blue on a 390px screen is the loudest thing on
+                 * the display and it is doing nothing louder than "you are
+                 * here"; the rows underneath it, being the same gray as their
+                 * container, read as one flat panel rather than as a list.
+                 */
+                className={`w-full text-left flex items-center transition-all ${
+                  isPhone
+                    ? `min-h-[56px] gap-4 border-b border-gray-200 px-4 text-[17px] font-medium last:border-b-0 sim-dark:border-gray-700 ${
+                        location === s.id
+                          ? "bg-blue-50 text-blue-700 sim-dark:bg-blue-950 sim-dark:text-blue-200"
+                          : "bg-white text-gray-900 sim-dark:bg-gray-800 sim-dark:text-gray-100"
+                      }`
+                    : `gap-2 px-3 py-2 text-sm font-semibold ${
+                        location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
+                      }`
                 } ${hl("sidebar", s.label) || s.id === guideToLoc ? ROW_RING : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
               >
-                <span>{s.icon}</span>
-                <span>{s.label}</span>
+                <span className={isPhone ? "text-gray-500 sim-dark:text-gray-400" : ""}>{s.icon}</span>
+                <span className="flex-1">{s.label}</span>
+                {isPhone && <DisclosureChevron />}
               </button>
             );
           })}
@@ -600,7 +632,7 @@ export default function FileManager({
       {preview && (
         <FileModal onClose={handlePreviewClose}>
           {/* Same viewer the desktop opens, so a file looks identical in every unit. */}
-          <div className="flex h-[26rem] w-[34rem] max-w-full flex-col">
+          <div className={`flex w-[34rem] max-w-full flex-col ${isPhone ? "max-h-full" : "h-[26rem]"}`}>
             <div className="flex shrink-0 items-center justify-between gap-3 border-b-2 border-gray-300 sim-dark:border-gray-700 bg-gray-100 sim-dark:bg-gray-800 px-3 py-2">
               <span className="flex items-center gap-2 text-sm font-bold text-gray-700 sim-dark:text-gray-200">
                 <span className="text-gray-500 sim-dark:text-gray-300">{iconFor(preview, 18)}</span>
@@ -619,6 +651,83 @@ export default function FileManager({
             <div className="min-h-0 flex-1 overflow-hidden">
               <FileViewer item={preview} />
             </div>
+            {/*
+              * On a phone, a file's actions live on the file's own screen.
+              *
+              * One tap opens a file here — that is the phone rule, and it is
+              * right. What it quietly cost was every other thing you can do to
+              * a file: Rename, Move to… and Move to Trash are in the list
+              * toolbar, and this preview is a modal over it. So the only route
+              * to renaming was tap the file, close what opened, then press
+              * Rename against a selection nothing on screen mentions. No
+              * learner finds that.
+              *
+              * Every gate was green on it, and the reason is worth keeping:
+              * `element.click()` goes straight through a `bg-black/40` overlay,
+              * so the solver renamed files by clicking a button no finger could
+              * reach, and `ring-check` scores whether a ring is *within the
+              * viewport*, not whether something is on top of it.
+              *
+              * Rename and Move to Trash close the sheet first, because both act
+              * on the row underneath — rename edits the name in place, and the
+              * trash needs the list to show what left. **Move to… does not**:
+              * picking a destination is a second question about the same file,
+              * so it replaces the buttons in this sheet rather than dropping a
+              * popover behind it.
+              */}
+            {isPhone && !inTrash && (
+              <div className="shrink-0 border-t border-gray-300 bg-gray-100 px-3 py-2 sim-dark:border-gray-700 sim-dark:bg-gray-800">
+                {moveMenu && canMove ? (
+                  <div className="flex flex-col">
+                    <span className="px-1 pb-1 text-sm font-semibold text-gray-600 sim-dark:text-gray-300">Move to which folder?</span>
+                    {SIDEBAR.filter((s) => s.id !== "home" && s.id !== "trash" && s.id !== selItem?.loc).map((s) => (
+                      <button
+                        key={s.id}
+                        onClick={() => { setPreview(null); handleMoveTo(s.id); }}
+                        className="flex min-h-[44px] items-center gap-3 rounded-lg px-1 text-left text-[17px] font-medium text-gray-900 hover:bg-blue-100 sim-dark:text-gray-100 sim-dark:hover:bg-gray-700"
+                      >
+                        <span className="text-gray-500 sim-dark:text-gray-400">{s.icon}</span>
+                        <span className="flex-1">{s.label}</span>
+                        <DisclosureChevron />
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setMoveMenu(false)}
+                      className="mt-1 min-h-[44px] text-sm font-semibold text-blue-700 sim-dark:text-blue-300"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <ToolbarBtn
+                      label="Rename"
+                      onClick={() => { setPreview(null); handleRenameButtonClick(); }}
+                      highlight={hl("toolbar-rename")}
+                    />
+                    <ToolbarBtn
+                      label="Move to…"
+                      onClick={() => setMoveMenu(true)}
+                      disabled={!canMove}
+                    />
+                    <ToolbarBtn
+                      label="Move to Trash"
+                      onClick={() => { setPreview(null); handleDeleteButtonClick(); }}
+                      highlight={hl("toolbar-trash")}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+            {isPhone && inTrash && (
+              <div className="flex shrink-0 items-center gap-2 border-t border-gray-300 bg-gray-100 px-3 py-2 sim-dark:border-gray-700 sim-dark:bg-gray-800">
+                <ToolbarBtn
+                  label="Put Back"
+                  onClick={() => { setPreview(null); handleRestoreButtonClick(); }}
+                  highlight={hl("toolbar-putback")}
+                />
+              </div>
+            )}
           </div>
         </FileModal>
       )}
@@ -671,9 +780,12 @@ export function FileModal({ children, onClose }: { children: React.ReactNode; on
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        /* `max-h-full` on the sheet, and the content inside it must be free to
+           shrink — a phone sheet with a fixed-height child grows past the
+           bottom edge of the screen and takes its footer with it. */
         className={`border-black bg-white shadow-2xl sim-dark:border-gray-500 sim-dark:bg-gray-900 ${
           isPhone
-            ? "w-full rounded-t-2xl border-t-4 animate-sheet-up"
+            ? "max-h-full w-full overflow-hidden rounded-t-2xl border-t-4 animate-sheet-up"
             : "rounded-xl border-4 animate-slide-down"
         }`}
       >

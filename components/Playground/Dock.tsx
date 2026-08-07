@@ -82,6 +82,18 @@ interface DockProps {
    * there is one place the icons come from.
    */
   wrap?: boolean;
+  /**
+   * A dock over a scene, not a home screen: five to a row, tight rows.
+   *
+   * `wrap` was written for the phone's home *screen*, where the grid is the
+   * whole screen and can afford four big tiles to a row. A host that keeps a
+   * scene above its dock cannot: measured in `GuidedTroubleshootingTask`, ten
+   * large tiles at four to a row took three rows and about 350px of a 530px
+   * phone screen, and the content area above computed a height of **zero** —
+   * `password-recovery` rendered its bank page 40px tall with the wallpaper
+   * showing through, and two dialogs elsewhere had nowhere to open.
+   */
+  dense?: boolean;
   /** The frosted tray behind the icons. Off on the phone's home screen, where the
    *  icons sit straight on the wallpaper exactly as they do on a real phone. */
   tray?: boolean;
@@ -95,6 +107,7 @@ export default function Dock({
   showLabels = true,
   className = "",
   wrap = false,
+  dense = false,
   tray = true,
 }: DockProps) {
   // The column is exactly the tile's width. Ten of these plus gaps fit the lesson pane,
@@ -115,7 +128,11 @@ export default function Dock({
        * have and keeps the labels lined up under each other.
        */
       className={`max-w-full rounded-2xl px-2 py-2 ${
-        wrap ? "grid grid-cols-4 gap-x-1 gap-y-6 justify-items-center" : "flex items-start gap-1"
+        wrap
+          ? dense
+            ? "grid grid-cols-5 gap-x-1 gap-y-2 justify-items-center"
+            : "grid grid-cols-4 gap-x-1 gap-y-6 justify-items-center"
+          : "flex items-start gap-1"
       } ${tray ? "backdrop-blur-md" : ""} ${className}`}
       style={
         tray

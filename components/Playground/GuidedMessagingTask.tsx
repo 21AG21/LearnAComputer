@@ -165,7 +165,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { step, stepIndex, finished, done, flash, tryStep, wanted, objectives, isAssessment } = useStepRunner({
+  const { step, stepIndex, finished, done, flash, tryStep, wanted, objectives } = useStepRunner({
     steps,
     mode,
     onResult,
@@ -202,15 +202,21 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   const listStep = step?.action === "create-group" || step?.action === "select-contact";
   // `creatingGroup` is NOT detail: the contact picker replaces the contact list,
   // in the list pane. Counting it as detail hid the checkboxes the step names.
-  const showDetail = isPhone && !isAssessment && !listStep && !creatingGroup && !!(activeContact || activeGroupId);
+  const showDetail = isPhone && !listStep && !creatingGroup && !!(activeContact || activeGroupId);
   /**
-   * The stacked, two-pane layout — the laptop's, and the one assessments keep.
+   * The laptop's two-pane layout. Phones push instead — including in
+   * assessments.
    *
-   * Nothing points during an assessment, so the sim cannot know which of the
-   * two screens the learner needs next; guessing wrong there hides a control
-   * rather than merely moving it.
+   * Assessments used to be carved out here, on the reasoning that nothing
+   * points during one so the app cannot know which screen the learner needs.
+   * That was true and beside the point: a learner navigates *themselves*, and
+   * every screen has a chevron labeled with where it goes. What actually broke
+   * was the solver, whose nav-hunt did not know the words "Mailboxes",
+   * "Browse", "Chats", "Library" or "Albums". Teaching it those (see
+   * `NAV_LABELS`) removed the reason, and with it thirteen lessons that still
+   * looked like a desktop.
    */
-  const bothPanes = !isPhone || isAssessment;
+  const bothPanes = !isPhone;
 
 
   useEffect(() => {
@@ -675,7 +681,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           * layout no phone has.
           */}
         <div
-          className={`flex-1 flex flex-col relative ${showDetail ? "animate-screen-push" : ""} ${
+          className={`flex-1 flex flex-col relative ${showDetail ? "" : ""} ${
             !bothPanes && !showDetail ? "hidden" : ""
           }`}
         >

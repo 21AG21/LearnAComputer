@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useIsPhone } from "./SimFormFactor";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
-import { PhoneTabBar, ROW_RING } from "./PhoneChrome";
+import { DisclosureChevron, PhoneTabBar, ROW_RING } from "./PhoneChrome";
 import { useSimTheme } from "./Desktop/SimThemeContext";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import {
@@ -114,7 +114,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
   const [showMeBanner, setShowMeBanner] = useState(false);
   const [showMeConfirmed, setShowMeConfirmed] = useState(false);
 
-  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives, completed, isAssessment } =
+  const { step, stepIndex, finished, done, flash, tryStep, wants, objectives, completed } =
     useStepRunner({ steps, mode, onResult });
 
   /**
@@ -124,7 +124,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
    */
   const listStep =
     step?.action === "create-album" || step?.action === "go-to-album" || step?.action === "search";
-  const showDetail = isPhone && !isAssessment && !listStep && !!selectedPhoto;
+  const showDetail = isPhone && !listStep && !!selectedPhoto;
 
   /**
    * A phone's Photos app has a **tab bar**, not a sidebar.
@@ -142,7 +142,20 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
    * otherwise the ring would be on a screen the learner is not looking at —
    * the same reason a `go-to-folder` step pops Mail back to Mailboxes.
    */
-  const bothPanes = !isPhone || isAssessment;
+  /**
+   * The laptop's two-pane layout. Phones push instead — including in
+   * assessments.
+   *
+   * Assessments used to be carved out here, on the reasoning that nothing
+   * points during one so the app cannot know which screen the learner needs.
+   * That was true and beside the point: a learner navigates *themselves*, and
+   * every screen has a chevron labeled with where it goes. What actually broke
+   * was the solver, whose nav-hunt did not know the words "Mailboxes",
+   * "Browse", "Chats", "Library" or "Albums". Teaching it those (see
+   * `NAV_LABELS`) removed the reason, and with it thirteen lessons that still
+   * looked like a desktop.
+   */
+  const bothPanes = !isPhone;
   const [userTab, setUserTab] = useState<"library" | "albums" | "search">("library");
   const [albumOpen, setAlbumOpen] = useState(false);
   const wantsAlbumsList =
@@ -419,7 +432,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               list keeps a capped slice of the height and scrolls inside it. */}
         <div
           className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto ${
-            bothPanes ? "w-36" : showAlbumsList ? "w-full flex-1 animate-screen-push" : "hidden"
+            bothPanes ? "w-36" : showAlbumsList ? "w-full flex-1" : "hidden"
           }`}
         >
           {/* Search is its own tab on a phone, so the box does not sit above the
@@ -466,7 +479,7 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               } ${hl("sidebar-item", s) ? ROW_RING : ""}`}
             >
               <span className={`inline-flex items-center ${bothPanes ? "gap-1.5" : "gap-3"}`}>{s === "All Photos" ? <ImageIcon size={bothPanes ? 14 : 18} /> : s === "Favorites" ? <HeartFilledIcon size={bothPanes ? 14 : 18} className="text-red-700 sim-dark:text-red-400" /> : s === "Recently Deleted" ? <TrashIcon size={bothPanes ? 14 : 18} /> : <FolderIcon size={bothPanes ? 14 : 18} />} {s}</span>
-              {!bothPanes && <span aria-hidden className="text-gray-400">›</span>}
+              {!bothPanes && <DisclosureChevron />}
             </button>
           ))}
           {creatingAlbum ? (
@@ -564,6 +577,45 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
                   {albums.map((a) => (
                     <button key={a} onClick={() => handlePickAlbum(a)} className={`block w-full text-left px-2 py-1.5 text-sm hover:bg-blue-50 rounded ${hl("album-choice", a) ? pulse : ""}`}><span className="inline-flex items-center gap-1"><FolderIcon size={12} /> {a}</span></button>
                   ))}
+                  {/**
+                    * You can make a new album from right here.
+                    *
+                    * That is what a phone's "Add to Album" does, and on a phone
+                    * it is the only sane place for it: the list of albums is a
+                    * different screen from the open photo, so "create an album,
+                    * then put this photo in it" would otherwise mean leaving
+                    * the photo, making the album, and finding the photo again.
+                    * The laptop never had that problem — its album list sits
+                    * beside the picture — which is why the flow was built
+                    * without this and why `unit-7-assessment` was the lesson
+                    * that noticed.
+                    */}
+                  {creatingAlbum ? (
+                    <div className="mt-2 border-t pt-2">
+                      <input
+                        autoFocus
+                        value={newAlbumInput}
+                        onChange={(e) => setNewAlbumInput(e.target.value)}
+                        placeholder="Album name"
+                        aria-label="New album name"
+                        onKeyDown={(e) => e.key === "Enter" && handleConfirmAlbum()}
+                        className="w-full rounded border border-gray-500 px-2 py-1 text-sm outline-none focus:border-blue-600"
+                      />
+                      <button
+                        onClick={handleConfirmAlbum}
+                        className={`mt-1 w-full rounded bg-blue-600 py-1 text-sm text-white hover:bg-blue-700 ${hl("new-album-confirm") ? pulse : ""}`}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleCreateAlbum}
+                      className={`mt-1 block w-full rounded border-t px-2 pt-2 text-left text-sm text-blue-700 hover:bg-blue-50 sim-dark:text-blue-300 ${hl("new-album-btn") ? pulse : ""}`}
+                    >
+                      + New Album
+                    </button>
+                  )}
                 </div>
               )}
 
