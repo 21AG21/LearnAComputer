@@ -114,6 +114,24 @@ for (const unit of PHONE_COURSE) {
           quote: tautology[0],
         });
       }
+
+      /**
+       * "do X (or do X)".
+       *
+       * The same defect wearing different words. A sentence offering a keyboard
+       * route *and* a pointer route — "press Enter (or click Go)" — has two
+       * halves that collapse onto the same phone gesture, so rewriting each
+       * half on its own produced **"tap Go (or tap Go)"** on `urls`, the lesson
+       * that teaches typing a web address. Offering somebody a choice between a
+       * thing and itself reads as a mistake, because it is one.
+       */
+      const echoed = /\b([a-z][a-z ]{2,24}?) \((?:or|and) \1\)/i.exec(text);
+      if (echoed) {
+        findings.push({
+          slug: entry.slug, where, word: "choice between a thing and itself",
+          quote: echoed[0],
+        });
+      }
     }
   }
 }

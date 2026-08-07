@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useIsPhone } from "./SimFormFactor";
-import { ArrowLeftIcon } from "./Icons";
 import { useEffect, useRef, useState } from "react";
 import SimulatorFrame from "./SimulatorFrame";
+import { ROW_RING } from "./PhoneChrome";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { photoSrc } from "@/lib/photoAssets";
 
@@ -203,6 +203,14 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
   // `creatingGroup` is NOT detail: the contact picker replaces the contact list,
   // in the list pane. Counting it as detail hid the checkboxes the step names.
   const showDetail = isPhone && !isAssessment && !listStep && !creatingGroup && !!(activeContact || activeGroupId);
+  /**
+   * The stacked, two-pane layout — the laptop's, and the one assessments keep.
+   *
+   * Nothing points during an assessment, so the sim cannot know which of the
+   * two screens the learner needs next; guessing wrong there hides a control
+   * rather than merely moving it.
+   */
+  const bothPanes = !isPhone || isAssessment;
 
 
   useEffect(() => {
@@ -526,6 +534,18 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
       objectives={objectives}
       hint={hint}
       freePlay={freePlay}
+      /* One screen at a time: the conversation list, or one conversation. */
+      phoneNav={
+        bothPanes
+          ? undefined
+          : showDetail
+            ? {
+                title: currentContactObj?.name ?? "Group",
+                backLabel: "Chats",
+                onBack: () => { setActiveContact(null); setActiveGroupId(null); },
+              }
+            : { title: creatingGroup ? "New Group" : "Chats" }
+      }
     >
       <div
         data-phone-stacked={isPhone || undefined}
@@ -602,7 +622,7 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
                   onClick={() => handleSelectContact(c.id)}
                   className={`flex items-center gap-3 px-3 py-3 text-left border-b transition-all hover:bg-blue-50 ${
                     activeContact === c.id ? "bg-blue-100" : ""
-                  } ${hl("contact", c.id) ? pulse : ""}`}
+                  } ${hl("contact", c.id) ? ROW_RING : ""}`}
                 >
                   <span className="relative w-9 h-9 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">
                     <Image src={c.avatar} alt={c.name} fill sizes="36px" className="object-cover" />
@@ -646,8 +666,19 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           )}
         </div>
 
-        {/* Chat area */}
-        <div className={`flex-1 flex flex-col relative ${showDetail ? "animate-screen-push" : ""}`}>
+        {/**
+          * Chat area. On a phone this is a *pushed screen*, not a second pane:
+          * hidden until a conversation is open, because there is no such thing
+          * on a phone as a detail pane sitting empty beside a list. It used to
+          * render below the contact list saying "Tap someone above to start
+          * chatting" — half a 390px screen spent on a sentence explaining a
+          * layout no phone has.
+          */}
+        <div
+          className={`flex-1 flex flex-col relative ${showDetail ? "animate-screen-push" : ""} ${
+            !bothPanes && !showDetail ? "hidden" : ""
+          }`}
+        >
           {activeGroupId && currentGroupObj ? (
             /* Group chat view */
             <>
@@ -751,19 +782,8 @@ export default function GuidedMessagingTask({ goal, steps, mode, hint, freePlay,
           ) : activeContact ? (
             /* 1-to-1 chat view */
             <>
-              {/* Chat header. On a phone the thread replaced the list, so the
-                  back chevron here is the only way to it — top left, where every
-                  phone puts it. */}
-              {isPhone && (
-                <button
-                  type="button"
-                  onClick={() => setActiveContact(null)}
-                  className="flex min-h-[44px] w-full items-center gap-1 border-b bg-gray-50 px-3 text-left text-[15px] font-semibold text-blue-700 sim-dark:bg-gray-800 sim-dark:text-blue-300"
-                >
-                  <ArrowLeftIcon size={18} aria-hidden />
-                  Contacts
-                </button>
-              )}
+              {/* Back to the conversation list lives in the phone's nav bar —
+                  see the `phoneNav` handed to `SimulatorFrame`. */}
               <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50 sim-dark:bg-gray-800">
                 <div className="flex items-center gap-2">
                   <span className="relative w-8 h-8 rounded-full bg-gray-200 sim-dark:bg-gray-700 overflow-hidden shrink-0">

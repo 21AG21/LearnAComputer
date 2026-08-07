@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import WindowControls from "./WindowControls";
 import { useIsPhone, usePhoneHome } from "./SimFormFactor";
 import PhoneShell from "./PhoneShell";
+import type { PhoneNavEntry } from "./PhoneChrome";
 import { SimThemeProvider } from "./Desktop/SimThemeContext";
 
 export const CELEBRATION_MS = 800;
@@ -48,6 +49,16 @@ interface SimulatorFrameProps {
    * name the laptop deliberately.
    */
   phoneWording?: boolean;
+  /**
+   * Which screen inside the app the learner is on, for the phone's nav bar.
+   *
+   * A prop rather than the `PhoneNavProvider` context that apps inside
+   * `FakeDesktop` use, because a guided sim *renders* this frame — it is the
+   * parent of `PhoneShell`, not a descendant, so a context published from its
+   * body would never reach the bar. Omit it and the bar shows the app's name
+   * with a chevron pointing home, which is right for a one-screen app.
+   */
+  phoneNav?: PhoneNavEntry;
   /** Free-play mode: no banner, no frame, no celebration — children fill the container directly. */
   freePlay?: boolean;
   children: ReactNode;
@@ -73,6 +84,41 @@ export function typeTargetFor(
     "type-username", "type-new-password",
   ]);
   return TYPING.has(a) ? v : undefined;
+}
+
+/**
+ * Set the string a learner has to type *into the sentence*, as a chip.
+ *
+ * The laptop shows it in its own white card under the instruction. On a phone
+ * that card cost 52px of screen — and 52px reserved on **every** step, typing
+ * or not, because a box that appears mid-lesson shoves the whole device down
+ * and a status bar that moves is the one thing a status bar must never do.
+ *
+ * The card turns out to be redundant there: of the 68 typing steps in the
+ * course, 62 already name the value in their own words, and the other six are
+ * assessment objectives, where there is no current step and the card never
+ * rendered anyway. So the phone marks up the occurrence that is already in the
+ * sentence — monospace, boxed, exact — and pays nothing for it.
+ *
+ * If the value somehow is not in the sentence, it is appended rather than
+ * dropped: losing the string a learner must copy is much worse than a slightly
+ * clumsy line.
+ */
+function withTypeChip(line: string, value: string): ReactNode {
+  const at = line.toLowerCase().indexOf(value.toLowerCase());
+  const chip = (
+    <code className="mx-0.5 whitespace-nowrap rounded bg-white px-1.5 py-0.5 font-mono text-[15px] font-bold text-gray-900">
+      {value}
+    </code>
+  );
+  if (at < 0) return <>{line} {chip}</>;
+  return (
+    <>
+      {line.slice(0, at)}
+      {chip}
+      {line.slice(at + value.length)}
+    </>
+  );
 }
 
 /**
@@ -113,6 +159,7 @@ export default function SimulatorFrame({
   chrome = true,
   phoneChrome = true,
   phoneWording = true,
+  phoneNav,
   freePlay,
   children,
 }: SimulatorFrameProps) {
@@ -349,8 +396,30 @@ export default function SimulatorFrame({
         * instruction, the "type this" box — at a size that leaves room to use
         * the thing the instruction is about.
         */}
-      <div className={`shrink-0 bg-[#1d2733] text-white ${isPhone ? "px-3 py-2" : "px-5 py-3"}`}>
-        <div className="flex items-center gap-3">
+      {/**
+        * On a phone this box is a **fixed height**, and the instruction scrolls
+        * inside it.
+        *
+        * The banner sits above the device, so anything that changes its height
+        * moves the phone — the Wi-Fi icon jumped 110px between steps on `urls`,
+        * and a status bar that moves is the one thing a status bar must never
+        * do. That was previously solved by *reserving* space: three lines'
+        * worth of minimum for the instruction plus an always-present 52px hole
+        * where the "type this" card would go if the step had one. Most steps
+        * have neither, so the phone was giving up 52px of screen permanently to
+        * hold a box that is absent from all but a handful of lessons.
+        *
+        * One fixed height solves the same problem without the reserve: the
+        * device never moves, a long instruction scrolls rather than being cut
+        * off, and the card can appear and disappear inside the box without
+        * anything below it noticing.
+        */}
+      <div
+        className={`shrink-0 bg-[#1d2733] text-white ${
+          isPhone ? "flex h-[7.75rem] flex-col px-3 py-2" : "px-5 py-3"
+        }`}
+      >
+        <div className="flex shrink-0 items-center gap-3">
           {(done || isAssessment || totalSteps != null) && (
             <>
               <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
@@ -366,28 +435,25 @@ export default function SimulatorFrame({
             </>
           )}
         </div>
-        <div className="mt-1.5 flex items-start justify-between gap-3">
+        <div className={`mt-1.5 flex items-start justify-between gap-3 ${isPhone ? "min-h-0 flex-1" : ""}`}>
           {/* aria-live: the single most important a11y hook in the product. Every
               guided lesson teaches by swapping this instruction on each step; a
               screen-reader learner must be told it changed, or they are stranded
               after every step with a silent, purely-visual ring as the only cue. */}
           <p
-            /**
-             * Three lines' worth of room on a phone, always.
-             *
-             * The banner sits above the device, so a one-line step and a
-             * three-line step moved the whole phone up and down between steps —
-             * the Wi-Fi icon jumped 110px on `urls`. A status bar that moves is
-             * the one thing a status bar must never do.
-             */
-            className={`font-semibold leading-snug ${isPhone ? "min-h-[3.75rem] text-[15px]" : "text-lg"}`}
+            /* Fills the fixed banner and scrolls if the step has more to say
+               than fits — see the note on the banner itself. */
+            className={`font-semibold leading-snug ${isPhone ? "min-h-0 flex-1 self-stretch overflow-y-auto text-[15px]" : "text-lg"}`}
             role="status"
             aria-live="polite"
             aria-atomic="true"
           >
             {(() => {
-              const line = done ? goal + " — all done!" : (instruction ?? goal);
-              return isPhone && phoneWording ? inPhoneWords(line) : line;
+              const raw = done ? goal + " — all done!" : (instruction ?? goal);
+              const line = isPhone && phoneWording ? inPhoneWords(raw) : raw;
+              // On a laptop the exact string gets its own card below; on a
+              // phone it is set into the sentence instead. See `TypeChip`.
+              return isPhone && typeThis && !done ? withTypeChip(line, typeThis) : line;
             })()}
           </p>
           {isAssessment && !done && (
@@ -404,7 +470,7 @@ export default function SimulatorFrame({
               <button
                 onClick={() => setExpanded(!expanded)}
                 /**
-                 * Labelled, and a real target — without growing the banner.
+                 * Labeled, and a real target — without growing the banner.
                  *
                  * A bare chevron says nothing about what is behind it, and at
                  * 21×18px it is a quarter of the touch floor, guarding the only
@@ -431,19 +497,13 @@ export default function SimulatorFrame({
             </div>
           )}
         </div>
-        {/* Reserved unconditionally on a phone. The box only appears on typing
-            steps, so its arrival pushed the whole device down 69px mid-lesson —
-            on `urls`, which is a typing lesson. A status bar that moves is the
-            one thing a status bar must never do. */}
-        {isPhone && !typeThis && !done && <div className="mt-2 h-[3.25rem]" aria-hidden />}
-        {typeThis && !done && (
-          <div className={`mt-2 rounded-lg bg-white text-center shadow-sm ${isPhone ? "px-3 py-2" : "px-4 py-3"}`}>
+        {/* Laptop only. The phone sets the same string into the instruction —
+            see `withTypeChip` — because a second box costs 52px of a screen
+            that has 812 and the sentence already contains the words. */}
+        {typeThis && !done && !isPhone && (
+          <div className="mt-2 rounded-lg bg-white px-4 py-3 text-center shadow-sm">
             <span className="block text-xs font-bold uppercase tracking-widest text-blue-700">Type this — exactly</span>
-            <span
-              className={`mt-1 block break-words font-mono font-bold leading-snug text-gray-900 ${
-                isPhone ? "text-lg" : "text-2xl"
-              }`}
-            >
+            <span className="mt-1 block break-words font-mono text-2xl font-bold leading-snug text-gray-900">
               {typeThis}
             </span>
           </div>
@@ -495,7 +555,7 @@ export default function SimulatorFrame({
          */
         <div className="min-h-0 flex-1">
           <SimThemeProvider>
-            <PhoneShell title={appName} onHome={goHome ?? undefined}>
+            <PhoneShell title={appName} onHome={goHome ?? undefined} nav={phoneNav}>
               <div className="flex h-full min-h-0 flex-col bg-white">{children}</div>
             </PhoneShell>
           </SimThemeProvider>

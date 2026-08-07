@@ -142,7 +142,49 @@ It is a `.ts` file, not `.mjs`: `tsx` only transpiles a `.ts` **entry point**, a
 from an `.mjs` entry the same import silently resolves down the CommonJS path
 with every named export gone.
 
-Seven rules for this code, each of which shipped as a bug first:
+**The phone has three bars and they are three different things**
+(`components/Playground/PhoneChrome.tsx`): a **status bar** (time, radio,
+battery — and never any navigation), an app's **nav bar** (a back chevron
+labelled with where it goes *to*, a centered title), and a **tab bar** at the
+bottom for an app with two or more top-level sections. They were one
+`DesktopMenuBar compact` carrying the clock, the app's name and a back arrow,
+which is a shape no phone has — and the merge is what made push-and-pop
+impossible, because with one bar there is nowhere to say "back to Mailboxes" as
+distinct from "back to the home screen". Every app was therefore stuck one
+screen deep with its sidebar permanently on display.
+
+An app says which screen it is on by publishing a `PhoneNavEntry`, and **how it
+publishes depends on where it sits**: apps mounted by `FakeDesktop` are
+descendants of the shell and use the `usePhoneScreen` context; a guided sim
+*renders* `SimulatorFrame`, so it is the shell's **parent** and must pass
+`phoneNav` as a prop — a context published from its body never arrives.
+
+Three rules around that, each of which cost a debugging round:
+
+- **A full-bleed row in a scrolling list gets `ROW_RING`, not
+  `animate-ring-pulse`.** The outer box-shadow has its left and right clipped by
+  the container, and two yellow horizontal rules read as a rendering fault, not
+  as "this one". Every list in the course had it.
+- **`data-phone-back` says `"home"` or `"app"`, and `solver.ts` reads it.** The
+  chevron's text is its destination, which at the top of an app is "Home" — a
+  `NAV_LABELS` entry — so the solver's nav-hunt would press it and walk out of
+  the app it was searching. The in-app pop stays in the hunt; leaving does not.
+- **The nav bar's back label is a bare text node, never a `<span>`.** Same trap
+  as the objectives toggle: `button[aria-label]` containing an `img` or `span`
+  is how the solver identifies a dock icon.
+
+**A "deliberate retreat" is an untested hypothesis.** The browser's desktop tab
+strip was kept for months because removing it broke `browser-vs-search` with the
+mechanism recorded as unidentified. It was never the strip: reading
+`window.__solveTrace` showed the browser sitting on a **fresh New Tab** at the
+search step — no search box, and Back disabled because a new tab has no history
+— so the instruction said "type in the search box" with nothing on screen to
+type into and no way to reach one. The new-tab page carries a search box now,
+the way every phone browser's does; that lesson went from 1 pass in 6 to 6 in 6,
+and the strip became a tab count that opens a grid of cards. Record a mystery
+honestly, then go and solve it.
+
+Seven more rules for this code, each of which shipped as a bug first:
 
 - **`SimulatorFrame`'s no-chrome pane must be a flex column.** As a block, every
   sim's `flex-1` body sized to its content rather than the screen — invisible on

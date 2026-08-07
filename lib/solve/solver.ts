@@ -1255,7 +1255,15 @@ function ringlessGestures(step: AnyStep, root: HTMLElement, all: AnyStep[] = [])
     // Folder buttons carry unread counts ("Inbox4"), so match label + digits.
     const isNav = (t: string) => NAV_LABELS.some((label) => t === label || new RegExp(`^${label}\\d+$`).test(t));
     const navs = Array.from(root.querySelectorAll<HTMLElement>("button, [role='button']")).filter(
-      (b) => isReachable(b) && isNav(textOf(b)),
+      /**
+       * `data-phone-back="home"` is the phone's chevron at the *top* of an app,
+       * and its text is where it goes back to — which at the top of an app is
+       * "Home", a navigation label. Pressing it leaves the app entirely, so a
+       * hunt for Mail's Spam folder would sail out of Mail and then have to
+       * find its way back in. The in-app pop (`="app"`) is left in: escaping a
+       * detail view is exactly what the hunt is for.
+       */
+      (b) => isReachable(b) && isNav(textOf(b)) && b.getAttribute("data-phone-back") !== "home",
     );
     const start = navSpin++ % Math.max(navs.length, 1);
     for (const b of [...navs.slice(start), ...navs.slice(0, start)]) out.push(() => click(b));

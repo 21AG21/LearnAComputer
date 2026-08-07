@@ -386,12 +386,119 @@ tab is what a phone does, and it broke `browser-vs-search` reproducibly, with
 the cause unidentified — a lesson nobody can finish is worse than a strip that
 looks like a laptop.
 
+## The chrome redesign, 2026-08-06
+
+The complaint was "the phone playground is completely inaccurate to how a phone
+works", and it was right. Screenshotting every app at 390x844 turned up one
+cause behind almost all of it: **the phone was the desktop simulator with
+responsive tweaks**, and the tweaks stopped at the layer where a phone is
+actually different.
+
+| What a phone has | What was there |
+|---|---|
+| A status bar: time, radio, battery, and no controls | `DesktopMenuBar compact`, carrying a back arrow **and** the app's name |
+| A nav bar with a back chevron labelled with its destination | Nothing — back lived in the status bar |
+| A bottom tab bar for top-level sections | A sidebar stacked above the content, both scrolling |
+| Push and pop, one screen at a time | Split views folded into a column, in Mail, Messages, Photos and Files |
+| A grid from the top, a dock, a page dot | Ten icons floating in the vertical center, no dock |
+| One address pill, tabs as cards | A desktop tab strip with ✕ buttons |
+
+### The split that made the rest possible
+
+`components/Playground/PhoneChrome.tsx` is new and holds `PhoneStatusBar`,
+`PhoneNavBar`, `PhoneTabBar` and the `PhoneNavEntry` an app publishes to say
+which screen it is on. Separating the status bar from the nav bar is what made
+push-and-pop *expressible*: with one merged bar there is nowhere to say "back to
+Mailboxes" as distinct from "back to the home screen", so every app was stuck
+one screen deep and its sidebar had to stay on display forever.
+
+Two hosts draw those bars, and they take the app's screen by different routes,
+for a reason worth remembering: apps mounted by `FakeDesktop` are *descendants*
+of the shell and publish through `PhoneNavProvider`; a guided sim **renders**
+`SimulatorFrame`, so it is the shell's *parent* and a context published from its
+body would never arrive. Those pass `phoneNav` as a prop instead.
+
+Three details are load-bearing:
+
+- **The back button carries a bare text node, never a `<span>`.** The solver
+  identifies a dock icon as `button[aria-label]` containing an `img` or a
+  `span`; wrapping the label would enlist the back chevron in the list of app
+  icons it clicks through on every `open-app` step.
+- **`data-phone-back="home"` vs `"app"`.** The chevron's text is where it goes
+  back *to*, which at the top of an app is "Home" — a `NAV_LABELS` entry. The
+  solver's nav-hunt clicks those when its target is off screen, so a hunt for
+  Mail's Spam folder would have walked straight out of Mail. `solver.ts` now
+  skips the `"home"` kind and keeps the in-app pop, which is exactly what the
+  hunt is for.
+- **A full-bleed list row gets `ROW_RING` (`animate-ring-pulse-inset`).**
+  `animate-ring-pulse` is an outer box-shadow, and a row filling its scrolling
+  container has its left and right clipped away — what reached the learner was
+  two yellow horizontal rules, which reads as a rendering fault rather than as
+  "this one". Every list in the course had it: Files' places, Mail's folders and
+  messages, Photos' albums, Messages' conversations.
+
+### The banner stopped reserving space it was not using
+
+The instruction banner was 160px, of which **52px was a permanently empty box**
+held open in case the step had a "type this" card, plus a 60px floor for text
+that is one line more often than not. The reserve existed for a real reason —
+the banner sits above the device, so a banner that changes height moves the
+phone, and a status bar that moves is the one thing a status bar must never do.
+
+One fixed height solves the same problem without the reserve: 124px, with the
+instruction scrolling inside it. The longest step text in the phone course is
+137 characters and it fits without scrolling. The card itself is gone on the
+phone: of the 68 typing steps in the course, 62 already name the value in their
+own words and the other six are assessment objectives where the card never
+rendered, so the phone marks up the occurrence already in the sentence as a
+monospace chip and pays nothing for it.
+
+### `browser-vs-search`, and why the tab strip could finally go
+
+The desktop tab strip had been kept as a documented retreat: hiding it broke
+`browser-vs-search` reproducibly, with the mechanism unidentified. It was never
+the strip. Running the lesson under the real solver and reading
+`window.__solveTrace` showed the stall exactly:
+
+```
+iter step=search prog=2 objdone= spin=14 addr="" results=0 ring=[]
+  ringless #1 moved (click:Downloads)
+```
+
+At the `search` step the browser was sitting on a **fresh New Tab** — a page
+with no search box and, because its history is empty, a **disabled Back
+button**. The instruction said "type in the search box" with no search box on
+screen and no way to one. The solver span its whole budget clicking Downloads,
+which is in `NAV_LABELS` and is a panel toggle, so the screen kept changing and
+the step never could.
+
+A learner reaching that state has strictly less to go on than the solver does.
+The fix is the phone-accurate one: **the new-tab page has a search box**, which
+every phone browser's does. Content pages, which always have history, ring Back
+instead and say so in words. `browser-vs-search` went from 1 pass in 6 to 6 in
+6, and with the dead end gone the strip was replaced by a tab count that opens a
+grid of cards.
+
+The lesson for next time: a "deliberate retreat" is a hypothesis nobody has
+tested. This one was recorded honestly as a mystery and it stayed a mystery for
+as long as nobody read the trace.
+
 ## Still open
 
 - **Only Mail implements a swipe.** An inbox row now slides left to reveal
   Archive, which is the gesture people use twenty times a day on a real phone
   and the first one in this product outside the home bar. Photos still has no
   swipe between pictures and nothing has pull-to-refresh.
+- **Assessments keep the stacked two-pane layout.** Mail, Messages, Photos and
+  Settings all carve out `isAssessment`: nothing points during an assessment, so
+  the app cannot know which screen the learner needs next, and guessing wrong
+  hides a control rather than merely moving it. Thirteen lessons therefore still
+  look like a desktop. Push-and-pop *is* navigable without a ring — every screen
+  has a labelled chevron — so this is worth revisiting with the solver watched
+  closely rather than assumed.
+- **The browser keeps its zoom stepper** (`− 100% +`) in the bottom bar, which
+  is a desktop control; a phone zooms by pinching. `zooming-webpages` and
+  `a11y-zoom-web-page` ring it by name, so it cannot simply go.
 - **There is no on-screen keyboard**, so no typing lesson ever has one appear,
   and nothing handles `visualViewport`: on a real phone the keyboard covers the
   Send button in `messages-app` and `composing-email`, with no scroll to reveal

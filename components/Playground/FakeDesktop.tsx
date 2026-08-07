@@ -9,6 +9,7 @@ import { iconFor, type Item } from "./Desktop/filesData";
 import { SimThemeProvider, useSimTheme, themeFilter, themeCursor } from "./Desktop/SimThemeContext";
 import Dock from "./Dock";
 import { CalendarPanel, DesktopMenuBar, StatusPanel, wallpaper } from "./DesktopChrome";
+import { PhoneNavBar, PhoneNavProvider, PhoneStatusBar, type PhoneNavEntry } from "./PhoneChrome";
 import { useIsPhone } from "./SimFormFactor";
 import { useSwipe } from "./touchGestures";
 import { ArrowLeftIcon } from "./Icons";
@@ -20,6 +21,23 @@ import {
 export type DesktopAppId = "messages" | "browser" | "files" | "mail" | "settings" | "photos" | "app-market" | "calendar" | "reminders" | "notes";
 
 export const BUILT_IN_APPS: DesktopAppId[] = ["messages", "browser", "files", "mail", "settings", "photos", "app-market", "calendar", "reminders", "notes"];
+
+/**
+ * The four the phone pins to its dock.
+ *
+ * A phone's home screen is a grid that starts at the *top* plus a tray of the
+ * few apps you reach for constantly, pinned along the bottom where the thumb
+ * is. The simulated phone had neither: all ten icons sat in one block floating
+ * in the vertical center of the screen, which is a layout no handset has ever
+ * shipped and read as a dialog rather than as a home screen.
+ *
+ * These four are the ones this course sends a learner back to most — the two
+ * ways to reach a person, the web, and their files. The other six stay in the
+ * grid. They are *moved*, not copied: two buttons carrying the same
+ * `aria-label` would give the solver two answers to "open Mail" and would make
+ * "the same icon opens the same app" quietly false.
+ */
+export const PHONE_DOCK_APPS: DesktopAppId[] = ["messages", "browser", "mail", "files"];
 
 interface SettingsCallbacks {
   /** Phone assessments keep the section list and panel together. */
@@ -143,6 +161,22 @@ function FakeDesktopInner({
   /** When the status strip was last toggled — see `onTogglePanel` below. */
   const lastPanelToggle = useRef(0);
   const [openFileViewers, setOpenFileViewers] = useState<{ uid: string; item: Item }[]>([]);
+  /**
+   * What each open app says its current screen is — the title for the nav bar
+   * and where its back chevron should pop to.
+   *
+   * Keyed **by app**, not global, because every open app stays mounted on a
+   * phone: a backgrounded Mail sitting behind Files would otherwise keep
+   * publishing "Inbox" over the nav bar of the app in front. The setters are
+   * memoized in a ref so an app is not handed a new callback on every render,
+   * which would re-fire its declaring effect forever.
+   */
+  const [appNav, setAppNav] = useState<Partial<Record<DesktopAppId, PhoneNavEntry | null>>>({});
+  const navSetters = useRef<Partial<Record<DesktopAppId, (e: PhoneNavEntry | null) => void>>>({});
+  function navSetterFor(id: DesktopAppId) {
+    navSetters.current[id] ??= (entry) => setAppNav((prev) => (prev[id] === entry ? prev : { ...prev, [id]: entry }));
+    return navSetters.current[id]!;
+  }
 
   useEffect(() => {
     if (!autoOpenApp) return;
@@ -222,6 +256,18 @@ function FakeDesktopInner({
     },
   );
 
+  /** One description of an app icon, so the grid and the dock cannot drift apart. */
+  function dockItem(id: DesktopAppId) {
+    return {
+      id,
+      label: APP_TITLES[id],
+      running: openApps.includes(id),
+      // The way back, when the lesson's own app has been closed.
+      highlighted: highlightApp === id || (!!autoOpenApp && id === autoOpenApp && !openApps.includes(autoOpenApp)),
+      bouncing: launchingApp === id,
+    };
+  }
+
   function windowAnim(id: DesktopAppId) {
     // A phone grows the app out of its icon and shrinks it back; a laptop opens
     // and minimizes a window. Same three states, the motion each machine uses.
@@ -289,6 +335,32 @@ function FakeDesktopInner({
       setOpenPanel(null);
       setClosingPanel(null);
     }, 160);
+  }
+
+  /**
+   * Open a status panel, or shut the one that is open.
+   *
+   * A finger bouncing must not toggle twice. This one control opens a status
+   * panel and shuts it again, and `phone-status-strip` spends one step on each,
+   * so two presses 120ms apart ticked **both** steps and the learner never saw
+   * the panel the lesson is about — measured, step 1 straight to step 3.
+   *
+   * Guarded here rather than in `useStepRunner`, and that distinction cost a
+   * round trip: a 150ms guard across steps in the step engine blocked three
+   * laptop lessons whose steps are honestly satisfied back to back, and then 34
+   * phone lessons, because the solver completes steps faster than any hand. The
+   * hazard is one toggling control, so the guard belongs on it.
+   */
+  function togglePanel(panel: "wifi" | "battery" | "calendar") {
+    const now = performance.now();
+    if (isPhone && now - lastPanelToggle.current < 250) return;
+    lastPanelToggle.current = now;
+    if (openPanel === panel) {
+      dismissPanel();
+    } else {
+      setOpenPanel(panel);
+      onPanelChange?.(panel);
+    }
   }
 
   function openApp(app: DesktopAppId) {
@@ -406,6 +478,18 @@ function FakeDesktopInner({
         zoom: theme.textScale / 100,
         width: `${1e4 / theme.textScale}%`,
         height: `${1e4 / theme.textScale}%`,
+        /**
+         * On a phone the wallpaper is painted here, on the *whole* screen,
+         * rather than only on the area between the two bars.
+         *
+         * That is what lets the status bar and the home indicator be
+         * transparent and show the wallpaper through them — which is how every
+         * phone paints them, and the reason the old opaque white strips read as
+         * a menu bar and a taskbar. Painting a second gradient on a 32px strip
+         * would not do: the same 115deg gradient over a different box height
+         * lands at a different angle and leaves a visible seam.
+         */
+        ...(isPhone ? { background: wallpaper(isDark) } : null),
         fontWeight: theme.boldText ? 600 : 400,
         filter: themeFilter(theme),
         cursor: themeCursor(theme),
@@ -413,25 +497,48 @@ function FakeDesktopInner({
     >
       {/* Menu bar */}
       <div className="relative shrink-0">
+        {isPhone ? (
+          /**
+           * A phone's two bars, kept apart.
+           *
+           * This used to be one `DesktopMenuBar` holding the clock, the app's
+           * name and a back arrow. No phone has ever put navigation in the
+           * status bar, and the merge is what made push-and-pop impossible:
+           * with a single bar there is nowhere to say "back to Mailboxes" as
+           * distinct from "back to the home screen", so every app was stuck one
+           * screen deep with its sidebar permanently on display.
+           *
+           * On the home screen the strip is transparent and the wallpaper runs
+           * up under it, which is what a phone does; inside an app it takes the
+           * nav bar's color so the two read as one block of chrome.
+           */
+          <>
+            <PhoneStatusBar
+              dark={isDark}
+              transparent={!focusedApp}
+              time={time}
+              batteryPercent={batteryPercent}
+              openPanel={openPanel}
+              highlight={highlightPanel}
+              trailing={theme.notificationsMuted ? <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span> : undefined}
+              onTogglePanel={togglePanel}
+            />
+            {focusedApp && (
+              <PhoneNavBar
+                dark={isDark}
+                title={appNav[focusedApp]?.title ?? APP_TITLES[focusedApp]}
+                backLabel={appNav[focusedApp]?.backLabel ?? "Home"}
+                onBack={appNav[focusedApp]?.onBack ?? goHome}
+                backKind={appNav[focusedApp]?.onBack ? "app" : "home"}
+                highlightBack={appNav[focusedApp]?.highlightBack}
+                trailing={appNav[focusedApp]?.trailing}
+              />
+            )}
+          </>
+        ) : (
         <DesktopMenuBar
           dark={isDark}
-          compact={isPhone}
-          leading={
-            isPhone && focusedApp ? (
-              <button
-                type="button"
-                data-phone-back
-                aria-label="Back to the home screen"
-                onClick={goHome}
-                /* 44px of finger out of the padding, not out of the strip —
-                   this was 26x26 and it is the way out of every app. */
-                className="relative -my-3 -ml-2 rounded px-3 py-3 hover:bg-black/10 sim-dark:hover:bg-white/15"
-              >
-                <ArrowLeftIcon size={20} />
-              </button>
-            ) : undefined
-          }
-          title={focusedApp ? APP_TITLES[focusedApp] : isPhone ? "Home" : "Desktop"}
+          title={focusedApp ? APP_TITLES[focusedApp] : "Desktop"}
           trailing={theme.notificationsMuted && <span title="Do Not Disturb is on"><BellOffIcon size={16} /></span>}
           time={time}
           batteryPercent={batteryPercent}
@@ -452,18 +559,9 @@ function FakeDesktopInner({
            * steps faster than any hand. The hazard is one toggling control, so
            * the guard belongs on it.
            */
-          onTogglePanel={(panel) => {
-            const now = performance.now();
-            if (isPhone && now - lastPanelToggle.current < 250) return;
-            lastPanelToggle.current = now;
-            if (openPanel === panel) {
-              dismissPanel();
-            } else {
-              setOpenPanel(panel);
-              onPanelChange?.(panel);
-            }
-          }}
+          onTogglePanel={togglePanel}
         />
+        )}
 
         {(openPanel === "wifi" || closingPanel === "wifi") && (
           <StatusPanel color="#2451e0" tint="#cfe3fb" darkTint="#1e3a8a" onClose={dismissPanel} title="WiFi Networks" closing={closingPanel === "wifi"}>
@@ -513,7 +611,10 @@ function FakeDesktopInner({
         onClick={() => openPanel ? dismissPanel() : undefined}
         style={isPhone && lift ? { transform: `translateY(${lift * 0.35}px)` } : undefined}
       >
-        <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />
+        {/* The laptop paints its wallpaper here, inside the frame the menu bar
+            and dock sit around. The phone paints it on the root instead — see
+            the note on that style block. */}
+        {!isPhone && <div className="absolute inset-0" style={{ background: wallpaper(isDark) }} />}
 
         {/* The lesson's app, closed.
             A learner closing the window a guided lesson is talking about is a
@@ -577,6 +678,7 @@ function FakeDesktopInner({
                   focusedApp === id ? "flex flex-col" : "hidden"
                 } ${inertApp === id ? "pointer-events-none" : ""} ${windowAnim(id)}`}
               >
+                <PhoneNavProvider value={navSetterFor(id)}>
                 <AppBody
                   id={id}
                   extras={{
@@ -592,6 +694,7 @@ function FakeDesktopInner({
                     },
                   }}
                 />
+                </PhoneNavProvider>
               </div>
             ))
           : null}
@@ -699,34 +802,69 @@ function FakeDesktopInner({
           * the home screen itself on a phone, where it sits under everything and
           * the open app covers it.
           */}
-        <div
-          className={
-            isPhone
-              ? // Centered, not top-aligned. A real phone tops out its icons because
-                // it has six pages of them; this one has ten apps and no wallpaper
-                // art, and hugging the top left two thirds of the screen looking
-                // like something had failed to load.
-                "absolute inset-0 z-10 flex flex-col justify-center overflow-y-auto px-3 py-5"
-              : "absolute bottom-4 inset-x-2 flex justify-center z-30"
-          }
-        >
-          <Dock
-            wrap={isPhone}
-            tray={!isPhone}
-            size={isPhone ? "lg" : "md"}
-            showLabels
-            tone={isDark ? "dark" : "light"}
-            items={BUILT_IN_APPS.map((id) => ({
-              id,
-              label: APP_TITLES[id],
-              running: openApps.includes(id),
-              // The way back, when the lesson's own app has been closed.
-              highlighted: highlightApp === id || (!!autoOpenApp && id === autoOpenApp && !openApps.includes(autoOpenApp)),
-              bouncing: launchingApp === id,
-            }))}
-            onOpen={(id) => openApp(id as DesktopAppId)}
-          />
-        </div>
+        {isPhone ? (
+          /**
+           * A home screen, rather than a block of icons floating in the middle.
+           *
+           * Three things make the difference and all three are what a phone
+           * does: the grid **starts at the top** and lets the wallpaper show
+           * below it; four apps live in a **dock** pinned along the bottom
+           * within reach of the thumb; and a **page dot** says how many screens
+           * of apps there are. Before this the ten icons were vertically
+           * centered with empty wallpaper above and below, which is the shape
+           * of a dialog box, not of a phone.
+           */
+          <div className="absolute inset-0 z-10 flex flex-col px-3 pb-2 pt-4">
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <Dock
+                wrap
+                tray={false}
+                size="lg"
+                showLabels
+                tone={isDark ? "dark" : "light"}
+                items={BUILT_IN_APPS.filter((id) => !PHONE_DOCK_APPS.includes(id)).map(dockItem)}
+                onOpen={(id) => openApp(id as DesktopAppId)}
+              />
+            </div>
+            {/* One page of apps, so one dot. A phone always says how many there
+                are; saying "one" is not decoration, it is the answer to "is
+                there more if I swipe?" — which is a real question for somebody
+                who has just been taught that swiping does things. */}
+            <div className="flex shrink-0 justify-center py-2" aria-hidden>
+              <span className={`h-1.5 w-1.5 rounded-full ${isDark ? "bg-white/70" : "bg-black/40"}`} />
+            </div>
+            {/* `wrap` for four items in one row, because it lays the dock out
+                as a 4-column grid: the flex path sizes each column to the tile
+                and the labels are wider than that, so "Messages" and "Browser"
+                ran together into one word. A capped width keeps the tray from
+                stretching the full 390px, which is what makes it read as a
+                tray rather than as a bar. */}
+            <div className="flex shrink-0 justify-center">
+              <div className="w-full max-w-[21rem]">
+                <Dock
+                  wrap
+                  tray
+                  size="md"
+                  showLabels
+                  tone={isDark ? "dark" : "light"}
+                  items={PHONE_DOCK_APPS.map(dockItem)}
+                  onOpen={(id) => openApp(id as DesktopAppId)}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="absolute bottom-4 inset-x-2 flex justify-center z-30">
+            <Dock
+              tray
+              size="md"
+              showLabels
+              tone={isDark ? "dark" : "light"}
+              items={BUILT_IN_APPS.map(dockItem)}
+              onOpen={(id) => openApp(id as DesktopAppId)}
+            />
+          </div>
+        )}
       </div>
 
       {/* Brightness overlay */}
@@ -756,15 +894,21 @@ function FakeDesktopInner({
           /* py-3 gives the 44px touch area the accessibility floor asks for
              behind a 6px visible bar — this is the only way out of an app, and
              it used to be the smallest target on the screen. */
+          /**
+           * Transparent on the home screen so the wallpaper runs under it, and
+           * the app's own color once an app is open — the same rule the status
+           * bar follows, and between them what makes the top and bottom of the
+           * screen read as a phone's rather than as a menu bar and a taskbar.
+           */
           className={`flex min-h-[44px] shrink-0 touch-none select-none items-center justify-center ${
-            isDark ? "bg-gray-800" : "bg-white"
+            !focusedApp ? "bg-transparent" : isDark ? "bg-gray-800" : "bg-white"
           } ${highlightHomeBar ? "animate-ring-pulse-inset" : ""}`}
         >
           <span
             className={`h-1.5 rounded-full transition-all duration-150 ${
               lift < -8
                 ? "w-32 bg-blue-600"
-                : `w-28 ${highlightHomeBar ? "bg-blue-700" : isDark ? "bg-white/70" : "bg-gray-500"}`
+                : `w-28 ${highlightHomeBar ? "bg-blue-700" : isDark || !focusedApp ? "bg-black/40" : "bg-gray-500"}`
             }`}
           />
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useIsPhone } from "../SimFormFactor";
+import { ROW_RING, usePhoneScreen } from "../PhoneChrome";
 import { FolderIcon, SaveIcon, SearchIcon } from "../Icons";
 import { iconFor, Item, Loc, LOC_TITLE, makeItems, SIDEBAR } from "./filesData";
 import FileViewer from "./FileViewer";
@@ -41,6 +42,17 @@ export interface FileManagerProps {
   keyboardNav?: boolean;
   /** Open file in a viewer window instead of the inline modal (used by FakeDesktop freePlay). */
   onFileOpen?: (item: Item) => void;
+  /**
+   * Push and pop between the places list and a folder, on a phone.
+   *
+   * Off for assessments. Nothing points during one, so the way to another
+   * folder is to press its name in the places list — and behind a pushed
+   * screen that list is not on display, with the chevron back to it reading
+   * "Browse", which is not a word anybody is hunting for. `unit-3-assessment`
+   * stalled on "delete Letter.docx" for exactly this. Mail, Messages and
+   * Photos all make the same carve-out.
+   */
+  phonePushPop?: boolean;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -64,6 +76,7 @@ export default function FileManager({
   onItemsChange,
   keyboardNav = false,
   onFileOpen,
+  phonePushPop = true,
 }: FileManagerProps) {
 
   const [items, setItems]       = useState<Item[]>(makeItems);
@@ -169,6 +182,41 @@ export default function FileManager({
   const pulse = "animate-ring-pulse";
   const isPhone = useIsPhone();
 
+  /**
+   * A phone's file browser is **Browse, then a folder** — not both at once.
+   *
+   * The places list (Home, Documents, Pictures, Downloads, Trash) was pinned
+   * above the file list at `max-h-[34%]`, scrolling separately, so a 390px
+   * screen was a third menu and two thirds files, permanently. Every phone
+   * files app instead shows the places on their own screen and pushes the
+   * folder you pick, with a chevron back to Browse.
+   *
+   * A step that points at a place — or one whose target file lives somewhere
+   * the learner is not — pops back to Browse, so the ring is on a screen they
+   * are looking at.
+   */
+  const [atBrowse, setAtBrowse] = useState(false);
+  // `highlight.kind` directly, not `hl("sidebar")` — that helper compares the
+  // target too, and a sidebar highlight always carries one.
+  const wantsPlaces = highlight?.kind === "sidebar" || guideToLoc !== null;
+  const showBrowse = isPhone && phonePushPop && (atBrowse || wantsPlaces);
+
+  /**
+   * Tell the phone's nav bar which screen this is.
+   *
+   * The context reaches here from `PhoneShell` in both hosts: `GuidedFilesTask`
+   * renders the frame that renders the shell around this component, and inside
+   * `FakeDesktop` each app surface is wrapped in its own provider.
+   */
+  usePhoneScreen(
+    !isPhone || !phonePushPop
+      ? null
+      : showBrowse
+        ? { title: "Browse" }
+        : { title: LOC_TITLE[location], backLabel: "Browse", onBack: () => setAtBrowse(true) },
+    [isPhone, phonePushPop, showBrowse, location],
+  );
+
   // ── Handlers ─────────────────────────────────────────────────────────────
 
   function handleSidebarClick(loc: Loc, label: string) {
@@ -176,6 +224,8 @@ export default function FileManager({
     setSelected(null);
     setSearch("");
     setMoveMenu(false);
+    // On a phone, picking a place pushes it; Browse is behind the chevron.
+    setAtBrowse(false);
     onSidebarClick?.(loc, label);
   }
 
@@ -330,10 +380,17 @@ export default function FileManager({
           as broken rather than as unavailable. Tightened rather than rebuilt:
           the steps ring these controls by name and a `⋯` menu would be a screen
           the lesson vocabulary has no word for. */}
-      <div className={`shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-center flex-wrap ${
-        isPhone ? "gap-1 px-2 py-1" : "gap-2 px-3 py-2"
-      }`}>
-        <span className="font-bold text-gray-600 sim-dark:text-gray-300 text-sm mr-1">{LOC_TITLE[location]}</span>
+      {/* Hidden on the phone's Browse screen: the toolbar acts on the folder
+          you are *in*, and on Browse you are not in one yet. Leaving it there
+          offered New Folder and Rename against nothing. */}
+      <div className={`shrink-0 bg-gray-100 sim-dark:bg-gray-800 border-b-2 border-gray-300 sim-dark:border-gray-700 items-center flex-wrap ${
+        showBrowse ? "hidden" : "flex"
+      } ${isPhone ? "gap-1 px-2 py-1" : "gap-2 px-3 py-2"}`}>
+        {/* The phone's nav bar already carries the folder name. */}
+        {/* The phone's nav bar carries the folder name — but only when this
+            app is pushing screens. In an assessment it is not, so the label
+            has to stay here or nothing says which folder you are in. */}
+        <span className={`font-bold text-gray-600 sim-dark:text-gray-300 text-sm mr-1 ${isPhone && phonePushPop ? "hidden" : ""}`}>{LOC_TITLE[location]}</span>
 
         {!inTrash && (
           <>
@@ -409,7 +466,23 @@ export default function FileManager({
               screen and every filename wrapped mid-word into three lines. */}
         <div
           className={`shrink-0 overflow-auto border-gray-300 bg-[#eef1f5] py-2 sim-dark:bg-gray-800 sim-dark:border-gray-700 ${
-            isPhone ? "max-h-[34%] w-full border-b-2" : "w-40 border-r-2"
+            /**
+             * Three layouts, not two.
+             *
+             * Laptop: a column beside the files. Phone with push/pop: its own
+             * screen, or out of the way. Phone **without** push/pop — an
+             * assessment — the old stacked strip, because that is the only
+             * state where nothing can decide to show the places list on the
+             * learner's behalf, and falling through to `hidden` left
+             * `unit-3-assessment` with no way to reach another folder at all.
+             */
+            !isPhone
+              ? "w-40 border-r-2"
+              : !phonePushPop
+                ? "max-h-[34%] w-full border-b-2"
+                : showBrowse
+                  ? "w-full flex-1 animate-screen-push"
+                  : "hidden"
           }`}
         >
           {SIDEBAR.map((s) => {
@@ -424,7 +497,7 @@ export default function FileManager({
                 onDrop={droppable ? (e) => handleDrop(e, s.id) : undefined}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-semibold text-sm transition-all ${
                   location === s.id ? "bg-blue-600 text-white" : "hover:bg-blue-100 sim-dark:hover:bg-gray-700 text-gray-800 sim-dark:text-gray-200"
-                } ${hl("sidebar", s.label) || s.id === guideToLoc ? "animate-ring-pulse" : ""} ${
+                } ${hl("sidebar", s.label) || s.id === guideToLoc ? ROW_RING : ""} ${
                   isDropOver ? "ring-4 ring-blue-400 bg-blue-100 scale-[1.02]" : ""
                 }`}
               >
@@ -438,7 +511,9 @@ export default function FileManager({
         {/* File grid */}
         <div
           ref={gridRef}
-          className="flex-1 min-h-0 overflow-auto p-4 bg-white sim-dark:bg-gray-900 relative outline-none"
+          className={`flex-1 min-h-0 overflow-auto p-4 bg-white sim-dark:bg-gray-900 relative outline-none ${
+            showBrowse ? "hidden" : ""
+          }`}
           tabIndex={keyboardNav ? 0 : undefined}
           onKeyDown={keyboardNav ? handleGridKeyDown : undefined}
         >

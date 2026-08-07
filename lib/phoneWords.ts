@@ -81,9 +81,21 @@ const RULES: [string, string][] = [
   ["\\bcursor\\b", "blinking line"],
 
   // ── Keys a phone does not have ───────────────────────────────────────────
-  // The on-screen keyboard's key says Go, or return. There is nothing labelled
+  // The on-screen keyboard's key says Go, or return. There is nothing labeled
   // Enter for a learner to hunt for, and 21 of the 22 lessons that said so did
   // not hedge.
+  /**
+   * The hedged form has to go first, or it rewrites into a tautology.
+   *
+   * "press Enter (or click Go)" offers a keyboard route and a pointer route,
+   * and on a phone both collapse onto the same key: `press enter` → "tap Go"
+   * and `click` → "tap" turned it into **"tap Go (or tap Go)"** — on `urls`,
+   * the lesson that teaches typing a web address. Naming both halves of a
+   * choice the same thing is the same defect `phone-words-check` already
+   * catches as "X is called X"; it just wears different words here.
+   */
+  ["\\bpress enter \\(or (?:click|tap) go\\)", "tap Go"],
+  ["\\bpress enter or (?:click|tap) (?:the )?go(?: button)?\\b", "tap Go"],
   ["\\bpress enter\\b", "tap Go"],
   ["\\bpressing enter\\b", "tapping Go"],
   ["\\bhit enter\\b", "tap Go"],
@@ -101,11 +113,20 @@ const RULES: [string, string][] = [
   ["\\u2022 Ctrl\\+[^\\n]*\\n?", ""],
 
   // ── Furniture ────────────────────────────────────────────────────────────
-  // "the left sidebar" is doubly wrong on a phone: there is no sidebar, and the
-  // list it means is above the pane, not beside it.
-  ["\\bthe left sidebar\\b", "the list at the top"],
+  /**
+   * A phone has no sidebar, and it no longer has "the list at the top" either.
+   *
+   * That phrasing was written when the phone stacked the sidebar above the
+   * content pane. The apps now *push*: the places, mailboxes and albums are
+   * their own screen, reached with the chevron. So the honest word is just
+   * "the list" — it says which control without claiming a position the
+   * learner will not find it in.
+   */
+  ["\\bthe left sidebar\\b", "the list"],
+  ["\\bin the left sidebar\\b", "in the list"],
   ["\\bin the sidebar\\b", "in the list"],
   ["\\bthe sidebar\\b", "the list"],
+  ["\\bthe list at the top\\b", "the list"],
   // Bare and possessive forms reach the noun with no "the" in front of it —
   // "the left sidebar", "the Settings sidebar", "the browser's toolbar".
   ["\\bsidebar\\b", "list"],

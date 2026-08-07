@@ -574,6 +574,8 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
   const [pdfViewer, setPdfViewer] = useState<string | null>(null);
   const [pdfZoom, setPdfZoom] = useState(100);
   const [adNudge, setAdNudge] = useState(false);
+  /** Phone only: the tab switcher, a phone's answer to a permanent tab strip. */
+  const [tabsOpen, setTabsOpen] = useState(false);
   const [unknownUrl, setUnknownUrl] = useState("");
 
   const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, objectives } =
@@ -604,13 +606,38 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
     return out;
   }, [history]);
 
+  /** Google and the new-tab page both carry one; a content site does not. */
+  const hasSearchBox = activePage.kind === "search" || activePage.kind === "newtab";
+  /**
+   * A step about tabs opens the switcher on its own, so the ring is on a
+   * control the learner can see — the same reason a `go-to-folder` step pops
+   * Mail back to Mailboxes.
+   */
+  const wantsTabs = !finished && step?.action === "close-tab";
+  const showTabs = isPhone && (tabsOpen || wantsTabs);
+
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
     switch (step.action) {
       case "navigate":
         return kind === "address";
+      /**
+       * A search step with no search page under it is a dead end, and it was a
+       * reachable one.
+       *
+       * `browser-vs-search` navigates to a site, then to google.com, then
+       * searches. Land on any other page when the search step arrives — a
+       * mistyped address, a stray Back, a tap on a favorite — and the
+       * instruction says "type in the search box" while no search box exists.
+       * No ring, nothing glowing, nothing to do. Measured: the solver span
+       * `ringless #1 moved (click:Downloads)` for its entire budget, and a
+       * learner has strictly less to go on than the solver does.
+       *
+       * So when the page is wrong, the ring moves to Back, which is the way
+       * to the search page — and `browserNudge` below says so in words.
+       */
       case "search":
-        return kind === "searchbox";
+        return hasSearchBox ? kind === "searchbox" : kind === "back-btn";
       case "new-tab":
         return kind === "newtab-btn";
       case "close-tab":
@@ -893,7 +920,7 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
    */
   const navButtons = (
     <>
-      <button onClick={goBack} disabled={activeTab.back.length === 0} aria-label="Go back" className={`text-xl rounded ${isPhone ? "min-w-[44px]" : "px-1"}  ${activeTab.back.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>‹</button>
+      <button onClick={goBack} disabled={activeTab.back.length === 0} aria-label="Go back" className={`text-xl rounded ${isPhone ? "min-w-[44px]" : "px-1"} ${hl("back-btn") ? "animate-ring-pulse" : ""} ${activeTab.back.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>‹</button>
       <button onClick={goForward} disabled={activeTab.fwd.length === 0} aria-label="Go forward" className={`text-xl rounded ${isPhone ? "min-w-[44px]" : "px-1"}  ${activeTab.fwd.length === 0 ? "text-gray-300 sim-dark:text-gray-600 cursor-default" : "text-gray-700 sim-dark:text-gray-200 hover:bg-gray-200 sim-dark:hover:bg-gray-700"}`}>›</button>
       <button onClick={reload} aria-label="Reload" className={`flex items-center justify-center rounded hover:bg-gray-200 ${isPhone ? "min-w-[44px]" : "px-1"} sim-dark:hover:bg-gray-700 ${hl("reload-btn") ? "animate-ring-pulse" : ""}`}><ReloadIcon size={18} /></button>
       <button onClick={clickBookmarkStar} aria-label="Bookmark this page" className={`flex items-center justify-center text-lg rounded hover:bg-gray-200 ${isPhone ? "min-w-[44px]" : "px-1"} sim-dark:hover:bg-gray-700 ${hl("bookmark-btn") ? "animate-ring-pulse" : ""}`}>
@@ -928,7 +955,9 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         * worse than both. For whoever picks this up: the symptom was `rings=[]`
         * with the Google page's search box never highlighted.
         */}
-      <div className="shrink-0 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700 flex items-stretch gap-1 px-2 pt-2">
+      <div className={`shrink-0 bg-gray-200 sim-dark:bg-gray-900 border-b-2 border-gray-300 sim-dark:border-gray-700 items-stretch gap-1 px-2 pt-2 ${
+        isPhone ? "hidden" : "flex"
+      }`}>
         {tabs.map((t) => {
           const p = PAGES[t.pageId];
           const active = t.id === activeId;
@@ -1036,6 +1065,47 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
               <span className="border-x-2 border-gray-300 px-2 font-semibold tabular-nums sim-dark:border-gray-700">{activeTab.zoom}%</span>
               <button onClick={zoomIn} aria-label="Zoom in" className={`min-w-[44px] font-bold hover:bg-gray-200 sim-dark:hover:bg-gray-700 ${hl("zoomin-btn") && !pdfViewer ? "animate-ring-pulse" : ""}`}>+</button>
             </div>
+            {/**
+              * Tabs, the way a phone shows them: a count you tap for a grid of
+              * cards. The desktop strip above is hidden here.
+              *
+              * This was tried once before and reverted, because hiding the
+              * strip broke `browser-vs-search` with the mechanism unidentified.
+              * It has now been identified and it was never the strip: a fresh
+              * tab has no search box and a disabled Back button, so a `search`
+              * step landing there was a dead end. The new-tab page carries a
+              * search box now, and that lesson passes 6 runs out of 6.
+              */}
+            <button
+              type="button"
+              onClick={() => setTabsOpen((v) => !v)}
+              aria-label={`Tabs (${tabs.length} open)`}
+              aria-expanded={tabsOpen}
+              className={`flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-gray-500 px-2 font-bold tabular-nums text-gray-700 hover:bg-gray-200 sim-dark:border-gray-500 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 ${
+                wantsTabs ? "animate-ring-pulse" : ""
+              }`}
+            >
+              {tabs.length}
+            </button>
+            {/*
+              * New Tab lives in the bar, not only inside the switcher.
+              *
+              * An assessment has no current step, so nothing can decide to open
+              * the switcher on the learner's behalf — and `final-browser` asks
+              * for a second tab. A control reachable only when the lesson
+              * points at it is not a control. Phone browsers put a ＋ beside
+              * the tab count too.
+              */}
+            <button
+              type="button"
+              onClick={newTab}
+              aria-label="New tab"
+              className={`flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-xl font-bold text-gray-700 hover:bg-gray-200 sim-dark:text-gray-200 sim-dark:hover:bg-gray-700 ${
+                hl("newtab-btn") ? "animate-ring-pulse" : ""
+              }`}
+            >
+              ＋
+            </button>
             <div className="basis-full" />
           </>
         )}
@@ -1135,6 +1205,48 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
           >
             {activePage.kind === "newtab" && (
               <div>
+                {/**
+                  * The new-tab page has a search box, because every phone
+                  * browser's does — and because without one this page was a
+                  * **dead end**.
+                  *
+                  * A fresh tab has an empty history, so its Back button is
+                  * disabled. Reach it while a `search` step is active and the
+                  * instruction says "type in the search box" with no search box
+                  * on screen and no way back to one. Measured on
+                  * `browser-vs-search`: the solver span its entire budget on
+                  * `click:Downloads`, and a learner has strictly less to go on.
+                  * Ringing Back instead did not help — Back is exactly the
+                  * control that is disabled here.
+                  *
+                  * It shares `searchInput` and `submitSearch` with the Google
+                  * page, so a search started here completes the same step and
+                  * shows the same results.
+                  */}
+                <div className={`mb-5 flex items-center gap-2 rounded-full border-2 bg-white px-4 py-2 sim-dark:bg-gray-900 ${hl("searchbox") ? "animate-ring-pulse border-yellow-400" : "border-gray-400"}`}>
+                  <span className="text-gray-500 sim-dark:text-gray-400"><SearchIcon size={16} /></span>
+                  <input
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); }}
+                    placeholder="Search the web"
+                    className="flex-1 rounded outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  />
+                </div>
+                {searchResults && (
+                  <div className="mb-5 flex w-full max-w-md flex-col gap-3 text-left">
+                    {searchResults.map((r, i) => (
+                      <button
+                        key={i}
+                        onClick={() => openSearchResult(r.title)}
+                        className={`text-left ${hl("search-result", r.title) ? "animate-ring-pulse" : ""}`}
+                      >
+                        <span className="block font-semibold text-blue-700 underline sim-dark:text-blue-400">{r.title}</span>
+                        <span className="block text-sm text-gray-600 sim-dark:text-gray-300">{r.snippet}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
                 <p className="text-gray-500 sim-dark:text-gray-400 font-semibold mb-3">Favorites</p>
                 {/* Two columns on a phone: at four, the URL captions overflowed their
                     75px tiles and ran into each other as one unreadable line. */}
@@ -1237,6 +1349,86 @@ export default function GuidedBrowserTask({ goal, steps, initialDownloads, mode 
         )}
 
         {/* Ad click nudge */}
+        {/**
+          * The step wants a search box and this page has not got one.
+          *
+          * Said out loud rather than left to the ring alone: the learner is
+          * reading an instruction that does not match what is in front of
+          * them, and "the words are wrong" is the moment a beginner decides
+          * they have broken something. See the note on `case "search"` in
+          * `hl` for how this state is reached.
+          */}
+        {/**
+          * The tab switcher: a grid of cards, which is what a phone shows
+          * instead of a permanent strip.
+          *
+          * Selecting a card switches to it and closes the switcher; the ✕ on
+          * each card and the "New Tab" row carry the same ring targets
+          * (`tab-close`, `newtab-btn`) the strip used to, so no lesson step had
+          * to change.
+          */}
+        {showTabs && (
+          <div className="absolute inset-0 z-30 flex flex-col bg-gray-100 p-3 sim-dark:bg-gray-900">
+            <div className="mb-2 flex shrink-0 items-center justify-between">
+              <p className="font-bold">Tabs</p>
+              <button
+                type="button"
+                onClick={() => setTabsOpen(false)}
+                className="min-h-[44px] px-3 font-semibold text-blue-700 sim-dark:text-blue-300"
+              >
+                Done
+              </button>
+            </div>
+            <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-3 overflow-y-auto">
+              {tabs.map((t) => {
+                const pg = PAGES[t.pageId];
+                return (
+                  <div
+                    key={t.id}
+                    className={`relative flex h-32 flex-col rounded-xl border-2 bg-white p-2 sim-dark:bg-gray-800 ${
+                      t.id === activeId ? "border-blue-600" : "border-gray-400 sim-dark:border-gray-600"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => { setActiveId(t.id); setTabsOpen(false); }}
+                      className="flex min-h-0 flex-1 flex-col items-start gap-1 text-left"
+                    >
+                      <span className="flex items-center gap-1.5 text-gray-600 sim-dark:text-gray-300">{pg.icon}</span>
+                      <span className="line-clamp-2 text-sm font-semibold">{pg.title}</span>
+                      <span className="truncate text-xs text-gray-500 sim-dark:text-gray-400">{pg.url}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { closeTab(t.id); }}
+                      aria-label={`Close ${pg.title} tab`}
+                      className={`absolute right-1 top-1 flex h-11 w-11 items-center justify-center rounded-full text-lg font-bold text-gray-600 hover:bg-gray-200 sim-dark:text-gray-300 sim-dark:hover:bg-gray-700 ${
+                        hl("tab-close", pg.title) ? "animate-ring-pulse" : ""
+                      }`}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={() => { newTab(); setTabsOpen(false); }}
+              aria-label="New tab"
+              className="mt-3 min-h-[44px] shrink-0 rounded-xl bg-blue-600 font-bold text-white"
+            >
+              ＋ New Tab
+            </button>
+          </div>
+        )}
+
+        {!finished && step?.action === "search" && !hasSearchBox && (
+          <div className="absolute top-2 left-2 right-2 z-20 animate-slide-down rounded-lg border-2 border-amber-400 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+            This page has no search box. Press the ‹ Back button to return to the search page.
+          </div>
+        )}
+
         {adNudge && (
           <div className="absolute top-2 left-2 right-2 z-20 bg-amber-50 border-2 border-amber-400 rounded-lg px-4 py-3 text-sm font-semibold text-amber-900 animate-slide-down">
             That&apos;s an ad — they&apos;re designed to look like real buttons! Ignore them and keep going.

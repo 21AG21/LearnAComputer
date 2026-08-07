@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { useIsPhone } from "./SimFormFactor";
 import { useSwipe } from "./touchGestures";
-import { ArrowLeftIcon } from "./Icons";
 import SimulatorFrame from "./SimulatorFrame";
+import { ROW_RING } from "./PhoneChrome";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import { ATTACHABLE_FILES } from "./Desktop/filesData";
 import {
@@ -221,6 +221,30 @@ export default function GuidedEmailTask({
    */
   const listStep = step?.action === "compose" || step?.action === "go-to-folder";
   const showDetail = isPhone && !isAssessment && !listStep && !!(selectedEmail || composing);
+
+  /**
+   * The mailbox list is its own screen, the way a phone's Mail app has it.
+   *
+   * Before this the folder list (Inbox, Sent, Drafts, Spam, Archive) and the
+   * messages in the open folder were both on screen at once, stacked — a
+   * macOS source list rotated 90 degrees. That is not what stacking a split
+   * view gets you on a phone; a phone *pushes*. Mailboxes → the folder's
+   * messages → the message, one screen at a time, each with a chevron naming
+   * the screen behind it.
+   *
+   * A `go-to-folder` step pops back to Mailboxes, because that is where the
+   * control the step is asking for actually lives — and it is the only way the
+   * highlight ring can be somewhere the learner can see.
+   *
+   * Assessments keep both panes. Nothing points in an assessment, so the sim
+   * cannot know which screen the learner needs next, and a wrong guess there
+   * hides the control rather than merely moving it.
+   */
+  const [atMailboxes, setAtMailboxes] = useState(false);
+  const showMailboxes =
+    isPhone && !isAssessment && !showDetail && (atMailboxes || step?.action === "go-to-folder");
+  /** The stacked layout, kept for assessments and for the laptop. */
+  const bothPanes = !isPhone || isAssessment;
 
   useEffect(() => {
     if (!undoPill) return;
@@ -503,6 +527,24 @@ export default function GuidedEmailTask({
       objectives={objectives}
       hint={hint}
       freePlay={freePlay}
+      /**
+       * Which of Mail's three screens the phone's nav bar is titling, and what
+       * its chevron pops back to. Mailboxes is the top of the app, so back
+       * there means out of Mail; everywhere else it means one screen up.
+       */
+      phoneNav={
+        bothPanes
+          ? undefined
+          : showMailboxes
+            ? { title: "Mailboxes" }
+            : showDetail
+              ? {
+                  title: composing ? (replyTo ? "Reply" : "New Message") : currentFolder,
+                  backLabel: currentFolder,
+                  onBack: () => { setSelectedEmail(null); setComposing(false); setReplyTo(null); },
+                }
+              : { title: currentFolder, backLabel: "Mailboxes", onBack: () => setAtMailboxes(true) }
+      }
     >
       <div
         data-phone-stacked={isPhone || undefined}
@@ -515,46 +557,59 @@ export default function GuidedEmailTask({
               list keeps a capped slice of the height and scrolls inside it. */}
         <div
           className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-shrink-0 ${
-            isPhone ? (showDetail ? "hidden" : "w-full flex-1 flex-col overflow-y-auto") : "w-32 flex-col"
+            bothPanes
+              ? "w-32 flex-col"
+              : showMailboxes
+                ? "w-full flex-1 flex-col overflow-y-auto animate-screen-push"
+                : "hidden"
           }`}
         >
-          <div className="p-2 border-b">
-            <button
-              onClick={handleCompose}
-              className={`w-full px-2 py-2 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-all ${hl("compose-btn") ? pulse : ""}`}
-            >
-              <span className="inline-flex items-center gap-1"><PencilIcon size={12} /> Compose</span>
-            </button>
-          </div>
+          {/* On a phone Compose is a floating button over the message list, the
+              way every phone puts it — within reach of the thumb, and present
+              on whichever screen you are on. Only the laptop keeps it as the
+              first row of the sidebar. */}
+          {bothPanes && (
+            <div className="p-2 border-b">
+              <button
+                onClick={handleCompose}
+                className={`w-full px-2 py-2 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-all ${hl("compose-btn") ? pulse : ""}`}
+              >
+                <span className="inline-flex items-center gap-1"><PencilIcon size={12} /> Compose</span>
+              </button>
+            </div>
+          )}
           {FOLDERS.map((f) => (
             <button
               key={f}
-              onClick={() => handleGoToFolder(f)}
-              className={`flex items-center justify-between px-2 py-2.5 text-xs text-left border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+              onClick={() => { setAtMailboxes(false); handleGoToFolder(f); }}
+              className={`flex items-center justify-between text-left border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+                bothPanes ? "px-2 py-2.5 text-xs" : "min-h-[52px] px-4 text-[17px]"
+              } ${
                 currentFolder === f ? "bg-blue-100 sim-dark:bg-blue-900 font-medium text-blue-700 sim-dark:text-blue-100" : "text-gray-700 sim-dark:text-gray-300"
-              } ${hl("folder", f) ? pulse : ""}`}
+              } ${hl("folder", f) ? ROW_RING : ""}`}
             >
-              <span className="inline-flex items-center gap-1.5">{FOLDER_ICONS[f]} {f}</span>
-              {folderCount(f) > 0 && (
-                <span className="text-xs bg-gray-200 sim-dark:bg-gray-600 sim-dark:text-gray-100 rounded-full px-1 leading-4">{folderCount(f)}</span>
-              )}
+              <span className={`inline-flex items-center ${bothPanes ? "gap-1.5" : "gap-3"}`}>{FOLDER_ICONS[f]} {f}</span>
+              <span className="flex items-center gap-2">
+                {folderCount(f) > 0 && (
+                  <span className="text-xs bg-gray-200 sim-dark:bg-gray-600 sim-dark:text-gray-100 rounded-full px-1 leading-4">{folderCount(f)}</span>
+                )}
+                {/* The disclosure chevron that says "this pushes a screen". */}
+                {!bothPanes && <span aria-hidden className="text-gray-400">›</span>}
+              </span>
             </button>
           ))}
         </div>
 
         {/* Main area. On a phone this replaced the folder list, so it carries the
             only way back — a chevron at the top left, where a phone puts it. */}
-        <div className={`flex-1 flex flex-col overflow-hidden ${showDetail ? "animate-screen-push" : ""}`}>
-          {showDetail && (
-            <button
-              type="button"
-              onClick={() => { setSelectedEmail(null); setComposing(false); setReplyTo(null); }}
-              className="flex min-h-[44px] w-full shrink-0 items-center gap-1 border-b bg-gray-50 px-3 text-left text-[15px] font-semibold text-blue-700 sim-dark:bg-gray-800 sim-dark:text-blue-300"
-            >
-              <ArrowLeftIcon size={18} aria-hidden />
-              {currentFolder}
-            </button>
-          )}
+        {/* Back lives in the phone's nav bar now, not in a strip the app draws
+            for itself — see the `phoneNav` handed to `SimulatorFrame` below.
+            Two back controls on one screen is two back controls. */}
+        <div
+          className={`flex-1 flex flex-col overflow-hidden ${showDetail ? "animate-screen-push" : ""} ${
+            showMailboxes ? "hidden" : ""
+          }`}
+        >
           {composing ? (
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
               <div className="flex items-center justify-between mb-1">
@@ -681,9 +736,13 @@ export default function GuidedEmailTask({
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto">
-              <div className="px-3 py-2 border-b bg-gray-50 sim-dark:bg-gray-800 text-xs font-medium text-gray-500 sim-dark:text-gray-300 uppercase tracking-wide">
-                {currentFolder}
-              </div>
+              {/* The phone's nav bar already says which folder this is; a second
+                  label under it is the desktop's column heading, not a phone's. */}
+              {bothPanes && (
+                <div className="px-3 py-2 border-b bg-gray-50 sim-dark:bg-gray-800 text-xs font-medium text-gray-500 sim-dark:text-gray-300 uppercase tracking-wide">
+                  {currentFolder}
+                </div>
+              )}
               {visibleEmails.length === 0 ? (
                 <div className="flex items-center justify-center h-24 text-gray-500 sim-dark:text-gray-400 text-sm">Empty</div>
               ) : (
@@ -695,7 +754,7 @@ export default function GuidedEmailTask({
                       isPhone && currentFolder === "Inbox" ? () => archiveOne(email) : undefined
                     }
                     className={`w-full text-left px-3 py-3 border-b hover:bg-gray-50 sim-dark:hover:bg-gray-800 transition-all ${
-                      hl("email-row", email.subject) || highlightEmail === email.subject ? pulse : ""
+                      hl("email-row", email.subject) || highlightEmail === email.subject ? ROW_RING : ""
                     }`}
                   >
                     <div className="flex items-center justify-between mb-0.5">
@@ -710,6 +769,28 @@ export default function GuidedEmailTask({
             </div>
           )}
         </div>
+
+        {/**
+          * Compose, as the floating button a phone puts it in.
+          *
+          * On the laptop it is the first row of the sidebar; on a phone that
+          * sidebar is a screen you have usually navigated away from, so the
+          * button has to travel with the message list. Bottom right, clear of
+          * the home indicator, which is where every mail app on a phone keeps
+          * it and therefore where a thumb goes looking.
+          */}
+        {!bothPanes && !showDetail && (
+          <button
+            type="button"
+            onClick={handleCompose}
+            aria-label="Compose"
+            className={`absolute bottom-4 right-4 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 ${
+              hl("compose-btn") ? pulse : ""
+            }`}
+          >
+            <PencilIcon size={22} />
+          </button>
+        )}
 
         {/* File picker modal */}
         {filePicker && (

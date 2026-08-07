@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useIsPhone } from "./SimFormFactor";
 import Image from "next/image";
 import SimulatorFrame from "./SimulatorFrame";
+import { PhoneTabBar, ROW_RING } from "./PhoneChrome";
+import { useSimTheme } from "./Desktop/SimThemeContext";
 import { useStepRunner, type SimMode } from "./useStepRunner";
 import {
   ImageIcon, HeartIcon, HeartFilledIcon, TrashIcon, FolderIcon,
@@ -91,6 +93,7 @@ const CONTACTS = [
 export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, onResult }: GuidedPhotosTaskProps) {
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const isPhone = useIsPhone();
+  const simTheme = useSimTheme();
   const [albums, setAlbums] = useState<string[]>(["Vacation", "Family", "Pets"]);
   const [section, setSection] = useState("All Photos");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
@@ -122,6 +125,40 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
   const listStep =
     step?.action === "create-album" || step?.action === "go-to-album" || step?.action === "search";
   const showDetail = isPhone && !isAssessment && !listStep && !!selectedPhoto;
+
+  /**
+   * A phone's Photos app has a **tab bar**, not a sidebar.
+   *
+   * The sections (All Photos, Favorites, Recently Deleted, and each album) were
+   * a macOS source list stacked above the grid, so a 390px screen gave half its
+   * height to a menu and half to the photos. Every phone photo library instead
+   * puts its top-level places along the bottom edge — Library, Albums, Search —
+   * and gives the whole screen to the pictures.
+   *
+   * `albumOpen` is the push: on the Albums tab you first see the *list* of
+   * albums, and choosing one pushes its grid with a chevron back to the list.
+   *
+   * A guided step forces the tab holding the control it is pointing at,
+   * otherwise the ring would be on a screen the learner is not looking at —
+   * the same reason a `go-to-folder` step pops Mail back to Mailboxes.
+   */
+  const bothPanes = !isPhone || isAssessment;
+  const [userTab, setUserTab] = useState<"library" | "albums" | "search">("library");
+  const [albumOpen, setAlbumOpen] = useState(false);
+  const wantsAlbumsList =
+    step?.action === "create-album" ||
+    (step?.action === "go-to-album" && step.target !== "All Photos");
+  const phoneTab: "library" | "albums" | "search" = bothPanes
+    ? "library"
+    : step?.action === "search"
+      ? "search"
+      : wantsAlbumsList
+        ? "albums"
+        : step?.action === "go-to-album" && step.target === "All Photos"
+          ? "library"
+          : userTab;
+  /** The Albums tab, before an album has been chosen. */
+  const showAlbumsList = !bothPanes && phoneTab === "albums" && (wantsAlbumsList || !albumOpen) && !showDetail;
 
   function hl(kind: string, name?: string): boolean {
     if (finished || !step) return false;
@@ -215,6 +252,10 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
     setSelectedPhoto(null);
     setSearchQuery("");
     setSearchOpen(false);
+    // On a phone, choosing a place pushes its grid and puts the tab bar on the
+    // matching tab: All Photos is the Library, everything else lives in Albums.
+    setAlbumOpen(true);
+    setUserTab(name === "All Photos" ? "library" : "albums");
     tryStep((s) => s.action === "go-to-album" && s.target === name);
   }
 
@@ -342,6 +383,30 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
       objectives={objectives}
       hint={hint}
       freePlay={freePlay}
+      /**
+       * The three places a phone's Photos app can be, and where back goes from
+       * each. `highlightBack` carries the `back-btn` ring into the nav bar —
+       * some steps genuinely point at back, when the photo they want is not
+       * the one currently open.
+       */
+      phoneNav={
+        bothPanes
+          ? undefined
+          : showDetail
+            ? {
+                title: selectedPhoto?.label ?? "Photo",
+                backLabel: section === "All Photos" ? "Library" : section,
+                onBack: () => { setSelectedPhoto(null); resetEdits(); },
+                highlightBack: hl("back-btn"),
+              }
+            : showAlbumsList
+              ? { title: "Albums" }
+              : phoneTab === "search"
+                ? { title: "Search" }
+                : phoneTab === "albums"
+                  ? { title: section, backLabel: "Albums", onBack: () => setAlbumOpen(false) }
+                  : { title: "Library" }
+      }
     >
       <div
         data-phone-stacked={isPhone || undefined}
@@ -354,10 +419,12 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               list keeps a capped slice of the height and scrolls inside it. */}
         <div
           className={`bg-gray-50 sim-dark:bg-gray-800 border-r flex flex-col flex-shrink-0 overflow-y-auto ${
-            isPhone ? (showDetail ? "hidden" : "w-full flex-1") : "w-36"
+            bothPanes ? "w-36" : showAlbumsList ? "w-full flex-1 animate-screen-push" : "hidden"
           }`}
         >
-          <div className="p-2 border-b flex items-center gap-1">
+          {/* Search is its own tab on a phone, so the box does not sit above the
+              albums list taking a row it does not need. */}
+          <div className={`p-2 border-b items-center gap-1 ${bothPanes ? "flex" : "hidden"}`}>
             {searchOpen ? (
               <input
                 autoFocus
@@ -384,15 +451,22 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
               </button>
             )}
           </div>
-          {SIDEBAR_SECTIONS.map((s) => (
+          {SIDEBAR_SECTIONS
+            // "All Photos" is the Library tab on a phone, so listing it inside
+            // Albums as well would be two doors to one room.
+            .filter((s) => bothPanes || s !== "All Photos")
+            .map((s) => (
             <button
               key={s}
               onClick={() => handleGoToAlbum(s)}
-              className={`px-3 py-2 text-left text-xs border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+              className={`text-left border-b transition-all hover:bg-gray-100 sim-dark:hover:bg-gray-700 ${
+                bothPanes ? "px-3 py-2 text-xs" : "flex min-h-[52px] items-center justify-between px-4 text-[17px]"
+              } ${
                 section === s ? "bg-blue-100 sim-dark:bg-blue-900 font-medium text-blue-700 sim-dark:text-blue-100" : "text-gray-700 sim-dark:text-gray-200"
-              } ${hl("sidebar-item", s) ? pulse : ""}`}
+              } ${hl("sidebar-item", s) ? ROW_RING : ""}`}
             >
-              <span className="inline-flex items-center gap-1.5">{s === "All Photos" ? <ImageIcon size={14} /> : s === "Favorites" ? <HeartFilledIcon size={14} className="text-red-700 sim-dark:text-red-400" /> : s === "Recently Deleted" ? <TrashIcon size={14} /> : <FolderIcon size={14} />} {s}</span>
+              <span className={`inline-flex items-center ${bothPanes ? "gap-1.5" : "gap-3"}`}>{s === "All Photos" ? <ImageIcon size={bothPanes ? 14 : 18} /> : s === "Favorites" ? <HeartFilledIcon size={bothPanes ? 14 : 18} className="text-red-700 sim-dark:text-red-400" /> : s === "Recently Deleted" ? <TrashIcon size={bothPanes ? 14 : 18} /> : <FolderIcon size={bothPanes ? 14 : 18} />} {s}</span>
+              {!bothPanes && <span aria-hidden className="text-gray-400">›</span>}
             </button>
           ))}
           {creatingAlbum ? (
@@ -423,21 +497,30 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
         </div>
 
         {/* Main */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className={`flex-1 flex flex-col overflow-hidden ${showAlbumsList ? "hidden" : ""}`}>
+          {/* The Search tab's field. Its own screen on a phone, rather than a
+              row wedged above the albums list. */}
+          {!bothPanes && phoneTab === "search" && !showDetail && (
+            <div className="shrink-0 border-b p-2">
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSelectedPhoto(null);
+                  setSection("All Photos");
+                  const q = e.target.value.toLowerCase();
+                  tryStep((s) => s.action === "search" && !!s.value && q.includes(s.value.toLowerCase()));
+                }}
+                placeholder="Search photos"
+                aria-label="Search photos"
+                className={`w-full rounded-lg border border-gray-500 px-3 py-2 outline-none focus:border-blue-600 ${hl("search-input") || hl("search-icon") ? pulse : ""}`}
+              />
+            </div>
+          )}
           {selectedPhoto ? (
             <div className={`flex-1 overflow-y-auto ${isPhone ? "flex flex-col" : ""}`}>
-              {/* The nav row: a chevron at the top left, which is where a phone
-                  puts "back", and where this app's own `back-btn` ring belongs
-                  once the toolbar it used to live in has moved to the bottom. */}
-              {isPhone && (
-                <button
-                  onClick={() => { setSelectedPhoto(null); resetEdits(); }}
-                  aria-label="Back to all photos"
-                  className={`flex w-full shrink-0 items-center gap-1 border-b px-3 text-left text-[15px] font-semibold text-blue-700 sim-dark:text-blue-300 ${hl("back-btn") ? pulse : ""}`}
-                >
-                  <span aria-hidden className="text-lg leading-none">‹</span> Photos
-                </button>
-              )}
+              {/* Back is the phone's nav-bar chevron — see `phoneNav` below. */}
               {/**
                 * The actions, and on a phone they are under the picture.
                 *
@@ -684,6 +767,33 @@ export default function GuidedPhotosTask({ goal, steps, mode, hint, freePlay, on
           )}
         </div>
       </div>
+      {/**
+        * The tab bar — a phone photo library's Library / Albums / Search, along
+        * the bottom edge where the thumb is. It replaces the source list that
+        * used to sit stacked above the grid taking half the screen.
+        *
+        * Hidden while a single photo is open, which is what a phone does too:
+        * the picture is the point, and its own actions are already in a bar
+        * under it.
+        */}
+      {!bothPanes && !showDetail && (
+        <PhoneTabBar
+          dark={simTheme.dark}
+          active={phoneTab}
+          onSelect={(id: string) => {
+            setUserTab(id as "library" | "albums" | "search");
+            setSelectedPhoto(null);
+            if (id === "library") { setSection("All Photos"); setAlbumOpen(false); setSearchQuery(""); }
+            if (id === "albums") { setAlbumOpen(false); setSearchQuery(""); }
+            if (id === "search") { setSearchOpen(true); tryStep((s) => s.action === "search" && !s.value); }
+          }}
+          tabs={[
+            { id: "library", label: "Library", icon: <ImageIcon size={20} /> },
+            { id: "albums", label: "Albums", icon: <FolderIcon size={20} /> },
+            { id: "search", label: "Search", icon: <SearchIcon size={20} /> },
+          ]}
+        />
+      )}
     </SimulatorFrame>
   );
 }

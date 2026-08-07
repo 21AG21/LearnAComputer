@@ -77,7 +77,7 @@ export default function GuidedFilesTask({ goal, steps, mode, hint, onResult, key
   const [nudge, setNudge]                     = useState<string | null>(null);
   const [resetKey, setResetKey]               = useState(0);
 
-  const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, wants, objectives } =
+  const { step, stepIndex, finished, done, flash, phase, setPhase, tryStep, wanted, wants, objectives, isAssessment } =
     useStepRunner({
       steps,
       mode,
@@ -135,6 +135,7 @@ export default function GuidedFilesTask({ goal, steps, mode, hint, onResult, key
     >
       <div className="h-full relative">
         <FileManager
+          phonePushPop={!isAssessment}
           highlight={computeHighlight(step, phase, saveStage, finished)}
           nudge={nudge}
           resetKey={resetKey}

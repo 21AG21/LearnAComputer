@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { CalendarPanel, DesktopMenuBar, StatusPanel, type StatusPanelId } from "./DesktopChrome";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { CalendarPanel, StatusPanel, type StatusPanelId } from "./DesktopChrome";
+import { PhoneNavBar, PhoneNavProvider, PhoneStatusBar, type PhoneNavEntry } from "./PhoneChrome";
 import { useSimTheme } from "./Desktop/SimThemeContext";
 import { useSwipe } from "./touchGestures";
-import { ArrowLeftIcon, WifiIcon } from "./Icons";
+import { WifiIcon } from "./Icons";
 
 /**
  * The strip at the top and the bar at the bottom — the two things that make a
@@ -48,10 +49,20 @@ interface BatteryManagerLike {
 export default function PhoneShell({
   title,
   onHome,
+  nav: navProp,
   children,
 }: {
-  /** Shown at the left of the status strip — the app the learner is in. */
+  /** The app's name — the nav bar's title when no inner screen is declared. */
   title: string;
+  /**
+   * The screen inside the app, when the caller is the guided sim itself.
+   *
+   * Guided sims *render* `SimulatorFrame`, which renders this shell, so they
+   * sit above the context and have to hand their screen down as a prop. Apps
+   * nested inside (the ones `FakeDesktop` mounts) publish through
+   * `PhoneNavProvider` instead. The prop wins where both exist.
+   */
+  nav?: PhoneNavEntry;
   /**
    * Where the bar at the bottom goes. Absent when there is nowhere to go — and
    * then the bar is drawn as a plain rule rather than as a control, because a
@@ -67,6 +78,14 @@ export default function PhoneShell({
   const [openPanel, setOpenPanel] = useState<StatusPanelId | null>(null);
   const [closingPanel, setClosingPanel] = useState<StatusPanelId | null>(null);
   const [connected, setConnected] = useState<string | null>("CoolKids Network");
+  /**
+   * What the app in front says its current screen is. `null` until an app
+   * declares one, and then the nav bar shows that screen's title and a back
+   * chevron pointing one level up rather than straight out of the app.
+   */
+  const [innerNav, setInnerNav] = useState<PhoneNavEntry | null>(null);
+  const publishNav = useCallback((entry: PhoneNavEntry | null) => setInnerNav(entry), []);
+  const nav = navProp ?? innerNav;
 
   useEffect(() => {
     const update = () =>
@@ -126,33 +145,32 @@ export default function PhoneShell({
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
+      {/**
+        * Two bars, not one: the system's strip, then the app's.
+        *
+        * They were a single `DesktopMenuBar` carrying the clock, the app's name
+        * *and* a back arrow — a shape no phone has. The status bar belongs to
+        * the phone and holds no navigation; the nav bar belongs to the app and
+        * is where back lives, labeled with where it goes. See `PhoneChrome`.
+        */}
       <div className="relative shrink-0">
-        <DesktopMenuBar
+        <PhoneStatusBar
           dark={isDark}
-          compact
-          leading={
-            onHome ? (
-              <button
-                type="button"
-                data-phone-back
-                aria-label="Back to the home screen"
-                onClick={onHome}
-                /* 44px of finger out of the padding, not out of the strip.
-                   Measured at 26x26, and it is the keyboard route home and the
-                   only visible way out of an app. Kept identical to
-                   `FakeDesktop`'s copy — two back arrows that feel different
-                   are two back arrows. */
-                className="relative -my-3 -ml-2 rounded px-3 py-3 hover:bg-black/10 sim-dark:hover:bg-white/15"
-              >
-                <ArrowLeftIcon size={20} />
-              </button>
-            ) : undefined
-          }
-          title={title}
           time={time}
           batteryPercent={batteryPercent}
           openPanel={openPanel}
           onTogglePanel={(panel) => (openPanel === panel ? dismissPanel() : setOpenPanel(panel))}
+        />
+        <PhoneNavBar
+          dark={isDark}
+          title={nav?.title ?? title}
+          backLabel={nav?.backLabel ?? "Home"}
+          // An app one screen deep pops back to its own previous screen; at the
+          // top of an app, back means out of the app altogether.
+          onBack={nav?.onBack ?? onHome}
+          backKind={nav?.onBack ? "app" : "home"}
+          highlightBack={nav?.highlightBack}
+          trailing={nav?.trailing}
         />
 
         {(openPanel === "wifi" || closingPanel === "wifi") && (
@@ -205,7 +223,7 @@ export default function PhoneShell({
         onClick={() => (openPanel ? dismissPanel() : undefined)}
         style={{ transform: lift ? `translateY(${lift * 0.35}px)` : undefined }}
       >
-        {children}
+        <PhoneNavProvider value={publishNav}>{children}</PhoneNavProvider>
         {missed && (
           <p className="pointer-events-none absolute inset-x-3 bottom-3 z-50 animate-slide-up rounded-xl bg-[#101820] px-4 py-3 text-center text-sm font-semibold text-white shadow-xl">
             Keep your finger on the bar and slide it upward.
